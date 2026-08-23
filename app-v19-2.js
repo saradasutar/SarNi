@@ -7,6 +7,7 @@ const state = {
   username: localStorage.getItem('portfolio_username') || '',
   user: null,
   holdings: [],
+  transactions: [],
   watchlist: [],
   stickyNotes: [],
   lifeQuotes: [],
@@ -49,7 +50,7 @@ const $ = (id) => document.getElementById(id);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 const els = {};
 [
-  'loginView','appView','runtimeWarning','loginForm','loginUsername','loginPassword','rememberUsername','loginVersion','loginBackendVersion','loginButton','loginMessage','sideAppName','dashboardUsername','dashboardVersion','dashboardBackendVersion','dashboardVersionTop','dashboardBackendVersionTop','todayLabel','pageTitle','autoRefreshSelect','autoRefreshCountdown','syncStatus','refreshBtn','addInvestmentBtn','addInvestmentTableBtn','bulkImportBtn','logoutBtn','profileButton','avatarInitial','personalHomeModeBtn','investmentHomeModeBtn','overviewSetDefaultBtn','personalHomeContent','investmentOverviewContent','personalHomeGreeting','homeDailyWriteBtn','homeMonthlyWriteBtn','homeAddTargetBtn','homeDiaryCount','homeDiaryPreview','homeDiaryQuickBtn','homeFullDiaryBtn','homeStickyCount','homeStickyDueToday','homeStickyOverdue','homeStickyUpcoming','homeStickyPreview','homeTargetAddBtn','homeTargetsOpenBtn','homeQuoteCard','homeQuoteText','homeQuoteAuthor','homeQuoteAutoStatus','homeQuoteNextBtn','homeQuotesOpenBtn','homeShowInvestmentsBtn','welcomeTitle','lastUpdatedText','viewChip','overviewStickyShortcut','overviewStickyShortcutCount','overviewQuoteShortcut','utilityDrawerOpenBtn','utilityDrawerCloseBtn','utilityDrawerScrim','utilityDrawer','utilityStickyBadge','utilityStickyTabCount','utilityStickySection','utilityQuoteSection','lifeQuoteText','lifeQuoteAuthor','lifeQuoteShuffleStatus','lifeQuoteNextBtn','lifeQuotePauseBtn','lifeQuoteLibraryBtn','lifeQuoteModal','lifeQuoteForm','lifeQuoteId','lifeQuoteInput','lifeQuoteAuthorInput','lifeQuoteSearch','lifeQuoteCount','lifeQuoteList','lifeQuoteEmpty','clearLifeQuoteBtn','saveLifeQuoteBtn','stickyNotesCount','stickyNotesList','stickyNotesEmpty','addStickyNoteBtn','ownerSwitcher','assetViewSwitcher','typeSummaryGrid','holdingsHeading','sumInvestedLabel','sumCurrentLabel','importBtn','exportBtn','sumInvested','sumCurrent','sumGain','sumReturn','sumAssetCount','sumPricedCount','sumSplit','sumWatchCount','sumInvestedTrend','sumCurrentTrend','sumGainTrend','sumWatchTrend','growthRangeButtons','growthInvestedDelta','growthInvestedPct','growthValueDelta','growthValuePct','growthGainNow','growthReturnNow','portfolioGrowthChart','growthHistoryNote','watchPulseBadge','watchAtTarget','watchNearTarget','watchAverageGap','watchPulseCount','watchlistTrendChart','watchTrendNote','watchlistLastAutoUpdate','watchStripAtTarget','watchStripNear','watchStripGap','allocationChart','investorSummary','topHoldings','replaceMasterDataBtn','masterDataStatus','masterLoadBanner','masterLoadNowBtn','showAllInvestmentsBtn','holdingSearch','holdingTypeFilter','holdingsFilterCount','printHoldingsBtn','holdingsFullscreenBtn','holdRowMinusBtn','holdRowPlusBtn','holdRowSizeLabel','holdRowSlider','holdWidthMinusBtn','holdWidthPlusBtn','holdWidthSizeLabel','holdWidthSlider','holdLayoutSavedStatus','holdSizeResetBtn','holdSumCombinedTotalInvested','holdSumCombinedTotalCurrent','holdSumCombinedTotalGrowth','holdSumCombinedMfInvested','holdSumCombinedMfCurrent','holdSumCombinedMfGrowth','holdSumCombinedStockInvested','holdSumCombinedStockCurrent','holdSumCombinedStockGrowth','holdSumNiharikaTotalInvested','holdSumNiharikaTotalCurrent','holdSumNiharikaTotalGrowth','holdSumNiharikaMfInvested','holdSumNiharikaMfCurrent','holdSumNiharikaMfGrowth','holdSumNiharikaStockInvested','holdSumNiharikaStockCurrent','holdSumNiharikaStockGrowth','holdSumSaradaTotalInvested','holdSumSaradaTotalCurrent','holdSumSaradaTotalGrowth','holdSumSaradaMfInvested','holdSumSaradaMfCurrent','holdSumSaradaMfGrowth','holdSumSaradaStockInvested','holdSumSaradaStockCurrent','holdSumSaradaStockGrowth','holdingsBody','holdingsEmpty','manageHoldingsColumnsBtn','viewAllNotesBtn','watchAllNotesBtn','columnManagerModal','columnManagerTitle','customColumnForm','customColumnId','customColumnSection','customColumnLabel','customColumnKey','customColumnType','customColumnOrder','clearCustomColumnBtn','saveCustomColumnBtn','standardColumnsList','resetStandardColumnsBtn','customColumnsList','customColumnsEmpty','customColumnCount','customValueModal','customValueTitle','customValueRecord','customValueForm','customValueSection','customValueRecordId','customValueColumnKey','customValueFieldLabel','customValueInput','saveCustomValueBtn','notesModal','notesSearch','notesSource','notesScope','notesFilter','notesSummary','notesList','notesEmpty','watchSearch','watchTypeFilter','watchPriorityFilter','watchTargetFilter','watchFilterCount','printWatchlistBtn','watchlistFullscreenBtn','watchRowMinusBtn','watchRowPlusBtn','watchRowSizeLabel','watchRowSlider','watchWidthMinusBtn','watchWidthPlusBtn','watchWidthSizeLabel','watchWidthSlider','watchLayoutSavedStatus','watchSizeResetBtn','manageWatchlistColumnsBtn','watchBody','watchEmpty','diaryForm','diaryId','diaryDate','diaryPrevDayBtn','diaryTodayBtn','diaryNextDayBtn','diaryTitle','diaryText','diaryDraftStatus','diaryCharCount','saveDiaryBtn','clearDiaryBtn','newDiaryEntryBtn','diarySaveStatus','diaryViewSwitcher','diarySearch','diarySearchClearBtn','diaryDayControl','diaryMonthControl','diaryRangeControl','diaryBrowseDate','diaryBrowseMonth','diaryFromDate','diaryToDate','printDiaryBtn','diarySummary','diaryList','diaryEmpty','diaryHeroStatus','diaryWorkspaceSwitcher','dailyDiaryWorkspace','monthlyDiaryWorkspace','monthlyYearFilter','monthlyMonthFilter','monthlyTypeFilter','monthlyStatusFilter','monthlySearch','printMonthlyBtn','monthCompletionPanel','monthCompletionTitle','monthCompletionText','monthProgressBar','monthProgressLabel','completeMonthBtn','monthlyForm','monthlyId','monthlyEntryMonth','monthlyPrevMonthBtn','monthlyThisMonthBtn','monthlyNextMonthBtn','monthlyEntryType','monthlyTitle','monthlyText','monthlyDraftStatus','monthlyCharCount','monthlyTargetHelp','monthlySaveStatus','clearMonthlyBtn','saveMonthlyBtn','monthlyListTitle','monthlyResultCount','completedMonthArchive','monthlyList','monthlyEmpty','usersBody','modalBackdrop','investmentModal','investmentForm','holdingId','holdingOwner','holdingType','holdingName','holdingCode','holdingExchange','holdingUnits','holdingInvested','holdingManualPrice','holdingBuyDate','holdingNotes','holdingCodeLabel','exchangeLabel','mfHelp','bulkImportModal','bulkImportForm','bulkCsvFile','bulkImportStatus','runBulkImportBtn','downloadImportTemplateBtn','mfImportHelp','mfSnapshotImportHelp','stockImportHelp','stockOwnerLabel','importOwner','importFileHint','watchModal','watchForm','watchId','watchType','watchName','watchCode','watchExchange','watchTarget','watchManualPrice','watchPriority','watchNotes','watchCodeLabel','watchExchangeLabel','watchMfHelp','stickyNoteModal','stickyNoteForm','stickyNoteId','stickyNoteType','stickyNoteColor','stickyNoteTitle','stickyNoteDueDate','stickyNoteText','stickyNoteModalTitle','saveStickyNoteBtn','passwordModal','passwordForm','currentPassword','newPassword','confirmPassword','userModal','userForm','newUsername','newDisplayName','newUserRole','newUserPassword','quickDiaryBtn','quickDiaryMobileBtn','quickDiaryPanel','quickDiaryCloseBtn','quickDailyForm','quickDailyDate','quickDailyTitle','quickDailyText','quickDailyStatus','quickDailyCount','quickDailySaveBtn','quickMonthlyForm','quickMonthlyMonth','quickMonthlyType','quickMonthlyTitle','quickMonthlyText','quickMonthlyStatus','quickMonthlyCount','quickMonthlySaveBtn','openFullDiaryBtn','dashboardHScroll','dashboardHScrollRange','dashboardHScrollLabel','dashboardHScrollPct','dashboardHScrollLeft','dashboardHScrollRight','holdingDrawerBackdrop','holdingDrawer','drawerEyebrow','drawerAssetBadge','drawerTitle','drawerSubtitle','drawerContent','drawerCloseBtn','drawerEditBtn','drawerDoneBtn','toastRegion'
+  'loginView','appView','runtimeWarning','loginForm','loginUsername','loginPassword','rememberUsername','loginVersion','loginBackendVersion','loginButton','loginMessage','sideAppName','dashboardUsername','dashboardVersion','dashboardBackendVersion','dashboardVersionTop','dashboardBackendVersionTop','todayLabel','pageTitle','autoRefreshSelect','autoRefreshCountdown','syncStatus','refreshBtn','addInvestmentBtn','addInvestmentTableBtn','bulkImportBtn','logoutBtn','profileButton','avatarInitial','personalHomeModeBtn','investmentHomeModeBtn','overviewSetDefaultBtn','personalHomeContent','investmentOverviewContent','personalHomeGreeting','homeDailyWriteBtn','homeMonthlyWriteBtn','homeAddTargetBtn','homeDiaryCount','homeDiaryPreview','homeDiaryQuickBtn','homeFullDiaryBtn','homeStickyCount','homeStickyDueToday','homeStickyOverdue','homeStickyUpcoming','homeStickyPreview','homeTargetAddBtn','homeTargetsOpenBtn','homeQuoteCard','homeQuoteText','homeQuoteAuthor','homeQuoteAutoStatus','homeQuoteNextBtn','homeQuotesOpenBtn','homeShowInvestmentsBtn','welcomeTitle','lastUpdatedText','viewChip','overviewStickyShortcut','overviewStickyShortcutCount','overviewQuoteShortcut','utilityDrawerOpenBtn','utilityDrawerCloseBtn','utilityDrawerScrim','utilityDrawer','utilityStickyBadge','utilityStickyTabCount','utilityStickySection','utilityQuoteSection','lifeQuoteText','lifeQuoteAuthor','lifeQuoteShuffleStatus','lifeQuoteNextBtn','lifeQuotePauseBtn','lifeQuoteLibraryBtn','lifeQuoteModal','lifeQuoteForm','lifeQuoteId','lifeQuoteInput','lifeQuoteAuthorInput','lifeQuoteSearch','lifeQuoteCount','lifeQuoteList','lifeQuoteEmpty','clearLifeQuoteBtn','saveLifeQuoteBtn','stickyNotesCount','stickyNotesList','stickyNotesEmpty','addStickyNoteBtn','ownerSwitcher','assetViewSwitcher','typeSummaryGrid','holdingsHeading','sumInvestedLabel','sumCurrentLabel','importBtn','exportBtn','sumInvested','sumCurrent','sumGain','sumReturn','sumAssetCount','sumPricedCount','sumSplit','sumWatchCount','sumInvestedTrend','sumCurrentTrend','sumGainTrend','sumWatchTrend','growthRangeButtons','growthInvestedDelta','growthInvestedPct','growthValueDelta','growthValuePct','growthGainNow','growthReturnNow','portfolioGrowthChart','growthHistoryNote','watchPulseBadge','watchAtTarget','watchNearTarget','watchAverageGap','watchPulseCount','watchlistTrendChart','watchTrendNote','watchlistLastAutoUpdate','watchStripAtTarget','watchStripNear','watchStripGap','allocationChart','investorSummary','topHoldings','replaceMasterDataBtn','masterDataStatus','masterLoadBanner','masterLoadNowBtn','showAllInvestmentsBtn','holdingSearch','holdingTypeFilter','holdingsFilterCount','printHoldingsBtn','holdingsFullscreenBtn','holdRowMinusBtn','holdRowPlusBtn','holdRowSizeLabel','holdRowSlider','holdWidthMinusBtn','holdWidthPlusBtn','holdWidthSizeLabel','holdWidthSlider','holdLayoutSavedStatus','holdSizeResetBtn','holdSumCombinedTotalInvested','holdSumCombinedTotalCurrent','holdSumCombinedTotalGrowth','holdSumCombinedMfInvested','holdSumCombinedMfCurrent','holdSumCombinedMfGrowth','holdSumCombinedStockInvested','holdSumCombinedStockCurrent','holdSumCombinedStockGrowth','holdSumNiharikaTotalInvested','holdSumNiharikaTotalCurrent','holdSumNiharikaTotalGrowth','holdSumNiharikaMfInvested','holdSumNiharikaMfCurrent','holdSumNiharikaMfGrowth','holdSumNiharikaStockInvested','holdSumNiharikaStockCurrent','holdSumNiharikaStockGrowth','holdSumSaradaTotalInvested','holdSumSaradaTotalCurrent','holdSumSaradaTotalGrowth','holdSumSaradaMfInvested','holdSumSaradaMfCurrent','holdSumSaradaMfGrowth','holdSumSaradaStockInvested','holdSumSaradaStockCurrent','holdSumSaradaStockGrowth','holdingsBody','holdingsEmpty','manageHoldingsColumnsBtn','viewAllNotesBtn','watchAllNotesBtn','columnManagerModal','columnManagerTitle','customColumnForm','customColumnId','customColumnSection','customColumnLabel','customColumnKey','customColumnType','customColumnOrder','clearCustomColumnBtn','saveCustomColumnBtn','standardColumnsList','resetStandardColumnsBtn','customColumnsList','customColumnsEmpty','customColumnCount','customValueModal','customValueTitle','customValueRecord','customValueForm','customValueSection','customValueRecordId','customValueColumnKey','customValueFieldLabel','customValueInput','saveCustomValueBtn','notesModal','notesSearch','notesSource','notesScope','notesFilter','notesSummary','notesList','notesEmpty','transactionSearch','transactionOwnerFilter','transactionAssetFilter','transactionSideFilter','transactionFromDate','transactionToDate','transactionFilterCount','transactionBuyTotal','transactionSaleTotal','transactionRealizedPnl','transactionCount','transactionBody','transactionEmpty','transactionImportBtn','printTransactionsBtn','watchSearch','watchTypeFilter','watchPriorityFilter','watchTargetFilter','watchFilterCount','printWatchlistBtn','watchlistFullscreenBtn','watchRowMinusBtn','watchRowPlusBtn','watchRowSizeLabel','watchRowSlider','watchWidthMinusBtn','watchWidthPlusBtn','watchWidthSizeLabel','watchWidthSlider','watchLayoutSavedStatus','watchSizeResetBtn','manageWatchlistColumnsBtn','watchBody','watchEmpty','diaryForm','diaryId','diaryDate','diaryPrevDayBtn','diaryTodayBtn','diaryNextDayBtn','diaryTitle','diaryText','diaryDraftStatus','diaryCharCount','saveDiaryBtn','clearDiaryBtn','newDiaryEntryBtn','diarySaveStatus','diaryViewSwitcher','diarySearch','diarySearchClearBtn','diaryDayControl','diaryMonthControl','diaryRangeControl','diaryBrowseDate','diaryBrowseMonth','diaryFromDate','diaryToDate','printDiaryBtn','diarySummary','diaryList','diaryEmpty','diaryHeroStatus','diaryWorkspaceSwitcher','dailyDiaryWorkspace','monthlyDiaryWorkspace','monthlyYearFilter','monthlyMonthFilter','monthlyTypeFilter','monthlyStatusFilter','monthlySearch','printMonthlyBtn','monthCompletionPanel','monthCompletionTitle','monthCompletionText','monthProgressBar','monthProgressLabel','completeMonthBtn','monthlyForm','monthlyId','monthlyEntryMonth','monthlyPrevMonthBtn','monthlyThisMonthBtn','monthlyNextMonthBtn','monthlyEntryType','monthlyTitle','monthlyText','monthlyDraftStatus','monthlyCharCount','monthlyTargetHelp','monthlySaveStatus','clearMonthlyBtn','saveMonthlyBtn','monthlyListTitle','monthlyResultCount','completedMonthArchive','monthlyList','monthlyEmpty','usersBody','modalBackdrop','investmentModal','investmentForm','holdingId','holdingOwner','holdingType','holdingName','holdingCode','holdingExchange','holdingUnits','holdingInvested','holdingManualPrice','holdingBuyDate','holdingNotes','holdingCodeLabel','exchangeLabel','mfHelp','bulkImportModal','bulkImportForm','bulkCsvFile','bulkImportStatus','runBulkImportBtn','downloadImportTemplateBtn','mfImportHelp','mfSnapshotImportHelp','stockImportHelp','stockTradeImportHelp','stockOwnerLabel','importOwner','importFileHint','watchModal','watchForm','watchId','watchType','watchName','watchCode','watchExchange','watchTarget','watchManualPrice','watchPriority','watchNotes','watchCodeLabel','watchExchangeLabel','watchMfHelp','stickyNoteModal','stickyNoteForm','stickyNoteId','stickyNoteType','stickyNoteTitle','stickyNoteDueDate','stickyNoteText','stickyNoteModalTitle','saveStickyNoteBtn','passwordModal','passwordForm','currentPassword','newPassword','confirmPassword','userModal','userForm','newUsername','newDisplayName','newUserRole','newUserPassword','quickDiaryBtn','quickDiaryMobileBtn','quickDiaryPanel','quickDiaryCloseBtn','quickDailyForm','quickDailyDate','quickDailyTitle','quickDailyText','quickDailyStatus','quickDailyCount','quickDailySaveBtn','quickMonthlyForm','quickMonthlyMonth','quickMonthlyType','quickMonthlyTitle','quickMonthlyText','quickMonthlyStatus','quickMonthlyCount','quickMonthlySaveBtn','openFullDiaryBtn','dashboardHScroll','dashboardHScrollRange','dashboardHScrollLabel','dashboardHScrollPct','dashboardHScrollLeft','dashboardHScrollRight','holdingDrawerBackdrop','holdingDrawer','drawerEyebrow','drawerAssetBadge','drawerTitle','drawerSubtitle','drawerContent','drawerCloseBtn','drawerEditBtn','drawerDoneBtn','toastRegion'
 ].forEach((id) => { els[id] = $(id); });
 
 function isConfigured() {
@@ -534,86 +535,38 @@ function stickyDueState(note){
   if(due===today)return {label:'Due today',cls:'today'};
   return {label:`Due ${diaryDateLabel(due)}`,cls:'upcoming'};
 }
-function stickyColor(note){
-  const value=String(note?.color||'YELLOW').toUpperCase();
-  return ['YELLOW','BLUE','GREEN','PINK','PURPLE','ORANGE'].includes(value)?value:'YELLOW';
-}
-function stickySize(note){
-  const value=String(note?.size||'M').toUpperCase();
-  return ['S','M','L','XL'].includes(value)?value:'M';
-}
-function stickyOrderValue(note,index=0){
-  const n=Number(note?.sortOrder);
-  return Number.isFinite(n)&&n>0?n:(1000+index*10);
-}
-function sortedStickyNotes(){
-  return [...state.stickyNotes].sort((a,b)=>{
-    const pin=(b.pinned?1:0)-(a.pinned?1:0);
-    if(pin)return pin;
-    const order=stickyOrderValue(a)-stickyOrderValue(b);
-    if(order)return order;
-    const ad=a.dueDate||'9999-12-31',bd=b.dueDate||'9999-12-31';
-    const due=ad.localeCompare(bd);
-    return due!==0?due:String(b.updatedAt||'').localeCompare(String(a.updatedAt||''));
-  });
-}
-function stickyCardHtml(note){
-  const due=stickyDueState(note);
-  const type=String(note.noteType||'REMINDER').toUpperCase();
-  const color=stickyColor(note).toLowerCase();
-  const size=stickySize(note).toLowerCase();
-  const collapsed=!!note.collapsed;
-  const pinned=!!note.pinned;
-  const id=escapeHtml(note.id);
-  return `<article class="sticky-note-card ${type.toLowerCase()} ${due.cls} sticky-color-${color} sticky-size-${size}${collapsed?' is-collapsed':''}${pinned?' is-pinned':''}" data-sticky-card="${id}" draggable="true">
-    <div class="sticky-note-top">
-      <div class="sticky-note-grab-zone" title="Drag to move">
-        <span class="sticky-drag-handle" aria-hidden="true">⋮⋮</span>
-        <span class="sticky-note-type">${type==='TARGET'?'Target':'Reminder'}</span>
-      </div>
-      <div class="sticky-top-tools">
-        <span class="sticky-due ${due.cls}">${escapeHtml(due.label)}</span>
-        <button type="button" class="sticky-icon-button pin${pinned?' active':''}" data-sticky-pin="${id}" title="${pinned?'Unpin':'Keep open / pin'}">${pinned?'📌':'📍'}</button>
-        <button type="button" class="sticky-icon-button" data-sticky-collapse="${id}" title="${collapsed?'Expand':'Collapse'}">${collapsed?'▸':'▾'}</button>
-        <button type="button" class="sticky-icon-button" data-sticky-edit="${id}" title="Edit">✎</button>
-        <button type="button" class="sticky-icon-button danger" data-sticky-delete="${id}" title="Delete">×</button>
-      </div>
-    </div>
-    <button type="button" class="sticky-title-button" data-sticky-collapse="${id}" title="${collapsed?'Expand sticky note':'Collapse sticky note'}">
-      <h4>${escapeHtml(note.title||'Untitled')}</h4>
-    </button>
-    <div class="sticky-note-body">
-      ${note.text?`<p>${escapeHtml(compactText(note.text,220))}</p>`:'<p class="sticky-no-details">No additional details.</p>'}
-      <div class="sticky-note-footer">
-        <button type="button" class="sticky-done-button" data-sticky-done="${id}">✓ Done</button>
-        <div class="sticky-layout-tools" aria-label="Sticky note controls">
-          <button type="button" class="sticky-mini-button" data-sticky-move="-1" data-sticky-id="${id}" title="Move left">←</button>
-          <button type="button" class="sticky-mini-button" data-sticky-move="1" data-sticky-id="${id}" title="Move right">→</button>
-          <span class="sticky-size-label">${stickySize(note)}</span>
-          <button type="button" class="sticky-mini-button" data-sticky-resize="-1" data-sticky-id="${id}" title="Make smaller">−</button>
-          <button type="button" class="sticky-mini-button" data-sticky-resize="1" data-sticky-id="${id}" title="Make larger">+</button>
-        </div>
-      </div>
-    </div>
-  </article>`;
-}
 function renderStickyNotes(){
   if(!els.stickyNotesList)return;
-  const items=sortedStickyNotes();
+  const items=[...state.stickyNotes].sort((a,b)=>{
+    const ad=a.dueDate||'9999-12-31',bd=b.dueDate||'9999-12-31';
+    const d=ad.localeCompare(bd);
+    return d!==0?d:String(b.updatedAt||'').localeCompare(String(a.updatedAt||''));
+  });
   els.stickyNotesCount.textContent=`${items.length} active`;
   if(els.utilityStickyBadge)els.utilityStickyBadge.textContent=String(items.length);
   if(els.utilityStickyTabCount)els.utilityStickyTabCount.textContent=String(items.length);
   if(els.overviewStickyShortcutCount)els.overviewStickyShortcutCount.textContent=`${items.length} active`;
   els.stickyNotesEmpty.classList.toggle('hidden',items.length>0);
-  els.stickyNotesList.innerHTML=items.map(stickyCardHtml).join('');
-  installStickyDragHandlers();
+  els.stickyNotesList.innerHTML=items.map(note=>{
+    const due=stickyDueState(note);
+    const type=String(note.noteType||'REMINDER').toUpperCase();
+    return `<article class="sticky-note-card ${type.toLowerCase()} ${due.cls}">
+      <div class="sticky-note-top"><span class="sticky-note-type">${type==='TARGET'?'Target':'Reminder'}</span><span class="sticky-due ${due.cls}">${escapeHtml(due.label)}</span></div>
+      <h4>${escapeHtml(note.title||'Untitled')}</h4>
+      ${note.text?`<p>${escapeHtml(compactText(note.text,130))}</p>`:''}
+      <div class="sticky-note-actions">
+        <button type="button" class="sticky-done-button" data-sticky-done="${escapeHtml(note.id)}">✓ Done</button>
+        <button type="button" class="small-button" data-sticky-edit="${escapeHtml(note.id)}">Edit</button>
+        <button type="button" class="small-button danger" data-sticky-delete="${escapeHtml(note.id)}">Delete</button>
+      </div>
+    </article>`;
+  }).join('');
   renderPersonalHome();
 }
 function openStickyNote(note=null){
   els.stickyNoteForm.reset();
   els.stickyNoteId.value=note?.id||'';
   els.stickyNoteType.value=note?.noteType||'TARGET';
-  if(els.stickyNoteColor)els.stickyNoteColor.value=stickyColor(note);
   els.stickyNoteTitle.value=note?.title||'';
   els.stickyNoteDueDate.value=note?.dueDate||'';
   els.stickyNoteText.value=note?.text||'';
@@ -630,18 +583,19 @@ async function saveStickyNote(event){
     const result=await api('saveStickyNote',{note:{
       id:els.stickyNoteId.value,
       noteType:els.stickyNoteType.value,
-      color:els.stickyNoteColor?.value||'YELLOW',
       title,
       dueDate:els.stickyNoteDueDate.value,
       text:els.stickyNoteText.value.trim()
     }});
 
+    // Backend save succeeded. Close the editor before doing a full dashboard rerender.
     closeModals();
+
     try{
       applyBootstrap(result.data);
       saveCache(result.data);
       renderStickyNotes();
-      toast('Sticky note saved.','success');
+      toast('Sticky note saved and shown on Overview.','success');
     }catch(renderError){
       console.error('Sticky saved; dashboard rerender failed',renderError);
       toast('Sticky note was saved. Refresh once to display the latest dashboard.','info');
@@ -670,114 +624,6 @@ async function deleteStickyNote(id){
     applyBootstrap(result.data);saveCache(result.data);renderStickyNotes();
     toast('Sticky note deleted.','success');
   }catch(e){toast(e.message,'error');}
-}
-function stickyLayoutPayload(notes){
-  return notes.map((n,i)=>({
-    id:n.id,
-    pinned:!!n.pinned,
-    collapsed:!!n.collapsed,
-    size:stickySize(n),
-    sortOrder:(i+1)*10
-  }));
-}
-async function saveStickyLayout(notes,successMessage=''){
-  try{
-    const result=await api('saveStickyLayout',{items:stickyLayoutPayload(notes)});
-    if(result?.data){
-      applyBootstrap(result.data);
-      saveCache(result.data);
-      renderStickyNotes();
-    }
-    if(successMessage)toast(successMessage,'success');
-  }catch(e){
-    toast(`Sticky layout was not saved: ${e.message}`,'error');
-  }
-}
-function toggleStickyCollapse(id){
-  const note=state.stickyNotes.find(x=>x.id===id);
-  if(!note)return;
-  note.collapsed=!note.collapsed;
-  renderStickyNotes();
-  saveStickyLayout([note]);
-}
-function toggleStickyPin(id){
-  const note=state.stickyNotes.find(x=>x.id===id);
-  if(!note)return;
-  note.pinned=!note.pinned;
-  if(note.pinned)note.collapsed=false;
-  renderStickyNotes();
-  saveStickyLayout([note],note.pinned?'Sticky pinned and kept open.':'Sticky unpinned.');
-}
-function resizeStickyNote(id,direction){
-  const note=state.stickyNotes.find(x=>x.id===id);
-  if(!note)return;
-  const sizes=['S','M','L','XL'];
-  const current=Math.max(0,sizes.indexOf(stickySize(note)));
-  const next=Math.max(0,Math.min(sizes.length-1,current+Number(direction||0)));
-  if(next===current)return;
-  note.size=sizes[next];
-  renderStickyNotes();
-  saveStickyLayout([note]);
-}
-function moveStickyNote(id,direction){
-  const ordered=sortedStickyNotes();
-  const index=ordered.findIndex(x=>x.id===id);
-  if(index<0)return;
-  let target=index+Number(direction||0);
-  target=Math.max(0,Math.min(ordered.length-1,target));
-  if(target===index)return;
-  if(!!ordered[target].pinned!==!!ordered[index].pinned){
-    toast('Pin or unpin the note first to move it across the pinned group.','info');
-    return;
-  }
-  const [item]=ordered.splice(index,1);
-  ordered.splice(target,0,item);
-  ordered.forEach((n,i)=>n.sortOrder=(i+1)*10);
-  renderStickyNotes();
-  saveStickyLayout(ordered);
-}
-let stickyDragId='';
-function installStickyDragHandlers(){
-  if(!els.stickyNotesList)return;
-  els.stickyNotesList.querySelectorAll('[data-sticky-card]').forEach(card=>{
-    card.addEventListener('dragstart',e=>{
-      if(e.target.closest('button,input,textarea,select')){e.preventDefault();return;}
-      stickyDragId=card.dataset.stickyCard||'';
-      card.classList.add('is-dragging');
-      try{e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',stickyDragId);}catch{}
-    });
-    card.addEventListener('dragend',()=>{
-      stickyDragId='';
-      els.stickyNotesList.querySelectorAll('.is-dragging,.drag-target').forEach(x=>x.classList.remove('is-dragging','drag-target'));
-    });
-    card.addEventListener('dragover',e=>{
-      if(!stickyDragId||stickyDragId===card.dataset.stickyCard)return;
-      e.preventDefault();
-      card.classList.add('drag-target');
-      try{e.dataTransfer.dropEffect='move';}catch{}
-    });
-    card.addEventListener('dragleave',()=>card.classList.remove('drag-target'));
-    card.addEventListener('drop',e=>{
-      e.preventDefault();
-      card.classList.remove('drag-target');
-      const dragged=state.stickyNotes.find(x=>x.id===stickyDragId);
-      const target=state.stickyNotes.find(x=>x.id===card.dataset.stickyCard);
-      if(!dragged||!target||dragged.id===target.id)return;
-      if(!!dragged.pinned!==!!target.pinned){
-        toast('Pin or unpin the note first to move it across the pinned group.','info');
-        return;
-      }
-      const ordered=sortedStickyNotes();
-      const from=ordered.findIndex(x=>x.id===dragged.id);
-      const to=ordered.findIndex(x=>x.id===target.id);
-      if(from<0||to<0)return;
-      const [item]=ordered.splice(from,1);
-      ordered.splice(to,0,item);
-      ordered.forEach((n,i)=>n.sortOrder=(i+1)*10);
-      renderStickyNotes();
-      saveStickyLayout(ordered,'Sticky position saved.');
-    });
-  });
 }
 
 function titleCase(value){return String(value||'').trim().toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());}
@@ -810,8 +656,8 @@ async function loadBackendVersion(){
     if(data&&data.version){
       state.backendVersion=String(data.version);
       const parts=state.backendVersion.split('.').map(Number);
-      if(parts[0]<3||(parts[0]===3&&parts[1]<14)){
-        showRuntimeWarning(`Backend v${state.backendVersion} is older than required v3.14.0. Update the Apps Script backend before using V19.0.`);
+      if(parts[0]<3||(parts[0]===3&&parts[1]<15)){
+        showRuntimeWarning(`Backend v${state.backendVersion} is older than required v3.15.0. Update the Apps Script backend before using V19.2.`);
       }
     }
   }catch(e){
@@ -863,7 +709,7 @@ function applyBootstrap(data,fromCache=false){
     setTimeout(()=>toast('Master spreadsheet has not been applied yet. Click “Load Master Sheet Data” on Overview.','info'),500);
   }
   updateVersionLabels();
-  state.user=data.user||state.user;state.holdings=Array.isArray(data.holdings)?data.holdings:[];state.watchlist=Array.isArray(data.watchlist)?data.watchlist:[];state.customColumns=Array.isArray(data.customColumns)?data.customColumns:[];state.customValues=Array.isArray(data.customValues)?data.customValues:[];state.stickyNotes=Array.isArray(data.stickyNotes)?data.stickyNotes:[];state.lifeQuotes=Array.isArray(data.lifeQuotes)?data.lifeQuotes:[];state.diary=Array.isArray(data.diary)?data.diary:[];state.monthlyDiary=Array.isArray(data.monthlyDiary)?data.monthlyDiary:[];state.monthStatus=Array.isArray(data.monthStatus)?data.monthStatus:[];state.owners=Array.isArray(data.owners)?data.owners:[];if(Array.isArray(data.users))state.users=data.users;
+  state.user=data.user||state.user;state.holdings=Array.isArray(data.holdings)?data.holdings:[];state.transactions=Array.isArray(data.transactions)?data.transactions:[];state.watchlist=Array.isArray(data.watchlist)?data.watchlist:[];state.customColumns=Array.isArray(data.customColumns)?data.customColumns:[];state.customValues=Array.isArray(data.customValues)?data.customValues:[];state.stickyNotes=Array.isArray(data.stickyNotes)?data.stickyNotes:[];state.lifeQuotes=Array.isArray(data.lifeQuotes)?data.lifeQuotes:[];state.diary=Array.isArray(data.diary)?data.diary:[];state.monthlyDiary=Array.isArray(data.monthlyDiary)?data.monthlyDiary:[];state.monthStatus=Array.isArray(data.monthStatus)?data.monthStatus:[];state.owners=Array.isArray(data.owners)?data.owners:[];if(Array.isArray(data.users))state.users=data.users;
   if(!fromCache)recordGrowthSnapshot();
   refreshOwnerControls();renderAll();
   if(state.user){els.avatarInitial.textContent=(state.user.displayName||state.user.username||'I').charAt(0).toUpperCase();if(els.dashboardUsername)els.dashboardUsername.textContent=state.user.username||state.user.displayName||'—';if(els.diaryHeroStatus)els.diaryHeroStatus.textContent=`Private diary · ${state.user.username||'signed in'}`;$$('.admin-only').forEach(el=>el.classList.toggle('hidden',state.user.role!=='ADMIN'));}
@@ -952,7 +798,7 @@ function refreshAssetViewControls(){
     els.holdingsHeading.textContent=state.selectedAssetView==='MF'?'Mutual fund holdings':state.selectedAssetView==='STOCKS'?'Stock & ETF holdings':'Mutual funds, stocks and ETFs';
   }
 }
-function renderAll(){refreshAssetViewControls();renderSummary();renderGrowthDashboard();renderTypeSummary();renderAllocation();renderInvestorSummary();renderTopHoldings();renderHoldings();renderWatchlist();renderLifeQuote(true);renderStickyNotes();renderPersonalHome();refreshMonthlyYearFilter();renderDiary();renderMonthlyDiary();setOverviewMode(state.overviewMode);if(state.user?.role==='ADMIN')renderUsers();}
+function renderAll(){refreshAssetViewControls();renderSummary();renderGrowthDashboard();renderTypeSummary();renderAllocation();renderInvestorSummary();renderTopHoldings();renderHoldings();renderTransactions();renderWatchlist();renderLifeQuote(true);renderStickyNotes();renderPersonalHome();refreshMonthlyYearFilter();renderDiary();renderMonthlyDiary();setOverviewMode(state.overviewMode);if(state.user?.role==='ADMIN')renderUsers();}
 function renderSummary(){
   const items=visibleHoldings(),s=summarizeHoldings(items);
   els.sumInvested.textContent=formatCurrency(s.invested,true);
@@ -1552,6 +1398,100 @@ function renderHoldings(){
   restoreTableScroll('holdings');
   scheduleDashboardHScrollRefresh();
 }
+
+function transactionHoldingPeriod(days){
+  const n=Number(days);
+  if(!Number.isFinite(n)||n<0)return '—';
+  if(n<31)return `${Math.round(n)} day${Math.round(n)===1?'':'s'}`;
+  if(n<365)return `${Math.floor(n/30)}m ${Math.round(n%30)}d`;
+  const y=Math.floor(n/365),m=Math.floor((n%365)/30);
+  return `${y}y ${m}m`;
+}
+function visibleTransactions(){
+  const q=String(els.transactionSearch?.value||'').trim().toLowerCase();
+  const owner=els.transactionOwnerFilter?.value||'ALL';
+  const asset=els.transactionAssetFilter?.value||'ALL';
+  const side=els.transactionSideFilter?.value||'ALL';
+  const from=els.transactionFromDate?.value||'';
+  const to=els.transactionToDate?.value||'';
+
+  return (state.transactions||[]).filter(t=>{
+    if(owner!=='ALL'&&canonicalOwner(t.owner)!==canonicalOwner(owner))return false;
+    if(asset!=='ALL'&&String(t.assetType||'').toUpperCase()!==asset)return false;
+    if(side!=='ALL'&&String(t.side||'').toUpperCase()!==side)return false;
+    const d=String(t.tradeDate||'');
+    if(from&&d<from)return false;
+    if(to&&d>to)return false;
+    const hay=`${t.owner||''} ${t.assetType||''} ${t.assetName||''} ${t.code||''} ${t.side||''} ${t.transactionType||''} ${t.broker||''}`.toLowerCase();
+    return !q||hay.includes(q);
+  });
+}
+function refreshTransactionOwnerFilter(){
+  if(!els.transactionOwnerFilter)return;
+  const current=els.transactionOwnerFilter.value||'ALL';
+  const owners=[...new Set((state.transactions||[]).map(t=>canonicalOwner(t.owner)).filter(Boolean))];
+  els.transactionOwnerFilter.innerHTML='<option value="ALL">All investors</option>'+owners.map(o=>`<option value="${escapeHtml(o)}">${escapeHtml(shortOwner(o))}</option>`).join('');
+  if(current==='ALL'||owners.includes(current))els.transactionOwnerFilter.value=current;
+}
+function renderTransactions(){
+  if(!els.transactionBody)return;
+  refreshTransactionOwnerFilter();
+  const items=visibleTransactions();
+
+  const buys=items.filter(t=>t.side==='BUY');
+  const sells=items.filter(t=>t.side==='SELL');
+  const buyTotal=buys.reduce((s,t)=>s+(Number(t.amount)||0),0);
+  const saleTotal=sells.reduce((s,t)=>s+(Number(t.amount)||0),0);
+  const realized=items.reduce((s,t)=>s+(Number.isFinite(Number(t.realizedPnl))?Number(t.realizedPnl):0),0);
+  const realizedCount=items.filter(t=>t.realizedPnl!==null&&t.realizedPnl!==undefined&&Number.isFinite(Number(t.realizedPnl))).length;
+
+  if(els.transactionBuyTotal)els.transactionBuyTotal.textContent=formatCurrency(buyTotal,true);
+  if(els.transactionSaleTotal)els.transactionSaleTotal.textContent=formatCurrency(saleTotal,true);
+  if(els.transactionRealizedPnl){
+    els.transactionRealizedPnl.textContent=realizedCount?formatCurrency(realized,true):'—';
+    els.transactionRealizedPnl.className=pnlClass(realized);
+  }
+  if(els.transactionCount)els.transactionCount.textContent=String(items.length);
+  if(els.transactionFilterCount)els.transactionFilterCount.textContent=`${items.length} visible`;
+
+  els.transactionBody.innerHTML=items.map(t=>{
+    const sale=t.side==='SELL',buy=t.side==='BUY';
+    const sideClass=sale?'sale':buy?'buy':'other';
+    const realizedClass=pnlClass(t.realizedPnl);
+    return `<tr class="transaction-row ${sideClass}">
+      <td>${detailDate(t.tradeDate)}</td>
+      <td><span class="owner-tag">${escapeHtml(shortOwner(t.owner))}</span></td>
+      <td><span class="transaction-asset-badge ${String(t.assetType||'').toLowerCase()}">${escapeHtml(t.assetType||'—')}</span></td>
+      <td><div class="transaction-asset"><strong>${escapeHtml(t.assetName||t.code||'—')}</strong><span>${escapeHtml(t.code||'')}</span></div></td>
+      <td><strong class="transaction-side ${sideClass}">${sale?'SALE':buy?'BUY':escapeHtml(t.side||'OTHER')}</strong><span class="transaction-type-detail">${escapeHtml(t.transactionType||'')}</span></td>
+      <td>${formatNumber(t.units,6)}</td>
+      <td>${formatCurrency(t.price)}</td>
+      <td><strong>${formatCurrency(t.amount)}</strong></td>
+      <td class="${realizedClass}"><strong>${t.realizedPnl==null?'—':formatCurrency(t.realizedPnl)}</strong></td>
+      <td>${transactionHoldingPeriod(t.holdingDays)}</td>
+      <td>${escapeHtml(t.broker||t.source||'—')}</td>
+    </tr>`;
+  }).join('');
+  els.transactionEmpty.classList.toggle('hidden',items.length>0);
+  scheduleDashboardHScrollRefresh();
+}
+function printTransactionsView(){
+  const items=visibleTransactions();
+  if(!items.length){toast('No transactions to print.','error');return;}
+  const rows=items.map(t=>`<tr>
+    <td>${escapeHtml(detailDate(t.tradeDate))}</td><td>${escapeHtml(shortOwner(t.owner))}</td><td>${escapeHtml(t.assetType||'')}</td>
+    <td>${escapeHtml(t.assetName||t.code||'')}</td><td class="${t.side==='SELL'?'negative':t.side==='BUY'?'positive':''}">${escapeHtml(t.side==='SELL'?'SALE':t.side||'')}</td>
+    <td>${escapeHtml(formatNumber(t.units,6))}</td><td>${escapeHtml(formatCurrency(t.price))}</td><td>${escapeHtml(formatCurrency(t.amount))}</td>
+    <td class="${pnlClass(t.realizedPnl)}">${escapeHtml(t.realizedPnl==null?'—':formatCurrency(t.realizedPnl))}</td><td>${escapeHtml(transactionHoldingPeriod(t.holdingDays))}</td>
+  </tr>`).join('');
+  openPrintPreview(
+    'Transactions',
+    `${items.length} filtered transactions · sale rows shown in red`,
+    `<table><thead><tr><th>Date</th><th>Investor</th><th>Type</th><th>Asset</th><th>Buy/Sale</th><th>Qty/Units</th><th>Price</th><th>Amount</th><th>Realised P/L</th><th>Holding period</th></tr></thead><tbody>${rows}</tbody></table>`,
+    'landscape'
+  );
+}
+
 function sourcePerfCell(v){return `<td class="perf ${pnlClass(v)}">${formatPercent(v)}</td>`;}
 function compactText(value,max=74){const c=String(value||'').replace(/\s+/g,' ').trim();if(!c)return '—';return c.length>max?`${c.slice(0,max-1)}…`:c;}
 function renderWatchlist(){
@@ -1667,7 +1607,11 @@ function openHoldingDrawer(item){
         ${item.sourceCode?`<div class="drawer-info-row"><span>Statement code</span><strong>${escapeHtml(item.sourceCode)}</strong></div>`:''}
         ${item.exchange?`<div class="drawer-info-row"><span>Exchange</span><strong>${escapeHtml(item.exchange)}</strong></div>`:''}
         <div class="drawer-info-row"><span>Price date</span><strong>${detailDate(item.priceDate)}</strong></div>
-        ${item.buyDate?`<div class="drawer-info-row"><span>Purchase date</span><strong>${detailDate(item.buyDate)}</strong></div>`:''}
+        ${item.buyDate?`<div class="drawer-info-row"><span>Manual purchase date</span><strong>${detailDate(item.buyDate)}</strong></div>`:''}
+        ${item.transactionStats?.firstPurchaseDate?`<div class="drawer-info-row"><span>First transaction purchase</span><strong>${detailDate(item.transactionStats.firstPurchaseDate)}</strong></div>`:''}
+        ${item.transactionStats?.latestPurchaseDate?`<div class="drawer-info-row"><span>Latest purchase</span><strong>${detailDate(item.transactionStats.latestPurchaseDate)}</strong></div>`:''}
+        ${item.transactionStats?.latestSaleDate?`<div class="drawer-info-row"><span>Latest sale</span><strong class="negative">${detailDate(item.transactionStats.latestSaleDate)}</strong></div>`:''}
+        ${item.transactionStats?.transactionCount?`<div class="drawer-info-row"><span>Transactions recorded</span><strong>${item.transactionStats.transactionCount}</strong></div>`:''}
       </div>
     </section>
     <section class="drawer-section"><h3 class="drawer-section-title">Personal Note</h3><div class="drawer-notes ${item.notes?'':'drawer-notes-empty'}">${item.notes?escapeHtml(item.notes):'No personal note added yet. Use Edit investment to add one.'}</div></section>
@@ -1916,6 +1860,12 @@ function trimToDetectedHeader(rows,mode){
       const hasIsin=h.includes('isin');
       const hasUnits=['unitsheld','units','quantity','qty'].some(x=>h.includes(x));
       if(hasName&&hasIsin&&hasUnits)return rows.slice(i);
+    }else if(mode==='STOCK_TRADES'){
+      const hasSymbol=['stocksymbol','symbol','tradingsymbol','instrument','scrip'].some(x=>h.includes(x));
+      const hasQty=['quantity','qty','tradedquantity'].some(x=>h.includes(x));
+      const hasDate=['tradedate','date','orderexecutiontime','orderexecutiondate'].some(x=>h.includes(x));
+      const hasSide=['tradetype','transactiontype','buysell','side','type'].some(x=>h.includes(x));
+      if(hasSymbol&&hasQty&&hasDate&&hasSide)return rows.slice(i);
     }else{
       const hasSymbol=['stocksymbol','symbol','tradingsymbol','instrument','scrip'].some(x=>h.includes(x));
       const hasQty=['quantity','qty'].some(x=>h.includes(x));
@@ -1993,6 +1943,56 @@ function rowsToMfSnapshotHoldings(rows){
   return out;
 }
 
+
+function rowsToStockTransactions(rows){
+  if(rows.length<2)throw new Error('The tradebook has no trade rows.');
+  const h=rows[0].map(normalizeHeader);
+  const idx={
+    owner:detectIndex(h,['Investor Name','INVESTOR_NAME','Owner']),
+    type:detectIndex(h,['Asset Type','Instrument Type','Type']),
+    symbol:detectIndex(h,['Stock Symbol','Symbol','Tradingsymbol','Trading Symbol','Instrument','Scrip']),
+    name:detectIndex(h,['Company Name','Asset Name','Name','Instrument']),
+    exchange:detectIndex(h,['Exchange']),
+    date:detectIndex(h,['Trade Date','trade_date','Date','Order Execution Time','Order Execution Date']),
+    side:detectIndex(h,['Trade Type','trade_type','Transaction Type','Buy/Sell','Side','Type']),
+    qty:detectIndex(h,['Quantity','Qty','Traded Quantity']),
+    price:detectIndex(h,['Price','Trade Price','Average Price']),
+    amount:detectIndex(h,['Amount','Trade Value','Value']),
+    broker:detectIndex(h,['Broker'])
+  };
+  if(idx.symbol<0||idx.date<0||idx.side<0||idx.qty<0||idx.price<0){
+    throw new Error('Tradebook needs Symbol/Instrument, Trade Date, Trade Type (buy/sell), Quantity and Price.');
+  }
+
+  const selected=canonicalOwner(els.importOwner.value||configuredOwners()[0]||'Niharika');
+  const out=[],errors=[];
+  rows.slice(1).forEach((r,n)=>{
+    const symbol=cell(r,idx.symbol).toUpperCase().replace(/\s+/g,'');
+    if(!symbol)return;
+    const rawSide=cell(r,idx.side).toUpperCase();
+    const side=/SELL|SALE/.test(rawSide)?'SELL':/BUY|PURCHASE/.test(rawSide)?'BUY':'';
+    const tradeDate=normalizeDate(cell(r,idx.date).split(' ')[0]);
+    const units=parseNum(cell(r,idx.qty));
+    const price=parseNum(cell(r,idx.price));
+    const amountRaw=parseNum(cell(r,idx.amount));
+    const owner=idx.owner>=0&&cell(r,idx.owner)?canonicalOwner(cell(r,idx.owner)):selected;
+    const assetType=classifyAsset(symbol,cell(r,idx.type));
+    const assetName=cell(r,idx.name)||symbol;
+    const broker=cell(r,idx.broker)||'Zerodha / Tradebook';
+
+    if(!tradeDate||!side||!Number.isFinite(units)||Math.abs(units)<=0||!Number.isFinite(price)||price<0){
+      errors.push(`Row ${n+2}: check date, BUY/SELL, quantity and price.`);
+      return;
+    }
+    const amount=Number.isFinite(amountRaw)?Math.abs(amountRaw):Math.abs(units*price);
+    out.push({owner,assetType,assetName,code:symbol,tradeDate,side,units:Math.abs(units),price:Math.abs(price),amount,broker});
+  });
+  if(errors.length)throw new Error(errors.slice(0,6).join(' ')+(errors.length>6?` Plus ${errors.length-6} more.`:''));
+  if(!out.length)throw new Error('No BUY/SELL trades found.');
+  if(out.length>10000)throw new Error('More than 10,000 trades detected. Split the file.');
+  return out;
+}
+
 function rowsToStockHoldings(rows){
   if(rows.length<2)throw new Error('The CSV has no stock rows.');const h=rows[0].map(normalizeHeader);
   const idx={owner:detectIndex(h,['INVESTOR_NAME','Investor Name','Owner']),type:detectIndex(h,['Asset Type','Type','Instrument Type']),symbol:detectIndex(h,['Stock Symbol','Symbol','Tradingsymbol','Trading Symbol','Instrument','Scrip']),exchange:detectIndex(h,['Exchange']),qty:detectIndex(h,['Quantity','Qty','Qty.','QTY']),avg:detectIndex(h,['Avg Buy Price','Average Buy Price','Avg. cost','Avg Cost','Average price','Buy Average']),invested:detectIndex(h,['Invested Amount','Invested Value','Cost Value','Investment Value']),name:detectIndex(h,['Company Name','Asset Name','Name'])};
@@ -2005,9 +2005,11 @@ function setImportMode(mode){
   els.mfImportHelp.classList.toggle('hidden',mode!=='MF_STATEMENT');
   els.mfSnapshotImportHelp.classList.toggle('hidden',mode!=='MF_SNAPSHOT');
   els.stockImportHelp.classList.toggle('hidden',mode!=='STOCK_HOLDINGS');
-  els.stockOwnerLabel.classList.toggle('hidden',!['MF_SNAPSHOT','STOCK_HOLDINGS'].includes(mode));
+  els.stockTradeImportHelp?.classList.toggle('hidden',mode!=='STOCK_TRADES');
+  els.stockOwnerLabel.classList.toggle('hidden',!['MF_SNAPSHOT','STOCK_HOLDINGS','STOCK_TRADES'].includes(mode));
   if(mode==='MF_STATEMENT')els.importFileHint.textContent='Up to 5,000 MF transaction rows. PAN and folio are ignored. CSV/XLSX supported.';
-  else if(mode==='MF_SNAPSHOT')els.importFileHint.textContent='Current MF holdings snapshot. ISIN is resolved to AMFI scheme code for automatic NAV updates.';
+  else if(mode==='MF_SNAPSHOT')els.importFileHint.textContent='Current MF holdings snapshot. CSV/XLSX supported.';
+  else if(mode==='STOCK_TRADES')els.importFileHint.textContent='Stock/ETF tradebook with BUY/SELL dates. Zerodha CSV/XLSX and similar formats supported.';
   else els.importFileHint.textContent='Current stock/ETF holdings. Zerodha XLSX/CSV supported.';
   els.bulkCsvFile.value='';
   state.pendingImport=[];
@@ -2026,6 +2028,10 @@ function downloadImportTemplate(){
     headers=['Investor Name','Scheme Name','ISIN','Units Held','Avg NAV','Invested Amount','Current NAV','Personal Note'];
     examples=[['Niharika','Parag Parikh Flexi Cap Fund - Direct Plan Growth','INF879O01027','1865.091','42.89','80000','91.75','']];
     name='mf-current-holdings-template.csv';
+  }else if(state.importMode==='STOCK_TRADES'){
+    headers=['Investor Name','Asset Type','Stock Symbol','Exchange','Trade Date','Trade Type','Quantity','Price','Amount','Broker'];
+    examples=[['Niharika','STOCK','HDFCBANK','NSE','2026-07-05','BUY','10','1680','16800','Zerodha'],['Niharika','STOCK','HDFCBANK','NSE','2026-08-10','SELL','5','1750','8750','Zerodha']];
+    name='stock-tradebook-import-template.csv';
   }else{
     headers=['Investor Name','Asset Type','Stock Symbol','Exchange','Quantity','Avg Buy Price','Invested Amount'];
     examples=[['Niharika','STOCK','DMART','NSE','20','3923.85','78477'],['Niharika','ETF','GOLDBEES','NSE','1123','91.37','102614']];
@@ -2045,10 +2051,11 @@ async function handleBulkFile(){
     let data;
     if(state.importMode==='MF_STATEMENT')data=rowsToMfTransactions(rows);
     else if(state.importMode==='MF_SNAPSHOT')data=rowsToMfSnapshotHoldings(rows);
+    else if(state.importMode==='STOCK_TRADES')data=rowsToStockTransactions(rows);
     else data=rowsToStockHoldings(rows);
     state.pendingImport=data;
     const owners=[...new Set(data.map(x=>x.owner).filter(Boolean))];
-    const label=state.importMode==='MF_STATEMENT'?'financial transaction':state.importMode==='MF_SNAPSHOT'?'MF holding':'stock/ETF holding';
+    const label=state.importMode==='MF_STATEMENT'?'MF transaction':state.importMode==='MF_SNAPSHOT'?'MF holding':state.importMode==='STOCK_TRADES'?'stock/ETF trade':'stock/ETF holding';
     els.bulkImportStatus.textContent=`${data.length} ${label} row${data.length===1?'':'s'} ready · ${owners.map(shortOwner).join(', ')}`;
     els.bulkImportStatus.className='import-status success';
     els.runBulkImportBtn.disabled=false;
@@ -2068,6 +2075,8 @@ async function runBulkImport(event){
       action='bulkImportMfTransactions';payload={transactions:state.pendingImport};
     }else if(state.importMode==='MF_SNAPSHOT'){
       action='bulkImportMfSnapshot';payload={mfHoldings:state.pendingImport};
+    }else if(state.importMode==='STOCK_TRADES'){
+      action='bulkImportStockTransactions';payload={transactions:state.pendingImport};
     }else{
       action='bulkImportHoldings';payload={holdings:state.pendingImport};
     }
@@ -2076,8 +2085,9 @@ async function runBulkImport(event){
     state.pendingImport=[];
     applyBootstrap(result.data);
     saveCache(result.data);
-    switchSection('holdings');
-    if(state.importMode==='MF_STATEMENT')toast(`${result.imported} new MF transactions imported; ${result.skipped||0} duplicates skipped. Click Refresh for 1D–10Y performance.`,'success');
+    switchSection(['MF_STATEMENT','STOCK_TRADES'].includes(state.importMode)?'transactions':'holdings');
+    if(state.importMode==='MF_STATEMENT')toast(`${result.imported} new MF transactions imported; ${result.skipped||0} duplicates skipped. Purchase/redemption dates are now in Transactions.`,'success');
+    else if(state.importMode==='STOCK_TRADES')toast(`${result.imported} stock/ETF BUY/SELL trades imported; ${result.skipped||0} duplicates skipped.`,'success');
     else if(state.importMode==='MF_SNAPSHOT')toast(`${result.imported} MF holdings imported and mapped to AMFI. NAV will update automatically; XIRR needs transaction history.`,'success');
     else toast(`${result.imported} stock/ETF holdings imported. Click Refresh for performance.`,'success');
   }catch(e){
@@ -2998,11 +3008,11 @@ function toggleDataFullscreen(section){
 function switchSection(section){
   if(state.dataFullscreenSection&&state.dataFullscreenSection!==section)exitDataFullscreen();
   state.activeSection=section;
-  document.body.classList.remove('section-overview','section-holdings','section-watchlist','section-diary','section-users');
+  document.body.classList.remove('section-overview','section-holdings','section-transactions','section-watchlist','section-diary','section-users');
   document.body.classList.add(`section-${section}`);
-  const titles={overview:state.overviewMode==='INVESTMENT'?'Investment overview':'My dashboard',holdings:'Holdings & performance',watchlist:'Watchlist',diary:'Diary',users:'User administration'};
+  const titles={overview:state.overviewMode==='INVESTMENT'?'Investment overview':'My dashboard',holdings:'Holdings & performance',transactions:'Transactions',watchlist:'Watchlist',diary:'Diary',users:'User administration'};
   if(els.pageTitle)els.pageTitle.textContent=titles[section]||'My Finance';
-  ['overview','holdings','watchlist','diary','users'].forEach(name=>{
+  ['overview','holdings','transactions','watchlist','diary','users'].forEach(name=>{
     const sec=$(`${name}Section`);
     if(sec)sec.classList.toggle('hidden',name!==section);
   });
@@ -3080,8 +3090,8 @@ function bindEvents(){safeOn(els.manageHoldingsColumnsBtn,'click',()=>openColumn
   safeOn(els.quickMonthlyText,'input',updateQuickDiaryCounts);
   safeOn(els.openFullDiaryBtn,'click',()=>{closeQuickDiary();switchSection('diary');});
   window.addEventListener('resize',scheduleDashboardHScrollRefresh);
-  document.querySelectorAll('.table-wrap').forEach(wrap=>wrap.addEventListener('scroll',()=>{if(wrap===state.hScrollTarget)refreshDashboardHScroll();},{passive:true}));safeOn(els.loginForm,'submit',login);safeOn(els.logoutBtn,'click',logout);safeOn(els.replaceMasterDataBtn,'click',replaceMasterPortfolioData);safeOn(els.masterLoadNowBtn,'click',replaceMasterPortfolioData);safeOn(els.showAllInvestmentsBtn,'click',showAllInvestments);safeOn(els.viewAllNotesBtn,'click',()=>openAllNotes('HOLDINGS'));safeOn(els.watchAllNotesBtn,'click',()=>openAllNotes('WATCHLIST'));safeOn(els.notesSearch,'input',renderNotesModal);safeOn(els.notesSource,'change',renderNotesModal);safeOn(els.notesScope,'change',renderNotesModal);safeOn(els.notesFilter,'change',renderNotesModal);safeOn(els.drawerCloseBtn,'click',closeHoldingDrawer);safeOn(els.drawerDoneBtn,'click',closeHoldingDrawer);safeOn(els.drawerEditBtn,'click',editDrawerHolding);safeOn(els.holdingDrawerBackdrop,'click',closeHoldingDrawer);safeOn(els.refreshBtn,'click',async()=>{await loadDashboard(true);resetAutoRefreshClock();});safeOn(els.addInvestmentBtn,'click',()=>openInvestment());safeOn(els.addInvestmentTableBtn,'click',()=>openInvestment());safeOn(els.importBtn,'click',openBulkImport);safeOn(els.bulkImportBtn,'click',openBulkImport);safeOn(els.downloadImportTemplateBtn,'click',downloadImportTemplate);safeOn(els.bulkCsvFile,'change',handleBulkFile);safeOn(els.bulkImportForm,'submit',runBulkImport);safeOn(els.exportBtn,'click',exportCsv);safeOn(els.investmentForm,'submit',saveInvestment);safeOn(els.watchForm,'submit',saveWatch);safeOn(els.passwordForm,'submit',changePassword);safeOn(els.userForm,'submit',createUser);safeOn(els.addStickyNoteBtn,'click',()=>openStickyNote());safeOn(els.stickyNoteForm,'submit',saveStickyNote);safeOn(els.holdingType,'change',()=>updateAssetForm(els.holdingType.value,'holding'));safeOn(els.watchType,'change',()=>updateAssetForm(els.watchType.value,'watch'));safeOn(els.holdingSearch,'input',renderHoldings);safeOn(els.holdingTypeFilter,'change',renderHoldings);safeOn(els.printHoldingsBtn,'click',printHoldingsView);safeOn(els.holdingsFullscreenBtn,'click',()=>toggleDataFullscreen('holdings'));safeOn(els.watchSearch,'input',renderWatchlist);safeOn(els.watchTypeFilter,'change',renderWatchlist);safeOn(els.watchPriorityFilter,'change',renderWatchlist);safeOn(els.watchTargetFilter,'change',renderWatchlist);safeOn(els.printWatchlistBtn,'click',printWatchlistView);safeOn(els.watchlistFullscreenBtn,'click',()=>toggleDataFullscreen('watchlist'));safeOn($('addWatchBtn'),'click',()=>openWatch());safeOn($('changePasswordBtn'),'click',()=>openModal('passwordModal'));safeOn($('addUserBtn'),'click',()=>openModal('userModal'));safeOn(els.modalBackdrop,'click',e=>{if(e.target===els.modalBackdrop)closeModals();});$$('[data-close-modal]').forEach(b=>b.addEventListener('click',closeModals));$$('[data-section]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.section)));$$('[data-section-link]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.sectionLink)));$$('[data-toggle-password]').forEach(b=>b.addEventListener('click',()=>{const input=$(b.dataset.togglePassword),show=input.type==='password';input.type=show?'text':'password';b.textContent=show?'Hide':'Show';}));$$('.import-mode').forEach(b=>b.addEventListener('click',()=>setImportMode(b.dataset.importMode)));
-  document.addEventListener('click',e=>{const customCell=e.target.closest('[data-custom-cell]');if(customCell){e.preventDefault();e.stopPropagation();openCustomValueEditor(customCell.dataset.customSection,customCell.dataset.customRecord,customCell.dataset.customKey);return;}const homeSticky=e.target.closest('[data-home-open-sticky]');if(homeSticky){openUtilityDrawer('STICKY');return;}const utilityTab=e.target.closest('[data-utility-tab]');if(utilityTab){state.utilityDrawerTab=utilityTab.dataset.utilityTab==='QUOTE'?'QUOTE':'STICKY';renderUtilityDrawerTab();if(lifeQuoteAutoContextVisible())startLifeQuoteShuffle();else stopLifeQuoteShuffle();return;}const quoteEdit=e.target.closest('[data-life-quote-edit]');if(quoteEdit){editLifeQuote(quoteEdit.dataset.lifeQuoteEdit);return;}const quoteDelete=e.target.closest('[data-life-quote-delete]');if(quoteDelete){deleteLifeQuote(quoteDelete.dataset.lifeQuoteDelete);return;}const stickyDone=e.target.closest('[data-sticky-done]');if(stickyDone){completeStickyNote(stickyDone.dataset.stickyDone);return;}const stickyCollapse=e.target.closest('[data-sticky-collapse]');if(stickyCollapse){toggleStickyCollapse(stickyCollapse.dataset.stickyCollapse);return;}const stickyPin=e.target.closest('[data-sticky-pin]');if(stickyPin){toggleStickyPin(stickyPin.dataset.stickyPin);return;}const stickyResize=e.target.closest('[data-sticky-resize]');if(stickyResize){resizeStickyNote(stickyResize.dataset.stickyId,stickyResize.dataset.stickyResize);return;}const stickyMove=e.target.closest('[data-sticky-move]');if(stickyMove){moveStickyNote(stickyMove.dataset.stickyId,stickyMove.dataset.stickyMove);return;}const stickyEdit=e.target.closest('[data-sticky-edit]');if(stickyEdit){const item=state.stickyNotes.find(x=>x.id===stickyEdit.dataset.stickyEdit);if(item)openStickyNote(item);return;}const stickyDelete=e.target.closest('[data-sticky-delete]');if(stickyDelete){deleteStickyNote(stickyDelete.dataset.stickyDelete);return;}const qmode=e.target.closest('[data-quick-diary-mode]');if(qmode){state.quickDiaryMode=qmode.dataset.quickDiaryMode;renderQuickDiaryMode();setTimeout(()=>state.quickDiaryMode==='DAILY'?els.quickDailyText?.focus():els.quickMonthlyText?.focus(),30);return;}const workspace=e.target.closest('[data-diary-workspace]');if(workspace){state.diaryWorkspace=workspace.dataset.diaryWorkspace;renderDiaryWorkspace();return;}const openCompleted=e.target.closest('[data-open-completed-month]');if(openCompleted){const key=openCompleted.dataset.openCompletedMonth;state.diaryWorkspace='MONTHLY';renderDiaryWorkspace();els.monthlyYearFilter.value=key.slice(0,4);els.monthlyMonthFilter.value=key.slice(5,7);renderMonthlyDiary();return;}const monthlyEdit=e.target.closest('[data-edit-monthly]');if(monthlyEdit){const item=state.monthlyDiary.find(x=>x.id===monthlyEdit.dataset.editMonthly);if(item)openMonthlyItem(item);return;}const monthlyDelete=e.target.closest('[data-delete-monthly]');if(monthlyDelete){deleteMonthlyItem(monthlyDelete.dataset.deleteMonthly);return;}const monthlyTarget=e.target.closest('[data-toggle-monthly-target]');if(monthlyTarget){toggleMonthlyTarget(monthlyTarget.dataset.toggleMonthlyTarget);return;}const diaryView=e.target.closest('[data-diary-view]');if(diaryView){state.diaryView=diaryView.dataset.diaryView;renderDiary();return;}const diaryEdit=e.target.closest('[data-edit-diary]');if(diaryEdit){const item=state.diary.find(x=>x.id===diaryEdit.dataset.editDiary);if(item)openDiaryEntry(item);return;}const diaryDelete=e.target.closest('[data-delete-diary]');if(diaryDelete){deleteDiaryEntry(diaryDelete.dataset.deleteDiary);return;}const diaryCard=e.target.closest('[data-diary-view-entry]');if(diaryCard&&!e.target.closest('button')){const item=state.diary.find(x=>x.id===diaryCard.dataset.diaryViewEntry);if(item)openDiaryEntry(item);return;}const gr=e.target.closest('[data-growth-range]');if(gr){state.growthRange=gr.dataset.growthRange;$$('[data-growth-range]').forEach(b=>b.classList.toggle('active',b.dataset.growthRange===state.growthRange));renderGrowthDashboard();return;}const owner=e.target.closest('[data-owner-view]');if(owner){state.selectedOwner=owner.dataset.ownerView;refreshOwnerControls();renderAll();return;}const assetView=e.target.closest('[data-asset-view]');if(assetView){state.selectedAssetView=assetView.dataset.assetView;els.holdingTypeFilter.value='ALL';renderAll();return;}const noteView=e.target.closest('[data-note-view]'),noteEdit=e.target.closest('[data-note-edit]'),watchNoteView=e.target.closest('[data-watch-note-view]'),watchNoteEdit=e.target.closest('[data-watch-note-edit]'),holdingViewButton=e.target.closest('[data-view-holding-button]'),watchViewButton=e.target.closest('[data-view-watch-button]'),watchNoteButton=e.target.closest('[data-watch-note-button]'),edit=e.target.closest('[data-edit-holding]'),del=e.target.closest('[data-delete-holding]'),ew=e.target.closest('[data-edit-watch]'),dw=e.target.closest('[data-delete-watch]'),ru=e.target.closest('[data-reset-user]'),tu=e.target.closest('[data-toggle-user]');if(noteView){const item=state.holdings.find(x=>x.id===noteView.dataset.noteView);closeModals();if(item)openHoldingDrawer(item);return;}if(noteEdit){const item=state.holdings.find(x=>x.id===noteEdit.dataset.noteEdit);closeModals();if(item)openInvestment(item);return;}if(watchNoteView){const item=state.watchlist.find(x=>x.id===watchNoteView.dataset.watchNoteView);closeModals();if(item)openWatchDrawer(item);return;}if(holdingViewButton){const item=state.holdings.find(x=>x.id===holdingViewButton.dataset.viewHoldingButton);if(item)openHoldingDrawer(item);return;}if(watchViewButton){const item=state.watchlist.find(x=>x.id===watchViewButton.dataset.viewWatchButton);if(item)openWatchDrawer(item);return;}if(watchNoteButton){const item=state.watchlist.find(x=>x.id===watchNoteButton.dataset.watchNoteButton);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(watchNoteEdit){const item=state.watchlist.find(x=>x.id===watchNoteEdit.dataset.watchNoteEdit);closeModals();if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(edit){openInvestment(state.holdings.find(x=>x.id===edit.dataset.editHolding));return;}if(del){deleteItem('deleteHolding',del.dataset.deleteHolding,'investment');return;}if(ew){openWatch(state.watchlist.find(x=>x.id===ew.dataset.editWatch));return;}if(dw){deleteItem('deleteWatchItem',dw.dataset.deleteWatch,'watchlist item');return;}if(ru){resetUserPassword(ru.dataset.resetUser);return;}if(tu){toggleUser(tu.dataset.toggleUser,tu.dataset.active==='true');return;}const watchNoteCell=e.target.closest('[data-watch-note-cell]');if(watchNoteCell){const item=state.watchlist.find(x=>x.id===watchNoteCell.dataset.watchNoteCell);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t)t.focus();},80);}return;}const noteCell=e.target.closest('[data-note-cell]');if(noteCell){const item=state.holdings.find(x=>x.id===noteCell.dataset.noteCell);if(item)openHoldingDrawer(item);return;}const watchView=e.target.closest('[data-view-watch]');if(watchView){const item=state.watchlist.find(x=>x.id===watchView.dataset.viewWatch);if(item)openWatchDrawer(item);return;}const view=e.target.closest('[data-view-holding]');if(view){openHoldingDrawer(state.holdings.find(x=>x.id===view.dataset.viewHolding));}});
+  document.querySelectorAll('.table-wrap').forEach(wrap=>wrap.addEventListener('scroll',()=>{if(wrap===state.hScrollTarget)refreshDashboardHScroll();},{passive:true}));safeOn(els.loginForm,'submit',login);safeOn(els.logoutBtn,'click',logout);safeOn(els.replaceMasterDataBtn,'click',replaceMasterPortfolioData);safeOn(els.masterLoadNowBtn,'click',replaceMasterPortfolioData);safeOn(els.showAllInvestmentsBtn,'click',showAllInvestments);safeOn(els.viewAllNotesBtn,'click',()=>openAllNotes('HOLDINGS'));safeOn(els.watchAllNotesBtn,'click',()=>openAllNotes('WATCHLIST'));safeOn(els.notesSearch,'input',renderNotesModal);safeOn(els.notesSource,'change',renderNotesModal);safeOn(els.notesScope,'change',renderNotesModal);safeOn(els.notesFilter,'change',renderNotesModal);safeOn(els.drawerCloseBtn,'click',closeHoldingDrawer);safeOn(els.drawerDoneBtn,'click',closeHoldingDrawer);safeOn(els.drawerEditBtn,'click',editDrawerHolding);safeOn(els.holdingDrawerBackdrop,'click',closeHoldingDrawer);safeOn(els.refreshBtn,'click',async()=>{await loadDashboard(true);resetAutoRefreshClock();});safeOn(els.addInvestmentBtn,'click',()=>openInvestment());safeOn(els.addInvestmentTableBtn,'click',()=>openInvestment());safeOn(els.importBtn,'click',openBulkImport);safeOn(els.bulkImportBtn,'click',openBulkImport);safeOn(els.downloadImportTemplateBtn,'click',downloadImportTemplate);safeOn(els.bulkCsvFile,'change',handleBulkFile);safeOn(els.bulkImportForm,'submit',runBulkImport);safeOn(els.exportBtn,'click',exportCsv);safeOn(els.investmentForm,'submit',saveInvestment);safeOn(els.watchForm,'submit',saveWatch);safeOn(els.passwordForm,'submit',changePassword);safeOn(els.userForm,'submit',createUser);safeOn(els.addStickyNoteBtn,'click',()=>openStickyNote());safeOn(els.stickyNoteForm,'submit',saveStickyNote);safeOn(els.holdingType,'change',()=>updateAssetForm(els.holdingType.value,'holding'));safeOn(els.watchType,'change',()=>updateAssetForm(els.watchType.value,'watch'));safeOn(els.transactionSearch,'input',renderTransactions);safeOn(els.transactionOwnerFilter,'change',renderTransactions);safeOn(els.transactionAssetFilter,'change',renderTransactions);safeOn(els.transactionSideFilter,'change',renderTransactions);safeOn(els.transactionFromDate,'change',renderTransactions);safeOn(els.transactionToDate,'change',renderTransactions);safeOn(els.transactionImportBtn,'click',()=>{refreshOwnerControls();setImportMode('STOCK_TRADES');openModal('bulkImportModal');});safeOn(els.printTransactionsBtn,'click',printTransactionsView);safeOn(els.holdingSearch,'input',renderHoldings);safeOn(els.holdingTypeFilter,'change',renderHoldings);safeOn(els.printHoldingsBtn,'click',printHoldingsView);safeOn(els.holdingsFullscreenBtn,'click',()=>toggleDataFullscreen('holdings'));safeOn(els.watchSearch,'input',renderWatchlist);safeOn(els.watchTypeFilter,'change',renderWatchlist);safeOn(els.watchPriorityFilter,'change',renderWatchlist);safeOn(els.watchTargetFilter,'change',renderWatchlist);safeOn(els.printWatchlistBtn,'click',printWatchlistView);safeOn(els.watchlistFullscreenBtn,'click',()=>toggleDataFullscreen('watchlist'));safeOn($('addWatchBtn'),'click',()=>openWatch());safeOn($('changePasswordBtn'),'click',()=>openModal('passwordModal'));safeOn($('addUserBtn'),'click',()=>openModal('userModal'));safeOn(els.modalBackdrop,'click',e=>{if(e.target===els.modalBackdrop)closeModals();});$$('[data-close-modal]').forEach(b=>b.addEventListener('click',closeModals));$$('[data-section]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.section)));$$('[data-section-link]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.sectionLink)));$$('[data-toggle-password]').forEach(b=>b.addEventListener('click',()=>{const input=$(b.dataset.togglePassword),show=input.type==='password';input.type=show?'text':'password';b.textContent=show?'Hide':'Show';}));$$('.import-mode').forEach(b=>b.addEventListener('click',()=>setImportMode(b.dataset.importMode)));
+  document.addEventListener('click',e=>{const customCell=e.target.closest('[data-custom-cell]');if(customCell){e.preventDefault();e.stopPropagation();openCustomValueEditor(customCell.dataset.customSection,customCell.dataset.customRecord,customCell.dataset.customKey);return;}const homeSticky=e.target.closest('[data-home-open-sticky]');if(homeSticky){openUtilityDrawer('STICKY');return;}const utilityTab=e.target.closest('[data-utility-tab]');if(utilityTab){state.utilityDrawerTab=utilityTab.dataset.utilityTab==='QUOTE'?'QUOTE':'STICKY';renderUtilityDrawerTab();if(lifeQuoteAutoContextVisible())startLifeQuoteShuffle();else stopLifeQuoteShuffle();return;}const quoteEdit=e.target.closest('[data-life-quote-edit]');if(quoteEdit){editLifeQuote(quoteEdit.dataset.lifeQuoteEdit);return;}const quoteDelete=e.target.closest('[data-life-quote-delete]');if(quoteDelete){deleteLifeQuote(quoteDelete.dataset.lifeQuoteDelete);return;}const stickyDone=e.target.closest('[data-sticky-done]');if(stickyDone){completeStickyNote(stickyDone.dataset.stickyDone);return;}const stickyEdit=e.target.closest('[data-sticky-edit]');if(stickyEdit){const item=state.stickyNotes.find(x=>x.id===stickyEdit.dataset.stickyEdit);if(item)openStickyNote(item);return;}const stickyDelete=e.target.closest('[data-sticky-delete]');if(stickyDelete){deleteStickyNote(stickyDelete.dataset.stickyDelete);return;}const qmode=e.target.closest('[data-quick-diary-mode]');if(qmode){state.quickDiaryMode=qmode.dataset.quickDiaryMode;renderQuickDiaryMode();setTimeout(()=>state.quickDiaryMode==='DAILY'?els.quickDailyText?.focus():els.quickMonthlyText?.focus(),30);return;}const workspace=e.target.closest('[data-diary-workspace]');if(workspace){state.diaryWorkspace=workspace.dataset.diaryWorkspace;renderDiaryWorkspace();return;}const openCompleted=e.target.closest('[data-open-completed-month]');if(openCompleted){const key=openCompleted.dataset.openCompletedMonth;state.diaryWorkspace='MONTHLY';renderDiaryWorkspace();els.monthlyYearFilter.value=key.slice(0,4);els.monthlyMonthFilter.value=key.slice(5,7);renderMonthlyDiary();return;}const monthlyEdit=e.target.closest('[data-edit-monthly]');if(monthlyEdit){const item=state.monthlyDiary.find(x=>x.id===monthlyEdit.dataset.editMonthly);if(item)openMonthlyItem(item);return;}const monthlyDelete=e.target.closest('[data-delete-monthly]');if(monthlyDelete){deleteMonthlyItem(monthlyDelete.dataset.deleteMonthly);return;}const monthlyTarget=e.target.closest('[data-toggle-monthly-target]');if(monthlyTarget){toggleMonthlyTarget(monthlyTarget.dataset.toggleMonthlyTarget);return;}const diaryView=e.target.closest('[data-diary-view]');if(diaryView){state.diaryView=diaryView.dataset.diaryView;renderDiary();return;}const diaryEdit=e.target.closest('[data-edit-diary]');if(diaryEdit){const item=state.diary.find(x=>x.id===diaryEdit.dataset.editDiary);if(item)openDiaryEntry(item);return;}const diaryDelete=e.target.closest('[data-delete-diary]');if(diaryDelete){deleteDiaryEntry(diaryDelete.dataset.deleteDiary);return;}const diaryCard=e.target.closest('[data-diary-view-entry]');if(diaryCard&&!e.target.closest('button')){const item=state.diary.find(x=>x.id===diaryCard.dataset.diaryViewEntry);if(item)openDiaryEntry(item);return;}const gr=e.target.closest('[data-growth-range]');if(gr){state.growthRange=gr.dataset.growthRange;$$('[data-growth-range]').forEach(b=>b.classList.toggle('active',b.dataset.growthRange===state.growthRange));renderGrowthDashboard();return;}const owner=e.target.closest('[data-owner-view]');if(owner){state.selectedOwner=owner.dataset.ownerView;refreshOwnerControls();renderAll();return;}const assetView=e.target.closest('[data-asset-view]');if(assetView){state.selectedAssetView=assetView.dataset.assetView;els.holdingTypeFilter.value='ALL';renderAll();return;}const noteView=e.target.closest('[data-note-view]'),noteEdit=e.target.closest('[data-note-edit]'),watchNoteView=e.target.closest('[data-watch-note-view]'),watchNoteEdit=e.target.closest('[data-watch-note-edit]'),holdingViewButton=e.target.closest('[data-view-holding-button]'),watchViewButton=e.target.closest('[data-view-watch-button]'),watchNoteButton=e.target.closest('[data-watch-note-button]'),edit=e.target.closest('[data-edit-holding]'),del=e.target.closest('[data-delete-holding]'),ew=e.target.closest('[data-edit-watch]'),dw=e.target.closest('[data-delete-watch]'),ru=e.target.closest('[data-reset-user]'),tu=e.target.closest('[data-toggle-user]');if(noteView){const item=state.holdings.find(x=>x.id===noteView.dataset.noteView);closeModals();if(item)openHoldingDrawer(item);return;}if(noteEdit){const item=state.holdings.find(x=>x.id===noteEdit.dataset.noteEdit);closeModals();if(item)openInvestment(item);return;}if(watchNoteView){const item=state.watchlist.find(x=>x.id===watchNoteView.dataset.watchNoteView);closeModals();if(item)openWatchDrawer(item);return;}if(holdingViewButton){const item=state.holdings.find(x=>x.id===holdingViewButton.dataset.viewHoldingButton);if(item)openHoldingDrawer(item);return;}if(watchViewButton){const item=state.watchlist.find(x=>x.id===watchViewButton.dataset.viewWatchButton);if(item)openWatchDrawer(item);return;}if(watchNoteButton){const item=state.watchlist.find(x=>x.id===watchNoteButton.dataset.watchNoteButton);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(watchNoteEdit){const item=state.watchlist.find(x=>x.id===watchNoteEdit.dataset.watchNoteEdit);closeModals();if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(edit){openInvestment(state.holdings.find(x=>x.id===edit.dataset.editHolding));return;}if(del){deleteItem('deleteHolding',del.dataset.deleteHolding,'investment');return;}if(ew){openWatch(state.watchlist.find(x=>x.id===ew.dataset.editWatch));return;}if(dw){deleteItem('deleteWatchItem',dw.dataset.deleteWatch,'watchlist item');return;}if(ru){resetUserPassword(ru.dataset.resetUser);return;}if(tu){toggleUser(tu.dataset.toggleUser,tu.dataset.active==='true');return;}const watchNoteCell=e.target.closest('[data-watch-note-cell]');if(watchNoteCell){const item=state.watchlist.find(x=>x.id===watchNoteCell.dataset.watchNoteCell);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t)t.focus();},80);}return;}const noteCell=e.target.closest('[data-note-cell]');if(noteCell){const item=state.holdings.find(x=>x.id===noteCell.dataset.noteCell);if(item)openHoldingDrawer(item);return;}const watchView=e.target.closest('[data-view-watch]');if(watchView){const item=state.watchlist.find(x=>x.id===watchView.dataset.viewWatch);if(item)openWatchDrawer(item);return;}const view=e.target.closest('[data-view-holding]');if(view){openHoldingDrawer(state.holdings.find(x=>x.id===view.dataset.viewHolding));}});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.autoRefreshMinutes&&Date.now()>=state.autoRefreshNextAt&&!state.syncing){resetAutoRefreshClock();loadDashboard(true);}});
   document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('[data-custom-cell]')){e.preventDefault();openCustomValueEditor(e.target.dataset.customSection,e.target.dataset.customRecord,e.target.dataset.customKey);return;}if(e.key==='Escape'){if($('printPreviewOverlay')){closePrintPreview();return;}if(state.dataFullscreenSection){exitDataFullscreen();return;}if(els.holdingDrawer?.classList.contains('open'))closeHoldingDrawer();else closeModals();return;}if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('[data-view-holding]')){e.preventDefault();openHoldingDrawer(state.holdings.find(x=>x.id===e.target.dataset.viewHolding));return;}if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('[data-view-watch]')){e.preventDefault();openWatchDrawer(state.watchlist.find(x=>x.id===e.target.dataset.viewWatch));}});
 }
@@ -3145,7 +3155,7 @@ async function init(){
     try{loadSavedUsername();}catch{}
   }
 }
-console.info('MyFinance v19.2 loaded — advanced movable, collapsible, resizable sticky notes');
+console.info('MyFinance v19.2 loaded — transaction history, buy/sale dates and red sale display');
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.utilityDrawerOpen)closeUtilityDrawer();});
 window.addEventListener('error',event=>{
   console.error('MyFinance runtime error',event.error||event.message);

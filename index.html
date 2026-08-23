@@ -10,7 +10,7 @@
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260822-192">
+  <link rel="stylesheet" href="styles.css?v=20260823-192">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -49,6 +49,7 @@
       <nav class="side-nav" aria-label="Main navigation">
         <button class="nav-item active" data-section="overview"><span>◫</span>Overview</button>
         <button class="nav-item" data-section="holdings"><span>▥</span>Holdings</button>
+        <button class="nav-item" data-section="transactions"><span>⇄</span>Transactions</button>
         <button class="nav-item" data-section="watchlist"><span>☆</span>Watchlist</button>
         <button class="nav-item" data-section="diary"><span>✎</span>Diary</button>
         <button id="quickDiaryBtn" class="nav-item quick-diary-nav" type="button"><span>✚</span>Quick Diary</button>
@@ -350,6 +351,51 @@
         </article>
       </section>
 
+
+      <section id="transactionsSection" class="page-section hidden">
+        <div class="transaction-hero">
+          <div>
+            <p class="eyebrow">TRANSACTION HISTORY</p>
+            <h2>Purchase &amp; Sale Dates</h2>
+            <p>Mutual-fund statement transactions and imported stock/ETF tradebook history. <strong class="sale-copy">SALE is always red.</strong></p>
+          </div>
+          <div class="transaction-hero-actions">
+            <button id="transactionImportBtn" class="primary-button" type="button">⇧ Import stock tradebook</button>
+            <button id="printTransactionsBtn" class="print-view-button" type="button">⎙ Preview / Print</button>
+          </div>
+        </div>
+
+        <div class="transaction-summary-grid">
+          <article class="transaction-summary-card buy-card"><span>Total purchases</span><strong id="transactionBuyTotal">₹0</strong><small>BUY / Purchase / SIP</small></article>
+          <article class="transaction-summary-card sale-card"><span>Total sales</span><strong id="transactionSaleTotal">₹0</strong><small>SALE / Redemption</small></article>
+          <article class="transaction-summary-card pnl-card"><span>Realised profit / loss</span><strong id="transactionRealizedPnl">—</strong><small>FIFO where complete transaction history is available</small></article>
+          <article class="transaction-summary-card count-card"><span>Transactions</span><strong id="transactionCount">0</strong><small>Current filtered view</small></article>
+        </div>
+
+        <article class="panel table-panel transaction-panel">
+          <div class="panel-head responsive-head">
+            <div><p class="eyebrow">BUY / SALE REGISTER</p><h3>Stocks, ETFs &amp; Mutual Funds</h3></div>
+            <div class="table-tools transaction-filter-tools">
+              <input id="transactionSearch" class="search-input" type="search" placeholder="Search asset, symbol or broker…">
+              <select id="transactionOwnerFilter" class="compact-select"><option value="ALL">All investors</option></select>
+              <select id="transactionAssetFilter" class="compact-select"><option value="ALL">All assets</option><option value="MF">Mutual funds</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option></select>
+              <select id="transactionSideFilter" class="compact-select"><option value="ALL">Buy + Sale</option><option value="BUY">BUY only</option><option value="SELL">SALE only</option></select>
+              <label class="transaction-date-filter">From<input id="transactionFromDate" type="date"></label>
+              <label class="transaction-date-filter">To<input id="transactionToDate" type="date"></label>
+              <span id="transactionFilterCount" class="filter-result-pill">0 visible</span>
+            </div>
+          </div>
+          <div class="transaction-note">For stocks/ETFs, import the broker Tradebook to obtain actual purchase/sale dates. Holdings files alone usually do not contain full transaction dates. MF statement imports automatically appear here.</div>
+          <div class="table-wrap wide-table transaction-table-wrap">
+            <table class="transaction-table">
+              <thead><tr><th>Date</th><th>Investor</th><th>Asset Type</th><th>Asset / Symbol</th><th>Buy / Sale</th><th>Qty / Units</th><th>Price / NAV</th><th>Amount</th><th>Realised P/L</th><th>Holding Period</th><th>Broker / Source</th></tr></thead>
+              <tbody id="transactionBody"></tbody>
+            </table>
+          </div>
+          <div id="transactionEmpty" class="empty-state hidden">No transactions match this view. Import an MF transaction statement or stock/ETF tradebook.</div>
+        </article>
+      </section>
+
       <section id="watchlistSection" class="page-section hidden"><div class="watchlist-live-strip"><div><span class="live-dot"></span><strong>Live watchlist tracking</strong><span id="watchlistLastAutoUpdate" class="muted">Waiting for update…</span></div><div class="watchlist-live-stats"><span>At target <b id="watchStripAtTarget">0</b></span><span>Near target <b id="watchStripNear">0</b></span><span>Avg gap <b id="watchStripGap">—</b></span></div></div>
         <article class="panel table-panel"><div class="panel-head responsive-head"><div><p class="eyebrow">FUTURE IDEAS</p><h3>Investment watchlist</h3></div><div class="table-tools watch-filter-tools"><input id="watchSearch" class="search-input" type="search" placeholder="Search watchlist…"><select id="watchTypeFilter" class="compact-select"><option value="ALL">All types</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="MF">Mutual funds</option></select><select id="watchPriorityFilter" class="compact-select"><option value="ALL">All priority</option><option value="HIGH">High</option><option value="MEDIUM">Medium</option><option value="LOW">Low</option></select><select id="watchTargetFilter" class="compact-select"><option value="ALL">All target status</option><option value="AT">At / below target</option><option value="NEAR">Within 5%</option><option value="FAR">More than 5% away</option><option value="NO_TARGET">No target</option></select><span id="watchFilterCount" class="filter-result-pill">0 visible</span><button id="printWatchlistBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="watchlistFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Watchlist to full browser area">⛶ Full screen</button><button id="manageWatchlistColumnsBtn" class="secondary-button" type="button">⚙ Columns</button><button id="watchAllNotesBtn" class="secondary-button">📝 All notes</button><button id="addWatchBtn" class="primary-button">+ Add</button></div></div><div class="table-view-size-bar" data-table-size-for="watchlist">
             <strong>Table size</strong>
@@ -628,7 +674,7 @@
       <button id="dashboardHScrollRight" class="dashboard-hscroll-arrow" type="button" title="Scroll right">›</button>
     </div>
 
-    <nav class="mobile-nav"><button class="mobile-nav-item active" data-section="overview"><span>◫</span>Overview</button><button class="mobile-nav-item" data-section="holdings"><span>▥</span>Holdings</button><button class="mobile-nav-item" data-section="watchlist"><span>☆</span>Watchlist</button><button class="mobile-nav-item" data-section="diary"><span>✎</span>Diary</button><button id="quickDiaryMobileBtn" class="mobile-nav-item" type="button"><span>✚</span>Quick</button></nav>
+    <nav class="mobile-nav"><button class="mobile-nav-item active" data-section="overview"><span>◫</span>Overview</button><button class="mobile-nav-item" data-section="holdings"><span>▥</span>Holdings</button><button class="mobile-nav-item" data-section="transactions"><span>⇄</span>Trades</button><button class="mobile-nav-item" data-section="watchlist"><span>☆</span>Watchlist</button><button class="mobile-nav-item" data-section="diary"><span>✎</span>Diary</button><button id="quickDiaryMobileBtn" class="mobile-nav-item" type="button"><span>✚</span>Quick</button></nav>
   </div>
 
   <div id="modalBackdrop" class="modal-backdrop hidden" aria-hidden="true">
@@ -653,9 +699,9 @@
     <div id="bulkImportModal" class="modal import-modal hidden" role="dialog" aria-modal="true">
       <div class="modal-head"><div><p class="eyebrow">SMART IMPORT</p><h2>Import portfolio data</h2></div><button class="modal-close" data-close-modal>×</button></div>
       <form id="bulkImportForm" class="stack-form">
-        <div class="import-mode-tabs"><button type="button" class="import-mode active" data-import-mode="MF_STATEMENT">MF transaction statement</button><button type="button" class="import-mode" data-import-mode="MF_SNAPSHOT">MF current holdings</button><button type="button" class="import-mode" data-import-mode="STOCK_HOLDINGS">Stock / Zerodha holdings</button></div>
+        <div class="import-mode-tabs"><button type="button" class="import-mode active" data-import-mode="MF_STATEMENT">MF transaction statement</button><button type="button" class="import-mode" data-import-mode="MF_SNAPSHOT">MF current holdings</button><button type="button" class="import-mode" data-import-mode="STOCK_HOLDINGS">Stock / Zerodha holdings</button><button type="button" class="import-mode" data-import-mode="STOCK_TRADES">Stock / ETF tradebook</button></div>
         <div id="mfImportHelp" class="info-box"><strong>MF statement:</strong> accepts your columns MF_NAME, INVESTOR_NAME, PRODUCT_CODE, SCHEME_NAME, TRADE_DATE, TRANSACTION_TYPE, AMOUNT, UNITS, PRICE and BROKER. PAN and folio columns are ignored and are not sent to the backend.</div>
-        <div id="mfSnapshotImportHelp" class="info-box hidden"><strong>MF current holdings:</strong> accepts Investor Name, Scheme Name, ISIN, Units Held, Avg NAV and Invested Amount. The backend resolves the ISIN to the numeric AMFI scheme code so NAV and 1D–10Y performance can update automatically. Snapshot mode does not create transaction history, so XIRR remains blank unless a transaction statement is also imported.</div><div id="stockImportHelp" class="info-box hidden"><strong>Stock/Zerodha:</strong> accepts Investor Name, Stock Symbol, Exchange, Quantity, Avg Buy Price and Invested Amount. It also recognises common Zerodha holdings headings such as Instrument, Qty. and Avg. cost. Native Zerodha XLSX holdings files are supported.</div>
+        <div id="mfSnapshotImportHelp" class="info-box hidden"><strong>MF current holdings:</strong> accepts Investor Name, Scheme Name, ISIN, Units Held, Avg NAV and Invested Amount. The backend resolves the ISIN to the numeric AMFI scheme code so NAV and 1D–10Y performance can update automatically. Snapshot mode does not create transaction history, so XIRR remains blank unless a transaction statement is also imported.</div><div id="stockImportHelp" class="info-box hidden"><strong>Stock/Zerodha:</strong> accepts Investor Name, Stock Symbol, Exchange, Quantity, Avg Buy Price and Invested Amount. It also recognises common Zerodha holdings headings such as Instrument, Qty. and Avg. cost. Native Zerodha XLSX holdings files are supported.</div><div id="stockTradeImportHelp" class="info-box hidden"><strong>Stock/ETF tradebook:</strong> imports actual BUY/SELL dates, quantity and price from Zerodha Tradebook CSV/XLSX or similar broker files. Existing holdings are not replaced. Sale entries are shown in red in the Transactions tab.</div>
         <label id="stockOwnerLabel" class="hidden">Investor if file has no investor column<select id="importOwner"></select></label>
         <div class="import-actions"><button id="downloadImportTemplateBtn" type="button" class="secondary-button">Download template</button></div>
         <label class="import-drop"><strong>Select CSV or Excel file</strong><span id="importFileHint">Up to 5,000 MF transaction rows. CSV and XLSX are supported.</span><input id="bulkCsvFile" type="file" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" required></label>
@@ -800,17 +846,7 @@
       <div class="modal-head"><div><p class="eyebrow">DASHBOARD STICKY</p><h2 id="stickyNoteModalTitle">Add target or reminder</h2></div><button class="modal-close" data-close-modal>×</button></div>
       <form id="stickyNoteForm" class="stack-form">
         <input id="stickyNoteId" type="hidden">
-        <div class="form-grid two">
-          <label>Type<select id="stickyNoteType"><option value="TARGET">Target</option><option value="REMINDER">Reminder</option></select></label>
-          <label>Sticky colour<select id="stickyNoteColor">
-            <option value="YELLOW">Yellow</option>
-            <option value="BLUE">Blue</option>
-            <option value="GREEN">Green</option>
-            <option value="PINK">Pink</option>
-            <option value="PURPLE">Purple</option>
-            <option value="ORANGE">Orange</option>
-          </select></label>
-        </div>
+        <label>Type<select id="stickyNoteType"><option value="TARGET">Target</option><option value="REMINDER">Reminder</option></select></label>
         <label>Title<input id="stickyNoteTitle" required maxlength="120" placeholder="What needs attention?"></label>
         <label>Due date <small>(optional)</small><input id="stickyNoteDueDate" type="date"></label>
         <label>Details<textarea id="stickyNoteText" rows="5" maxlength="1000" placeholder="Short details, next action, amount, person, etc."></textarea></label>
@@ -847,7 +883,7 @@
   </aside>
 
   <div id="toastRegion" class="toast-region" aria-live="polite"></div>
-  <script src="config.js?v=20260822-192"></script>
-  <script src="app-v19-2.js?v=20260822-192" defer></script>
+  <script src="config.js?v=20260823-192"></script>
+  <script src="app-v19-2.js?v=20260823-192" defer></script>
 </body>
 </html>

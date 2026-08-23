@@ -5448,224 +5448,139 @@ td.negative strong{
 
 
 /* =========================================================
-   V19.2 — ADVANCED STICKY TARGETS & REMINDERS
-   Colour · Pin/keep-open · Collapse · Drag/move · Resize
+   V19.2 — TRANSACTIONS / PURCHASE-SALE HISTORY
+   SALE is intentionally strong red throughout.
    ========================================================= */
-.sticky-usage-hint{
-  display:block;
-  margin-top:4px;
-  color:#8993a5;
-  font-size:8.5px;
-  font-weight:750;
-}
-.sticky-notes-list{
-  align-items:flex-start;
-  min-height:128px;
-}
-.sticky-note-card{
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  flex:0 0 270px;
-  width:270px;
-  min-height:128px;
-  transition:width .18s ease,flex-basis .18s ease,min-height .18s ease,transform .16s ease,box-shadow .16s ease,opacity .16s ease;
-  user-select:none;
-}
-.sticky-note-card.sticky-size-s{flex-basis:220px;width:220px}
-.sticky-note-card.sticky-size-m{flex-basis:270px;width:270px}
-.sticky-note-card.sticky-size-l{flex-basis:340px;width:340px}
-.sticky-note-card.sticky-size-xl{flex-basis:430px;width:430px}
-.sticky-note-card.is-pinned{
-  order:-1;
-  box-shadow:0 0 0 2px rgba(92,87,210,.14),0 12px 26px rgba(53,55,126,.13);
-}
-.sticky-note-card.is-pinned::before{
-  content:"PINNED";
-  position:absolute;
-  top:-7px;
-  left:14px;
-  padding:2px 7px;
-  border-radius:999px;
-  color:#fff;
-  background:#625bd6;
-  font-size:6.7px;
-  font-weight:950;
-  letter-spacing:.08em;
-}
-.sticky-note-card.is-collapsed{
-  min-height:72px;
-}
-.sticky-note-card.is-collapsed .sticky-note-body{
-  display:none;
-}
-.sticky-note-card.is-collapsed .sticky-title-button h4{
-  margin-bottom:1px;
-}
-.sticky-note-card.is-dragging{
-  opacity:.48;
-  transform:scale(.98);
-}
-.sticky-note-card.drag-target{
-  transform:translateY(-3px);
-  outline:2px dashed rgba(91,92,226,.45);
-  outline-offset:2px;
-}
-
-/* Six selectable colours */
-.sticky-note-card.sticky-color-yellow{border-color:#ead99a;background:linear-gradient(145deg,#fffbe4,#fff3b9)}
-.sticky-note-card.sticky-color-blue{border-color:#bad8f2;background:linear-gradient(145deg,#f3f9ff,#deefff)}
-.sticky-note-card.sticky-color-green{border-color:#b9e0cc;background:linear-gradient(145deg,#f1fbf6,#dff5e9)}
-.sticky-note-card.sticky-color-pink{border-color:#efc2cf;background:linear-gradient(145deg,#fff5f8,#ffe3eb)}
-.sticky-note-card.sticky-color-purple{border-color:#d5c6f1;background:linear-gradient(145deg,#faf6ff,#ece3ff)}
-.sticky-note-card.sticky-color-orange{border-color:#efc99e;background:linear-gradient(145deg,#fff8ef,#ffe8cc)}
-
-.sticky-note-card.overdue{
-  border-color:#ed9da6!important;
-  box-shadow:inset 0 0 0 1px rgba(207,70,87,.08),0 7px 16px rgba(103,89,35,.08);
-}
-.sticky-note-top{
-  gap:6px;
-}
-.sticky-note-grab-zone{
-  min-width:0;
-  display:flex;
-  align-items:center;
-  gap:5px;
-  cursor:grab;
-}
-.sticky-note-grab-zone:active{cursor:grabbing}
-.sticky-drag-handle{
-  color:#8b91a0;
-  font-size:14px;
-  font-weight:950;
-  letter-spacing:-4px;
-  transform:rotate(90deg);
-  margin-right:2px;
-}
-.sticky-top-tools{
-  margin-left:auto;
-  display:flex;
-  align-items:center;
-  gap:3px;
-}
-.sticky-top-tools .sticky-due{
-  margin-right:2px;
-  max-width:105px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.sticky-icon-button,
-.sticky-mini-button{
-  display:inline-grid;
-  place-items:center;
-  border:1px solid rgba(112,121,145,.20);
-  color:#5e687a;
-  background:rgba(255,255,255,.58);
-  cursor:pointer;
-}
-.sticky-icon-button{
-  width:23px;
-  height:23px;
-  padding:0;
-  border-radius:7px;
-  font-size:11px;
-  font-weight:950;
-}
-.sticky-icon-button:hover,
-.sticky-mini-button:hover{
-  color:#4e49b3;
-  background:rgba(255,255,255,.92);
-  border-color:rgba(93,88,190,.32);
-}
-.sticky-icon-button.pin.active{
-  color:#6552bc;
-  background:#f0ebff;
-  border-color:#cfc4ef;
-}
-.sticky-icon-button.danger{
-  color:#c44b59;
-}
-.sticky-icon-button.danger:hover{
-  color:#b62f40;
-  background:#fff0f2;
-  border-color:#efc2c9;
-}
-.sticky-title-button{
-  width:100%;
-  padding:0;
-  border:0;
-  text-align:left;
-  color:inherit;
-  background:transparent;
-  cursor:pointer;
-}
-.sticky-title-button h4{
-  margin:8px 0 5px;
-}
-.sticky-note-body{
-  display:flex;
-  flex:1;
-  flex-direction:column;
-}
-.sticky-no-details{
-  color:#9097a3!important;
-  font-style:italic;
-}
-.sticky-note-footer{
+.transaction-hero{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:8px;
-  margin-top:auto;
-  padding-top:5px;
+  gap:18px;
+  padding:20px 22px;
+  margin-bottom:14px;
+  border:1px solid #e0e6f1;
+  border-radius:20px;
+  background:linear-gradient(135deg,#fbfcff,#f7f8ff);
+  box-shadow:0 8px 22px rgba(40,52,93,.055);
 }
-.sticky-layout-tools{
+.transaction-hero h2{
+  margin:4px 0 5px;
+  font-size:26px;
+  font-weight:950;
+  color:#1f2d48;
+  letter-spacing:-.035em;
+}
+.transaction-hero p:last-child{margin:0;color:#68758a;font-size:12px;font-weight:750}
+.transaction-hero-actions{display:flex;gap:9px;flex-wrap:wrap}
+.sale-copy{color:var(--loss-red,#d63f52)!important}
+
+.transaction-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:14px;
+}
+.transaction-summary-card{
+  min-height:106px;
+  padding:15px 16px;
+  border:1px solid #e1e6ef;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 6px 16px rgba(39,53,91,.05);
+}
+.transaction-summary-card>span{display:block;color:#6e7b91;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.transaction-summary-card>strong{display:block;margin-top:8px;color:#21304a;font-size:24px;font-weight:950;letter-spacing:-.03em}
+.transaction-summary-card>small{display:block;margin-top:5px;color:#8290a4;font-size:10px;font-weight:750}
+.transaction-summary-card.buy-card{background:linear-gradient(145deg,#fff,#edf9f3)}
+.transaction-summary-card.buy-card>strong{color:var(--profit-green,#078a5b)!important}
+.transaction-summary-card.sale-card{background:linear-gradient(145deg,#fff,#fff0f2);border-color:#f3d8dc}
+.transaction-summary-card.sale-card>span,
+.transaction-summary-card.sale-card>strong{color:var(--loss-red,#d63f52)!important}
+.transaction-summary-card.pnl-card>strong.positive{color:var(--profit-green,#078a5b)!important}
+.transaction-summary-card.pnl-card>strong.negative{color:var(--loss-red,#d63f52)!important}
+
+.transaction-filter-tools{flex-wrap:wrap}
+.transaction-date-filter{
   display:flex;
   align-items:center;
-  gap:3px;
+  gap:5px;
+  color:#75839a;
+  font-size:10px;
+  font-weight:850;
 }
-.sticky-mini-button{
-  width:23px;
-  height:23px;
-  padding:0;
-  border-radius:7px;
-  font-size:11px;
+.transaction-date-filter input{
+  height:43px;
+  min-width:135px;
+  padding:0 9px;
+  border:1px solid #dfe5ef;
+  border-radius:10px;
+  background:#fff;
+  color:#43516a;
+  font-weight:750;
+}
+.transaction-note{
+  margin:0 22px 8px;
+  padding:9px 12px;
+  border-radius:10px;
+  background:#f7f8fc;
+  color:#718096;
+  font-size:10.5px;
+  font-weight:750;
+}
+.transaction-table th{font-size:10px}
+.transaction-table td{font-size:12px}
+.transaction-row.sale td{background:linear-gradient(90deg,rgba(255,240,242,.72),rgba(255,255,255,.8))}
+.transaction-row.sale:hover td{background:#fff0f2}
+.transaction-row.buy td{background:linear-gradient(90deg,rgba(236,249,243,.35),rgba(255,255,255,.8))}
+.transaction-side{
+  display:inline-flex;
+  min-width:52px;
+  justify-content:center;
+  padding:5px 8px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:.04em;
+}
+.transaction-side.sale{
+  color:#fff!important;
+  background:var(--loss-red,#d63f52)!important;
+  box-shadow:0 4px 10px rgba(214,63,82,.2);
+}
+.transaction-side.buy{
+  color:#067a51!important;
+  background:#e5f7ef!important;
+  border:1px solid #c9ecdc;
+}
+.transaction-side.other{color:#66748a;background:#eef1f6}
+.transaction-type-detail{display:block;margin-top:4px;color:#8a95a6;font-size:9px;font-weight:700}
+.transaction-asset{display:flex;flex-direction:column;gap:2px}
+.transaction-asset strong{color:#25344f;font-weight:900}
+.transaction-asset span{color:#8793a5;font-size:10px;font-weight:750}
+.transaction-asset-badge{
+  display:inline-flex;
+  min-width:42px;
+  justify-content:center;
+  padding:5px 7px;
+  border-radius:8px;
+  background:#eef1f8;
+  color:#526078;
+  font-size:9px;
   font-weight:950;
 }
-.sticky-size-label{
-  min-width:18px;
-  color:#7c8493;
-  font-size:7.5px;
-  font-weight:950;
-  text-align:center;
-}
-.sticky-note-actions{
-  display:none!important; /* replaced by compact top tools + footer */
-}
+.transaction-asset-badge.mf{background:#eaf8f2;color:#087b59}
+.transaction-asset-badge.stock{background:#eef0ff;color:#565fc7}
+.transaction-asset-badge.etf{background:#fff3e8;color:#c66d21}
 
-/* Drawer: cards remain practical even at L / XL setting */
-.utility-drawer .sticky-note-card.sticky-size-s,
-.utility-drawer .sticky-note-card.sticky-size-m,
-.utility-drawer .sticky-note-card.sticky-size-l,
-.utility-drawer .sticky-note-card.sticky-size-xl{
-  width:100%!important;
-  flex-basis:auto!important;
-}
-.utility-drawer .sticky-notes-list{
-  overflow-x:hidden!important;
-}
-.utility-drawer .sticky-note-card{
-  user-select:auto;
-}
+/* Sale date in holding details is red */
+.drawer-info-row strong.negative{color:var(--loss-red,#d63f52)!important}
 
-/* Mobile keeps move arrows available when drag is awkward */
-@media(max-width:720px){
-  .sticky-usage-hint{font-size:8px}
-  .sticky-note-card.sticky-size-s{flex-basis:205px;width:205px}
-  .sticky-note-card.sticky-size-m{flex-basis:245px;width:245px}
-  .sticky-note-card.sticky-size-l{flex-basis:300px;width:300px}
-  .sticky-note-card.sticky-size-xl{flex-basis:360px;width:360px}
-  .sticky-icon-button{width:22px;height:22px}
-  .sticky-top-tools .sticky-due{max-width:82px}
+@media(max-width:1050px){
+  .transaction-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .transaction-hero{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:620px){
+  .transaction-summary-grid{grid-template-columns:1fr 1fr}
+  .transaction-summary-card>strong{font-size:20px}
+  .transaction-hero h2{font-size:22px}
 }
