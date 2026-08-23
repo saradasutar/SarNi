@@ -5719,3 +5719,50 @@ body.data-fullscreen-open .pinned-sticky-layer{
 body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
   pointer-events:auto!important;
 }
+
+/* V19.2.2 keyboard horizontal scroll */
+.table-wrap.keyboard-smooth-ready{scroll-behavior:auto!important}
+
+
+/* V19.2.2 purchase / sale dates */
+.trade-date-head{min-width:150px}
+.holding-trade-date-cell{min-width:150px}
+.holding-trade-dates{display:grid;gap:5px;min-width:130px}
+.holding-trade-date{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  white-space:nowrap;
+  font-size:10px;
+  font-weight:850;
+}
+.holding-trade-date b{
+  min-width:35px;
+  padding:3px 5px;
+  border-radius:999px;
+  text-align:center;
+  font-size:8px;
+  letter-spacing:.04em;
+}
+.holding-trade-date.purchase b{
+  color:#067a51;
+  background:#e5f7ef;
+}
+.holding-trade-date.purchase strong{
+  color:#087b5d;
+}
+.holding-trade-date.sale b{
+  color:#fff;
+  background:var(--loss-red,#d63f52);
+}
+.holding-trade-date.sale.has-sale strong{
+  color:var(--loss-red,#d63f52)!important;
+  font-weight:950;
+}
+.holding-trade-date.sale.no-sale{
+  opacity:.58;
+}
+.column-manager-main-btn{
+  font-weight:900!important;
+  white-space:nowrap;
+}
