@@ -36,7 +36,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.2.9</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · checking…</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.2.9</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.15.4</span></div>
         </div>
       </form>
     </div>
@@ -58,16 +58,27 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v19.2.9</span><span id="dashboardBackendVersion">Backend · checking…</span>
+        <span id="dashboardVersion">Frontend · v19.2.9</span><span id="dashboardBackendVersion">Backend · v3.15.4</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.2.9</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE …</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.2.9</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.15.4</span></div></div></div>
         <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
+
+      <div id="mobileSessionBar" class="mobile-session-bar" aria-label="Mobile session controls">
+        <div class="mobile-session-versions">
+          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.2.9</span>
+          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.15.4</span>
+        </div>
+        <div class="mobile-session-actions">
+          <button id="mobileChangePasswordBtn" class="mobile-session-button" type="button">Password</button>
+          <button id="mobileLogoutBtn" class="mobile-session-button danger" type="button">Log out</button>
+        </div>
+      </div>
 
       <div class="portfolio-switch-wrap portfolio-filter-bar">
         <div class="filter-group">
@@ -979,7 +990,7 @@
   </aside>
 
   <div id="toastRegion" class="toast-region" aria-live="polite"></div>
-  <script src="config.js?v=20260823-1929"></script>
-  <script src="app-v19-2-9.js?v=20260823-1929" defer></script>
+  <script src="config.js?v=20260823-1929-mobile-parity"></script>
+  <script src="app-v19-2-9.js?v=20260823-1929-mobile-parity" defer></script>
 </body>
 </html>
