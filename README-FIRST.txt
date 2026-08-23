@@ -1,40 +1,52 @@
-MYFINANCE V19.3 / BACKEND V3.16.0 — LOGIN TIMEOUT FIX
+MYFINANCE V19.4 — LOGIN ERROR HANDLING FIX
 
-The screenshot showing Backend v3.15.0 proves the frontend can reach Apps Script.
-The timeout was caused by LOGIN trying to build and return the full dashboard including
-the new transaction history before login completed.
-
-V19.3 changes this:
-- Login returns only authentication details and token.
-- Dashboard loads separately after login.
-- Full transaction history is removed from the normal dashboard payload.
-- Transactions load only when you open Transactions.
-- Transactions are fetched in pages of 200 rows.
-- Purchase/sale dates, realised P/L and red SALE display remain.
-
-BACKEND
-Replace Code.gs with Code-v3.16.gs.
-Deploy > Manage deployments > Edit existing Web App > New version > Deploy.
-Execute as: Me
-Who has access: Anyone
-
-Confirm the same /exec URL shows:
-"version":"3.16.0"
-
-GITHUB
-Upload/replace:
-- index.html
-- styles.css
-- app-v19-2.js  (compatibility)
-- app-v19-3.js
-
-Keep config.js unchanged.
-
-Open your current GitHub Pages URL with:
-?v=1930
-
-Then Command + Shift + R.
-
-Expected:
+Your screenshot already shows:
 Frontend v19.3
 Backend v3.16.0
+
+That proves the frontend CAN reach the backend.
+
+I found a frontend bug in the polling code:
+When Apps Script returned a real application error such as:
+- Incorrect username/password
+- Too many failed sign-in attempts
+- A server-side login error
+
+the polling loop caught that real response, discarded it, kept polling, and finally showed the
+misleading message:
+"The backend did not return a result."
+
+V19.4 fixes that.
+
+CHANGES
+- Real backend login errors are shown immediately.
+- Wrong credentials now show "Incorrect username or password" instead of a backend timeout.
+- Other backend errors are also shown directly.
+- Login timeout increased from 30 seconds to 60 seconds.
+- Backend remains v3.16.0.
+- No Apps Script redeployment is required.
+
+GITHUB
+Replace:
+- index.html
+- app-v19-3.js  (compatibility file)
+
+Add:
+- app-v19-4.js
+
+Keep unchanged:
+- styles.css
+- config.js
+- Apps Script Backend v3.16.0
+
+Open your CURRENT GitHub Pages URL with:
+?v=1940
+
+Then hard refresh:
+Mac: Command + Shift + R
+
+Expected:
+Frontend v19.4
+Backend v3.16.0
+
+If the password is wrong, the page will now tell you that directly instead of falsely saying the backend failed.
