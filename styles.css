@@ -5766,3 +5766,25 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
   font-weight:900!important;
   white-space:nowrap;
 }
+
+
+/* V19.2.3 — exact dates + P/L to date */
+.holding-pnl-strip{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:8px;margin:8px 0 10px}
+.holding-pnl-card{padding:10px 12px;border:1px solid #e0e4ee;border-radius:12px;background:#fff;box-shadow:0 4px 14px rgba(31,42,84,.045)}
+.holding-pnl-card>span{display:block;color:#69738a;font-size:8.5px;font-weight:950;text-transform:uppercase;letter-spacing:.045em}
+.holding-pnl-card>strong{display:block;margin-top:4px;font-size:17px;line-height:1.1;font-weight:1000;color:#28335f}
+.holding-pnl-card>strong.profit{color:#078a5b!important}.holding-pnl-card>strong.loss{color:#d63f52!important}.holding-pnl-card>strong.neutral{color:#5f6880!important}
+.holding-pnl-card>small{display:block;margin-top:4px;color:#8992a5;font-size:7.7px;line-height:1.25}
+.holding-pnl-card.current{border-top:3px solid #5c68cb}.holding-pnl-card.realised{border-top:3px solid #5c9c83}.holding-pnl-card.total{border-top:3px solid #7a61ba}.holding-pnl-card.coverage{border-top:3px solid #8b91a3}
+.purchase-head{min-width:145px}.sale-head{min-width:140px;color:#b33249!important}.holding-trade-date-cell{min-width:140px;vertical-align:top}
+.trade-date-stack{display:grid;gap:2px;min-width:125px}.trade-date-stack strong{font-size:10px;line-height:1.2}.trade-date-stack span{color:#818a9d;font-size:7.5px;font-weight:800;line-height:1.18}
+.trade-date-stack.purchase strong{color:#078a5b}.trade-date-stack.sale strong,.sale-date-cell .trade-date-stack.sale strong{color:#d63f52!important;font-weight:1000}.trade-date-stack.sale span{color:#bd5061}.trade-date-stack.no-sale strong{color:#a0a7b5}
+.trade-date-missing{display:grid;gap:2px;min-width:125px}.trade-date-missing strong{color:#8a6a33;font-size:8.5px}.trade-date-missing span{color:#9a8e7a;font-size:7.3px}
+.holding-pnl-pill{display:inline-flex;min-width:82px;justify-content:flex-end;padding:5px 7px;border-radius:8px;font-weight:1000;font-size:9.5px;white-space:nowrap}
+.holding-pnl-pill.profit{color:#067a51!important;background:#e8f7f0;border:1px solid #bfe9d8}.holding-pnl-pill.loss{color:#c9344c!important;background:#fff0f2;border:1px solid #f3c5cd}.holding-pnl-pill.neutral{color:#6f788d!important;background:#f2f4f8;border:1px solid #e1e5ec}
+.current-pnl-cell,.realised-pnl-cell,.total-pnl-cell{text-align:right}
+.exact-trade-dates-section .tiny{margin:-3px 0 9px}.drawer-date-list{display:grid;grid-template-columns:130px 1fr;gap:8px;align-items:start;padding:8px 0;border-bottom:1px solid #edf0f5}
+.drawer-date-list>span{color:#6b7488;font-size:9px;font-weight:900}.drawer-date-list>div{display:flex;flex-wrap:wrap;gap:5px}.drawer-date-list b{padding:4px 6px;border-radius:8px;font-size:8.5px}
+.drawer-date-list.purchase b{color:#087b5d;background:#e8f7f0}.drawer-date-list.sale b{color:#c9344c;background:#fff0f2}.drawer-date-list em{color:#9ca3b1;font-size:8.5px;font-style:normal}
+.drawer-history-warning{margin-top:8px;padding:8px 9px;border-radius:9px;color:#8f5b22;background:#fff7e9;border:1px solid #f3ddb9;font-size:8.5px;font-weight:750;line-height:1.35}
+@media(max-width:900px){.holding-pnl-strip{grid-template-columns:repeat(2,minmax(145px,1fr))}}@media(max-width:560px){.holding-pnl-strip{grid-template-columns:1fr}}

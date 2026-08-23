@@ -1,52 +1,45 @@
-MYFINANCE V19.2.2
-Backend remains v3.15.0.
+MYFINANCE V19.2.3 — EXACT DATES + PROFIT/LOSS TO DATE
+Frontend v19.2.3 / Backend v3.15.1
 
-NEW
-1. INVESTMENT HOLDINGS — Purchase / Sale Date column
-   - Works for MF, stocks and ETFs.
-   - BUY date appears in green.
-   - SALE date appears in red.
-   - Uses transaction history already available in V19.2.
-   - First purchase is shown; latest purchase remains available in the holding detail drawer.
-   - Latest sale/redemption is shown in red.
-   - Also included in Holdings Preview/Print and CSV export.
+This version improves the Holdings dashboard so transaction dates and profit/loss are visible and not ambiguous.
 
-2. SMOOTHER KEYBOARD HORIZONTAL SCROLLING
-   - Left / Right arrow keys now smoothly move the active Holdings, Transactions or Watchlist table.
-   - Normal Arrow key = smaller controlled movement.
-   - Shift + Arrow = larger movement.
-   - Uses requestAnimationFrame easing instead of competing browser smooth-scroll calls.
-   - Does not interfere while typing in input/select/textarea fields.
+WHAT YOU WILL SEE
+- Separate Purchase Date(s) and Sale Date(s) columns.
+- Exact BUY date in green.
+- Exact SALE/redemption date in red.
+- For multiple MF SIPs/stock buys: First BUY + Latest BUY + number of recorded dates.
+- Hover the date cell for the recorded dates; the Holding detail drawer lists all exact dates.
+- Current P/L Till Today: current value minus current cost basis.
+- Realised P/L: FIFO P/L from completed sales/redemptions.
+- Total P/L To Date: Current P/L + Realised P/L when complete history exists.
+- PROFIT = green. LOSS = red.
+- A compact P/L strip above Holdings shows Current P/L, Realised P/L, Total P/L and trade-date coverage.
+- Latest price/NAV date is shown so “till today” is not misleading.
 
-3. ADD / EDIT / DELETE COLUMNS
-   - Available in BOTH Investment Holdings and Watchlist.
-   - Buttons are now labelled “Add / Edit / Delete Columns”.
-   - Add custom parameter columns.
-   - Edit custom column name, data type and order.
-   - Delete custom columns and their saved values.
-   - Rename/hide standard columns.
-   - Click custom cells to edit values.
-   - Custom columns continue to appear in Preview/Print.
+WHY DATES CAN STILL BE MISSING
+A holdings snapshot does not contain historical trade dates. Exact dates require:
+- MF transaction statement, or
+- Stock/ETF broker Tradebook.
+If a row says “Import broker tradebook” or “Import MF transaction statement”, the dashboard is telling you the source history is missing rather than inventing a date.
 
-4. All V19.2.1 features retained
-   - Transactions
-   - BUY green / SALE red
-   - realised P/L colours
-   - stock tradebook import
-   - sticky Pin / Completed / Edit / Delete
-   - smooth trackpad/mouse horizontal controls
+BETTER STOCK MATCHING
+Backend v3.15.1 matches common symbol forms such as:
+HDFCBANK / NSE:HDFCBANK / HDFCBANK-EQ / HDFCBANK.NS
 
-INSTALL
-Frontend files to upload/replace:
+INSTALL — BOTH FRONTEND AND BACKEND
+Apps Script:
+1. Replace Code.gs with Code-v3.15.1.gs
+2. Save
+3. Deploy > Manage deployments > Edit existing Web App > New version > Deploy
+4. Execute as Me / Who has access: Anyone
+
+GitHub:
+Upload/replace:
 - index.html
 - styles.css
-- app-v19-2-1.js  (compatibility)
-- app-v19-2-2.js
+- app-v19-2-3.js
+- app-v19-2-2.js (compatibility)
 
-Keep your CURRENT working config.js.
-Backend stays v3.15.0, so no Apps Script redeployment is required for this update.
+Keep the CURRENT working config.js /exec URL.
 
-Open your current GitHub Pages URL with:
-?v=1922
-
-Then Command + Shift + R.
+Open with ?v=1923 and hard refresh (Command + Shift + R).

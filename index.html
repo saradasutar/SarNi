@@ -10,7 +10,7 @@
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260823-1922">
+  <link rel="stylesheet" href="styles.css?v=20260823-1923">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -36,7 +36,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.2.2</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · checking…</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.2.3</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · checking…</span></div>
         </div>
       </form>
     </div>
@@ -58,14 +58,14 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v19.2.2</span><span id="dashboardBackendVersion">Backend · checking…</span>
+        <span id="dashboardVersion">Frontend · v19.2.3</span><span id="dashboardBackendVersion">Backend · checking…</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.2.2</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE …</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.2.3</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE …</span></div></div></div>
         <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
 
@@ -341,9 +341,15 @@
             <button id="holdSizeResetBtn" type="button" class="size-reset-button">Reset</button>
           </div>
           <div class="performance-note">1D–10Y columns show the asset/scheme price or NAV performance for that period. XIRR is available for mutual funds imported from transaction statements.</div>
+          <div class="holding-pnl-strip" aria-label="Profit and loss to date">
+            <article class="holding-pnl-card current"><span>Current P/L till today*</span><strong id="holdCurrentPnlToday">₹0</strong><small>Remaining holdings vs current cost</small></article>
+            <article class="holding-pnl-card realised"><span>Realised P/L</span><strong id="holdRealizedPnl">₹0</strong><small>Completed sales/redemptions</small></article>
+            <article class="holding-pnl-card total"><span>Total P/L to date</span><strong id="holdTotalPnlToDate">₹0</strong><small>Current + realised, where history is complete</small></article>
+            <article class="holding-pnl-card coverage"><span>Exact trade-date coverage</span><strong id="holdTradeDateCoverage">0 / 0</strong><small id="holdPnlAsOf">*Using latest available price/NAV</small></article>
+          </div>
           <div class="table-wrap wide-table" data-layout-scroll="holdings">
             <table class="holdings-table">
-              <thead><tr id="holdingsHeadRow"><th class="sticky-col owner-col">Investor</th><th class="sticky-col asset-col">Asset</th><th class="trade-date-head">Purchase / Sale Date</th><th>Qty / Units</th><th>Avg Buy</th><th>Invested</th><th>Current Price / NAV</th><th>Current Value</th><th>Gain / Loss</th><th>Gain %</th><th>XIRR</th><th>1D</th><th>1W</th><th>1M</th><th>6M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead>
+              <thead><tr id="holdingsHeadRow"><th class="sticky-col owner-col">Investor</th><th class="sticky-col asset-col">Asset</th><th class="trade-date-head purchase-head">Purchase Date(s)</th><th class="trade-date-head sale-head">Sale Date(s)</th><th>Qty / Units</th><th>Avg Buy</th><th>Invested</th><th>Current Price / NAV</th><th>Current Value</th><th>P/L Till Today</th><th>Realised P/L</th><th>Total P/L to Date</th><th>Gain %</th><th>XIRR</th><th>1D</th><th>1W</th><th>1M</th><th>6M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead>
               <tbody id="holdingsBody"></tbody>
             </table>
           </div>
@@ -886,7 +892,7 @@
   </aside>
 
   <div id="toastRegion" class="toast-region" aria-live="polite"></div>
-  <script src="config.js?v=20260823-1922"></script>
-  <script src="app-v19-2-2.js?v=20260823-1922" defer></script>
+  <script src="config.js?v=20260823-1923"></script>
+  <script src="app-v19-2-3.js?v=20260823-1923" defer></script>
 </body>
 </html>
