@@ -10,7 +10,7 @@
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260823-1931-startupsync1">
+  <link rel="stylesheet" href="styles.css?v=20260823-1932-recentdiary1">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -36,7 +36,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.3.1</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.16.0</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.3.2</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.16.0</span></div>
         </div>
       </form>
     </div>
@@ -69,20 +69,20 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v19.3.1</span><span id="dashboardBackendVersion">Backend · v3.16.0</span>
+        <span id="dashboardVersion">Frontend · v19.3.2</span><span id="dashboardBackendVersion">Backend · v3.16.0</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.3.1</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.16.0</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.3.2</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.16.0</span></div></div></div>
         <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
 
       <div id="mobileSessionBar" class="mobile-session-bar" aria-label="Mobile session controls">
         <div class="mobile-session-versions">
-          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.3.1</span>
+          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.3.2</span>
           <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.16.0</span>
         </div>
         <div class="mobile-session-actions">
@@ -613,6 +613,7 @@
                 <div><p class="eyebrow">WRITE / EDIT</p><h3>Daily diary entry</h3></div>
                 <span id="diarySaveStatus" class="tiny muted">New entry</span>
               </div>
+              <div class="diary-compose-with-recent">
               <form id="diaryForm" class="diary-form">
                 <input id="diaryId" type="hidden">
                 <div class="diary-date-row">
@@ -634,6 +635,29 @@
                   <button id="saveDiaryBtn" type="submit" class="primary-button">Save entry</button>
                 </div>
               </form>
+
+              <aside id="recentDailyRail" class="recent-diary-rail mobile-collapsed" aria-label="Recent daily diary entries">
+                <button type="button" class="recent-diary-mobile-toggle" data-recent-rail-toggle="daily" aria-expanded="false">
+                  Recent entries <span id="recentDailyMobileCount">0</span>
+                </button>
+                <div class="recent-diary-rail-body">
+                  <div class="recent-diary-head">
+                    <div><p class="eyebrow">IMMEDIATE HISTORY</p><h4>Recent daily entries</h4></div>
+                    <span id="recentDailyCount" class="tiny muted">0 entries</span>
+                  </div>
+                  <div class="recent-diary-tools">
+                    <select id="recentDailyLimit" aria-label="Number of recent daily entries">
+                      <option value="3">Recent 3</option>
+                      <option value="5" selected>Recent 5</option>
+                      <option value="10">Recent 10</option>
+                    </select>
+                    <input id="recentDailySearch" type="search" placeholder="Search recent…">
+                  </div>
+                  <div id="recentDailyList" class="recent-diary-list"></div>
+                  <div id="recentDailyEmpty" class="recent-diary-empty">No recent daily entries yet.</div>
+                </div>
+              </aside>
+              </div>
             </article>
 
             <article class="panel diary-browser-panel">
@@ -706,6 +730,7 @@
                 <div><p class="eyebrow">ADD / EDIT MONTHLY ITEM</p><h3>Diary, plan, experience or target</h3></div>
                 <span id="monthlySaveStatus" class="tiny muted">New monthly item</span>
               </div>
+              <div class="diary-compose-with-recent monthly-compose-with-recent">
               <form id="monthlyForm" class="diary-form">
                 <input id="monthlyId" type="hidden">
                 <div class="diary-date-row">
@@ -736,6 +761,29 @@
                   <button id="saveMonthlyBtn" type="submit" class="primary-button">Save monthly item</button>
                 </div>
               </form>
+
+              <aside id="recentMonthlyRail" class="recent-diary-rail recent-monthly-rail mobile-collapsed" aria-label="Recent monthly diary entries">
+                <button type="button" class="recent-diary-mobile-toggle" data-recent-rail-toggle="monthly" aria-expanded="false">
+                  Recent monthly <span id="recentMonthlyMobileCount">0</span>
+                </button>
+                <div class="recent-diary-rail-body">
+                  <div class="recent-diary-head">
+                    <div><p class="eyebrow">IMMEDIATE HISTORY</p><h4>Recent monthly entries</h4></div>
+                    <span id="recentMonthlyCount" class="tiny muted">0 items</span>
+                  </div>
+                  <div class="recent-diary-tools">
+                    <select id="recentMonthlyLimit" aria-label="Number of recent monthly entries">
+                      <option value="3">Recent 3</option>
+                      <option value="5" selected>Recent 5</option>
+                      <option value="10">Recent 10</option>
+                    </select>
+                    <input id="recentMonthlySearch" type="search" placeholder="Search recent…">
+                  </div>
+                  <div id="recentMonthlyList" class="recent-diary-list"></div>
+                  <div id="recentMonthlyEmpty" class="recent-diary-empty">No recent monthly entries yet.</div>
+                </div>
+              </aside>
+              </div>
             </article>
 
             <article class="panel monthly-list-panel">
@@ -1201,7 +1249,7 @@
   </aside>
 
   <div id="toastRegion" class="toast-region" aria-live="polite"></div>
-  <script src="config.js?v=20260823-1931-startupsync1"></script>
-  <script src="app-v19-3-1.js?v=20260823-1931-startupsync1" defer></script>
+  <script src="config.js?v=20260823-1932-recentdiary1"></script>
+  <script src="app-v19-3-2.js?v=20260823-1932-recentdiary1" defer></script>
 </body>
 </html>

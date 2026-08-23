@@ -7438,3 +7438,203 @@ body.portfolio-startup-loading #sipSection{
     width:100%;
   }
 }
+
+
+/* =========================================================
+   FE v19.3.2 — RECENT DIARY ENTRIES BESIDE WRITING AREA
+   ========================================================= */
+.diary-compose-with-recent{
+  display:grid;
+  grid-template-columns:minmax(0,1.85fr) minmax(220px,1fr);
+  gap:14px;
+  align-items:start;
+}
+.diary-compose-with-recent > .diary-form{
+  min-width:0;
+}
+.recent-diary-rail{
+  min-width:0;
+  border:1px solid #e0e4f0;
+  border-radius:15px;
+  background:linear-gradient(180deg,#fbfcff,#f7f9ff);
+  overflow:hidden;
+}
+.recent-diary-rail-body{
+  padding:12px;
+}
+.recent-diary-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:9px;
+}
+.recent-diary-head h4{
+  margin:3px 0 0;
+  color:#344363;
+  font-size:12px;
+}
+.recent-diary-tools{
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr);
+  gap:7px;
+  margin-bottom:9px;
+}
+.recent-diary-tools select,
+.recent-diary-tools input{
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  border:1px solid #dce1ec;
+  border-radius:9px;
+  padding:7px 8px;
+  color:#4c5870;
+  background:#fff;
+  font-size:9px;
+  outline:none;
+}
+.recent-diary-tools input:focus,
+.recent-diary-tools select:focus{
+  border-color:#8a7ee1;
+  box-shadow:0 0 0 3px rgba(102,87,216,.08);
+}
+.recent-diary-list{
+  display:grid;
+  gap:8px;
+  max-height:465px;
+  overflow:auto;
+  padding-right:2px;
+}
+.recent-diary-card{
+  min-width:0;
+  padding:10px;
+  border:1px solid #e4e7f0;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 5px 13px rgba(45,58,100,.035);
+}
+.recent-diary-card-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:6px;
+}
+.recent-diary-date,
+.recent-monthly-meta{
+  color:#6e73bd;
+  font-size:7.8px;
+  font-weight:900;
+  line-height:1.35;
+}
+.recent-monthly-meta b{
+  color:#5b51ae;
+}
+.recent-diary-card > strong{
+  display:block;
+  color:#2e3d5e;
+  font-size:10.5px;
+  line-height:1.3;
+  overflow-wrap:break-word;
+}
+.recent-diary-preview,
+.recent-diary-full{
+  margin:5px 0 0;
+  color:#6f7a8e;
+  font-size:9.2px;
+  line-height:1.45;
+  white-space:pre-wrap;
+  overflow-wrap:break-word;
+}
+.recent-diary-full{
+  display:none;
+  padding-top:7px;
+  border-top:1px dashed #e4e7ef;
+  color:#4f5b70;
+}
+.recent-diary-card.expanded .recent-diary-preview{display:none}
+.recent-diary-card.expanded .recent-diary-full{display:block}
+.recent-diary-card-actions{
+  display:flex;
+  gap:4px;
+  flex:0 0 auto;
+}
+.recent-link-button{
+  border:0;
+  padding:2px 3px;
+  color:#6157b7;
+  background:transparent;
+  font-size:8px;
+  font-weight:900;
+  cursor:pointer;
+}
+.recent-link-button.edit{color:#347563}
+.recent-link-button:hover{text-decoration:underline}
+.recent-diary-empty{
+  padding:14px 8px;
+  color:#98a0af;
+  text-align:center;
+  font-size:9px;
+}
+.recent-diary-empty.hidden{display:none!important}
+.recent-diary-mobile-toggle{
+  display:none;
+}
+
+/* Let the existing left editor remain comfortable even with the new recent rail. */
+.diary-compose-panel,
+.monthly-compose-panel{
+  min-width:0;
+}
+
+/* At medium desktop widths, stack recent history below the form instead of crushing it. */
+@media(max-width:1180px) and (min-width:861px){
+  .diary-compose-with-recent{
+    grid-template-columns:1fr;
+  }
+  .recent-diary-list{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    max-height:310px;
+  }
+}
+
+/* Mobile: Recent entries start collapsed and open on demand. */
+@media(max-width:860px){
+  .diary-compose-with-recent{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  .recent-diary-rail{
+    border-radius:12px;
+  }
+  .recent-diary-mobile-toggle{
+    display:flex;
+    width:100%;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    border:0;
+    padding:11px 12px;
+    color:#4e528f;
+    background:#f5f4ff;
+    font-size:10px;
+    font-weight:950;
+    cursor:pointer;
+  }
+  .recent-diary-mobile-toggle span{
+    display:inline-flex;
+    min-width:24px;
+    justify-content:center;
+    padding:2px 6px;
+    border-radius:999px;
+    color:#fff;
+    background:#6a5bd3;
+    font-size:8px;
+  }
+  .recent-diary-rail.mobile-collapsed .recent-diary-rail-body{
+    display:none;
+  }
+  .recent-diary-list{
+    max-height:360px;
+  }
+}
