@@ -1,49 +1,40 @@
-MYFINANCE V19.2 / BACKEND V3.15.0 — TRANSACTION HISTORY
+MYFINANCE V19.3 / BACKEND V3.16.0 — LOGIN TIMEOUT FIX
 
-NEW
-- New Transactions tab
-- MF purchase/SIP/redemption dates from already imported MF statements
-- Stock/ETF BUY/SELL dates from broker Tradebook import
-- Zerodha Tradebook CSV/XLSX support plus similar common tradebook headings
-- Filters: investor, asset type, BUY/SALE, date range, search
-- Total purchases
-- Total sales
-- Realised profit/loss (FIFO when complete buy history is available)
-- Holding period on sale transactions
-- Holding detail drawer shows first purchase, latest purchase and latest sale dates
-- SALE is deliberately shown in RED
-- Realised profit = green; realised loss = red
-- Transaction print preview
+The screenshot showing Backend v3.15.0 proves the frontend can reach Apps Script.
+The timeout was caused by LOGIN trying to build and return the full dashboard including
+the new transaction history before login completed.
 
-IMPORTANT
-Stock holdings files normally do not contain full trade dates. Use:
-Transactions > Import stock tradebook
-
-Stock tradebook import adds transaction history and DOES NOT replace existing holdings.
+V19.3 changes this:
+- Login returns only authentication details and token.
+- Dashboard loads separately after login.
+- Full transaction history is removed from the normal dashboard payload.
+- Transactions load only when you open Transactions.
+- Transactions are fetched in pages of 200 rows.
+- Purchase/sale dates, realised P/L and red SALE display remain.
 
 BACKEND
-Update Apps Script to Code-v3.15.gs and redeploy the SAME existing Web App deployment:
-Deploy > Manage deployments > Edit > New version > Deploy
+Replace Code.gs with Code-v3.16.gs.
+Deploy > Manage deployments > Edit existing Web App > New version > Deploy.
 Execute as: Me
 Who has access: Anyone
 
-Then direct /exec should show:
-"version":"3.15.0"
+Confirm the same /exec URL shows:
+"version":"3.16.0"
 
 GITHUB
 Upload/replace:
 - index.html
 - styles.css
-- app-v19-1.js  (compatibility)
-- app-v19-2.js
-Keep:
-- config.js
+- app-v19-2.js  (compatibility)
+- app-v19-3.js
 
-Current config.js retains your existing backend URL. If you intentionally create a NEW deployment URL,
-update config.js to that new /exec URL.
+Keep config.js unchanged.
 
-Open:
-https://saradasutar.github.io/saradaniharika/?v=1920
+Open your current GitHub Pages URL with:
+?v=1930
 
-Hard refresh:
-Mac: Command + Shift + R
+Then Command + Shift + R.
+
+Expected:
+Frontend v19.3
+Backend v3.16.0
