@@ -1,0 +1,24 @@
+SARNI FRONTEND V19.4 — UPLOAD THESE FILES TO THE ROOT OF THE SarNi GITHUB REPOSITORY
+
+Upload/replace ALL of these files in:
+https://github.com/saradasutar/SarNi
+
+Files:
+- index.html
+- styles.css
+- config.js
+- app-v19-4.js
+- app-v19-3.js
+
+Do NOT upload them to the old saradaniharika or MyFinance repository.
+
+After GitHub Pages finishes publishing, open:
+https://saradasutar.github.io/SarNi/?v=1941
+
+Then Command + Shift + R.
+
+CORRECT LOGIN SCREEN MUST SHOW:
+Frontend · v19.4
+Backend · v3.16.0
+
+If it still says Frontend · v19.3, GitHub Pages is still serving the old index.html from the SarNi repository/branch.
