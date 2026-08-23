@@ -1,7 +1,7 @@
 'use strict';
 
 const CONFIG = window.PORTFOLIO_CONFIG || {};
-const APP_VERSION = '18.4';
+const APP_VERSION = '18.3';
 const state = {
   token: localStorage.getItem('portfolio_token') || '',
   username: localStorage.getItem('portfolio_username') || '',
@@ -10,8 +10,6 @@ const state = {
   watchlist: [],
   stickyNotes: [],
   lifeQuotes: [],
-  customColumns: [],
-  customValues: [],
   lifeQuoteIndex: 0,
   lifeQuoteTimer: null,
   lifeQuotePaused: false,
@@ -49,7 +47,7 @@ const $ = (id) => document.getElementById(id);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 const els = {};
 [
-  'loginView','appView','runtimeWarning','loginForm','loginUsername','loginPassword','rememberUsername','loginVersion','loginBackendVersion','loginButton','loginMessage','sideAppName','dashboardUsername','dashboardVersion','dashboardBackendVersion','dashboardVersionTop','dashboardBackendVersionTop','todayLabel','pageTitle','autoRefreshSelect','autoRefreshCountdown','syncStatus','refreshBtn','addInvestmentBtn','addInvestmentTableBtn','bulkImportBtn','logoutBtn','profileButton','avatarInitial','personalHomeModeBtn','investmentHomeModeBtn','overviewSetDefaultBtn','personalHomeContent','investmentOverviewContent','personalHomeGreeting','homeDailyWriteBtn','homeMonthlyWriteBtn','homeAddTargetBtn','homeDiaryCount','homeDiaryPreview','homeDiaryQuickBtn','homeFullDiaryBtn','homeStickyCount','homeStickyDueToday','homeStickyOverdue','homeStickyUpcoming','homeStickyPreview','homeTargetAddBtn','homeTargetsOpenBtn','homeQuoteCard','homeQuoteText','homeQuoteAuthor','homeQuoteAutoStatus','homeQuoteNextBtn','homeQuotesOpenBtn','homeShowInvestmentsBtn','welcomeTitle','lastUpdatedText','viewChip','overviewStickyShortcut','overviewStickyShortcutCount','overviewQuoteShortcut','utilityDrawerOpenBtn','utilityDrawerCloseBtn','utilityDrawerScrim','utilityDrawer','utilityStickyBadge','utilityStickyTabCount','utilityStickySection','utilityQuoteSection','lifeQuoteText','lifeQuoteAuthor','lifeQuoteShuffleStatus','lifeQuoteNextBtn','lifeQuotePauseBtn','lifeQuoteLibraryBtn','lifeQuoteModal','lifeQuoteForm','lifeQuoteId','lifeQuoteInput','lifeQuoteAuthorInput','lifeQuoteSearch','lifeQuoteCount','lifeQuoteList','lifeQuoteEmpty','clearLifeQuoteBtn','saveLifeQuoteBtn','stickyNotesCount','stickyNotesList','stickyNotesEmpty','addStickyNoteBtn','ownerSwitcher','assetViewSwitcher','typeSummaryGrid','holdingsHeading','sumInvestedLabel','sumCurrentLabel','importBtn','exportBtn','sumInvested','sumCurrent','sumGain','sumReturn','sumAssetCount','sumPricedCount','sumSplit','sumWatchCount','sumInvestedTrend','sumCurrentTrend','sumGainTrend','sumWatchTrend','growthRangeButtons','growthInvestedDelta','growthInvestedPct','growthValueDelta','growthValuePct','growthGainNow','growthReturnNow','portfolioGrowthChart','growthHistoryNote','watchPulseBadge','watchAtTarget','watchNearTarget','watchAverageGap','watchPulseCount','watchlistTrendChart','watchTrendNote','watchlistLastAutoUpdate','watchStripAtTarget','watchStripNear','watchStripGap','allocationChart','investorSummary','topHoldings','replaceMasterDataBtn','masterDataStatus','masterLoadBanner','masterLoadNowBtn','showAllInvestmentsBtn','holdingSearch','holdingTypeFilter','holdingsFilterCount','printHoldingsBtn','holdingsFullscreenBtn','holdRowMinusBtn','holdRowPlusBtn','holdRowSizeLabel','holdRowSlider','holdWidthMinusBtn','holdWidthPlusBtn','holdWidthSizeLabel','holdWidthSlider','holdLayoutSavedStatus','holdSizeResetBtn','holdSumCombinedTotalInvested','holdSumCombinedTotalCurrent','holdSumCombinedTotalGrowth','holdSumCombinedMfInvested','holdSumCombinedMfCurrent','holdSumCombinedMfGrowth','holdSumCombinedStockInvested','holdSumCombinedStockCurrent','holdSumCombinedStockGrowth','holdSumNiharikaTotalInvested','holdSumNiharikaTotalCurrent','holdSumNiharikaTotalGrowth','holdSumNiharikaMfInvested','holdSumNiharikaMfCurrent','holdSumNiharikaMfGrowth','holdSumNiharikaStockInvested','holdSumNiharikaStockCurrent','holdSumNiharikaStockGrowth','holdSumSaradaTotalInvested','holdSumSaradaTotalCurrent','holdSumSaradaTotalGrowth','holdSumSaradaMfInvested','holdSumSaradaMfCurrent','holdSumSaradaMfGrowth','holdSumSaradaStockInvested','holdSumSaradaStockCurrent','holdSumSaradaStockGrowth','holdingsBody','holdingsEmpty','manageHoldingsColumnsBtn','viewAllNotesBtn','watchAllNotesBtn','columnManagerModal','columnManagerTitle','customColumnForm','customColumnId','customColumnSection','customColumnLabel','customColumnKey','customColumnType','customColumnOrder','clearCustomColumnBtn','saveCustomColumnBtn','standardColumnsList','resetStandardColumnsBtn','customColumnsList','customColumnsEmpty','customColumnCount','customValueModal','customValueTitle','customValueRecord','customValueForm','customValueSection','customValueRecordId','customValueColumnKey','customValueFieldLabel','customValueInput','saveCustomValueBtn','notesModal','notesSearch','notesSource','notesScope','notesFilter','notesSummary','notesList','notesEmpty','watchSearch','watchTypeFilter','watchPriorityFilter','watchTargetFilter','watchFilterCount','printWatchlistBtn','watchlistFullscreenBtn','watchRowMinusBtn','watchRowPlusBtn','watchRowSizeLabel','watchRowSlider','watchWidthMinusBtn','watchWidthPlusBtn','watchWidthSizeLabel','watchWidthSlider','watchLayoutSavedStatus','watchSizeResetBtn','manageWatchlistColumnsBtn','watchBody','watchEmpty','diaryForm','diaryId','diaryDate','diaryPrevDayBtn','diaryTodayBtn','diaryNextDayBtn','diaryTitle','diaryText','diaryDraftStatus','diaryCharCount','saveDiaryBtn','clearDiaryBtn','newDiaryEntryBtn','diarySaveStatus','diaryViewSwitcher','diarySearch','diarySearchClearBtn','diaryDayControl','diaryMonthControl','diaryRangeControl','diaryBrowseDate','diaryBrowseMonth','diaryFromDate','diaryToDate','printDiaryBtn','diarySummary','diaryList','diaryEmpty','diaryHeroStatus','diaryWorkspaceSwitcher','dailyDiaryWorkspace','monthlyDiaryWorkspace','monthlyYearFilter','monthlyMonthFilter','monthlyTypeFilter','monthlyStatusFilter','monthlySearch','printMonthlyBtn','monthCompletionPanel','monthCompletionTitle','monthCompletionText','monthProgressBar','monthProgressLabel','completeMonthBtn','monthlyForm','monthlyId','monthlyEntryMonth','monthlyPrevMonthBtn','monthlyThisMonthBtn','monthlyNextMonthBtn','monthlyEntryType','monthlyTitle','monthlyText','monthlyDraftStatus','monthlyCharCount','monthlyTargetHelp','monthlySaveStatus','clearMonthlyBtn','saveMonthlyBtn','monthlyListTitle','monthlyResultCount','completedMonthArchive','monthlyList','monthlyEmpty','usersBody','modalBackdrop','investmentModal','investmentForm','holdingId','holdingOwner','holdingType','holdingName','holdingCode','holdingExchange','holdingUnits','holdingInvested','holdingManualPrice','holdingBuyDate','holdingNotes','holdingCodeLabel','exchangeLabel','mfHelp','bulkImportModal','bulkImportForm','bulkCsvFile','bulkImportStatus','runBulkImportBtn','downloadImportTemplateBtn','mfImportHelp','mfSnapshotImportHelp','stockImportHelp','stockOwnerLabel','importOwner','importFileHint','watchModal','watchForm','watchId','watchType','watchName','watchCode','watchExchange','watchTarget','watchManualPrice','watchPriority','watchNotes','watchCodeLabel','watchExchangeLabel','watchMfHelp','stickyNoteModal','stickyNoteForm','stickyNoteId','stickyNoteType','stickyNoteTitle','stickyNoteDueDate','stickyNoteText','stickyNoteModalTitle','saveStickyNoteBtn','passwordModal','passwordForm','currentPassword','newPassword','confirmPassword','userModal','userForm','newUsername','newDisplayName','newUserRole','newUserPassword','quickDiaryBtn','quickDiaryMobileBtn','quickDiaryPanel','quickDiaryCloseBtn','quickDailyForm','quickDailyDate','quickDailyTitle','quickDailyText','quickDailyStatus','quickDailyCount','quickDailySaveBtn','quickMonthlyForm','quickMonthlyMonth','quickMonthlyType','quickMonthlyTitle','quickMonthlyText','quickMonthlyStatus','quickMonthlyCount','quickMonthlySaveBtn','openFullDiaryBtn','dashboardHScroll','dashboardHScrollRange','dashboardHScrollLabel','dashboardHScrollPct','dashboardHScrollLeft','dashboardHScrollRight','holdingDrawerBackdrop','holdingDrawer','drawerEyebrow','drawerAssetBadge','drawerTitle','drawerSubtitle','drawerContent','drawerCloseBtn','drawerEditBtn','drawerDoneBtn','toastRegion'
+  'loginView','appView','runtimeWarning','loginForm','loginUsername','loginPassword','rememberUsername','loginVersion','loginBackendVersion','loginButton','loginMessage','sideAppName','dashboardUsername','dashboardVersion','dashboardBackendVersion','dashboardVersionTop','dashboardBackendVersionTop','todayLabel','pageTitle','autoRefreshSelect','autoRefreshCountdown','syncStatus','refreshBtn','addInvestmentBtn','addInvestmentTableBtn','bulkImportBtn','logoutBtn','profileButton','avatarInitial','personalHomeModeBtn','investmentHomeModeBtn','overviewSetDefaultBtn','personalHomeContent','investmentOverviewContent','personalHomeGreeting','homeDailyWriteBtn','homeMonthlyWriteBtn','homeAddTargetBtn','homeDiaryCount','homeDiaryPreview','homeDiaryQuickBtn','homeFullDiaryBtn','homeStickyCount','homeStickyDueToday','homeStickyOverdue','homeStickyUpcoming','homeStickyPreview','homeTargetAddBtn','homeTargetsOpenBtn','homeQuoteCard','homeQuoteText','homeQuoteAuthor','homeQuoteAutoStatus','homeQuoteNextBtn','homeQuotesOpenBtn','homeShowInvestmentsBtn','welcomeTitle','lastUpdatedText','viewChip','overviewStickyShortcut','overviewStickyShortcutCount','overviewQuoteShortcut','utilityDrawerOpenBtn','utilityDrawerCloseBtn','utilityDrawerScrim','utilityDrawer','utilityStickyBadge','utilityStickyTabCount','utilityStickySection','utilityQuoteSection','lifeQuoteText','lifeQuoteAuthor','lifeQuoteShuffleStatus','lifeQuoteNextBtn','lifeQuotePauseBtn','lifeQuoteLibraryBtn','lifeQuoteModal','lifeQuoteForm','lifeQuoteId','lifeQuoteInput','lifeQuoteAuthorInput','lifeQuoteSearch','lifeQuoteCount','lifeQuoteList','lifeQuoteEmpty','clearLifeQuoteBtn','saveLifeQuoteBtn','stickyNotesCount','stickyNotesList','stickyNotesEmpty','addStickyNoteBtn','ownerSwitcher','assetViewSwitcher','typeSummaryGrid','holdingsHeading','sumInvestedLabel','sumCurrentLabel','importBtn','exportBtn','sumInvested','sumCurrent','sumGain','sumReturn','sumAssetCount','sumPricedCount','sumSplit','sumWatchCount','sumInvestedTrend','sumCurrentTrend','sumGainTrend','sumWatchTrend','growthRangeButtons','growthInvestedDelta','growthInvestedPct','growthValueDelta','growthValuePct','growthGainNow','growthReturnNow','portfolioGrowthChart','growthHistoryNote','watchPulseBadge','watchAtTarget','watchNearTarget','watchAverageGap','watchPulseCount','watchlistTrendChart','watchTrendNote','watchlistLastAutoUpdate','watchStripAtTarget','watchStripNear','watchStripGap','allocationChart','investorSummary','topHoldings','replaceMasterDataBtn','masterDataStatus','masterLoadBanner','masterLoadNowBtn','showAllInvestmentsBtn','holdingSearch','holdingTypeFilter','holdingsFilterCount','printHoldingsBtn','holdingsFullscreenBtn','holdRowMinusBtn','holdRowPlusBtn','holdRowSizeLabel','holdRowSlider','holdWidthMinusBtn','holdWidthPlusBtn','holdWidthSizeLabel','holdWidthSlider','holdLayoutSavedStatus','holdSizeResetBtn','holdSumCombinedTotalInvested','holdSumCombinedTotalCurrent','holdSumCombinedTotalGrowth','holdSumCombinedMfInvested','holdSumCombinedMfCurrent','holdSumCombinedMfGrowth','holdSumCombinedStockInvested','holdSumCombinedStockCurrent','holdSumCombinedStockGrowth','holdSumNiharikaTotalInvested','holdSumNiharikaTotalCurrent','holdSumNiharikaTotalGrowth','holdSumNiharikaMfInvested','holdSumNiharikaMfCurrent','holdSumNiharikaMfGrowth','holdSumNiharikaStockInvested','holdSumNiharikaStockCurrent','holdSumNiharikaStockGrowth','holdSumSaradaTotalInvested','holdSumSaradaTotalCurrent','holdSumSaradaTotalGrowth','holdSumSaradaMfInvested','holdSumSaradaMfCurrent','holdSumSaradaMfGrowth','holdSumSaradaStockInvested','holdSumSaradaStockCurrent','holdSumSaradaStockGrowth','holdingsBody','holdingsEmpty','viewAllNotesBtn','watchAllNotesBtn','notesModal','notesSearch','notesSource','notesScope','notesFilter','notesSummary','notesList','notesEmpty','watchSearch','watchTypeFilter','watchPriorityFilter','watchTargetFilter','watchFilterCount','printWatchlistBtn','watchlistFullscreenBtn','watchRowMinusBtn','watchRowPlusBtn','watchRowSizeLabel','watchRowSlider','watchWidthMinusBtn','watchWidthPlusBtn','watchWidthSizeLabel','watchWidthSlider','watchLayoutSavedStatus','watchSizeResetBtn','watchBody','watchEmpty','diaryForm','diaryId','diaryDate','diaryPrevDayBtn','diaryTodayBtn','diaryNextDayBtn','diaryTitle','diaryText','diaryDraftStatus','diaryCharCount','saveDiaryBtn','clearDiaryBtn','newDiaryEntryBtn','diarySaveStatus','diaryViewSwitcher','diarySearch','diarySearchClearBtn','diaryDayControl','diaryMonthControl','diaryRangeControl','diaryBrowseDate','diaryBrowseMonth','diaryFromDate','diaryToDate','printDiaryBtn','diarySummary','diaryList','diaryEmpty','diaryHeroStatus','diaryWorkspaceSwitcher','dailyDiaryWorkspace','monthlyDiaryWorkspace','monthlyYearFilter','monthlyMonthFilter','monthlyTypeFilter','monthlyStatusFilter','monthlySearch','printMonthlyBtn','monthCompletionPanel','monthCompletionTitle','monthCompletionText','monthProgressBar','monthProgressLabel','completeMonthBtn','monthlyForm','monthlyId','monthlyEntryMonth','monthlyPrevMonthBtn','monthlyThisMonthBtn','monthlyNextMonthBtn','monthlyEntryType','monthlyTitle','monthlyText','monthlyDraftStatus','monthlyCharCount','monthlyTargetHelp','monthlySaveStatus','clearMonthlyBtn','saveMonthlyBtn','monthlyListTitle','monthlyResultCount','completedMonthArchive','monthlyList','monthlyEmpty','usersBody','modalBackdrop','investmentModal','investmentForm','holdingId','holdingOwner','holdingType','holdingName','holdingCode','holdingExchange','holdingUnits','holdingInvested','holdingManualPrice','holdingBuyDate','holdingNotes','holdingCodeLabel','exchangeLabel','mfHelp','bulkImportModal','bulkImportForm','bulkCsvFile','bulkImportStatus','runBulkImportBtn','downloadImportTemplateBtn','mfImportHelp','mfSnapshotImportHelp','stockImportHelp','stockOwnerLabel','importOwner','importFileHint','watchModal','watchForm','watchId','watchType','watchName','watchCode','watchExchange','watchTarget','watchManualPrice','watchPriority','watchNotes','watchCodeLabel','watchExchangeLabel','watchMfHelp','stickyNoteModal','stickyNoteForm','stickyNoteId','stickyNoteType','stickyNoteTitle','stickyNoteDueDate','stickyNoteText','stickyNoteModalTitle','saveStickyNoteBtn','passwordModal','passwordForm','currentPassword','newPassword','confirmPassword','userModal','userForm','newUsername','newDisplayName','newUserRole','newUserPassword','quickDiaryBtn','quickDiaryMobileBtn','quickDiaryPanel','quickDiaryCloseBtn','quickDailyForm','quickDailyDate','quickDailyTitle','quickDailyText','quickDailyStatus','quickDailyCount','quickDailySaveBtn','quickMonthlyForm','quickMonthlyMonth','quickMonthlyType','quickMonthlyTitle','quickMonthlyText','quickMonthlyStatus','quickMonthlyCount','quickMonthlySaveBtn','openFullDiaryBtn','dashboardHScroll','dashboardHScrollRange','dashboardHScrollLabel','dashboardHScrollPct','dashboardHScrollLeft','dashboardHScrollRight','holdingDrawerBackdrop','holdingDrawer','drawerEyebrow','drawerAssetBadge','drawerTitle','drawerSubtitle','drawerContent','drawerCloseBtn','drawerEditBtn','drawerDoneBtn','toastRegion'
 ].forEach((id) => { els[id] = $(id); });
 
 function isConfigured() {
@@ -523,8 +521,8 @@ async function loadBackendVersion(){
     if(data&&data.version){
       state.backendVersion=String(data.version);
       const parts=state.backendVersion.split('.').map(Number);
-      if(parts[0]<3||(parts[0]===3&&parts[1]<9)){
-        showRuntimeWarning(`Backend v${state.backendVersion} is older than required v3.9.0. Core tabs remain available, but custom table columns need backend v3.9.0.`);
+      if(parts[0]<3||(parts[0]===3&&parts[1]<8)){
+        showRuntimeWarning(`Backend v${state.backendVersion} is older than required v3.8.0. Core tabs remain available, but the Daily Quote Library needs backend v3.8.0.`);
       }
     }
   }catch(e){if(!state.backendVersion)state.backendVersion='unavailable';}
@@ -573,7 +571,7 @@ function applyBootstrap(data,fromCache=false){
     setTimeout(()=>toast('Master spreadsheet has not been applied yet. Click “Load Master Sheet Data” on Overview.','info'),500);
   }
   updateVersionLabels();
-  state.user=data.user||state.user;state.holdings=Array.isArray(data.holdings)?data.holdings:[];state.watchlist=Array.isArray(data.watchlist)?data.watchlist:[];state.customColumns=Array.isArray(data.customColumns)?data.customColumns:[];state.customValues=Array.isArray(data.customValues)?data.customValues:[];state.stickyNotes=Array.isArray(data.stickyNotes)?data.stickyNotes:[];state.lifeQuotes=Array.isArray(data.lifeQuotes)?data.lifeQuotes:[];state.diary=Array.isArray(data.diary)?data.diary:[];state.monthlyDiary=Array.isArray(data.monthlyDiary)?data.monthlyDiary:[];state.monthStatus=Array.isArray(data.monthStatus)?data.monthStatus:[];state.owners=Array.isArray(data.owners)?data.owners:[];if(Array.isArray(data.users))state.users=data.users;
+  state.user=data.user||state.user;state.holdings=Array.isArray(data.holdings)?data.holdings:[];state.watchlist=Array.isArray(data.watchlist)?data.watchlist:[];state.stickyNotes=Array.isArray(data.stickyNotes)?data.stickyNotes:[];state.lifeQuotes=Array.isArray(data.lifeQuotes)?data.lifeQuotes:[];state.diary=Array.isArray(data.diary)?data.diary:[];state.monthlyDiary=Array.isArray(data.monthlyDiary)?data.monthlyDiary:[];state.monthStatus=Array.isArray(data.monthStatus)?data.monthStatus:[];state.owners=Array.isArray(data.owners)?data.owners:[];if(Array.isArray(data.users))state.users=data.users;
   if(!fromCache)recordGrowthSnapshot();
   refreshOwnerControls();renderAll();
   if(state.user){els.avatarInitial.textContent=(state.user.displayName||state.user.username||'I').charAt(0).toUpperCase();if(els.dashboardUsername)els.dashboardUsername.textContent=state.user.username||state.user.displayName||'—';if(els.diaryHeroStatus)els.diaryHeroStatus.textContent=`Private diary · ${state.user.username||'signed in'}`;$$('.admin-only').forEach(el=>el.classList.toggle('hidden',state.user.role!=='ADMIN'));}
@@ -1012,250 +1010,11 @@ function renderHoldingsSummary(){
   setHoldingValueGrowth('holdSumSaradaStock',holdingSummarySubset(sarada,'STOCKS'));
 }
 
-const STANDARD_COLUMN_DEFS={
-  HOLDINGS:[
-    {key:'investor',label:'Investor',index:0,locked:true},{key:'asset',label:'Asset',index:1,locked:true},
-    {key:'units',label:'Qty / Units',index:2},{key:'avgBuy',label:'Avg Buy',index:3},{key:'invested',label:'Invested',index:4},
-    {key:'currentPrice',label:'Current Price / NAV',index:5},{key:'currentValue',label:'Current Value',index:6},
-    {key:'gainLoss',label:'Gain / Loss',index:7},{key:'gainPct',label:'Gain %',index:8},{key:'xirr',label:'XIRR',index:9},
-    {key:'d1',label:'1D',index:10},{key:'w1',label:'1W',index:11},{key:'m1',label:'1M',index:12},{key:'m6',label:'6M',index:13},
-    {key:'y1',label:'1Y',index:14},{key:'y3',label:'3Y',index:15},{key:'y5',label:'5Y',index:16},{key:'y10',label:'10Y',index:17},
-    {key:'note',label:'Personal Note',index:18},{key:'actions',label:'Actions',index:19,locked:true}
-  ],
-  WATCHLIST:[
-    {key:'asset',label:'Asset',index:0,locked:true},{key:'livePrice',label:'Live Price/NAV',index:1},{key:'dayPct',label:'Sheet Day %',index:2},
-    {key:'target',label:'Target',index:3},{key:'distance',label:'Distance',index:4},{key:'highLow',label:'52W H/L',index:5},
-    {key:'valuation',label:'P/E or P/B',index:6},{key:'m1',label:'1M',index:7},{key:'y1',label:'1Y',index:8},{key:'y3',label:'3Y',index:9},
-    {key:'y5',label:'5Y',index:10},{key:'y10',label:'10Y',index:11},{key:'remark',label:'Remark / Moat',index:12},
-    {key:'note',label:'Personal Note',index:13},{key:'actions',label:'Actions',index:14,locked:true}
-  ]
-};
-function standardColumnSettingsKey(section){return `myfinance_standard_columns_${section}`;}
-function loadStandardColumnSettings(section){
-  try{
-    const raw=JSON.parse(localStorage.getItem(standardColumnSettingsKey(section))||'{}');
-    return raw&&typeof raw==='object'?raw:{};
-  }catch{return{};}
-}
-function saveStandardColumnSettings(section,settings){
-  try{localStorage.setItem(standardColumnSettingsKey(section),JSON.stringify(settings||{}));}catch{}
-}
-function sectionCustomColumns(section){
-  return state.customColumns.filter(c=>String(c.section).toUpperCase()===section).sort((a,b)=>Number(a.sortOrder||100)-Number(b.sortOrder||100)||String(a.label).localeCompare(String(b.label)));
-}
-function customValueFor(section,recordId,columnKey){
-  return state.customValues.find(v=>String(v.section).toUpperCase()===section&&String(v.recordId)===String(recordId)&&String(v.columnKey)===String(columnKey))?.value||'';
-}
-function customColumnByKey(section,key){
-  return sectionCustomColumns(section).find(c=>String(c.columnKey)===String(key))||null;
-}
-function formatCustomValuePlain(column,value){
-  if(value==null||String(value)==='')return '—';
-  const type=String(column?.dataType||'TEXT').toUpperCase();
-  if(type==='CURRENCY')return formatCurrency(Number(value));
-  if(type==='PERCENT')return `${Number(value)>=0?'+':''}${Number(value).toFixed(2)}%`;
-  if(type==='NUMBER')return Number(value).toLocaleString('en-IN',{maximumFractionDigits:4});
-  if(type==='DATE')return detailDate(value);
-  return String(value);
-}
-function formatCustomValue(column,value){
-  const plain=formatCustomValuePlain(column,value);
-  return String(column?.dataType||'TEXT').toUpperCase()==='TEXT'?escapeHtml(plain):plain;
-}
-function customCellsHtml(section,recordId){
-  return sectionCustomColumns(section).map(c=>{
-    const raw=customValueFor(section,recordId,c.columnKey);
-    const shown=formatCustomValue(c,raw);
-    return `<td class="custom-value-cell" data-custom-cell="1" data-custom-section="${section}" data-custom-record="${escapeHtml(recordId)}" data-custom-key="${escapeHtml(c.columnKey)}" title="Click to edit ${escapeHtml(c.label)}"><span>${shown}</span><i>✎</i></td>`;
-  }).join('');
-}
-function resetCustomHeaders(section){
-  const row=$(section==='HOLDINGS'?'holdingsHeadRow':'watchHeadRow');
-  row?.querySelectorAll('.custom-column-head').forEach(x=>x.remove());
-}
-function appendCustomHeaders(section){
-  const row=$(section==='HOLDINGS'?'holdingsHeadRow':'watchHeadRow');
-  if(!row)return;
-  resetCustomHeaders(section);
-  const actionHead=row.lastElementChild;
-  sectionCustomColumns(section).forEach(c=>{
-    const th=document.createElement('th');
-    th.className='custom-column-head';
-    th.dataset.customKey=c.columnKey;
-    th.textContent=c.label;
-    th.title=`Custom parameter · ${c.dataType}`;
-    row.insertBefore(th,actionHead);
-  });
-}
-function applyStandardColumnSettings(section){
-  const table=tableElementFor(section.toLowerCase());
-  if(!table)return;
-  const defs=STANDARD_COLUMN_DEFS[section]||[];
-  const settings=loadStandardColumnSettings(section);
-  const headerRow=table.querySelector('thead tr');
-  const customCount=sectionCustomColumns(section).length;
-  defs.forEach(def=>{
-    let index=def.index;
-    if(def.key==='actions'&&customCount)index=def.index+customCount;
-    const cfg=settings[def.key]||{};
-    const cells=[...table.querySelectorAll('tr')].map(r=>r.children[index]).filter(Boolean);
-    cells.forEach((cell,rowIndex)=>{
-      cell.classList.toggle('column-user-hidden',cfg.visible===false&&!def.locked);
-      if(rowIndex===0&&!cell.classList.contains('custom-column-head')){
-        const label=String(cfg.label||def.label);
-        if(def.key!=='actions')cell.childNodes[0] && (cell.childNodes[0].nodeValue=label);
-      }
-    });
-  });
-}
-function renderStandardColumnsManager(section){
-  if(!els.standardColumnsList)return;
-  const settings=loadStandardColumnSettings(section);
-  els.standardColumnsList.innerHTML=(STANDARD_COLUMN_DEFS[section]||[]).filter(d=>d.key!=='actions').map(def=>{
-    const cfg=settings[def.key]||{};
-    const visible=def.locked?true:cfg.visible!==false;
-    return `<div class="column-config-row ${def.locked?'locked':''}" data-standard-column="${escapeHtml(def.key)}">
-      <label class="column-visible-toggle"><input type="checkbox" data-standard-visible="${escapeHtml(def.key)}" ${visible?'checked':''} ${def.locked?'disabled':''}><span>${def.locked?'Required':'Show'}</span></label>
-      <input class="column-label-input" data-standard-label="${escapeHtml(def.key)}" value="${escapeHtml(String(cfg.label||def.label))}" maxlength="80" ${def.locked&&def.key==='asset'?'':''}>
-    </div>`;
-  }).join('');
-}
-function resetCustomColumnForm(section=els.customColumnSection?.value||'HOLDINGS'){
-  if(!els.customColumnForm)return;
-  els.customColumnForm.reset();
-  els.customColumnId.value='';
-  els.customColumnSection.value=section;
-  els.customColumnType.value='TEXT';
-  els.customColumnOrder.value=String((sectionCustomColumns(section).length+1)*10);
-  els.customColumnKey.disabled=false;
-  els.saveCustomColumnBtn.textContent='Add column';
-}
-function renderCustomColumnsManager(section){
-  const items=sectionCustomColumns(section);
-  if(els.customColumnCount)els.customColumnCount.textContent=`${items.length} custom`;
-  els.customColumnsEmpty?.classList.toggle('hidden',items.length>0);
-  if(els.customColumnsList)els.customColumnsList.innerHTML=items.map(c=>`<div class="column-config-row custom" data-custom-column-id="${escapeHtml(c.id)}">
-    <div class="custom-column-info"><strong>${escapeHtml(c.label)}</strong><span>${escapeHtml(c.columnKey)} · ${escapeHtml(c.dataType)} · order ${Number(c.sortOrder||100)}</span></div>
-    <div class="column-config-actions"><button type="button" class="small-button" data-edit-custom-column="${escapeHtml(c.id)}">Edit</button><button type="button" class="small-button danger" data-delete-custom-column="${escapeHtml(c.id)}">Delete</button></div>
-  </div>`).join('');
-}
-function renderColumnManager(section=els.customColumnSection?.value||'HOLDINGS'){
-  if(els.customColumnSection)els.customColumnSection.value=section;
-  if(els.columnManagerTitle)els.columnManagerTitle.textContent=`Manage ${section==='HOLDINGS'?'Holdings':'Watchlist'} columns`;
-  renderStandardColumnsManager(section);
-  renderCustomColumnsManager(section);
-}
-function openColumnManager(section){
-  resetCustomColumnForm(section);
-  renderColumnManager(section);
-  openModal('columnManagerModal');
-}
-function editCustomColumn(id){
-  const c=state.customColumns.find(x=>x.id===id);
-  if(!c)return;
-  els.customColumnId.value=c.id;
-  els.customColumnSection.value=c.section;
-  els.customColumnLabel.value=c.label;
-  els.customColumnKey.value=c.columnKey;
-  els.customColumnKey.disabled=true;
-  els.customColumnType.value=c.dataType||'TEXT';
-  els.customColumnOrder.value=String(c.sortOrder||100);
-  els.saveCustomColumnBtn.textContent='Update column';
-  renderColumnManager(c.section);
-  setTimeout(()=>els.customColumnLabel?.focus(),30);
-}
-async function saveCustomColumn(event){
-  event.preventDefault();
-  const button=els.saveCustomColumnBtn;
-  setBusy(button,true,'Saving…');
-  try{
-    const result=await api('saveCustomColumn',{column:{
-      id:els.customColumnId.value,
-      section:els.customColumnSection.value,
-      label:els.customColumnLabel.value.trim(),
-      columnKey:els.customColumnKey.value.trim(),
-      dataType:els.customColumnType.value,
-      sortOrder:Number(els.customColumnOrder.value)||100
-    }});
-    const section=els.customColumnSection.value;
-    saveColumnWidths(section.toLowerCase(),{});
-    clearPrintLayout(section.toLowerCase());
-    applyBootstrap(result.data);saveCache(result.data);
-    resetCustomColumnForm(section);renderColumnManager(section);
-    toast('Custom column saved. Column widths reset once so the new structure fits correctly.','success');
-  }catch(e){toast(e.message,'error');}
-  finally{setBusy(button,false);}
-}
-async function deleteCustomColumn(id){
-  const c=state.customColumns.find(x=>x.id===id);
-  if(!c||!confirm(`Delete custom column “${c.label}” and its saved values?`))return;
-  try{
-    const result=await api('deleteCustomColumn',{id});
-    saveColumnWidths(c.section.toLowerCase(),{});
-    clearPrintLayout(c.section.toLowerCase());
-    applyBootstrap(result.data);saveCache(result.data);renderColumnManager(c.section);
-    toast('Custom column deleted. Column widths reset once so the remaining columns align correctly.','success');
-  }catch(e){toast(e.message,'error');}
-}
-function openCustomValueEditor(section,recordId,columnKey){
-  const c=customColumnByKey(section,columnKey);
-  if(!c)return;
-  const record=section==='HOLDINGS'?state.holdings.find(x=>x.id===recordId):state.watchlist.find(x=>x.id===recordId);
-  if(!record)return;
-  els.customValueSection.value=section;
-  els.customValueRecordId.value=recordId;
-  els.customValueColumnKey.value=columnKey;
-  els.customValueTitle.textContent=c.label;
-  els.customValueRecord.textContent=record.assetName||record.code||'Selected row';
-  els.customValueFieldLabel.firstChild.nodeValue=`${c.label} `;
-  els.customValueInput.type=c.dataType==='DATE'?'date':(['NUMBER','CURRENCY','PERCENT'].includes(c.dataType)?'number':'text');
-  els.customValueInput.step=['NUMBER','CURRENCY','PERCENT'].includes(c.dataType)?'any':'';
-  els.customValueInput.value=customValueFor(section,recordId,columnKey);
-  openModal('customValueModal');
-  setTimeout(()=>els.customValueInput?.focus(),50);
-}
-async function saveCustomValue(event){
-  event.preventDefault();
-  const button=els.saveCustomValueBtn;
-  setBusy(button,true,'Saving…');
-  try{
-    const result=await api('saveCustomValue',{
-      section:els.customValueSection.value,
-      recordId:els.customValueRecordId.value,
-      columnKey:els.customValueColumnKey.value,
-      value:els.customValueInput.value
-    });
-    closeModals();applyBootstrap(result.data);saveCache(result.data);
-    toast('Custom value saved.','success');
-  }catch(e){toast(e.message,'error');}
-  finally{setBusy(button,false);}
-}
-function saveStandardColumnChange(section,key,patch){
-  const defs=STANDARD_COLUMN_DEFS[section]||[];
-  const def=defs.find(d=>d.key===key);
-  if(!def)return;
-  const settings=loadStandardColumnSettings(section);
-  settings[key]={...(settings[key]||{}),...patch};
-  if(def.locked)settings[key].visible=true;
-  saveStandardColumnSettings(section,settings);
-  if(section==='HOLDINGS')renderHoldings();else renderWatchlist();
-  renderStandardColumnsManager(section);
-}
-function resetStandardColumns(section){
-  try{localStorage.removeItem(standardColumnSettingsKey(section));}catch{}
-  if(section==='HOLDINGS')renderHoldings();else renderWatchlist();
-  renderStandardColumnsManager(section);
-  toast('Standard column names and visibility reset.','success');
-}
-
 function renderHoldings(){
   renderHoldingsSummary();
-  resetCustomHeaders('HOLDINGS');
   applyTableSize('holdings');
-  const items=state.holdings.filter(holdingMatches);if(els.holdingsFilterCount)els.holdingsFilterCount.textContent=`${items.length} visible`;els.holdingsBody.innerHTML=items.map(h=>{const avg=(Number(h.units)>0?Number(h.investedAmount)/Number(h.units):null),p=h.performance||{};return `<tr class="holding-row" data-view-holding="${escapeHtml(h.id)}" tabindex="0" aria-label="View details for ${escapeHtml(h.assetName)}"><td class="sticky-col owner-col"><span class="owner-tag">${escapeHtml(shortOwner(h.owner))}</span></td><td class="sticky-col asset-col"><div class="asset-cell"><div class="asset-badge ${String(h.type).toLowerCase()}">${escapeHtml(h.type==='MF'?'MF':h.type==='ETF'?'ET':'ST')}</div><div><strong>${escapeHtml(h.assetName)}</strong><span>${escapeHtml(h.exchange?`${h.exchange}:`:'')}${escapeHtml(h.code)}${h.sourceCode?` · stmt ${escapeHtml(h.sourceCode)}`:''}</span></div></div></td><td>${formatNumber(h.units)}</td><td>${formatCurrency(avg)}</td><td>${formatCurrency(h.investedAmount)}</td><td>${formatCurrency(h.currentPrice)}<span class="price-note">${escapeHtml(h.priceSource||'Pending')}</span></td><td><strong>${formatCurrency(h.currentValue)}</strong></td><td class="${pnlClass(h.gainLoss)}">${formatCurrency(h.gainLoss)}</td><td class="${pnlClass(h.returnPct)}"><strong>${formatPercent(h.returnPct)}</strong></td><td class="${pnlClass(h.xirr)}">${formatPercent(h.xirr)}</td>${perfCell(p.d1)}${perfCell(p.w1)}${perfCell(p.m1)}${perfCell(p.m6)}${perfCell(p.y1)}${perfCell(p.y3)}${perfCell(p.y5)}${perfCell(p.y10)}<td class="personal-note-cell" data-note-cell="${escapeHtml(h.id)}">${notePreview(h.notes)}</td>${customCellsHtml('HOLDINGS',h.id)}<td class="row-actions"><button class="small-button view-button" data-view-holding-button="${escapeHtml(h.id)}">View</button><button class="small-button" data-edit-holding="${escapeHtml(h.id)}">Edit</button><button class="small-button danger" data-delete-holding="${escapeHtml(h.id)}">Delete</button></td></tr>`;}).join('');
+  const items=state.holdings.filter(holdingMatches);if(els.holdingsFilterCount)els.holdingsFilterCount.textContent=`${items.length} visible`;els.holdingsBody.innerHTML=items.map(h=>{const avg=(Number(h.units)>0?Number(h.investedAmount)/Number(h.units):null),p=h.performance||{};return `<tr class="holding-row" data-view-holding="${escapeHtml(h.id)}" tabindex="0" aria-label="View details for ${escapeHtml(h.assetName)}"><td class="sticky-col owner-col"><span class="owner-tag">${escapeHtml(shortOwner(h.owner))}</span></td><td class="sticky-col asset-col"><div class="asset-cell"><div class="asset-badge ${String(h.type).toLowerCase()}">${escapeHtml(h.type==='MF'?'MF':h.type==='ETF'?'ET':'ST')}</div><div><strong>${escapeHtml(h.assetName)}</strong><span>${escapeHtml(h.exchange?`${h.exchange}:`:'')}${escapeHtml(h.code)}${h.sourceCode?` · stmt ${escapeHtml(h.sourceCode)}`:''}</span></div></div></td><td>${formatNumber(h.units)}</td><td>${formatCurrency(avg)}</td><td>${formatCurrency(h.investedAmount)}</td><td>${formatCurrency(h.currentPrice)}<span class="price-note">${escapeHtml(h.priceSource||'Pending')}</span></td><td><strong>${formatCurrency(h.currentValue)}</strong></td><td class="${pnlClass(h.gainLoss)}">${formatCurrency(h.gainLoss)}</td><td class="${pnlClass(h.returnPct)}"><strong>${formatPercent(h.returnPct)}</strong></td><td class="${pnlClass(h.xirr)}">${formatPercent(h.xirr)}</td>${perfCell(p.d1)}${perfCell(p.w1)}${perfCell(p.m1)}${perfCell(p.m6)}${perfCell(p.y1)}${perfCell(p.y3)}${perfCell(p.y5)}${perfCell(p.y10)}<td class="personal-note-cell" data-note-cell="${escapeHtml(h.id)}">${notePreview(h.notes)}</td><td class="row-actions"><button class="small-button view-button" data-view-holding-button="${escapeHtml(h.id)}">View</button><button class="small-button" data-edit-holding="${escapeHtml(h.id)}">Edit</button><button class="small-button danger" data-delete-holding="${escapeHtml(h.id)}">Delete</button></td></tr>`;}).join('');
   els.holdingsEmpty.classList.toggle('hidden',items.length>0);
-  appendCustomHeaders('HOLDINGS');
-  applyStandardColumnSettings('HOLDINGS');
   installColumnResizers('holdings');
   applyStoredColumnWidths('holdings');
   bindTableScrollPersistence('holdings');
@@ -1265,7 +1024,6 @@ function renderHoldings(){
 function sourcePerfCell(v){return `<td class="perf ${pnlClass(v)}">${formatPercent(v)}</td>`;}
 function compactText(value,max=74){const c=String(value||'').replace(/\s+/g,' ').trim();if(!c)return '—';return c.length>max?`${c.slice(0,max-1)}…`:c;}
 function renderWatchlist(){
-  resetCustomHeaders('WATCHLIST');
   applyTableSize('watchlist');
   const items=visibleWatchlist();
   if(els.watchFilterCount)els.watchFilterCount.textContent=`${items.length} visible`;
@@ -1283,12 +1041,10 @@ function renderWatchlist(){
       ${sourcePerfCell(s.perf1M)}${sourcePerfCell(s.perf1Y)}${sourcePerfCell(s.perf3Y)}${sourcePerfCell(s.perf5Y)}${sourcePerfCell(s.perf10Y)}
       <td class="watch-source-remark" title="${escapeHtml(s.moatRemark||'')}">${escapeHtml(compactText(s.moatRemark,72))}</td>
       <td class="personal-note-cell" data-watch-note-cell="${escapeHtml(x.id)}">${notePreview(x.notes)}</td>
-      ${customCellsHtml('WATCHLIST',x.id)}<td class="row-actions"><button class="small-button" data-view-watch-button="${escapeHtml(x.id)}">View</button><button class="small-button note-button" data-watch-note-button="${escapeHtml(x.id)}">📝 Note</button><button class="small-button" data-edit-watch="${escapeHtml(x.id)}">Edit</button><button class="small-button danger" data-delete-watch="${escapeHtml(x.id)}">Delete</button></td>
+      <td class="row-actions"><button class="small-button" data-view-watch-button="${escapeHtml(x.id)}">View</button><button class="small-button note-button" data-watch-note-button="${escapeHtml(x.id)}">📝 Note</button><button class="small-button" data-edit-watch="${escapeHtml(x.id)}">Edit</button><button class="small-button danger" data-delete-watch="${escapeHtml(x.id)}">Delete</button></td>
     </tr>`;
   }).join('');
   els.watchEmpty.classList.toggle('hidden',items.length>0);
-  appendCustomHeaders('WATCHLIST');
-  applyStandardColumnSettings('WATCHLIST');
   installColumnResizers('watchlist');
   applyStoredColumnWidths('watchlist');
   bindTableScrollPersistence('watchlist');
@@ -2103,14 +1859,11 @@ function holdingsFilterDescription(items){
 }
 function printHoldingsView(){
   const items=state.holdings.filter(holdingMatches);
-  const custom=sectionCustomColumns('HOLDINGS');
-  const rows=items.map(h=>{const p=h.performance||{};const customCells=custom.map(c=>`<td>${printEscape(formatCustomValuePlain(c,customValueFor('HOLDINGS',h.id,c.columnKey)))}</td>`).join('');return `<tr><td>${printEscape(shortOwner(h.owner))}</td><td>${printEscape(h.assetName)}<br><small>${printEscape(h.type)} ${printEscape(h.code||'')}</small></td><td class="num">${printEscape(formatNumber(h.units))}</td><td class="num">${printEscape(formatCurrency(h.investedAmount))}</td><td class="num">${printEscape(formatCurrency(h.currentValue))}</td><td class="num ${Number(h.gainLoss)>=0?'pos':'neg'}">${printEscape(formatCurrency(h.gainLoss))}</td><td class="num ${Number(h.returnPct)>=0?'pos':'neg'}">${printEscape(formatPercent(h.returnPct))}</td><td class="num">${printEscape(formatPercent(h.xirr))}</td><td class="num">${printEscape(formatPercent(p.m1))}</td><td class="num">${printEscape(formatPercent(p.y1))}</td><td class="num">${printEscape(formatPercent(p.y3))}</td><td>${printEscape(h.notes||'')}</td>${customCells}</tr>`;}).join('');
-  const map=[0,1,2,4,6,7,8,9,12,14,15,18,...custom.map((c,i)=>19+i)];
+  const rows=items.map(h=>{const p=h.performance||{};return `<tr><td>${printEscape(shortOwner(h.owner))}</td><td>${printEscape(h.assetName)}<br><small>${printEscape(h.type)} ${printEscape(h.code||'')}</small></td><td class="num">${printEscape(formatNumber(h.units))}</td><td class="num">${printEscape(formatCurrency(h.investedAmount))}</td><td class="num">${printEscape(formatCurrency(h.currentValue))}</td><td class="num ${Number(h.gainLoss)>=0?'pos':'neg'}">${printEscape(formatCurrency(h.gainLoss))}</td><td class="num ${Number(h.returnPct)>=0?'pos':'neg'}">${printEscape(formatPercent(h.returnPct))}</td><td class="num">${printEscape(formatPercent(h.xirr))}</td><td class="num">${printEscape(formatPercent(p.m1))}</td><td class="num">${printEscape(formatPercent(p.y1))}</td><td class="num">${printEscape(formatPercent(p.y3))}</td><td>${printEscape(h.notes||'')}</td></tr>`;}).join('');
+  const map=[0,1,2,4,6,7,8,9,12,14,15,18];
   const dashboardLayout=dashboardPrintLayout('holdings',map);
   const activeLayout=loadPrintLayout('holdings')||dashboardLayout;
-  const customHeads=custom.map(c=>`<th>${printEscape(c.label)}</th>`).join('');
-  const colCount=12+custom.length;
-  const body=`<table>${printColgroup(activeLayout.widths)}<thead><tr><th>Investor</th><th>Investment</th><th>Qty/Units</th><th>Invested</th><th>Current</th><th>Gain/Loss</th><th>Return</th><th>XIRR</th><th>1M</th><th>1Y</th><th>3Y</th><th>Note</th>${customHeads}</tr></thead><tbody>${rows||`<tr><td colspan="${colCount}">No matching investments.</td></tr>`}</tbody></table>`;
+  const body=`<table>${printColgroup(activeLayout.widths)}<thead><tr><th>Investor</th><th>Investment</th><th>Qty/Units</th><th>Invested</th><th>Current</th><th>Gain/Loss</th><th>Return</th><th>XIRR</th><th>1M</th><th>1Y</th><th>3Y</th><th>Note</th></tr></thead><tbody>${rows||'<tr><td colspan="12">No matching investments.</td></tr>'}</tbody></table>`;
   printDocument('Investment Portfolio — Filtered View',holdingsFilterDescription(items),body,'landscape',{section:'holdings',dashboardLayout});
 }
 function watchFilterDescription(items){
@@ -2123,14 +1876,11 @@ function watchFilterDescription(items){
 }
 function printWatchlistView(){
   const items=visibleWatchlist();
-  const custom=sectionCustomColumns('WATCHLIST');
-  const rows=items.map(x=>{const s=x.sourceDetails||{};const customCells=custom.map(c=>`<td>${printEscape(formatCustomValuePlain(c,customValueFor('WATCHLIST',x.id,c.columnKey)))}</td>`).join('');return `<tr><td>${printEscape(x.assetName)}<br><small>${printEscape(x.type)} ${printEscape(x.code||'')}</small></td><td class="num">${printEscape(formatCurrency(x.currentPrice))}</td><td class="num">${printEscape(formatCurrency(x.targetPrice))}</td><td class="num">${printEscape(formatPercent(x.distancePct))}</td><td>${printEscape(x.priority||'')}</td><td class="num">${printEscape(formatPercent(s.perf1M))}</td><td class="num">${printEscape(formatPercent(s.perf1Y))}</td><td class="num">${printEscape(formatPercent(s.perf3Y))}</td><td>${printEscape(s.valuation||'')}</td><td>${printEscape(s.moatRemark||'')}</td><td>${printEscape(x.notes||'')}</td>${customCells}</tr>`;}).join('');
-  const map=[0,1,3,4,null,7,8,9,6,12,13,...custom.map((c,i)=>14+i)];
+  const rows=items.map(x=>{const s=x.sourceDetails||{};return `<tr><td>${printEscape(x.assetName)}<br><small>${printEscape(x.type)} ${printEscape(x.code||'')}</small></td><td class="num">${printEscape(formatCurrency(x.currentPrice))}</td><td class="num">${printEscape(formatCurrency(x.targetPrice))}</td><td class="num">${printEscape(formatPercent(x.distancePct))}</td><td>${printEscape(x.priority||'')}</td><td class="num">${printEscape(formatPercent(s.perf1M))}</td><td class="num">${printEscape(formatPercent(s.perf1Y))}</td><td class="num">${printEscape(formatPercent(s.perf3Y))}</td><td>${printEscape(s.valuation||'')}</td><td>${printEscape(s.moatRemark||'')}</td><td>${printEscape(x.notes||'')}</td></tr>`;}).join('');
+  const map=[0,1,3,4,null,7,8,9,6,12,13];
   const dashboardLayout=dashboardPrintLayout('watchlist',map);
   const activeLayout=loadPrintLayout('watchlist')||dashboardLayout;
-  const customHeads=custom.map(c=>`<th>${printEscape(c.label)}</th>`).join('');
-  const colCount=11+custom.length;
-  const body=`<table>${printColgroup(activeLayout.widths)}<thead><tr><th>Asset</th><th>Live Price/NAV</th><th>Target</th><th>Distance</th><th>Priority</th><th>1M</th><th>1Y</th><th>3Y</th><th>P/E or P/B</th><th>Remark/Moat</th><th>Personal Note</th>${customHeads}</tr></thead><tbody>${rows||`<tr><td colspan="${colCount}">No matching watchlist items.</td></tr>`}</tbody></table>`;
+  const body=`<table>${printColgroup(activeLayout.widths)}<thead><tr><th>Asset</th><th>Live Price/NAV</th><th>Target</th><th>Distance</th><th>Priority</th><th>1M</th><th>1Y</th><th>3Y</th><th>P/E or P/B</th><th>Remark/Moat</th><th>Personal Note</th></tr></thead><tbody>${rows||'<tr><td colspan="11">No matching watchlist items.</td></tr>'}</tbody></table>`;
   printDocument('Investment Watchlist — Filtered View',watchFilterDescription(items),body,'landscape',{section:'watchlist',dashboardLayout});
 }
 function printDiaryView(){
@@ -2748,8 +2498,7 @@ function clearRuntimeWarning(){
   els.runtimeWarning.classList.add('hidden');
 }
 
-function bindEvents(){safeOn(els.manageHoldingsColumnsBtn,'click',()=>openColumnManager('HOLDINGS'));safeOn(els.manageWatchlistColumnsBtn,'click',()=>openColumnManager('WATCHLIST'));safeOn(els.customColumnForm,'submit',saveCustomColumn);safeOn(els.clearCustomColumnBtn,'click',()=>resetCustomColumnForm(els.customColumnSection.value));safeOn(els.customColumnSection,'change',()=>{resetCustomColumnForm(els.customColumnSection.value);renderColumnManager(els.customColumnSection.value);});safeOn(els.customValueForm,'submit',saveCustomValue);safeOn(els.resetStandardColumnsBtn,'click',()=>resetStandardColumns(els.customColumnSection.value));safeOn(els.standardColumnsList,'change',e=>{const key=e.target.dataset.standardVisible;if(key)saveStandardColumnChange(els.customColumnSection.value,key,{visible:e.target.checked});});safeOn(els.standardColumnsList,'input',e=>{const key=e.target.dataset.standardLabel;if(key){const section=els.customColumnSection.value;const settings=loadStandardColumnSettings(section);settings[key]={...(settings[key]||{}),label:e.target.value};saveStandardColumnSettings(section,settings);if(section==='HOLDINGS')renderHoldings();else renderWatchlist();}});safeOn(els.customColumnsList,'click',e=>{const edit=e.target.closest('[data-edit-custom-column]');const del=e.target.closest('[data-delete-custom-column]');if(edit){editCustomColumn(edit.dataset.editCustomColumn);return;}if(del){deleteCustomColumn(del.dataset.deleteCustomColumn);}});
-  safeOn(els.holdRowSlider,'input',e=>setTableSizeFromSlider('holdings','row',e.target.value));safeOn(els.holdWidthSlider,'input',e=>setTableSizeFromSlider('holdings','width',e.target.value));safeOn(els.watchRowSlider,'input',e=>setTableSizeFromSlider('watchlist','row',e.target.value));safeOn(els.watchWidthSlider,'input',e=>setTableSizeFromSlider('watchlist','width',e.target.value));
+function bindEvents(){safeOn(els.holdRowSlider,'input',e=>setTableSizeFromSlider('holdings','row',e.target.value));safeOn(els.holdWidthSlider,'input',e=>setTableSizeFromSlider('holdings','width',e.target.value));safeOn(els.watchRowSlider,'input',e=>setTableSizeFromSlider('watchlist','row',e.target.value));safeOn(els.watchWidthSlider,'input',e=>setTableSizeFromSlider('watchlist','width',e.target.value));
   safeOn(els.holdRowMinusBtn,'click',()=>changeTableSize('holdings','row',-1));safeOn(els.holdRowPlusBtn,'click',()=>changeTableSize('holdings','row',1));safeOn(els.holdWidthMinusBtn,'click',()=>changeTableSize('holdings','width',-1));safeOn(els.holdWidthPlusBtn,'click',()=>changeTableSize('holdings','width',1));safeOn(els.holdSizeResetBtn,'click',()=>resetTableSize('holdings'));safeOn(els.watchRowMinusBtn,'click',()=>changeTableSize('watchlist','row',-1));safeOn(els.watchRowPlusBtn,'click',()=>changeTableSize('watchlist','row',1));safeOn(els.watchWidthMinusBtn,'click',()=>changeTableSize('watchlist','width',-1));safeOn(els.watchWidthPlusBtn,'click',()=>changeTableSize('watchlist','width',1));safeOn(els.watchSizeResetBtn,'click',()=>resetTableSize('watchlist'));
   safeOn(els.personalHomeModeBtn,'click',()=>setOverviewMode('PERSONAL'));safeOn(els.investmentHomeModeBtn,'click',()=>switchSection('holdings'));safeOn(els.overviewSetDefaultBtn,'click',setCurrentOverviewAsDefault);safeOn(els.homeDailyWriteBtn,'click',()=>openQuickDiary('DAILY'));safeOn(els.homeMonthlyWriteBtn,'click',()=>openQuickDiary('MONTHLY'));safeOn(els.homeAddTargetBtn,'click',()=>openStickyNote());safeOn(els.homeDiaryQuickBtn,'click',()=>openQuickDiary('DAILY'));safeOn(els.homeFullDiaryBtn,'click',()=>switchSection('diary'));safeOn(els.homeTargetAddBtn,'click',()=>openStickyNote());safeOn(els.homeTargetsOpenBtn,'click',()=>openUtilityDrawer('STICKY'));safeOn(els.homeQuoteNextBtn,'click',nextLifeQuote);safeOn(els.homeQuotesOpenBtn,'click',()=>openUtilityDrawer('QUOTE'));safeOn(els.homeShowInvestmentsBtn,'click',()=>switchSection('holdings'));
   safeOn(els.utilityDrawerOpenBtn,'click',toggleUtilityDrawer);safeOn(els.utilityDrawerCloseBtn,'click',closeUtilityDrawer);safeOn(els.utilityDrawerScrim,'click',closeUtilityDrawer);safeOn(els.overviewStickyShortcut,'click',()=>openUtilityDrawer('STICKY'));safeOn(els.overviewQuoteShortcut,'click',()=>openUtilityDrawer('QUOTE'));
@@ -2791,9 +2540,9 @@ function bindEvents(){safeOn(els.manageHoldingsColumnsBtn,'click',()=>openColumn
   safeOn(els.openFullDiaryBtn,'click',()=>{closeQuickDiary();switchSection('diary');});
   window.addEventListener('resize',scheduleDashboardHScrollRefresh);
   document.querySelectorAll('.table-wrap').forEach(wrap=>wrap.addEventListener('scroll',()=>{if(wrap===state.hScrollTarget)refreshDashboardHScroll();},{passive:true}));safeOn(els.loginForm,'submit',login);safeOn(els.logoutBtn,'click',logout);safeOn(els.replaceMasterDataBtn,'click',replaceMasterPortfolioData);safeOn(els.masterLoadNowBtn,'click',replaceMasterPortfolioData);safeOn(els.showAllInvestmentsBtn,'click',showAllInvestments);safeOn(els.viewAllNotesBtn,'click',()=>openAllNotes('HOLDINGS'));safeOn(els.watchAllNotesBtn,'click',()=>openAllNotes('WATCHLIST'));safeOn(els.notesSearch,'input',renderNotesModal);safeOn(els.notesSource,'change',renderNotesModal);safeOn(els.notesScope,'change',renderNotesModal);safeOn(els.notesFilter,'change',renderNotesModal);safeOn(els.drawerCloseBtn,'click',closeHoldingDrawer);safeOn(els.drawerDoneBtn,'click',closeHoldingDrawer);safeOn(els.drawerEditBtn,'click',editDrawerHolding);safeOn(els.holdingDrawerBackdrop,'click',closeHoldingDrawer);safeOn(els.refreshBtn,'click',async()=>{await loadDashboard(true);resetAutoRefreshClock();});safeOn(els.addInvestmentBtn,'click',()=>openInvestment());safeOn(els.addInvestmentTableBtn,'click',()=>openInvestment());safeOn(els.importBtn,'click',openBulkImport);safeOn(els.bulkImportBtn,'click',openBulkImport);safeOn(els.downloadImportTemplateBtn,'click',downloadImportTemplate);safeOn(els.bulkCsvFile,'change',handleBulkFile);safeOn(els.bulkImportForm,'submit',runBulkImport);safeOn(els.exportBtn,'click',exportCsv);safeOn(els.investmentForm,'submit',saveInvestment);safeOn(els.watchForm,'submit',saveWatch);safeOn(els.passwordForm,'submit',changePassword);safeOn(els.userForm,'submit',createUser);safeOn(els.addStickyNoteBtn,'click',()=>openStickyNote());safeOn(els.stickyNoteForm,'submit',saveStickyNote);safeOn(els.holdingType,'change',()=>updateAssetForm(els.holdingType.value,'holding'));safeOn(els.watchType,'change',()=>updateAssetForm(els.watchType.value,'watch'));safeOn(els.holdingSearch,'input',renderHoldings);safeOn(els.holdingTypeFilter,'change',renderHoldings);safeOn(els.printHoldingsBtn,'click',printHoldingsView);safeOn(els.holdingsFullscreenBtn,'click',()=>toggleDataFullscreen('holdings'));safeOn(els.watchSearch,'input',renderWatchlist);safeOn(els.watchTypeFilter,'change',renderWatchlist);safeOn(els.watchPriorityFilter,'change',renderWatchlist);safeOn(els.watchTargetFilter,'change',renderWatchlist);safeOn(els.printWatchlistBtn,'click',printWatchlistView);safeOn(els.watchlistFullscreenBtn,'click',()=>toggleDataFullscreen('watchlist'));safeOn($('addWatchBtn'),'click',()=>openWatch());safeOn($('changePasswordBtn'),'click',()=>openModal('passwordModal'));safeOn($('addUserBtn'),'click',()=>openModal('userModal'));safeOn(els.modalBackdrop,'click',e=>{if(e.target===els.modalBackdrop)closeModals();});$$('[data-close-modal]').forEach(b=>b.addEventListener('click',closeModals));$$('[data-section]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.section)));$$('[data-section-link]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.sectionLink)));$$('[data-toggle-password]').forEach(b=>b.addEventListener('click',()=>{const input=$(b.dataset.togglePassword),show=input.type==='password';input.type=show?'text':'password';b.textContent=show?'Hide':'Show';}));$$('.import-mode').forEach(b=>b.addEventListener('click',()=>setImportMode(b.dataset.importMode)));
-  document.addEventListener('click',e=>{const customCell=e.target.closest('[data-custom-cell]');if(customCell){e.preventDefault();e.stopPropagation();openCustomValueEditor(customCell.dataset.customSection,customCell.dataset.customRecord,customCell.dataset.customKey);return;}const homeSticky=e.target.closest('[data-home-open-sticky]');if(homeSticky){openUtilityDrawer('STICKY');return;}const utilityTab=e.target.closest('[data-utility-tab]');if(utilityTab){state.utilityDrawerTab=utilityTab.dataset.utilityTab==='QUOTE'?'QUOTE':'STICKY';renderUtilityDrawerTab();if(lifeQuoteAutoContextVisible())startLifeQuoteShuffle();else stopLifeQuoteShuffle();return;}const quoteEdit=e.target.closest('[data-life-quote-edit]');if(quoteEdit){editLifeQuote(quoteEdit.dataset.lifeQuoteEdit);return;}const quoteDelete=e.target.closest('[data-life-quote-delete]');if(quoteDelete){deleteLifeQuote(quoteDelete.dataset.lifeQuoteDelete);return;}const stickyDone=e.target.closest('[data-sticky-done]');if(stickyDone){completeStickyNote(stickyDone.dataset.stickyDone);return;}const stickyEdit=e.target.closest('[data-sticky-edit]');if(stickyEdit){const item=state.stickyNotes.find(x=>x.id===stickyEdit.dataset.stickyEdit);if(item)openStickyNote(item);return;}const stickyDelete=e.target.closest('[data-sticky-delete]');if(stickyDelete){deleteStickyNote(stickyDelete.dataset.stickyDelete);return;}const qmode=e.target.closest('[data-quick-diary-mode]');if(qmode){state.quickDiaryMode=qmode.dataset.quickDiaryMode;renderQuickDiaryMode();setTimeout(()=>state.quickDiaryMode==='DAILY'?els.quickDailyText?.focus():els.quickMonthlyText?.focus(),30);return;}const workspace=e.target.closest('[data-diary-workspace]');if(workspace){state.diaryWorkspace=workspace.dataset.diaryWorkspace;renderDiaryWorkspace();return;}const openCompleted=e.target.closest('[data-open-completed-month]');if(openCompleted){const key=openCompleted.dataset.openCompletedMonth;state.diaryWorkspace='MONTHLY';renderDiaryWorkspace();els.monthlyYearFilter.value=key.slice(0,4);els.monthlyMonthFilter.value=key.slice(5,7);renderMonthlyDiary();return;}const monthlyEdit=e.target.closest('[data-edit-monthly]');if(monthlyEdit){const item=state.monthlyDiary.find(x=>x.id===monthlyEdit.dataset.editMonthly);if(item)openMonthlyItem(item);return;}const monthlyDelete=e.target.closest('[data-delete-monthly]');if(monthlyDelete){deleteMonthlyItem(monthlyDelete.dataset.deleteMonthly);return;}const monthlyTarget=e.target.closest('[data-toggle-monthly-target]');if(monthlyTarget){toggleMonthlyTarget(monthlyTarget.dataset.toggleMonthlyTarget);return;}const diaryView=e.target.closest('[data-diary-view]');if(diaryView){state.diaryView=diaryView.dataset.diaryView;renderDiary();return;}const diaryEdit=e.target.closest('[data-edit-diary]');if(diaryEdit){const item=state.diary.find(x=>x.id===diaryEdit.dataset.editDiary);if(item)openDiaryEntry(item);return;}const diaryDelete=e.target.closest('[data-delete-diary]');if(diaryDelete){deleteDiaryEntry(diaryDelete.dataset.deleteDiary);return;}const diaryCard=e.target.closest('[data-diary-view-entry]');if(diaryCard&&!e.target.closest('button')){const item=state.diary.find(x=>x.id===diaryCard.dataset.diaryViewEntry);if(item)openDiaryEntry(item);return;}const gr=e.target.closest('[data-growth-range]');if(gr){state.growthRange=gr.dataset.growthRange;$$('[data-growth-range]').forEach(b=>b.classList.toggle('active',b.dataset.growthRange===state.growthRange));renderGrowthDashboard();return;}const owner=e.target.closest('[data-owner-view]');if(owner){state.selectedOwner=owner.dataset.ownerView;refreshOwnerControls();renderAll();return;}const assetView=e.target.closest('[data-asset-view]');if(assetView){state.selectedAssetView=assetView.dataset.assetView;els.holdingTypeFilter.value='ALL';renderAll();return;}const noteView=e.target.closest('[data-note-view]'),noteEdit=e.target.closest('[data-note-edit]'),watchNoteView=e.target.closest('[data-watch-note-view]'),watchNoteEdit=e.target.closest('[data-watch-note-edit]'),holdingViewButton=e.target.closest('[data-view-holding-button]'),watchViewButton=e.target.closest('[data-view-watch-button]'),watchNoteButton=e.target.closest('[data-watch-note-button]'),edit=e.target.closest('[data-edit-holding]'),del=e.target.closest('[data-delete-holding]'),ew=e.target.closest('[data-edit-watch]'),dw=e.target.closest('[data-delete-watch]'),ru=e.target.closest('[data-reset-user]'),tu=e.target.closest('[data-toggle-user]');if(noteView){const item=state.holdings.find(x=>x.id===noteView.dataset.noteView);closeModals();if(item)openHoldingDrawer(item);return;}if(noteEdit){const item=state.holdings.find(x=>x.id===noteEdit.dataset.noteEdit);closeModals();if(item)openInvestment(item);return;}if(watchNoteView){const item=state.watchlist.find(x=>x.id===watchNoteView.dataset.watchNoteView);closeModals();if(item)openWatchDrawer(item);return;}if(holdingViewButton){const item=state.holdings.find(x=>x.id===holdingViewButton.dataset.viewHoldingButton);if(item)openHoldingDrawer(item);return;}if(watchViewButton){const item=state.watchlist.find(x=>x.id===watchViewButton.dataset.viewWatchButton);if(item)openWatchDrawer(item);return;}if(watchNoteButton){const item=state.watchlist.find(x=>x.id===watchNoteButton.dataset.watchNoteButton);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(watchNoteEdit){const item=state.watchlist.find(x=>x.id===watchNoteEdit.dataset.watchNoteEdit);closeModals();if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(edit){openInvestment(state.holdings.find(x=>x.id===edit.dataset.editHolding));return;}if(del){deleteItem('deleteHolding',del.dataset.deleteHolding,'investment');return;}if(ew){openWatch(state.watchlist.find(x=>x.id===ew.dataset.editWatch));return;}if(dw){deleteItem('deleteWatchItem',dw.dataset.deleteWatch,'watchlist item');return;}if(ru){resetUserPassword(ru.dataset.resetUser);return;}if(tu){toggleUser(tu.dataset.toggleUser,tu.dataset.active==='true');return;}const watchNoteCell=e.target.closest('[data-watch-note-cell]');if(watchNoteCell){const item=state.watchlist.find(x=>x.id===watchNoteCell.dataset.watchNoteCell);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t)t.focus();},80);}return;}const noteCell=e.target.closest('[data-note-cell]');if(noteCell){const item=state.holdings.find(x=>x.id===noteCell.dataset.noteCell);if(item)openHoldingDrawer(item);return;}const watchView=e.target.closest('[data-view-watch]');if(watchView){const item=state.watchlist.find(x=>x.id===watchView.dataset.viewWatch);if(item)openWatchDrawer(item);return;}const view=e.target.closest('[data-view-holding]');if(view){openHoldingDrawer(state.holdings.find(x=>x.id===view.dataset.viewHolding));}});
+  document.addEventListener('click',e=>{const homeSticky=e.target.closest('[data-home-open-sticky]');if(homeSticky){openUtilityDrawer('STICKY');return;}const utilityTab=e.target.closest('[data-utility-tab]');if(utilityTab){state.utilityDrawerTab=utilityTab.dataset.utilityTab==='QUOTE'?'QUOTE':'STICKY';renderUtilityDrawerTab();if(lifeQuoteAutoContextVisible())startLifeQuoteShuffle();else stopLifeQuoteShuffle();return;}const quoteEdit=e.target.closest('[data-life-quote-edit]');if(quoteEdit){editLifeQuote(quoteEdit.dataset.lifeQuoteEdit);return;}const quoteDelete=e.target.closest('[data-life-quote-delete]');if(quoteDelete){deleteLifeQuote(quoteDelete.dataset.lifeQuoteDelete);return;}const stickyDone=e.target.closest('[data-sticky-done]');if(stickyDone){completeStickyNote(stickyDone.dataset.stickyDone);return;}const stickyEdit=e.target.closest('[data-sticky-edit]');if(stickyEdit){const item=state.stickyNotes.find(x=>x.id===stickyEdit.dataset.stickyEdit);if(item)openStickyNote(item);return;}const stickyDelete=e.target.closest('[data-sticky-delete]');if(stickyDelete){deleteStickyNote(stickyDelete.dataset.stickyDelete);return;}const qmode=e.target.closest('[data-quick-diary-mode]');if(qmode){state.quickDiaryMode=qmode.dataset.quickDiaryMode;renderQuickDiaryMode();setTimeout(()=>state.quickDiaryMode==='DAILY'?els.quickDailyText?.focus():els.quickMonthlyText?.focus(),30);return;}const workspace=e.target.closest('[data-diary-workspace]');if(workspace){state.diaryWorkspace=workspace.dataset.diaryWorkspace;renderDiaryWorkspace();return;}const openCompleted=e.target.closest('[data-open-completed-month]');if(openCompleted){const key=openCompleted.dataset.openCompletedMonth;state.diaryWorkspace='MONTHLY';renderDiaryWorkspace();els.monthlyYearFilter.value=key.slice(0,4);els.monthlyMonthFilter.value=key.slice(5,7);renderMonthlyDiary();return;}const monthlyEdit=e.target.closest('[data-edit-monthly]');if(monthlyEdit){const item=state.monthlyDiary.find(x=>x.id===monthlyEdit.dataset.editMonthly);if(item)openMonthlyItem(item);return;}const monthlyDelete=e.target.closest('[data-delete-monthly]');if(monthlyDelete){deleteMonthlyItem(monthlyDelete.dataset.deleteMonthly);return;}const monthlyTarget=e.target.closest('[data-toggle-monthly-target]');if(monthlyTarget){toggleMonthlyTarget(monthlyTarget.dataset.toggleMonthlyTarget);return;}const diaryView=e.target.closest('[data-diary-view]');if(diaryView){state.diaryView=diaryView.dataset.diaryView;renderDiary();return;}const diaryEdit=e.target.closest('[data-edit-diary]');if(diaryEdit){const item=state.diary.find(x=>x.id===diaryEdit.dataset.editDiary);if(item)openDiaryEntry(item);return;}const diaryDelete=e.target.closest('[data-delete-diary]');if(diaryDelete){deleteDiaryEntry(diaryDelete.dataset.deleteDiary);return;}const diaryCard=e.target.closest('[data-diary-view-entry]');if(diaryCard&&!e.target.closest('button')){const item=state.diary.find(x=>x.id===diaryCard.dataset.diaryViewEntry);if(item)openDiaryEntry(item);return;}const gr=e.target.closest('[data-growth-range]');if(gr){state.growthRange=gr.dataset.growthRange;$$('[data-growth-range]').forEach(b=>b.classList.toggle('active',b.dataset.growthRange===state.growthRange));renderGrowthDashboard();return;}const owner=e.target.closest('[data-owner-view]');if(owner){state.selectedOwner=owner.dataset.ownerView;refreshOwnerControls();renderAll();return;}const assetView=e.target.closest('[data-asset-view]');if(assetView){state.selectedAssetView=assetView.dataset.assetView;els.holdingTypeFilter.value='ALL';renderAll();return;}const noteView=e.target.closest('[data-note-view]'),noteEdit=e.target.closest('[data-note-edit]'),watchNoteView=e.target.closest('[data-watch-note-view]'),watchNoteEdit=e.target.closest('[data-watch-note-edit]'),holdingViewButton=e.target.closest('[data-view-holding-button]'),watchViewButton=e.target.closest('[data-view-watch-button]'),watchNoteButton=e.target.closest('[data-watch-note-button]'),edit=e.target.closest('[data-edit-holding]'),del=e.target.closest('[data-delete-holding]'),ew=e.target.closest('[data-edit-watch]'),dw=e.target.closest('[data-delete-watch]'),ru=e.target.closest('[data-reset-user]'),tu=e.target.closest('[data-toggle-user]');if(noteView){const item=state.holdings.find(x=>x.id===noteView.dataset.noteView);closeModals();if(item)openHoldingDrawer(item);return;}if(noteEdit){const item=state.holdings.find(x=>x.id===noteEdit.dataset.noteEdit);closeModals();if(item)openInvestment(item);return;}if(watchNoteView){const item=state.watchlist.find(x=>x.id===watchNoteView.dataset.watchNoteView);closeModals();if(item)openWatchDrawer(item);return;}if(holdingViewButton){const item=state.holdings.find(x=>x.id===holdingViewButton.dataset.viewHoldingButton);if(item)openHoldingDrawer(item);return;}if(watchViewButton){const item=state.watchlist.find(x=>x.id===watchViewButton.dataset.viewWatchButton);if(item)openWatchDrawer(item);return;}if(watchNoteButton){const item=state.watchlist.find(x=>x.id===watchNoteButton.dataset.watchNoteButton);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(watchNoteEdit){const item=state.watchlist.find(x=>x.id===watchNoteEdit.dataset.watchNoteEdit);closeModals();if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(edit){openInvestment(state.holdings.find(x=>x.id===edit.dataset.editHolding));return;}if(del){deleteItem('deleteHolding',del.dataset.deleteHolding,'investment');return;}if(ew){openWatch(state.watchlist.find(x=>x.id===ew.dataset.editWatch));return;}if(dw){deleteItem('deleteWatchItem',dw.dataset.deleteWatch,'watchlist item');return;}if(ru){resetUserPassword(ru.dataset.resetUser);return;}if(tu){toggleUser(tu.dataset.toggleUser,tu.dataset.active==='true');return;}const watchNoteCell=e.target.closest('[data-watch-note-cell]');if(watchNoteCell){const item=state.watchlist.find(x=>x.id===watchNoteCell.dataset.watchNoteCell);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t)t.focus();},80);}return;}const noteCell=e.target.closest('[data-note-cell]');if(noteCell){const item=state.holdings.find(x=>x.id===noteCell.dataset.noteCell);if(item)openHoldingDrawer(item);return;}const watchView=e.target.closest('[data-view-watch]');if(watchView){const item=state.watchlist.find(x=>x.id===watchView.dataset.viewWatch);if(item)openWatchDrawer(item);return;}const view=e.target.closest('[data-view-holding]');if(view){openHoldingDrawer(state.holdings.find(x=>x.id===view.dataset.viewHolding));}});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.autoRefreshMinutes&&Date.now()>=state.autoRefreshNextAt&&!state.syncing){resetAutoRefreshClock();loadDashboard(true);}});
-  document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('[data-custom-cell]')){e.preventDefault();openCustomValueEditor(e.target.dataset.customSection,e.target.dataset.customRecord,e.target.dataset.customKey);return;}if(e.key==='Escape'){if($('printPreviewOverlay')){closePrintPreview();return;}if(state.dataFullscreenSection){exitDataFullscreen();return;}if(els.holdingDrawer?.classList.contains('open'))closeHoldingDrawer();else closeModals();return;}if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('[data-view-holding]')){e.preventDefault();openHoldingDrawer(state.holdings.find(x=>x.id===e.target.dataset.viewHolding));return;}if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('[data-view-watch]')){e.preventDefault();openWatchDrawer(state.watchlist.find(x=>x.id===e.target.dataset.viewWatch));}});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('printPreviewOverlay')){closePrintPreview();return;}if(state.dataFullscreenSection){exitDataFullscreen();return;}if(els.holdingDrawer?.classList.contains('open'))closeHoldingDrawer();else closeModals();return;}if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('[data-view-holding]')){e.preventDefault();openHoldingDrawer(state.holdings.find(x=>x.id===e.target.dataset.viewHolding));return;}if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('[data-view-watch]')){e.preventDefault();openWatchDrawer(state.watchlist.find(x=>x.id===e.target.dataset.viewWatch));}});
 }
 
 async function init(){
@@ -2855,7 +2604,7 @@ async function init(){
     try{loadSavedUsername();}catch{}
   }
 }
-console.info('MyFinance v18.4 loaded — add/edit/delete custom Holdings and Watchlist columns');
+console.info('MyFinance v18.3 loaded — print preview honors saved widths and supports drag resizing');
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.utilityDrawerOpen)closeUtilityDrawer();});
 window.addEventListener('error',event=>{
   console.error('MyFinance runtime error',event.error||event.message);

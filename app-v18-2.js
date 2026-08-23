@@ -1,7 +1,7 @@
 'use strict';
 
 const CONFIG = window.PORTFOLIO_CONFIG || {};
-const APP_VERSION = '18.2';
+const APP_VERSION = '18.3';
 const state = {
   token: localStorage.getItem('portfolio_token') || '',
   username: localStorage.getItem('portfolio_username') || '',
@@ -1576,6 +1576,133 @@ async function replaceMasterPortfolioData(){
 }
 
 function printEscape(value){return escapeHtml(value==null?'':String(value));}
+function printLayoutKey(section){return `myfinance_print_layout_${section||'generic'}`;}
+function loadPrintLayout(section){
+  try{
+    const raw=JSON.parse(localStorage.getItem(printLayoutKey(section))||'null');
+    if(!raw||typeof raw!=='object')return null;
+    return {
+      row:Math.max(70,Math.min(160,Number(raw.row)||100)),
+      widths:Array.isArray(raw.widths)?raw.widths.map(Number).filter(Number.isFinite):null
+    };
+  }catch{return null;}
+}
+function savePrintLayout(section,layout){
+  if(!section)return;
+  try{
+    localStorage.setItem(printLayoutKey(section),JSON.stringify({
+      row:Math.max(70,Math.min(160,Number(layout?.row)||100)),
+      widths:Array.isArray(layout?.widths)?layout.widths.map(v=>Number(v)||0):null
+    }));
+  }catch{}
+}
+function clearPrintLayout(section){
+  if(!section)return;
+  try{localStorage.removeItem(printLayoutKey(section));}catch{}
+}
+function normalizePrintWidths(widths,count){
+  const list=Array.from({length:count},(_,i)=>Math.max(3,Number(widths?.[i])||1));
+  const total=list.reduce((a,b)=>a+b,0)||count;
+  return list.map(v=>v/total*100);
+}
+function dashboardWidthsForPrint(section,map){
+  const table=tableElementFor(section);
+  if(!table||!Array.isArray(map)||!map.length)return null;
+  const heads=[...table.querySelectorAll('thead th')];
+  const values=map.map(sourceIndex=>{
+    if(sourceIndex==null)return 90;
+    const th=heads[sourceIndex];
+    return th?Math.max(58,th.getBoundingClientRect().width):90;
+  });
+  return normalizePrintWidths(values,map.length);
+}
+function dashboardPrintLayout(section,map){
+  const size=section?loadTableSize(section):{row:100,width:100};
+  return {
+    row:Math.max(70,Math.min(160,Number(size?.row)||100)),
+    widths:dashboardWidthsForPrint(section,map)
+  };
+}
+function printColgroup(widths){
+  if(!Array.isArray(widths)||!widths.length)return '';
+  return `<colgroup>${widths.map(v=>`<col style="width:${Math.max(2,Number(v)||0).toFixed(3)}%">`).join('')}</colgroup>`;
+}
+function applyPrintFrameLayout(frame,layout){
+  const doc=frame?.contentDocument;
+  if(!doc)return;
+  const row=Math.max(70,Math.min(160,Number(layout?.row)||100));
+  doc.documentElement.style.setProperty('--print-row-scale',String(row/100));
+  const table=doc.querySelector('table');
+  if(table&&Array.isArray(layout?.widths)&&layout.widths.length){
+    const widths=normalizePrintWidths(layout.widths,table.querySelectorAll('thead th').length);
+    let colgroup=table.querySelector('colgroup');
+    if(!colgroup){
+      colgroup=doc.createElement('colgroup');
+      table.insertBefore(colgroup,table.firstChild);
+    }
+    colgroup.innerHTML=widths.map(v=>`<col style="width:${v.toFixed(3)}%">`).join('');
+    table.style.tableLayout='fixed';
+  }
+}
+function installPrintColumnResizers(frame,section,layout,onChange){
+  const doc=frame?.contentDocument;
+  if(!doc)return;
+  const table=doc.querySelector('table');
+  if(!table)return;
+  const headers=[...table.querySelectorAll('thead th')];
+  if(!headers.length)return;
+  layout.widths=normalizePrintWidths(layout.widths,headers.length);
+  applyPrintFrameLayout(frame,layout);
+
+  headers.forEach((th,index)=>{
+    if(th.querySelector('.print-col-resizer'))return;
+    const handle=doc.createElement('span');
+    handle.className='print-col-resizer';
+    handle.title='Drag left/right to resize this print column';
+    th.appendChild(handle);
+
+    handle.addEventListener('pointerdown',event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      handle.setPointerCapture?.(event.pointerId);
+      const tableRect=table.getBoundingClientRect();
+      const startX=event.clientX;
+      const startPct=layout.widths[index];
+      const next=index<headers.length-1?index+1:index-1;
+      const nextStart=layout.widths[next];
+      doc.body.classList.add('print-column-resizing');
+
+      const move=e=>{
+        const deltaPct=(e.clientX-startX)/Math.max(1,tableRect.width)*100;
+        const minPct=3;
+        let newCurrent=Math.max(minPct,startPct+deltaPct);
+        let newNext=Math.max(minPct,nextStart-deltaPct);
+        const pairTotal=startPct+nextStart;
+        if(newCurrent+newNext!==pairTotal){
+          if(newCurrent<=minPct)newNext=pairTotal-minPct;
+          if(newNext<=minPct)newCurrent=pairTotal-minPct;
+        }
+        layout.widths[index]=newCurrent;
+        layout.widths[next]=newNext;
+        applyPrintFrameLayout(frame,layout);
+        onChange?.(true);
+      };
+      const up=()=>{
+        handle.removeEventListener('pointermove',move);
+        handle.removeEventListener('pointerup',up);
+        handle.removeEventListener('pointercancel',up);
+        doc.body.classList.remove('print-column-resizing');
+        layout.widths=normalizePrintWidths(layout.widths,headers.length);
+        applyPrintFrameLayout(frame,layout);
+        if(section)savePrintLayout(section,layout);
+        onChange?.(false);
+      };
+      handle.addEventListener('pointermove',move);
+      handle.addEventListener('pointerup',up);
+      handle.addEventListener('pointercancel',up);
+    });
+  });
+}
 function closePrintPreview(){
   const overlay=$('printPreviewOverlay');
   if(overlay)overlay.remove();
@@ -1585,31 +1712,46 @@ function buildPrintableDocument(title,subtitle,bodyHtml,orientation='portrait'){
   const generated=new Intl.DateTimeFormat('en-IN',{dateStyle:'medium',timeStyle:'short'}).format(new Date());
   return `<!doctype html><html><head><meta charset="utf-8"><title>${printEscape(title)}</title><style>
     @page{size:${orientation};margin:10mm}
+    :root{--print-row-scale:1}
     *{box-sizing:border-box}
     html,body{background:#fff}
     body{font-family:Arial,Helvetica,sans-serif;color:#1f2937;margin:0;font-size:10px}
     .print-head{display:flex;justify-content:space-between;gap:18px;border-bottom:2px solid #303f8f;padding-bottom:8px;margin-bottom:10px}
     h1{margin:0;font-size:18px;color:#24326c} h2{font-size:13px;margin:14px 0 7px}
     .sub{margin-top:4px;color:#606b80;font-size:9px}.meta{text-align:right;color:#7b8495;font-size:8px;white-space:nowrap}
-    table{width:100%;border-collapse:collapse;table-layout:auto}
-    th,td{border:1px solid #d9dee8;padding:5px 6px;text-align:left;vertical-align:top}
+    table{width:100%;border-collapse:collapse;table-layout:fixed}
+    th,td{position:relative;border:1px solid #d9dee8;padding:calc(5px * var(--print-row-scale)) 6px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
     th{background:#eef1fb;color:#26336e;font-size:8px;text-transform:uppercase}
     tr:nth-child(even) td{background:#fafbfe}
     .num{text-align:right;white-space:nowrap}.pos{color:#087b5d}.neg{color:#be4051}
-    .entry{border:1px solid #dfe4ed;border-radius:6px;padding:9px;margin:0 0 8px;break-inside:avoid}
+    small{font-size:7px;color:#748096}
+    .print-col-resizer{position:absolute;top:0;right:-4px;bottom:0;width:9px;z-index:5;cursor:col-resize;touch-action:none}
+    .print-col-resizer::after{content:"";position:absolute;top:18%;bottom:18%;left:4px;width:2px;background:transparent;border-radius:2px}
+    th:hover .print-col-resizer::after,.print-col-resizer:hover::after{background:#5e68d6}
+    .print-column-resizing,.print-column-resizing *{cursor:col-resize!important;user-select:none!important}
+    .entry{border:1px solid #dfe4ed;border-radius:6px;padding:calc(9px * var(--print-row-scale));margin:0 0 calc(8px * var(--print-row-scale));break-inside:avoid}
     .entry h3{font-size:11px;margin:4px 0}.entry-date{font-size:8px;color:#5e60b7;font-weight:bold}.entry-text{white-space:pre-wrap;line-height:1.45;color:#404b5e}
     .monthly-type{font-size:7px;font-weight:bold;text-transform:uppercase;color:#5d59bc}
     .status{font-size:8px;font-weight:bold}
     .print-footer{margin-top:10px;color:#8a93a3;font-size:7.5px}
     @media print{
       html,body{width:auto!important;height:auto!important;overflow:visible!important}
+      .print-col-resizer{display:none!important}
       thead{display:table-header-group}
       tr{break-inside:avoid}
     }
   </style></head><body><div class="print-head"><div><h1>${printEscape(title)}</h1><div class="sub">${printEscape(subtitle||'')}</div></div><div class="meta">My Finance · Frontend v${APP_VERSION}<br>Prepared ${printEscape(generated)}</div></div>${bodyHtml}<div class="print-footer">Prepared from the current filtered dashboard view.</div></body></html>`;
 }
-function openPrintPreview(title,subtitle,bodyHtml,orientation='portrait'){
+function openPrintPreview(title,subtitle,bodyHtml,orientation='portrait',options={}){
   closePrintPreview();
+  const section=options.section||'';
+  const dashboardLayout=options.dashboardLayout||{row:100,widths:null};
+  let layout=section?(loadPrintLayout(section)||dashboardLayout):dashboardLayout;
+  layout={
+    row:Math.max(70,Math.min(160,Number(layout?.row)||100)),
+    widths:Array.isArray(layout?.widths)?layout.widths.slice():null
+  };
+
   const overlay=document.createElement('div');
   overlay.id='printPreviewOverlay';
   overlay.className='print-preview-overlay';
@@ -1619,8 +1761,16 @@ function openPrintPreview(title,subtitle,bodyHtml,orientation='portrait'){
         <strong>Print Preview</strong>
         <span>${printEscape(title)}</span>
       </div>
+      <div class="print-layout-controls">
+        <span class="print-control-label">Row height</span>
+        <button type="button" id="printRowMinusBtn" class="print-size-step">−</button>
+        <span id="printRowLabel" class="print-size-value">${Math.round(layout.row)}%</span>
+        <button type="button" id="printRowPlusBtn" class="print-size-step">+</button>
+        <input id="printRowSlider" class="print-size-slider" type="range" min="70" max="160" step="5" value="${Math.round(layout.row)}" aria-label="Adjust print row height">
+        ${section?`<span class="print-drag-help">↔ Drag column heading edges</span><button type="button" id="printUseDashboardBtn" class="print-layout-button">Use dashboard widths</button>`:''}
+        <span id="printLayoutSaved" class="print-layout-saved">${section?'✓ Print layout saved':'Preview'}</span>
+      </div>
       <div class="print-preview-actions">
-        <span class="print-preview-help">No pop-up permission needed</span>
         <button type="button" id="printPreviewPrintBtn" class="print-preview-primary">⎙ Print now</button>
         <button type="button" id="printPreviewCloseBtn" class="print-preview-close">✕ Close</button>
       </div>
@@ -1629,14 +1779,58 @@ function openPrintPreview(title,subtitle,bodyHtml,orientation='portrait'){
       <iframe id="printPreviewFrame" class="print-preview-frame" title="Printable preview"></iframe>
     </div>
   </section>`;
+
   document.body.appendChild(overlay);
   document.body.classList.add('print-preview-open');
   const frame=$('printPreviewFrame');
   frame.srcdoc=buildPrintableDocument(title,subtitle,bodyHtml,orientation);
+
+  const status=$('printLayoutSaved');
+  let statusTimer=null;
+  const showStatus=(saving=false)=>{
+    if(!status)return;
+    status.textContent=saving?'Saving…':section?'✓ Print layout saved':'Preview';
+    status.classList.toggle('saving',saving);
+    if(statusTimer)clearTimeout(statusTimer);
+    if(saving)statusTimer=setTimeout(()=>showStatus(false),350);
+  };
+  const saveCurrent=()=>{
+    if(section)savePrintLayout(section,layout);
+    showStatus(true);
+  };
+  const applyRow=value=>{
+    layout.row=Math.max(70,Math.min(160,Math.round(Number(value)||100)));
+    $('printRowLabel').textContent=`${layout.row}%`;
+    $('printRowSlider').value=String(layout.row);
+    applyPrintFrameLayout(frame,layout);
+    saveCurrent();
+  };
+
+  $('printRowMinusBtn')?.addEventListener('click',()=>applyRow(layout.row-10));
+  $('printRowPlusBtn')?.addEventListener('click',()=>applyRow(layout.row+10));
+  $('printRowSlider')?.addEventListener('input',e=>applyRow(e.target.value));
+
   $('printPreviewCloseBtn')?.addEventListener('click',closePrintPreview);
   overlay.addEventListener('click',e=>{if(e.target===overlay)closePrintPreview();});
+
+  $('printUseDashboardBtn')?.addEventListener('click',()=>{
+    layout={
+      row:Math.max(70,Math.min(160,Number(dashboardLayout?.row)||100)),
+      widths:Array.isArray(dashboardLayout?.widths)?dashboardLayout.widths.slice():null
+    };
+    if(section)clearPrintLayout(section);
+    applyPrintFrameLayout(frame,layout);
+    installPrintColumnResizers(frame,section,layout,showStatus);
+    $('printRowLabel').textContent=`${Math.round(layout.row)}%`;
+    $('printRowSlider').value=String(Math.round(layout.row));
+    if(section)savePrintLayout(section,layout);
+    showStatus(false);
+  });
+
   $('printPreviewPrintBtn')?.addEventListener('click',()=>{
     try{
+      if(section)savePrintLayout(section,layout);
+      applyPrintFrameLayout(frame,layout);
       const target=frame?.contentWindow;
       if(!target)throw new Error('Print preview is not ready.');
       target.focus();
@@ -1645,10 +1839,15 @@ function openPrintPreview(title,subtitle,bodyHtml,orientation='portrait'){
       toast(`Could not start printing: ${e.message}`,'error');
     }
   });
+
+  frame.addEventListener('load',()=>{
+    applyPrintFrameLayout(frame,layout);
+    if(section)installPrintColumnResizers(frame,section,layout,showStatus);
+  },{once:true});
   setTimeout(()=>frame?.focus(),80);
 }
-function printDocument(title,subtitle,bodyHtml,orientation='portrait'){
-  openPrintPreview(title,subtitle,bodyHtml,orientation);
+function printDocument(title,subtitle,bodyHtml,orientation='portrait',options={}){
+  openPrintPreview(title,subtitle,bodyHtml,orientation,options);
 }
 
 function holdingsFilterDescription(items){
@@ -1661,8 +1860,11 @@ function holdingsFilterDescription(items){
 function printHoldingsView(){
   const items=state.holdings.filter(holdingMatches);
   const rows=items.map(h=>{const p=h.performance||{};return `<tr><td>${printEscape(shortOwner(h.owner))}</td><td>${printEscape(h.assetName)}<br><small>${printEscape(h.type)} ${printEscape(h.code||'')}</small></td><td class="num">${printEscape(formatNumber(h.units))}</td><td class="num">${printEscape(formatCurrency(h.investedAmount))}</td><td class="num">${printEscape(formatCurrency(h.currentValue))}</td><td class="num ${Number(h.gainLoss)>=0?'pos':'neg'}">${printEscape(formatCurrency(h.gainLoss))}</td><td class="num ${Number(h.returnPct)>=0?'pos':'neg'}">${printEscape(formatPercent(h.returnPct))}</td><td class="num">${printEscape(formatPercent(h.xirr))}</td><td class="num">${printEscape(formatPercent(p.m1))}</td><td class="num">${printEscape(formatPercent(p.y1))}</td><td class="num">${printEscape(formatPercent(p.y3))}</td><td>${printEscape(h.notes||'')}</td></tr>`;}).join('');
-  const body=`<table><thead><tr><th>Investor</th><th>Investment</th><th>Qty/Units</th><th>Invested</th><th>Current</th><th>Gain/Loss</th><th>Return</th><th>XIRR</th><th>1M</th><th>1Y</th><th>3Y</th><th>Note</th></tr></thead><tbody>${rows||'<tr><td colspan="12">No matching investments.</td></tr>'}</tbody></table>`;
-  printDocument('Investment Portfolio — Filtered View',holdingsFilterDescription(items),body,'landscape');
+  const map=[0,1,2,4,6,7,8,9,12,14,15,18];
+  const dashboardLayout=dashboardPrintLayout('holdings',map);
+  const activeLayout=loadPrintLayout('holdings')||dashboardLayout;
+  const body=`<table>${printColgroup(activeLayout.widths)}<thead><tr><th>Investor</th><th>Investment</th><th>Qty/Units</th><th>Invested</th><th>Current</th><th>Gain/Loss</th><th>Return</th><th>XIRR</th><th>1M</th><th>1Y</th><th>3Y</th><th>Note</th></tr></thead><tbody>${rows||'<tr><td colspan="12">No matching investments.</td></tr>'}</tbody></table>`;
+  printDocument('Investment Portfolio — Filtered View',holdingsFilterDescription(items),body,'landscape',{section:'holdings',dashboardLayout});
 }
 function watchFilterDescription(items){
   const parts=[`${items.length} visible`];
@@ -1675,8 +1877,11 @@ function watchFilterDescription(items){
 function printWatchlistView(){
   const items=visibleWatchlist();
   const rows=items.map(x=>{const s=x.sourceDetails||{};return `<tr><td>${printEscape(x.assetName)}<br><small>${printEscape(x.type)} ${printEscape(x.code||'')}</small></td><td class="num">${printEscape(formatCurrency(x.currentPrice))}</td><td class="num">${printEscape(formatCurrency(x.targetPrice))}</td><td class="num">${printEscape(formatPercent(x.distancePct))}</td><td>${printEscape(x.priority||'')}</td><td class="num">${printEscape(formatPercent(s.perf1M))}</td><td class="num">${printEscape(formatPercent(s.perf1Y))}</td><td class="num">${printEscape(formatPercent(s.perf3Y))}</td><td>${printEscape(s.valuation||'')}</td><td>${printEscape(s.moatRemark||'')}</td><td>${printEscape(x.notes||'')}</td></tr>`;}).join('');
-  const body=`<table><thead><tr><th>Asset</th><th>Live Price/NAV</th><th>Target</th><th>Distance</th><th>Priority</th><th>1M</th><th>1Y</th><th>3Y</th><th>P/E or P/B</th><th>Remark/Moat</th><th>Personal Note</th></tr></thead><tbody>${rows||'<tr><td colspan="11">No matching watchlist items.</td></tr>'}</tbody></table>`;
-  printDocument('Investment Watchlist — Filtered View',watchFilterDescription(items),body,'landscape');
+  const map=[0,1,3,4,null,7,8,9,6,12,13];
+  const dashboardLayout=dashboardPrintLayout('watchlist',map);
+  const activeLayout=loadPrintLayout('watchlist')||dashboardLayout;
+  const body=`<table>${printColgroup(activeLayout.widths)}<thead><tr><th>Asset</th><th>Live Price/NAV</th><th>Target</th><th>Distance</th><th>Priority</th><th>1M</th><th>1Y</th><th>3Y</th><th>P/E or P/B</th><th>Remark/Moat</th><th>Personal Note</th></tr></thead><tbody>${rows||'<tr><td colspan="11">No matching watchlist items.</td></tr>'}</tbody></table>`;
+  printDocument('Investment Watchlist — Filtered View',watchFilterDescription(items),body,'landscape',{section:'watchlist',dashboardLayout});
 }
 function printDiaryView(){
   const items=diaryVisibleItems();
@@ -2399,7 +2604,7 @@ async function init(){
     try{loadSavedUsername();}catch{}
   }
 }
-console.info('MyFinance v18.2 loaded — saved Holdings/Watchlist dragged layout');
+console.info('MyFinance v18.3 loaded — print preview honors saved widths and supports drag resizing');
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.utilityDrawerOpen)closeUtilityDrawer();});
 window.addEventListener('error',event=>{
   console.error('MyFinance runtime error',event.error||event.message);

@@ -1,52 +1,69 @@
-MYFINANCE V19.4 — LOGIN ERROR HANDLING FIX
+SARNI ROLLBACK — LAST STABLE V18.3 / BACKEND V3.8.0
 
-Your screenshot already shows:
-Frontend v19.3
-Backend v3.16.0
+PURPOSE
+This package intentionally removes all later connection experiments and restores the
+older GitHub Pages + Apps Script setup.
 
-That proves the frontend CAN reach the backend.
+FRONTEND
+v18.3
 
-I found a frontend bug in the polling code:
-When Apps Script returned a real application error such as:
-- Incorrect username/password
-- Too many failed sign-in attempts
-- A server-side login error
+BACKEND
+v3.8.0
 
-the polling loop caught that real response, discarded it, kept polling, and finally showed the
-misleading message:
-"The backend did not return a result."
+WHAT THIS ROLLBACK KEEPS
+- Holdings / Watchlist / Diary
+- Auto prices
+- Personal Home
+- Quotes / sticky notes
+- Adjustable table widths
+- Saved table layout
+- In-page Print Preview
+- Print row-height / column-width adjustment
 
-V19.4 fixes that.
+WHAT THIS ROLLBACK DOES NOT INCLUDE
+- V18.4+ custom columns
+- V19 transaction-history tab / stock tradebook
+- Later relay / polling / native Apps Script experiments
 
-CHANGES
-- Real backend login errors are shown immediately.
-- Wrong credentials now show "Incorrect username or password" instead of a backend timeout.
-- Other backend errors are also shown directly.
-- Login timeout increased from 30 seconds to 60 seconds.
-- Backend remains v3.16.0.
-- No Apps Script redeployment is required.
+APPS SCRIPT — DO THIS FIRST
+1. Open the SAME Apps Script project used by this deployment:
+   https://script.google.com/macros/s/AKfycbyVYGOHu5aJf7jHd0N6n64F988GxDbKwdzCAkOX_LQ7nNU0StqKUACFkfbrsh_WDfe7/exec
 
-GITHUB
-Replace:
+2. Replace the ENTIRE Code.gs with:
+   Code-v3.8.gs
+
+3. Save.
+
+4. Deploy > Manage deployments > Edit the SAME Web App deployment.
+   Version: New version
+   Execute as: Me
+   Who has access: Anyone
+   Deploy.
+
+5. Open the base /exec URL:
+   https://script.google.com/macros/s/AKfycbyVYGOHu5aJf7jHd0N6n64F988GxDbKwdzCAkOX_LQ7nNU0StqKUACFkfbrsh_WDfe7/exec
+
+   It should show backend version 3.8.0.
+
+GITHUB SarNi
+In the ROOT of the SarNi repository upload/replace ALL:
 - index.html
-- app-v19-3.js  (compatibility file)
-
-Add:
-- app-v19-4.js
-
-Keep unchanged:
 - styles.css
 - config.js
-- Apps Script Backend v3.16.0
+- app-v18-3.js
+- app-v18-2.js
 
-Open your CURRENT GitHub Pages URL with:
-?v=1940
+Do not use the V20 launcher index.html.
 
-Then hard refresh:
-Mac: Command + Shift + R
+OPEN
+https://saradasutar.github.io/SarNi/?v=rollback183
 
-Expected:
-Frontend v19.4
-Backend v3.16.0
+Hard refresh on Mac:
+Command + Shift + R
 
-If the password is wrong, the page will now tell you that directly instead of falsely saying the backend failed.
+EXPECTED LOGIN BADGES
+Frontend v18.3
+Backend v3.8.0
+
+IMPORTANT
+This is a rollback package. Do not mix V18.3 files with V19/V20 files.
