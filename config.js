@@ -1,5 +1,5 @@
 window.PORTFOLIO_CONFIG = {
-  API_URL: 'https://script.google.com/macros/s/AKfycby4PhiW0iqQiJNNWZ3w7GBfiTibsZEFFPIdrk4u_r4H22wk1A05b3G6u5k4yD6SvGsO/exec',
+  API_URL: 'https://script.google.com/macros/s/AKfycbwh5-PMVPi7JgRmE2XWN0TtH6lQUNWEu_q181K7W1zhFjVjbIBJrut5P-heC5SB7lWx/exec',
   APP_NAME: 'My Finance',
   CURRENCY: 'INR',
   REQUEST_TIMEOUT_MS: 60000,
