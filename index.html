@@ -10,7 +10,7 @@
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=rollback183">
+  <link rel="stylesheet" href="styles.css?v=20260823-192">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -36,7 +36,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v18.3</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · checking…</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.2</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · checking…</span></div>
         </div>
       </form>
     </div>
@@ -49,6 +49,7 @@
       <nav class="side-nav" aria-label="Main navigation">
         <button class="nav-item active" data-section="overview"><span>◫</span>Overview</button>
         <button class="nav-item" data-section="holdings"><span>▥</span>Holdings</button>
+        <button class="nav-item" data-section="transactions"><span>⇄</span>Transactions</button>
         <button class="nav-item" data-section="watchlist"><span>☆</span>Watchlist</button>
         <button class="nav-item" data-section="diary"><span>✎</span>Diary</button>
         <button id="quickDiaryBtn" class="nav-item quick-diary-nav" type="button"><span>✚</span>Quick Diary</button>
@@ -57,14 +58,14 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v18.3</span><span id="dashboardBackendVersion">Backend · checking…</span>
+        <span id="dashboardVersion">Frontend · v19.2</span><span id="dashboardBackendVersion">Backend · checking…</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v18.3</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE …</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.2</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE …</span></div></div></div>
         <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
 
@@ -320,7 +321,7 @@
         <article class="panel table-panel">
           <div class="panel-head responsive-head">
             <div class="holdings-title-block"><h3 id="holdingsHeading"><span class="holdings-title-label">PORTFOLIO DETAILS</span><span class="holdings-title-sep">·</span><span>Mutual funds, stocks &amp; ETFs</span></h3><p id="masterDataStatus" class="master-data-status">Master spreadsheet not loaded yet.</p></div>
-            <div class="table-tools"><button id="replaceMasterDataBtn" class="master-data-button" type="button">⇄ Replace from Master Sheet</button><button id="showAllInvestmentsBtn" class="show-all-button" type="button">▦ Show All Investments</button><input id="holdingSearch" class="search-input" type="search" placeholder="Search holdings…"><select id="holdingTypeFilter" class="compact-select"><option value="ALL">All assets</option><option value="MF">Mutual funds</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="OTHER">Other</option></select><span id="holdingsFilterCount" class="filter-result-pill">0 visible</span><button id="printHoldingsBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="holdingsFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Holdings to full browser area">⛶ Full screen</button><button id="viewAllNotesBtn" class="secondary-button">📝 All notes</button><button id="bulkImportBtn" class="secondary-button">⇧ Import</button><button id="addInvestmentTableBtn" class="primary-button">+ Add</button></div>
+            <div class="table-tools"><button id="replaceMasterDataBtn" class="master-data-button" type="button">⇄ Replace from Master Sheet</button><button id="showAllInvestmentsBtn" class="show-all-button" type="button">▦ Show All Investments</button><input id="holdingSearch" class="search-input" type="search" placeholder="Search holdings…"><select id="holdingTypeFilter" class="compact-select"><option value="ALL">All assets</option><option value="MF">Mutual funds</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="OTHER">Other</option></select><span id="holdingsFilterCount" class="filter-result-pill">0 visible</span><button id="printHoldingsBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="holdingsFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Holdings to full browser area">⛶ Full screen</button><button id="manageHoldingsColumnsBtn" class="secondary-button" type="button">⚙ Columns</button><button id="viewAllNotesBtn" class="secondary-button">📝 All notes</button><button id="bulkImportBtn" class="secondary-button">⇧ Import</button><button id="addInvestmentTableBtn" class="primary-button">+ Add</button></div>
           </div>
           <div class="table-view-size-bar" data-table-size-for="holdings">
             <strong>Table size</strong>
@@ -342,7 +343,7 @@
           <div class="performance-note">1D–10Y columns show the asset/scheme price or NAV performance for that period. XIRR is available for mutual funds imported from transaction statements.</div>
           <div class="table-wrap wide-table" data-layout-scroll="holdings">
             <table class="holdings-table">
-              <thead><tr><th class="sticky-col owner-col">Investor</th><th class="sticky-col asset-col">Asset</th><th>Qty / Units</th><th>Avg Buy</th><th>Invested</th><th>Current Price / NAV</th><th>Current Value</th><th>Gain / Loss</th><th>Gain %</th><th>XIRR</th><th>1D</th><th>1W</th><th>1M</th><th>6M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead>
+              <thead><tr id="holdingsHeadRow"><th class="sticky-col owner-col">Investor</th><th class="sticky-col asset-col">Asset</th><th>Qty / Units</th><th>Avg Buy</th><th>Invested</th><th>Current Price / NAV</th><th>Current Value</th><th>Gain / Loss</th><th>Gain %</th><th>XIRR</th><th>1D</th><th>1W</th><th>1M</th><th>6M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead>
               <tbody id="holdingsBody"></tbody>
             </table>
           </div>
@@ -350,8 +351,53 @@
         </article>
       </section>
 
+
+      <section id="transactionsSection" class="page-section hidden">
+        <div class="transaction-hero">
+          <div>
+            <p class="eyebrow">TRANSACTION HISTORY</p>
+            <h2>Purchase &amp; Sale Dates</h2>
+            <p>Mutual-fund statement transactions and imported stock/ETF tradebook history. <strong class="sale-copy">SALE is always red.</strong></p>
+          </div>
+          <div class="transaction-hero-actions">
+            <button id="transactionImportBtn" class="primary-button" type="button">⇧ Import stock tradebook</button>
+            <button id="printTransactionsBtn" class="print-view-button" type="button">⎙ Preview / Print</button>
+          </div>
+        </div>
+
+        <div class="transaction-summary-grid">
+          <article class="transaction-summary-card buy-card"><span>Total purchases</span><strong id="transactionBuyTotal">₹0</strong><small>BUY / Purchase / SIP</small></article>
+          <article class="transaction-summary-card sale-card"><span>Total sales</span><strong id="transactionSaleTotal">₹0</strong><small>SALE / Redemption</small></article>
+          <article class="transaction-summary-card pnl-card"><span>Realised profit / loss</span><strong id="transactionRealizedPnl">—</strong><small>FIFO where complete transaction history is available</small></article>
+          <article class="transaction-summary-card count-card"><span>Transactions</span><strong id="transactionCount">0</strong><small>Current filtered view</small></article>
+        </div>
+
+        <article class="panel table-panel transaction-panel">
+          <div class="panel-head responsive-head">
+            <div><p class="eyebrow">BUY / SALE REGISTER</p><h3>Stocks, ETFs &amp; Mutual Funds</h3></div>
+            <div class="table-tools transaction-filter-tools">
+              <input id="transactionSearch" class="search-input" type="search" placeholder="Search asset, symbol or broker…">
+              <select id="transactionOwnerFilter" class="compact-select"><option value="ALL">All investors</option></select>
+              <select id="transactionAssetFilter" class="compact-select"><option value="ALL">All assets</option><option value="MF">Mutual funds</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option></select>
+              <select id="transactionSideFilter" class="compact-select"><option value="ALL">Buy + Sale</option><option value="BUY">BUY only</option><option value="SELL">SALE only</option></select>
+              <label class="transaction-date-filter">From<input id="transactionFromDate" type="date"></label>
+              <label class="transaction-date-filter">To<input id="transactionToDate" type="date"></label>
+              <span id="transactionFilterCount" class="filter-result-pill">0 visible</span>
+            </div>
+          </div>
+          <div class="transaction-note">For stocks/ETFs, import the broker Tradebook to obtain actual purchase/sale dates. Holdings files alone usually do not contain full transaction dates. MF statement imports automatically appear here.</div>
+          <div class="table-wrap wide-table transaction-table-wrap">
+            <table class="transaction-table">
+              <thead><tr><th>Date</th><th>Investor</th><th>Asset Type</th><th>Asset / Symbol</th><th>Buy / Sale</th><th>Qty / Units</th><th>Price / NAV</th><th>Amount</th><th>Realised P/L</th><th>Holding Period</th><th>Broker / Source</th></tr></thead>
+              <tbody id="transactionBody"></tbody>
+            </table>
+          </div>
+          <div id="transactionEmpty" class="empty-state hidden">No transactions match this view. Import an MF transaction statement or stock/ETF tradebook.</div>
+        </article>
+      </section>
+
       <section id="watchlistSection" class="page-section hidden"><div class="watchlist-live-strip"><div><span class="live-dot"></span><strong>Live watchlist tracking</strong><span id="watchlistLastAutoUpdate" class="muted">Waiting for update…</span></div><div class="watchlist-live-stats"><span>At target <b id="watchStripAtTarget">0</b></span><span>Near target <b id="watchStripNear">0</b></span><span>Avg gap <b id="watchStripGap">—</b></span></div></div>
-        <article class="panel table-panel"><div class="panel-head responsive-head"><div><p class="eyebrow">FUTURE IDEAS</p><h3>Investment watchlist</h3></div><div class="table-tools watch-filter-tools"><input id="watchSearch" class="search-input" type="search" placeholder="Search watchlist…"><select id="watchTypeFilter" class="compact-select"><option value="ALL">All types</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="MF">Mutual funds</option></select><select id="watchPriorityFilter" class="compact-select"><option value="ALL">All priority</option><option value="HIGH">High</option><option value="MEDIUM">Medium</option><option value="LOW">Low</option></select><select id="watchTargetFilter" class="compact-select"><option value="ALL">All target status</option><option value="AT">At / below target</option><option value="NEAR">Within 5%</option><option value="FAR">More than 5% away</option><option value="NO_TARGET">No target</option></select><span id="watchFilterCount" class="filter-result-pill">0 visible</span><button id="printWatchlistBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="watchlistFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Watchlist to full browser area">⛶ Full screen</button><button id="watchAllNotesBtn" class="secondary-button">📝 All notes</button><button id="addWatchBtn" class="primary-button">+ Add</button></div></div><div class="table-view-size-bar" data-table-size-for="watchlist">
+        <article class="panel table-panel"><div class="panel-head responsive-head"><div><p class="eyebrow">FUTURE IDEAS</p><h3>Investment watchlist</h3></div><div class="table-tools watch-filter-tools"><input id="watchSearch" class="search-input" type="search" placeholder="Search watchlist…"><select id="watchTypeFilter" class="compact-select"><option value="ALL">All types</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="MF">Mutual funds</option></select><select id="watchPriorityFilter" class="compact-select"><option value="ALL">All priority</option><option value="HIGH">High</option><option value="MEDIUM">Medium</option><option value="LOW">Low</option></select><select id="watchTargetFilter" class="compact-select"><option value="ALL">All target status</option><option value="AT">At / below target</option><option value="NEAR">Within 5%</option><option value="FAR">More than 5% away</option><option value="NO_TARGET">No target</option></select><span id="watchFilterCount" class="filter-result-pill">0 visible</span><button id="printWatchlistBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="watchlistFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Watchlist to full browser area">⛶ Full screen</button><button id="manageWatchlistColumnsBtn" class="secondary-button" type="button">⚙ Columns</button><button id="watchAllNotesBtn" class="secondary-button">📝 All notes</button><button id="addWatchBtn" class="primary-button">+ Add</button></div></div><div class="table-view-size-bar" data-table-size-for="watchlist">
             <strong>Table size</strong>
             <span class="size-group-label">Row height</span>
             <button id="watchRowMinusBtn" type="button" class="size-step-button" title="Reduce Watchlist row height">−</button>
@@ -368,7 +414,7 @@
             <span id="watchLayoutSavedStatus" class="layout-saved-status">✓ Saved</span>
             <button id="watchSizeResetBtn" type="button" class="size-reset-button">Reset</button>
           </div>
-          <div class="performance-note">Live price comes from the backend. Sheet columns retain the uploaded workbook’s valuation, growth, 52-week and performance details.</div><div class="table-wrap wide-table" data-layout-scroll="watchlist"><table class="watchlist-details-table"><thead><tr><th class="sticky-col asset-col">Asset</th><th>Live Price/NAV</th><th>Sheet Day %</th><th>Target</th><th>Distance</th><th>52W H/L</th><th>P/E or P/B</th><th>1M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th>Remark / Moat</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead><tbody id="watchBody"></tbody></table></div><div id="watchEmpty" class="empty-state hidden">No watchlist items match this search.</div></article>
+          <div class="performance-note">Live price comes from the backend. Sheet columns retain the uploaded workbook’s valuation, growth, 52-week and performance details.</div><div class="table-wrap wide-table" data-layout-scroll="watchlist"><table class="watchlist-details-table"><thead><tr id="watchHeadRow"><th class="sticky-col asset-col">Asset</th><th>Live Price/NAV</th><th>Sheet Day %</th><th>Target</th><th>Distance</th><th>52W H/L</th><th>P/E or P/B</th><th>1M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th>Remark / Moat</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead><tbody id="watchBody"></tbody></table></div><div id="watchEmpty" class="empty-state hidden">No watchlist items match this search.</div></article>
       </section>
 
 
@@ -628,7 +674,7 @@
       <button id="dashboardHScrollRight" class="dashboard-hscroll-arrow" type="button" title="Scroll right">›</button>
     </div>
 
-    <nav class="mobile-nav"><button class="mobile-nav-item active" data-section="overview"><span>◫</span>Overview</button><button class="mobile-nav-item" data-section="holdings"><span>▥</span>Holdings</button><button class="mobile-nav-item" data-section="watchlist"><span>☆</span>Watchlist</button><button class="mobile-nav-item" data-section="diary"><span>✎</span>Diary</button><button id="quickDiaryMobileBtn" class="mobile-nav-item" type="button"><span>✚</span>Quick</button></nav>
+    <nav class="mobile-nav"><button class="mobile-nav-item active" data-section="overview"><span>◫</span>Overview</button><button class="mobile-nav-item" data-section="holdings"><span>▥</span>Holdings</button><button class="mobile-nav-item" data-section="transactions"><span>⇄</span>Trades</button><button class="mobile-nav-item" data-section="watchlist"><span>☆</span>Watchlist</button><button class="mobile-nav-item" data-section="diary"><span>✎</span>Diary</button><button id="quickDiaryMobileBtn" class="mobile-nav-item" type="button"><span>✚</span>Quick</button></nav>
   </div>
 
   <div id="modalBackdrop" class="modal-backdrop hidden" aria-hidden="true">
@@ -653,9 +699,9 @@
     <div id="bulkImportModal" class="modal import-modal hidden" role="dialog" aria-modal="true">
       <div class="modal-head"><div><p class="eyebrow">SMART IMPORT</p><h2>Import portfolio data</h2></div><button class="modal-close" data-close-modal>×</button></div>
       <form id="bulkImportForm" class="stack-form">
-        <div class="import-mode-tabs"><button type="button" class="import-mode active" data-import-mode="MF_STATEMENT">MF transaction statement</button><button type="button" class="import-mode" data-import-mode="MF_SNAPSHOT">MF current holdings</button><button type="button" class="import-mode" data-import-mode="STOCK_HOLDINGS">Stock / Zerodha holdings</button></div>
+        <div class="import-mode-tabs"><button type="button" class="import-mode active" data-import-mode="MF_STATEMENT">MF transaction statement</button><button type="button" class="import-mode" data-import-mode="MF_SNAPSHOT">MF current holdings</button><button type="button" class="import-mode" data-import-mode="STOCK_HOLDINGS">Stock / Zerodha holdings</button><button type="button" class="import-mode" data-import-mode="STOCK_TRADES">Stock / ETF tradebook</button></div>
         <div id="mfImportHelp" class="info-box"><strong>MF statement:</strong> accepts your columns MF_NAME, INVESTOR_NAME, PRODUCT_CODE, SCHEME_NAME, TRADE_DATE, TRANSACTION_TYPE, AMOUNT, UNITS, PRICE and BROKER. PAN and folio columns are ignored and are not sent to the backend.</div>
-        <div id="mfSnapshotImportHelp" class="info-box hidden"><strong>MF current holdings:</strong> accepts Investor Name, Scheme Name, ISIN, Units Held, Avg NAV and Invested Amount. The backend resolves the ISIN to the numeric AMFI scheme code so NAV and 1D–10Y performance can update automatically. Snapshot mode does not create transaction history, so XIRR remains blank unless a transaction statement is also imported.</div><div id="stockImportHelp" class="info-box hidden"><strong>Stock/Zerodha:</strong> accepts Investor Name, Stock Symbol, Exchange, Quantity, Avg Buy Price and Invested Amount. It also recognises common Zerodha holdings headings such as Instrument, Qty. and Avg. cost. Native Zerodha XLSX holdings files are supported.</div>
+        <div id="mfSnapshotImportHelp" class="info-box hidden"><strong>MF current holdings:</strong> accepts Investor Name, Scheme Name, ISIN, Units Held, Avg NAV and Invested Amount. The backend resolves the ISIN to the numeric AMFI scheme code so NAV and 1D–10Y performance can update automatically. Snapshot mode does not create transaction history, so XIRR remains blank unless a transaction statement is also imported.</div><div id="stockImportHelp" class="info-box hidden"><strong>Stock/Zerodha:</strong> accepts Investor Name, Stock Symbol, Exchange, Quantity, Avg Buy Price and Invested Amount. It also recognises common Zerodha holdings headings such as Instrument, Qty. and Avg. cost. Native Zerodha XLSX holdings files are supported.</div><div id="stockTradeImportHelp" class="info-box hidden"><strong>Stock/ETF tradebook:</strong> imports actual BUY/SELL dates, quantity and price from Zerodha Tradebook CSV/XLSX or similar broker files. Existing holdings are not replaced. Sale entries are shown in red in the Transactions tab.</div>
         <label id="stockOwnerLabel" class="hidden">Investor if file has no investor column<select id="importOwner"></select></label>
         <div class="import-actions"><button id="downloadImportTemplateBtn" type="button" class="secondary-button">Download template</button></div>
         <label class="import-drop"><strong>Select CSV or Excel file</strong><span id="importFileHint">Up to 5,000 MF transaction rows. CSV and XLSX are supported.</span><input id="bulkCsvFile" type="file" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" required></label>
@@ -664,6 +710,85 @@
       </form>
     </div>
 
+
+
+    <div id="columnManagerModal" class="modal column-manager-modal hidden" role="dialog" aria-modal="true" aria-labelledby="columnManagerTitle">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">TABLE DESIGN</p>
+          <h2 id="columnManagerTitle">Manage columns</h2>
+          <p class="modal-subcopy">Add your own parameters, rename/hide standard columns, or edit/delete custom columns.</p>
+        </div>
+        <button class="modal-close" data-close-modal aria-label="Close column manager">×</button>
+      </div>
+      <div class="column-manager-layout">
+        <form id="customColumnForm" class="stack-form custom-column-editor">
+          <input id="customColumnId" type="hidden">
+          <label>Table
+            <select id="customColumnSection">
+              <option value="HOLDINGS">Holdings</option>
+              <option value="WATCHLIST">Watchlist</option>
+            </select>
+          </label>
+          <label>Column name
+            <input id="customColumnLabel" maxlength="80" required placeholder="e.g. Risk level">
+          </label>
+          <label>Parameter key
+            <input id="customColumnKey" maxlength="60" placeholder="e.g. RiskLevel">
+            <small>Unique key used to store this parameter.</small>
+          </label>
+          <label>Data type
+            <select id="customColumnType">
+              <option value="TEXT">Text</option>
+              <option value="NUMBER">Number</option>
+              <option value="CURRENCY">Currency ₹</option>
+              <option value="PERCENT">Percentage %</option>
+              <option value="DATE">Date</option>
+            </select>
+          </label>
+          <label>Order
+            <input id="customColumnOrder" type="number" min="1" max="999" value="100">
+          </label>
+          <div class="form-actions">
+            <button id="clearCustomColumnBtn" type="button" class="secondary-button">Clear</button>
+            <button id="saveCustomColumnBtn" type="submit" class="primary-button">Add column</button>
+          </div>
+        </form>
+
+        <div class="column-manager-lists">
+          <section class="column-list-panel">
+            <div class="column-list-head"><div><p class="eyebrow">STANDARD COLUMNS</p><h3>Show, hide or rename</h3></div><button id="resetStandardColumnsBtn" type="button" class="small-button">Reset names</button></div>
+            <div id="standardColumnsList" class="column-config-list"></div>
+          </section>
+          <section class="column-list-panel">
+            <div class="column-list-head"><div><p class="eyebrow">CUSTOM PARAMETERS</p><h3>Your added columns</h3></div><span id="customColumnCount" class="filter-result-pill">0 custom</span></div>
+            <div id="customColumnsList" class="column-config-list"></div>
+            <div id="customColumnsEmpty" class="empty-state">No custom columns yet.</div>
+          </section>
+        </div>
+      </div>
+      <div class="column-manager-tip">Tip: click any custom cell in Holdings or Watchlist to enter/edit its value. Custom columns also appear in Preview / Print.</div>
+    </div>
+
+    <div id="customValueModal" class="modal small-modal hidden" role="dialog" aria-modal="true" aria-labelledby="customValueTitle">
+      <div class="modal-head">
+        <div><p class="eyebrow">CUSTOM PARAMETER</p><h2 id="customValueTitle">Edit value</h2><p id="customValueRecord" class="modal-subcopy"></p></div>
+        <button class="modal-close" data-close-modal aria-label="Close value editor">×</button>
+      </div>
+      <form id="customValueForm" class="stack-form">
+        <input id="customValueSection" type="hidden">
+        <input id="customValueRecordId" type="hidden">
+        <input id="customValueColumnKey" type="hidden">
+        <label id="customValueFieldLabel">Value
+          <input id="customValueInput" maxlength="2000">
+        </label>
+        <p class="tiny muted">Leave blank and save to clear this value.</p>
+        <div class="form-actions">
+          <button type="button" class="secondary-button" data-close-modal>Cancel</button>
+          <button id="saveCustomValueBtn" type="submit" class="primary-button">Save value</button>
+        </div>
+      </form>
+    </div>
 
     <div id="notesModal" class="modal notes-modal hidden" role="dialog" aria-modal="true" aria-labelledby="notesModalTitle">
       <div class="modal-head">
@@ -758,7 +883,7 @@
   </aside>
 
   <div id="toastRegion" class="toast-region" aria-live="polite"></div>
-  <script src="config.js?v=rollback183"></script>
-  <script src="app-v18-3.js?v=rollback183" defer></script>
+  <script src="config.js?v=20260823-192"></script>
+  <script src="app-v19-2.js?v=20260823-192" defer></script>
 </body>
 </html>

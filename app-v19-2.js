@@ -1,16 +1,13 @@
 'use strict';
 
 const CONFIG = window.PORTFOLIO_CONFIG || {};
-const APP_VERSION = '19.3';
+const APP_VERSION = '19.2';
 const state = {
   token: localStorage.getItem('portfolio_token') || '',
   username: localStorage.getItem('portfolio_username') || '',
   user: null,
   holdings: [],
   transactions: [],
-  transactionsLoaded: false,
-  transactionsLoading: false,
-  transactionTotal: 0,
   watchlist: [],
   stickyNotes: [],
   lifeQuotes: [],
@@ -148,7 +145,7 @@ async function waitForAsyncResult(requestId,timeoutMs){
   }
 
   if(lastError)throw lastError;
-  throw new Error('The backend did not return a result. Confirm Backend v3.16.0 is deployed and config.js uses the same /exec URL.');
+  throw new Error('The backend did not return a result. Confirm Backend v3.14.0 is deployed and config.js uses the same /exec URL.');
 }
 function apiViaAsyncPost(action,payload={},options={}){
   if(!isConfigured())return Promise.reject(new Error('Backend is not configured. Check config.js.'));
@@ -659,8 +656,8 @@ async function loadBackendVersion(){
     if(data&&data.version){
       state.backendVersion=String(data.version);
       const parts=state.backendVersion.split('.').map(Number);
-      if(parts[0]<3||(parts[0]===3&&parts[1]<16)){
-        showRuntimeWarning(`Backend v${state.backendVersion} is older than required v3.16.0. Update the Apps Script backend before using V19.3.`);
+      if(parts[0]<3||(parts[0]===3&&parts[1]<15)){
+        showRuntimeWarning(`Backend v${state.backendVersion} is older than required v3.15.0. Update the Apps Script backend before using V19.2.`);
       }
     }
   }catch(e){
@@ -690,28 +687,9 @@ async function login(event){
   event.preventDefault(); els.loginMessage.textContent='';
   if(!isConfigured()){els.loginMessage.textContent='Setup required: paste the Apps Script /exec URL into config.js.';return;}
   setBusy(els.loginButton,true,'Signing in…');
-  try{
-    const result=await api('login',{username:els.loginUsername.value.trim(),password:els.loginPassword.value},{timeoutMs:30000});
-    state.token=result.token;
-    state.username=result.user.username;
-    state.user=result.user;
-    state.transactions=[];
-    state.transactionsLoaded=false;
-    state.transactionsLoading=false;
-    state.transactionTotal=0;
-    localStorage.setItem('portfolio_token',state.token);
-    localStorage.setItem('portfolio_username',state.username);
-    updateSavedUsernamePreference();
-    showApp();
-    resetAutoRefreshClock();
-    toast('Signed in successfully. Loading dashboard…','success');
-    await loadDashboard(false);
-  }catch(error){
-    if(!state.token) els.loginMessage.textContent=error.message;
-    else toast(error.message,'error');
-  }finally{
-    setBusy(els.loginButton,false);
-  }
+  try{const result=await api('login',{username:els.loginUsername.value.trim(),password:els.loginPassword.value});state.token=result.token;state.username=result.user.username;localStorage.setItem('portfolio_token',state.token);localStorage.setItem('portfolio_username',state.username);updateSavedUsernamePreference();showApp();applyBootstrap(result.data);resetAutoRefreshClock();toast('Signed in successfully.','success');}
+  catch(error){els.loginMessage.textContent=error.message;}
+  finally{setBusy(els.loginButton,false);}
 }
 async function logout(){try{if(state.token)await api('logout');}catch{}clearSession();els.appView.classList.add('hidden');els.loginView.classList.remove('hidden');els.loginPassword.value='';loadSavedUsername();}
 function showApp(){els.loginView.classList.add('hidden');els.appView.classList.remove('hidden');els.sideAppName.textContent=CONFIG.APP_NAME||'My Finance';updateVersionLabels();els.todayLabel.textContent=new Intl.DateTimeFormat('en-IN',{weekday:'long',day:'numeric',month:'long'}).format(new Date()).toUpperCase();}
@@ -731,7 +709,7 @@ function applyBootstrap(data,fromCache=false){
     setTimeout(()=>toast('Master spreadsheet has not been applied yet. Click “Load Master Sheet Data” on Overview.','info'),500);
   }
   updateVersionLabels();
-  state.user=data.user||state.user;state.holdings=Array.isArray(data.holdings)?data.holdings:[];if(Array.isArray(data.transactions)){state.transactions=data.transactions;state.transactionsLoaded=true;}state.transactionTotal=Number(data.transactionMeta?.total??state.transactionTotal??0);state.watchlist=Array.isArray(data.watchlist)?data.watchlist:[];state.customColumns=Array.isArray(data.customColumns)?data.customColumns:[];state.customValues=Array.isArray(data.customValues)?data.customValues:[];state.stickyNotes=Array.isArray(data.stickyNotes)?data.stickyNotes:[];state.lifeQuotes=Array.isArray(data.lifeQuotes)?data.lifeQuotes:[];state.diary=Array.isArray(data.diary)?data.diary:[];state.monthlyDiary=Array.isArray(data.monthlyDiary)?data.monthlyDiary:[];state.monthStatus=Array.isArray(data.monthStatus)?data.monthStatus:[];state.owners=Array.isArray(data.owners)?data.owners:[];if(Array.isArray(data.users))state.users=data.users;
+  state.user=data.user||state.user;state.holdings=Array.isArray(data.holdings)?data.holdings:[];state.transactions=Array.isArray(data.transactions)?data.transactions:[];state.watchlist=Array.isArray(data.watchlist)?data.watchlist:[];state.customColumns=Array.isArray(data.customColumns)?data.customColumns:[];state.customValues=Array.isArray(data.customValues)?data.customValues:[];state.stickyNotes=Array.isArray(data.stickyNotes)?data.stickyNotes:[];state.lifeQuotes=Array.isArray(data.lifeQuotes)?data.lifeQuotes:[];state.diary=Array.isArray(data.diary)?data.diary:[];state.monthlyDiary=Array.isArray(data.monthlyDiary)?data.monthlyDiary:[];state.monthStatus=Array.isArray(data.monthStatus)?data.monthStatus:[];state.owners=Array.isArray(data.owners)?data.owners:[];if(Array.isArray(data.users))state.users=data.users;
   if(!fromCache)recordGrowthSnapshot();
   refreshOwnerControls();renderAll();
   if(state.user){els.avatarInitial.textContent=(state.user.displayName||state.user.username||'I').charAt(0).toUpperCase();if(els.dashboardUsername)els.dashboardUsername.textContent=state.user.username||state.user.displayName||'—';if(els.diaryHeroStatus)els.diaryHeroStatus.textContent=`Private diary · ${state.user.username||'signed in'}`;$$('.admin-only').forEach(el=>el.classList.toggle('hidden',state.user.role!=='ADMIN'));}
@@ -1421,59 +1399,6 @@ function renderHoldings(){
   scheduleDashboardHScrollRefresh();
 }
 
-
-async function ensureTransactionsLoaded(force=false){
-  if(state.transactionsLoading)return;
-  if(state.transactionsLoaded&&!force)return;
-
-  state.transactionsLoading=true;
-  if(force){
-    state.transactions=[];
-    state.transactionsLoaded=false;
-  }
-
-  if(els.transactionEmpty){
-    els.transactionEmpty.textContent='Loading transaction history…';
-    els.transactionEmpty.classList.remove('hidden');
-  }
-  if(els.transactionFilterCount)els.transactionFilterCount.textContent='Loading…';
-
-  try{
-    const collected=[];
-    let offset=0;
-    const limit=200;
-    let total=0;
-
-    while(true){
-      const result=await api('getTransactions',{offset,limit},{timeoutMs:60000});
-      const page=Array.isArray(result.transactions)?result.transactions:[];
-      collected.push(...page);
-      total=Number(result.total)||collected.length;
-
-      state.transactions=collected.slice();
-      state.transactionTotal=total;
-      renderTransactions();
-
-      if(result.nextOffset===null||result.nextOffset===undefined||page.length===0)break;
-      offset=Number(result.nextOffset);
-      if(!Number.isFinite(offset)||offset<=0||offset>=10000)break;
-    }
-
-    state.transactions=collected;
-    state.transactionTotal=total;
-    state.transactionsLoaded=true;
-    renderTransactions();
-  }catch(error){
-    if(els.transactionEmpty){
-      els.transactionEmpty.textContent=`Could not load transactions: ${error.message}`;
-      els.transactionEmpty.classList.remove('hidden');
-    }
-    toast(error.message,'error');
-  }finally{
-    state.transactionsLoading=false;
-  }
-}
-
 function transactionHoldingPeriod(days){
   const n=Number(days);
   if(!Number.isFinite(n)||n<0)return '—';
@@ -1547,12 +1472,7 @@ function renderTransactions(){
       <td>${escapeHtml(t.broker||t.source||'—')}</td>
     </tr>`;
   }).join('');
-  if(els.transactionEmpty){
-    if(state.transactionsLoading&&!items.length)els.transactionEmpty.textContent='Loading transaction history…';
-    else if(state.transactionsLoaded&&!items.length)els.transactionEmpty.textContent='No transactions match this view. Import an MF transaction statement or stock/ETF tradebook.';
-    else if(!state.transactionsLoaded&&!items.length)els.transactionEmpty.textContent='Open Transactions to load purchase/sale history.';
-    els.transactionEmpty.classList.toggle('hidden',items.length>0);
-  }
+  els.transactionEmpty.classList.toggle('hidden',items.length>0);
   scheduleDashboardHScrollRefresh();
 }
 function printTransactionsView(){
@@ -2166,7 +2086,6 @@ async function runBulkImport(event){
     applyBootstrap(result.data);
     saveCache(result.data);
     switchSection(['MF_STATEMENT','STOCK_TRADES'].includes(state.importMode)?'transactions':'holdings');
-    if(['MF_STATEMENT','STOCK_TRADES'].includes(state.importMode))setTimeout(()=>ensureTransactionsLoaded(true),100);
     if(state.importMode==='MF_STATEMENT')toast(`${result.imported} new MF transactions imported; ${result.skipped||0} duplicates skipped. Purchase/redemption dates are now in Transactions.`,'success');
     else if(state.importMode==='STOCK_TRADES')toast(`${result.imported} stock/ETF BUY/SELL trades imported; ${result.skipped||0} duplicates skipped.`,'success');
     else if(state.importMode==='MF_SNAPSHOT')toast(`${result.imported} MF holdings imported and mapped to AMFI. NAV will update automatically; XIRR needs transaction history.`,'success');
@@ -3104,7 +3023,6 @@ function switchSection(section){
     if(els.diaryDate&&!els.diaryDate.value)els.diaryDate.value=els.diaryBrowseDate?.value||localIsoDate();
     if(els.dailyDiaryWorkspace&&els.monthlyDiaryWorkspace)renderDiaryWorkspace();
   }
-  if(section==='transactions')ensureTransactionsLoaded();
   if(section==='users'&&state.user?.role==='ADMIN'&&els.usersBody)loadUsers();
   if(section==='overview')setOverviewMode('PERSONAL');
   if(lifeQuoteAutoContextVisible())startLifeQuoteShuffle();else if(!(state.utilityDrawerOpen&&state.utilityDrawerTab==='QUOTE'))stopLifeQuoteShuffle();
@@ -3237,7 +3155,7 @@ async function init(){
     try{loadSavedUsername();}catch{}
   }
 }
-console.info('MyFinance v19.3 loaded — fast login + lazy paged transaction history');
+console.info('MyFinance v19.2 loaded — transaction history, buy/sale dates and red sale display');
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.utilityDrawerOpen)closeUtilityDrawer();});
 window.addEventListener('error',event=>{
   console.error('MyFinance runtime error',event.error||event.message);
