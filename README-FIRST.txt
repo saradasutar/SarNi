@@ -1,83 +1,43 @@
-MYFINANCE V19.2.6 — MOTILAL / ZERO-NAV HARD FIX
-Frontend v19.2.6
-Backend v3.15.3
+MYFINANCE V19.2.8 — COLOUR-CODED HOLDINGS SUMMARY
+Frontend v19.2.8
+Backend remains v3.15.3.
 
-YOUR SCREENSHOT
-The three Motilal Oswal funds still had:
-- valid AMFI scheme codes
-- valid ISINs
-- ₹0.00 current NAV
-- DATE UNKNOWN
+NEW HOLDINGS SUMMARY VISUALS
 
-The codes are valid:
-152354 = Motilal Oswal Large Cap Direct Plan Growth
-127042 = Motilal Oswal Midcap Direct Plan Growth
-152237 = Motilal Oswal Small Cap Direct Growth
+When you click “Show Holding Summary”:
 
-V19.2.6 therefore does not depend on a single NAV path.
+- INVESTED AMOUNT = BLUE
+- PRESENT VALUE = VIOLET / PURPLE
+- POSITIVE GROWTH = GREEN
+- LOSS / NEGATIVE GROWTH = RED
+- ZERO / NEUTRAL = GREY
 
-WHAT CHANGED
+A small colour guide appears in the summary header.
 
-1. DIRECT AMFI PORTAL
-Backend now calls:
-https://portal.amfiindia.com/spages/NAVAll.txt
-directly, instead of relying on the www.amfiindia.com redirect.
+The Total Portfolio / Mutual Funds / Stocks & ETFs cards are also easier to distinguish:
+- Total Portfolio = indigo accent
+- Mutual Funds = green accent
+- Stocks & ETFs = orange accent
 
-2. SECOND NAV SOURCE / FALLBACK
-AMFI is still primary.
-If an active MF remains zero/missing after the AMFI refresh, Backend v3.15.3 calls:
-https://api.mfapi.in/mf/<AMFI_CODE>
-and writes the latest valid NAV/date into Quotes as:
-MFAPI fallback
+The Combined row remains visually strongest.
 
-3. AUTOMATIC REPAIR ON LOGIN / PAGE RELOAD
-If any active MF has a zero/missing NAV or no NAV date, the backend immediately tries repair.
-You do not need to wait 15 minutes.
+The Holdings Summary is still hidden by default and opens only when you click:
+“Show Holding Summary”.
 
-4. ZERO NAV IS NOT TREATED AS A REAL PRICE
-If both sources fail, the dashboard now shows:
-NAV PENDING / —
-instead of ₹0.00 and a false huge loss.
+INSTALL — FRONTEND ONLY
 
-5. REFRESH REPORT
-Manual Refresh can report:
-MF NAV 12/12 · 3 fallback repaired · MF performance 12/12
-
-INSTALL
-
-APPS SCRIPT
-1. Replace the entire Code.gs with Code-v3.15.3.gs
-2. Save
-3. Deploy > Manage deployments > Edit existing Web App
-4. New version
-5. Execute as Me
-6. Who has access: Anyone
-7. Deploy
-
-GITHUB
-Replace/upload:
+Upload/replace:
 - index.html
 - styles.css
-- app-v19-2-6.js
-- app-v19-2-5.js
+- app-v19-2-8.js
+- app-v19-2-7.js (compatibility)
 
-Keep the CURRENT working config.js and /exec URL.
+Keep:
+- current config.js
+- Backend v3.15.3
 
-TEST
-Open your GitHub site with:
-?v=1926
+Open:
+?v=1928
 
-Then:
+Then hard refresh on Mac:
 Command + Shift + R
-
-Reload/login once. Missing MF NAVs will be repaired immediately.
-You can also click the circular Refresh button once.
-
-EXPECTED
-Motilal Large Cap, Midcap and Small Cap should show a positive NAV and NAV date.
-Source will be either:
-AMFI
-or
-MFAPI fallback
-
-If neither source can be fetched, it will show NAV PENDING instead of ₹0.00.
