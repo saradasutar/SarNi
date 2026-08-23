@@ -7205,3 +7205,12 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
     white-space:normal !important;
   }
 }
+
+
+/* FE v19.2.9 — all-device portfolio value parity */
+#lastUpdatedText{overflow-wrap:break-word;}
+#holdingsSection [data-standard-key="invested"],
+#holdingsSection [data-standard-key="currentValue"],
+#holdingsSection [data-standard-key="currentPrice"]{
+  font-variant-numeric:tabular-nums;
+}

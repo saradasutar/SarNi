@@ -229,13 +229,9 @@ async function api(action,payload={},options={}){
 function cacheKey(){return `portfolio_cache_${MOBILE_DATA_CACHE_VERSION}_${state.username||'unknown'}`;}
 function saveCache(data){try{localStorage.setItem(cacheKey(),JSON.stringify({savedAt:Date.now(),data}));}catch{} }
 function loadCache(){
-  // Desktop can still show a recent saved snapshot while syncing.
-  // Mobile deliberately waits for the backend so it reflects the same source data as desktop.
-  if(isMobileViewport())return;
-  try{
-    const p=JSON.parse(localStorage.getItem(cacheKey())||'null');
-    if(p?.data)applyBootstrap(p.data,true);
-  }catch{}
+  // Do not render an old device-local portfolio snapshot before the live backend.
+  // This keeps phones/tablets/desktop on the same source data.
+  return;
 }
 function clearSession(){
   state.token='';
@@ -797,28 +793,35 @@ function localIsoMonth(date=new Date()){
 }
 
 
-function mobileHoldingAmountHealth(){
+function holdingAmountHealth(){
   const holdings=Array.isArray(state.holdings)?state.holdings:[];
-  const priceable=holdings.filter(h=>['MF','STOCK','ETF'].includes(String(h.type||'').toUpperCase())&&(Number(h.units)||0)>0);
+  const priceable=holdings.filter(h=>
+    ['MF','STOCK','ETF'].includes(String(h.type||'').toUpperCase()) &&
+    (Number(h.units)||0)>0
+  );
   const invested=priceable.reduce((sum,h)=>sum+(Number(h.investedAmount)||0),0);
   const current=priceable.reduce((sum,h)=>sum+(Number(h.currentValue)||0),0);
-  const priced=priceable.filter(h=>(Number(h.currentValue)||0)>0||(Number(h.currentPrice)||0)>0).length;
-  return {count:holdings.length,priceable:priceable.length,invested,current,priced};
+  const priced=priceable.filter(h=>
+    (Number(h.currentValue)||0)>0 || (Number(h.currentPrice)||0)>0
+  ).length;
+  const missing=Math.max(0,priceable.length-priced);
+  return {count:holdings.length,priceable:priceable.length,invested,current,priced,missing};
 }
-
-function mobileHoldingAmountsMissing(){
-  const h=mobileHoldingAmountHealth();
+function holdingAmountsMissing(){
+  const h=holdingAmountHealth();
   if(!h.priceable)return false;
-  // Invested amount comes directly from Holdings. If it is present but no live
-  // value is reflected, mobile should immediately re-fetch/repair prices.
-  return h.invested>0 && (h.current<=0 || h.priced===0);
+  // Repair if even ONE MF/stock/ETF is missing its live value.
+  return h.invested>0 && (h.current<=0 || h.priced<h.priceable || h.missing>0);
 }
+// Keep old names for compatibility with existing v19.2.9 code.
+function mobileHoldingAmountHealth(){return holdingAmountHealth();}
+function mobileHoldingAmountsMissing(){return holdingAmountsMissing();}
 
-async function repairMobileHoldingAmounts({allowPriceRefresh=true}={}){
-  if(!isMobileViewport()||!state.token||!isConfigured())return false;
+async function repairHoldingAmounts({allowPriceRefresh=true}={}){
+  if(!state.token||!isConfigured())return false;
   state.mobileLastAmountCheckAt=Date.now();
 
-  // Always take one authoritative bootstrap from the same backend used by desktop.
+  // Authoritative backend bootstrap for every device/browser mode.
   try{
     const boot=await api('bootstrap',{}, {retry:true,timeoutMs:90000});
     if(boot?.data){
@@ -827,14 +830,14 @@ async function repairMobileHoldingAmounts({allowPriceRefresh=true}={}){
       state.lastServerSyncAt=Date.now();
     }
   }catch(error){
-    console.warn('Mobile portfolio bootstrap retry failed:',error);
+    console.warn('Portfolio bootstrap retry failed:',error);
   }
 
-  if(!mobileHoldingAmountsMissing())return true;
+  if(!holdingAmountsMissing())return true;
   if(!allowPriceRefresh||state.mobileAmountRepairTried)return false;
 
   state.mobileAmountRepairTried=true;
-  setSyncStatus('syncing','Repairing mobile holding values…');
+  setSyncStatus('syncing','Repairing holding values…');
   try{
     const refreshed=await api('refreshPrices',{}, {retry:false,timeoutMs:120000});
     if(refreshed?.data){
@@ -842,13 +845,16 @@ async function repairMobileHoldingAmounts({allowPriceRefresh=true}={}){
       saveCache(refreshed.data);
       state.lastServerSyncAt=Date.now();
     }
-    return !mobileHoldingAmountsMissing();
+    return !holdingAmountsMissing();
   }catch(error){
-    console.warn('Mobile holding value repair failed:',error);
+    console.warn('Holding value repair failed:',error);
     return false;
   }finally{
     setSyncStatus('','Up to date');
   }
+}
+async function repairMobileHoldingAmounts(options={}){
+  return repairHoldingAmounts(options);
 }
 
 async function login(event){
@@ -870,12 +876,10 @@ async function login(event){
     saveCache(result.data);
     state.lastServerSyncAt=Date.now();
 
-    // Mobile must finish login from the same fresh backend snapshot as desktop.
-    // If live MF/stock values are absent, perform one automatic price repair.
-    if(isMobileViewport()){
-      setSyncStatus('syncing','Loading portfolio amounts…');
-      await repairMobileHoldingAmounts({allowPriceRefresh:true});
-    }
+    // Every device finishes login from the same fresh backend snapshot.
+    // This also covers phones using Desktop-site mode, landscape or wide viewport.
+    setSyncStatus('syncing','Loading portfolio amounts…');
+    await repairHoldingAmounts({allowPriceRefresh:true});
 
     restoreHoldingsSummaryState();
     switchSection('overview');
@@ -914,7 +918,11 @@ async function loadDashboard(force=false){
   if(state.syncing)return; state.syncing=true;setSyncStatus('syncing',force?'Updating prices & performance…':'Syncing…');
   try{
     const result=await api(force?'refreshPrices':'bootstrap',{}, {retry:!force});
-    applyBootstrap(result.data);saveCache(result.data);state.lastServerSyncAt=Date.now();setSyncStatus('','Up to date');
+    applyBootstrap(result.data);saveCache(result.data);state.lastServerSyncAt=Date.now();
+    if(!force&&holdingAmountsMissing()&&!state.mobileAmountRepairTried){
+      await repairHoldingAmounts({allowPriceRefresh:true});
+    }
+    setSyncStatus('','Up to date');
     if(force){
       const nav=result.refreshReport?.mfNav,perf=result.refreshReport?.mfPerformance;
       if(nav){
@@ -949,9 +957,9 @@ function applyBootstrap(data,fromCache=false){
     els.masterDataStatus.textContent=state.masterDataAppliedAt?`Master sheet loaded · 35 holdings · 17 watchlist · ${detailDate(state.masterDataAppliedAt)}`:'Master spreadsheet not loaded yet · use “Replace from Master Sheet”.';
     els.masterDataStatus.classList.toggle('loaded',Boolean(state.masterDataAppliedAt));
   }
-  const mobileHealth=isMobileViewport()?mobileHoldingAmountHealth():null;
-  const mobileAmountNote=mobileHealth&&mobileHealth.priceable?` · ${mobileHealth.priced}/${mobileHealth.priceable} holdings valued`:'';
-  els.lastUpdatedText.textContent=`${fromCache?'Showing saved data':'Updated'} ${dateLabel(data.updatedAt)}${data.priceNote?` · ${data.priceNote}`:''}${mobileAmountNote}`;if(els.watchlistLastAutoUpdate)els.watchlistLastAutoUpdate.textContent=`Updated ${dateLabel(data.updatedAt)}`;
+  const amountHealth=holdingAmountHealth();
+  const amountNote=amountHealth.priceable?` · ${amountHealth.priced}/${amountHealth.priceable} holdings valued`:'';
+  els.lastUpdatedText.textContent=`${fromCache?'Showing saved data':'Updated'} ${dateLabel(data.updatedAt)}${data.priceNote?` · ${data.priceNote}`:''}${amountNote}`;if(els.watchlistLastAutoUpdate)els.watchlistLastAutoUpdate.textContent=`Updated ${dateLabel(data.updatedAt)}`;
 }
 
 function refreshOwnerControls(){
@@ -4449,16 +4457,30 @@ function bindEvents(){safeOn(els.manageHoldingsColumnsBtn,'click',()=>openColumn
 }
 
 async function refreshMobileFromBackend(reason='resume'){
-  if(!isMobileViewport()||!state.token||state.syncing||!isConfigured())return;
+  if(!state.token||state.syncing||!isConfigured())return;
   const age=Date.now()-Number(state.lastServerSyncAt||0);
-  if(reason!=='pageshow'&&age<30000&&!mobileHoldingAmountsMissing())return;
+  if(reason!=='pageshow'&&age<30000&&!holdingAmountsMissing())return;
   try{
     await loadDashboard(false);
-    if(mobileHoldingAmountsMissing())await repairMobileHoldingAmounts({allowPriceRefresh:!state.mobileAmountRepairTried});
-  }catch(e){console.warn('Mobile resync failed:',e);}
+    if(holdingAmountsMissing()){
+      await repairHoldingAmounts({allowPriceRefresh:!state.mobileAmountRepairTried});
+    }
+  }catch(e){console.warn('Device resync failed:',e);}
 }
 
 
+
+function applyAllDeviceValueParityMigration(){
+  const key='myfinance_1929_all_device_value_parity_1';
+  try{
+    if(localStorage.getItem(key)==='1')return;
+    Object.keys(localStorage).forEach(k=>{
+      if(k.startsWith('portfolio_cache_'))localStorage.removeItem(k);
+    });
+    state.mobileAmountRepairTried=false;
+    localStorage.setItem(key,'1');
+  }catch{}
+}
 
 function applyPerformanceVisibilityMigration(){
   const key='myfinance_1929_performance_visibility_fix_1';
@@ -4501,6 +4523,7 @@ function applyProperLayoutMigration(){
 
 async function init(){
   try{
+    applyAllDeviceValueParityMigration();
     applyPerformanceVisibilityMigration();
     applyAssetResizeMigration();
     applyProperLayoutMigration();
@@ -4554,8 +4577,8 @@ async function init(){
       showApp();
       loadCache();
       await loadDashboard(false);
-      if(isMobileViewport()&&mobileHoldingAmountsMissing()){
-        await repairMobileHoldingAmounts({allowPriceRefresh:true});
+      if(holdingAmountsMissing()){
+        await repairHoldingAmounts({allowPriceRefresh:true});
       }
       restoreHoldingsSummaryState();
       resetAutoRefreshClock();
