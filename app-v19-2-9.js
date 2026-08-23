@@ -1171,11 +1171,16 @@ function columnResizeLimits(section,index){
   const table=tableElementFor(section);
   const th=table?.querySelector('thead tr')?.children[index]||null;
   const key=String(th?.dataset?.standardKey||'');
+  const perfKeys=new Set(['d1','w1','m1','m6','y1','y3','y5','y10']);
   if(key==='asset')return {min:150,max:760};
-  if(key==='owner')return {min:86,max:220};
+  if(key==='investor'||key==='owner')return {min:86,max:220};
   if(key==='actions')return {min:145,max:320};
-  if(key==='currentPrice')return {min:105,max:340};
-  if(key==='notes')return {min:105,max:460};
+  if(key==='currentPrice')return {min:150,max:360};
+  if(key==='currentValue')return {min:105,max:300};
+  if(key==='gainLoss'||key==='realizedPnl'||key==='totalPnl')return {min:100,max:300};
+  if(key==='gainPct'||key==='xirr')return {min:78,max:220};
+  if(key==='note'||key==='notes')return {min:110,max:460};
+  if(perfKeys.has(key))return {min:88,max:240};
   return {min:58,max:620};
 }
 function setColumnWidth(section,index,width){
@@ -1474,10 +1479,23 @@ function holdingsPresetFromCurrent(){
   }
   return 'CUSTOM';
 }
+function resetHoldingsHorizontalScroll(){
+  saveTableScroll('holdings',0);
+  const wrap=tableScrollWrap('holdings');
+  if(wrap){
+    wrap.scrollLeft=0;
+    requestAnimationFrame(()=>{
+      wrap.scrollLeft=0;
+      queueHScrollUiRefresh();
+    });
+  }
+}
+
 function setHoldingsViewPreset(name,{render=true}={}){
   const preset=HOLDINGS_VIEW_PRESETS[name];if(!preset)return;
   applyPresetSettings('HOLDINGS',preset);
   if(els.holdingsViewPreset)els.holdingsViewPreset.value=name;
+  resetHoldingsHorizontalScroll();
   if(render)renderHoldings();
 }
 function holdingsViewSnapshot(){
@@ -1502,6 +1520,7 @@ function applyHoldingsSnapshot(saved,{toastUser=false}={}){
   if(els.holdingNotesFilter)els.holdingNotesFilter.value=f.notes||'ALL';
   if(els.holdingTradeFilter)els.holdingTradeFilter.value=f.trade||'ALL';
   if(els.holdingsViewPreset)els.holdingsViewPreset.value=saved.preset||holdingsPresetFromCurrent();
+  resetHoldingsHorizontalScroll();
   renderHoldings();
   if(els.holdingsDefaultViewStatus)els.holdingsDefaultViewStatus.textContent='✓ Saved default applied';
   if(toastUser)toast('Saved Holdings default view restored.','success');
@@ -4366,6 +4385,19 @@ async function refreshMobileFromBackend(reason='resume'){
 
 
 
+function applyPerformanceVisibilityMigration(){
+  const key='myfinance_1929_performance_visibility_fix_1';
+  try{
+    if(localStorage.getItem(key)==='1')return;
+    // Position-based saved widths from older versions can leave 1D/1W/etc.
+    // too narrow after switching presets. Reset widths once; preserve all
+    // filters, hidden columns, column order and default-view choices.
+    saveColumnWidths('holdings',{});
+    saveTableScroll('holdings',0);
+    localStorage.setItem(key,'1');
+  }catch{}
+}
+
 function applyAssetResizeMigration(){
   const key='myfinance_1929_asset_resize_final_fix_2';
   try{
@@ -4394,6 +4426,7 @@ function applyProperLayoutMigration(){
 
 async function init(){
   try{
+    applyPerformanceVisibilityMigration();
     applyAssetResizeMigration();
     applyProperLayoutMigration();
     bindEvents();

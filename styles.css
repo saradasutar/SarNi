@@ -6988,3 +6988,75 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
     min-width:220px !important;
   }
 }
+
+
+/* =========================================================
+   FE v19.2.9 — MF/STOCK PERFORMANCE COLUMN VISIBILITY FIX
+   ========================================================= */
+
+/* Price/NAV and performance headers must remain fully readable. */
+#holdingsSection [data-standard-key="currentPrice"]{
+  min-width:150px !important;
+}
+
+#holdingsSection [data-standard-key="d1"],
+#holdingsSection [data-standard-key="w1"],
+#holdingsSection [data-standard-key="m1"],
+#holdingsSection [data-standard-key="m6"],
+#holdingsSection [data-standard-key="y1"],
+#holdingsSection [data-standard-key="y3"],
+#holdingsSection [data-standard-key="y5"],
+#holdingsSection [data-standard-key="y10"]{
+  min-width:88px !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+
+/* Performance numbers are short percentages: keep them on one readable line. */
+#holdingsSection td.asset-performance-column{
+  min-width:88px !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  font-variant-numeric:tabular-nums;
+}
+
+/* Make period labels visually clear. */
+#holdingsSection th.asset-performance-column{
+  min-width:88px !important;
+  padding-left:10px !important;
+  padding-right:10px !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  letter-spacing:.02em;
+}
+
+/* The first performance column (1D) should clearly start after NAV/result fields. */
+#holdingsSection [data-standard-key="d1"]{
+  border-left:3px solid rgba(93,104,160,.34) !important;
+}
+
+/* Sticky Investor + Asset may cover scrolling content while the user is moving
+   horizontally. Give the table a clean divider so hidden-under-sticky content
+   does not look like broken text. */
+#holdingsSection .asset-col{
+  box-shadow:5px 0 8px -7px rgba(40,50,90,.45);
+}
+
+/* On mobile, prefer horizontal scrolling over crushed performance values. */
+@media(max-width:860px){
+  #holdingsSection [data-standard-key="d1"],
+  #holdingsSection [data-standard-key="w1"],
+  #holdingsSection [data-standard-key="m1"],
+  #holdingsSection [data-standard-key="m6"],
+  #holdingsSection [data-standard-key="y1"],
+  #holdingsSection [data-standard-key="y3"],
+  #holdingsSection [data-standard-key="y5"],
+  #holdingsSection [data-standard-key="y10"],
+  #holdingsSection td.asset-performance-column{
+    min-width:84px !important;
+  }
+}
