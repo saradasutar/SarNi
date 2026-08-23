@@ -7359,3 +7359,82 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
   #sipSection .sip-table-wrap{max-height:none!important;overflow:visible!important}
   #sipSection .sip-table th{position:static!important}
 }
+
+
+/* =========================================================
+   FE v19.3.1 — STARTUP SYNC / ZERO-VALUE PROTECTION
+   ========================================================= */
+.portfolio-startup-overlay{
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(239,244,255,.72);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+}
+.portfolio-startup-overlay.hidden{display:none!important}
+.portfolio-startup-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  width:min(520px,calc(100vw - 36px));
+  padding:18px 20px;
+  border:1px solid #d9e0f1;
+  border-radius:18px;
+  background:rgba(255,255,255,.97);
+  box-shadow:0 24px 70px rgba(38,51,101,.18);
+}
+.portfolio-startup-card>div:nth-child(2){flex:1;min-width:0}
+.portfolio-startup-card strong{
+  display:block;
+  margin-bottom:4px;
+  color:#27375d;
+  font-size:14px;
+}
+.portfolio-startup-card span{
+  display:block;
+  color:#73809a;
+  font-size:10.5px;
+  line-height:1.45;
+}
+.portfolio-startup-spinner{
+  width:28px;
+  height:28px;
+  flex:0 0 28px;
+  border:3px solid #e0e5f5;
+  border-top-color:#6557d8;
+  border-radius:50%;
+  animation:portfolio-startup-spin .8s linear infinite;
+}
+.portfolio-startup-overlay.error .portfolio-startup-spinner{
+  animation:none;
+  border-color:#f0c8ce;
+  border-top-color:#ca4658;
+}
+@keyframes portfolio-startup-spin{to{transform:rotate(360deg)}}
+
+/* While restoring a session, do not let temporary zero cards look like real data. */
+body.portfolio-startup-loading #holdingsSection,
+body.portfolio-startup-loading #overviewSection,
+body.portfolio-startup-loading #transactionsSection,
+body.portfolio-startup-loading #watchlistSection,
+body.portfolio-startup-loading #sipSection{
+  pointer-events:none;
+  user-select:none;
+}
+
+@media(max-width:680px){
+  .portfolio-startup-overlay{padding:14px}
+  .portfolio-startup-card{
+    align-items:flex-start;
+    flex-wrap:wrap;
+    padding:16px;
+  }
+  .portfolio-startup-card #portfolioStartupRetryBtn{
+    width:100%;
+  }
+}
