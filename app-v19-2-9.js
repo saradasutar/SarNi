@@ -43,6 +43,8 @@ const state = {
   backendVersion: EXPECTED_BACKEND_VERSION,
   lastServerSyncAt: 0,
   inlineEditHoldingId: '',
+  mobileAmountRepairTried: false,
+  mobileLastAmountCheckAt: 0,
   masterDataVersion: '',
   masterDataAppliedAt: '',
   hScrollTarget: null,
@@ -239,6 +241,8 @@ function clearSession(){
   state.token='';
   state.username='';
   state.user=null;
+  state.mobileAmountRepairTried=false;
+  state.mobileLastAmountCheckAt=0;
   state.holdings=[];
   state.transactions=[];
   state.watchlist=[];
@@ -792,6 +796,61 @@ function localIsoMonth(date=new Date()){
   return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;
 }
 
+
+function mobileHoldingAmountHealth(){
+  const holdings=Array.isArray(state.holdings)?state.holdings:[];
+  const priceable=holdings.filter(h=>['MF','STOCK','ETF'].includes(String(h.type||'').toUpperCase())&&(Number(h.units)||0)>0);
+  const invested=priceable.reduce((sum,h)=>sum+(Number(h.investedAmount)||0),0);
+  const current=priceable.reduce((sum,h)=>sum+(Number(h.currentValue)||0),0);
+  const priced=priceable.filter(h=>(Number(h.currentValue)||0)>0||(Number(h.currentPrice)||0)>0).length;
+  return {count:holdings.length,priceable:priceable.length,invested,current,priced};
+}
+
+function mobileHoldingAmountsMissing(){
+  const h=mobileHoldingAmountHealth();
+  if(!h.priceable)return false;
+  // Invested amount comes directly from Holdings. If it is present but no live
+  // value is reflected, mobile should immediately re-fetch/repair prices.
+  return h.invested>0 && (h.current<=0 || h.priced===0);
+}
+
+async function repairMobileHoldingAmounts({allowPriceRefresh=true}={}){
+  if(!isMobileViewport()||!state.token||!isConfigured())return false;
+  state.mobileLastAmountCheckAt=Date.now();
+
+  // Always take one authoritative bootstrap from the same backend used by desktop.
+  try{
+    const boot=await api('bootstrap',{}, {retry:true,timeoutMs:90000});
+    if(boot?.data){
+      applyBootstrap(boot.data);
+      saveCache(boot.data);
+      state.lastServerSyncAt=Date.now();
+    }
+  }catch(error){
+    console.warn('Mobile portfolio bootstrap retry failed:',error);
+  }
+
+  if(!mobileHoldingAmountsMissing())return true;
+  if(!allowPriceRefresh||state.mobileAmountRepairTried)return false;
+
+  state.mobileAmountRepairTried=true;
+  setSyncStatus('syncing','Repairing mobile holding values…');
+  try{
+    const refreshed=await api('refreshPrices',{}, {retry:false,timeoutMs:120000});
+    if(refreshed?.data){
+      applyBootstrap(refreshed.data);
+      saveCache(refreshed.data);
+      state.lastServerSyncAt=Date.now();
+    }
+    return !mobileHoldingAmountsMissing();
+  }catch(error){
+    console.warn('Mobile holding value repair failed:',error);
+    return false;
+  }finally{
+    setSyncStatus('','Up to date');
+  }
+}
+
 async function login(event){
   event.preventDefault();
   if(els.loginMessage)els.loginMessage.textContent='';
@@ -801,16 +860,27 @@ async function login(event){
     const result=await api('login',{username:els.loginUsername.value.trim(),password:els.loginPassword.value},{timeoutMs:90000});
     state.token=result.token;
     state.username=result.user.username;
+    state.mobileAmountRepairTried=false;
     localStorage.setItem('portfolio_token',state.token);
     localStorage.setItem('portfolio_username',state.username);
     updateSavedUsernamePreference();
+
     showApp();
     applyBootstrap(result.data);
     saveCache(result.data);
     state.lastServerSyncAt=Date.now();
+
+    // Mobile must finish login from the same fresh backend snapshot as desktop.
+    // If live MF/stock values are absent, perform one automatic price repair.
+    if(isMobileViewport()){
+      setSyncStatus('syncing','Loading portfolio amounts…');
+      await repairMobileHoldingAmounts({allowPriceRefresh:true});
+    }
+
     restoreHoldingsSummaryState();
     switchSection('overview');
     resetAutoRefreshClock();
+    setSyncStatus('','Up to date');
     toast('Signed in successfully.','success');
   }
   catch(error){if(els.loginMessage)els.loginMessage.textContent=error.message;}
@@ -879,7 +949,9 @@ function applyBootstrap(data,fromCache=false){
     els.masterDataStatus.textContent=state.masterDataAppliedAt?`Master sheet loaded · 35 holdings · 17 watchlist · ${detailDate(state.masterDataAppliedAt)}`:'Master spreadsheet not loaded yet · use “Replace from Master Sheet”.';
     els.masterDataStatus.classList.toggle('loaded',Boolean(state.masterDataAppliedAt));
   }
-  els.lastUpdatedText.textContent=`${fromCache?'Showing saved data':'Updated'} ${dateLabel(data.updatedAt)}${data.priceNote?` · ${data.priceNote}`:''}`;if(els.watchlistLastAutoUpdate)els.watchlistLastAutoUpdate.textContent=`Updated ${dateLabel(data.updatedAt)}`;
+  const mobileHealth=isMobileViewport()?mobileHoldingAmountHealth():null;
+  const mobileAmountNote=mobileHealth&&mobileHealth.priceable?` · ${mobileHealth.priced}/${mobileHealth.priceable} holdings valued`:'';
+  els.lastUpdatedText.textContent=`${fromCache?'Showing saved data':'Updated'} ${dateLabel(data.updatedAt)}${data.priceNote?` · ${data.priceNote}`:''}${mobileAmountNote}`;if(els.watchlistLastAutoUpdate)els.watchlistLastAutoUpdate.textContent=`Updated ${dateLabel(data.updatedAt)}`;
 }
 
 function refreshOwnerControls(){
@@ -4379,8 +4451,11 @@ function bindEvents(){safeOn(els.manageHoldingsColumnsBtn,'click',()=>openColumn
 async function refreshMobileFromBackend(reason='resume'){
   if(!isMobileViewport()||!state.token||state.syncing||!isConfigured())return;
   const age=Date.now()-Number(state.lastServerSyncAt||0);
-  if(reason!=='pageshow'&&age<30000)return;
-  try{await loadDashboard(false);}catch(e){console.warn('Mobile resync failed:',e);}
+  if(reason!=='pageshow'&&age<30000&&!mobileHoldingAmountsMissing())return;
+  try{
+    await loadDashboard(false);
+    if(mobileHoldingAmountsMissing())await repairMobileHoldingAmounts({allowPriceRefresh:!state.mobileAmountRepairTried});
+  }catch(e){console.warn('Mobile resync failed:',e);}
 }
 
 
@@ -4479,6 +4554,9 @@ async function init(){
       showApp();
       loadCache();
       await loadDashboard(false);
+      if(isMobileViewport()&&mobileHoldingAmountsMissing()){
+        await repairMobileHoldingAmounts({allowPriceRefresh:true});
+      }
       restoreHoldingsSummaryState();
       resetAutoRefreshClock();
     }

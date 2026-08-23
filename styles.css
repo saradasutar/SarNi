@@ -7181,3 +7181,27 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
     box-shadow:none !important;
   }
 }
+
+
+/* =========================================================
+   FE v19.2.9 — MOBILE HOLDING AMOUNT SYNC
+   ========================================================= */
+@media(max-width:860px){
+  #lastUpdatedText{
+    line-height:1.35;
+    overflow-wrap:break-word;
+  }
+
+  /* During the first mobile login sync, keep financial figures readable
+     rather than allowing any amount to collapse to a tiny line. */
+  #holdingsSection .holdings-table td,
+  #holdingsSection .holdings-table th{
+    font-variant-numeric:tabular-nums;
+  }
+
+  #holdingsSection [data-standard-key="invested"],
+  #holdingsSection [data-standard-key="currentValue"],
+  #holdingsSection [data-standard-key="currentPrice"]{
+    white-space:normal !important;
+  }
+}
