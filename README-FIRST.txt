@@ -1,31 +1,35 @@
-MYFINANCE MOBILE PRICE FIX V9
+MYFINANCE MOBILE COMPACT V10
 
-PROBLEM FIXED
-Desktop/web shows MF and stock prices correctly, but mobile may show 0 because an older local browser cache can be restored or because one of the returned live price fields is temporarily blank/zero.
+CHANGE REQUESTED
+On mobile, the default Overview now hides the large holding-summary area, matching the compact desktop behaviour requested.
 
-V9 CHANGES
-- Uses a new versioned browser cache (V9), so old zero-price cache is ignored.
-- Removes older MyFinance portfolio-cache entries automatically.
-- Always performs a fresh server bootstrap after opening the dashboard.
-- If live MF/stock/ETF prices are still missing after bootstrap, performs ONE automatic refreshPrices request.
-- If Current Value is available but Current Price is missing, derives Current Price = Current Value / Units.
-- If Current Price is available but Current Value is missing, derives Current Value = Current Price × Units.
-- Manual price is used only as an existing fallback if already saved.
-- Re-syncs after the phone returns online, after browser back/forward cache restore, or after the app has been in the background for more than 5 minutes.
-- No price is invented: calculations only use values already returned by your backend or your saved manual price.
+MOBILE DEFAULT VIEW
+Hidden on Overview:
+- Invested / Current Value / Gain / Selected View summary cards
+- Mutual Funds vs Stocks & ETFs summary panel
 
-BACKEND
-No Apps Script change is required if desktop prices are already working.
+Still available:
+- Portfolio selector
+- Investment type selector
+- Allocation / investor information / top holdings
+- Holdings tab
+- Watchlist
+- Personal notes
+- Vertical investment detail popup
+- All V9 mobile price fixes
+
+DESKTOP
+Desktop layout is unchanged.
 
 GITHUB INSTALL
 1. Keep config.js unchanged.
 2. Replace index.html.
 3. Replace styles.css.
-4. Upload app-v9.js as a NEW file.
-5. Commit.
-6. On your phone open:
-   https://saradasutar.github.io/MyFinance/?v=1500
-7. Close any older MyFinance tab first, then open the URL above.
-8. Sign in and tap Refresh once if needed.
+4. Upload app-v10.js as a NEW file.
+5. Commit changes.
+6. On mobile open:
+   https://saradasutar.github.io/MyFinance/?v=1600
+7. Close the previous MyFinance tab first, then reopen.
+8. If needed, refresh once.
 
-If mobile still shows 0 after V9 while desktop shows a real price, send a mobile screenshot showing the holding name and the 0 price.
+No Apps Script/backend change is required.
