@@ -10,7 +10,7 @@
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260823-1929-deviceparity1">
+  <link rel="stylesheet" href="styles.css?v=20260823-1930-sip1">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -36,7 +36,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.2.9</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.15.4</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.3.0</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.16.0</span></div>
         </div>
       </form>
     </div>
@@ -51,6 +51,7 @@
         <button class="nav-item" data-section="holdings"><span>▥</span>Holdings</button>
         <button class="nav-item" data-section="transactions"><span>⇄</span>Transactions</button>
         <button class="nav-item" data-section="watchlist"><span>☆</span>Watchlist</button>
+        <button class="nav-item" data-section="sip"><span>₹</span>SIP Planner</button>
         <button class="nav-item" data-section="diary"><span>✎</span>Diary</button>
         <button id="quickDiaryBtn" class="nav-item quick-diary-nav" type="button"><span>✚</span>Quick Diary</button>
         <button class="nav-item admin-only hidden" data-section="users"><span>♙</span>Users</button>
@@ -58,21 +59,21 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v19.2.9</span><span id="dashboardBackendVersion">Backend · v3.15.4</span>
+        <span id="dashboardVersion">Frontend · v19.3.0</span><span id="dashboardBackendVersion">Backend · v3.16.0</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.2.9</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.15.4</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.3.0</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.16.0</span></div></div></div>
         <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
 
       <div id="mobileSessionBar" class="mobile-session-bar" aria-label="Mobile session controls">
         <div class="mobile-session-versions">
-          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.2.9</span>
-          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.15.4</span>
+          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.3.0</span>
+          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.16.0</span>
         </div>
         <div class="mobile-session-actions">
           <button id="mobileChangePasswordBtn" class="mobile-session-button" type="button">Password</button>
@@ -472,6 +473,111 @@
       </section>
 
 
+
+      <section id="sipSection" class="page-section hidden">
+        <div class="sip-hero">
+          <div>
+            <p class="eyebrow">PLANNED INVESTING</p>
+            <h2>SIP Planner &amp; Future Investment</h2>
+            <p>Plan future mutual-fund, ETF or stock investments without adding them to current Holdings before they are actually invested.</p>
+          </div>
+          <button id="addSipPlanBtn" type="button" class="primary-button">+ Add SIP</button>
+        </div>
+
+        <div class="sip-kpi-grid">
+          <article class="sip-kpi-card">
+            <span>MONTHLY COMMITMENT</span>
+            <strong id="sipMonthlyCommitment">₹0</strong>
+            <small>Monthly-equivalent active SIPs</small>
+          </article>
+          <article class="sip-kpi-card">
+            <span>NEXT 30 DAYS</span>
+            <strong id="sipNext30Amount">₹0</strong>
+            <small id="sipNext30Count">0 upcoming instalments</small>
+          </article>
+          <article class="sip-kpi-card">
+            <span>NEXT 12 MONTHS</span>
+            <strong id="sipNext12Amount">₹0</strong>
+            <small>Planned future contribution</small>
+          </article>
+          <article class="sip-kpi-card">
+            <span>ACTIVE SIPs</span>
+            <strong id="sipActiveCount">0</strong>
+            <small id="sipPausedCount">0 paused</small>
+          </article>
+        </div>
+
+        <article class="panel sip-panel">
+          <div class="panel-head responsive-head">
+            <div>
+              <p class="eyebrow">SIP MASTER</p>
+              <h3>Recurring investment plans</h3>
+            </div>
+            <div class="sip-filter-tools">
+              <select id="sipOwnerFilter" class="compact-select" aria-label="SIP investor filter">
+                <option value="ALL">All investors</option>
+              </select>
+              <select id="sipStatusFilter" class="compact-select" aria-label="SIP status filter">
+                <option value="ALL">All status</option>
+                <option value="ACTIVE">Active</option>
+                <option value="PAUSED">Paused</option>
+                <option value="STOPPED">Stopped</option>
+              </select>
+              <span id="sipPlanCount" class="filter-result-pill">0 plans</span>
+            </div>
+          </div>
+
+          <div class="sip-info-strip">
+            <strong>Future SIP amounts are kept separate from current Holdings.</strong>
+            They are counted in Holdings only after your actual MF statement / broker transaction is imported.
+          </div>
+
+          <div class="table-wrap sip-table-wrap">
+            <table class="sip-table">
+              <thead>
+                <tr>
+                  <th>Investor</th><th>Asset / Scheme</th><th>SIP Amount</th><th>Frequency</th>
+                  <th>SIP Date</th><th>Step-up</th><th>Next SIP</th><th>Status</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="sipPlansBody"></tbody>
+            </table>
+          </div>
+          <div id="sipPlansEmpty" class="empty-state">No SIP plan yet. Click “Add SIP” to plan future investments.</div>
+        </article>
+
+        <article class="panel sip-panel">
+          <div class="panel-head responsive-head">
+            <div>
+              <p class="eyebrow">FUTURE SIP SCHEDULE</p>
+              <h3>Upcoming instalments</h3>
+            </div>
+            <div class="sip-filter-tools">
+              <label class="sip-horizon-label">Show
+                <select id="sipHorizonSelect" class="compact-select">
+                  <option value="3">Next 3 months</option>
+                  <option value="6">Next 6 months</option>
+                  <option value="12" selected>Next 12 months</option>
+                  <option value="24">Next 24 months</option>
+                </select>
+              </label>
+              <span id="sipScheduleCount" class="filter-result-pill">0 instalments</span>
+            </div>
+          </div>
+
+          <div class="table-wrap sip-table-wrap sip-schedule-wrap">
+            <table class="sip-table sip-schedule-table">
+              <thead>
+                <tr><th>Due Date</th><th>Investor</th><th>Asset / Scheme</th><th>Amount</th><th>Status</th><th>Action</th></tr>
+              </thead>
+              <tbody id="sipScheduleBody"></tbody>
+            </table>
+          </div>
+          <div id="sipScheduleEmpty" class="empty-state">No upcoming SIP instalments for the selected period.</div>
+          <p class="sip-footnote">“Mark Invested” records completion of the SIP schedule only. It does not create units in Holdings because actual units/NAV should come from the MF statement or broker transaction file.</p>
+        </article>
+      </section>
+
       <section id="diarySection" class="page-section hidden">
         <div class="diary-hero">
           <div>
@@ -746,7 +852,7 @@
       <button id="dashboardHScrollRight" class="dashboard-hscroll-arrow" type="button" title="Scroll right">›</button>
     </div>
 
-    <nav class="mobile-nav"><button class="mobile-nav-item active" data-section="overview"><span>◫</span>Overview</button><button class="mobile-nav-item" data-section="holdings"><span>▥</span>Holdings</button><button class="mobile-nav-item" data-section="transactions"><span>⇄</span>Trades</button><button class="mobile-nav-item" data-section="watchlist"><span>☆</span>Watchlist</button><button class="mobile-nav-item" data-section="diary"><span>✎</span>Diary</button><button id="quickDiaryMobileBtn" class="mobile-nav-item" type="button"><span>✚</span>Quick</button></nav>
+    <nav class="mobile-nav"><button class="mobile-nav-item active" data-section="overview"><span>◫</span>Overview</button><button class="mobile-nav-item" data-section="holdings"><span>▥</span>Holdings</button><button class="mobile-nav-item" data-section="transactions"><span>⇄</span>Trades</button><button class="mobile-nav-item" data-section="watchlist"><span>☆</span>Watchlist</button><button class="mobile-nav-item" data-section="sip"><span>₹</span>SIP</button><button class="mobile-nav-item" data-section="diary"><span>✎</span>Diary</button><button id="quickDiaryMobileBtn" class="mobile-nav-item" type="button"><span>✚</span>Quick</button></nav>
   </div>
 
   <div id="modalBackdrop" class="modal-backdrop hidden" aria-hidden="true">
@@ -899,6 +1005,94 @@
       </div>
     </div>
 
+
+    <div id="sipPlanModal" class="modal sip-plan-modal hidden" role="dialog" aria-modal="true" aria-labelledby="sipPlanModalTitle">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">FUTURE INVESTMENT PLAN</p>
+          <h2 id="sipPlanModalTitle">Add SIP</h2>
+          <p class="modal-subcopy">Plan recurring investments. Future SIPs remain separate from current Holdings.</p>
+        </div>
+        <button class="modal-close" data-close-modal aria-label="Close SIP planner">×</button>
+      </div>
+      <form id="sipPlanForm" class="form-grid">
+        <input id="sipPlanId" type="hidden">
+
+        <label>Investor
+          <select id="sipPlanOwner" required></select>
+        </label>
+
+        <label>Investment type
+          <select id="sipPlanAssetType" required>
+            <option value="MF" selected>Mutual fund</option>
+            <option value="ETF">ETF</option>
+            <option value="STOCK">Stock</option>
+            <option value="OTHER">Other</option>
+          </select>
+        </label>
+
+        <label class="span-2">Asset / Scheme name
+          <input id="sipPlanAssetName" list="sipAssetSuggestions" required maxlength="160" placeholder="e.g. Parag Parikh Flexi Cap Fund - Direct Growth">
+          <datalist id="sipAssetSuggestions"></datalist>
+        </label>
+
+        <label>Scheme code / Symbol <small>(optional)</small>
+          <input id="sipPlanCode" maxlength="60" placeholder="AMFI code or ticker">
+        </label>
+
+        <label>SIP amount
+          <input id="sipPlanAmount" type="number" min="1" step="0.01" required placeholder="10000">
+        </label>
+
+        <label>Frequency
+          <select id="sipPlanFrequency">
+            <option value="MONTHLY" selected>Monthly</option>
+            <option value="QUARTERLY">Quarterly</option>
+          </select>
+        </label>
+
+        <label>SIP day
+          <input id="sipPlanDay" type="number" min="1" max="28" step="1" value="5" required>
+          <small>1–28 avoids invalid month-end dates.</small>
+        </label>
+
+        <label>Start date
+          <input id="sipPlanStartDate" type="date" required>
+        </label>
+
+        <label>End date <small>(optional)</small>
+          <input id="sipPlanEndDate" type="date">
+        </label>
+
+        <label>Annual step-up %
+          <input id="sipPlanStepUpPct" type="number" min="0" max="100" step="0.1" value="0">
+        </label>
+
+        <label>Expected return % <small>(planning only)</small>
+          <input id="sipPlanExpectedReturnPct" type="number" min="-50" max="100" step="0.1" value="12">
+        </label>
+
+        <label>Status
+          <select id="sipPlanStatus">
+            <option value="ACTIVE" selected>Active</option>
+            <option value="PAUSED">Paused</option>
+            <option value="STOPPED">Stopped</option>
+          </select>
+        </label>
+
+        <label class="span-2">Personal note <small>(optional)</small>
+          <textarea id="sipPlanNotes" rows="3" maxlength="800" placeholder="e.g. Increase by 10% every April; continue for long term."></textarea>
+        </label>
+
+        <div class="sip-modal-note span-2">Expected return is only a planning assumption and is not a guaranteed return.</div>
+
+        <div class="form-actions span-2">
+          <button type="button" class="secondary-button" data-close-modal>Cancel</button>
+          <button id="saveSipPlanBtn" type="submit" class="primary-button">Save SIP</button>
+        </div>
+      </form>
+    </div>
+
     <div id="watchModal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-head"><div><p class="eyebrow">FUTURE INVESTMENT</p><h2>Add to watchlist</h2></div><button class="modal-close" data-close-modal>×</button></div><form id="watchForm" class="form-grid"><input id="watchId" type="hidden"><label>Asset type<select id="watchType" required><option value="STOCK">Stock</option><option value="ETF">ETF</option><option value="MF">Mutual fund</option><option value="OTHER">Other</option></select></label><label>Asset name<input id="watchName" required maxlength="160"></label><label><span id="watchCodeLabel">Ticker symbol</span><input id="watchCode" required maxlength="40"></label><label id="watchExchangeLabel">Exchange<select id="watchExchange"><option value="NSE">NSE</option><option value="BOM">BSE (BOM)</option><option value="NASDAQ">NASDAQ</option><option value="NYSE">NYSE</option></select></label><label>Target buy price<input id="watchTarget" type="number" min="0" step="0.0001"></label><label>Manual current price <small>(optional)</small><input id="watchManualPrice" type="number" min="0" step="0.0001"></label><label>Priority<select id="watchPriority"><option value="HIGH">High</option><option value="MEDIUM" selected>Medium</option><option value="LOW">Low</option></select></label><label class="span-2">Personal Note <small>(optional)</small><textarea id="watchNotes" rows="4" maxlength="500" placeholder="Example: Buy below ₹1,500; wait for valuation correction; review after Q3 results…"></textarea></label><div id="watchMfHelp" class="info-box span-2 hidden">For Indian mutual funds, enter the numeric AMFI scheme code.</div><div class="form-actions span-2"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="saveWatchBtn" type="submit" class="primary-button">Save watch item</button></div></form></div>
 
     <div id="lifeQuoteModal" class="modal quote-library-modal hidden" role="dialog" aria-modal="true">
@@ -997,7 +1191,7 @@
   </aside>
 
   <div id="toastRegion" class="toast-region" aria-live="polite"></div>
-  <script src="config.js?v=20260823-1929-deviceparity1"></script>
-  <script src="app-v19-2-9.js?v=20260823-1929-deviceparity1" defer></script>
+  <script src="config.js?v=20260823-1930-sip1"></script>
+  <script src="app-v19-3-0.js?v=20260823-1930-sip1" defer></script>
 </body>
 </html>
