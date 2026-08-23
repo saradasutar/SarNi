@@ -6654,3 +6654,106 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
     grid-column:span 1;
   }
 }
+
+
+/* =========================================================
+   FE v19.2.9 — MOVE PARTICULAR COLUMN
+   ========================================================= */
+.column-config-row{
+  grid-template-columns:auto minmax(150px,1fr) auto !important;
+}
+
+.standard-column-move-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:5px;
+  flex-wrap:wrap;
+}
+
+.column-move-button{
+  min-height:27px;
+  padding:5px 8px;
+  border:1px solid #d9deec;
+  border-radius:8px;
+  background:#fff;
+  color:#505a72;
+  font-size:9px;
+  font-weight:900;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+
+.column-move-button:hover:not(:disabled){
+  color:#5747bf;
+  border-color:#c8c0ef;
+  background:#f7f5ff;
+}
+
+.column-move-button.icon{
+  width:29px;
+  padding-left:0;
+  padding-right:0;
+  font-size:13px;
+}
+
+.column-move-button:disabled{
+  opacity:.34;
+  cursor:not-allowed;
+}
+
+.column-config-row.locked .column-label-input{
+  background:#f8f9fc;
+}
+
+@media(max-width:680px){
+  .column-config-row{
+    grid-template-columns:1fr !important;
+    gap:8px;
+  }
+  .standard-column-move-actions{
+    justify-content:flex-start;
+  }
+}
+
+
+/* =========================================================
+   FE v19.2.9 — HIDE CERTAIN COLUMNS FROM DEFAULT VIEW
+   ========================================================= */
+.column-default-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.default-column-toggle-btn{
+  color:#6352bd;
+  border-color:#d9d2f4;
+  background:#faf8ff;
+}
+
+.default-column-toggle-btn:hover{
+  color:#4936ae;
+  border-color:#c7bdee;
+  background:#f5f1ff;
+}
+
+.column-visible-toggle{
+  cursor:pointer;
+}
+
+.column-visible-toggle span{
+  min-width:34px;
+}
+
+@media(max-width:680px){
+  .column-list-head{
+    align-items:flex-start;
+    gap:10px;
+  }
+  .column-default-actions{
+    justify-content:flex-start;
+  }
+}

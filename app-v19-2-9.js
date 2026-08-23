@@ -55,7 +55,7 @@ const $ = (id) => document.getElementById(id);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 const els = {};
 [
-  'loginView','appView','runtimeWarning','loginForm','loginUsername','loginPassword','rememberUsername','loginVersion','loginBackendVersion','loginButton','loginMessage','sideAppName','dashboardUsername','dashboardVersion','dashboardBackendVersion','dashboardVersionTop','dashboardBackendVersionTop','mobileSessionBar','mobileFrontendVersion','mobileBackendVersion','mobileChangePasswordBtn','mobileLogoutBtn','todayLabel','pageTitle','autoRefreshSelect','autoRefreshCountdown','syncStatus','refreshBtn','addInvestmentBtn','addInvestmentTableBtn','bulkImportBtn','logoutBtn','profileButton','avatarInitial','personalHomeModeBtn','investmentHomeModeBtn','overviewSetDefaultBtn','personalHomeContent','investmentOverviewContent','personalHomeGreeting','homeDailyWriteBtn','homeMonthlyWriteBtn','homeAddTargetBtn','homeDiaryCount','homeDiaryPreview','homeDiaryQuickBtn','homeFullDiaryBtn','homeStickyCount','homeStickyDueToday','homeStickyOverdue','homeStickyUpcoming','homeStickyPreview','homeTargetAddBtn','homeTargetsOpenBtn','homeQuoteCard','homeQuoteText','homeQuoteAuthor','homeQuoteAutoStatus','homeQuoteNextBtn','homeQuotesOpenBtn','homeShowInvestmentsBtn','welcomeTitle','lastUpdatedText','viewChip','overviewStickyShortcut','overviewStickyShortcutCount','overviewQuoteShortcut','utilityDrawerOpenBtn','utilityDrawerCloseBtn','utilityDrawerScrim','utilityDrawer','utilityStickyBadge','utilityStickyTabCount','utilityStickySection','utilityQuoteSection','lifeQuoteText','lifeQuoteAuthor','lifeQuoteShuffleStatus','lifeQuoteNextBtn','lifeQuotePauseBtn','lifeQuoteLibraryBtn','lifeQuoteModal','lifeQuoteForm','lifeQuoteId','lifeQuoteInput','lifeQuoteAuthorInput','lifeQuoteSearch','lifeQuoteCount','lifeQuoteList','lifeQuoteEmpty','clearLifeQuoteBtn','saveLifeQuoteBtn','stickyNotesCount','stickyNotesList','stickyNotesEmpty','addStickyNoteBtn','pinnedStickyLayer','ownerSwitcher','assetViewSwitcher','typeSummaryGrid','holdingsHeading','sumInvestedLabel','sumCurrentLabel','importBtn','exportBtn','sumInvested','sumCurrent','sumGain','sumReturn','sumAssetCount','sumPricedCount','sumSplit','sumWatchCount','sumInvestedTrend','sumCurrentTrend','sumGainTrend','sumWatchTrend','growthRangeButtons','growthInvestedDelta','growthInvestedPct','growthValueDelta','growthValuePct','growthGainNow','growthReturnNow','portfolioGrowthChart','growthHistoryNote','watchPulseBadge','watchAtTarget','watchNearTarget','watchAverageGap','watchPulseCount','watchlistTrendChart','watchTrendNote','watchlistLastAutoUpdate','watchStripAtTarget','watchStripNear','watchStripGap','allocationChart','investorSummary','topHoldings','replaceMasterDataBtn','masterDataStatus','masterLoadBanner','masterLoadNowBtn','showAllInvestmentsBtn','holdingSearch','holdingTypeFilter','holdingResultFilter','holdingNotesFilter','holdingTradeFilter','holdingsFilterCount','holdingsSummaryPanel','toggleHoldingsSummaryBtn','holdingsViewPreset','saveHoldingsDefaultViewBtn','restoreHoldingsDefaultViewBtn','resetHoldingsViewBtn','holdingsDefaultViewStatus','printHoldingsBtn','holdingsFullscreenBtn','holdRowMinusBtn','holdRowPlusBtn','holdRowSizeLabel','holdRowSlider','holdWidthMinusBtn','holdWidthPlusBtn','holdWidthSizeLabel','holdWidthSlider','holdLayoutSavedStatus','holdSizeResetBtn','holdSumCombinedTotalInvested','holdSumCombinedTotalCurrent','holdSumCombinedTotalGrowth','holdSumCombinedMfInvested','holdSumCombinedMfCurrent','holdSumCombinedMfGrowth','holdSumCombinedStockInvested','holdSumCombinedStockCurrent','holdSumCombinedStockGrowth','holdSumNiharikaTotalInvested','holdSumNiharikaTotalCurrent','holdSumNiharikaTotalGrowth','holdSumNiharikaMfInvested','holdSumNiharikaMfCurrent','holdSumNiharikaMfGrowth','holdSumNiharikaStockInvested','holdSumNiharikaStockCurrent','holdSumNiharikaStockGrowth','holdSumSaradaTotalInvested','holdSumSaradaTotalCurrent','holdSumSaradaTotalGrowth','holdSumSaradaMfInvested','holdSumSaradaMfCurrent','holdSumSaradaMfGrowth','holdSumSaradaStockInvested','holdSumSaradaStockCurrent','holdSumSaradaStockGrowth','holdingsBody','holdingsEmpty','holdCurrentPnlToday','holdRealizedPnl','holdTotalPnlToDate','holdTradeDateCoverage','holdPnlAsOf','mfNavHealthBadge','manageHoldingsColumnsBtn','viewAllNotesBtn','watchAllNotesBtn','columnManagerModal','columnManagerTitle','customColumnForm','customColumnId','customColumnSection','customColumnLabel','customColumnKey','customColumnType','customColumnOrder','clearCustomColumnBtn','saveCustomColumnBtn','standardColumnsList','resetStandardColumnsBtn','customColumnsList','customColumnsEmpty','customColumnCount','customValueModal','customValueTitle','customValueRecord','customValueForm','customValueSection','customValueRecordId','customValueColumnKey','customValueFieldLabel','customValueInput','saveCustomValueBtn','notesModal','notesSearch','notesSource','notesScope','notesFilter','notesSummary','notesList','notesEmpty','transactionSearch','transactionOwnerFilter','transactionAssetFilter','transactionSideFilter','transactionFromDate','transactionToDate','transactionFilterCount','transactionBuyTotal','transactionSaleTotal','transactionRealizedPnl','transactionCount','transactionBody','transactionEmpty','transactionImportBtn','printTransactionsBtn','watchSearch','watchTypeFilter','watchPriorityFilter','watchTargetFilter','watchNotesFilter','watchFilterCount','saveWatchDefaultViewBtn','restoreWatchDefaultViewBtn','watchDefaultViewStatus','printWatchlistBtn','watchlistFullscreenBtn','watchRowMinusBtn','watchRowPlusBtn','watchRowSizeLabel','watchRowSlider','watchWidthMinusBtn','watchWidthPlusBtn','watchWidthSizeLabel','watchWidthSlider','watchLayoutSavedStatus','watchSizeResetBtn','manageWatchlistColumnsBtn','watchBody','watchEmpty','diaryForm','diaryId','diaryDate','diaryPrevDayBtn','diaryTodayBtn','diaryNextDayBtn','diaryTitle','diaryText','diaryDraftStatus','diaryCharCount','saveDiaryBtn','clearDiaryBtn','newDiaryEntryBtn','diarySaveStatus','diaryViewSwitcher','diarySearch','diarySearchClearBtn','diaryDayControl','diaryMonthControl','diaryRangeControl','diaryBrowseDate','diaryBrowseMonth','diaryFromDate','diaryToDate','printDiaryBtn','diarySummary','diaryList','diaryEmpty','diaryHeroStatus','diaryWorkspaceSwitcher','dailyDiaryWorkspace','monthlyDiaryWorkspace','monthlyYearFilter','monthlyMonthFilter','monthlyTypeFilter','monthlyStatusFilter','monthlySearch','printMonthlyBtn','monthCompletionPanel','monthCompletionTitle','monthCompletionText','monthProgressBar','monthProgressLabel','completeMonthBtn','monthlyForm','monthlyId','monthlyEntryMonth','monthlyPrevMonthBtn','monthlyThisMonthBtn','monthlyNextMonthBtn','monthlyEntryType','monthlyTitle','monthlyText','monthlyDraftStatus','monthlyCharCount','monthlyTargetHelp','monthlySaveStatus','clearMonthlyBtn','saveMonthlyBtn','monthlyListTitle','monthlyResultCount','completedMonthArchive','monthlyList','monthlyEmpty','usersBody','modalBackdrop','investmentModal','investmentForm','holdingId','holdingOwner','holdingType','holdingName','holdingCode','holdingExchange','holdingUnits','holdingInvested','holdingManualPrice','holdingBuyDate','holdingNotes','holdingCodeLabel','exchangeLabel','mfHelp','bulkImportModal','bulkImportForm','bulkCsvFile','bulkImportStatus','runBulkImportBtn','downloadImportTemplateBtn','mfImportHelp','mfSnapshotImportHelp','stockImportHelp','stockTradeImportHelp','stockOwnerLabel','importOwner','importFileHint','watchModal','watchForm','watchId','watchType','watchName','watchCode','watchExchange','watchTarget','watchManualPrice','watchPriority','watchNotes','watchCodeLabel','watchExchangeLabel','watchMfHelp','stickyNoteModal','stickyNoteForm','stickyNoteId','stickyNoteType','stickyNoteTitle','stickyNoteDueDate','stickyNoteText','stickyNoteModalTitle','saveStickyNoteBtn','passwordModal','passwordForm','currentPassword','newPassword','confirmPassword','userModal','userForm','userModalTitle','userFormMode','editOriginalUsername','newUsername','usernameEditHelp','newDisplayName','newUserRole','newUserActiveLabel','newUserActive','userPasswordGroup','newUserPassword','generateUserPasswordBtn','copyUserPasswordBtn','userFormStatus','saveUserBtn','quickDiaryBtn','quickDiaryMobileBtn','quickDiaryPanel','quickDiaryCloseBtn','quickDailyForm','quickDailyDate','quickDailyTitle','quickDailyText','quickDailyStatus','quickDailyCount','quickDailySaveBtn','quickMonthlyForm','quickMonthlyMonth','quickMonthlyType','quickMonthlyTitle','quickMonthlyText','quickMonthlyStatus','quickMonthlyCount','quickMonthlySaveBtn','openFullDiaryBtn','dashboardHScroll','dashboardHScrollRange','dashboardHScrollLabel','dashboardHScrollPct','dashboardHScrollLeft','dashboardHScrollRight','holdingDrawerBackdrop','holdingDrawer','drawerEyebrow','drawerAssetBadge','drawerTitle','drawerSubtitle','drawerContent','drawerCloseBtn','drawerEditBtn','drawerDoneBtn','toastRegion'
+  'loginView','appView','runtimeWarning','loginForm','loginUsername','loginPassword','rememberUsername','loginVersion','loginBackendVersion','loginButton','loginMessage','sideAppName','dashboardUsername','dashboardVersion','dashboardBackendVersion','dashboardVersionTop','dashboardBackendVersionTop','mobileSessionBar','mobileFrontendVersion','mobileBackendVersion','mobileChangePasswordBtn','mobileLogoutBtn','todayLabel','pageTitle','autoRefreshSelect','autoRefreshCountdown','syncStatus','refreshBtn','addInvestmentBtn','addInvestmentTableBtn','bulkImportBtn','logoutBtn','profileButton','avatarInitial','personalHomeModeBtn','investmentHomeModeBtn','overviewSetDefaultBtn','personalHomeContent','investmentOverviewContent','personalHomeGreeting','homeDailyWriteBtn','homeMonthlyWriteBtn','homeAddTargetBtn','homeDiaryCount','homeDiaryPreview','homeDiaryQuickBtn','homeFullDiaryBtn','homeStickyCount','homeStickyDueToday','homeStickyOverdue','homeStickyUpcoming','homeStickyPreview','homeTargetAddBtn','homeTargetsOpenBtn','homeQuoteCard','homeQuoteText','homeQuoteAuthor','homeQuoteAutoStatus','homeQuoteNextBtn','homeQuotesOpenBtn','homeShowInvestmentsBtn','welcomeTitle','lastUpdatedText','viewChip','overviewStickyShortcut','overviewStickyShortcutCount','overviewQuoteShortcut','utilityDrawerOpenBtn','utilityDrawerCloseBtn','utilityDrawerScrim','utilityDrawer','utilityStickyBadge','utilityStickyTabCount','utilityStickySection','utilityQuoteSection','lifeQuoteText','lifeQuoteAuthor','lifeQuoteShuffleStatus','lifeQuoteNextBtn','lifeQuotePauseBtn','lifeQuoteLibraryBtn','lifeQuoteModal','lifeQuoteForm','lifeQuoteId','lifeQuoteInput','lifeQuoteAuthorInput','lifeQuoteSearch','lifeQuoteCount','lifeQuoteList','lifeQuoteEmpty','clearLifeQuoteBtn','saveLifeQuoteBtn','stickyNotesCount','stickyNotesList','stickyNotesEmpty','addStickyNoteBtn','pinnedStickyLayer','ownerSwitcher','assetViewSwitcher','typeSummaryGrid','holdingsHeading','sumInvestedLabel','sumCurrentLabel','importBtn','exportBtn','sumInvested','sumCurrent','sumGain','sumReturn','sumAssetCount','sumPricedCount','sumSplit','sumWatchCount','sumInvestedTrend','sumCurrentTrend','sumGainTrend','sumWatchTrend','growthRangeButtons','growthInvestedDelta','growthInvestedPct','growthValueDelta','growthValuePct','growthGainNow','growthReturnNow','portfolioGrowthChart','growthHistoryNote','watchPulseBadge','watchAtTarget','watchNearTarget','watchAverageGap','watchPulseCount','watchlistTrendChart','watchTrendNote','watchlistLastAutoUpdate','watchStripAtTarget','watchStripNear','watchStripGap','allocationChart','investorSummary','topHoldings','replaceMasterDataBtn','masterDataStatus','masterLoadBanner','masterLoadNowBtn','showAllInvestmentsBtn','holdingSearch','holdingTypeFilter','holdingResultFilter','holdingNotesFilter','holdingTradeFilter','holdingsFilterCount','holdingsSummaryPanel','toggleHoldingsSummaryBtn','holdingsViewPreset','saveHoldingsDefaultViewBtn','restoreHoldingsDefaultViewBtn','resetHoldingsViewBtn','holdingsDefaultViewStatus','printHoldingsBtn','holdingsFullscreenBtn','holdRowMinusBtn','holdRowPlusBtn','holdRowSizeLabel','holdRowSlider','holdWidthMinusBtn','holdWidthPlusBtn','holdWidthSizeLabel','holdWidthSlider','holdLayoutSavedStatus','holdSizeResetBtn','holdSumCombinedTotalInvested','holdSumCombinedTotalCurrent','holdSumCombinedTotalGrowth','holdSumCombinedMfInvested','holdSumCombinedMfCurrent','holdSumCombinedMfGrowth','holdSumCombinedStockInvested','holdSumCombinedStockCurrent','holdSumCombinedStockGrowth','holdSumNiharikaTotalInvested','holdSumNiharikaTotalCurrent','holdSumNiharikaTotalGrowth','holdSumNiharikaMfInvested','holdSumNiharikaMfCurrent','holdSumNiharikaMfGrowth','holdSumNiharikaStockInvested','holdSumNiharikaStockCurrent','holdSumNiharikaStockGrowth','holdSumSaradaTotalInvested','holdSumSaradaTotalCurrent','holdSumSaradaTotalGrowth','holdSumSaradaMfInvested','holdSumSaradaMfCurrent','holdSumSaradaMfGrowth','holdSumSaradaStockInvested','holdSumSaradaStockCurrent','holdSumSaradaStockGrowth','holdingsBody','holdingsEmpty','holdCurrentPnlToday','holdRealizedPnl','holdTotalPnlToDate','holdTradeDateCoverage','holdPnlAsOf','mfNavHealthBadge','manageHoldingsColumnsBtn','showAllHoldingColumnsBtn','viewAllNotesBtn','watchAllNotesBtn','columnManagerModal','columnManagerTitle','customColumnForm','customColumnId','customColumnSection','customColumnLabel','customColumnKey','customColumnType','customColumnOrder','clearCustomColumnBtn','saveCustomColumnBtn','standardColumnsList','saveColumnsAsDefaultBtn','showAllColumnsTempBtn','resetStandardColumnsBtn','customColumnsList','customColumnsEmpty','customColumnCount','customValueModal','customValueTitle','customValueRecord','customValueForm','customValueSection','customValueRecordId','customValueColumnKey','customValueFieldLabel','customValueInput','saveCustomValueBtn','notesModal','notesSearch','notesSource','notesScope','notesFilter','notesSummary','notesList','notesEmpty','transactionSearch','transactionOwnerFilter','transactionAssetFilter','transactionSideFilter','transactionFromDate','transactionToDate','transactionFilterCount','transactionBuyTotal','transactionSaleTotal','transactionRealizedPnl','transactionCount','transactionBody','transactionEmpty','transactionImportBtn','printTransactionsBtn','watchSearch','watchTypeFilter','watchPriorityFilter','watchTargetFilter','watchNotesFilter','watchFilterCount','saveWatchDefaultViewBtn','restoreWatchDefaultViewBtn','watchDefaultViewStatus','printWatchlistBtn','watchlistFullscreenBtn','watchRowMinusBtn','watchRowPlusBtn','watchRowSizeLabel','watchRowSlider','watchWidthMinusBtn','watchWidthPlusBtn','watchWidthSizeLabel','watchWidthSlider','watchLayoutSavedStatus','watchSizeResetBtn','manageWatchlistColumnsBtn','showAllWatchColumnsBtn','watchBody','watchEmpty','diaryForm','diaryId','diaryDate','diaryPrevDayBtn','diaryTodayBtn','diaryNextDayBtn','diaryTitle','diaryText','diaryDraftStatus','diaryCharCount','saveDiaryBtn','clearDiaryBtn','newDiaryEntryBtn','diarySaveStatus','diaryViewSwitcher','diarySearch','diarySearchClearBtn','diaryDayControl','diaryMonthControl','diaryRangeControl','diaryBrowseDate','diaryBrowseMonth','diaryFromDate','diaryToDate','printDiaryBtn','diarySummary','diaryList','diaryEmpty','diaryHeroStatus','diaryWorkspaceSwitcher','dailyDiaryWorkspace','monthlyDiaryWorkspace','monthlyYearFilter','monthlyMonthFilter','monthlyTypeFilter','monthlyStatusFilter','monthlySearch','printMonthlyBtn','monthCompletionPanel','monthCompletionTitle','monthCompletionText','monthProgressBar','monthProgressLabel','completeMonthBtn','monthlyForm','monthlyId','monthlyEntryMonth','monthlyPrevMonthBtn','monthlyThisMonthBtn','monthlyNextMonthBtn','monthlyEntryType','monthlyTitle','monthlyText','monthlyDraftStatus','monthlyCharCount','monthlyTargetHelp','monthlySaveStatus','clearMonthlyBtn','saveMonthlyBtn','monthlyListTitle','monthlyResultCount','completedMonthArchive','monthlyList','monthlyEmpty','usersBody','modalBackdrop','investmentModal','investmentForm','holdingId','holdingOwner','holdingType','holdingName','holdingCode','holdingExchange','holdingUnits','holdingInvested','holdingManualPrice','holdingBuyDate','holdingNotes','holdingCodeLabel','exchangeLabel','mfHelp','bulkImportModal','bulkImportForm','bulkCsvFile','bulkImportStatus','runBulkImportBtn','downloadImportTemplateBtn','mfImportHelp','mfSnapshotImportHelp','stockImportHelp','stockTradeImportHelp','stockOwnerLabel','importOwner','importFileHint','watchModal','watchForm','watchId','watchType','watchName','watchCode','watchExchange','watchTarget','watchManualPrice','watchPriority','watchNotes','watchCodeLabel','watchExchangeLabel','watchMfHelp','stickyNoteModal','stickyNoteForm','stickyNoteId','stickyNoteType','stickyNoteTitle','stickyNoteDueDate','stickyNoteText','stickyNoteModalTitle','saveStickyNoteBtn','passwordModal','passwordForm','currentPassword','newPassword','confirmPassword','userModal','userForm','userModalTitle','userFormMode','editOriginalUsername','newUsername','usernameEditHelp','newDisplayName','newUserRole','newUserActiveLabel','newUserActive','userPasswordGroup','newUserPassword','generateUserPasswordBtn','copyUserPasswordBtn','userFormStatus','saveUserBtn','quickDiaryBtn','quickDiaryMobileBtn','quickDiaryPanel','quickDiaryCloseBtn','quickDailyForm','quickDailyDate','quickDailyTitle','quickDailyText','quickDailyStatus','quickDailyCount','quickDailySaveBtn','quickMonthlyForm','quickMonthlyMonth','quickMonthlyType','quickMonthlyTitle','quickMonthlyText','quickMonthlyStatus','quickMonthlyCount','quickMonthlySaveBtn','openFullDiaryBtn','dashboardHScroll','dashboardHScrollRange','dashboardHScrollLabel','dashboardHScrollPct','dashboardHScrollLeft','dashboardHScrollRight','holdingDrawerBackdrop','holdingDrawer','drawerEyebrow','drawerAssetBadge','drawerTitle','drawerSubtitle','drawerContent','drawerCloseBtn','drawerEditBtn','drawerDoneBtn','toastRegion'
 ].forEach((id) => { els[id] = $(id); });
 
 function isMobileViewport(){
@@ -1374,6 +1374,61 @@ function applyPresetSettings(section,visibleKeys){
   defs.forEach(def=>current[def.key]={...(current[def.key]||{}),visible:def.locked?true:set.has(def.key)});
   saveStandardColumnSettings(section,current);
 }
+function showAllStandardColumnsTemporarily(section){
+  const defs=STANDARD_COLUMN_DEFS[section]||[];
+  const current=loadStandardColumnSettings(section);
+  defs.forEach(def=>{
+    current[def.key]={...(current[def.key]||{}),visible:true};
+  });
+  saveStandardColumnSettings(section,current);
+  if(section==='HOLDINGS'){
+    renderHoldings();
+    if(els.holdingsDefaultViewStatus)els.holdingsDefaultViewStatus.textContent='Temporary: all columns shown';
+  }else{
+    renderWatchlist();
+    if(els.watchDefaultViewStatus)els.watchDefaultViewStatus.textContent='Temporary: all columns shown';
+  }
+  toast('All standard columns shown temporarily. Your saved default is unchanged.','info');
+}
+
+function restoreSavedDefaultColumnsOnly(section){
+  try{
+    const key=section==='HOLDINGS'?holdingsDefaultViewKey():watchDefaultViewKey();
+    const saved=JSON.parse(localStorage.getItem(key)||'null');
+    if(saved?.settings){
+      saveStandardColumnSettings(section,saved.settings);
+      if(saved.order)saveStandardColumnOrder(section,saved.order);
+      if(section==='HOLDINGS')renderHoldings();else renderWatchlist();
+      return true;
+    }
+  }catch{}
+  return false;
+}
+
+function saveCurrentColumnsAsDefault(section){
+  if(section==='HOLDINGS'){
+    saveHoldingsDefaultView();
+    renderStandardColumnsManager('HOLDINGS');
+  }else{
+    saveWatchDefaultView();
+    renderStandardColumnsManager('WATCHLIST');
+  }
+}
+
+function toggleAllColumnsButton(section){
+  const restored=restoreSavedDefaultColumnsOnly(section);
+  if(restored){
+    if(section==='HOLDINGS'){
+      if(els.holdingsDefaultViewStatus)els.holdingsDefaultViewStatus.textContent='✓ Saved default columns restored';
+    }else{
+      if(els.watchDefaultViewStatus)els.watchDefaultViewStatus.textContent='✓ Saved default columns restored';
+    }
+    toast('Saved default columns restored.','success');
+    return;
+  }
+  toast('No saved default yet. Open Columns, hide what you do not want, then Save as default.','info');
+}
+
 function holdingsPresetFromCurrent(){
   const settings=loadStandardColumnSettings('HOLDINGS'),defs=STANDARD_COLUMN_DEFS.HOLDINGS||[];
   const visible=defs.filter(d=>d.locked||settings[d.key]?.visible!==false).map(d=>d.key).sort().join('|');
@@ -1389,7 +1444,7 @@ function setHoldingsViewPreset(name,{render=true}={}){
   if(render)renderHoldings();
 }
 function holdingsViewSnapshot(){
-  return {settings:currentStandardSettingsSnapshot('HOLDINGS'),filters:{
+  return {settings:currentStandardSettingsSnapshot('HOLDINGS'),order:loadStandardColumnOrder('HOLDINGS'),filters:{
     type:els.holdingTypeFilter?.value||'ALL',result:els.holdingResultFilter?.value||'ALL',
     notes:els.holdingNotesFilter?.value||'ALL',trade:els.holdingTradeFilter?.value||'ALL'
   },preset:holdingsPresetFromCurrent(),savedAt:Date.now()};
@@ -1403,7 +1458,7 @@ function saveHoldingsDefaultView(){
 }
 function applyHoldingsSnapshot(saved,{toastUser=false}={}){
   if(!saved||typeof saved!=='object')return false;
-  if(saved.settings)saveStandardColumnSettings('HOLDINGS',saved.settings);
+  if(saved.settings)saveStandardColumnSettings('HOLDINGS',saved.settings);if(saved.order)saveStandardColumnOrder('HOLDINGS',saved.order);
   const f=saved.filters||{};
   if(els.holdingTypeFilter)els.holdingTypeFilter.value=f.type||'ALL';
   if(els.holdingResultFilter)els.holdingResultFilter.value=f.result||'ALL';
@@ -1450,7 +1505,7 @@ function restoreWatchDefaultView(toastUser=true){
   try{
     const saved=JSON.parse(localStorage.getItem(watchDefaultViewKey())||'null');
     if(saved){
-      if(saved.settings)saveStandardColumnSettings('WATCHLIST',saved.settings);
+      if(saved.settings)saveStandardColumnSettings('WATCHLIST',saved.settings);if(saved.order)saveStandardColumnOrder('WATCHLIST',saved.order);
       const f=saved.filters||{};
       if(els.watchTypeFilter)els.watchTypeFilter.value=f.type||'ALL';
       if(els.watchPriorityFilter)els.watchPriorityFilter.value=f.priority||'ALL';
@@ -1465,6 +1520,122 @@ function restoreWatchDefaultView(toastUser=true){
   return false;
 }
 function standardColumnSettingsKey(section){return `myfinance_standard_columns_${section}`;}
+function standardColumnOrderKey(section){return `myfinance_standard_column_order_${section}`;}
+function defaultStandardColumnOrder(section){
+  return (STANDARD_COLUMN_DEFS[section]||[]).filter(d=>d.key!=='actions').map(d=>d.key);
+}
+function loadStandardColumnOrder(section){
+  const defaults=defaultStandardColumnOrder(section);
+  try{
+    const raw=JSON.parse(localStorage.getItem(standardColumnOrderKey(section))||'[]');
+    const saved=Array.isArray(raw)?raw.filter(k=>defaults.includes(k)):[];
+    return [...saved,...defaults.filter(k=>!saved.includes(k))];
+  }catch{return defaults;}
+}
+function saveStandardColumnOrder(section,order){
+  const defaults=defaultStandardColumnOrder(section);
+  const clean=(Array.isArray(order)?order:[]).filter(k=>defaults.includes(k));
+  const final=[...clean,...defaults.filter(k=>!clean.includes(k))];
+  try{localStorage.setItem(standardColumnOrderKey(section),JSON.stringify(final));}catch{}
+}
+function lockedLeadingKeys(section){
+  const defs=STANDARD_COLUMN_DEFS[section]||[];
+  const lead=[];
+  for(const d of defs){
+    if(d.key==='actions')break;
+    if(d.locked)lead.push(d.key);
+    else break;
+  }
+  return lead;
+}
+function moveStandardColumn(section,key,mode){
+  const defs=STANDARD_COLUMN_DEFS[section]||[];
+  const def=defs.find(d=>d.key===key);
+  if(!def||def.key==='actions'||def.locked)return;
+
+  const order=loadStandardColumnOrder(section);
+  const i=order.indexOf(key);
+  if(i<0)return;
+
+  const lockedCount=lockedLeadingKeys(section).length;
+  let target=i;
+  if(mode==='LEFT')target=Math.max(lockedCount,i-1);
+  if(mode==='RIGHT')target=Math.min(order.length-1,i+1);
+  if(mode==='FRONT')target=lockedCount;
+  if(mode==='END')target=order.length-1;
+  if(target===i)return;
+
+  order.splice(i,1);
+  order.splice(target,0,key);
+  saveStandardColumnOrder(section,order);
+
+  // Old widths are position-based; clear them once so widths don't jump to another column.
+  const tableSection=section.toLowerCase();
+  saveColumnWidths(tableSection,{});
+  saveTableScroll(tableSection,0);
+
+  if(section==='HOLDINGS')renderHoldings();else renderWatchlist();
+  renderStandardColumnsManager(section);
+  toast(`${def.label} column moved.`, 'success');
+}
+function annotateStandardColumnKeys(section){
+  const table=tableElementFor(section.toLowerCase());
+  if(!table)return;
+  const defs=STANDARD_COLUMN_DEFS[section]||[];
+  const customCount=sectionCustomColumns(section).length;
+
+  const head=table.querySelector('thead tr');
+  if(head){
+    const existing=[...head.children].some(c=>c.dataset.standardKey);
+    if(!existing){
+      defs.forEach(def=>{
+        let index=def.index;
+        if(def.key==='actions'&&customCount)index+=customCount;
+        const cell=head.children[index];
+        if(cell&&!cell.classList.contains('custom-column-head'))cell.dataset.standardKey=def.key;
+      });
+    }
+  }
+
+  table.querySelectorAll('tbody tr').forEach(row=>{
+    if(row.children.length<=1)return; // direct-row editor uses one colspan cell.
+    defs.forEach(def=>{
+      let index=def.index;
+      if(def.key==='actions'&&customCount)index+=customCount;
+      const cell=row.children[index];
+      if(cell&&!cell.dataset.customKey)cell.dataset.standardKey=def.key;
+    });
+  });
+}
+function applyStandardColumnOrder(section){
+  const table=tableElementFor(section.toLowerCase());
+  if(!table)return;
+  annotateStandardColumnKeys(section);
+
+  const order=loadStandardColumnOrder(section);
+  const rows=table.querySelectorAll('thead tr, tbody tr');
+  rows.forEach(row=>{
+    if(row.children.length<=1)return;
+
+    const standard=new Map();
+    const custom=[];
+    let actions=null;
+
+    [...row.children].forEach(cell=>{
+      if(cell.dataset.customKey)custom.push(cell);
+      else if(cell.dataset.standardKey==='actions')actions=cell;
+      else if(cell.dataset.standardKey)standard.set(cell.dataset.standardKey,cell);
+    });
+
+    order.forEach(key=>{
+      const cell=standard.get(key);
+      if(cell)row.appendChild(cell);
+    });
+    custom.forEach(cell=>row.appendChild(cell));
+    if(actions)row.appendChild(actions);
+  });
+}
+
 function loadStandardColumnSettings(section){
   try{
     const stored=localStorage.getItem(standardColumnSettingsKey(section));
@@ -1531,20 +1702,21 @@ function appendCustomHeaders(section){
 function applyStandardColumnSettings(section){
   const table=tableElementFor(section.toLowerCase());
   if(!table)return;
+  annotateStandardColumnKeys(section);
   const defs=STANDARD_COLUMN_DEFS[section]||[];
   const settings=loadStandardColumnSettings(section);
-  const headerRow=table.querySelector('thead tr');
-  const customCount=sectionCustomColumns(section).length;
+
   defs.forEach(def=>{
-    let index=def.index;
-    if(def.key==='actions'&&customCount)index=def.index+customCount;
     const cfg=settings[def.key]||{};
-    const cells=[...table.querySelectorAll('tr')].map(r=>r.children[index]).filter(Boolean);
+    const cells=[...table.querySelectorAll(`[data-standard-key="${def.key}"]`)];
     cells.forEach((cell,rowIndex)=>{
       cell.classList.toggle('column-user-hidden',cfg.visible===false&&!def.locked);
-      if(rowIndex===0&&!cell.classList.contains('custom-column-head')){
+      if(rowIndex===0){
         const label=String(cfg.label||def.label);
-        if(def.key!=='actions')cell.childNodes[0] && (cell.childNodes[0].nodeValue=label);
+        if(def.key!=='actions'){
+          const firstText=[...cell.childNodes].find(n=>n.nodeType===Node.TEXT_NODE);
+          if(firstText)firstText.nodeValue=label;
+        }
       }
     });
   });
@@ -1552,11 +1724,9 @@ function applyStandardColumnSettings(section){
 
 function applyHoldingsSemanticGroups(){
   const table=tableElementFor('holdings');if(!table)return;
-  const defs=STANDARD_COLUMN_DEFS.HOLDINGS||[],customCount=sectionCustomColumns('HOLDINGS').length;
-  defs.forEach(def=>{
-    let index=def.index;if(def.key==='actions'&&customCount)index+=customCount;
-    [...table.querySelectorAll('tr')].forEach(row=>{
-      const cell=row.children[index];if(!cell)return;
+  annotateStandardColumnKeys('HOLDINGS');
+  (STANDARD_COLUMN_DEFS.HOLDINGS||[]).forEach(def=>{
+    table.querySelectorAll(`[data-standard-key="${def.key}"]`).forEach(cell=>{
       cell.classList.remove('trade-history-column','my-result-column','asset-performance-column','group-start');
       if(HOLDINGS_TRANSACTION_KEYS.has(def.key))cell.classList.add('trade-history-column');
       if(HOLDINGS_RESULT_KEYS.has(def.key))cell.classList.add('my-result-column');
@@ -1568,12 +1738,22 @@ function applyHoldingsSemanticGroups(){
 function renderStandardColumnsManager(section){
   if(!els.standardColumnsList)return;
   const settings=loadStandardColumnSettings(section);
-  els.standardColumnsList.innerHTML=(STANDARD_COLUMN_DEFS[section]||[]).filter(d=>d.key!=='actions').map(def=>{
+  const defs=STANDARD_COLUMN_DEFS[section]||[];
+  const byKey=new Map(defs.map(d=>[d.key,d]));
+  const ordered=loadStandardColumnOrder(section).map(k=>byKey.get(k)).filter(Boolean);
+
+  els.standardColumnsList.innerHTML=ordered.map((def,position)=>{
     const cfg=settings[def.key]||{};
     const visible=def.locked?true:cfg.visible!==false;
-    return `<div class="column-config-row ${def.locked?'locked':''}" data-standard-column="${escapeHtml(def.key)}">
-      <label class="column-visible-toggle"><input type="checkbox" data-standard-visible="${escapeHtml(def.key)}" ${visible?'checked':''} ${def.locked?'disabled':''}><span>${def.locked?'Required':'Show'}</span></label>
-      <input class="column-label-input" data-standard-label="${escapeHtml(def.key)}" value="${escapeHtml(String(cfg.label||def.label))}" maxlength="80" ${def.locked&&def.key==='asset'?'':''}>
+    const locked=Boolean(def.locked);
+    return `<div class="column-config-row ${locked?'locked':''}" data-standard-column="${escapeHtml(def.key)}">
+      <label class="column-visible-toggle" title="${locked?'Fixed column':'Untick to hide this column from the dashboard/default view'}"><input type="checkbox" data-standard-visible="${escapeHtml(def.key)}" ${visible?'checked':''} ${locked?'disabled':''}><span>${locked?'Fixed':'Show'}</span></label>
+      <input class="column-label-input" data-standard-label="${escapeHtml(def.key)}" value="${escapeHtml(String(cfg.label||def.label))}" maxlength="80">
+      <div class="standard-column-move-actions">
+        <button type="button" class="column-move-button" data-move-standard="FRONT" data-column-key="${escapeHtml(def.key)}" ${locked?'disabled':''} title="Move near front">⇤ Front</button>
+        <button type="button" class="column-move-button icon" data-move-standard="LEFT" data-column-key="${escapeHtml(def.key)}" ${locked?'disabled':''} title="Move one column left">←</button>
+        <button type="button" class="column-move-button icon" data-move-standard="RIGHT" data-column-key="${escapeHtml(def.key)}" ${locked?'disabled':''} title="Move one column right">→</button>
+      </div>
     </div>`;
   }).join('');
 }
@@ -1699,10 +1879,11 @@ function saveStandardColumnChange(section,key,patch){
   renderStandardColumnsManager(section);
 }
 function resetStandardColumns(section){
-  try{localStorage.removeItem(standardColumnSettingsKey(section));}catch{}
+  try{localStorage.removeItem(standardColumnSettingsKey(section));localStorage.removeItem(standardColumnOrderKey(section));}catch{}
+  saveColumnWidths(section.toLowerCase(),{});
   if(section==='HOLDINGS')renderHoldings();else renderWatchlist();
   renderStandardColumnsManager(section);
-  toast('Standard column names and visibility reset.','success');
+  toast('Standard column names, visibility and order reset.','success');
 }
 
 
@@ -2085,7 +2266,7 @@ function renderHoldings(){
     return mainRow+(state.inlineEditHoldingId===String(h.id)?inlineHoldingEditorHtml(h):'');
   }).join('');
   els.holdingsEmpty.classList.toggle('hidden',items.length>0);
-  appendCustomHeaders('HOLDINGS');applyStandardColumnSettings('HOLDINGS');applyHoldingsSemanticGroups();if(els.holdingsViewPreset)els.holdingsViewPreset.value=holdingsPresetFromCurrent();installColumnResizers('holdings');applyStoredColumnWidths('holdings');bindTableScrollPersistence('holdings');restoreTableScroll('holdings');scheduleDashboardHScrollRefresh();
+  appendCustomHeaders('HOLDINGS');applyStandardColumnOrder('HOLDINGS');applyStandardColumnSettings('HOLDINGS');applyHoldingsSemanticGroups();if(els.holdingsViewPreset)els.holdingsViewPreset.value=holdingsPresetFromCurrent();installColumnResizers('holdings');applyStoredColumnWidths('holdings');bindTableScrollPersistence('holdings');restoreTableScroll('holdings');scheduleDashboardHScrollRefresh();
 }
 function transactionHoldingPeriod(days){
   const n=Number(days);
@@ -2206,6 +2387,7 @@ function renderWatchlist(){
   }).join('');
   els.watchEmpty.classList.toggle('hidden',items.length>0);
   appendCustomHeaders('WATCHLIST');
+  applyStandardColumnOrder('WATCHLIST');
   applyStandardColumnSettings('WATCHLIST');
   installColumnResizers('watchlist');
   applyStoredColumnWidths('watchlist');
@@ -4089,7 +4271,7 @@ function clearRuntimeWarning(){
   els.runtimeWarning.classList.add('hidden');
 }
 
-function bindEvents(){safeOn(els.manageHoldingsColumnsBtn,'click',()=>openColumnManager('HOLDINGS'));safeOn(els.manageWatchlistColumnsBtn,'click',()=>openColumnManager('WATCHLIST'));safeOn(els.customColumnForm,'submit',saveCustomColumn);safeOn(els.clearCustomColumnBtn,'click',()=>resetCustomColumnForm(els.customColumnSection.value));safeOn(els.customColumnSection,'change',()=>{resetCustomColumnForm(els.customColumnSection.value);renderColumnManager(els.customColumnSection.value);});safeOn(els.customValueForm,'submit',saveCustomValue);safeOn(els.resetStandardColumnsBtn,'click',()=>resetStandardColumns(els.customColumnSection.value));safeOn(els.standardColumnsList,'change',e=>{const key=e.target.dataset.standardVisible;if(key)saveStandardColumnChange(els.customColumnSection.value,key,{visible:e.target.checked});});safeOn(els.standardColumnsList,'input',e=>{const key=e.target.dataset.standardLabel;if(key){const section=els.customColumnSection.value;const settings=loadStandardColumnSettings(section);settings[key]={...(settings[key]||{}),label:e.target.value};saveStandardColumnSettings(section,settings);if(section==='HOLDINGS')renderHoldings();else renderWatchlist();}});safeOn(els.customColumnsList,'click',e=>{const edit=e.target.closest('[data-edit-custom-column]');const del=e.target.closest('[data-delete-custom-column]');if(edit){editCustomColumn(edit.dataset.editCustomColumn);return;}if(del){deleteCustomColumn(del.dataset.deleteCustomColumn);}});
+function bindEvents(){safeOn(els.manageHoldingsColumnsBtn,'click',()=>openColumnManager('HOLDINGS'));safeOn(els.manageWatchlistColumnsBtn,'click',()=>openColumnManager('WATCHLIST'));safeOn(els.showAllHoldingColumnsBtn,'click',()=>showAllStandardColumnsTemporarily('HOLDINGS'));safeOn(els.showAllWatchColumnsBtn,'click',()=>showAllStandardColumnsTemporarily('WATCHLIST'));safeOn(els.saveColumnsAsDefaultBtn,'click',()=>saveCurrentColumnsAsDefault(els.customColumnSection.value));safeOn(els.showAllColumnsTempBtn,'click',()=>showAllStandardColumnsTemporarily(els.customColumnSection.value));safeOn(els.customColumnForm,'submit',saveCustomColumn);safeOn(els.clearCustomColumnBtn,'click',()=>resetCustomColumnForm(els.customColumnSection.value));safeOn(els.customColumnSection,'change',()=>{resetCustomColumnForm(els.customColumnSection.value);renderColumnManager(els.customColumnSection.value);});safeOn(els.customValueForm,'submit',saveCustomValue);safeOn(els.resetStandardColumnsBtn,'click',()=>resetStandardColumns(els.customColumnSection.value));safeOn(els.standardColumnsList,'change',e=>{const key=e.target.dataset.standardVisible;if(key)saveStandardColumnChange(els.customColumnSection.value,key,{visible:e.target.checked});});safeOn(els.standardColumnsList,'input',e=>{const key=e.target.dataset.standardLabel;if(key){const section=els.customColumnSection.value;const settings=loadStandardColumnSettings(section);settings[key]={...(settings[key]||{}),label:e.target.value};saveStandardColumnSettings(section,settings);if(section==='HOLDINGS')renderHoldings();else renderWatchlist();}});safeOn(els.standardColumnsList,'click',e=>{const btn=e.target.closest('[data-move-standard]');if(!btn)return;moveStandardColumn(els.customColumnSection.value,btn.dataset.columnKey,btn.dataset.moveStandard);});safeOn(els.customColumnsList,'click',e=>{const edit=e.target.closest('[data-edit-custom-column]');const del=e.target.closest('[data-delete-custom-column]');if(edit){editCustomColumn(edit.dataset.editCustomColumn);return;}if(del){deleteCustomColumn(del.dataset.deleteCustomColumn);}});
   safeOn(els.holdRowSlider,'input',e=>setTableSizeFromSlider('holdings','row',e.target.value));safeOn(els.holdWidthSlider,'input',e=>setTableSizeFromSlider('holdings','width',e.target.value));safeOn(els.watchRowSlider,'input',e=>setTableSizeFromSlider('watchlist','row',e.target.value));safeOn(els.watchWidthSlider,'input',e=>setTableSizeFromSlider('watchlist','width',e.target.value));
   safeOn(els.holdRowMinusBtn,'click',()=>changeTableSize('holdings','row',-1));safeOn(els.holdRowPlusBtn,'click',()=>changeTableSize('holdings','row',1));safeOn(els.holdWidthMinusBtn,'click',()=>changeTableSize('holdings','width',-1));safeOn(els.holdWidthPlusBtn,'click',()=>changeTableSize('holdings','width',1));safeOn(els.holdSizeResetBtn,'click',()=>resetTableSize('holdings'));safeOn(els.watchRowMinusBtn,'click',()=>changeTableSize('watchlist','row',-1));safeOn(els.watchRowPlusBtn,'click',()=>changeTableSize('watchlist','row',1));safeOn(els.watchWidthMinusBtn,'click',()=>changeTableSize('watchlist','width',-1));safeOn(els.watchWidthPlusBtn,'click',()=>changeTableSize('watchlist','width',1));safeOn(els.watchSizeResetBtn,'click',()=>resetTableSize('watchlist'));
   safeOn(els.personalHomeModeBtn,'click',()=>setOverviewMode('PERSONAL'));safeOn(els.investmentHomeModeBtn,'click',()=>switchSection('holdings'));safeOn(els.overviewSetDefaultBtn,'click',setCurrentOverviewAsDefault);safeOn(els.homeDailyWriteBtn,'click',()=>openQuickDiary('DAILY'));safeOn(els.homeMonthlyWriteBtn,'click',()=>openQuickDiary('MONTHLY'));safeOn(els.homeAddTargetBtn,'click',()=>openStickyNote());safeOn(els.homeDiaryQuickBtn,'click',()=>openQuickDiary('DAILY'));safeOn(els.homeFullDiaryBtn,'click',()=>switchSection('diary'));safeOn(els.homeTargetAddBtn,'click',()=>openStickyNote());safeOn(els.homeTargetsOpenBtn,'click',()=>openUtilityDrawer('STICKY'));safeOn(els.homeQuoteNextBtn,'click',nextLifeQuote);safeOn(els.homeQuotesOpenBtn,'click',()=>openUtilityDrawer('QUOTE'));safeOn(els.homeShowInvestmentsBtn,'click',()=>switchSection('holdings'));
