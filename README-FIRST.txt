@@ -1,90 +1,83 @@
-MYFINANCE V19.2.5 — RELIABLE AUTOMATIC MUTUAL-FUND REFRESH
-Frontend v19.2.5
-Backend v3.15.2
+MYFINANCE V19.2.6 — MOTILAL / ZERO-NAV HARD FIX
+Frontend v19.2.6
+Backend v3.15.3
 
-WHY THIS VERSION
-Earlier backend performance refresh processed only the first 40 MF Performance rows.
-Old/obsolete rows could occupy those positions, so an active Motilal Oswal or another
-fund could remain stale even though AMFI data was available.
+YOUR SCREENSHOT
+The three Motilal Oswal funds still had:
+- valid AMFI scheme codes
+- valid ISINs
+- ₹0.00 current NAV
+- DATE UNKNOWN
 
-WHAT IS FIXED
+The codes are valid:
+152354 = Motilal Oswal Large Cap Direct Plan Growth
+127042 = Motilal Oswal Midcap Direct Plan Growth
+152237 = Motilal Oswal Small Cap Direct Growth
 
-1. ACTIVE MF ONLY
-The backend now builds the refresh list from active Mutual Funds in:
-- Holdings
-- Watchlist
-Old Quote/Performance rows are ignored and cannot crowd out current funds.
+V19.2.6 therefore does not depend on a single NAV path.
 
-2. NO 40-FUND LIMIT
-All active MF performance rows are refreshed in batches of 50.
-This avoids the old slice(0,40) limitation while staying safer for Apps Script calls.
+WHAT CHANGED
 
-3. ISIN / CODE / NAME FALLBACK
-For each active MF the backend attempts:
-- current AMFI code
-- SourceCode if it is an AMFI code
-- ISIN match
-- exact normalized scheme-name match
-- scheme-name fuzzy fallback
-If an old AMFI code has been phased out and a current scheme can be resolved,
-the active Holding/Watchlist Code is automatically remapped.
+1. DIRECT AMFI PORTAL
+Backend now calls:
+https://portal.amfiindia.com/spages/NAVAll.txt
+directly, instead of relying on the www.amfiindia.com redirect.
 
-4. FRESH AMFI REQUEST ON REFRESH
-Manual/scheduled refresh bypasses the 6-hour AMFI universe cache so it can fetch
-the latest available AMFI NAV data immediately.
+2. SECOND NAV SOURCE / FALLBACK
+AMFI is still primary.
+If an active MF remains zero/missing after the AMFI refresh, Backend v3.15.3 calls:
+https://api.mfapi.in/mf/<AMFI_CODE>
+and writes the latest valid NAV/date into Quotes as:
+MFAPI fallback
 
-5. SCHEDULED REFRESH IS STRONGER
-The existing refreshMutualFundNav trigger now refreshes:
-- NAV
-- active MF performance
-The existing six-hour trigger can remain in place.
+3. AUTOMATIC REPAIR ON LOGIN / PAGE RELOAD
+If any active MF has a zero/missing NAV or no NAV date, the backend immediately tries repair.
+You do not need to wait 15 minutes.
 
-6. CLEAR NAV HEALTH IN THE DASHBOARD
-Every MF price/NAV cell now displays:
-- AMFI · <date> when fresh
-- STALE NAV in red when older than 2 business days
-- NAV PENDING in red when no NAV exists
-- MANUAL OVERRIDE in amber when Manual Price is overriding automatic NAV
+4. ZERO NAV IS NOT TREATED AS A REAL PRICE
+If both sources fail, the dashboard now shows:
+NAV PENDING / —
+instead of ₹0.00 and a false huge loss.
 
-The Holdings saved-view bar also shows an MF NAV health summary:
-MF NAV · X fresh · Y stale · Z pending · N manual
+5. REFRESH REPORT
+Manual Refresh can report:
+MF NAV 12/12 · 3 fallback repaired · MF performance 12/12
 
-7. MANUAL REFRESH DIAGNOSTICS
-When you press Refresh, the toast now reports for example:
-MF NAV 12/12 · MF performance 12/12
-If a code was automatically remapped, it also reports the remap count.
-
-INSTALL — BOTH FRONTEND AND BACKEND
+INSTALL
 
 APPS SCRIPT
-1. Replace the entire Code.gs with Code-v3.15.2.gs
+1. Replace the entire Code.gs with Code-v3.15.3.gs
 2. Save
-3. Deploy > Manage deployments
-4. Edit the EXISTING Web App deployment
-5. Choose New version
-6. Execute as: Me
-7. Who has access: Anyone
-8. Deploy
+3. Deploy > Manage deployments > Edit existing Web App
+4. New version
+5. Execute as Me
+6. Who has access: Anyone
+7. Deploy
 
 GITHUB
-Upload/replace:
+Replace/upload:
 - index.html
 - styles.css
+- app-v19-2-6.js
 - app-v19-2-5.js
-- app-v19-2-4.js (compatibility)
 
-Keep your CURRENT working config.js and /exec URL.
+Keep the CURRENT working config.js and /exec URL.
 
-OPEN
-Use your normal GitHub Pages URL with:
-?v=1925
-Then press Command + Shift + R.
+TEST
+Open your GitHub site with:
+?v=1926
 
-EXPECTED VERSION
-Frontend v19.2.5
-Backend v3.15.2
+Then:
+Command + Shift + R
 
-NOTE
-Mutual-fund NAV is normally end-of-day rather than live intraday.
-Weekends/holidays can therefore legitimately show an older NAV date without being a failure.
-The red stale warning uses a business-day test rather than simple calendar days.
+Reload/login once. Missing MF NAVs will be repaired immediately.
+You can also click the circular Refresh button once.
+
+EXPECTED
+Motilal Large Cap, Midcap and Small Cap should show a positive NAV and NAV date.
+Source will be either:
+AMFI
+or
+MFAPI fallback
+
+If neither source can be fetched, it will show NAV PENDING instead of ₹0.00.
