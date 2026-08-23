@@ -6410,3 +6410,247 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
     white-space:normal !important;
   }
 }
+
+
+/* =========================================================
+   FE v19.2.9 — ASSET NAME WRAP HARD FIX
+   The old .asset-col min-width (330px desktop / 290px mobile)
+   prevented the Asset column from actually becoming narrow.
+   ========================================================= */
+
+/* Remove the old hard minimum that was blocking wrapping. */
+#holdingsSection .holdings-table th.asset-col,
+#holdingsSection .holdings-table td.asset-col,
+#watchlistSection .watchlist-details-table th.asset-col,
+#watchlistSection .watchlist-details-table td.asset-col{
+  min-width:0 !important;
+}
+
+/* The sticky Asset cell itself must be allowed to shrink to its actual
+   dragged / table-scaled width. */
+#holdingsSection .holdings-table .asset-col .asset-cell,
+#watchlistSection .watchlist-details-table .asset-col .asset-cell{
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  display:flex;
+  align-items:flex-start;
+}
+
+/* Critical flexbox rule: without min-width:0 the text child keeps its
+   content width and refuses to wrap even when the column is narrower. */
+#holdingsSection .holdings-table .asset-col .asset-cell > div:last-child,
+#watchlistSection .watchlist-details-table .asset-col .asset-cell > div:last-child{
+  flex:1 1 0 !important;
+  width:0 !important;
+  min-width:0 !important;
+  max-width:100% !important;
+}
+
+/* Asset/scheme name and code now wrap inside the actual column width. */
+#holdingsSection .holdings-table .asset-col .asset-cell strong,
+#holdingsSection .holdings-table .asset-col .asset-cell span,
+#watchlistSection .watchlist-details-table .asset-col .asset-cell strong,
+#watchlistSection .watchlist-details-table .asset-col .asset-cell span{
+  display:block !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  overflow-wrap:anywhere !important;
+  word-break:break-word !important;
+  hyphens:auto;
+  line-height:1.28;
+}
+
+/* Ensure row height grows naturally when a long asset wraps onto
+   two, three or more lines. */
+#holdingsSection .holdings-table td.asset-col,
+#watchlistSection .watchlist-details-table td.asset-col{
+  height:auto !important;
+  vertical-align:top !important;
+}
+
+/* Keep the icon compact; only the text section uses the remaining width. */
+#holdingsSection .holdings-table .asset-col .asset-badge,
+#watchlistSection .watchlist-details-table .asset-col .asset-badge{
+  flex:0 0 auto !important;
+}
+
+/* Same behaviour in fullscreen and mobile. */
+#holdingsSection.data-fullscreen-active .holdings-table .asset-col,
+#watchlistSection.data-fullscreen-active .watchlist-details-table .asset-col{
+  min-width:0 !important;
+}
+
+@media(max-width:860px){
+  #holdingsSection .holdings-table .asset-col,
+  #watchlistSection .watchlist-details-table .asset-col{
+    min-width:0 !important;
+  }
+}
+
+/* Print preview / printed table: asset names must wrap when print
+   column widths are reduced. */
+@media print{
+  .asset-cell,
+  .asset-cell > div:last-child,
+  .asset-cell strong,
+  .asset-cell span{
+    min-width:0 !important;
+    max-width:100% !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+    word-break:break-word !important;
+  }
+}
+
+
+/* =========================================================
+   FE v19.2.9 — DIRECT ROW EDIT + SLOWER SMOOTH HORIZONTAL SCROLL
+   ========================================================= */
+
+.quick-edit-button{
+  color:#5f46c8;
+  border-color:#d7cff8;
+  background:#f8f5ff;
+}
+
+.inline-holding-edit-row > td{
+  padding:0 !important;
+  background:#f7f8ff !important;
+  border-top:0 !important;
+}
+
+.inline-holding-editor{
+  margin:0;
+  padding:14px 16px 16px;
+  border-top:1px solid #dfe4f2;
+  border-bottom:2px solid #8f7bea;
+  background:linear-gradient(180deg,#fbfbff,#f4f6ff);
+  box-shadow:inset 0 5px 12px rgba(60,70,125,.035);
+}
+
+.inline-editor-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:12px;
+}
+
+.inline-editor-head strong,
+.inline-editor-head span{
+  display:block;
+}
+
+.inline-editor-head strong{
+  color:#252e54;
+  font-size:13px;
+}
+
+.inline-editor-head span{
+  margin-top:3px;
+  color:#7b849a;
+  font-size:10px;
+}
+
+.inline-editor-head-actions{
+  display:flex;
+  gap:7px;
+  flex:0 0 auto;
+}
+
+.inline-save-button{
+  min-height:31px;
+  padding:7px 13px;
+}
+
+.inline-editor-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(130px,1fr));
+  gap:10px;
+}
+
+.inline-editor-grid label{
+  display:grid;
+  gap:5px;
+  min-width:0;
+  color:#657089;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+.inline-editor-grid input,
+.inline-editor-grid select,
+.inline-editor-grid textarea{
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  border:1px solid #d8ddea;
+  border-radius:9px;
+  padding:8px 9px;
+  color:#25304f;
+  background:#fff;
+  font:inherit;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0;
+  text-transform:none;
+  outline:none;
+}
+
+.inline-editor-grid input:focus,
+.inline-editor-grid select:focus,
+.inline-editor-grid textarea:focus{
+  border-color:#8171e8;
+  box-shadow:0 0 0 3px rgba(105,88,222,.10);
+}
+
+.inline-editor-grid textarea{
+  resize:vertical;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+
+.inline-editor-grid .inline-wide{
+  grid-column:span 2;
+}
+
+.inline-editor-grid .inline-note{
+  grid-column:span 2;
+}
+
+/* A little more controlled horizontal movement on compatible browsers. */
+#holdingsSection .table-wrap,
+#transactionsSection .table-wrap,
+#watchlistSection .table-wrap{
+  overscroll-behavior-inline:contain;
+  -webkit-overflow-scrolling:touch;
+}
+
+@media(max-width:900px){
+  .inline-editor-grid{
+    grid-template-columns:repeat(2,minmax(120px,1fr));
+  }
+}
+
+@media(max-width:560px){
+  .inline-editor-head{
+    display:grid;
+  }
+  .inline-editor-head-actions{
+    justify-content:flex-end;
+  }
+  .inline-editor-grid{
+    grid-template-columns:1fr;
+  }
+  .inline-editor-grid .inline-wide,
+  .inline-editor-grid .inline-note{
+    grid-column:span 1;
+  }
+}

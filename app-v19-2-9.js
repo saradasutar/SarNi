@@ -42,6 +42,7 @@ const state = {
   autoRefreshTimer: null,
   backendVersion: EXPECTED_BACKEND_VERSION,
   lastServerSyncAt: 0,
+  inlineEditHoldingId: '',
   masterDataVersion: '',
   masterDataAppliedAt: '',
   hScrollTarget: null,
@@ -1903,6 +1904,156 @@ function restoreHoldingsSummaryState(){
   applyHoldingsSummaryState(false,{save:false});
 }
 
+
+function inlineHoldingEditorHtml(h){
+  const owners=configuredOwners();
+  const currentOwner=canonicalOwner(h.owner);
+  const ownerList=owners.includes(currentOwner)?owners:[currentOwner,...owners].filter(Boolean);
+  const ownerOptions=ownerList.map(o=>`<option value="${escapeHtml(o)}"${currentOwner===o?' selected':''}>${escapeHtml(shortOwner(o))}</option>`).join('');
+  const typeOptions=['MF','STOCK','ETF','OTHER'].map(t=>`<option value="${t}"${h.type===t?' selected':''}>${t==='MF'?'Mutual Fund':t==='STOCK'?'Stock':t==='ETF'?'ETF':'Other'}</option>`).join('');
+
+  return `<tr class="inline-holding-edit-row" data-inline-editor-row="${escapeHtml(h.id)}">
+    <td colspan="99">
+      <div class="inline-holding-editor">
+        <div class="inline-editor-head">
+          <div>
+            <strong>Direct row edit</strong>
+            <span>Edit the main investment fields here. The normal Edit button remains available for the full popup.</span>
+          </div>
+          <div class="inline-editor-head-actions">
+            <button type="button" class="small-button" data-inline-cancel-holding="${escapeHtml(h.id)}">Cancel</button>
+            <button type="button" class="primary-button inline-save-button" data-inline-save-holding="${escapeHtml(h.id)}">Save row</button>
+          </div>
+        </div>
+
+        <div class="inline-editor-grid">
+          <label>Investor
+            <select data-inline-field="owner">${ownerOptions}</select>
+          </label>
+
+          <label>Type
+            <select data-inline-field="type">${typeOptions}</select>
+          </label>
+
+          <label class="inline-wide">Asset / Scheme Name
+            <input data-inline-field="assetName" type="text" maxlength="160" value="${escapeHtml(h.assetName||'')}">
+          </label>
+
+          <label>Code / AMFI
+            <input data-inline-field="code" type="text" maxlength="80" value="${escapeHtml(h.code||'')}">
+          </label>
+
+          <label>Exchange
+            <select data-inline-field="exchange">
+              <option value=""${!h.exchange?' selected':''}>—</option>
+              <option value="NSE"${h.exchange==='NSE'?' selected':''}>NSE</option>
+              <option value="BSE"${h.exchange==='BSE'?' selected':''}>BSE</option>
+            </select>
+          </label>
+
+          <label>Units / Qty
+            <input data-inline-field="units" type="number" min="0.00000001" step="any" value="${escapeHtml(h.units??'')}">
+          </label>
+
+          <label>Invested Amount
+            <input data-inline-field="investedAmount" type="number" min="0" step="0.01" value="${escapeHtml(h.investedAmount??'')}">
+          </label>
+
+          <label>Manual Price / NAV
+            <input data-inline-field="manualPrice" type="number" min="0" step="any" value="${escapeHtml(h.manualPrice??'')}">
+          </label>
+
+          <label>Buy Date
+            <input data-inline-field="buyDate" type="date" value="${escapeHtml(h.buyDate||'')}">
+          </label>
+
+          <label class="inline-note">Personal Note
+            <textarea data-inline-field="notes" rows="2" maxlength="500">${escapeHtml(h.notes||'')}</textarea>
+          </label>
+        </div>
+      </div>
+    </td>
+  </tr>`;
+}
+
+function inlineEditorRow(id){
+  return Array.from(document.querySelectorAll('[data-inline-editor-row]'))
+    .find(row=>String(row.dataset.inlineEditorRow)===String(id))||null;
+}
+
+function openInlineHoldingEdit(id){
+  const wrap=tableScrollWrap('holdings');
+  const left=wrap?.scrollLeft||0;
+  state.inlineEditHoldingId=String(id||'');
+  renderHoldings();
+  requestAnimationFrame(()=>{
+    const nextWrap=tableScrollWrap('holdings');
+    if(nextWrap)nextWrap.scrollLeft=left;
+    const row=inlineEditorRow(state.inlineEditHoldingId);
+    row?.scrollIntoView({block:'nearest',behavior:'smooth'});
+    row?.querySelector('[data-inline-field="assetName"]')?.focus();
+  });
+}
+
+function closeInlineHoldingEdit(){
+  const wrap=tableScrollWrap('holdings');
+  const left=wrap?.scrollLeft||0;
+  state.inlineEditHoldingId='';
+  renderHoldings();
+  requestAnimationFrame(()=>{
+    const nextWrap=tableScrollWrap('holdings');
+    if(nextWrap)nextWrap.scrollLeft=left;
+  });
+}
+
+async function saveInlineHolding(id,button){
+  const h=state.holdings.find(x=>String(x.id)===String(id));
+  const row=inlineEditorRow(id);
+  if(!h||!row)return;
+
+  const value=name=>row.querySelector(`[data-inline-field="${name}"]`)?.value ?? '';
+  const assetName=String(value('assetName')).trim();
+  const code=String(value('code')).trim().toUpperCase();
+  const units=Number(value('units'));
+  const investedAmount=Number(value('investedAmount'));
+  const manualRaw=value('manualPrice');
+  const manualPrice=manualRaw===''?null:Number(manualRaw);
+
+  if(!assetName){toast('Asset / Scheme Name is required.','error');return;}
+  if(!code){toast('Code / AMFI is required.','error');return;}
+  if(!Number.isFinite(units)||units<=0){toast('Units / Qty must be greater than zero.','error');return;}
+  if(!Number.isFinite(investedAmount)||investedAmount<0){toast('Enter a valid Invested Amount.','error');return;}
+  if(manualPrice!==null&&(!Number.isFinite(manualPrice)||manualPrice<0)){toast('Manual Price / NAV cannot be negative.','error');return;}
+
+  setBusy(button,true,'Saving…');
+  try{
+    const type=String(value('type')||'').toUpperCase();
+    const result=await api('saveHolding',{holding:{
+      id:h.id,
+      owner:value('owner'),
+      type,
+      assetName,
+      code,
+      exchange:['MF','OTHER'].includes(type)?'':value('exchange'),
+      units,
+      investedAmount,
+      manualPrice,
+      buyDate:value('buyDate'),
+      notes:String(value('notes')).trim(),
+      sourceCode:h.sourceCode||''
+    }});
+
+    state.inlineEditHoldingId='';
+    applyBootstrap(result.data);
+    saveCache(result.data);
+    toast('Investment row saved.','success');
+  }catch(error){
+    toast(error.message,'error');
+  }finally{
+    setBusy(button,false);
+  }
+}
+
 function renderHoldings(){
   renderHoldingsSummary();
   resetCustomHeaders('HOLDINGS');
@@ -1915,7 +2066,7 @@ function renderHoldings(){
     const avg=(Number(h.units)>0?Number(h.investedAmount)/Number(h.units):null),p=h.performance||{},s=h.transactionStats||{};
     const realisedComplete=s.realizedPnlComplete!==false;
     const totalComplete=realisedComplete&&h.totalPnlToDate!==null&&h.totalPnlToDate!==undefined;
-    return `<tr class="holding-row" data-view-holding="${escapeHtml(h.id)}" tabindex="0" aria-label="View details for ${escapeHtml(h.assetName)}">
+    const mainRow=`<tr class="holding-row" data-view-holding="${escapeHtml(h.id)}" tabindex="0" aria-label="View details for ${escapeHtml(h.assetName)}">
       <td class="sticky-col owner-col"><span class="owner-tag">${escapeHtml(shortOwner(h.owner))}</span></td>
       <td class="sticky-col asset-col"><div class="asset-cell"><div class="asset-badge ${String(h.type).toLowerCase()}">${escapeHtml(h.type==='MF'?'MF':h.type==='ETF'?'ET':'ST')}</div><div><strong>${escapeHtml(h.assetName)}</strong><span>${escapeHtml(h.exchange?`${h.exchange}:`:'')}${escapeHtml(h.code)}${h.sourceCode?` · stmt ${escapeHtml(h.sourceCode)}`:''}</span></div></div></td>
       <td class="holding-trade-date-cell purchase-date-cell">${holdingPurchaseDatesHtml(h)}</td>
@@ -1929,8 +2080,9 @@ function renderHoldings(){
       <td class="${pnlClass(h.returnPct)}"><strong>${formatPercent(h.returnPct)}</strong></td><td class="${pnlClass(h.xirr)}">${formatPercent(h.xirr)}</td>
       ${perfCell(p.d1)}${perfCell(p.w1)}${perfCell(p.m1)}${perfCell(p.m6)}${perfCell(p.y1)}${perfCell(p.y3)}${perfCell(p.y5)}${perfCell(p.y10)}
       <td class="personal-note-cell" data-note-cell="${escapeHtml(h.id)}">${notePreview(h.notes)}</td>${customCellsHtml('HOLDINGS',h.id)}
-      <td class="row-actions"><button class="small-button view-button" data-view-holding-button="${escapeHtml(h.id)}">View</button><button class="small-button" data-edit-holding="${escapeHtml(h.id)}">Edit</button><button class="small-button danger" data-delete-holding="${escapeHtml(h.id)}">Delete</button></td>
+      <td class="row-actions"><button class="small-button view-button" data-view-holding-button="${escapeHtml(h.id)}">View</button><button class="small-button quick-edit-button" data-inline-edit-holding="${escapeHtml(h.id)}">Row edit</button><button class="small-button" data-edit-holding="${escapeHtml(h.id)}">Edit</button><button class="small-button danger" data-delete-holding="${escapeHtml(h.id)}">Delete</button></td>
     </tr>`;
+    return mainRow+(state.inlineEditHoldingId===String(h.id)?inlineHoldingEditorHtml(h):'');
   }).join('');
   els.holdingsEmpty.classList.toggle('hidden',items.length>0);
   appendCustomHeaders('HOLDINGS');applyStandardColumnSettings('HOLDINGS');applyHoldingsSemanticGroups();if(els.holdingsViewPreset)els.holdingsViewPreset.value=holdingsPresetFromCurrent();installColumnResizers('holdings');applyStoredColumnWidths('holdings');bindTableScrollPersistence('holdings');restoreTableScroll('holdings');scheduleDashboardHScrollRefresh();
@@ -3153,12 +3305,12 @@ function syncHScrollFromRange(){
   hScrollRangeRaf=requestAnimationFrame(()=>{
     hScrollRangeRaf=0;
     const maxScroll=Math.max(0,target.scrollWidth-target.clientWidth);
-    target.scrollLeft=maxScroll*(value/1000);
+    animateHorizontalScroll(target,maxScroll*(value/1000),150);
     queueHScrollUiRefresh();
   });
 }
 let hScrollAnimRaf=0;
-function animateHorizontalScroll(target,to,duration=230){
+function animateHorizontalScroll(target,to,duration=360){
   if(!target)return;
   if(hScrollAnimRaf)cancelAnimationFrame(hScrollAnimRaf);
   const start=target.scrollLeft;
@@ -3177,11 +3329,11 @@ function animateHorizontalScroll(target,to,duration=230){
   };
   hScrollAnimRaf=requestAnimationFrame(frame);
 }
-function scrollDashboardHorizontal(direction,ratio=.72){
+function scrollDashboardHorizontal(direction,ratio=.52){
   const target=state.hScrollTarget||activeHorizontalScrollTarget();
   if(!target)return;
-  const step=Math.max(220,Math.min(720,target.clientWidth*ratio));
-  animateHorizontalScroll(target,target.scrollLeft+(direction*step),230);
+  const step=Math.max(160,Math.min(520,target.clientWidth*ratio));
+  animateHorizontalScroll(target,target.scrollLeft+(direction*step),360);
 }
 function shouldIgnoreHorizontalKeys(target){
   if(!target)return false;
@@ -3199,7 +3351,7 @@ function handleDashboardHorizontalKeydown(e){
   e.preventDefault();
   const dir=e.key==='ArrowRight'?1:-1;
   // Normal press = smaller smooth movement; Shift = larger movement.
-  scrollDashboardHorizontal(dir,e.shiftKey?.85:.34);
+  scrollDashboardHorizontal(dir,e.shiftKey?.58:.24);
 }
 function bindSmoothHorizontalTable(wrap){
   if(!wrap||wrap.dataset.smoothHorizontalBound==='1')return;
@@ -3212,7 +3364,7 @@ function bindSmoothHorizontalTable(wrap){
     if(max<=0)return;
     if(e.shiftKey&&Math.abs(e.deltaY)>0){
       e.preventDefault();
-      wrap.scrollBy({left:e.deltaY*1.15,behavior:'auto'});
+      animateHorizontalScroll(wrap,wrap.scrollLeft+(e.deltaY*.62),190);
       queueHScrollUiRefresh();
     }
   },{passive:false});
@@ -3981,7 +4133,7 @@ function bindEvents(){safeOn(els.manageHoldingsColumnsBtn,'click',()=>openColumn
   window.addEventListener('keydown',handleDashboardHorizontalKeydown,{passive:false});
   window.addEventListener('resize',scheduleDashboardHScrollRefresh);
   document.querySelectorAll('.table-wrap').forEach(bindSmoothHorizontalTable);safeOn(els.loginForm,'submit',login);safeOn(els.logoutBtn,'click',logout);safeOn(els.mobileLogoutBtn,'click',logout);safeOn(els.mobileChangePasswordBtn,'click',()=>openModal('passwordModal'));safeOn(els.replaceMasterDataBtn,'click',replaceMasterPortfolioData);safeOn(els.masterLoadNowBtn,'click',replaceMasterPortfolioData);safeOn(els.showAllInvestmentsBtn,'click',showAllInvestments);safeOn(els.viewAllNotesBtn,'click',()=>openAllNotes('HOLDINGS'));safeOn(els.watchAllNotesBtn,'click',()=>openAllNotes('WATCHLIST'));safeOn(els.notesSearch,'input',renderNotesModal);safeOn(els.notesSource,'change',renderNotesModal);safeOn(els.notesScope,'change',renderNotesModal);safeOn(els.notesFilter,'change',renderNotesModal);safeOn(els.drawerCloseBtn,'click',closeHoldingDrawer);safeOn(els.drawerDoneBtn,'click',closeHoldingDrawer);safeOn(els.drawerEditBtn,'click',editDrawerHolding);safeOn(els.holdingDrawerBackdrop,'click',closeHoldingDrawer);safeOn(els.refreshBtn,'click',async()=>{await loadDashboard(true);resetAutoRefreshClock();});safeOn(els.addInvestmentBtn,'click',()=>openInvestment());safeOn(els.addInvestmentTableBtn,'click',()=>openInvestment());safeOn(els.importBtn,'click',openBulkImport);safeOn(els.bulkImportBtn,'click',openBulkImport);safeOn(els.downloadImportTemplateBtn,'click',downloadImportTemplate);safeOn(els.bulkCsvFile,'change',handleBulkFile);safeOn(els.bulkImportForm,'submit',runBulkImport);safeOn(els.exportBtn,'click',exportCsv);safeOn(els.investmentForm,'submit',saveInvestment);safeOn(els.watchForm,'submit',saveWatch);safeOn(els.passwordForm,'submit',changePassword);safeOn(els.userForm,'submit',saveUserForm);safeOn(els.addStickyNoteBtn,'click',()=>openStickyNote());safeOn(els.stickyNoteForm,'submit',saveStickyNote);safeOn(els.holdingType,'change',()=>updateAssetForm(els.holdingType.value,'holding'));safeOn(els.watchType,'change',()=>updateAssetForm(els.watchType.value,'watch'));safeOn(els.transactionSearch,'input',renderTransactions);safeOn(els.transactionOwnerFilter,'change',renderTransactions);safeOn(els.transactionAssetFilter,'change',renderTransactions);safeOn(els.transactionSideFilter,'change',renderTransactions);safeOn(els.transactionFromDate,'change',renderTransactions);safeOn(els.transactionToDate,'change',renderTransactions);safeOn(els.transactionImportBtn,'click',()=>{refreshOwnerControls();setImportMode('STOCK_TRADES');openModal('bulkImportModal');});safeOn(els.printTransactionsBtn,'click',printTransactionsView);safeOn(els.toggleHoldingsSummaryBtn,'click',toggleHoldingsSummary);document.addEventListener('click',e=>{if(e.target.closest('[data-hide-holdings-summary]'))hideHoldingsSummary();});safeOn(els.holdingSearch,'input',renderHoldings);safeOn(els.holdingTypeFilter,'change',renderHoldings);safeOn(els.holdingResultFilter,'change',renderHoldings);safeOn(els.holdingNotesFilter,'change',renderHoldings);safeOn(els.holdingTradeFilter,'change',renderHoldings);safeOn(els.holdingsViewPreset,'change',e=>{if(e.target.value!=='CUSTOM')setHoldingsViewPreset(e.target.value);});safeOn(els.saveHoldingsDefaultViewBtn,'click',saveHoldingsDefaultView);safeOn(els.restoreHoldingsDefaultViewBtn,'click',()=>restoreHoldingsDefaultView(true));safeOn(els.resetHoldingsViewBtn,'click',resetHoldingsView);safeOn(els.printHoldingsBtn,'click',printHoldingsView);safeOn(els.holdingsFullscreenBtn,'click',()=>toggleDataFullscreen('holdings'));safeOn(els.watchSearch,'input',renderWatchlist);safeOn(els.watchTypeFilter,'change',renderWatchlist);safeOn(els.watchPriorityFilter,'change',renderWatchlist);safeOn(els.watchTargetFilter,'change',renderWatchlist);safeOn(els.watchNotesFilter,'change',renderWatchlist);safeOn(els.saveWatchDefaultViewBtn,'click',saveWatchDefaultView);safeOn(els.restoreWatchDefaultViewBtn,'click',()=>restoreWatchDefaultView(true));safeOn(els.printWatchlistBtn,'click',printWatchlistView);safeOn(els.watchlistFullscreenBtn,'click',()=>toggleDataFullscreen('watchlist'));safeOn($('addWatchBtn'),'click',()=>openWatch());safeOn($('changePasswordBtn'),'click',()=>openModal('passwordModal'));safeOn($('addUserBtn'),'click',openCreateUserModal);safeOn(els.generateUserPasswordBtn,'click',()=>{els.newUserPassword.value=generateStrongUserPassword();setUserFormStatus('New strong temporary password generated.','success');});safeOn(els.copyUserPasswordBtn,'click',copyUserPassword);safeOn(els.modalBackdrop,'click',e=>{if(e.target===els.modalBackdrop)closeModals();});$$('[data-close-modal]').forEach(b=>b.addEventListener('click',closeModals));$$('[data-section]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.section)));$$('[data-section-link]').forEach(b=>b.addEventListener('click',()=>switchSection(b.dataset.sectionLink)));$$('[data-toggle-password]').forEach(b=>b.addEventListener('click',()=>{const input=$(b.dataset.togglePassword),show=input.type==='password';input.type=show?'text':'password';b.textContent=show?'Hide':'Show';}));$$('.import-mode').forEach(b=>b.addEventListener('click',()=>setImportMode(b.dataset.importMode)));
-  document.addEventListener('click',e=>{const customCell=e.target.closest('[data-custom-cell]');if(customCell){e.preventDefault();e.stopPropagation();openCustomValueEditor(customCell.dataset.customSection,customCell.dataset.customRecord,customCell.dataset.customKey);return;}const homeSticky=e.target.closest('[data-home-open-sticky]');if(homeSticky){openUtilityDrawer('STICKY');return;}const utilityTab=e.target.closest('[data-utility-tab]');if(utilityTab){state.utilityDrawerTab=utilityTab.dataset.utilityTab==='QUOTE'?'QUOTE':'STICKY';renderUtilityDrawerTab();if(lifeQuoteAutoContextVisible())startLifeQuoteShuffle();else stopLifeQuoteShuffle();return;}const quoteEdit=e.target.closest('[data-life-quote-edit]');if(quoteEdit){editLifeQuote(quoteEdit.dataset.lifeQuoteEdit);return;}const quoteDelete=e.target.closest('[data-life-quote-delete]');if(quoteDelete){deleteLifeQuote(quoteDelete.dataset.lifeQuoteDelete);return;}const stickyPin=e.target.closest('[data-sticky-pin]');if(stickyPin){toggleStickyPin(stickyPin.dataset.stickyPin);return;}const stickyDone=e.target.closest('[data-sticky-done]');if(stickyDone){completeStickyNote(stickyDone.dataset.stickyDone);return;}const stickyEdit=e.target.closest('[data-sticky-edit]');if(stickyEdit){const item=state.stickyNotes.find(x=>x.id===stickyEdit.dataset.stickyEdit);if(item)openStickyNote(item);return;}const stickyDelete=e.target.closest('[data-sticky-delete]');if(stickyDelete){deleteStickyNote(stickyDelete.dataset.stickyDelete);return;}const qmode=e.target.closest('[data-quick-diary-mode]');if(qmode){state.quickDiaryMode=qmode.dataset.quickDiaryMode;renderQuickDiaryMode();setTimeout(()=>state.quickDiaryMode==='DAILY'?els.quickDailyText?.focus():els.quickMonthlyText?.focus(),30);return;}const workspace=e.target.closest('[data-diary-workspace]');if(workspace){state.diaryWorkspace=workspace.dataset.diaryWorkspace;renderDiaryWorkspace();return;}const openCompleted=e.target.closest('[data-open-completed-month]');if(openCompleted){const key=openCompleted.dataset.openCompletedMonth;state.diaryWorkspace='MONTHLY';renderDiaryWorkspace();els.monthlyYearFilter.value=key.slice(0,4);els.monthlyMonthFilter.value=key.slice(5,7);renderMonthlyDiary();return;}const monthlyEdit=e.target.closest('[data-edit-monthly]');if(monthlyEdit){const item=state.monthlyDiary.find(x=>x.id===monthlyEdit.dataset.editMonthly);if(item)openMonthlyItem(item);return;}const monthlyDelete=e.target.closest('[data-delete-monthly]');if(monthlyDelete){deleteMonthlyItem(monthlyDelete.dataset.deleteMonthly);return;}const monthlyTarget=e.target.closest('[data-toggle-monthly-target]');if(monthlyTarget){toggleMonthlyTarget(monthlyTarget.dataset.toggleMonthlyTarget);return;}const diaryView=e.target.closest('[data-diary-view]');if(diaryView){state.diaryView=diaryView.dataset.diaryView;renderDiary();return;}const diaryEdit=e.target.closest('[data-edit-diary]');if(diaryEdit){const item=state.diary.find(x=>x.id===diaryEdit.dataset.editDiary);if(item)openDiaryEntry(item);return;}const diaryDelete=e.target.closest('[data-delete-diary]');if(diaryDelete){deleteDiaryEntry(diaryDelete.dataset.deleteDiary);return;}const diaryCard=e.target.closest('[data-diary-view-entry]');if(diaryCard&&!e.target.closest('button')){const item=state.diary.find(x=>x.id===diaryCard.dataset.diaryViewEntry);if(item)openDiaryEntry(item);return;}const gr=e.target.closest('[data-growth-range]');if(gr){state.growthRange=gr.dataset.growthRange;$$('[data-growth-range]').forEach(b=>b.classList.toggle('active',b.dataset.growthRange===state.growthRange));renderGrowthDashboard();return;}const owner=e.target.closest('[data-owner-view]');if(owner){state.selectedOwner=owner.dataset.ownerView;refreshOwnerControls();renderAll();return;}const assetView=e.target.closest('[data-asset-view]');if(assetView){state.selectedAssetView=assetView.dataset.assetView;els.holdingTypeFilter.value='ALL';renderAll();return;}const noteView=e.target.closest('[data-note-view]'),noteEdit=e.target.closest('[data-note-edit]'),watchNoteView=e.target.closest('[data-watch-note-view]'),watchNoteEdit=e.target.closest('[data-watch-note-edit]'),holdingViewButton=e.target.closest('[data-view-holding-button]'),watchViewButton=e.target.closest('[data-view-watch-button]'),watchNoteButton=e.target.closest('[data-watch-note-button]'),edit=e.target.closest('[data-edit-holding]'),del=e.target.closest('[data-delete-holding]'),ew=e.target.closest('[data-edit-watch]'),dw=e.target.closest('[data-delete-watch]'),eu=e.target.closest('[data-edit-user]'),du=e.target.closest('[data-delete-user]'),ru=e.target.closest('[data-reset-user]'),tu=e.target.closest('[data-toggle-user]');if(noteView){const item=state.holdings.find(x=>x.id===noteView.dataset.noteView);closeModals();if(item)openHoldingDrawer(item);return;}if(noteEdit){const item=state.holdings.find(x=>x.id===noteEdit.dataset.noteEdit);closeModals();if(item)openInvestment(item);return;}if(watchNoteView){const item=state.watchlist.find(x=>x.id===watchNoteView.dataset.watchNoteView);closeModals();if(item)openWatchDrawer(item);return;}if(holdingViewButton){const item=state.holdings.find(x=>x.id===holdingViewButton.dataset.viewHoldingButton);if(item)openHoldingDrawer(item);return;}if(watchViewButton){const item=state.watchlist.find(x=>x.id===watchViewButton.dataset.viewWatchButton);if(item)openWatchDrawer(item);return;}if(watchNoteButton){const item=state.watchlist.find(x=>x.id===watchNoteButton.dataset.watchNoteButton);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(watchNoteEdit){const item=state.watchlist.find(x=>x.id===watchNoteEdit.dataset.watchNoteEdit);closeModals();if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(edit){openInvestment(state.holdings.find(x=>x.id===edit.dataset.editHolding));return;}if(del){deleteItem('deleteHolding',del.dataset.deleteHolding,'investment');return;}if(ew){openWatch(state.watchlist.find(x=>x.id===ew.dataset.editWatch));return;}if(dw){deleteItem('deleteWatchItem',dw.dataset.deleteWatch,'watchlist item');return;}if(eu){openEditUserModal(eu.dataset.editUser);return;}if(du){deleteUserAccount(du.dataset.deleteUser);return;}if(ru){resetUserPassword(ru.dataset.resetUser);return;}if(tu){toggleUser(tu.dataset.toggleUser,tu.dataset.active==='true');return;}const watchNoteCell=e.target.closest('[data-watch-note-cell]');if(watchNoteCell){const item=state.watchlist.find(x=>x.id===watchNoteCell.dataset.watchNoteCell);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t)t.focus();},80);}return;}const noteCell=e.target.closest('[data-note-cell]');if(noteCell){const item=state.holdings.find(x=>x.id===noteCell.dataset.noteCell);if(item)openHoldingDrawer(item);return;}const watchView=e.target.closest('[data-view-watch]');if(watchView){const item=state.watchlist.find(x=>x.id===watchView.dataset.viewWatch);if(item)openWatchDrawer(item);return;}const view=e.target.closest('[data-view-holding]');if(view){openHoldingDrawer(state.holdings.find(x=>x.id===view.dataset.viewHolding));}});
+  document.addEventListener('click',e=>{const customCell=e.target.closest('[data-custom-cell]');if(customCell){e.preventDefault();e.stopPropagation();openCustomValueEditor(customCell.dataset.customSection,customCell.dataset.customRecord,customCell.dataset.customKey);return;}const homeSticky=e.target.closest('[data-home-open-sticky]');if(homeSticky){openUtilityDrawer('STICKY');return;}const utilityTab=e.target.closest('[data-utility-tab]');if(utilityTab){state.utilityDrawerTab=utilityTab.dataset.utilityTab==='QUOTE'?'QUOTE':'STICKY';renderUtilityDrawerTab();if(lifeQuoteAutoContextVisible())startLifeQuoteShuffle();else stopLifeQuoteShuffle();return;}const quoteEdit=e.target.closest('[data-life-quote-edit]');if(quoteEdit){editLifeQuote(quoteEdit.dataset.lifeQuoteEdit);return;}const quoteDelete=e.target.closest('[data-life-quote-delete]');if(quoteDelete){deleteLifeQuote(quoteDelete.dataset.lifeQuoteDelete);return;}const stickyPin=e.target.closest('[data-sticky-pin]');if(stickyPin){toggleStickyPin(stickyPin.dataset.stickyPin);return;}const stickyDone=e.target.closest('[data-sticky-done]');if(stickyDone){completeStickyNote(stickyDone.dataset.stickyDone);return;}const stickyEdit=e.target.closest('[data-sticky-edit]');if(stickyEdit){const item=state.stickyNotes.find(x=>x.id===stickyEdit.dataset.stickyEdit);if(item)openStickyNote(item);return;}const stickyDelete=e.target.closest('[data-sticky-delete]');if(stickyDelete){deleteStickyNote(stickyDelete.dataset.stickyDelete);return;}const qmode=e.target.closest('[data-quick-diary-mode]');if(qmode){state.quickDiaryMode=qmode.dataset.quickDiaryMode;renderQuickDiaryMode();setTimeout(()=>state.quickDiaryMode==='DAILY'?els.quickDailyText?.focus():els.quickMonthlyText?.focus(),30);return;}const workspace=e.target.closest('[data-diary-workspace]');if(workspace){state.diaryWorkspace=workspace.dataset.diaryWorkspace;renderDiaryWorkspace();return;}const openCompleted=e.target.closest('[data-open-completed-month]');if(openCompleted){const key=openCompleted.dataset.openCompletedMonth;state.diaryWorkspace='MONTHLY';renderDiaryWorkspace();els.monthlyYearFilter.value=key.slice(0,4);els.monthlyMonthFilter.value=key.slice(5,7);renderMonthlyDiary();return;}const monthlyEdit=e.target.closest('[data-edit-monthly]');if(monthlyEdit){const item=state.monthlyDiary.find(x=>x.id===monthlyEdit.dataset.editMonthly);if(item)openMonthlyItem(item);return;}const monthlyDelete=e.target.closest('[data-delete-monthly]');if(monthlyDelete){deleteMonthlyItem(monthlyDelete.dataset.deleteMonthly);return;}const monthlyTarget=e.target.closest('[data-toggle-monthly-target]');if(monthlyTarget){toggleMonthlyTarget(monthlyTarget.dataset.toggleMonthlyTarget);return;}const diaryView=e.target.closest('[data-diary-view]');if(diaryView){state.diaryView=diaryView.dataset.diaryView;renderDiary();return;}const diaryEdit=e.target.closest('[data-edit-diary]');if(diaryEdit){const item=state.diary.find(x=>x.id===diaryEdit.dataset.editDiary);if(item)openDiaryEntry(item);return;}const diaryDelete=e.target.closest('[data-delete-diary]');if(diaryDelete){deleteDiaryEntry(diaryDelete.dataset.deleteDiary);return;}const diaryCard=e.target.closest('[data-diary-view-entry]');if(diaryCard&&!e.target.closest('button')){const item=state.diary.find(x=>x.id===diaryCard.dataset.diaryViewEntry);if(item)openDiaryEntry(item);return;}const gr=e.target.closest('[data-growth-range]');if(gr){state.growthRange=gr.dataset.growthRange;$$('[data-growth-range]').forEach(b=>b.classList.toggle('active',b.dataset.growthRange===state.growthRange));renderGrowthDashboard();return;}const owner=e.target.closest('[data-owner-view]');if(owner){state.selectedOwner=owner.dataset.ownerView;refreshOwnerControls();renderAll();return;}const assetView=e.target.closest('[data-asset-view]');if(assetView){state.selectedAssetView=assetView.dataset.assetView;els.holdingTypeFilter.value='ALL';renderAll();return;}const inlineEdit=e.target.closest('[data-inline-edit-holding]'),inlineSave=e.target.closest('[data-inline-save-holding]'),inlineCancel=e.target.closest('[data-inline-cancel-holding]'),noteView=e.target.closest('[data-note-view]'),noteEdit=e.target.closest('[data-note-edit]'),watchNoteView=e.target.closest('[data-watch-note-view]'),watchNoteEdit=e.target.closest('[data-watch-note-edit]'),holdingViewButton=e.target.closest('[data-view-holding-button]'),watchViewButton=e.target.closest('[data-view-watch-button]'),watchNoteButton=e.target.closest('[data-watch-note-button]'),edit=e.target.closest('[data-edit-holding]'),del=e.target.closest('[data-delete-holding]'),ew=e.target.closest('[data-edit-watch]'),dw=e.target.closest('[data-delete-watch]'),eu=e.target.closest('[data-edit-user]'),du=e.target.closest('[data-delete-user]'),ru=e.target.closest('[data-reset-user]'),tu=e.target.closest('[data-toggle-user]');if(inlineEdit){openInlineHoldingEdit(inlineEdit.dataset.inlineEditHolding);return;}if(inlineSave){saveInlineHolding(inlineSave.dataset.inlineSaveHolding,inlineSave);return;}if(inlineCancel){closeInlineHoldingEdit();return;}if(noteView){const item=state.holdings.find(x=>x.id===noteView.dataset.noteView);closeModals();if(item)openHoldingDrawer(item);return;}if(noteEdit){const item=state.holdings.find(x=>x.id===noteEdit.dataset.noteEdit);closeModals();if(item)openInvestment(item);return;}if(watchNoteView){const item=state.watchlist.find(x=>x.id===watchNoteView.dataset.watchNoteView);closeModals();if(item)openWatchDrawer(item);return;}if(holdingViewButton){const item=state.holdings.find(x=>x.id===holdingViewButton.dataset.viewHoldingButton);if(item)openHoldingDrawer(item);return;}if(watchViewButton){const item=state.watchlist.find(x=>x.id===watchViewButton.dataset.viewWatchButton);if(item)openWatchDrawer(item);return;}if(watchNoteButton){const item=state.watchlist.find(x=>x.id===watchNoteButton.dataset.watchNoteButton);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(watchNoteEdit){const item=state.watchlist.find(x=>x.id===watchNoteEdit.dataset.watchNoteEdit);closeModals();if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},80);}return;}if(edit){openInvestment(state.holdings.find(x=>x.id===edit.dataset.editHolding));return;}if(del){deleteItem('deleteHolding',del.dataset.deleteHolding,'investment');return;}if(ew){openWatch(state.watchlist.find(x=>x.id===ew.dataset.editWatch));return;}if(dw){deleteItem('deleteWatchItem',dw.dataset.deleteWatch,'watchlist item');return;}if(eu){openEditUserModal(eu.dataset.editUser);return;}if(du){deleteUserAccount(du.dataset.deleteUser);return;}if(ru){resetUserPassword(ru.dataset.resetUser);return;}if(tu){toggleUser(tu.dataset.toggleUser,tu.dataset.active==='true');return;}const watchNoteCell=e.target.closest('[data-watch-note-cell]');if(watchNoteCell){const item=state.watchlist.find(x=>x.id===watchNoteCell.dataset.watchNoteCell);if(item){openWatchDrawer(item);setTimeout(()=>{const t=$('drawerWatchNote');if(t)t.focus();},80);}return;}const noteCell=e.target.closest('[data-note-cell]');if(noteCell){const item=state.holdings.find(x=>x.id===noteCell.dataset.noteCell);if(item)openHoldingDrawer(item);return;}const watchView=e.target.closest('[data-view-watch]');if(watchView){const item=state.watchlist.find(x=>x.id===watchView.dataset.viewWatch);if(item)openWatchDrawer(item);return;}const view=e.target.closest('[data-view-holding]');if(view){openHoldingDrawer(state.holdings.find(x=>x.id===view.dataset.viewHolding));}});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.autoRefreshMinutes&&Date.now()>=state.autoRefreshNextAt&&!state.syncing){resetAutoRefreshClock();loadDashboard(true);}});
   document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('[data-custom-cell]')){e.preventDefault();openCustomValueEditor(e.target.dataset.customSection,e.target.dataset.customRecord,e.target.dataset.customKey);return;}if(e.key==='Escape'){if($('printPreviewOverlay')){closePrintPreview();return;}if(state.dataFullscreenSection){exitDataFullscreen();return;}if(els.holdingDrawer?.classList.contains('open'))closeHoldingDrawer();else closeModals();return;}if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('[data-view-holding]')){e.preventDefault();openHoldingDrawer(state.holdings.find(x=>x.id===e.target.dataset.viewHolding));return;}if((e.key==='Enter'||e.key===' ')&&e.target?.matches?.('[data-view-watch]')){e.preventDefault();openWatchDrawer(state.watchlist.find(x=>x.id===e.target.dataset.viewWatch));}});
 }
