@@ -10,7 +10,7 @@
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260823-192">
+  <link rel="stylesheet" href="styles.css?v=20260823-1921">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -36,7 +36,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.2</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · checking…</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.2.1</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · checking…</span></div>
         </div>
       </form>
     </div>
@@ -58,14 +58,14 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v19.2</span><span id="dashboardBackendVersion">Backend · checking…</span>
+        <span id="dashboardVersion">Frontend · v19.2.1</span><span id="dashboardBackendVersion">Backend · checking…</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.2</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE …</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.2.1</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE …</span></div></div></div>
         <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
 
@@ -643,6 +643,7 @@
             <div><p class="eyebrow">STICKY NOTES</p><h3>Targets & reminders</h3></div>
             <div class="sticky-head-actions"><span id="stickyNotesCount">0 active</span><button id="addStickyNoteBtn" class="sticky-add-button" type="button">+ Add sticky</button></div>
           </div>
+          <p class="sticky-pin-help">📌 Pin a note to keep it floating above other dashboard fields. Done and Delete remain available while pinned.</p>
           <div id="stickyNotesList" class="sticky-notes-list"></div>
           <div id="stickyNotesEmpty" class="sticky-empty">No active target or reminder. Add one when something needs your attention.</div>
         </section>
@@ -664,6 +665,8 @@
         </section>
       </div>
     </aside>
+
+    <div id="pinnedStickyLayer" class="pinned-sticky-layer hidden" aria-label="Pinned sticky notes"></div>
 
     <div id="dashboardHScroll" class="dashboard-hscroll hidden" aria-label="Horizontal dashboard scroller">
       <button id="dashboardHScrollLeft" class="dashboard-hscroll-arrow" type="button" title="Scroll left">‹</button>
@@ -883,7 +886,7 @@
   </aside>
 
   <div id="toastRegion" class="toast-region" aria-live="polite"></div>
-  <script src="config.js?v=20260823-192"></script>
-  <script src="app-v19-2.js?v=20260823-192" defer></script>
+  <script src="config.js?v=20260823-1921"></script>
+  <script src="app-v19-2-1.js?v=20260823-1921" defer></script>
 </body>
 </html>

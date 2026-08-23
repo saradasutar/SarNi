@@ -5584,3 +5584,138 @@ td.negative strong{
   .transaction-summary-card>strong{font-size:20px}
   .transaction-hero h2{font-size:22px}
 }
+
+
+/* =========================================================
+   V19.2.1 — SMOOTHER HORIZONTAL SCROLLING
+   ========================================================= */
+.table-wrap{
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+  scrollbar-gutter:stable;
+  scroll-behavior:smooth;
+  touch-action:pan-x pan-y;
+}
+#transactionsSection .table-wrap{
+  scroll-behavior:smooth;
+}
+.dashboard-hscroll{
+  transform:translateZ(0);
+  contain:layout paint;
+}
+.dashboard-hscroll-range{
+  cursor:ew-resize;
+}
+.dashboard-hscroll-arrow{
+  transition:transform .12s ease,background .12s ease,border-color .12s ease;
+}
+.dashboard-hscroll-arrow:active{
+  transform:scale(.94);
+}
+@media (prefers-reduced-motion:reduce){
+  .table-wrap{scroll-behavior:auto}
+}
+
+/* =========================================================
+   V19.2.1 — PINNED STICKY NOTES ABOVE OTHER FIELDS
+   Pin state is saved on this browser/device; note data stays in backend.
+   ========================================================= */
+.sticky-pin-help{
+  margin:0 0 8px;
+  padding:7px 9px;
+  border-radius:9px;
+  background:#f5f4ff;
+  color:#6b67a9;
+  font-size:8.5px;
+  font-weight:800;
+  line-height:1.35;
+}
+.sticky-pin-button{
+  min-height:29px;
+  padding:5px 8px;
+  border:1px solid #d7d8e8;
+  border-radius:9px;
+  color:#625f8e;
+  background:#f7f6ff;
+  font-size:8.2px;
+  font-weight:950;
+  cursor:pointer;
+}
+.sticky-pin-button:hover{
+  background:#eeecff;
+  border-color:#bbb8e6;
+}
+.sticky-pin-button.active{
+  color:#5349ad;
+  background:#eae7ff;
+  border-color:#c5bff0;
+}
+.sticky-note-card.is-pinned{
+  box-shadow:0 0 0 2px rgba(91,82,190,.12),0 9px 20px rgba(72,61,151,.12);
+}
+.pinned-sticky-layer{
+  position:fixed;
+  top:82px;
+  right:18px;
+  z-index:185;
+  width:min(315px,calc(100vw - 28px));
+  max-height:calc(100vh - 160px);
+  display:grid;
+  gap:10px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:2px 3px 10px;
+  pointer-events:none;
+  scrollbar-width:thin;
+}
+.pinned-sticky-layer.hidden{display:none!important}
+.pinned-sticky-layer .sticky-note-card{
+  pointer-events:auto;
+}
+.sticky-note-card.pinned-floating{
+  width:100%;
+  min-height:0;
+  flex:none;
+  padding:13px;
+  border-width:1px;
+  box-shadow:0 14px 36px rgba(24,31,69,.22),0 0 0 1px rgba(255,255,255,.7) inset;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.sticky-pinned-badge{
+  display:inline-flex;
+  align-items:center;
+  padding:3px 7px;
+  border-radius:999px;
+  color:#5148ad;
+  background:rgba(235,231,255,.92);
+  font-size:7.5px;
+  font-weight:950;
+}
+.pinned-sticky-due{
+  margin-top:6px;
+}
+.pinned-actions{
+  flex-wrap:wrap;
+}
+.pinned-sticky-layer .sticky-note-card h4{
+  font-size:13px;
+}
+.pinned-sticky-layer .sticky-note-card p{
+  font-size:10px;
+}
+@media(max-width:760px){
+  .pinned-sticky-layer{
+    top:68px;
+    right:8px;
+    width:min(290px,calc(100vw - 16px));
+    max-height:calc(100vh - 130px);
+  }
+}
+body.data-fullscreen-open .pinned-sticky-layer{
+  visibility:visible!important;
+  pointer-events:none!important;
+}
+body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
+  pointer-events:auto!important;
+}
