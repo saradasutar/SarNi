@@ -10,7 +10,7 @@
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260823-1928">
+  <link rel="stylesheet" href="styles.css?v=20260823-1929">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -36,7 +36,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.2.8</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · checking…</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.2.9</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · checking…</span></div>
         </div>
       </form>
     </div>
@@ -58,14 +58,14 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v19.2.8</span><span id="dashboardBackendVersion">Backend · checking…</span>
+        <span id="dashboardVersion">Frontend · v19.2.9</span><span id="dashboardBackendVersion">Backend · checking…</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.2.8</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE …</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.2.9</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE …</span></div></div></div>
         <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
 
@@ -625,7 +625,22 @@
       </section>
 
       <section id="usersSection" class="page-section hidden">
-        <article class="panel table-panel"><div class="panel-head responsive-head"><div><p class="eyebrow">ADMINISTRATION</p><h3>Dashboard users</h3></div><button id="addUserBtn" class="primary-button">+ Create user</button></div><div class="table-wrap"><table><thead><tr><th>Username</th><th>Name</th><th>Role</th><th>Status</th><th>Last login</th><th></th></tr></thead><tbody id="usersBody"></tbody></table></div></article>
+        <article class="panel table-panel user-admin-panel">
+          <div class="panel-head responsive-head">
+            <div>
+              <p class="eyebrow">ADMINISTRATION</p>
+              <h3>Dashboard users</h3>
+              <p class="user-admin-help">Create accounts, edit name/role/status, reset password or delete an account. Deleting a login account does not delete portfolio data.</p>
+            </div>
+            <button id="addUserBtn" class="primary-button" type="button">+ Create user</button>
+          </div>
+          <div class="table-wrap user-table-wrap">
+            <table class="users-table">
+              <thead><tr><th>Username</th><th>Name</th><th>Role</th><th>Status</th><th>Last login</th><th>Actions</th></tr></thead>
+              <tbody id="usersBody"></tbody>
+            </table>
+          </div>
+        </article>
       </section>
     </main>
 
@@ -903,7 +918,42 @@
 
     <div id="passwordModal" class="modal small-modal hidden" role="dialog" aria-modal="true"><div class="modal-head"><div><p class="eyebrow">ACCOUNT SECURITY</p><h2>Change password</h2></div><button class="modal-close" data-close-modal>×</button></div><form id="passwordForm" class="stack-form"><label>Current password<input id="currentPassword" type="password" required></label><label>New password<input id="newPassword" type="password" required minlength="10"></label><label>Confirm new password<input id="confirmPassword" type="password" required minlength="10"></label><p class="tiny muted">At least 10 characters with upper-case, lower-case, number and symbol.</p><div class="form-actions"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button type="submit" class="primary-button">Update password</button></div></form></div>
 
-    <div id="userModal" class="modal small-modal hidden" role="dialog" aria-modal="true"><div class="modal-head"><div><p class="eyebrow">ADMINISTRATION</p><h2>Create user</h2></div><button class="modal-close" data-close-modal>×</button></div><form id="userForm" class="stack-form"><label>Username<input id="newUsername" required maxlength="60" pattern="[A-Za-z0-9._-]+"></label><label>Display name<input id="newDisplayName" required maxlength="100"></label><label>Role<select id="newUserRole"><option value="USER">User</option><option value="ADMIN">Admin</option></select></label><label>Temporary password<input id="newUserPassword" type="password" required minlength="10"></label><div class="form-actions"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button type="submit" class="primary-button">Create user</button></div></form></div>
+    <div id="userModal" class="modal small-modal hidden user-admin-modal" role="dialog" aria-modal="true" aria-labelledby="userModalTitle">
+    <div class="modal-head">
+      <div><p class="eyebrow">ADMINISTRATION</p><h2 id="userModalTitle">Create user</h2></div>
+      <button class="modal-close" data-close-modal type="button">×</button>
+    </div>
+    <form id="userForm" class="stack-form">
+      <input id="userFormMode" type="hidden" value="CREATE">
+      <input id="editOriginalUsername" type="hidden" value="">
+      <label>Username
+        <input id="newUsername" required maxlength="60" pattern="[A-Za-z0-9._-]+" autocomplete="off">
+        <small id="usernameEditHelp" class="form-help">3–60 characters: letters, numbers, dot, underscore or hyphen.</small>
+      </label>
+      <label>Display name<input id="newDisplayName" required maxlength="100"></label>
+      <label>Role
+        <select id="newUserRole"><option value="USER">User</option><option value="ADMIN">Admin</option></select>
+      </label>
+      <label id="newUserActiveLabel" class="user-active-label hidden">Account status
+        <select id="newUserActive"><option value="true">Active</option><option value="false">Disabled</option></select>
+      </label>
+      <div id="userPasswordGroup" class="user-password-group">
+        <label>Temporary password
+          <div class="user-password-row">
+            <input id="newUserPassword" type="text" minlength="10" autocomplete="new-password">
+            <button id="generateUserPasswordBtn" type="button" class="secondary-button compact-user-btn">Generate</button>
+            <button id="copyUserPasswordBtn" type="button" class="secondary-button compact-user-btn">Copy</button>
+          </div>
+          <small class="form-help">At least 10 characters with uppercase, lowercase, number and symbol. A strong password is generated automatically.</small>
+        </label>
+      </div>
+      <div id="userFormStatus" class="user-form-status" aria-live="polite"></div>
+      <div class="form-actions">
+        <button type="button" class="secondary-button" data-close-modal>Cancel</button>
+        <button id="saveUserBtn" type="submit" class="primary-button">Create user</button>
+      </div>
+    </form>
+  </div>
   </div>
 
 
@@ -929,7 +979,7 @@
   </aside>
 
   <div id="toastRegion" class="toast-region" aria-live="polite"></div>
-  <script src="config.js?v=20260823-1928"></script>
-  <script src="app-v19-2-8.js?v=20260823-1928" defer></script>
+  <script src="config.js?v=20260823-1929"></script>
+  <script src="app-v19-2-9.js?v=20260823-1929" defer></script>
 </body>
 </html>

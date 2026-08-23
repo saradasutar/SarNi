@@ -6091,3 +6091,129 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
     width:100%;
   }
 }
+
+
+/* =========================================================
+   V19.2.9 — ADMIN USER MANAGEMENT
+   ========================================================= */
+.user-admin-help{
+  margin:4px 0 0;
+  max-width:720px;
+  color:#778198;
+  font-size:9px;
+  font-weight:700;
+  line-height:1.4;
+}
+.users-table .user-row-actions{
+  min-width:300px;
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.self-user-badge{
+  display:inline-flex;
+  margin-left:6px;
+  padding:3px 6px;
+  border-radius:999px;
+  color:#5149a2;
+  background:#eceaff;
+  border:1px solid #d6d1f5;
+  font-size:7px;
+  font-weight:1000;
+}
+.user-role-badge,
+.user-status-badge{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 7px;
+  border-radius:999px;
+  font-size:8px;
+  font-weight:1000;
+}
+.user-role-badge.admin{
+  color:#5f43aa;
+  background:#f0eaff;
+  border:1px solid #d9c9f4;
+}
+.user-role-badge.user{
+  color:#33648e;
+  background:#edf6ff;
+  border:1px solid #c9deef;
+}
+.user-status-badge.active{
+  color:#08795b;
+  background:#e8f7f0;
+  border:1px solid #bde7d5;
+}
+.user-status-badge.disabled{
+  color:#bd3e50;
+  background:#fff0f2;
+  border:1px solid #efc2c9;
+}
+.user-row.is-current-user{
+  background:linear-gradient(90deg,rgba(239,238,255,.65),rgba(255,255,255,.2));
+}
+.user-delete-button:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+}
+.user-admin-modal{
+  width:min(520px,calc(100vw - 30px));
+}
+.form-help{
+  display:block;
+  margin-top:5px;
+  color:#7d8799;
+  font-size:8px;
+  font-weight:700;
+  line-height:1.35;
+}
+.user-password-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  gap:6px;
+  align-items:center;
+}
+.compact-user-btn{
+  min-height:43px!important;
+  padding:7px 10px!important;
+  white-space:nowrap;
+}
+.user-form-status{
+  min-height:18px;
+  padding:7px 9px;
+  border-radius:9px;
+  color:#68748a;
+  background:#f4f6fa;
+  font-size:8.5px;
+  font-weight:800;
+  line-height:1.35;
+}
+.user-form-status:empty{
+  display:none;
+}
+.user-form-status.info{
+  color:#4f5e94;
+  background:#f0f3ff;
+}
+.user-form-status.success{
+  color:#08795b;
+  background:#eaf8f1;
+}
+.user-form-status.error{
+  color:#b73b4f;
+  background:#fff0f2;
+  border:1px solid #efc2c9;
+}
+@media(max-width:680px){
+  .user-password-row{
+    grid-template-columns:1fr 1fr;
+  }
+  .user-password-row input{
+    grid-column:1 / -1;
+  }
+  .users-table .user-row-actions{
+    min-width:210px;
+  }
+}
