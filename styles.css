@@ -5788,3 +5788,14 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
 .drawer-date-list.purchase b{color:#087b5d;background:#e8f7f0}.drawer-date-list.sale b{color:#c9344c;background:#fff0f2}.drawer-date-list em{color:#9ca3b1;font-size:8.5px;font-style:normal}
 .drawer-history-warning{margin-top:8px;padding:8px 9px;border-radius:9px;color:#8f5b22;background:#fff7e9;border:1px solid #f3ddb9;font-size:8.5px;font-weight:750;line-height:1.35}
 @media(max-width:900px){.holding-pnl-strip{grid-template-columns:repeat(2,minmax(145px,1fr))}}@media(max-width:560px){.holding-pnl-strip{grid-template-columns:1fr}}
+
+/* V19.2.4 saved views, filters and visual grouping */
+.saved-view-bar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 10px;margin:8px 0;border:1px solid #e2e5ef;border-radius:11px;background:linear-gradient(90deg,#fbfcff,#f7f8ff)}
+.saved-view-left{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.saved-view-label{color:#535e77;font-size:8.5px;font-weight:1000;text-transform:uppercase;letter-spacing:.045em}.view-preset-select{min-width:175px;font-weight:850}
+.saved-view-save{background:#fff8df!important;border-color:#ead591!important;color:#6d5821!important}.saved-view-status{color:#737d91;font-size:8px;font-weight:800}
+.investment-view-legend{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.view-legend-chip{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:7.5px;font-weight:1000;white-space:nowrap}
+.view-legend-chip.transaction{color:#6c5c27;background:#fff5cf;border:1px solid #eedb8e}.view-legend-chip.result{color:#315f8f;background:#edf5ff;border:1px solid #c8dcf3}.view-legend-chip.performance{color:#655293;background:#f4efff;border:1px solid #ddd0f5}
+.holdings-table th.trade-history-column{background:#fff5d7!important;color:#705d26!important}.holdings-table th.my-result-column{background:#edf5ff!important;color:#315d87!important}.holdings-table th.asset-performance-column{background:#f3efff!important;color:#654e92!important}
+.holdings-table td.trade-history-column{background:rgba(255,248,220,.32)}.holdings-table td.my-result-column{background:rgba(237,245,255,.22)}.holdings-table td.asset-performance-column{background:rgba(245,240,255,.28)}
+.holdings-table .group-start{border-left:3px solid rgba(93,104,160,.26)!important}.advanced-filter{min-width:132px}
+@media(max-width:900px){.saved-view-bar{align-items:flex-start}.investment-view-legend{width:100%}}

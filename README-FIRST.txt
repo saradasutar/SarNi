@@ -1,45 +1,42 @@
-MYFINANCE V19.2.3 — EXACT DATES + PROFIT/LOSS TO DATE
-Frontend v19.2.3 / Backend v3.15.1
+MYFINANCE V19.2.4 — SAVED DEFAULT VIEW + ADVANCED FILTERS
+Backend remains v3.15.1.
 
-This version improves the Holdings dashboard so transaction dates and profit/loss are visible and not ambiguous.
+Recommended default Holdings view: My Investment Result.
+This hides 1D–10Y market/scheme performance by default so it is not confused with your own investment return.
 
-WHAT YOU WILL SEE
-- Separate Purchase Date(s) and Sale Date(s) columns.
-- Exact BUY date in green.
-- Exact SALE/redemption date in red.
-- For multiple MF SIPs/stock buys: First BUY + Latest BUY + number of recorded dates.
-- Hover the date cell for the recorded dates; the Holding detail drawer lists all exact dates.
-- Current P/L Till Today: current value minus current cost basis.
-- Realised P/L: FIFO P/L from completed sales/redemptions.
-- Total P/L To Date: Current P/L + Realised P/L when complete history exists.
-- PROFIT = green. LOSS = red.
-- A compact P/L strip above Holdings shows Current P/L, Realised P/L, Total P/L and trade-date coverage.
-- Latest price/NAV date is shown so “till today” is not misleading.
+View presets:
+- My Investment Result
+- MF / Stock Performance
+- Compact Result
+- Full View
+- Custom
 
-WHY DATES CAN STILL BE MISSING
-A holdings snapshot does not contain historical trade dates. Exact dates require:
-- MF transaction statement, or
-- Stock/ETF broker Tradebook.
-If a row says “Import broker tradebook” or “Import MF transaction statement”, the dashboard is telling you the source history is missing rather than inventing a date.
+Save current as default stores your visible/hidden Holdings columns and current Type, Result, Notes and Trade-history filters.
 
-BETTER STOCK MATCHING
-Backend v3.15.1 matches common symbol forms such as:
-HDFCBANK / NSE:HDFCBANK / HDFCBANK-EQ / HDFCBANK.NS
+New filters:
+- Current profit / Current loss
+- Total profit / Total loss
+- Realised profit / Realised loss
+- P/L pending
+- Has notes / No notes
+- Has purchase date / Has sale-redemption / Missing exact dates
 
-INSTALL — BOTH FRONTEND AND BACKEND
-Apps Script:
-1. Replace Code.gs with Code-v3.15.1.gs
-2. Save
-3. Deploy > Manage deployments > Edit existing Web App > New version > Deploy
-4. Execute as Me / Who has access: Anyone
+Visual groups:
+- Gold = trade history
+- Blue = your investment result
+- Purple = asset/scheme performance
 
-GitHub:
+Watchlist:
+- Has notes / No notes filter
+- Save current Watchlist filters + visible columns as default
+- Add/Edit/Delete Columns remains available
+
+INSTALL — FRONTEND ONLY
 Upload/replace:
-- index.html
-- styles.css
-- app-v19-2-3.js
-- app-v19-2-2.js (compatibility)
+index.html
+styles.css
+app-v19-2-4.js
+app-v19-2-3.js (compatibility)
 
-Keep the CURRENT working config.js /exec URL.
-
-Open with ?v=1923 and hard refresh (Command + Shift + R).
+Keep config.js and Backend v3.15.1 unchanged.
+Open with ?v=1924, then Command + Shift + R.
