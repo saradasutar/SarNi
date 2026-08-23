@@ -7060,3 +7060,124 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
     min-width:84px !important;
   }
 }
+
+
+/* =========================================================
+   FE v19.2.9 — STICKY TABLE HEADER
+   Keeps the heading row visible while scrolling through rows.
+   ========================================================= */
+
+/* Holdings: vertical scrolling happens inside the table viewport,
+   allowing the heading row to remain fixed. */
+#holdingsSection .table-wrap.wide-table[data-layout-scroll="holdings"]{
+  max-height:min(64vh, 650px);
+  overflow-x:auto !important;
+  overflow-y:auto !important;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  position:relative;
+}
+
+/* Watchlist gets the same convenient fixed heading row. */
+#watchlistSection .table-wrap.wide-table[data-layout-scroll="watchlist"]{
+  max-height:min(64vh, 650px);
+  overflow-x:auto !important;
+  overflow-y:auto !important;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  position:relative;
+}
+
+/* Transactions: keep the heading visible there too. */
+#transactionsSection .table-wrap.wide-table,
+#transactionsSection .transaction-table-wrap{
+  max-height:min(64vh, 650px);
+  overflow-x:auto !important;
+  overflow-y:auto !important;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  position:relative;
+}
+
+/* Header cells stay at the top of their table scroll area. */
+#holdingsSection .holdings-table thead th,
+#watchlistSection .watchlist-details-table thead th,
+#transactionsSection table thead th{
+  position:sticky !important;
+  top:0 !important;
+  z-index:42 !important;
+  background:#f5f7fc !important;
+  box-shadow:0 2px 0 rgba(206,214,232,.95), 0 5px 10px rgba(39,49,92,.05);
+}
+
+/* Frozen Investor / Asset header intersections must stay above both
+   the sticky heading row and the frozen body columns. */
+#holdingsSection .holdings-table thead th.sticky-col,
+#watchlistSection .watchlist-details-table thead th.sticky-col{
+  z-index:55 !important;
+}
+
+/* Frozen body columns remain below the header, but above normal body cells. */
+#holdingsSection .holdings-table tbody td.sticky-col,
+#watchlistSection .watchlist-details-table tbody td.sticky-col{
+  z-index:18 !important;
+}
+
+/* Slightly stronger heading readability while it remains fixed. */
+#holdingsSection .holdings-table thead th,
+#watchlistSection .watchlist-details-table thead th{
+  min-height:42px;
+  color:#34527a;
+  font-weight:950;
+  line-height:1.2;
+}
+
+/* Make the vertical scrollbar subtle but easy to use. */
+#holdingsSection .table-wrap.wide-table[data-layout-scroll="holdings"]::-webkit-scrollbar,
+#watchlistSection .table-wrap.wide-table[data-layout-scroll="watchlist"]::-webkit-scrollbar,
+#transactionsSection .table-wrap.wide-table::-webkit-scrollbar{
+  width:10px;
+  height:10px;
+}
+#holdingsSection .table-wrap.wide-table[data-layout-scroll="holdings"]::-webkit-scrollbar-thumb,
+#watchlistSection .table-wrap.wide-table[data-layout-scroll="watchlist"]::-webkit-scrollbar-thumb,
+#transactionsSection .table-wrap.wide-table::-webkit-scrollbar-thumb{
+  background:#c5cce0;
+  border:2px solid transparent;
+  border-radius:999px;
+  background-clip:padding-box;
+}
+
+/* Mobile: give the table enough screen height while keeping the header fixed. */
+@media(max-width:860px){
+  #holdingsSection .table-wrap.wide-table[data-layout-scroll="holdings"],
+  #watchlistSection .table-wrap.wide-table[data-layout-scroll="watchlist"],
+  #transactionsSection .table-wrap.wide-table,
+  #transactionsSection .transaction-table-wrap{
+    max-height:62dvh;
+  }
+
+  #holdingsSection .holdings-table thead th,
+  #watchlistSection .watchlist-details-table thead th,
+  #transactionsSection table thead th{
+    top:0 !important;
+  }
+}
+
+/* Printing must use the ordinary table header flow. */
+@media print{
+  #holdingsSection .table-wrap.wide-table[data-layout-scroll="holdings"],
+  #watchlistSection .table-wrap.wide-table[data-layout-scroll="watchlist"],
+  #transactionsSection .table-wrap.wide-table,
+  #transactionsSection .transaction-table-wrap{
+    max-height:none !important;
+    overflow:visible !important;
+  }
+
+  #holdingsSection .holdings-table thead th,
+  #watchlistSection .watchlist-details-table thead th,
+  #transactionsSection table thead th{
+    position:static !important;
+    box-shadow:none !important;
+  }
+}
