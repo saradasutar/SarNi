@@ -3,11 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="theme-color" content="#eef5ff">
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260823-11">
+  <link rel="stylesheet" href="styles.css?v=20260823-1929">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -25,29 +28,45 @@
         <div><p class="eyebrow">WELCOME BACK</p><h2>Sign in</h2><p class="muted">Use your Apps Script dashboard username and password.</p></div>
         <label>Username<input id="loginUsername" name="username" autocomplete="username" required maxlength="60" placeholder="admin"></label>
         <label>Password<div class="password-wrap"><input id="loginPassword" name="password" type="password" autocomplete="current-password" required maxlength="200" placeholder="Your password"><button type="button" class="text-button" data-toggle-password="loginPassword">Show</button></div></label>
+        <div class="login-options">
+          <label class="remember-user"><input id="rememberUsername" type="checkbox"><span>Save username on this device</span></label>
+          <span class="remember-note">Password is never saved</span>
+        </div>
         <button id="loginButton" class="primary-button full" type="submit">Sign in</button>
         <p id="loginMessage" class="form-message" role="alert"></p>
-        <p class="tiny muted">Your password is never stored in the browser.</p>
+        <div class="login-meta">
+          <p class="tiny muted">Your password is never stored in the browser.</p>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.2.9</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · checking…</span></div>
+        </div>
       </form>
     </div>
   </section>
 
   <div id="appView" class="app-view hidden">
+    <div id="runtimeWarning" class="runtime-warning hidden" role="alert"></div>
     <aside class="sidebar">
       <div class="side-brand"><div class="brand-mark small">₹</div><div><strong id="sideAppName">My Finance</strong><span>Family portfolio</span></div></div>
       <nav class="side-nav" aria-label="Main navigation">
         <button class="nav-item active" data-section="overview"><span>◫</span>Overview</button>
         <button class="nav-item" data-section="holdings"><span>▥</span>Holdings</button>
+        <button class="nav-item" data-section="transactions"><span>⇄</span>Transactions</button>
         <button class="nav-item" data-section="watchlist"><span>☆</span>Watchlist</button>
+        <button class="nav-item" data-section="diary"><span>✎</span>Diary</button>
+        <button id="quickDiaryBtn" class="nav-item quick-diary-nav" type="button"><span>✚</span>Quick Diary</button>
         <button class="nav-item admin-only hidden" data-section="users"><span>♙</span>Users</button>
       </nav>
+      <div class="sidebar-session-card">
+        <span class="sidebar-session-label">SIGNED IN AS</span>
+        <strong id="dashboardUsername">—</strong>
+        <span id="dashboardVersion">Frontend · v19.2.9</span><span id="dashboardBackendVersion">Backend · checking…</span>
+      </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div>
-        <div class="top-actions"><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.2.9</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE …</span></div></div></div>
+        <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
 
       <div class="portfolio-switch-wrap portfolio-filter-bar">
@@ -66,17 +85,123 @@
         <div class="quick-actions"><button id="importBtn" class="secondary-button">⇧ Import portfolio</button><button id="exportBtn" class="secondary-button">Export CSV</button></div>
       </div>
 
-      <section id="overviewSection" class="page-section">
+      
+<section id="overviewSection" class="page-section">
+  <div class="overview-mode-bar">
+    <div class="overview-mode-switcher" role="tablist" aria-label="Dashboard view">
+      <button id="personalHomeModeBtn" type="button" class="active" data-overview-mode="PERSONAL"><span>⌂</span> My Home</button>
+      <button id="investmentHomeModeBtn" class="overview-investment-mode-hidden" type="button" data-overview-mode="INVESTMENT" aria-hidden="true" tabindex="-1"><span>₹</span> Investments</button>
+    </div>
+    <button id="overviewSetDefaultBtn" type="button" class="overview-default-button overview-investment-mode-hidden" aria-hidden="true" tabindex="-1">✓ Default view</button>
+  </div>
+
+  <div id="personalHomeContent" class="personal-home-content">
+    <section class="personal-home-hero tint-lilac">
+      <div>
+        <p class="eyebrow">MY DAILY DASHBOARD</p>
+        <h2 id="personalHomeGreeting">Your day at a glance</h2>
+        <p>Diary, targets, reminders and a daily thought. Investment details stay hidden until you choose to view them.</p>
+      </div>
+      <div class="personal-home-actions">
+        <button id="homeDailyWriteBtn" type="button" class="primary-button">✎ Daily diary</button>
+        <button id="homeMonthlyWriteBtn" type="button" class="secondary-button">▣ Monthly diary</button>
+        <button id="homeAddTargetBtn" type="button" class="secondary-button">+ Target / reminder</button>
+      </div>
+    </section>
+
+    <div class="personal-home-grid">
+      <article class="personal-home-card diary-home-card tint-blue">
+        <div class="personal-card-head">
+          <div><p class="eyebrow">TODAY'S DIARY</p><h3>Write & remember</h3></div>
+          <span id="homeDiaryCount" class="personal-count-badge">0 today</span>
+        </div>
+        <div id="homeDiaryPreview" class="home-diary-preview">
+          <p class="personal-empty-copy">Nothing written today yet.</p>
+        </div>
+        <div class="personal-card-actions">
+          <button id="homeDiaryQuickBtn" type="button">+ Write now</button>
+          <button id="homeFullDiaryBtn" type="button">Open Diary</button>
+        </div>
+      </article>
+
+      <article class="personal-home-card target-home-card tint-yellow">
+        <div class="personal-card-head">
+          <div><p class="eyebrow">TARGETS & REMINDERS</p><h3>What needs attention</h3></div>
+          <span id="homeStickyCount" class="personal-count-badge target-count">0 active</span>
+        </div>
+        <div id="homeStickySummary" class="home-sticky-summary">
+          <div><strong id="homeStickyDueToday">0</strong><span>Due today</span></div>
+          <div><strong id="homeStickyOverdue">0</strong><span>Overdue</span></div>
+          <div><strong id="homeStickyUpcoming">0</strong><span>Upcoming</span></div>
+        </div>
+        <div id="homeStickyPreview" class="home-sticky-preview">
+          <p class="personal-empty-copy">No active target or reminder.</p>
+        </div>
+        <div class="personal-card-actions">
+          <button id="homeTargetAddBtn" type="button">+ Add</button>
+          <button id="homeTargetsOpenBtn" type="button">Open panel</button>
+        </div>
+      </article>
+
+      <article id="homeQuoteCard" class="personal-home-card quote-home-card quote-tone-0">
+        <div class="personal-card-head">
+          <div><p class="eyebrow">QUOTE OF THE DAY</p><h3>Pause for a thought</h3></div>
+          <div class="quote-head-tools"><span id="homeQuoteAutoStatus" class="quote-auto-status">Auto move · 12s</span><span class="quote-mini-mark">“</span></div>
+        </div>
+        <blockquote id="homeQuoteText">Your saved life quote will appear here.</blockquote>
+        <div id="homeQuoteAuthor" class="home-quote-author">— Quote Library</div>
+        <div class="personal-card-actions">
+          <button id="homeQuoteNextBtn" type="button">↻ Another</button>
+          <button id="homeQuotesOpenBtn" type="button">Open Quotes</button>
+        </div>
+      </article>
+    </div>
+
+    <section class="personal-home-footer tint-green">
+      <div>
+        <strong>Investment details stay outside the Overview.</strong>
+        <span>Open Holdings or Watchlist from the left menu only when you want financial details.</span>
+      </div>
+      <button id="homeShowInvestmentsBtn" type="button">▥ Open Holdings</button>
+    </section>
+  </div>
+
+  <div id="investmentOverviewContent" class="investment-overview-content hidden">
+<div id="masterLoadBanner" class="master-load-banner hidden">
+          <div>
+            <p class="eyebrow">MASTER SPREADSHEET NOT YET APPLIED</p>
+            <h3>Your dashboard is still showing the old portfolio data.</h3>
+            <p>The uploaded master workbook contains 35 consolidated investments and 17 watchlist items. Load it once to replace the old holdings/watchlist.</p>
+          </div>
+          <button id="masterLoadNowBtn" class="primary-button" type="button">⇄ Load Master Sheet Data</button>
+        </div>
         <div class="welcome-banner">
-          <div><p class="eyebrow">PORTFOLIO SNAPSHOT</p><h2 id="welcomeTitle">Combined portfolio</h2><p id="lastUpdatedText">Loading your latest portfolio…</p></div>
+          <div><p class="eyebrow">LIVE WEALTH DASHBOARD</p><h2 id="welcomeTitle">Combined portfolio</h2><p id="lastUpdatedText">Loading your latest portfolio…</p><div class="live-data-line"><span class="live-dot"></span><span>Portfolio + watchlist auto tracking</span></div></div>
           <div class="banner-chip" id="viewChip">Combined</div>
         </div>
 
+        <div class="overview-utility-row">
+          <button id="overviewStickyShortcut" class="overview-utility-chip sticky-chip" type="button"><span>📌</span><strong id="overviewStickyShortcutCount">0 active</strong><small>Targets & reminders</small></button>
+          <button id="overviewQuoteShortcut" class="overview-utility-chip quote-chip" type="button"><span>💬</span><strong>Daily quote</strong><small>Open right panel</small></button>
+        </div>
+
         <div class="summary-grid">
-          <article class="summary-card accent-blue"><div class="card-icon">₹</div><p id="sumInvestedLabel">Invested / cost value</p><strong id="sumInvested">₹0</strong><span id="sumAssetCount">0 holdings</span></article>
-          <article class="summary-card accent-green"><div class="card-icon">↗</div><p id="sumCurrentLabel">Current value</p><strong id="sumCurrent">₹0</strong><span id="sumPricedCount">0 priced</span></article>
-          <article class="summary-card accent-purple"><div class="card-icon">±</div><p>Total gain / loss</p><strong id="sumGain">₹0</strong><span id="sumReturn">0.00%</span></article>
-          <article class="summary-card accent-orange"><div class="card-icon">▦</div><p>Selected view</p><strong id="sumSplit">All investments</strong><span id="sumWatchCount">0 watchlist</span></article>
+          <article class="summary-card accent-blue"><div class="card-icon">₹</div><p id="sumInvestedLabel">Invested / cost value</p><strong id="sumInvested">₹0</strong><span id="sumAssetCount">0 holdings</span><div id="sumInvestedTrend" class="summary-trend neutral">Tracking growth…</div></article>
+          <article class="summary-card accent-green"><div class="card-icon">↗</div><p id="sumCurrentLabel">Current value</p><strong id="sumCurrent">₹0</strong><span id="sumPricedCount">0 priced</span><div id="sumCurrentTrend" class="summary-trend neutral">Tracking growth…</div></article>
+          <article class="summary-card accent-purple"><div class="card-icon">±</div><p>Total gain / loss</p><strong id="sumGain">₹0</strong><span id="sumReturn">0.00%</span><div id="sumGainTrend" class="summary-trend neutral">Latest portfolio result</div></article>
+          <article class="summary-card accent-orange"><div class="card-icon">☆</div><p>Watchlist pulse</p><strong id="sumSplit">All investments</strong><span id="sumWatchCount">0 watchlist</span><div id="sumWatchTrend" class="summary-trend neutral">Tracking opportunities…</div></article>
+        </div>
+        <div class="insight-grid">
+          <article class="panel trend-panel portfolio-trend-panel">
+            <div class="panel-head trend-panel-head"><div><p class="eyebrow">WEALTH GROWTH</p><h3>Invested capital vs current value</h3><p class="panel-subcopy">Automatically records dashboard snapshots while you use My Finance.</p></div><div id="growthRangeButtons" class="range-switcher"><button type="button" data-growth-range="7D">7D</button><button type="button" class="active" data-growth-range="30D">30D</button><button type="button" data-growth-range="ALL">All</button></div></div>
+            <div class="growth-kpi-grid"><div class="growth-kpi"><span>Invested change</span><strong id="growthInvestedDelta">₹0</strong><small id="growthInvestedPct">0.00%</small></div><div class="growth-kpi"><span>Value change</span><strong id="growthValueDelta">₹0</strong><small id="growthValuePct">0.00%</small></div><div class="growth-kpi"><span>Portfolio gain</span><strong id="growthGainNow">₹0</strong><small id="growthReturnNow">0.00%</small></div></div>
+            <div id="portfolioGrowthChart" class="trend-chart"></div><div class="chart-legend"><span><i class="legend-line invested"></i>Invested amount</span><span><i class="legend-line current"></i>Current value</span><span id="growthHistoryNote" class="muted">Growth history starts from this version.</span></div>
+          </article>
+          <article class="panel trend-panel watch-trend-panel">
+            <div class="panel-head"><div><p class="eyebrow">WATCHLIST PULSE</p><h3>How close are ideas to your target?</h3><p class="panel-subcopy">Prices and target gaps refresh automatically with the portfolio.</p></div><span id="watchPulseBadge" class="pulse-badge">Live</span></div>
+            <div class="watch-pulse-grid"><div class="watch-pulse-card opportunity"><span>At / below target</span><strong id="watchAtTarget">0</strong><small>Potential opportunities</small></div><div class="watch-pulse-card near"><span>Within 5% of target</span><strong id="watchNearTarget">0</strong><small>Worth watching closely</small></div><div class="watch-pulse-card gap"><span>Average gap</span><strong id="watchAverageGap">—</strong><small>From your target prices</small></div><div class="watch-pulse-card total"><span>Watchlist size</span><strong id="watchPulseCount">0</strong><small>Stocks / ETFs / MFs</small></div></div>
+            <div id="watchlistTrendChart" class="trend-chart compact"></div><div class="chart-legend"><span><i class="legend-line watch"></i>Average distance to target</span><span id="watchTrendNote" class="muted">Lower is closer to your target.</span></div>
+          </article>
         </div>
 
         <article class="panel type-breakdown-panel">
@@ -93,18 +218,167 @@
         </div>
 
         <article class="panel"><div class="panel-head"><div><p class="eyebrow">TOP HOLDINGS</p><h3>Largest current holdings</h3></div><button class="link-button" data-section-link="holdings">View all</button></div><div id="topHoldings" class="mini-holdings empty-state">Add investments to begin.</div></article>
-      </section>
+  </div>
+</section>
 
-      <section id="holdingsSection" class="page-section hidden">
+<section id="holdingsSection" class="page-section hidden">
+        <section id="holdingsSummaryPanel" class="holdings-summary-panel is-collapsed" aria-label="Investment summary" aria-hidden="true">
+          <div class="holdings-summary-head">
+            <div>
+              <p class="eyebrow">HOLDINGS SUMMARY</p>
+              <h3>Invested · Present Value · Growth</h3>
+            </div>
+            <div class="holdings-summary-head-actions">
+              <span class="holdings-summary-note">Combined and investor-wise comparison</span>
+              <div class="summary-value-legend" aria-label="Summary colour guide">
+                <span class="invested">Invested</span>
+                <span class="present">Present value</span>
+                <span class="growth">Growth / Loss</span>
+              </div>
+              <button id="hideHoldingsSummaryInsideBtn" class="summary-inline-hide" type="button" data-hide-holdings-summary>Hide summary ↑</button>
+            </div>
+          </div>
+
+          <div class="holdings-summary-matrix holdings-value-growth-matrix">
+            <div class="holdings-summary-row summary-row-combined">
+              <div class="summary-owner-label">
+                <strong>Combined</strong>
+                <span>Whole portfolio</span>
+              </div>
+
+              <article class="holdings-mini-card total">
+                <span class="summary-card-title">Total Portfolio</span>
+                <div class="summary-metric"><span>Invested</span><strong id="holdSumCombinedTotalInvested">₹0</strong></div>
+                <div class="summary-metric"><span>Present value</span><strong id="holdSumCombinedTotalCurrent">₹0</strong></div>
+                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumCombinedTotalGrowth">₹0 · 0.00%</strong></div>
+              </article>
+
+              <article class="holdings-mini-card mf">
+                <span class="summary-card-title">Mutual Funds</span>
+                <div class="summary-metric"><span>Invested</span><strong id="holdSumCombinedMfInvested">₹0</strong></div>
+                <div class="summary-metric"><span>Present value</span><strong id="holdSumCombinedMfCurrent">₹0</strong></div>
+                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumCombinedMfGrowth">₹0 · 0.00%</strong></div>
+              </article>
+
+              <article class="holdings-mini-card stock">
+                <span class="summary-card-title">Stocks &amp; ETFs</span>
+                <div class="summary-metric"><span>Invested</span><strong id="holdSumCombinedStockInvested">₹0</strong></div>
+                <div class="summary-metric"><span>Present value</span><strong id="holdSumCombinedStockCurrent">₹0</strong></div>
+                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumCombinedStockGrowth">₹0 · 0.00%</strong></div>
+              </article>
+            </div>
+
+            <div class="holdings-summary-row summary-row-niharika">
+              <div class="summary-owner-label">
+                <strong>Niharika</strong>
+                <span>Individual portfolio</span>
+              </div>
+
+              <article class="holdings-mini-card total">
+                <span class="summary-card-title">Total Portfolio</span>
+                <div class="summary-metric"><span>Invested</span><strong id="holdSumNiharikaTotalInvested">₹0</strong></div>
+                <div class="summary-metric"><span>Present value</span><strong id="holdSumNiharikaTotalCurrent">₹0</strong></div>
+                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumNiharikaTotalGrowth">₹0 · 0.00%</strong></div>
+              </article>
+
+              <article class="holdings-mini-card mf">
+                <span class="summary-card-title">Mutual Funds</span>
+                <div class="summary-metric"><span>Invested</span><strong id="holdSumNiharikaMfInvested">₹0</strong></div>
+                <div class="summary-metric"><span>Present value</span><strong id="holdSumNiharikaMfCurrent">₹0</strong></div>
+                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumNiharikaMfGrowth">₹0 · 0.00%</strong></div>
+              </article>
+
+              <article class="holdings-mini-card stock">
+                <span class="summary-card-title">Stocks &amp; ETFs</span>
+                <div class="summary-metric"><span>Invested</span><strong id="holdSumNiharikaStockInvested">₹0</strong></div>
+                <div class="summary-metric"><span>Present value</span><strong id="holdSumNiharikaStockCurrent">₹0</strong></div>
+                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumNiharikaStockGrowth">₹0 · 0.00%</strong></div>
+              </article>
+            </div>
+
+            <div class="holdings-summary-row summary-row-sarada">
+              <div class="summary-owner-label">
+                <strong>Sarada</strong>
+                <span>Individual portfolio</span>
+              </div>
+
+              <article class="holdings-mini-card total">
+                <span class="summary-card-title">Total Portfolio</span>
+                <div class="summary-metric"><span>Invested</span><strong id="holdSumSaradaTotalInvested">₹0</strong></div>
+                <div class="summary-metric"><span>Present value</span><strong id="holdSumSaradaTotalCurrent">₹0</strong></div>
+                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumSaradaTotalGrowth">₹0 · 0.00%</strong></div>
+              </article>
+
+              <article class="holdings-mini-card mf">
+                <span class="summary-card-title">Mutual Funds</span>
+                <div class="summary-metric"><span>Invested</span><strong id="holdSumSaradaMfInvested">₹0</strong></div>
+                <div class="summary-metric"><span>Present value</span><strong id="holdSumSaradaMfCurrent">₹0</strong></div>
+                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumSaradaMfGrowth">₹0 · 0.00%</strong></div>
+              </article>
+
+              <article class="holdings-mini-card stock">
+                <span class="summary-card-title">Stocks &amp; ETFs</span>
+                <div class="summary-metric"><span>Invested</span><strong id="holdSumSaradaStockInvested">₹0</strong></div>
+                <div class="summary-metric"><span>Present value</span><strong id="holdSumSaradaStockCurrent">₹0</strong></div>
+                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumSaradaStockGrowth">₹0 · 0.00%</strong></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
         <article class="panel table-panel">
           <div class="panel-head responsive-head">
-            <div><p class="eyebrow">PORTFOLIO DETAILS</p><h3 id="holdingsHeading">Mutual funds, stocks and ETFs</h3></div>
-            <div class="table-tools"><input id="holdingSearch" class="search-input" type="search" placeholder="Search holdings…"><select id="holdingTypeFilter" class="compact-select"><option value="ALL">All assets</option><option value="MF">Mutual funds</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="OTHER">Other</option></select><button id="viewAllNotesBtn" class="secondary-button">📝 All notes</button><button id="bulkImportBtn" class="secondary-button">⇧ Import</button><button id="addInvestmentTableBtn" class="primary-button">+ Add</button></div>
+            <div class="holdings-title-block"><h3 id="holdingsHeading"><span class="holdings-title-label">PORTFOLIO DETAILS</span><span class="holdings-title-sep">·</span><span>Mutual funds, stocks &amp; ETFs</span></h3><p id="masterDataStatus" class="master-data-status">Master spreadsheet not loaded yet.</p></div>
+            <div class="table-tools"><button id="toggleHoldingsSummaryBtn" class="summary-toggle-button" type="button" aria-expanded="false">▾ Show Holding Summary</button><button id="replaceMasterDataBtn" class="master-data-button" type="button">⇄ Replace from Master Sheet</button><button id="showAllInvestmentsBtn" class="show-all-button" type="button">▦ Show All Investments</button><input id="holdingSearch" class="search-input" type="search" placeholder="Search holdings…"><select id="holdingTypeFilter" class="compact-select"><option value="ALL">All assets</option><option value="MF">Mutual funds</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="OTHER">Other</option></select><select id="holdingResultFilter" class="compact-select advanced-filter"><option value="ALL">All results</option><option value="CURRENT_PROFIT">Current profit</option><option value="CURRENT_LOSS">Current loss</option><option value="TOTAL_PROFIT">Total profit</option><option value="TOTAL_LOSS">Total loss</option><option value="REALISED_PROFIT">Realised profit</option><option value="REALISED_LOSS">Realised loss</option><option value="PNL_PENDING">P/L pending</option></select><select id="holdingNotesFilter" class="compact-select advanced-filter"><option value="ALL">All notes</option><option value="WITH_NOTES">Has notes</option><option value="WITHOUT_NOTES">No notes</option></select><select id="holdingTradeFilter" class="compact-select advanced-filter"><option value="ALL">All trade history</option><option value="HAS_PURCHASE">Has purchase date</option><option value="HAS_SALE">Has sale/redemption</option><option value="MISSING_DATES">Missing exact dates</option></select><span id="holdingsFilterCount" class="filter-result-pill">0 visible</span><button id="printHoldingsBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="holdingsFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Holdings to full browser area">⛶ Full screen</button><button id="manageHoldingsColumnsBtn" class="secondary-button column-manager-main-btn" type="button">⚙ Add / Edit / Delete Columns</button><button id="viewAllNotesBtn" class="secondary-button">📝 All notes</button><button id="bulkImportBtn" class="secondary-button">⇧ Import</button><button id="addInvestmentTableBtn" class="primary-button">+ Add</button></div>
+          </div>
+          <div class="saved-view-bar holdings-saved-view-bar">
+  <div class="saved-view-left">
+    <span class="saved-view-label">Default dashboard view</span>
+    <select id="holdingsViewPreset" class="compact-select view-preset-select">
+      <option value="RESULT">My Investment Result</option>
+      <option value="PERFORMANCE">MF / Stock Performance</option>
+      <option value="COMPACT">Compact Result</option>
+      <option value="FULL">Full View</option>
+      <option value="CUSTOM">Custom</option>
+    </select>
+    <button id="saveHoldingsDefaultViewBtn" type="button" class="small-button saved-view-save">★ Save current as default</button>
+    <button id="restoreHoldingsDefaultViewBtn" type="button" class="small-button">↺ Restore saved</button>
+    <button id="resetHoldingsViewBtn" type="button" class="small-button">Reset</button>
+    <span id="holdingsDefaultViewStatus" class="saved-view-status">Recommended: My Investment Result</span><span id="mfNavHealthBadge" class="mf-nav-health neutral">MF NAV status pending</span>
+  </div>
+  <div class="investment-view-legend">
+    <span class="view-legend-chip transaction">Trade history</span>
+    <span class="view-legend-chip result">My investment result</span>
+    <span class="view-legend-chip performance">Asset / scheme performance</span>
+  </div>
+</div>
+<div class="table-view-size-bar" data-table-size-for="holdings">
+            <strong>Table size</strong>
+            <span class="size-group-label">Row height</span>
+            <button id="holdRowMinusBtn" type="button" class="size-step-button" title="Reduce Holdings row height">−</button>
+            <span id="holdRowSizeLabel" class="size-value-label">100%</span>
+            <button id="holdRowPlusBtn" type="button" class="size-step-button" title="Increase Holdings row height">+</button>
+            <input id="holdRowSlider" class="size-drag-slider" type="range" min="70" max="160" step="5" value="100" aria-label="Drag to change Holdings row height">
+            <span class="size-divider"></span>
+            <span class="size-group-label">Column width</span>
+            <button id="holdWidthMinusBtn" type="button" class="size-step-button" title="Reduce Holdings table width">−</button>
+            <span id="holdWidthSizeLabel" class="size-value-label">100%</span>
+            <button id="holdWidthPlusBtn" type="button" class="size-step-button" title="Increase Holdings table width">+</button>
+            <input id="holdWidthSlider" class="size-drag-slider" type="range" min="70" max="160" step="5" value="100" aria-label="Drag to change Holdings column width">
+            <span class="drag-hint">↔ Drag column edges too</span>
+            <span id="holdLayoutSavedStatus" class="layout-saved-status">✓ Saved</span>
+            <button id="holdSizeResetBtn" type="button" class="size-reset-button">Reset</button>
           </div>
           <div class="performance-note">1D–10Y columns show the asset/scheme price or NAV performance for that period. XIRR is available for mutual funds imported from transaction statements.</div>
-          <div class="table-wrap wide-table">
+          <div class="holding-pnl-strip" aria-label="Profit and loss to date">
+            <article class="holding-pnl-card current"><span>Current P/L till today*</span><strong id="holdCurrentPnlToday">₹0</strong><small>Remaining holdings vs current cost</small></article>
+            <article class="holding-pnl-card realised"><span>Realised P/L</span><strong id="holdRealizedPnl">₹0</strong><small>Completed sales/redemptions</small></article>
+            <article class="holding-pnl-card total"><span>Total P/L to date</span><strong id="holdTotalPnlToDate">₹0</strong><small>Current + realised, where history is complete</small></article>
+            <article class="holding-pnl-card coverage"><span>Exact trade-date coverage</span><strong id="holdTradeDateCoverage">0 / 0</strong><small id="holdPnlAsOf">*Using latest available price/NAV</small></article>
+          </div>
+          <div class="table-wrap wide-table" data-layout-scroll="holdings">
             <table class="holdings-table">
-              <thead><tr><th class="sticky-col owner-col">Investor</th><th class="sticky-col asset-col">Asset</th><th>Qty / Units</th><th>Avg Buy</th><th>Invested</th><th>Current Price / NAV</th><th>Current Value</th><th>Gain / Loss</th><th>Gain %</th><th>XIRR</th><th>1D</th><th>1W</th><th>1M</th><th>6M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead>
+              <thead><tr id="holdingsHeadRow"><th class="sticky-col owner-col">Investor</th><th class="sticky-col asset-col">Asset</th><th class="trade-date-head purchase-head">Purchase Date(s)</th><th class="trade-date-head sale-head">Sale Date(s)</th><th>Qty / Units</th><th>Avg Buy</th><th>Invested</th><th>Current Price / NAV</th><th>Current Value</th><th>P/L Till Today</th><th>Realised P/L</th><th>Total P/L to Date</th><th>Gain %</th><th>XIRR</th><th>1D</th><th>1W</th><th>1M</th><th>6M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead>
               <tbody id="holdingsBody"></tbody>
             </table>
           </div>
@@ -112,16 +386,356 @@
         </article>
       </section>
 
-      <section id="watchlistSection" class="page-section hidden">
-        <article class="panel table-panel"><div class="panel-head responsive-head"><div><p class="eyebrow">FUTURE IDEAS</p><h3>Investment watchlist</h3></div><div class="table-tools"><input id="watchSearch" class="search-input" type="search" placeholder="Search watchlist…"><button id="watchAllNotesBtn" class="secondary-button">📝 All notes</button><button id="addWatchBtn" class="primary-button">+ Add</button></div></div><div class="table-wrap"><table><thead><tr><th>Asset</th><th>Current price</th><th>Target price</th><th>Distance</th><th>Priority</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead><tbody id="watchBody"></tbody></table></div><div id="watchEmpty" class="empty-state hidden">No watchlist items match this search.</div></article>
+
+      <section id="transactionsSection" class="page-section hidden">
+        <div class="transaction-hero">
+          <div>
+            <p class="eyebrow">TRANSACTION HISTORY</p>
+            <h2>Purchase &amp; Sale Dates</h2>
+            <p>Mutual-fund statement transactions and imported stock/ETF tradebook history. <strong class="sale-copy">SALE is always red.</strong></p>
+          </div>
+          <div class="transaction-hero-actions">
+            <button id="transactionImportBtn" class="primary-button" type="button">⇧ Import stock tradebook</button>
+            <button id="printTransactionsBtn" class="print-view-button" type="button">⎙ Preview / Print</button>
+          </div>
+        </div>
+
+        <div class="transaction-summary-grid">
+          <article class="transaction-summary-card buy-card"><span>Total purchases</span><strong id="transactionBuyTotal">₹0</strong><small>BUY / Purchase / SIP</small></article>
+          <article class="transaction-summary-card sale-card"><span>Total sales</span><strong id="transactionSaleTotal">₹0</strong><small>SALE / Redemption</small></article>
+          <article class="transaction-summary-card pnl-card"><span>Realised profit / loss</span><strong id="transactionRealizedPnl">—</strong><small>FIFO where complete transaction history is available</small></article>
+          <article class="transaction-summary-card count-card"><span>Transactions</span><strong id="transactionCount">0</strong><small>Current filtered view</small></article>
+        </div>
+
+        <article class="panel table-panel transaction-panel">
+          <div class="panel-head responsive-head">
+            <div><p class="eyebrow">BUY / SALE REGISTER</p><h3>Stocks, ETFs &amp; Mutual Funds</h3></div>
+            <div class="table-tools transaction-filter-tools">
+              <input id="transactionSearch" class="search-input" type="search" placeholder="Search asset, symbol or broker…">
+              <select id="transactionOwnerFilter" class="compact-select"><option value="ALL">All investors</option></select>
+              <select id="transactionAssetFilter" class="compact-select"><option value="ALL">All assets</option><option value="MF">Mutual funds</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option></select>
+              <select id="transactionSideFilter" class="compact-select"><option value="ALL">Buy + Sale</option><option value="BUY">BUY only</option><option value="SELL">SALE only</option></select>
+              <label class="transaction-date-filter">From<input id="transactionFromDate" type="date"></label>
+              <label class="transaction-date-filter">To<input id="transactionToDate" type="date"></label>
+              <span id="transactionFilterCount" class="filter-result-pill">0 visible</span>
+            </div>
+          </div>
+          <div class="transaction-note">For stocks/ETFs, import the broker Tradebook to obtain actual purchase/sale dates. Holdings files alone usually do not contain full transaction dates. MF statement imports automatically appear here.</div>
+          <div class="table-wrap wide-table transaction-table-wrap">
+            <table class="transaction-table">
+              <thead><tr><th>Date</th><th>Investor</th><th>Asset Type</th><th>Asset / Symbol</th><th>Buy / Sale</th><th>Qty / Units</th><th>Price / NAV</th><th>Amount</th><th>Realised P/L</th><th>Holding Period</th><th>Broker / Source</th></tr></thead>
+              <tbody id="transactionBody"></tbody>
+            </table>
+          </div>
+          <div id="transactionEmpty" class="empty-state hidden">No transactions match this view. Import an MF transaction statement or stock/ETF tradebook.</div>
+        </article>
+      </section>
+
+      <section id="watchlistSection" class="page-section hidden"><div class="watchlist-live-strip"><div><span class="live-dot"></span><strong>Live watchlist tracking</strong><span id="watchlistLastAutoUpdate" class="muted">Waiting for update…</span></div><div class="watchlist-live-stats"><span>At target <b id="watchStripAtTarget">0</b></span><span>Near target <b id="watchStripNear">0</b></span><span>Avg gap <b id="watchStripGap">—</b></span></div></div>
+        <article class="panel table-panel"><div class="panel-head responsive-head"><div><p class="eyebrow">FUTURE IDEAS</p><h3>Investment watchlist</h3></div><div class="table-tools watch-filter-tools"><input id="watchSearch" class="search-input" type="search" placeholder="Search watchlist…"><select id="watchTypeFilter" class="compact-select"><option value="ALL">All types</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="MF">Mutual funds</option></select><select id="watchPriorityFilter" class="compact-select"><option value="ALL">All priority</option><option value="HIGH">High</option><option value="MEDIUM">Medium</option><option value="LOW">Low</option></select><select id="watchTargetFilter" class="compact-select"><option value="ALL">All target status</option><option value="AT">At / below target</option><option value="NEAR">Within 5%</option><option value="FAR">More than 5% away</option><option value="NO_TARGET">No target</option></select><select id="watchNotesFilter" class="compact-select"><option value="ALL">All notes</option><option value="WITH_NOTES">Has notes</option><option value="WITHOUT_NOTES">No notes</option></select><span id="watchFilterCount" class="filter-result-pill">0 visible</span><button id="printWatchlistBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="watchlistFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Watchlist to full browser area">⛶ Full screen</button><button id="manageWatchlistColumnsBtn" class="secondary-button column-manager-main-btn" type="button">⚙ Add / Edit / Delete Columns</button><button id="watchAllNotesBtn" class="secondary-button">📝 All notes</button><button id="addWatchBtn" class="primary-button">+ Add</button></div></div><div class="saved-view-bar watch-saved-view-bar">
+  <div class="saved-view-left">
+    <span class="saved-view-label">Watchlist default view</span>
+    <button id="saveWatchDefaultViewBtn" type="button" class="small-button saved-view-save">★ Save current as default</button>
+    <button id="restoreWatchDefaultViewBtn" type="button" class="small-button">↺ Restore saved</button>
+    <span id="watchDefaultViewStatus" class="saved-view-status">Filters and visible columns can be saved</span>
+  </div>
+</div>
+<div class="table-view-size-bar" data-table-size-for="watchlist">
+            <strong>Table size</strong>
+            <span class="size-group-label">Row height</span>
+            <button id="watchRowMinusBtn" type="button" class="size-step-button" title="Reduce Watchlist row height">−</button>
+            <span id="watchRowSizeLabel" class="size-value-label">100%</span>
+            <button id="watchRowPlusBtn" type="button" class="size-step-button" title="Increase Watchlist row height">+</button>
+            <input id="watchRowSlider" class="size-drag-slider" type="range" min="70" max="160" step="5" value="100" aria-label="Drag to change Watchlist row height">
+            <span class="size-divider"></span>
+            <span class="size-group-label">Column width</span>
+            <button id="watchWidthMinusBtn" type="button" class="size-step-button" title="Reduce Watchlist table width">−</button>
+            <span id="watchWidthSizeLabel" class="size-value-label">100%</span>
+            <button id="watchWidthPlusBtn" type="button" class="size-step-button" title="Increase Watchlist table width">+</button>
+            <input id="watchWidthSlider" class="size-drag-slider" type="range" min="70" max="160" step="5" value="100" aria-label="Drag to change Watchlist column width">
+            <span class="drag-hint">↔ Drag column edges too</span>
+            <span id="watchLayoutSavedStatus" class="layout-saved-status">✓ Saved</span>
+            <button id="watchSizeResetBtn" type="button" class="size-reset-button">Reset</button>
+          </div>
+          <div class="performance-note">Live price comes from the backend. Sheet columns retain the uploaded workbook’s valuation, growth, 52-week and performance details.</div><div class="table-wrap wide-table" data-layout-scroll="watchlist"><table class="watchlist-details-table"><thead><tr id="watchHeadRow"><th class="sticky-col asset-col">Asset</th><th>Live Price/NAV</th><th>Sheet Day %</th><th>Target</th><th>Distance</th><th>52W H/L</th><th>P/E or P/B</th><th>1M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th>Remark / Moat</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead><tbody id="watchBody"></tbody></table></div><div id="watchEmpty" class="empty-state hidden">No watchlist items match this search.</div></article>
+      </section>
+
+
+      <section id="diarySection" class="page-section hidden">
+        <div class="diary-hero">
+          <div>
+            <p class="eyebrow">PERSONAL DIARY & MONTHLY LIFE PLAN</p>
+            <h2>Daily diary, monthly plans, experiences & targets</h2>
+            <p>Write day-to-day notes, plan each month, record experiences, set targets, mark achievements, and keep completed months permanently.</p>
+          </div>
+          <div class="diary-hero-actions">
+            <span id="diaryHeroStatus" class="diary-hero-status">Private to your login</span>
+            <button id="newDiaryEntryBtn" class="primary-button" type="button">+ New daily entry</button>
+          </div>
+        </div>
+
+        <div id="diaryWorkspaceSwitcher" class="diary-workspace-switcher">
+          <button type="button" class="active" data-diary-workspace="DAILY"><span>☀</span> Daily Diary</button>
+          <button type="button" data-diary-workspace="MONTHLY"><span>▣</span> Monthly Diary / Plan / Experience</button>
+        </div>
+
+        <div id="dailyDiaryWorkspace">
+          <div class="diary-layout">
+            <article class="panel diary-compose-panel">
+              <div class="panel-head">
+                <div><p class="eyebrow">WRITE / EDIT</p><h3>Daily diary entry</h3></div>
+                <span id="diarySaveStatus" class="tiny muted">New entry</span>
+              </div>
+              <form id="diaryForm" class="diary-form">
+                <input id="diaryId" type="hidden">
+                <div class="diary-date-row">
+                  <label>Date<input id="diaryDate" type="date" required></label>
+                  <div class="diary-date-nav" aria-label="Diary date navigation">
+                    <button id="diaryPrevDayBtn" type="button" class="diary-nav-button" title="Previous day">‹</button>
+                    <button id="diaryTodayBtn" type="button" class="diary-nav-button diary-today-button">Today</button>
+                    <button id="diaryNextDayBtn" type="button" class="diary-nav-button" title="Next day">›</button>
+                  </div>
+                </div>
+                <label>Title <small>(optional)</small><input id="diaryTitle" type="text" maxlength="120" placeholder="Today’s note"></label>
+                <label class="diary-entry-field">Entry
+                  <textarea id="diaryText" rows="8" maxlength="5000" required placeholder="Write what you want to remember…"></textarea>
+                  <div class="diary-writing-meta"><span id="diaryDraftStatus">Draft ready</span><span id="diaryCharCount">0 / 5000</span></div>
+                </label>
+                <div class="diary-keyboard-tip">Tip: press <strong>⌘/Ctrl + Enter</strong> to save quickly.</div>
+                <div class="diary-form-actions diary-sticky-actions">
+                  <button id="clearDiaryBtn" type="button" class="secondary-button">Clear</button>
+                  <button id="saveDiaryBtn" type="submit" class="primary-button">Save entry</button>
+                </div>
+              </form>
+            </article>
+
+            <article class="panel diary-browser-panel">
+              <div class="panel-head diary-browser-head">
+                <div><p class="eyebrow">BROWSE & SEARCH</p><h3>Daily diary history</h3></div>
+                <div id="diaryViewSwitcher" class="range-switcher diary-view-switcher">
+                  <button type="button" class="active" data-diary-view="DAILY">Day</button>
+                  <button type="button" data-diary-view="MONTHLY">Month</button><button type="button" data-diary-view="RANGE">Range</button>
+                </div>
+              </div>
+
+              <div class="diary-controls">
+                <div class="diary-search-wrap"><input id="diarySearch" class="search-input diary-search" type="search" placeholder="Search title, entry or date…"><button id="diarySearchClearBtn" type="button" class="search-clear-button" title="Clear search">×</button></div>
+                <label id="diaryDayControl" class="diary-date-control">Day<input id="diaryBrowseDate" type="date"></label>
+                <label id="diaryMonthControl" class="diary-date-control hidden">Month<input id="diaryBrowseMonth" type="month"></label>
+                <div id="diaryRangeControl" class="diary-range-control hidden"><label>From<input id="diaryFromDate" type="date"></label><label>To<input id="diaryToDate" type="date"></label></div>
+                <button id="printDiaryBtn" class="print-view-button diary-print-button" type="button">⎙ Print filtered diary</button>
+              </div>
+
+              <div id="diarySummary" class="diary-summary"></div>
+              <div id="diaryList" class="diary-list"></div>
+              <div id="diaryEmpty" class="empty-state hidden">No daily diary entries match this view.</div>
+            </article>
+          </div>
+        </div>
+
+        <div id="monthlyDiaryWorkspace" class="hidden">
+          <div class="monthly-control-bar">
+            <div class="monthly-filter-group">
+              <label>Year<select id="monthlyYearFilter"></select></label>
+              <label>Month<select id="monthlyMonthFilter">
+                <option value="ALL">All months</option>
+                <option value="01">January</option><option value="02">February</option><option value="03">March</option>
+                <option value="04">April</option><option value="05">May</option><option value="06">June</option>
+                <option value="07">July</option><option value="08">August</option><option value="09">September</option>
+                <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+              </select></label>
+              <label>Type<select id="monthlyTypeFilter">
+                <option value="ALL">All types</option>
+                <option value="DIARY">Diary</option>
+                <option value="PLAN">Plan</option>
+                <option value="EXPERIENCE">Experience</option>
+                <option value="TARGET">Target</option>
+              </select></label>
+              <label>Status<select id="monthlyStatusFilter">
+                <option value="ALL">All status</option>
+                <option value="OPEN">Open targets</option>
+                <option value="COMPLETED">Completed targets</option>
+              </select></label>
+            </div>
+            <div class="monthly-search-actions"><input id="monthlySearch" class="search-input monthly-search" type="search" placeholder="Search monthly diary, plan, experience or target…"><button id="printMonthlyBtn" class="print-view-button" type="button">⎙ Print filtered view</button></div>
+          </div>
+
+          <div id="monthCompletionPanel" class="month-completion-panel">
+            <div>
+              <p class="eyebrow">MONTH PROGRESS</p>
+              <h3 id="monthCompletionTitle">This month</h3>
+              <p id="monthCompletionText" class="muted">Add targets to track completion.</p>
+            </div>
+            <div class="month-progress-side">
+              <div class="month-progress-track"><div id="monthProgressBar" class="month-progress-bar"></div></div>
+              <strong id="monthProgressLabel">0 / 0 targets completed</strong>
+              <button id="completeMonthBtn" class="primary-button" type="button">✓ Complete month</button>
+            </div>
+          </div>
+
+          <div class="monthly-workspace-grid">
+            <article class="panel monthly-compose-panel">
+              <div class="panel-head">
+                <div><p class="eyebrow">ADD / EDIT MONTHLY ITEM</p><h3>Diary, plan, experience or target</h3></div>
+                <span id="monthlySaveStatus" class="tiny muted">New monthly item</span>
+              </div>
+              <form id="monthlyForm" class="diary-form">
+                <input id="monthlyId" type="hidden">
+                <div class="diary-date-row">
+                  <label>Month<input id="monthlyEntryMonth" type="month" required></label>
+                  <div class="diary-date-nav" aria-label="Monthly entry navigation">
+                    <button id="monthlyPrevMonthBtn" type="button" class="diary-nav-button" title="Previous month">‹</button>
+                    <button id="monthlyThisMonthBtn" type="button" class="diary-nav-button diary-today-button">This month</button>
+                    <button id="monthlyNextMonthBtn" type="button" class="diary-nav-button" title="Next month">›</button>
+                  </div>
+                </div>
+                <label>Type<select id="monthlyEntryType" required>
+                  <option value="DIARY">Monthly Diary</option>
+                  <option value="PLAN">Plan</option>
+                  <option value="EXPERIENCE">Experience</option>
+                  <option value="TARGET">Target</option>
+                </select></label>
+                <label>Title<input id="monthlyTitle" type="text" maxlength="140" placeholder="e.g. Health target, Trip plan, Monthly reflection"></label>
+                <label class="diary-entry-field">Details
+                  <textarea id="monthlyText" rows="7" maxlength="5000" required placeholder="Write the monthly diary, plan, experience or target details…"></textarea>
+                  <div class="diary-writing-meta"><span id="monthlyDraftStatus">Draft ready</span><span id="monthlyCharCount">0 / 5000</span></div>
+                </label>
+                <div class="diary-keyboard-tip">Tip: press <strong>⌘/Ctrl + Enter</strong> to save quickly.</div>
+                <div class="monthly-target-help" id="monthlyTargetHelp">
+                  For a Target, save it first. Then use <strong>Mark completed</strong> when achieved.
+                </div>
+                <div class="diary-form-actions">
+                  <button id="clearMonthlyBtn" type="button" class="secondary-button">Clear</button>
+                  <button id="saveMonthlyBtn" type="submit" class="primary-button">Save monthly item</button>
+                </div>
+              </form>
+            </article>
+
+            <article class="panel monthly-list-panel">
+              <div class="panel-head">
+                <div><p class="eyebrow">MONTHLY RECORDS</p><h3 id="monthlyListTitle">Monthly diary / plan / experience</h3></div>
+                <span id="monthlyResultCount" class="tiny muted">0 items</span>
+              </div>
+              <div id="completedMonthArchive" class="completed-month-archive"></div>
+              <div id="monthlyList" class="monthly-list"></div>
+              <div id="monthlyEmpty" class="empty-state hidden">No monthly records match these filters.</div>
+            </article>
+          </div>
+        </div>
       </section>
 
       <section id="usersSection" class="page-section hidden">
-        <article class="panel table-panel"><div class="panel-head responsive-head"><div><p class="eyebrow">ADMINISTRATION</p><h3>Dashboard users</h3></div><button id="addUserBtn" class="primary-button">+ Create user</button></div><div class="table-wrap"><table><thead><tr><th>Username</th><th>Name</th><th>Role</th><th>Status</th><th>Last login</th><th></th></tr></thead><tbody id="usersBody"></tbody></table></div></article>
+        <article class="panel table-panel user-admin-panel">
+          <div class="panel-head responsive-head">
+            <div>
+              <p class="eyebrow">ADMINISTRATION</p>
+              <h3>Dashboard users</h3>
+              <p class="user-admin-help">Create accounts, edit name/role/status, reset password or delete an account. Deleting a login account does not delete portfolio data.</p>
+            </div>
+            <button id="addUserBtn" class="primary-button" type="button">+ Create user</button>
+          </div>
+          <div class="table-wrap user-table-wrap">
+            <table class="users-table">
+              <thead><tr><th>Username</th><th>Name</th><th>Role</th><th>Status</th><th>Last login</th><th>Actions</th></tr></thead>
+              <tbody id="usersBody"></tbody>
+            </table>
+          </div>
+        </article>
       </section>
     </main>
 
-    <nav class="mobile-nav"><button class="mobile-nav-item active" data-section="overview"><span>◫</span>Overview</button><button class="mobile-nav-item" data-section="holdings"><span>▥</span>Holdings</button><button class="mobile-nav-item" data-section="watchlist"><span>☆</span>Watchlist</button></nav>
+    <aside id="quickDiaryPanel" class="quick-diary-panel" aria-hidden="true">
+      <div class="quick-diary-head">
+        <div><p class="eyebrow">QUICK DIARY</p><h3>Write without leaving dashboard</h3></div>
+        <button id="quickDiaryCloseBtn" class="icon-button" type="button" aria-label="Close quick diary">×</button>
+      </div>
+      <div class="quick-diary-tabs">
+        <button type="button" class="active" data-quick-diary-mode="DAILY">Daily Diary</button>
+        <button type="button" data-quick-diary-mode="MONTHLY">Monthly Diary</button>
+      </div>
+      <form id="quickDailyForm" class="quick-diary-form">
+        <label>Date<input id="quickDailyDate" type="date" required></label>
+        <label>Title<input id="quickDailyTitle" type="text" maxlength="120" placeholder="Optional title"></label>
+        <label>Entry<textarea id="quickDailyText" rows="8" maxlength="5000" required placeholder="Write your daily diary…"></textarea></label>
+        <div class="quick-diary-meta"><span id="quickDailyStatus">Ready</span><span id="quickDailyCount">0 / 5000</span></div>
+        <button id="quickDailySaveBtn" class="primary-button" type="submit">Save daily entry</button>
+      </form>
+      <form id="quickMonthlyForm" class="quick-diary-form hidden">
+        <label>Month<input id="quickMonthlyMonth" type="month" required></label>
+        <label>Type<select id="quickMonthlyType">
+          <option value="DIARY">Monthly Diary</option>
+          <option value="PLAN">Plan</option>
+          <option value="EXPERIENCE">Experience</option>
+          <option value="TARGET">Target</option>
+        </select></label>
+        <label>Title<input id="quickMonthlyTitle" type="text" maxlength="140" placeholder="Optional title"></label>
+        <label>Details<textarea id="quickMonthlyText" rows="8" maxlength="5000" required placeholder="Write monthly diary / plan / experience / target…"></textarea></label>
+        <div class="quick-diary-meta"><span id="quickMonthlyStatus">Ready</span><span id="quickMonthlyCount">0 / 5000</span></div>
+        <button id="quickMonthlySaveBtn" class="primary-button" type="submit">Save monthly item</button>
+      </form>
+      <button id="openFullDiaryBtn" class="secondary-button quick-full-diary" type="button">Open full Diary</button>
+    </aside>
+
+    <button id="utilityDrawerOpenBtn" class="utility-drawer-launcher" type="button" aria-controls="utilityDrawer" aria-expanded="false" title="Open targets, reminders and quotes">
+      <span class="utility-launcher-icon">✦</span>
+      <span class="utility-launcher-text">Notes & Quotes</span>
+      <span id="utilityStickyBadge" class="utility-launcher-badge">0</span>
+    </button>
+
+    <div id="utilityDrawerScrim" class="utility-drawer-scrim" aria-hidden="true"></div>
+
+    <aside id="utilityDrawer" class="utility-drawer" aria-hidden="true">
+      <div class="utility-drawer-head">
+        <div><p class="eyebrow">RIGHT UTILITY PANEL</p><h3>Notes & Quotes</h3><p>Targets, reminders and inspiration without occupying dashboard space.</p></div>
+        <button id="utilityDrawerCloseBtn" class="icon-button" type="button" aria-label="Close right utility panel">×</button>
+      </div>
+
+      <div class="utility-drawer-tabs" role="tablist" aria-label="Right panel sections">
+        <button type="button" class="active" data-utility-tab="STICKY">📌 Sticky <span id="utilityStickyTabCount">0</span></button>
+        <button type="button" data-utility-tab="QUOTE">💬 Quotes</button>
+      </div>
+
+      <div id="utilityStickySection" class="utility-drawer-section active">
+        <section class="sticky-notes-panel" aria-label="Sticky targets and reminders">
+          <div class="sticky-notes-head">
+            <div><p class="eyebrow">STICKY NOTES</p><h3>Targets & reminders</h3></div>
+            <div class="sticky-head-actions"><span id="stickyNotesCount">0 active</span><button id="addStickyNoteBtn" class="sticky-add-button" type="button">+ Add sticky</button></div>
+          </div>
+          <p class="sticky-pin-help">📌 Pin a note to keep it floating above other dashboard fields. Done and Delete remain available while pinned.</p>
+          <div id="stickyNotesList" class="sticky-notes-list"></div>
+          <div id="stickyNotesEmpty" class="sticky-empty">No active target or reminder. Add one when something needs your attention.</div>
+        </section>
+      </div>
+
+      <div id="utilityQuoteSection" class="utility-drawer-section hidden">
+        <section class="life-quote-panel" aria-label="Daily life quote">
+          <div class="life-quote-mark">“</div>
+          <div class="life-quote-copy">
+            <div class="life-quote-label"><span>QUOTE OF THE DAY</span><span id="lifeQuoteShuffleStatus">Auto shuffle · 30s</span></div>
+            <blockquote id="lifeQuoteText">Add your favorite life quotes to start the daily rotation.</blockquote>
+            <div id="lifeQuoteAuthor" class="life-quote-author">— Quote Library</div>
+          </div>
+          <div class="life-quote-actions">
+            <button id="lifeQuoteNextBtn" type="button" title="Show another quote">↻ Next</button>
+            <button id="lifeQuotePauseBtn" type="button" title="Pause automatic shuffle">Ⅱ Pause</button>
+            <button id="lifeQuoteLibraryBtn" type="button" class="quote-library-button" title="Manage saved quotes">☰ Library</button>
+          </div>
+        </section>
+      </div>
+    </aside>
+
+    <div id="pinnedStickyLayer" class="pinned-sticky-layer hidden" aria-label="Pinned sticky notes"></div>
+
+    <div id="dashboardHScroll" class="dashboard-hscroll hidden" aria-label="Horizontal dashboard scroller">
+      <button id="dashboardHScrollLeft" class="dashboard-hscroll-arrow" type="button" title="Scroll left">‹</button>
+      <div class="dashboard-hscroll-center">
+        <div class="dashboard-hscroll-labels"><span id="dashboardHScrollLabel">Horizontal scroll</span><span id="dashboardHScrollPct">0%</span></div>
+        <input id="dashboardHScrollRange" class="dashboard-hscroll-range" type="range" min="0" max="1000" value="0" step="1" aria-label="Move table left or right">
+      </div>
+      <button id="dashboardHScrollRight" class="dashboard-hscroll-arrow" type="button" title="Scroll right">›</button>
+    </div>
+
+    <nav class="mobile-nav"><button class="mobile-nav-item active" data-section="overview"><span>◫</span>Overview</button><button class="mobile-nav-item" data-section="holdings"><span>▥</span>Holdings</button><button class="mobile-nav-item" data-section="transactions"><span>⇄</span>Trades</button><button class="mobile-nav-item" data-section="watchlist"><span>☆</span>Watchlist</button><button class="mobile-nav-item" data-section="diary"><span>✎</span>Diary</button><button id="quickDiaryMobileBtn" class="mobile-nav-item" type="button"><span>✚</span>Quick</button></nav>
   </div>
 
   <div id="modalBackdrop" class="modal-backdrop hidden" aria-hidden="true">
@@ -146,10 +760,10 @@
     <div id="bulkImportModal" class="modal import-modal hidden" role="dialog" aria-modal="true">
       <div class="modal-head"><div><p class="eyebrow">SMART IMPORT</p><h2>Import portfolio data</h2></div><button class="modal-close" data-close-modal>×</button></div>
       <form id="bulkImportForm" class="stack-form">
-        <div class="import-mode-tabs"><button type="button" class="import-mode active" data-import-mode="MF_STATEMENT">Mutual fund statement</button><button type="button" class="import-mode" data-import-mode="STOCK_HOLDINGS">Stock / Zerodha holdings</button></div>
+        <div class="import-mode-tabs"><button type="button" class="import-mode active" data-import-mode="MF_STATEMENT">MF transaction statement</button><button type="button" class="import-mode" data-import-mode="MF_SNAPSHOT">MF current holdings</button><button type="button" class="import-mode" data-import-mode="STOCK_HOLDINGS">Stock / Zerodha holdings</button><button type="button" class="import-mode" data-import-mode="STOCK_TRADES">Stock / ETF tradebook</button></div>
         <div id="mfImportHelp" class="info-box"><strong>MF statement:</strong> accepts your columns MF_NAME, INVESTOR_NAME, PRODUCT_CODE, SCHEME_NAME, TRADE_DATE, TRANSACTION_TYPE, AMOUNT, UNITS, PRICE and BROKER. PAN and folio columns are ignored and are not sent to the backend.</div>
-        <div id="stockImportHelp" class="info-box hidden"><strong>Stock/Zerodha:</strong> accepts Investor Name, Stock Symbol, Exchange, Quantity, Avg Buy Price and Invested Amount. It also recognises common Zerodha holdings headings such as Instrument, Qty. and Avg. cost. Native Zerodha XLSX holdings files are supported.</div>
-        <label id="stockOwnerLabel" class="hidden">Investor for stock file<select id="importOwner"></select></label>
+        <div id="mfSnapshotImportHelp" class="info-box hidden"><strong>MF current holdings:</strong> accepts Investor Name, Scheme Name, ISIN, Units Held, Avg NAV and Invested Amount. The backend resolves the ISIN to the numeric AMFI scheme code so NAV and 1D–10Y performance can update automatically. Snapshot mode does not create transaction history, so XIRR remains blank unless a transaction statement is also imported.</div><div id="stockImportHelp" class="info-box hidden"><strong>Stock/Zerodha:</strong> accepts Investor Name, Stock Symbol, Exchange, Quantity, Avg Buy Price and Invested Amount. It also recognises common Zerodha holdings headings such as Instrument, Qty. and Avg. cost. Native Zerodha XLSX holdings files are supported.</div><div id="stockTradeImportHelp" class="info-box hidden"><strong>Stock/ETF tradebook:</strong> imports actual BUY/SELL dates, quantity and price from Zerodha Tradebook CSV/XLSX or similar broker files. Existing holdings are not replaced. Sale entries are shown in red in the Transactions tab.</div>
+        <label id="stockOwnerLabel" class="hidden">Investor if file has no investor column<select id="importOwner"></select></label>
         <div class="import-actions"><button id="downloadImportTemplateBtn" type="button" class="secondary-button">Download template</button></div>
         <label class="import-drop"><strong>Select CSV or Excel file</strong><span id="importFileHint">Up to 5,000 MF transaction rows. CSV and XLSX are supported.</span><input id="bulkCsvFile" type="file" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" required></label>
         <div id="bulkImportStatus" class="import-status muted">No file selected.</div>
@@ -157,6 +771,85 @@
       </form>
     </div>
 
+
+
+    <div id="columnManagerModal" class="modal column-manager-modal hidden" role="dialog" aria-modal="true" aria-labelledby="columnManagerTitle">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">TABLE DESIGN</p>
+          <h2 id="columnManagerTitle">Manage columns</h2>
+          <p class="modal-subcopy">Available for both Investment Holdings and Watchlist: add new parameter columns, edit names/type/order, hide/rename standard columns, or delete custom columns.</p>
+        </div>
+        <button class="modal-close" data-close-modal aria-label="Close column manager">×</button>
+      </div>
+      <div class="column-manager-layout">
+        <form id="customColumnForm" class="stack-form custom-column-editor">
+          <input id="customColumnId" type="hidden">
+          <label>Table
+            <select id="customColumnSection">
+              <option value="HOLDINGS">Holdings</option>
+              <option value="WATCHLIST">Watchlist</option>
+            </select>
+          </label>
+          <label>Column name
+            <input id="customColumnLabel" maxlength="80" required placeholder="e.g. Risk level">
+          </label>
+          <label>Parameter key
+            <input id="customColumnKey" maxlength="60" placeholder="e.g. RiskLevel">
+            <small>Unique key used to store this parameter.</small>
+          </label>
+          <label>Data type
+            <select id="customColumnType">
+              <option value="TEXT">Text</option>
+              <option value="NUMBER">Number</option>
+              <option value="CURRENCY">Currency ₹</option>
+              <option value="PERCENT">Percentage %</option>
+              <option value="DATE">Date</option>
+            </select>
+          </label>
+          <label>Order
+            <input id="customColumnOrder" type="number" min="1" max="999" value="100">
+          </label>
+          <div class="form-actions">
+            <button id="clearCustomColumnBtn" type="button" class="secondary-button">Clear</button>
+            <button id="saveCustomColumnBtn" type="submit" class="primary-button">Add column</button>
+          </div>
+        </form>
+
+        <div class="column-manager-lists">
+          <section class="column-list-panel">
+            <div class="column-list-head"><div><p class="eyebrow">STANDARD COLUMNS</p><h3>Show, hide or rename</h3></div><button id="resetStandardColumnsBtn" type="button" class="small-button">Reset names</button></div>
+            <div id="standardColumnsList" class="column-config-list"></div>
+          </section>
+          <section class="column-list-panel">
+            <div class="column-list-head"><div><p class="eyebrow">CUSTOM PARAMETERS</p><h3>Your added columns</h3></div><span id="customColumnCount" class="filter-result-pill">0 custom</span></div>
+            <div id="customColumnsList" class="column-config-list"></div>
+            <div id="customColumnsEmpty" class="empty-state">No custom columns yet.</div>
+          </section>
+        </div>
+      </div>
+      <div class="column-manager-tip"><strong>Works in both Holdings and Watchlist.</strong> Click any custom cell to enter/edit its value. Use Edit/Delete beside a custom column to change or remove it. Custom columns also appear in Preview / Print.</div>
+    </div>
+
+    <div id="customValueModal" class="modal small-modal hidden" role="dialog" aria-modal="true" aria-labelledby="customValueTitle">
+      <div class="modal-head">
+        <div><p class="eyebrow">CUSTOM PARAMETER</p><h2 id="customValueTitle">Edit value</h2><p id="customValueRecord" class="modal-subcopy"></p></div>
+        <button class="modal-close" data-close-modal aria-label="Close value editor">×</button>
+      </div>
+      <form id="customValueForm" class="stack-form">
+        <input id="customValueSection" type="hidden">
+        <input id="customValueRecordId" type="hidden">
+        <input id="customValueColumnKey" type="hidden">
+        <label id="customValueFieldLabel">Value
+          <input id="customValueInput" maxlength="2000">
+        </label>
+        <p class="tiny muted">Leave blank and save to clear this value.</p>
+        <div class="form-actions">
+          <button type="button" class="secondary-button" data-close-modal>Cancel</button>
+          <button id="saveCustomValueBtn" type="submit" class="primary-button">Save value</button>
+        </div>
+      </form>
+    </div>
 
     <div id="notesModal" class="modal notes-modal hidden" role="dialog" aria-modal="true" aria-labelledby="notesModalTitle">
       <div class="modal-head">
@@ -190,9 +883,77 @@
 
     <div id="watchModal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-head"><div><p class="eyebrow">FUTURE INVESTMENT</p><h2>Add to watchlist</h2></div><button class="modal-close" data-close-modal>×</button></div><form id="watchForm" class="form-grid"><input id="watchId" type="hidden"><label>Asset type<select id="watchType" required><option value="STOCK">Stock</option><option value="ETF">ETF</option><option value="MF">Mutual fund</option><option value="OTHER">Other</option></select></label><label>Asset name<input id="watchName" required maxlength="160"></label><label><span id="watchCodeLabel">Ticker symbol</span><input id="watchCode" required maxlength="40"></label><label id="watchExchangeLabel">Exchange<select id="watchExchange"><option value="NSE">NSE</option><option value="BOM">BSE (BOM)</option><option value="NASDAQ">NASDAQ</option><option value="NYSE">NYSE</option></select></label><label>Target buy price<input id="watchTarget" type="number" min="0" step="0.0001"></label><label>Manual current price <small>(optional)</small><input id="watchManualPrice" type="number" min="0" step="0.0001"></label><label>Priority<select id="watchPriority"><option value="HIGH">High</option><option value="MEDIUM" selected>Medium</option><option value="LOW">Low</option></select></label><label class="span-2">Personal Note <small>(optional)</small><textarea id="watchNotes" rows="4" maxlength="500" placeholder="Example: Buy below ₹1,500; wait for valuation correction; review after Q3 results…"></textarea></label><div id="watchMfHelp" class="info-box span-2 hidden">For Indian mutual funds, enter the numeric AMFI scheme code.</div><div class="form-actions span-2"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="saveWatchBtn" type="submit" class="primary-button">Save watch item</button></div></form></div>
 
+    <div id="lifeQuoteModal" class="modal quote-library-modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <div><p class="eyebrow">DAILY LIFE QUOTES</p><h2>Quote Library</h2><p class="modal-subcopy">Saved permanently in the Google Sheet tab <strong>DailyQuotes</strong>. The dashboard chooses a different starting quote each day and auto-shuffles while open.</p></div>
+        <button class="modal-close" data-close-modal>×</button>
+      </div>
+      <div class="quote-library-layout">
+        <form id="lifeQuoteForm" class="stack-form quote-editor">
+          <input id="lifeQuoteId" type="hidden">
+          <label>Quote<textarea id="lifeQuoteInput" rows="5" maxlength="500" required placeholder="Write or paste a life quote…"></textarea></label>
+          <label>Author / source <small>(optional)</small><input id="lifeQuoteAuthorInput" maxlength="120" placeholder="e.g. Personal note, book author, My Finance"></label>
+          <div class="form-actions"><button id="clearLifeQuoteBtn" type="button" class="secondary-button">Clear</button><button id="saveLifeQuoteBtn" type="submit" class="primary-button">Save quote</button></div>
+        </form>
+        <div class="quote-library-list-wrap">
+          <div class="quote-library-tools"><input id="lifeQuoteSearch" class="search-input" type="search" placeholder="Search saved quotes…"><span id="lifeQuoteCount" class="filter-result-pill">0 quotes</span></div>
+          <div id="lifeQuoteList" class="quote-library-list"></div>
+          <div id="lifeQuoteEmpty" class="empty-state hidden">No quotes saved yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="stickyNoteModal" class="modal small-modal sticky-note-modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-head"><div><p class="eyebrow">DASHBOARD STICKY</p><h2 id="stickyNoteModalTitle">Add target or reminder</h2></div><button class="modal-close" data-close-modal>×</button></div>
+      <form id="stickyNoteForm" class="stack-form">
+        <input id="stickyNoteId" type="hidden">
+        <label>Type<select id="stickyNoteType"><option value="TARGET">Target</option><option value="REMINDER">Reminder</option></select></label>
+        <label>Title<input id="stickyNoteTitle" required maxlength="120" placeholder="What needs attention?"></label>
+        <label>Due date <small>(optional)</small><input id="stickyNoteDueDate" type="date"></label>
+        <label>Details<textarea id="stickyNoteText" rows="5" maxlength="1000" placeholder="Short details, next action, amount, person, etc."></textarea></label>
+        <p class="tiny muted">Click <strong>Done</strong> on the dashboard when completed. It will automatically be saved in your Daily Diary.</p>
+        <div class="form-actions"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="saveStickyNoteBtn" type="submit" class="primary-button">Save sticky</button></div>
+      </form>
+    </div>
+
     <div id="passwordModal" class="modal small-modal hidden" role="dialog" aria-modal="true"><div class="modal-head"><div><p class="eyebrow">ACCOUNT SECURITY</p><h2>Change password</h2></div><button class="modal-close" data-close-modal>×</button></div><form id="passwordForm" class="stack-form"><label>Current password<input id="currentPassword" type="password" required></label><label>New password<input id="newPassword" type="password" required minlength="10"></label><label>Confirm new password<input id="confirmPassword" type="password" required minlength="10"></label><p class="tiny muted">At least 10 characters with upper-case, lower-case, number and symbol.</p><div class="form-actions"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button type="submit" class="primary-button">Update password</button></div></form></div>
 
-    <div id="userModal" class="modal small-modal hidden" role="dialog" aria-modal="true"><div class="modal-head"><div><p class="eyebrow">ADMINISTRATION</p><h2>Create user</h2></div><button class="modal-close" data-close-modal>×</button></div><form id="userForm" class="stack-form"><label>Username<input id="newUsername" required maxlength="60" pattern="[A-Za-z0-9._-]+"></label><label>Display name<input id="newDisplayName" required maxlength="100"></label><label>Role<select id="newUserRole"><option value="USER">User</option><option value="ADMIN">Admin</option></select></label><label>Temporary password<input id="newUserPassword" type="password" required minlength="10"></label><div class="form-actions"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button type="submit" class="primary-button">Create user</button></div></form></div>
+    <div id="userModal" class="modal small-modal hidden user-admin-modal" role="dialog" aria-modal="true" aria-labelledby="userModalTitle">
+    <div class="modal-head">
+      <div><p class="eyebrow">ADMINISTRATION</p><h2 id="userModalTitle">Create user</h2></div>
+      <button class="modal-close" data-close-modal type="button">×</button>
+    </div>
+    <form id="userForm" class="stack-form">
+      <input id="userFormMode" type="hidden" value="CREATE">
+      <input id="editOriginalUsername" type="hidden" value="">
+      <label>Username
+        <input id="newUsername" required maxlength="60" pattern="[A-Za-z0-9._-]+" autocomplete="off">
+        <small id="usernameEditHelp" class="form-help">3–60 characters: letters, numbers, dot, underscore or hyphen.</small>
+      </label>
+      <label>Display name<input id="newDisplayName" required maxlength="100"></label>
+      <label>Role
+        <select id="newUserRole"><option value="USER">User</option><option value="ADMIN">Admin</option></select>
+      </label>
+      <label id="newUserActiveLabel" class="user-active-label hidden">Account status
+        <select id="newUserActive"><option value="true">Active</option><option value="false">Disabled</option></select>
+      </label>
+      <div id="userPasswordGroup" class="user-password-group">
+        <label>Temporary password
+          <div class="user-password-row">
+            <input id="newUserPassword" type="text" minlength="10" autocomplete="new-password">
+            <button id="generateUserPasswordBtn" type="button" class="secondary-button compact-user-btn">Generate</button>
+            <button id="copyUserPasswordBtn" type="button" class="secondary-button compact-user-btn">Copy</button>
+          </div>
+          <small class="form-help">At least 10 characters with uppercase, lowercase, number and symbol. A strong password is generated automatically.</small>
+        </label>
+      </div>
+      <div id="userFormStatus" class="user-form-status" aria-live="polite"></div>
+      <div class="form-actions">
+        <button type="button" class="secondary-button" data-close-modal>Cancel</button>
+        <button id="saveUserBtn" type="submit" class="primary-button">Create user</button>
+      </div>
+    </form>
+  </div>
   </div>
 
 
@@ -203,7 +964,7 @@
       <div class="drawer-title-wrap">
         <div id="drawerAssetBadge" class="drawer-asset-badge">₹</div>
         <div>
-          <p class="eyebrow">INVESTMENT DETAILS</p>
+          <p id="drawerEyebrow" class="eyebrow">INVESTMENT DETAILS</p>
           <h2 id="drawerTitle">Investment</h2>
           <p id="drawerSubtitle" class="drawer-subtitle"></p>
         </div>
@@ -212,13 +973,13 @@
     </div>
     <div id="drawerContent" class="drawer-content"></div>
     <div class="drawer-footer">
-      <button id="drawerEditBtn" class="secondary-button" type="button">Edit investment</button>
+      <button id="drawerEditBtn" class="secondary-button" type="button">Edit</button>
       <button id="drawerDoneBtn" class="primary-button" type="button">Done</button>
     </div>
   </aside>
 
   <div id="toastRegion" class="toast-region" aria-live="polite"></div>
-  <script src="config.js?v=20260823-9"></script>
-  <script src="app-v11.js?v=20260823-11" defer></script>
+  <script src="config.js?v=20260823-1929"></script>
+  <script src="app-v19-2-9.js?v=20260823-1929" defer></script>
 </body>
 </html>
