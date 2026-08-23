@@ -1167,17 +1167,46 @@ function setTableSizeFromSlider(section,dimension,value){
   saveTableSize(section,size);
   applyTableSize(section);
 }
+function columnResizeLimits(section,index){
+  const table=tableElementFor(section);
+  const th=table?.querySelector('thead tr')?.children[index]||null;
+  const key=String(th?.dataset?.standardKey||'');
+  if(key==='asset')return {min:150,max:760};
+  if(key==='owner')return {min:86,max:220};
+  if(key==='actions')return {min:145,max:320};
+  if(key==='currentPrice')return {min:105,max:340};
+  if(key==='notes')return {min:105,max:460};
+  return {min:58,max:620};
+}
 function setColumnWidth(section,index,width){
   const table=tableElementFor(section);
   if(!table)return;
-  const safe=Math.max(58,Math.min(620,Math.round(width)));
+  const limits=columnResizeLimits(section,index);
+  const safe=Math.max(limits.min,Math.min(limits.max,Math.round(width)));
   table.querySelectorAll('tr').forEach(row=>{
     const cell=row.children[index];
     if(!cell)return;
-    cell.style.width=`${safe}px`;
-    cell.style.minWidth=`${safe}px`;
-    cell.style.maxWidth=`${safe}px`;
+    // Use inline !important so the user's drag always beats historical CSS min-width rules.
+    cell.style.setProperty('width',`${safe}px`,'important');
+    cell.style.setProperty('min-width',`${safe}px`,'important');
+    cell.style.setProperty('max-width',`${safe}px`,'important');
+    cell.dataset.userWidth=String(safe);
   });
+  const th=table.querySelector('thead tr')?.children[index];
+  if(String(th?.dataset?.standardKey||'')==='asset'){
+    table.querySelectorAll('.asset-col .asset-cell').forEach(assetCell=>{
+      assetCell.style.setProperty('width','100%','important');
+      assetCell.style.setProperty('min-width','0','important');
+      assetCell.style.setProperty('max-width','100%','important');
+    });
+    table.querySelectorAll('.asset-col .asset-cell > div:last-child').forEach(textBox=>{
+      // This explicitly cancels the older width:0!important rule that caused one-letter-per-line names.
+      textBox.style.setProperty('width','auto','important');
+      textBox.style.setProperty('min-width','0','important');
+      textBox.style.setProperty('max-width','100%','important');
+      textBox.style.setProperty('flex','1 1 auto','important');
+    });
+  }
   if(section==='holdings'&&index===0){
     const assetLeft=safe;
     table.querySelectorAll('.asset-col').forEach(cell=>cell.style.left=`${assetLeft}px`);
@@ -1197,13 +1226,19 @@ function resetSingleColumnWidth(section,index){
   saveColumnWidths(section,widths);
   const table=tableElementFor(section);
   if(!table)return;
+  const key=String(table.querySelector('thead tr')?.children[index]?.dataset?.standardKey||'');
   table.querySelectorAll('tr').forEach(row=>{
     const cell=row.children[index];
     if(!cell)return;
     cell.style.removeProperty('width');
     cell.style.removeProperty('min-width');
     cell.style.removeProperty('max-width');
+    delete cell.dataset.userWidth;
   });
+  if(key==='asset'){
+    // Restore a useful default width after double-click reset.
+    setColumnWidth(section,index,280);
+  }
   if(section==='holdings'&&index===0){
     table.querySelectorAll('.asset-col').forEach(cell=>cell.style.left='100px');
   }
@@ -1218,7 +1253,8 @@ function installColumnResizers(section){
     if(th.querySelector('.column-resize-handle'))return;
     const handle=document.createElement('span');
     handle.className='column-resize-handle';
-    handle.title='Drag left/right to resize this column · Double-click to reset';
+    const columnKey=String(th.dataset.standardKey||'');
+    handle.title=columnKey==='asset'?'Drag left/right to resize Asset / Scheme column (150–760 px) · Double-click to reset':'Drag left/right to resize this column · Double-click to reset';
     handle.setAttribute('aria-hidden','true');
     th.appendChild(handle);
 
@@ -1232,7 +1268,8 @@ function installColumnResizers(section){
       markTableLayoutSaving(section);
 
       const onMove=e=>{
-        const width=Math.max(58,Math.min(620,startWidth+(e.clientX-startX)));
+        const limits=columnResizeLimits(section,index);
+        const width=Math.max(limits.min,Math.min(limits.max,startWidth+(e.clientX-startX)));
         setColumnWidth(section,index,width);
       };
       const onUp=e=>{
@@ -4328,6 +4365,19 @@ async function refreshMobileFromBackend(reason='resume'){
 }
 
 
+
+function applyAssetResizeMigration(){
+  const key='myfinance_1929_asset_resize_final_fix_2';
+  try{
+    if(localStorage.getItem(key)==='1')return;
+    saveColumnWidths('holdings',{});
+    saveColumnWidths('watchlist',{});
+    saveTableScroll('holdings',0);
+    saveTableScroll('watchlist',0);
+    localStorage.setItem(key,'1');
+  }catch{}
+}
+
 function applyProperLayoutMigration(){
   const key='myfinance_1929_proper_layout_fix_1';
   try{
@@ -4344,6 +4394,7 @@ function applyProperLayoutMigration(){
 
 async function init(){
   try{
+    applyAssetResizeMigration();
     applyProperLayoutMigration();
     bindEvents();
     loadBackendVersion();

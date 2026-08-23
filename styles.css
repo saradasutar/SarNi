@@ -6912,3 +6912,79 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
     overflow-wrap:break-word !important;
   }
 }
+
+
+/* =========================================================
+   FE v19.2.9 — ASSET COLUMN RESIZE FINAL FIX
+   User drag width must override all previous asset min-width rules.
+   ========================================================= */
+
+/* Default state: readable, but NOT locked. JS inline !important takes over when dragged. */
+#holdingsSection .holdings-table th.asset-col:not([data-user-width]),
+#holdingsSection .holdings-table td.asset-col:not([data-user-width]),
+#watchlistSection .watchlist-details-table th.asset-col:not([data-user-width]),
+#watchlistSection .watchlist-details-table td.asset-col:not([data-user-width]){
+  min-width:260px !important;
+}
+
+/* Critical correction for the older hard-fix rule that set the text container to width:0!important. */
+#holdingsSection .holdings-table .asset-col .asset-cell > div:last-child,
+#watchlistSection .watchlist-details-table .asset-col .asset-cell > div:last-child{
+  width:auto !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  flex:1 1 auto !important;
+}
+
+/* Asset name wraps by words; it must never collapse to one character per line. */
+#holdingsSection .holdings-table .asset-col .asset-cell strong,
+#watchlistSection .watchlist-details-table .asset-col .asset-cell strong{
+  white-space:normal !important;
+  word-break:normal !important;
+  overflow-wrap:break-word !important;
+  hyphens:none !important;
+  line-height:1.25;
+}
+
+/* Codes/tickers are kept intact where possible. */
+#holdingsSection .holdings-table .asset-col .asset-cell span,
+#watchlistSection .watchlist-details-table .asset-col .asset-cell span{
+  white-space:normal !important;
+  word-break:normal !important;
+  overflow-wrap:normal !important;
+}
+
+/* Make the Asset resize edge easier to grab. */
+#holdingsSection .holdings-table th.asset-col .column-resize-handle,
+#watchlistSection .watchlist-details-table th.asset-col .column-resize-handle{
+  right:-7px;
+  width:14px;
+  z-index:80;
+}
+#holdingsSection .holdings-table th.asset-col .column-resize-handle::after,
+#watchlistSection .watchlist-details-table th.asset-col .column-resize-handle::after{
+  left:6px;
+  width:3px;
+  background:rgba(91,94,205,.28);
+}
+#holdingsSection .holdings-table th.asset-col:hover .column-resize-handle::after,
+#watchlistSection .watchlist-details-table th.asset-col:hover .column-resize-handle::after{
+  background:#5b5ecd;
+  box-shadow:0 0 0 3px rgba(91,94,205,.10);
+}
+
+/* User-resized widths must stay exact. */
+#holdingsSection .holdings-table [data-user-width],
+#watchlistSection .watchlist-details-table [data-user-width]{
+  box-sizing:border-box !important;
+}
+
+/* On mobile the same drag logic works; default remains usable. */
+@media(max-width:860px){
+  #holdingsSection .holdings-table th.asset-col:not([data-user-width]),
+  #holdingsSection .holdings-table td.asset-col:not([data-user-width]),
+  #watchlistSection .watchlist-details-table th.asset-col:not([data-user-width]),
+  #watchlistSection .watchlist-details-table td.asset-col:not([data-user-width]){
+    min-width:220px !important;
+  }
+}
