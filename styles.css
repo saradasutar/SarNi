@@ -6757,3 +6757,158 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
     justify-content:flex-start;
   }
 }
+
+
+/* =========================================================
+   FE v19.2.9 — PROPER TABLE LAYOUT FIX
+   ========================================================= */
+
+/* Normal word wrapping — never one-character-per-line. */
+#holdingsSection .holdings-table th,
+#holdingsSection .holdings-table td,
+#watchlistSection .watchlist-details-table th,
+#watchlistSection .watchlist-details-table td{
+  white-space:normal !important;
+  word-break:normal !important;
+  overflow-wrap:break-word !important;
+  vertical-align:middle;
+  line-height:1.3;
+}
+
+/* Investor stays compact and readable. */
+#holdingsSection [data-standard-key="owner"]{
+  min-width:100px !important;
+}
+
+/* Asset/Scheme is allowed to wrap, but not collapse into a vertical strip. */
+#holdingsSection [data-standard-key="asset"],
+#holdingsSection .asset-col,
+#watchlistSection [data-standard-key="asset"],
+#watchlistSection .asset-col{
+  min-width:235px !important;
+}
+
+#holdingsSection .asset-col .asset-cell,
+#watchlistSection .asset-col .asset-cell{
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  gap:9px;
+}
+
+#holdingsSection .asset-col .asset-cell > div:last-child,
+#watchlistSection .asset-col .asset-cell > div:last-child{
+  flex:1 1 auto !important;
+  width:auto !important;
+  min-width:0 !important;
+  max-width:100% !important;
+}
+
+#holdingsSection .asset-col .asset-cell strong,
+#holdingsSection .asset-col .asset-cell span,
+#watchlistSection .asset-col .asset-cell strong,
+#watchlistSection .asset-col .asset-cell span{
+  display:block !important;
+  width:auto !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  white-space:normal !important;
+  word-break:normal !important;
+  overflow-wrap:break-word !important;
+  hyphens:none !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+
+/* Codes/tickers should stay as words rather than breaking letter-by-letter. */
+#holdingsSection .asset-col .asset-cell span,
+#watchlistSection .asset-col .asset-cell span{
+  overflow-wrap:normal !important;
+}
+
+/* Sensible minimum widths for important result fields. */
+#holdingsSection [data-standard-key="invested"]{min-width:105px !important;}
+#holdingsSection [data-standard-key="currentPrice"]{min-width:155px !important;}
+#holdingsSection [data-standard-key="currentValue"]{min-width:110px !important;}
+#holdingsSection [data-standard-key="currentPnl"]{min-width:105px !important;}
+#holdingsSection [data-standard-key="realizedPnl"]{min-width:105px !important;}
+#holdingsSection [data-standard-key="totalPnl"]{min-width:110px !important;}
+#holdingsSection [data-standard-key="returnPct"]{min-width:85px !important;}
+#holdingsSection [data-standard-key="xirr"]{min-width:72px !important;}
+#holdingsSection [data-standard-key="notes"]{min-width:145px !important;}
+#holdingsSection [data-standard-key="d1"],
+#holdingsSection [data-standard-key="w1"],
+#holdingsSection [data-standard-key="m1"],
+#holdingsSection [data-standard-key="m6"],
+#holdingsSection [data-standard-key="y1"],
+#holdingsSection [data-standard-key="y3"],
+#holdingsSection [data-standard-key="y5"],
+#holdingsSection [data-standard-key="y10"]{
+  min-width:68px !important;
+}
+
+/* Action buttons in a neat 2×2 block. */
+#holdingsSection [data-standard-key="actions"],
+#watchlistSection [data-standard-key="actions"],
+#holdingsSection .row-actions,
+#watchlistSection .row-actions{
+  min-width:185px !important;
+}
+
+#holdingsSection .row-actions,
+#watchlistSection .row-actions{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(72px,1fr));
+  gap:6px !important;
+  align-content:center;
+  padding:8px !important;
+}
+
+#holdingsSection .row-actions .small-button,
+#watchlistSection .row-actions .small-button{
+  width:100%;
+  min-width:0;
+  white-space:nowrap !important;
+}
+
+/* Notes wrap by words. */
+#holdingsSection .personal-note-cell,
+#watchlistSection .personal-note-cell,
+#holdingsSection .note-preview,
+#watchlistSection .note-preview{
+  white-space:normal !important;
+  word-break:normal !important;
+  overflow-wrap:break-word !important;
+}
+
+/* Let rows grow naturally for wrapped names. */
+#holdingsSection .holding-row td,
+#watchlistSection .watchlist-row td{
+  height:auto !important;
+}
+
+@media(max-width:860px){
+  #holdingsSection [data-standard-key="asset"],
+  #holdingsSection .asset-col,
+  #watchlistSection [data-standard-key="asset"],
+  #watchlistSection .asset-col{
+    min-width:215px !important;
+  }
+
+  #holdingsSection [data-standard-key="actions"],
+  #watchlistSection [data-standard-key="actions"],
+  #holdingsSection .row-actions,
+  #watchlistSection .row-actions{
+    min-width:170px !important;
+  }
+}
+
+@media print{
+  th,td,.asset-cell strong,.asset-cell span{
+    white-space:normal !important;
+    word-break:normal !important;
+    overflow-wrap:break-word !important;
+  }
+}

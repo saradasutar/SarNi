@@ -4327,8 +4327,24 @@ async function refreshMobileFromBackend(reason='resume'){
   try{await loadDashboard(false);}catch(e){console.warn('Mobile resync failed:',e);}
 }
 
+
+function applyProperLayoutMigration(){
+  const key='myfinance_1929_proper_layout_fix_1';
+  try{
+    if(localStorage.getItem(key)==='1')return;
+    // Clear only the old position-based pixel widths once.
+    // Saved filters, hidden columns, moved order and table-size % remain.
+    saveColumnWidths('holdings',{});
+    saveColumnWidths('watchlist',{});
+    saveTableScroll('holdings',0);
+    saveTableScroll('watchlist',0);
+    localStorage.setItem(key,'1');
+  }catch{}
+}
+
 async function init(){
   try{
+    applyProperLayoutMigration();
     bindEvents();
     loadBackendVersion();
 
@@ -4405,8 +4421,13 @@ async function init(){
 console.info('MyFinance v19.2.9 loaded — mobile parity/session fix applied');
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.utilityDrawerOpen)closeUtilityDrawer();});
 window.addEventListener('error',event=>{
+  const message=String(event.message||'');
+  if(message==='Script error.'&&!event.error){
+    console.warn('Ignored generic cross-origin Script error.');
+    return;
+  }
   console.error('MyFinance runtime error',event.error||event.message);
-  showRuntimeWarning(`Dashboard script error: ${event.message||'Unknown error'}.`);
+  showRuntimeWarning(`Dashboard script error: ${message||'Unknown error'}.`);
 });
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.utilityDrawerOpen&&state.utilityDrawerTab==='QUOTE'&&!state.lifeQuotePaused)startLifeQuoteShuffle();});
 window.addEventListener('unhandledrejection',event=>{
