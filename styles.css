@@ -1275,24 +1275,25 @@ body.drawer-open { overflow: hidden; }
 }
 
 
-/* V10 — Mobile default overview: hide holding summary like desktop compact view */
-@media (max-width: 860px) {
-  /* Hide the large portfolio KPI/holding summary cards on the default mobile Overview. */
-  #overviewSection .summary-grid {
-    display: none !important;
-  }
 
-  /* Hide the MF vs Stocks/ETF holding-summary panel on default mobile Overview. */
-  #overviewSection .type-breakdown-panel {
-    display: none !important;
-  }
 
-  /* Pull the useful overview content upward after the summaries are removed. */
-  #overviewSection {
-    gap: 14px;
-  }
+/* V11 — Hide holding summary from DEFAULT OVERVIEW on desktop + mobile */
+#overviewSection .summary-grid,
+#overviewSection .type-breakdown-panel {
+  display: none !important;
+}
 
-  #overviewSection .overview-grid {
-    margin-top: 0;
-  }
+/* Keep the remaining default overview compact after summary cards are hidden. */
+#overviewSection {
+  gap: 14px;
+}
+
+#overviewSection .overview-grid {
+  margin-top: 0;
+}
+
+/* Holdings remain fully available in the dedicated Holdings section/tab. */
+#holdingsSection .summary-grid,
+#holdingsSection .type-breakdown-panel {
+  display: initial;
 }

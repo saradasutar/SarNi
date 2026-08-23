@@ -1,35 +1,33 @@
-MYFINANCE MOBILE COMPACT V10
+MYFINANCE HIDE HOLDING SUMMARY V11
 
-CHANGE REQUESTED
-On mobile, the default Overview now hides the large holding-summary area, matching the compact desktop behaviour requested.
+FIX
+The holding summary is now hidden from the DEFAULT OVERVIEW on BOTH:
+- Desktop browser
+- Mobile browser
 
-MOBILE DEFAULT VIEW
-Hidden on Overview:
+HIDDEN FROM DEFAULT OVERVIEW
 - Invested / Current Value / Gain / Selected View summary cards
 - Mutual Funds vs Stocks & ETFs summary panel
 
-Still available:
-- Portfolio selector
-- Investment type selector
-- Allocation / investor information / top holdings
-- Holdings tab
+STILL AVAILABLE
+- Holdings tab and full holdings table
+- Combined / Sarada / Niharika selector
+- All / Mutual Funds / Stocks & ETFs filter
 - Watchlist
-- Personal notes
+- Personal Notes / All Notes
 - Vertical investment detail popup
-- All V9 mobile price fixes
+- Mobile live-price fixes from V9
 
-DESKTOP
-Desktop layout is unchanged.
-
-GITHUB INSTALL
+INSTALL
 1. Keep config.js unchanged.
 2. Replace index.html.
 3. Replace styles.css.
-4. Upload app-v10.js as a NEW file.
+4. Upload app-v11.js as a NEW file.
 5. Commit changes.
-6. On mobile open:
-   https://saradasutar.github.io/MyFinance/?v=1600
-7. Close the previous MyFinance tab first, then reopen.
-8. If needed, refresh once.
+6. Desktop:
+   https://saradasutar.github.io/MyFinance/?v=1700
+7. Mobile:
+   Close the old MyFinance tab completely, then open the same URL.
+8. Hard refresh if required.
 
 No Apps Script/backend change is required.
