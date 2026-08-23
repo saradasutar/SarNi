@@ -6315,3 +6315,98 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
     justify-content:flex-end;
   }
 }
+
+
+/* =========================================================
+   FE v19.2.9 — TABLE TEXT WRAP FIX
+   Text wraps automatically when dashboard columns are narrowed.
+   Existing sizing, drag-resize, sticky columns and saved widths remain.
+   ========================================================= */
+
+/* Allow headings and text cells to wrap as columns become narrower. */
+#holdingsSection .holdings-table th,
+#holdingsSection .holdings-table td,
+#watchlistSection .watchlist-details-table th,
+#watchlistSection .watchlist-details-table td{
+  white-space:normal !important;
+  overflow-wrap:break-word;
+  word-break:normal;
+  hyphens:auto;
+}
+
+/* Asset names/codes must be allowed to shrink inside a dragged column. */
+#holdingsSection .holdings-table .asset-cell,
+#watchlistSection .watchlist-details-table .asset-cell{
+  min-width:0 !important;
+  max-width:100% !important;
+  align-items:flex-start;
+}
+#holdingsSection .holdings-table .asset-cell > div:last-child,
+#watchlistSection .watchlist-details-table .asset-cell > div:last-child{
+  min-width:0 !important;
+  max-width:100% !important;
+  width:auto !important;
+  flex:1 1 auto;
+}
+#holdingsSection .holdings-table .asset-cell strong,
+#holdingsSection .holdings-table .asset-cell span,
+#watchlistSection .watchlist-details-table .asset-cell strong,
+#watchlistSection .watchlist-details-table .asset-cell span,
+#holdingsSection .personal-note-cell,
+#watchlistSection .personal-note-cell,
+#watchlistSection .watch-source-remark,
+#holdingsSection [data-custom-cell],
+#watchlistSection [data-custom-cell]{
+  white-space:normal !important;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+/* Notes should use the width given to the column instead of keeping an old max width. */
+#holdingsSection .personal-note-cell .note-preview,
+#watchlistSection .personal-note-cell .note-preview{
+  max-width:100% !important;
+  width:100%;
+  white-space:normal !important;
+  overflow-wrap:anywhere;
+}
+
+/* Action buttons may move to a second line when that column is made narrow. */
+#holdingsSection .row-actions,
+#watchlistSection .row-actions{
+  flex-wrap:wrap;
+  align-items:flex-start;
+}
+
+/* Keep badges compact while surrounding text wraps. */
+#holdingsSection .asset-badge,
+#watchlistSection .asset-badge,
+#holdingsSection .owner-tag{
+  flex:0 0 auto;
+}
+
+/* Header labels remain readable after narrow drag-resize. */
+#holdingsSection .holdings-table thead th,
+#watchlistSection .watchlist-details-table thead th{
+  line-height:1.25 !important;
+  overflow-wrap:anywhere;
+}
+
+/* Same wrapping behaviour in full-screen table view. */
+#holdingsSection.data-fullscreen-active .holdings-table th,
+#holdingsSection.data-fullscreen-active .holdings-table td,
+#watchlistSection.data-fullscreen-active .watchlist-details-table th,
+#watchlistSection.data-fullscreen-active .watchlist-details-table td{
+  white-space:normal !important;
+  overflow-wrap:break-word;
+}
+
+/* Mobile retains exactly the same wrapping behaviour. */
+@media(max-width:860px){
+  #holdingsSection .holdings-table th,
+  #holdingsSection .holdings-table td,
+  #watchlistSection .watchlist-details-table th,
+  #watchlistSection .watchlist-details-table td{
+    white-space:normal !important;
+  }
+}

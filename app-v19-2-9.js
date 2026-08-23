@@ -2741,6 +2741,14 @@ function applyPrintFrameLayout(frame,layout){
     }
     colgroup.innerHTML=widths.map(v=>`<col style="width:${v.toFixed(3)}%">`).join('');
     table.style.tableLayout='fixed';
+    table.style.whiteSpace='normal';
+    table.querySelectorAll('th,td').forEach(cell=>{
+      cell.style.whiteSpace=cell.classList.contains('num')?'nowrap':'normal';
+      if(!cell.classList.contains('num')){
+        cell.style.overflowWrap='anywhere';
+        cell.style.wordBreak='break-word';
+      }
+    });
   }
 }
 function installPrintColumnResizers(frame,section,layout,onChange){
@@ -2819,11 +2827,12 @@ function buildPrintableDocument(title,subtitle,bodyHtml,orientation='portrait'){
     h1{margin:0;font-size:18px;color:#24326c} h2{font-size:13px;margin:14px 0 7px}
     .sub{margin-top:4px;color:#606b80;font-size:9px}.meta{text-align:right;color:#7b8495;font-size:8px;white-space:nowrap}
     table{width:100%;border-collapse:collapse;table-layout:fixed}
-    th,td{position:relative;border:1px solid #d9dee8;padding:calc(5px * var(--print-row-scale)) 6px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
-    th{background:#eef1fb;color:#26336e;font-size:8px;text-transform:uppercase}
+    th,td{position:relative;border:1px solid #d9dee8;padding:calc(5px * var(--print-row-scale)) 6px;text-align:left;vertical-align:top;white-space:normal;overflow-wrap:anywhere;word-break:normal;hyphens:auto}
+    th{background:#eef1fb;color:#26336e;font-size:8px;text-transform:uppercase;line-height:1.25}
     tr:nth-child(even) td{background:#fafbfe}
     .num{text-align:right;white-space:nowrap}.pos{color:#087b5d}.neg{color:#be4051}
-    small{font-size:7px;color:#748096}
+    td:not(.num),td:not(.num) *{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+    small{font-size:7px;color:#748096;white-space:normal;overflow-wrap:anywhere}
     .print-col-resizer{position:absolute;top:0;right:-4px;bottom:0;width:9px;z-index:5;cursor:col-resize;touch-action:none}
     .print-col-resizer::after{content:"";position:absolute;top:18%;bottom:18%;left:4px;width:2px;background:transparent;border-radius:2px}
     th:hover .print-col-resizer::after,.print-col-resizer:hover::after{background:#5e68d6}
