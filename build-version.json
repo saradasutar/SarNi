@@ -1,6 +1,6 @@
 {
-  "version": "19.4.10",
-  "build": "20260825-19410-loginheal1",
-  "frontend": "19.4.10",
+  "version": "19.4.11",
+  "build": "20260825-19411-directlogin1",
+  "frontend": "19.4.11",
   "backendExpected": "3.17.4"
 }
