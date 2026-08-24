@@ -7880,3 +7880,28 @@ button,input,select,textarea{
     transition-duration:.01ms!important;
   }
 }
+
+
+/* =========================================================
+   FE v19.4.2 — CACHE / SESSION SELF-HEAL
+   ========================================================= */
+.login-repair-button{
+  align-self:center;
+  border:0;
+  padding:3px 5px;
+  color:#777f97;
+  background:transparent;
+  font-size:8.5px;
+  font-weight:800;
+  cursor:pointer;
+}
+.login-repair-button:hover{
+  color:#5e53bd;
+  text-decoration:underline;
+}
+@media(max-width:680px){
+  .login-repair-button{
+    min-height:30px;
+    padding:6px;
+  }
+}

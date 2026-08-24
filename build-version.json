@@ -1,0 +1,6 @@
+{
+  "version": "19.4.2",
+  "build": "20260824-1942-cacheheal1",
+  "frontend": "19.4.2",
+  "backendExpected": "3.17.1"
+}
