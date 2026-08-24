@@ -1,6 +1,6 @@
 {
-  "version": "19.4.9",
-  "build": "20260825-1949-gpfsummary2",
-  "frontend": "19.4.9",
+  "version": "19.4.10",
+  "build": "20260825-19410-loginheal1",
+  "frontend": "19.4.10",
   "backendExpected": "3.17.4"
 }
