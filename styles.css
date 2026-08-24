@@ -6302,6 +6302,157 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
   }
 }
 
+/* =========================================================
+   FE v19.4.7 — PROFESSIONAL DIARY WORKSPACE
+   Editor first; all recent and searchable history follows below.
+   ========================================================= */
+.diary-layout,
+.monthly-workspace-grid{
+  grid-template-columns:minmax(0,1fr);
+  gap:20px;
+}
+.diary-compose-panel,
+.monthly-compose-panel{
+  position:static;
+  width:100%;
+  overflow:visible;
+}
+.diary-compose-with-recent,
+.monthly-compose-with-recent{
+  grid-template-columns:minmax(0,1fr);
+  gap:22px;
+}
+#diaryForm{
+  grid-template-columns:minmax(250px,.42fr) minmax(0,1fr);
+  gap:16px 18px;
+}
+#diaryForm>.diary-writing-starters,
+#diaryForm>.diary-entry-field,
+#diaryForm>.diary-keyboard-tip,
+#diaryForm>.diary-form-actions{
+  grid-column:1/-1;
+}
+.diary-writing-starters{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:13px 14px;
+  border:1px solid #e1e3f2;
+  border-radius:14px;
+  background:linear-gradient(135deg,#fafaff,#f7fbff 58%,#fffaf4);
+}
+.diary-writing-starters>div:first-child{
+  min-width:190px;
+}
+.diary-writing-starters strong{
+  display:block;
+  margin-bottom:3px;
+  color:#344363;
+  font-size:11px;
+}
+.diary-writing-starters span{
+  color:#7c879b;
+  font-size:9.5px;
+  line-height:1.4;
+}
+.diary-starter-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:7px;
+}
+.diary-starter-buttons button{
+  min-height:34px;
+  border:1px solid #dcdff0;
+  border-radius:999px;
+  padding:7px 11px;
+  color:#505b77;
+  background:#fff;
+  font:inherit;
+  font-size:9.5px;
+  font-weight:850;
+  cursor:pointer;
+  transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;
+}
+.diary-starter-buttons button:hover{
+  transform:translateY(-1px);
+  border-color:#a9a4e4;
+  box-shadow:0 7px 16px rgba(73,67,156,.09);
+}
+#diaryForm .diary-entry-field textarea{
+  min-height:300px;
+  padding:16px;
+  border-radius:15px;
+  background:linear-gradient(180deg,#fff,#fdfdff);
+  font-size:13px;
+  line-height:1.75;
+}
+.diary-writing-progress{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+}
+.diary-writing-progress>span+span::before{
+  content:"•";
+  margin-right:9px;
+  color:#c0c6d2;
+}
+.recent-diary-rail{
+  order:2;
+  width:100%;
+  max-width:none;
+  border-radius:18px;
+  background:linear-gradient(180deg,#fbfcff,#f8f9fd);
+}
+.recent-diary-rail-body{
+  padding:16px;
+}
+.recent-diary-list{
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  max-height:none;
+  overflow:visible;
+  gap:10px;
+}
+.recent-diary-card{
+  padding:13px;
+}
+.diary-browser-panel,
+.monthly-list-panel{
+  min-height:280px;
+}
+
+@media(max-width:760px){
+  #diaryForm{
+    grid-template-columns:minmax(0,1fr);
+  }
+  #diaryForm>*{
+    grid-column:1;
+  }
+  .diary-writing-starters{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .diary-starter-buttons{
+    justify-content:flex-start;
+  }
+  .diary-starter-buttons button{
+    min-height:40px;
+    font-size:12px;
+  }
+  #diaryForm .diary-entry-field textarea{
+    min-height:260px;
+    font-size:15px;
+  }
+  .diary-writing-progress{
+    align-items:flex-end;
+    flex-direction:column;
+    gap:2px;
+  }
+  .diary-writing-progress>span+span::before{display:none}
+  .recent-diary-list{grid-template-columns:1fr}
+}
+
 @media(max-width:520px){
   .mobile-session-bar{
     align-items:flex-start;
@@ -7908,7 +8059,7 @@ button,input,select,textarea{
 
 
 /* =========================================================
-   FE v19.4.6 — MOBILE COMFORT TYPOGRAPHY
+   FE v19.4.7 — MOBILE COMFORT TYPOGRAPHY
    Screen-only overrides: desktop and printed output are unchanged.
    ========================================================= */
 @media screen and (max-width:860px){
@@ -8296,6 +8447,22 @@ button,input,select,textarea{
   .modal{
     font-size:15px !important;
   }
+}
+
+/* Final layout lock: history always follows the writing workspace. */
+.diary-layout,
+.monthly-workspace-grid{grid-template-columns:minmax(0,1fr)!important}
+.diary-compose-panel,
+.monthly-compose-panel{position:static!important;overflow:visible!important}
+.diary-compose-with-recent,
+.monthly-compose-with-recent{grid-template-columns:minmax(0,1fr)!important;gap:22px!important}
+.recent-diary-list{
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  max-height:none;
+  overflow:visible;
+}
+@media screen and (max-width:860px){
+  .recent-diary-list{grid-template-columns:minmax(0,1fr)}
 }
 
 @media screen and (max-width:520px){
