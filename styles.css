@@ -8449,6 +8449,165 @@ button,input,select,textarea{
   }
 }
 
+/* FE v19.4.9 — compact Unified + separate investor summaries with explicit GPF. */
+#holdingsSection .holdings-summary-panel{padding:12px!important}
+#holdingsSection .holdings-summary-head{margin-bottom:10px!important}
+#holdingsSection .holdings-summary-head h3{font-size:20px!important}
+#holdingsSection .holdings-value-growth-matrix{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px!important;
+  overflow:visible;
+}
+#holdingsSection .holdings-value-growth-matrix .holdings-summary-row{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-content:start;
+  gap:7px!important;
+  min-width:0!important;
+  padding:8px;
+  border:1px solid #dfe5f0;
+  border-radius:16px;
+  background:rgba(255,255,255,.7);
+}
+#holdingsSection .holdings-value-growth-matrix .summary-row-combined{
+  border-color:#cbd4f1;
+  background:linear-gradient(145deg,#f7f8ff,#f1f4ff);
+  box-shadow:0 5px 16px rgba(64,78,145,.07);
+}
+#holdingsSection .holdings-value-growth-matrix .summary-row-niharika{
+  border-color:#efd8b8;
+  background:linear-gradient(145deg,#fffdf9,#fff8ed);
+}
+#holdingsSection .holdings-value-growth-matrix .summary-row-sarada{
+  border-color:#d9cdf0;
+  background:linear-gradient(145deg,#fdfbff,#f7f3ff);
+}
+#holdingsSection .holdings-value-growth-matrix .summary-owner-label{
+  grid-column:1/-1;
+  min-height:42px!important;
+  padding:8px 11px!important;
+  flex-direction:row!important;
+  align-items:baseline!important;
+  justify-content:space-between!important;
+  gap:10px;
+}
+#holdingsSection .holdings-value-growth-matrix .summary-owner-label strong{font-size:16px!important}
+#holdingsSection .holdings-value-growth-matrix .summary-owner-label span{margin-top:0!important;font-size:10.5px!important}
+#holdingsSection .summary-row-combined .summary-owner-label{border-color:#bcc7ed!important;background:#e9edff!important}
+#holdingsSection .summary-row-combined .summary-owner-label strong{color:#4252ad!important}
+#holdingsSection .summary-row-niharika .summary-owner-label{border-color:#ecd2aa!important;background:#fff1db!important}
+#holdingsSection .summary-row-niharika .summary-owner-label strong{color:#a96723!important}
+#holdingsSection .summary-row-sarada .summary-owner-label{border-color:#d5c5ee!important;background:#f0e9ff!important}
+#holdingsSection .summary-row-sarada .summary-owner-label strong{color:#7049a7!important}
+#holdingsSection .holdings-value-growth-matrix .holdings-mini-card{
+  min-height:112px!important;
+  padding:10px!important;
+  border-width:1.5px!important;
+  box-shadow:0 4px 11px rgba(39,53,91,.07)!important;
+}
+#holdingsSection .holdings-value-growth-matrix .summary-card-title{
+  display:flex!important;
+  align-items:center;
+  gap:7px;
+  margin-bottom:5px!important;
+  font-size:12.5px!important;
+}
+#holdingsSection .holdings-value-growth-matrix .summary-card-title::before{
+  flex:0 0 auto;
+  min-width:27px;
+  padding:3px 5px;
+  border-radius:7px;
+  color:#fff;
+  font-size:8.5px;
+  font-weight:950;
+  line-height:1.15;
+  text-align:center;
+  letter-spacing:.02em;
+}
+#holdingsSection .holdings-mini-card.total{border-color:#bdc9ef!important;background:linear-gradient(145deg,#fff,#eef2ff)!important}
+#holdingsSection .holdings-mini-card.total .summary-card-title::before{content:"ALL";background:#5867c7}
+#holdingsSection .holdings-mini-card.mf{border-color:#b9e3d1!important;background:linear-gradient(145deg,#fff,#ebf9f3)!important}
+#holdingsSection .holdings-mini-card.mf .summary-card-title::before{content:"MF";background:#22966f}
+#holdingsSection .holdings-mini-card.stock{border-color:#f0cfad!important;background:linear-gradient(145deg,#fff,#fff3e8)!important}
+#holdingsSection .holdings-mini-card.stock .summary-card-title::before{content:"ST";background:#d98235}
+#holdingsSection .holdings-mini-card.gpf .summary-card-title::before{content:"GPF";background:#168d6b}
+#holdingsSection .holdings-value-growth-matrix .summary-metric{
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:6px!important;
+  padding:4px 5px!important;
+}
+#holdingsSection .holdings-value-growth-matrix .summary-metric>span{font-size:10.5px!important}
+#holdingsSection .holdings-value-growth-matrix .summary-metric>strong{font-size:14.5px!important}
+.holdings-value-growth-matrix .holdings-mini-card.gpf{
+  border-color:#bfe4d7!important;
+  background:linear-gradient(145deg,#fff,#eafaf4)!important;
+}
+.summary-value-legend .gpf{
+  color:#08785a;
+  background:#e9f8f0;
+  border:1px solid #bce7d4;
+}
+.summary-row-niharika .holdings-mini-card.gpf{background:linear-gradient(145deg,#fff,#e8f9f2)!important}
+.summary-row-sarada .holdings-mini-card.gpf{background:linear-gradient(145deg,#fff,#edf9f4)!important}
+.holdings-value-growth-matrix .holdings-mini-card.gpf::before{background:#1b9b76}
+.holdings-value-growth-matrix .holdings-mini-card.gpf .summary-card-title{color:#14785b!important}
+.holdings-value-growth-matrix .gpf-projection-metric{
+  border:1px solid #bce7d4!important;
+  background:linear-gradient(90deg,#f5fcf8,#e9f8f0)!important;
+}
+.holdings-value-growth-matrix .gpf-projection-metric>span{color:#238163!important}
+.holdings-value-growth-matrix .gpf-projection-metric>strong{color:#08785a!important}
+.holdings-value-growth-matrix .gpf-projection-metric>small{
+  grid-column:2;
+  display:block;
+  overflow:hidden;
+  margin-top:-3px;
+  color:#34846d;
+  font-size:9.5px!important;
+  font-weight:850!important;
+  line-height:1.2;
+  text-align:right;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.holdings-value-growth-matrix .holdings-mini-card.gpf-empty{opacity:.76}
+@media(max-width:1450px) and (min-width:861px){
+  #holdingsSection .holdings-value-growth-matrix{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #holdingsSection .holdings-value-growth-matrix .summary-row-combined{
+    grid-column:1/-1;
+    grid-template-columns:118px repeat(4,minmax(0,1fr))!important;
+  }
+  #holdingsSection .holdings-value-growth-matrix .summary-row-combined .summary-owner-label{
+    grid-column:auto;
+    min-height:112px!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    justify-content:center!important;
+  }
+}
+@media(max-width:860px){
+  #holdingsSection .holdings-summary-panel{padding:10px!important}
+  #holdingsSection .holdings-value-growth-matrix{
+    grid-template-columns:minmax(0,1fr);
+    overflow:visible!important;
+  }
+  #holdingsSection .holdings-value-growth-matrix .holdings-summary-row{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    min-width:0!important;
+  }
+}
+@media(max-width:460px){
+  #holdingsSection .holdings-value-growth-matrix .holdings-mini-card{
+    min-height:108px!important;
+    padding:8px!important;
+  }
+  #holdingsSection .holdings-value-growth-matrix .summary-metric{gap:4px!important;padding:4px!important}
+  #holdingsSection .holdings-value-growth-matrix .summary-metric>span{font-size:9.8px!important}
+  #holdingsSection .holdings-value-growth-matrix .summary-metric>strong{font-size:13.5px!important}
+  .holdings-value-growth-matrix .gpf-projection-metric>small{font-size:8.8px!important}
+}
+
 /* v19.4.8 — GPF holding entry, projection and summary */
 .asset-badge.gpf{
   color:#fff;

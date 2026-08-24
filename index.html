@@ -8,11 +8,11 @@
   <meta http-equiv="Expires" content="0">
   <meta name="theme-color" content="#eef5ff">
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
-  <meta name="myfinance-build" content="20260824-1948-smoothlogin-gpf1">
+  <meta name="myfinance-build" content="20260825-1949-gpfsummary2">
   <script>
     // Check a tiny no-cache build file on every load.
     // If GitHub/Chrome serves an older index.html, reload once with a fresh URL.
-    window.__MYFINANCE_PAGE_BUILD__ = '20260824-1948-smoothlogin-gpf1';
+    window.__MYFINANCE_PAGE_BUILD__ = '20260825-1949-gpfsummary2';
     (function(){
       try{
         var url='build-version.json?_=' + Date.now();
@@ -31,7 +31,7 @@
   </script>
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260824-1948-smoothlogin-gpf1">
+  <link rel="stylesheet" href="styles.css?v=20260825-1949-gpfsummary2">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -57,7 +57,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.4.8</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.17.4</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.4.9</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.17.4</span></div>
           <button id="repairBrowserBtn" class="login-repair-button" type="button">↻ Repair browser cache/session</button>
         </div>
       </form>
@@ -92,20 +92,20 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v19.4.8</span><span id="dashboardBackendVersion">Backend · v3.17.4</span>
+        <span id="dashboardVersion">Frontend · v19.4.9</span><span id="dashboardBackendVersion">Backend · v3.17.4</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.4.8</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.17.4</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.4.9</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.17.4</span></div></div></div>
         <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
 
       <div id="mobileSessionBar" class="mobile-session-bar" aria-label="Mobile session controls">
         <div class="mobile-session-versions">
-          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.4.8</span>
+          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.4.9</span>
           <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.17.4</span>
         </div>
         <div class="mobile-session-actions">
@@ -272,14 +272,15 @@
           <div class="holdings-summary-head">
             <div>
               <p class="eyebrow">HOLDINGS SUMMARY</p>
-              <h3>Invested · Present Value · Growth</h3>
+              <h3>Invested · Present Value · Growth · GPF</h3>
             </div>
             <div class="holdings-summary-head-actions">
-              <span class="holdings-summary-note">Combined and investor-wise comparison</span>
+              <span class="holdings-summary-note">Unified Combined summary + separate investor summaries</span>
               <div class="summary-value-legend" aria-label="Summary colour guide">
                 <span class="invested">Invested</span>
                 <span class="present">Present value</span>
                 <span class="growth">Growth / Loss</span>
+                <span class="gpf">GPF projection</span>
               </div>
               <button id="hideHoldingsSummaryInsideBtn" class="summary-inline-hide" type="button" data-hide-holdings-summary>Hide summary ↑</button>
             </div>
@@ -289,7 +290,7 @@
             <div class="holdings-summary-row summary-row-combined">
               <div class="summary-owner-label">
                 <strong>Combined</strong>
-                <span>Whole portfolio</span>
+                <span>Unified portfolio</span>
               </div>
 
               <article class="holdings-mini-card total">
@@ -312,12 +313,19 @@
                 <div class="summary-metric"><span>Present value</span><strong id="holdSumCombinedStockCurrent">₹0</strong></div>
                 <div class="summary-metric growth"><span>Growth</span><strong id="holdSumCombinedStockGrowth">₹0 · 0.00%</strong></div>
               </article>
+
+              <article class="holdings-mini-card gpf">
+                <span class="summary-card-title">GPF</span>
+                <div class="summary-metric"><span>Present balance</span><strong id="holdSumCombinedGpfPresent">₹0</strong></div>
+                <div class="summary-metric"><span>Monthly payment</span><strong id="holdSumCombinedGpfMonthly">₹0</strong></div>
+                <div class="summary-metric growth gpf-projection-metric"><span>Projected 12M</span><strong id="holdSumCombinedGpfProjected">₹0</strong><small id="holdSumCombinedGpfInterest">₹0 interest</small></div>
+              </article>
             </div>
 
             <div class="holdings-summary-row summary-row-niharika">
               <div class="summary-owner-label">
                 <strong>Niharika</strong>
-                <span>Individual portfolio</span>
+                <span>Separate investments</span>
               </div>
 
               <article class="holdings-mini-card total">
@@ -340,12 +348,19 @@
                 <div class="summary-metric"><span>Present value</span><strong id="holdSumNiharikaStockCurrent">₹0</strong></div>
                 <div class="summary-metric growth"><span>Growth</span><strong id="holdSumNiharikaStockGrowth">₹0 · 0.00%</strong></div>
               </article>
+
+              <article class="holdings-mini-card gpf">
+                <span class="summary-card-title">GPF</span>
+                <div class="summary-metric"><span>Present balance</span><strong id="holdSumNiharikaGpfPresent">₹0</strong></div>
+                <div class="summary-metric"><span>Monthly payment</span><strong id="holdSumNiharikaGpfMonthly">₹0</strong></div>
+                <div class="summary-metric growth gpf-projection-metric"><span>Projected 12M</span><strong id="holdSumNiharikaGpfProjected">₹0</strong><small id="holdSumNiharikaGpfInterest">₹0 interest</small></div>
+              </article>
             </div>
 
             <div class="holdings-summary-row summary-row-sarada">
               <div class="summary-owner-label">
                 <strong>Sarada</strong>
-                <span>Individual portfolio</span>
+                <span>Separate investments</span>
               </div>
 
               <article class="holdings-mini-card total">
@@ -367,6 +382,13 @@
                 <div class="summary-metric"><span>Invested</span><strong id="holdSumSaradaStockInvested">₹0</strong></div>
                 <div class="summary-metric"><span>Present value</span><strong id="holdSumSaradaStockCurrent">₹0</strong></div>
                 <div class="summary-metric growth"><span>Growth</span><strong id="holdSumSaradaStockGrowth">₹0 · 0.00%</strong></div>
+              </article>
+
+              <article class="holdings-mini-card gpf">
+                <span class="summary-card-title">GPF</span>
+                <div class="summary-metric"><span>Present balance</span><strong id="holdSumSaradaGpfPresent">₹0</strong></div>
+                <div class="summary-metric"><span>Monthly payment</span><strong id="holdSumSaradaGpfMonthly">₹0</strong></div>
+                <div class="summary-metric growth gpf-projection-metric"><span>Projected 12M</span><strong id="holdSumSaradaGpfProjected">₹0</strong><small id="holdSumSaradaGpfInterest">₹0 interest</small></div>
               </article>
             </div>
           </div>
@@ -1451,7 +1473,7 @@
       <span>Auto logout in <strong id="idleWarningCountdown">60 sec</strong> due to inactivity.</span>
       <button id="staySignedInBtn" type="button">Stay signed in</button>
     </div>
-  <script src="config.js?v=20260824-1948-smoothlogin-gpf1"></script>
-  <script src="app-v19-4-8.js?v=20260824-1948-smoothlogin-gpf1" defer></script>
+  <script src="config.js?v=20260825-1949-gpfsummary2"></script>
+  <script src="app-v19-4-9.js?v=20260825-1949-gpfsummary2" defer></script>
 </body>
 </html>

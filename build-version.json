@@ -1,6 +1,6 @@
 {
-  "version": "19.4.8",
-  "build": "20260824-1948-smoothlogin-gpf1",
-  "frontend": "19.4.8",
+  "version": "19.4.9",
+  "build": "20260825-1949-gpfsummary2",
+  "frontend": "19.4.9",
   "backendExpected": "3.17.4"
 }
