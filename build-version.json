@@ -1,6 +1,6 @@
 {
-  "version": "19.4.5",
-  "build": "20260824-1945-instantvalues1",
-  "frontend": "19.4.5",
-  "backendExpected": "3.17.1"
+  "version": "19.4.6",
+  "build": "20260824-1946-fastlogin2",
+  "frontend": "19.4.6",
+  "backendExpected": "3.17.2"
 }
