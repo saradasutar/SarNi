@@ -1,6 +1,6 @@
 {
-  "version": "19.4.2",
-  "build": "20260824-1942-cacheheal1",
-  "frontend": "19.4.2",
+  "version": "19.4.3",
+  "build": "20260824-1943-mobilelogin2",
+  "frontend": "19.4.3",
   "backendExpected": "3.17.1"
 }
