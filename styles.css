@@ -7655,3 +7655,228 @@ body.portfolio-startup-loading #sipSection{
 @media(max-width:860px){.expense-hero{align-items:flex-start;flex-direction:column;padding:17px}.expense-hero-actions{width:100%;display:grid;grid-template-columns:1fr 1fr}.expense-hero-actions .primary-button{grid-column:1/-1}.expense-kpi-grid{gap:7px}.expense-kpi-card{padding:12px}.expense-filter-bar{align-items:stretch}.expense-search-wrap{width:100%;min-width:0}.expense-filter-bar label,.expense-filter-bar select{flex:1;min-width:125px}.expense-table-wrap{max-height:59dvh}.expense-table{min-width:1030px}.expense-category-grid{grid-template-columns:1fr}.expense-print-modal{width:calc(100vw - 16px)}}
 @media(max-width:480px){.expense-kpi-grid{grid-template-columns:1fr 1fr}.expense-kpi-card strong{font-size:16px}}
 @media print{#expenditureSection .expense-table-wrap{max-height:none!important;overflow:visible!important}.expense-table th{position:static!important}}
+
+
+/* =========================================================
+   FE v19.4.1 — SMOOTH / UNCLUTTERED DESKTOP + MOBILE
+   ========================================================= */
+
+html{
+  scroll-behavior:auto;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  overscroll-behavior-y:none;
+}
+button,input,select,textarea{
+  touch-action:manipulation;
+}
+.page-section{
+  animation:myfinance-soft-enter .14s ease-out !important;
+}
+@keyframes myfinance-soft-enter{
+  from{opacity:.55;transform:translateY(2px)}
+  to{opacity:1;transform:none}
+}
+
+/* Reduce visual noise without removing controls. */
+.topbar{
+  box-shadow:0 1px 0 rgba(210,218,235,.7);
+}
+.top-actions{
+  flex-wrap:nowrap;
+}
+.portfolio-filter-bar,
+.saved-view-bar,
+.holdings-layout-toolbar,
+.watch-layout-toolbar,
+.expense-toolbar{
+  scrollbar-width:none;
+}
+.portfolio-filter-bar::-webkit-scrollbar,
+.saved-view-bar::-webkit-scrollbar,
+.holdings-layout-toolbar::-webkit-scrollbar,
+.watch-layout-toolbar::-webkit-scrollbar,
+.expense-toolbar::-webkit-scrollbar{
+  display:none;
+}
+
+/* Small inactivity warning: appears only during the final minute. */
+.idle-warning-bar{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:7000;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  max-width:min(420px,calc(100vw - 32px));
+  padding:10px 12px;
+  border:1px solid #ead9a7;
+  border-radius:12px;
+  color:#795d16;
+  background:rgba(255,250,231,.98);
+  box-shadow:0 14px 35px rgba(73,62,28,.14);
+  font-size:10px;
+  font-weight:750;
+}
+.idle-warning-bar.hidden{display:none!important}
+.idle-warning-bar button{
+  flex:0 0 auto;
+  border:1px solid #d8c171;
+  border-radius:8px;
+  padding:6px 9px;
+  color:#684e08;
+  background:#fff;
+  font-size:9px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* Desktop table / panel scrolling feels lighter. */
+.table-wrap,
+.sip-table-wrap,
+.expense-table-wrap,
+.recent-diary-list{
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  scroll-behavior:auto;
+}
+
+/* Mobile: remove expensive blur and keep only the essentials prominent. */
+@media(max-width:860px){
+  .main-content{
+    padding-left:10px !important;
+    padding-right:10px !important;
+    padding-bottom:82px !important;
+  }
+
+  .topbar{
+    min-height:58px !important;
+    padding-top:7px !important;
+    padding-bottom:7px !important;
+    gap:7px !important;
+    background:#f8faff !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  .topbar h1{
+    font-size:20px !important;
+    line-height:1.05 !important;
+  }
+
+  /* Mobile already has a separate FE/BE session bar, so hide duplicate chips. */
+  .topbar .dashboard-version-pair{
+    display:none !important;
+  }
+
+  .top-actions{
+    gap:5px !important;
+    overflow-x:auto;
+    scrollbar-width:none;
+    max-width:100%;
+  }
+  .top-actions::-webkit-scrollbar{display:none}
+
+  .auto-refresh-control{
+    min-width:auto !important;
+    padding:3px 6px !important;
+    border-radius:10px !important;
+  }
+  .auto-refresh-copy strong{
+    display:none !important;
+  }
+  .auto-refresh-copy span{
+    font-size:8px !important;
+  }
+  .auto-refresh-control select{
+    max-width:70px !important;
+    font-size:9px !important;
+  }
+
+  .sync-status{
+    min-width:auto !important;
+    padding:0 7px !important;
+  }
+
+  .top-actions #addInvestmentBtn{
+    white-space:nowrap;
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+
+  .mobile-session-bar{
+    margin:6px 0 8px !important;
+    padding:6px 8px !important;
+    border-radius:10px !important;
+  }
+
+  /* Single clean horizontal bottom navigation instead of multi-row clutter. */
+  .mobile-nav{
+    height:62px !important;
+    padding:5px 6px calc(5px + env(safe-area-inset-bottom)) !important;
+    gap:2px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scrollbar-width:none;
+    scroll-snap-type:x proximity;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+  .mobile-nav::-webkit-scrollbar{display:none}
+  .mobile-nav-item{
+    flex:0 0 64px !important;
+    min-width:64px !important;
+    border-radius:11px !important;
+    font-size:8.5px !important;
+    scroll-snap-align:center;
+  }
+  .mobile-nav-item span{
+    margin-bottom:1px !important;
+    font-size:16px !important;
+  }
+
+  /* Toolbars remain usable but no longer wrap into several cluttered rows. */
+  .portfolio-filter-bar,
+  .saved-view-bar,
+  .holdings-layout-toolbar,
+  .watch-layout-toolbar,
+  .expense-toolbar,
+  .sip-filter-tools{
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    flex-wrap:nowrap !important;
+    scrollbar-width:none;
+  }
+
+  .panel,
+  .holdings-summary-panel,
+  .sip-panel,
+  .expense-panel{
+    border-radius:14px !important;
+  }
+
+  /* Lighter startup overlay for smoother phones. */
+  .portfolio-startup-overlay{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:rgba(244,247,253,.92) !important;
+  }
+
+  .idle-warning-bar{
+    left:10px;
+    right:10px;
+    bottom:72px;
+    max-width:none;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+}
