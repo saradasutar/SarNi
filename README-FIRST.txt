@@ -1,21 +1,20 @@
-SarNi Shared Holdings Recovery + Professional Diary — Frontend v19.4.7
-Backend v3.17.3 (Apps Script update and NEW deployment are required)
+SarNi Smooth Login + GPF Holdings — Frontend v19.4.8
+Backend v3.17.4 (Apps Script update and NEW deployment are required)
 
 WHAT THIS FIX CHANGES
-1. A verified holdings snapshot is now kept on the backend, so it is shared by desktop, mobile and tablet.
-2. A newly used phone can recover the last verified holding values even when that phone has no local cache.
-3. Missing or temporary zero values are repaired per holding without replacing newer valid live values.
-4. The fast holdings request automatically retries with shared recovery when the first response is incomplete.
-5. The holdings status shows the holding count, visible-value count and shared-recovery count.
-6. Login remains lightweight: authentication completes first, holdings load next, and full diary/SIP/expense details continue in the background.
-7. Values continue checking every 30 seconds and when the app returns to the foreground.
-8. The daily diary editor is full width. Recent entries and searchable history are below it and cannot overlap.
-9. The diary adds writing starters, a clearer reflection area, live word count and estimated reading time.
-10. Larger mobile text, light loading and the 5-minute inactivity auto-logout remain included.
+1. Login now opens the dashboard immediately after authentication; holdings and full details update quietly afterward.
+2. The browser no longer starts many rapid polling requests while Apps Script is still working.
+3. Successful Apps Script replies are delivered directly to the page, with delayed polling only as a fallback.
+4. Normal authenticated requests use the server session cache and avoid repeated session-sheet reads and writes.
+5. A verified holdings snapshot remains shared across desktop, mobile and tablet to repair temporary zero values.
+6. GPF can be added as a holding with present balance, monthly payment, annual interest rate and balance date.
+7. GPF present balance is included in combined holdings; its card and details show a 12-month payment, interest and balance projection.
+8. Holdings continue checking in the background and when the app returns to the foreground.
+9. The professional diary layout and comfortable mobile text remain included.
 
 STEP 1 — UPDATE APPS SCRIPT BACKEND
 1. Open the Apps Script project currently used by SarNi.
-2. Replace the full Code.gs contents with Code-v3.17.3.gs from this package.
+2. Replace the full Code.gs contents with Code-v3.17.4.gs from this package.
 3. Click Deploy > Manage deployments > Edit.
 4. Select New version, then click Deploy.
 5. Keep the same /exec URL; config.js does not need changing.
@@ -27,17 +26,19 @@ STEP 2 — UPLOAD WEBSITE FILES ON GITHUB
    - index.html
    - styles.css
    - config.js
-   - app-v19-4-7.js
+   - app-v19-4-8.js
    - build-version.json
 4. Choose Commit changes.
 5. Wait about 2 minutes for GitHub Pages to publish.
 
-FIRST SHARED-RECOVERY TEST
-1. On the desktop or phone that currently shows correct holdings, sign in once so Backend v3.17.3 stores the verified shared snapshot.
-2. On the affected phone, open:
-   https://saradasutar.github.io/SarNi/?v=1947-sharedrecovery1
-3. Confirm the login screen shows Frontend v19.4.7 and Backend v3.17.3.
+SMOOTH LOGIN AND GPF TEST
+1. On the affected phone, open:
+   https://saradasutar.github.io/SarNi/?v=1948-smoothlogin-gpf1
+2. Confirm the login screen shows Frontend v19.4.8 and Backend v3.17.4.
+3. Sign in. The dashboard should open as soon as authentication succeeds; holdings may fill in quietly afterward.
 4. If an older version appears, tap Repair browser cache/session once, then sign in again.
-5. In Holdings, confirm the status shows the expected holding count and all values visible.
+5. In Holdings, confirm the expected holding count and values on desktop and both phones.
+6. Tap Add, choose GPF, enter the present balance, monthly payment, editable interest rate and balance date, then save.
+7. Confirm the GPF present balance appears in the combined holding total and its details show the 12-month projection.
 
 You do not need to delete older app-v19-4-x.js files immediately. They are no longer loaded by index.html.

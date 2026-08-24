@@ -8,11 +8,11 @@
   <meta http-equiv="Expires" content="0">
   <meta name="theme-color" content="#eef5ff">
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
-  <meta name="myfinance-build" content="20260824-1947-sharedrecovery1">
+  <meta name="myfinance-build" content="20260824-1948-smoothlogin-gpf1">
   <script>
     // Check a tiny no-cache build file on every load.
     // If GitHub/Chrome serves an older index.html, reload once with a fresh URL.
-    window.__MYFINANCE_PAGE_BUILD__ = '20260824-1947-sharedrecovery1';
+    window.__MYFINANCE_PAGE_BUILD__ = '20260824-1948-smoothlogin-gpf1';
     (function(){
       try{
         var url='build-version.json?_=' + Date.now();
@@ -31,7 +31,7 @@
   </script>
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260824-1947-sharedrecovery1">
+  <link rel="stylesheet" href="styles.css?v=20260824-1948-smoothlogin-gpf1">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -57,7 +57,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.4.7</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.17.3</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.4.8</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.17.4</span></div>
           <button id="repairBrowserBtn" class="login-repair-button" type="button">↻ Repair browser cache/session</button>
         </div>
       </form>
@@ -71,7 +71,7 @@
         <div class="portfolio-startup-spinner" aria-hidden="true"></div>
         <div>
           <strong id="portfolioStartupTitle">Loading your portfolio…</strong>
-          <span id="portfolioStartupMessage">Getting holdings and verified values from Backend v3.17.3.</span>
+          <span id="portfolioStartupMessage">Holdings are updating quietly in the background.</span>
         </div>
         <button id="portfolioStartupRetryBtn" type="button" class="secondary-button hidden">Retry load</button>
       </div>
@@ -92,21 +92,21 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v19.4.7</span><span id="dashboardBackendVersion">Backend · v3.17.3</span>
+        <span id="dashboardVersion">Frontend · v19.4.8</span><span id="dashboardBackendVersion">Backend · v3.17.4</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.4.7</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.17.3</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.4.8</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.17.4</span></div></div></div>
         <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
 
       <div id="mobileSessionBar" class="mobile-session-bar" aria-label="Mobile session controls">
         <div class="mobile-session-versions">
-          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.4.7</span>
-          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.17.3</span>
+          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.4.8</span>
+          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.17.4</span>
         </div>
         <div class="mobile-session-actions">
           <button id="mobileChangePasswordBtn" class="mobile-session-button" type="button">Password</button>
@@ -125,6 +125,7 @@
             <button type="button" class="owner-pill active" data-asset-view="ALL">All investments</button>
             <button type="button" class="owner-pill" data-asset-view="MF">Mutual funds</button>
             <button type="button" class="owner-pill" data-asset-view="STOCKS">Stocks &amp; ETFs</button>
+            <button type="button" class="owner-pill" data-asset-view="GPF">GPF</button>
           </div>
         </div>
         <div class="quick-actions"><button id="importBtn" class="secondary-button">⇧ Import portfolio</button><button id="exportBtn" class="secondary-button">Export CSV</button></div>
@@ -251,7 +252,7 @@
 
         <article class="panel type-breakdown-panel">
           <div class="panel-head">
-            <div><p class="eyebrow">INVESTMENT TYPE SUMMARY</p><h3>Mutual funds vs Stocks &amp; ETFs</h3></div>
+            <div><p class="eyebrow">INVESTMENT TYPE SUMMARY</p><h3>Mutual funds, Stocks, ETFs &amp; GPF</h3></div>
             <span class="tiny muted">Click a card to filter the dashboard</span>
           </div>
           <div id="typeSummaryGrid" class="type-summary-grid"></div>
@@ -373,8 +374,8 @@
 
         <article class="panel table-panel">
           <div class="panel-head responsive-head">
-            <div class="holdings-title-block"><h3 id="holdingsHeading"><span class="holdings-title-label">PORTFOLIO DETAILS</span><span class="holdings-title-sep">·</span><span>Mutual funds, stocks &amp; ETFs</span></h3><p id="masterDataStatus" class="master-data-status">Master spreadsheet not loaded yet.</p></div>
-            <div class="table-tools"><button id="toggleHoldingsSummaryBtn" class="summary-toggle-button" type="button" aria-expanded="false">▾ Show Holding Summary</button><button id="replaceMasterDataBtn" class="master-data-button" type="button">⇄ Replace from Master Sheet</button><button id="showAllInvestmentsBtn" class="show-all-button" type="button">▦ Show All Investments</button><input id="holdingSearch" class="search-input" type="search" placeholder="Search holdings…"><select id="holdingTypeFilter" class="compact-select"><option value="ALL">All assets</option><option value="MF">Mutual funds</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="OTHER">Other</option></select><select id="holdingResultFilter" class="compact-select advanced-filter"><option value="ALL">All results</option><option value="CURRENT_PROFIT">Current profit</option><option value="CURRENT_LOSS">Current loss</option><option value="TOTAL_PROFIT">Total profit</option><option value="TOTAL_LOSS">Total loss</option><option value="REALISED_PROFIT">Realised profit</option><option value="REALISED_LOSS">Realised loss</option><option value="PNL_PENDING">P/L pending</option></select><select id="holdingNotesFilter" class="compact-select advanced-filter"><option value="ALL">All notes</option><option value="WITH_NOTES">Has notes</option><option value="WITHOUT_NOTES">No notes</option></select><select id="holdingTradeFilter" class="compact-select advanced-filter"><option value="ALL">All trade history</option><option value="HAS_PURCHASE">Has purchase date</option><option value="HAS_SALE">Has sale/redemption</option><option value="MISSING_DATES">Missing exact dates</option></select><span id="holdingsFilterCount" class="filter-result-pill">0 visible</span><button id="printHoldingsBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="holdingsFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Holdings to full browser area">⛶ Full screen</button><button id="showAllHoldingColumnsBtn" class="secondary-button default-column-toggle-btn" type="button">👁 Show all columns</button><button id="manageHoldingsColumnsBtn" class="secondary-button column-manager-main-btn" type="button">⚙ Add / Edit / Delete Columns</button><button id="viewAllNotesBtn" class="secondary-button">📝 All notes</button><button id="bulkImportBtn" class="secondary-button">⇧ Import</button><button id="addInvestmentTableBtn" class="primary-button">+ Add</button></div>
+            <div class="holdings-title-block"><h3 id="holdingsHeading"><span class="holdings-title-label">PORTFOLIO DETAILS</span><span class="holdings-title-sep">·</span><span>Mutual funds, stocks, ETFs &amp; GPF</span></h3><p id="masterDataStatus" class="master-data-status">Master spreadsheet not loaded yet.</p></div>
+            <div class="table-tools"><button id="toggleHoldingsSummaryBtn" class="summary-toggle-button" type="button" aria-expanded="false">▾ Show Holding Summary</button><button id="replaceMasterDataBtn" class="master-data-button" type="button">⇄ Replace from Master Sheet</button><button id="showAllInvestmentsBtn" class="show-all-button" type="button">▦ Show All Investments</button><input id="holdingSearch" class="search-input" type="search" placeholder="Search holdings…"><select id="holdingTypeFilter" class="compact-select"><option value="ALL">All assets</option><option value="MF">Mutual funds</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="GPF">GPF</option><option value="OTHER">Other</option></select><select id="holdingResultFilter" class="compact-select advanced-filter"><option value="ALL">All results</option><option value="CURRENT_PROFIT">Current profit</option><option value="CURRENT_LOSS">Current loss</option><option value="TOTAL_PROFIT">Total profit</option><option value="TOTAL_LOSS">Total loss</option><option value="REALISED_PROFIT">Realised profit</option><option value="REALISED_LOSS">Realised loss</option><option value="PNL_PENDING">P/L pending</option></select><select id="holdingNotesFilter" class="compact-select advanced-filter"><option value="ALL">All notes</option><option value="WITH_NOTES">Has notes</option><option value="WITHOUT_NOTES">No notes</option></select><select id="holdingTradeFilter" class="compact-select advanced-filter"><option value="ALL">All trade history</option><option value="HAS_PURCHASE">Has purchase date</option><option value="HAS_SALE">Has sale/redemption</option><option value="MISSING_DATES">Missing exact dates</option></select><span id="holdingsFilterCount" class="filter-result-pill">0 visible</span><button id="printHoldingsBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="holdingsFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Holdings to full browser area">⛶ Full screen</button><button id="showAllHoldingColumnsBtn" class="secondary-button default-column-toggle-btn" type="button">👁 Show all columns</button><button id="manageHoldingsColumnsBtn" class="secondary-button column-manager-main-btn" type="button">⚙ Add / Edit / Delete Columns</button><button id="viewAllNotesBtn" class="secondary-button">📝 All notes</button><button id="bulkImportBtn" class="secondary-button">⇧ Import</button><button id="addInvestmentTableBtn" class="primary-button">+ Add</button></div>
           </div>
           <div class="saved-view-bar holdings-saved-view-bar">
   <div class="saved-view-left">
@@ -1052,14 +1053,22 @@
       <div class="modal-head"><div><p class="eyebrow">PORTFOLIO ENTRY</p><h2 id="investmentModalTitle">Add investment</h2></div><button class="modal-close" data-close-modal>×</button></div>
       <form id="investmentForm" class="form-grid"><input id="holdingId" type="hidden">
         <label>Investor<select id="holdingOwner" required></select></label>
-        <label>Asset type<select id="holdingType" required><option value="STOCK">Stock</option><option value="ETF">ETF</option><option value="MF">Mutual fund</option><option value="OTHER">Other</option></select></label>
+        <label>Asset type<select id="holdingType" required><option value="STOCK">Stock</option><option value="ETF">ETF</option><option value="MF">Mutual fund</option><option value="GPF">GPF</option><option value="OTHER">Other</option></select></label>
         <label>Asset name<input id="holdingName" required maxlength="160" placeholder="Reliance Industries"></label>
-        <label><span id="holdingCodeLabel">Ticker symbol</span><input id="holdingCode" required maxlength="40" placeholder="RELIANCE"></label>
+        <label id="holdingCodeField"><span id="holdingCodeLabel">Ticker symbol</span><input id="holdingCode" required maxlength="40" placeholder="RELIANCE"></label>
         <label id="exchangeLabel">Exchange<select id="holdingExchange"><option value="NSE">NSE</option><option value="BOM">BSE (BOM)</option><option value="NASDAQ">NASDAQ</option><option value="NYSE">NYSE</option></select></label>
-        <label>Units / quantity<input id="holdingUnits" type="number" min="0" step="0.000001" required placeholder="10"></label>
-        <label>Total invested / current cost<input id="holdingInvested" type="number" min="0" step="0.01" required placeholder="25000"></label>
-        <label>Manual current price <small>(optional)</small><input id="holdingManualPrice" type="number" min="0" step="0.0001" placeholder="Automatic when blank"></label>
-        <label>Purchase date <small>(optional)</small><input id="holdingBuyDate" type="date"></label>
+        <label id="holdingUnitsField">Units / quantity<input id="holdingUnits" type="number" min="0" step="0.000001" required placeholder="10"></label>
+        <label id="holdingInvestedField">Total invested / current cost<input id="holdingInvested" type="number" min="0" step="0.01" required placeholder="25000"></label>
+        <label id="holdingManualPriceField">Manual current price <small>(optional)</small><input id="holdingManualPrice" type="number" min="0" step="0.0001" placeholder="Automatic when blank"></label>
+        <label id="holdingBuyDateField">Purchase date <small>(optional)</small><input id="holdingBuyDate" type="date"></label>
+        <section id="gpfFields" class="gpf-entry-fields span-2 hidden" aria-label="GPF details">
+          <div class="gpf-entry-intro span-2"><strong>General Provident Fund</strong><span>Enter the latest balance and monthly payment. SarNi will estimate the next 12 months with interest.</span></div>
+          <label>Present GPF balance<input id="gpfPresentBalance" type="number" min="0" step="0.01" inputmode="decimal" placeholder="500000"></label>
+          <label>Monthly payment<input id="gpfMonthlyContribution" type="number" min="0" step="0.01" inputmode="decimal" placeholder="10000"></label>
+          <label>Annual interest rate (%)<input id="gpfAnnualInterestRate" type="number" min="0" max="100" step="0.01" inputmode="decimal" value="7.10"></label>
+          <label>Balance as on<input id="gpfBalanceAsOfDate" type="date"></label>
+          <div id="gpfProjectionPreview" class="gpf-projection-preview span-2" aria-live="polite"></div>
+        </section>
         <label class="span-2">Personal Note <small>(optional)</small><textarea id="holdingNotes" rows="4" maxlength="500" placeholder="Example: Hold for 5+ years; add more below ₹1,200; review after Q3 results…"></textarea></label>
         <div id="mfHelp" class="info-box span-2 hidden">For manual MF entry, use the numeric AMFI scheme code. For statement import, mapping is attempted automatically.</div>
         <div class="form-actions span-2"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="saveInvestmentBtn" type="submit" class="primary-button">Save investment</button></div>
@@ -1442,7 +1451,7 @@
       <span>Auto logout in <strong id="idleWarningCountdown">60 sec</strong> due to inactivity.</span>
       <button id="staySignedInBtn" type="button">Stay signed in</button>
     </div>
-  <script src="config.js?v=20260824-1947-sharedrecovery1"></script>
-  <script src="app-v19-4-7.js?v=20260824-1947-sharedrecovery1" defer></script>
+  <script src="config.js?v=20260824-1948-smoothlogin-gpf1"></script>
+  <script src="app-v19-4-8.js?v=20260824-1948-smoothlogin-gpf1" defer></script>
 </body>
 </html>

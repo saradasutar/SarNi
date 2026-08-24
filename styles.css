@@ -6303,7 +6303,7 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
 }
 
 /* =========================================================
-   FE v19.4.7 — PROFESSIONAL DIARY WORKSPACE
+   FE v19.4.8 — PROFESSIONAL DIARY WORKSPACE
    Editor first; all recent and searchable history follows below.
    ========================================================= */
 .diary-layout,
@@ -8059,7 +8059,7 @@ button,input,select,textarea{
 
 
 /* =========================================================
-   FE v19.4.7 — MOBILE COMFORT TYPOGRAPHY
+   FE v19.4.8 — MOBILE COMFORT TYPOGRAPHY
    Screen-only overrides: desktop and printed output are unchanged.
    ========================================================= */
 @media screen and (max-width:860px){
@@ -8447,6 +8447,71 @@ button,input,select,textarea{
   .modal{
     font-size:15px !important;
   }
+}
+
+/* v19.4.8 — GPF holding entry, projection and summary */
+.asset-badge.gpf{
+  color:#fff;
+  background:linear-gradient(135deg,#14846f,#36b990);
+}
+.allocation-dot.gpf{background:#20a783}
+.gpf-entry-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  padding:18px;
+  border:1px solid #cfeade;
+  border-radius:18px;
+  background:linear-gradient(145deg,#f4fffb,#f5f7ff);
+}
+.gpf-entry-fields.hidden{display:none!important}
+.gpf-entry-intro{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:6px 12px;
+  padding-bottom:2px;
+}
+.gpf-entry-intro strong{font-size:16px;color:#176c5e}
+.gpf-entry-intro span{color:#64758a;font-size:12.5px;line-height:1.5}
+.gpf-projection-preview{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.gpf-projection-preview>span{
+  min-width:0;
+  padding:12px 13px;
+  border:1px solid #dce9e5;
+  border-radius:13px;
+  background:rgba(255,255,255,.9);
+}
+.gpf-projection-preview small,
+.gpf-projection-preview strong{display:block}
+.gpf-projection-preview small{color:#76849a;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.045em}
+.gpf-projection-preview strong{margin-top:5px;color:#25324f;font-size:15px;white-space:nowrap}
+.gpf-projected-total{border-color:#a9ddcb!important;background:#effcf7!important}
+.gpf-projected-total strong{color:#0a8064}
+.gpf-drawer-value{background:linear-gradient(135deg,#126a61,#168e73 58%,#43af88)}
+.gpf-projection-section .drawer-metric{border-color:#d9ece5}
+.gpf-projection-note{
+  margin:11px 2px 0;
+  color:#718098;
+  font-size:11px;
+  line-height:1.55;
+}
+@media screen and (min-width:1051px){
+  .type-summary-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media screen and (max-width:680px){
+  .gpf-entry-fields{grid-template-columns:1fr;padding:14px;gap:13px}
+  .gpf-entry-fields .span-2{grid-column:1}
+  .gpf-projection-preview{grid-template-columns:1fr}
+  .gpf-projection-preview>span{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .gpf-projection-preview strong{margin-top:0;font-size:16px}
+  #investmentModal input,
+  #investmentModal select,
+  #investmentModal textarea{font-size:16px!important}
 }
 
 /* Final layout lock: history always follows the writing workspace. */

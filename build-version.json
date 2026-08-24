@@ -1,6 +1,6 @@
 {
-  "version": "19.4.7",
-  "build": "20260824-1947-sharedrecovery1",
-  "frontend": "19.4.7",
-  "backendExpected": "3.17.3"
+  "version": "19.4.8",
+  "build": "20260824-1948-smoothlogin-gpf1",
+  "frontend": "19.4.8",
+  "backendExpected": "3.17.4"
 }
