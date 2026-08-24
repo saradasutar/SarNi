@@ -10,7 +10,7 @@
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260823-1932-recentdiary1">
+  <link rel="stylesheet" href="styles.css?v=20260824-1940-exp1">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -36,7 +36,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.3.2</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.16.0</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.4.0</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.17.0</span></div>
         </div>
       </form>
     </div>
@@ -49,7 +49,7 @@
         <div class="portfolio-startup-spinner" aria-hidden="true"></div>
         <div>
           <strong id="portfolioStartupTitle">Loading your portfolio…</strong>
-          <span id="portfolioStartupMessage">Getting Holdings, prices and SIP data from Backend v3.16.0.</span>
+          <span id="portfolioStartupMessage">Getting Holdings, prices and SIP data from Backend v3.17.0.</span>
         </div>
         <button id="portfolioStartupRetryBtn" type="button" class="secondary-button hidden">Retry load</button>
       </div>
@@ -62,6 +62,7 @@
         <button class="nav-item" data-section="transactions"><span>⇄</span>Transactions</button>
         <button class="nav-item" data-section="watchlist"><span>☆</span>Watchlist</button>
         <button class="nav-item" data-section="sip"><span>₹</span>SIP Planner</button>
+        <button class="nav-item" data-section="expenditure"><span>₹</span>Expenditure</button>
         <button class="nav-item" data-section="diary"><span>✎</span>Diary</button>
         <button id="quickDiaryBtn" class="nav-item quick-diary-nav" type="button"><span>✚</span>Quick Diary</button>
         <button class="nav-item admin-only hidden" data-section="users"><span>♙</span>Users</button>
@@ -69,21 +70,21 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v19.3.2</span><span id="dashboardBackendVersion">Backend · v3.16.0</span>
+        <span id="dashboardVersion">Frontend · v19.4.0</span><span id="dashboardBackendVersion">Backend · v3.17.0</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.3.2</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.16.0</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.4.0</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.17.0</span></div></div></div>
         <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
 
       <div id="mobileSessionBar" class="mobile-session-bar" aria-label="Mobile session controls">
         <div class="mobile-session-versions">
-          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.3.2</span>
-          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.16.0</span>
+          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.4.0</span>
+          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.17.0</span>
         </div>
         <div class="mobile-session-actions">
           <button id="mobileChangePasswordBtn" class="mobile-session-button" type="button">Password</button>
@@ -588,6 +589,105 @@
         </article>
       </section>
 
+
+      <section id="expenditureSection" class="page-section hidden">
+        <div class="expense-hero">
+          <div>
+            <p class="eyebrow">PERSONAL EXPENDITURE</p>
+            <h2>Expenses, plans &amp; regular payments</h2>
+            <p>Record actual spending, pre-plan upcoming expenses, manage recurring payments, and keep categories organised — without mixing planned amounts with actual expenditure.</p>
+          </div>
+          <div class="expense-hero-actions">
+            <button id="addExpenseBtn" type="button" class="primary-button">+ Actual expense</button>
+            <button id="addExpensePlanBtn" type="button" class="secondary-button">+ Preplan</button>
+            <button id="addRecurringExpenseBtn" type="button" class="secondary-button">+ Regular payment</button>
+          </div>
+        </div>
+
+        <div class="expense-kpi-grid">
+          <article class="expense-kpi-card actual"><span>SPENT THIS MONTH</span><strong id="expenseMonthActual">₹0</strong><small id="expenseMonthActualCount">0 expenses</small></article>
+          <article class="expense-kpi-card planned"><span>PREPLANNED PENDING</span><strong id="expensePlannedPending">₹0</strong><small id="expensePlannedCount">0 pending</small></article>
+          <article class="expense-kpi-card regular"><span>REGULAR DUE · 30 DAYS</span><strong id="expenseRegularDue">₹0</strong><small id="expenseRegularDueCount">0 payments</small></article>
+          <article class="expense-kpi-card year"><span>SPENT THIS YEAR</span><strong id="expenseYearActual">₹0</strong><small>Actual expenditure only</small></article>
+        </div>
+
+        <div class="expense-view-tabs" role="tablist" aria-label="Expenditure views">
+          <button type="button" class="expense-view-tab active" data-expense-view="ACTUAL">Actual Expenses</button>
+          <button type="button" class="expense-view-tab" data-expense-view="PLANNED">Preplanned</button>
+          <button type="button" class="expense-view-tab" data-expense-view="REGULAR">Regular Payments</button>
+          <button type="button" class="expense-view-tab" data-expense-view="CATEGORIES">Categories</button>
+        </div>
+
+        <article id="expenseDataPanel" class="panel expense-panel">
+          <div class="expense-filter-bar">
+            <div class="expense-search-wrap"><span>⌕</span><input id="expenseSearch" type="search" placeholder="Search reason, name, notes, account…"></div>
+            <label>From <input id="expenseFromDate" type="date"></label>
+            <label>To <input id="expenseToDate" type="date"></label>
+            <select id="expenseCategoryFilter" aria-label="Expense category filter"><option value="ALL">All categories</option></select>
+            <select id="expenseAccountFilter" aria-label="Debited from filter"><option value="ALL">All accounts</option></select>
+            <select id="expenseSort" aria-label="Sort expenses">
+              <option value="DATE_DESC">Date · newest</option><option value="DATE_ASC">Date · oldest</option>
+              <option value="AMOUNT_DESC">Amount · high to low</option><option value="AMOUNT_ASC">Amount · low to high</option>
+              <option value="CATEGORY">Category · A–Z</option><option value="NAME">Name / Paid to · A–Z</option><option value="ACCOUNT">Debited from · A–Z</option>
+            </select>
+            <button id="expenseResetFiltersBtn" type="button" class="small-button">Reset</button>
+            <button id="expensePrintBtn" type="button" class="small-button expense-print-button">▣ Print</button>
+            <span id="expenseResultCount" class="filter-result-pill">0 records</span>
+          </div>
+
+          <div class="expense-table-help"><strong>Tip:</strong> Drag any heading edge to change that column width. The heading row stays frozen while you scroll. Your widths are saved on this device.</div>
+
+          <div id="actualExpenseView" class="expense-data-view">
+            <div class="expense-table-wrap" data-expense-table="ACTUAL">
+              <table id="actualExpenseTable" class="expense-table">
+                <thead><tr>
+                  <th data-exp-col="amount">Amount</th><th data-exp-col="date">Dt Spent</th><th data-exp-col="paidTo">Paid To / Name</th>
+                  <th data-exp-col="account">Debited From</th><th data-exp-col="reason">Reason</th><th data-exp-col="category">Category of Exp</th>
+                  <th data-exp-col="notes">Notes to Remember</th><th data-exp-col="actions">Actions</th>
+                </tr></thead><tbody id="actualExpenseBody"></tbody>
+              </table>
+            </div>
+            <div id="actualExpenseEmpty" class="empty-state">No actual expenditure matches this view.</div>
+          </div>
+
+          <div id="plannedExpenseView" class="expense-data-view hidden">
+            <div class="expense-table-wrap" data-expense-table="PLANNED">
+              <table id="plannedExpenseTable" class="expense-table">
+                <thead><tr>
+                  <th data-exp-col="amount">Planned Amount</th><th data-exp-col="date">Planned Date</th><th data-exp-col="paidTo">Paid To / Name</th>
+                  <th data-exp-col="account">Debited From</th><th data-exp-col="reason">Reason</th><th data-exp-col="category">Category</th>
+                  <th data-exp-col="notes">Notes</th><th data-exp-col="status">Status</th><th data-exp-col="actions">Actions</th>
+                </tr></thead><tbody id="plannedExpenseBody"></tbody>
+              </table>
+            </div>
+            <div id="plannedExpenseEmpty" class="empty-state">No preplanned expenses match this view.</div>
+          </div>
+
+          <div id="regularExpenseView" class="expense-data-view hidden">
+            <div class="expense-table-wrap" data-expense-table="REGULAR">
+              <table id="regularExpenseTable" class="expense-table">
+                <thead><tr>
+                  <th data-exp-col="name">Regular Payment</th><th data-exp-col="amount">Amount</th><th data-exp-col="account">Debited From</th>
+                  <th data-exp-col="category">Category</th><th data-exp-col="frequency">Frequency</th><th data-exp-col="date">Next Due</th>
+                  <th data-exp-col="reason">Reason</th><th data-exp-col="notes">Notes</th><th data-exp-col="status">Status</th><th data-exp-col="actions">Actions</th>
+                </tr></thead><tbody id="regularExpenseBody"></tbody>
+              </table>
+            </div>
+            <div id="regularExpenseEmpty" class="empty-state">No regular payments match this view.</div>
+          </div>
+        </article>
+
+        <article id="expenseCategoriesView" class="panel expense-category-panel hidden">
+          <div class="panel-head responsive-head">
+            <div><p class="eyebrow">CATEGORY MANAGER</p><h3>Choose, add, rename or delete expense categories</h3></div>
+            <button id="addExpenseCategoryBtn" type="button" class="primary-button">+ Add category</button>
+          </div>
+          <div class="expense-category-note">Renaming a category also updates existing Actual, Preplanned and Regular Payment records using that category. A category in use cannot be deleted until those records are moved or renamed.</div>
+          <div id="expenseCategoryGrid" class="expense-category-grid"></div>
+          <div id="expenseCategoryEmpty" class="empty-state">No expense categories yet.</div>
+        </article>
+      </section>
+
       <section id="diarySection" class="page-section hidden">
         <div class="diary-hero">
           <div>
@@ -910,7 +1010,7 @@
       <button id="dashboardHScrollRight" class="dashboard-hscroll-arrow" type="button" title="Scroll right">›</button>
     </div>
 
-    <nav class="mobile-nav"><button class="mobile-nav-item active" data-section="overview"><span>◫</span>Overview</button><button class="mobile-nav-item" data-section="holdings"><span>▥</span>Holdings</button><button class="mobile-nav-item" data-section="transactions"><span>⇄</span>Trades</button><button class="mobile-nav-item" data-section="watchlist"><span>☆</span>Watchlist</button><button class="mobile-nav-item" data-section="sip"><span>₹</span>SIP</button><button class="mobile-nav-item" data-section="diary"><span>✎</span>Diary</button><button id="quickDiaryMobileBtn" class="mobile-nav-item" type="button"><span>✚</span>Quick</button></nav>
+    <nav class="mobile-nav"><button class="mobile-nav-item active" data-section="overview"><span>◫</span>Overview</button><button class="mobile-nav-item" data-section="holdings"><span>▥</span>Holdings</button><button class="mobile-nav-item" data-section="transactions"><span>⇄</span>Trades</button><button class="mobile-nav-item" data-section="watchlist"><span>☆</span>Watchlist</button><button class="mobile-nav-item" data-section="sip"><span>₹</span>SIP</button><button class="mobile-nav-item" data-section="expenditure"><span>₹</span>Spend</button><button class="mobile-nav-item" data-section="diary"><span>✎</span>Diary</button><button id="quickDiaryMobileBtn" class="mobile-nav-item" type="button"><span>✚</span>Quick</button></nav>
   </div>
 
   <div id="modalBackdrop" class="modal-backdrop hidden" aria-hidden="true">
@@ -1063,6 +1163,61 @@
       </div>
     </div>
 
+
+
+    <div id="expenseModal" class="modal expense-modal hidden" role="dialog" aria-modal="true" aria-labelledby="expenseModalTitle">
+      <div class="modal-head"><div><p id="expenseModalEyebrow" class="eyebrow">ACTUAL EXPENSE</p><h2 id="expenseModalTitle">Add expense</h2><p id="expenseModalSubcopy" class="modal-subcopy">Record money already spent.</p></div><button class="modal-close" data-close-modal aria-label="Close">×</button></div>
+      <form id="expenseForm" class="form-grid">
+        <input id="expenseRecordId" type="hidden"><input id="expenseRecordMode" type="hidden" value="ACTUAL">
+        <label id="expenseRegularNameGroup" class="span-2 hidden">Regular payment name<input id="expenseRegularName" maxlength="140" placeholder="e.g. Electricity bill / Insurance premium"></label>
+        <label>Amount<input id="expenseAmount" type="number" min="0.01" step="0.01" required></label>
+        <label id="expenseDateGroup"><span id="expenseDateLabel">Date spent</span><input id="expenseDate" type="date" required></label>
+        <label>Paid To / Name <small>(optional)</small><input id="expensePaidTo" maxlength="140" placeholder="Person, shop, service…"></label>
+        <label>Debited From<input id="expenseDebitedFrom" list="expenseAccountSuggestions" maxlength="120" placeholder="SBI / HDFC / Cash / Credit Card / UPI…"><datalist id="expenseAccountSuggestions"></datalist></label>
+        <label class="span-2">Reason<input id="expenseReason" maxlength="220" required placeholder="What was this payment for?"></label>
+        <label>Category of expense<select id="expenseCategory" required></select></label>
+        <label id="expenseFrequencyGroup" class="hidden">Frequency<select id="expenseFrequency"><option value="MONTHLY">Monthly</option><option value="QUARTERLY">Quarterly</option><option value="HALF_YEARLY">Half-yearly</option><option value="YEARLY">Yearly</option></select></label>
+        <label id="expenseEndDateGroup" class="hidden">End date <small>(optional)</small><input id="expenseEndDate" type="date"></label>
+        <label id="expenseStatusGroup" class="hidden">Status<select id="expenseStatus"><option value="ACTIVE">Active</option><option value="PAUSED">Paused</option><option value="STOPPED">Stopped</option></select></label>
+        <label class="span-2">Notes to remember <small>(optional)</small><textarea id="expenseNotes" rows="3" maxlength="1000" placeholder="Anything useful to remember later…"></textarea></label>
+        <div class="form-actions span-2"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="saveExpenseBtn" type="submit" class="primary-button">Save expense</button></div>
+      </form>
+    </div>
+
+    <div id="expensePaymentModal" class="modal expense-payment-modal hidden" role="dialog" aria-modal="true" aria-labelledby="expensePaymentTitle">
+      <div class="modal-head"><div><p class="eyebrow">CONVERT TO ACTUAL EXPENDITURE</p><h2 id="expensePaymentTitle">Mark paid</h2><p class="modal-subcopy">Confirm the actual payment details. A new Actual Expense will be created.</p></div><button class="modal-close" data-close-modal aria-label="Close">×</button></div>
+      <form id="expensePaymentForm" class="form-grid">
+        <input id="expensePaymentSourceType" type="hidden"><input id="expensePaymentSourceId" type="hidden">
+        <label>Actual amount<input id="expensePaymentAmount" type="number" min="0.01" step="0.01" required></label>
+        <label>Date paid<input id="expensePaymentDate" type="date" required></label>
+        <label>Paid To / Name<input id="expensePaymentPaidTo" maxlength="140"></label>
+        <label>Debited From<input id="expensePaymentAccount" list="expenseAccountSuggestions" maxlength="120"></label>
+        <label class="span-2">Additional note <small>(optional)</small><textarea id="expensePaymentNotes" rows="2" maxlength="600"></textarea></label>
+        <div class="expense-convert-note span-2">After confirmation, the amount appears in Actual Expenses. For a Regular Payment, the next due date is automatically advanced.</div>
+        <div class="form-actions span-2"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="confirmExpensePaymentBtn" type="submit" class="primary-button">✓ Mark paid &amp; add actual</button></div>
+      </form>
+    </div>
+
+    <div id="expenseCategoryModal" class="modal compact-modal hidden" role="dialog" aria-modal="true" aria-labelledby="expenseCategoryModalTitle">
+      <div class="modal-head"><div><p class="eyebrow">EXPENSE CATEGORY</p><h2 id="expenseCategoryModalTitle">Add category</h2></div><button class="modal-close" data-close-modal aria-label="Close">×</button></div>
+      <form id="expenseCategoryForm" class="form-grid">
+        <input id="expenseCategoryId" type="hidden">
+        <label class="span-2">Category name<input id="expenseCategoryName" maxlength="80" required placeholder="e.g. Household"></label>
+        <label class="span-2">Colour<select id="expenseCategoryColor"><option value="BLUE">Blue</option><option value="GREEN">Green</option><option value="PURPLE">Purple</option><option value="ORANGE">Orange</option><option value="PINK">Pink</option><option value="TEAL">Teal</option><option value="GOLD">Gold</option><option value="GREY">Grey</option></select></label>
+        <div class="form-actions span-2"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="saveExpenseCategoryBtn" type="submit" class="primary-button">Save category</button></div>
+      </form>
+    </div>
+
+    <div id="expensePrintModal" class="modal expense-print-modal hidden" role="dialog" aria-modal="true" aria-labelledby="expensePrintTitle">
+      <div class="modal-head"><div><p class="eyebrow">PRINT PREVIEW</p><h2 id="expensePrintTitle">Expenditure print</h2><p class="modal-subcopy">Print the current filtered view. Choose columns and drag preview headings to adjust widths.</p></div><button class="modal-close" data-close-modal aria-label="Close">×</button></div>
+      <div class="expense-print-controls">
+        <label>Orientation<select id="expensePrintOrientation"><option value="landscape" selected>Landscape</option><option value="portrait">Portrait</option></select></label>
+        <div id="expensePrintColumns" class="expense-print-columns"></div>
+        <button id="expensePrintAllColumnsBtn" type="button" class="small-button">All columns</button>
+      </div>
+      <div id="expensePrintPreview" class="expense-print-preview"></div>
+      <div class="form-actions"><button type="button" class="secondary-button" data-close-modal>Close</button><button id="runExpensePrintBtn" type="button" class="primary-button">Print current preview</button></div>
+    </div>
 
     <div id="sipPlanModal" class="modal sip-plan-modal hidden" role="dialog" aria-modal="true" aria-labelledby="sipPlanModalTitle">
       <div class="modal-head">
@@ -1249,7 +1404,7 @@
   </aside>
 
   <div id="toastRegion" class="toast-region" aria-live="polite"></div>
-  <script src="config.js?v=20260823-1932-recentdiary1"></script>
-  <script src="app-v19-3-2.js?v=20260823-1932-recentdiary1" defer></script>
+  <script src="config.js?v=20260824-1940-exp1"></script>
+  <script src="app-v19-4-0.js?v=20260824-1940-exp1" defer></script>
 </body>
 </html>
