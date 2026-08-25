@@ -1,6 +1,6 @@
 {
-  "version": "19.4.12",
-  "build": "20260825-19412-native1",
-  "frontend": "19.4.12",
+  "version": "19.4.13",
+  "build": "20260825-19413-newexec1",
+  "frontend": "19.4.13",
   "backendExpected": "3.17.5"
 }

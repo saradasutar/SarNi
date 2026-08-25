@@ -1,10 +1,10 @@
-SarNi Native Secure Mode — Frontend v19.4.12
+SarNi Native Secure Mode — Frontend v19.4.13
 Backend v3.17.5 — THIS BACKEND UPDATE IS REQUIRED
 
 WHY THIS VERSION IS DIFFERENT
 The normal Chrome profile is blocking Apps Script when it is called as a cross-site iframe or JSONP polling script. Incognito works because it uses a clean browser profile. Repeating cache repairs cannot reliably change this browser policy.
 
-SarNi v19.4.12 therefore opens the complete dashboard from Apps Script itself. Login and every later action use the built-in same-origin google.script.run bridge. There is no cross-site iframe and no polling endpoint.
+SarNi v19.4.13 opens the complete dashboard from Apps Script itself and uses the corrected deployment URL supplied on 25 August 2026. Login and every later action use the built-in same-origin google.script.run bridge. There is no cross-site iframe and no polling endpoint.
 
 WHAT REMAINS INCLUDED
 1. Fast login and immediate dashboard display.
@@ -31,14 +31,15 @@ STEP 1 — UPDATE THE APPS SCRIPT PROJECT
 5. Save the Apps Script project.
 6. Choose Deploy > Manage deployments > Edit.
 7. Select New version, confirm Execute as Me and Who has access: Anyone, then Deploy.
-8. Keep the same /exec URL already present in config.js.
+8. Keep this /exec URL in both config files:
+   https://script.google.com/macros/s/AKfycbzgYc_0yzUo1Rg4IcWTALBIcR6HcJJkg0x5VDKtXE4hYHod7gcuh-GK5SnvSWGILHAk/exec
 
 STEP 2 — UPLOAD SIX WEBSITE FILES TO GITHUB
 Upload these files to the SarNi repository and commit them:
    - index.html
    - styles.css
    - config.js
-   - app-v19-4-12.js
+   - app-v19-4-13.js
    - build-version.json
    - repair-login.html
 
@@ -47,13 +48,13 @@ Do not upload IndexApp.html, StylesApp.html, ConfigApp.html, AppApp.html or Code
 STEP 3 — TEST
 1. Wait about two minutes for GitHub Pages to publish.
 2. Open:
-   https://saradasutar.github.io/SarNi/?v=19412-native1
+   https://saradasutar.github.io/SarNi/?v=19413-newexec1
 3. The GitHub address will automatically open SarNi Native Secure Mode through Apps Script.
-4. Confirm Frontend v19.4.12 and Backend v3.17.5.
+4. Confirm Frontend v19.4.13 and Backend v3.17.5.
 5. Sign in in the normal Chrome window. The polling-endpoint error should no longer be possible in Native Secure Mode.
 6. Confirm Holdings, GPF, Diary and the Unified/Niharika/Sarada summaries.
 
 Direct Native Secure Mode test address:
-https://script.google.com/macros/s/AKfycbx0Se_UHDk1zWdPHcKm3WRBFEVHl2CalsaPRqVa020qrpj0Crq-l7T1W_5I8ciGhF1w/exec?app=1&v=19412-native1
+https://script.google.com/macros/s/AKfycbzgYc_0yzUo1Rg4IcWTALBIcR6HcJJkg0x5VDKtXE4hYHod7gcuh-GK5SnvSWGILHAk/exec?app=1&v=19413-newexec1
 
 Older app-v19-4-x.js files may remain in GitHub; index.html no longer loads them.
