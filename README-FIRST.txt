@@ -1,49 +1,59 @@
-SarNi Direct Login Repair + Clear Holdings Summary — Frontend v19.4.11
-Backend v3.17.4 (no backend change is required if v3.17.4 is already deployed)
+SarNi Native Secure Mode — Frontend v19.4.12
+Backend v3.17.5 — THIS BACKEND UPDATE IS REQUIRED
 
-WHAT THIS FIX CHANGES
-1. Login now prioritises the secure direct Apps Script reply instead of depending on the polling endpoint blocked by some normal browser profiles.
-2. Direct replies are matched by trusted Google origin plus a unique request ID, avoiding an unreliable redirected-iframe identity check.
-3. Polling is delayed during sign-in, giving the fast direct response sufficient time to arrive without the “Could not reach the backend polling endpoint” error.
-4. A new frontend update no longer deletes a valid signed-in session or forces another login.
-5. Old SarNi caches and SarNi-scoped service workers are removed before the new app starts, followed by one clean reload.
-6. If a login transport request still times out, SarNi performs one automatic browser-cache repair and retries the same sign-in once.
-7. A separate repair-login.html recovery page is included for a browser profile that is still controlled by an old cached site version.
-8. Saved username, portfolio value snapshots, diary drafts and display preferences are preserved during automatic repair.
-9. Login opens the dashboard immediately after authentication; holdings and full details update quietly afterward.
-10. The Holdings Summary remains reorganised: Unified family portfolio first; Niharika and Sarada below on wide screens.
-11. Summary labels and amounts use separate lines, preventing Growth/Loss values and percentages from overlapping.
-12. Mobile remains compact with two cards per row and no sideways summary scrolling.
-13. Total is blue, Mutual Funds green, Stocks/ETFs orange and GPF teal; investor groups retain their own colours.
-14. GPF present balance, monthly payment, projected 12-month value and estimated interest remain included.
-15. Shared holding-value recovery, professional diary and comfortable mobile text remain included.
+WHY THIS VERSION IS DIFFERENT
+The normal Chrome profile is blocking Apps Script when it is called as a cross-site iframe or JSONP polling script. Incognito works because it uses a clean browser profile. Repeating cache repairs cannot reliably change this browser policy.
 
-STEP 1 — CHECK APPS SCRIPT BACKEND
-1. If SarNi already shows Backend v3.17.4, do not change or redeploy the backend.
-2. If it shows an older backend, replace Code.gs with Code-v3.17.4.gs and deploy a New version using the same /exec URL.
+SarNi v19.4.12 therefore opens the complete dashboard from Apps Script itself. Login and every later action use the built-in same-origin google.script.run bridge. There is no cross-site iframe and no polling endpoint.
 
-STEP 2 — UPLOAD WEBSITE FILES ON GITHUB
-1. Open your SarNi repository.
-2. Choose Add file > Upload files.
-3. Upload all six website files from this folder:
+WHAT REMAINS INCLUDED
+1. Fast login and immediate dashboard display.
+2. Shared holding-value recovery across desktop and mobile.
+3. GPF present balance, monthly payment, interest rate and 12-month projection.
+4. Unified family summary first, followed by Niharika and Sarada.
+5. Overlap-proof summary metrics, distinct colours and compact mobile 2×2 cards.
+6. Professional Daily/Monthly Diary, sticky notes, quotes, expenditure, SIP, watchlist and transactions.
+7. Five-minute inactivity logout and saved username option.
+
+STEP 1 — UPDATE THE APPS SCRIPT PROJECT
+1. Open the existing SarNi Apps Script project.
+2. Replace all content in Code.gs with Code-v3.17.5.gs from this package.
+3. Click the + button beside Files, choose HTML, and create these four files exactly:
+   - IndexApp
+   - StylesApp
+   - ConfigApp
+   - AppApp
+4. Paste the corresponding packaged file into each Apps Script HTML file:
+   - IndexApp.html into IndexApp
+   - StylesApp.html into StylesApp
+   - ConfigApp.html into ConfigApp
+   - AppApp.html into AppApp
+5. Save the Apps Script project.
+6. Choose Deploy > Manage deployments > Edit.
+7. Select New version, confirm Execute as Me and Who has access: Anyone, then Deploy.
+8. Keep the same /exec URL already present in config.js.
+
+STEP 2 — UPLOAD SIX WEBSITE FILES TO GITHUB
+Upload these files to the SarNi repository and commit them:
    - index.html
    - styles.css
    - config.js
-   - app-v19-4-11.js
+   - app-v19-4-12.js
    - build-version.json
    - repair-login.html
-4. Choose Commit changes.
-5. Wait about 2 minutes for GitHub Pages to publish.
 
-LOGIN AND SUMMARY TEST
-1. In the affected normal browser, open:
-   https://saradasutar.github.io/SarNi/?v=19411-directlogin1
-2. The page may show “Preparing a clean, secure sign-in…” briefly and reload once.
-3. Confirm Frontend v19.4.11 and Backend v3.17.4 appear.
-4. Sign in. The dashboard should open immediately; holdings may fill in quietly afterward.
-5. If an old cached page still controls that browser, open this one-time repair address:
-   https://saradasutar.github.io/SarNi/repair-login.html?v=19411-directlogin1
-6. In Holdings, open the summary. Confirm Unified appears first and Niharika/Sarada below, with no text overlap.
-7. Confirm expected holding count, values and all GPF figures on desktop and both phones.
+Do not upload IndexApp.html, StylesApp.html, ConfigApp.html, AppApp.html or Code-v3.17.5.gs to GitHub. Those five belong in Apps Script.
 
-You do not need to delete older app-v19-4-x.js files immediately. They are no longer loaded by index.html.
+STEP 3 — TEST
+1. Wait about two minutes for GitHub Pages to publish.
+2. Open:
+   https://saradasutar.github.io/SarNi/?v=19412-native1
+3. The GitHub address will automatically open SarNi Native Secure Mode through Apps Script.
+4. Confirm Frontend v19.4.12 and Backend v3.17.5.
+5. Sign in in the normal Chrome window. The polling-endpoint error should no longer be possible in Native Secure Mode.
+6. Confirm Holdings, GPF, Diary and the Unified/Niharika/Sarada summaries.
+
+Direct Native Secure Mode test address:
+https://script.google.com/macros/s/AKfycbx0Se_UHDk1zWdPHcKm3WRBFEVHl2CalsaPRqVa020qrpj0Crq-l7T1W_5I8ciGhF1w/exec?app=1&v=19412-native1
+
+Older app-v19-4-x.js files may remain in GitHub; index.html no longer loads them.

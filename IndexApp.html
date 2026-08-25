@@ -9,82 +9,12 @@
   <meta name="theme-color" content="#eef5ff">
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
   <meta name="myfinance-build" content="20260825-19412-native1">
-  <style>
-    html.myfinance-cache-healing body{visibility:hidden}
-    html.myfinance-cache-healing::after{
-      content:"Preparing a clean, secure sign-in…";
-      position:fixed;inset:0;z-index:99999;display:grid;place-items:center;
-      padding:24px;color:#33426a;background:#f3f7ff;
-      font:800 16px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;
-    }
-  </style>
   <script>
-    // On a new frontend build, remove old app caches/service workers before any
-    // application script runs, then reload once. The valid login token, saved
-    // username, portfolio snapshot, diary drafts and UI preferences are kept.
-    window.__MYFINANCE_PAGE_BUILD__ = '20260825-19412-native1';
-    (function(){
-      try{
-        var build=window.__MYFINANCE_PAGE_BUILD__;
-        var params=new URLSearchParams(location.search);
-        var stored='';
-        try{stored=localStorage.getItem('myfinance_current_build_id')||'';}catch(e){}
-        if(stored!==build&&params.get('healed')!==build){
-          window.__MYFINANCE_CACHE_HEAL_PENDING__=true;
-          document.documentElement.classList.add('myfinance-cache-healing');
-          try{
-            localStorage.setItem('myfinance_current_build_id',build);
-            localStorage.setItem('myfinance_browser_updated_notice','1');
-          }catch(e){}
-
-          var tasks=[];
-          if('caches' in window){
-            tasks.push(caches.keys().then(function(keys){
-              return Promise.all(keys.filter(function(key){return /myfinance|sarni|portfolio/i.test(String(key));}).map(function(key){return caches.delete(key);}));
-            }).catch(function(){}));
-          }
-          if('serviceWorker' in navigator){
-            tasks.push(navigator.serviceWorker.getRegistrations().then(function(regs){
-              var currentPath=location.pathname.replace(/[^/]*$/,'');
-              return Promise.all(regs.map(function(reg){
-                try{return new URL(reg.scope).pathname.startsWith(currentPath)?reg.unregister():Promise.resolve(false);}catch(e){return Promise.resolve(false);}
-              }));
-            }).catch(function(){}));
-          }
-
-          var go=function(){
-            var next=new URL(location.href);
-            next.searchParams.set('v','19412-native1');
-            next.searchParams.set('healed',build);
-            next.searchParams.set('_',String(Date.now()));
-            location.replace(next.pathname+next.search);
-          };
-          Promise.race([
-            Promise.all(tasks),
-            new Promise(function(resolve){setTimeout(resolve,2200);})
-          ]).then(go,go);
-          return;
-        }
-
-        // Check a tiny no-cache build file on every normal load. If GitHub or
-        // Chrome serves an older index, reload once with the published build.
-        var url='build-version.json?_=' + Date.now();
-        fetch(url,{cache:'no-store',credentials:'same-origin'})
-          .then(function(r){return r.ok?r.json():null;})
-          .then(function(info){
-            if(!info||!info.build||info.build===window.__MYFINANCE_PAGE_BUILD__)return;
-            var guard='myfinance_build_reload_' + info.build;
-            if(sessionStorage.getItem(guard)==='1')return;
-            sessionStorage.setItem(guard,'1');
-            var next=location.pathname+'?v='+encodeURIComponent(info.version||info.build)+'&fresh='+Date.now();
-            location.replace(next);
-          }).catch(function(){});
-      }catch(e){}
-    })();
+    window.__MYFINANCE_PAGE_BUILD__='20260825-19412-native1';
+    window.__MYFINANCE_NATIVE__=true;
   </script>
   <title>My Finance</title>
-  <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260825-19412-native1">
+  <style><?!= includeFile_('StylesApp'); ?></style>
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -1526,22 +1456,7 @@
       <span>Auto logout in <strong id="idleWarningCountdown">60 sec</strong> due to inactivity.</span>
       <button id="staySignedInBtn" type="button">Stay signed in</button>
     </div>
-  <script src="config.js?v=20260825-19412-native1"></script>
-  <script>
-    (function(){
-      try{
-        if(location.hostname!=='saradasutar.github.io')return;
-        var target=new URL(String(window.PORTFOLIO_CONFIG&&window.PORTFOLIO_CONFIG.API_URL||''));
-        if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(target.toString()))return;
-        window.__MYFINANCE_NATIVE_REDIRECT__=true;
-        target.searchParams.set('app','1');
-        target.searchParams.set('v','19412-native1');
-        var saved=localStorage.getItem('portfolio_saved_username')||'';
-        if(/^[A-Za-z0-9._-]{1,60}$/.test(saved))target.searchParams.set('user',saved);
-        location.replace(target.toString());
-      }catch(e){}
-    })();
-  </script>
-  <script src="app-v19-4-12.js?v=20260825-19412-native1" defer></script>
+  <script><?!= includeFile_('ConfigApp'); ?></script>
+  <script><?!= includeFile_('AppApp'); ?></script>
 </body>
 </html>

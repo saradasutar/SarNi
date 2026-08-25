@@ -1,6 +1,6 @@
 {
-  "version": "19.4.11",
-  "build": "20260825-19411-directlogin1",
-  "frontend": "19.4.11",
-  "backendExpected": "3.17.4"
+  "version": "19.4.12",
+  "build": "20260825-19412-native1",
+  "frontend": "19.4.12",
+  "backendExpected": "3.17.5"
 }
