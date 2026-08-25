@@ -9110,3 +9110,60 @@ button,input,select,textarea{
   .matrix-value>strong{font-size:11px}
   .matrix-value.matrix-present>strong,.matrix-total-row .matrix-value>strong{font-size:12px}
 }
+
+/* FE v19.4.18 — professional expenditure categories and subcategories. */
+#expenditureSection .expense-filter-bar{gap:8px}
+#expenditureSection .expense-filter-bar input,
+#expenditureSection .expense-filter-bar select,
+#expenditureSection .expense-search-wrap{min-height:38px;font-size:11.5px}
+#expenditureSection .expense-filter-bar label{font-size:9px}
+#expenditureSection .expense-table{min-width:1280px}
+#expenditureSection .expense-table th{padding:11px 9px;font-size:10px;line-height:1.25;background:linear-gradient(180deg,#eef3ff,#e8eefb)}
+#expenditureSection .expense-table td{padding:11px 9px;font-size:12px;line-height:1.45}
+#expenditureSection .expense-table tbody tr:nth-child(odd) td{background:#ffffff}
+#expenditureSection .expense-table tbody tr:nth-child(even) td{background:#f0f5ff}
+#expenditureSection .expense-table tbody tr:hover td{background:#fff8e8}
+#expenditureSection .expense-table tbody .expense-row td:first-child{box-shadow:inset 4px 0 0 #8091d8}
+#expenditureSection .expense-table tbody .expense-row-green td:first-child{box-shadow:inset 4px 0 0 #36a37b}
+#expenditureSection .expense-table tbody .expense-row-purple td:first-child{box-shadow:inset 4px 0 0 #8a63cb}
+#expenditureSection .expense-table tbody .expense-row-orange td:first-child{box-shadow:inset 4px 0 0 #e18b38}
+#expenditureSection .expense-table tbody .expense-row-pink td:first-child{box-shadow:inset 4px 0 0 #d86c9e}
+#expenditureSection .expense-table tbody .expense-row-teal td:first-child{box-shadow:inset 4px 0 0 #39a1a4}
+#expenditureSection .expense-table tbody .expense-row-gold td:first-child{box-shadow:inset 4px 0 0 #c59b22}
+#expenditureSection .expense-table tbody .expense-row-grey td:first-child{box-shadow:inset 4px 0 0 #8d97a7}
+#expenditureSection .expense-table th[data-exp-col="subcategory"]{min-width:125px}
+#expenditureSection .expense-category-badge{padding:5px 9px;font-size:10px;letter-spacing:.01em}
+#expenditureSection .expense-subcategory-display{display:inline-flex;align-items:center;max-width:100%;padding:5px 9px;border:1px solid #d9dff0;border-radius:8px;color:#465477;background:#f8f9ff;font-size:10.5px;font-weight:850;white-space:normal}
+#expenditureSection .expense-subcategory-display.empty{color:#9aa3b3;background:#f7f8fa}
+#expenditureSection .expense-actions{gap:6px;min-width:188px}
+#expenditureSection .expense-actions .small-button{min-height:32px;padding:6px 10px;font-size:10px}
+#expenditureSection .expense-edit-button{border-color:#c9c3ff!important;color:#5d43b5!important;background:#f4f0ff!important;font-weight:950!important}
+#expenditureSection .expense-edit-button:hover{border-color:#7658df!important;color:#fff!important;background:#7658df!important}
+#expenditureSection .expense-subcategory-toggle{border-color:#b8c8e8;color:#40578a;background:#eef4ff;font-weight:900}
+body.expense-subcategories-hidden #expenditureSection [data-exp-col="subcategory"],
+body.expense-subcategories-hidden #expenditureSection .expense-subcategory-cell{display:none!important}
+#expenditureSection .expense-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#expenditureSection .expense-category-card{display:grid;grid-template-columns:1fr;align-items:start;gap:10px;padding:15px;border-radius:14px;box-shadow:0 8px 20px rgba(51,65,112,.07)}
+#expenditureSection .expense-category-card>div:first-child{display:flex;align-items:center;gap:9px}
+#expenditureSection .expense-category-card-head>div{display:grid;gap:2px}
+#expenditureSection .expense-category-card strong{font-size:13px;color:#283755}
+#expenditureSection .expense-category-card small{grid-column:auto;font-size:9.5px;color:#7b879b}
+#expenditureSection .expense-category-dot{grid-row:auto;width:12px;height:12px;box-shadow:0 0 0 5px rgba(105,118,196,.12)}
+#expenditureSection .expense-subcategory-chips{display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:wrap}
+#expenditureSection .expense-subcategory-chip{display:inline-flex;padding:5px 8px;border:1px solid #d8dff0;border-radius:999px;color:#4f5d7b;background:#f7f9ff;font-size:9.5px;font-weight:850}
+#expenditureSection .expense-subcategory-chip.empty{color:#929cad;border-style:dashed;background:#fafbfc}
+#expenditureSection .expense-category-actions{display:flex!important;gap:7px!important;flex-wrap:wrap;justify-content:flex-start!important;padding-top:3px;border-top:1px solid #edf0f6}
+#expenditureSection .expense-category-actions .expense-edit-button{flex:1;min-width:180px}
+.expense-modal .field-help,.compact-modal .field-help{display:block;margin-top:5px;color:#7b8799;font-size:9.5px;line-height:1.35}
+.expense-modal select#expenseSubcategory,.compact-modal #expenseCategorySubcategories{border-color:#cfd7ea;background:#fbfcff}
+
+@media(max-width:860px){
+  #expenditureSection .expense-filter-bar input,#expenditureSection .expense-filter-bar select,#expenditureSection .expense-search-wrap{min-height:44px;font-size:13px}
+  #expenditureSection .expense-filter-bar select{min-width:155px}
+  #expenditureSection .expense-table{min-width:1220px}
+  #expenditureSection .expense-table th{font-size:10.5px}
+  #expenditureSection .expense-table td{font-size:12.5px}
+  #expenditureSection .expense-category-grid{grid-template-columns:1fr}
+  #expenditureSection .expense-category-card strong{font-size:14px}
+  #expenditureSection .expense-category-card small,#expenditureSection .expense-subcategory-chip{font-size:10.5px}
+}
