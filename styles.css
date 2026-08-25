@@ -8833,3 +8833,280 @@ button,input,select,textarea{
     font-size:13.5px!important;
   }
 }
+
+/* FE v19.4.17 — vibrant comparison matrix, designed to stay readable without overlap. */
+#holdingsSection .holdings-summary-panel{
+  border:1px solid #d9dff3!important;
+  background:
+    radial-gradient(circle at 4% 0%,rgba(92,110,229,.12),transparent 28%),
+    radial-gradient(circle at 98% 8%,rgba(17,165,145,.10),transparent 24%),
+    linear-gradient(145deg,#ffffff 0%,#f8f9ff 54%,#f7fffc 100%)!important;
+  box-shadow:0 16px 38px rgba(37,50,107,.10)!important;
+}
+#holdingsSection .holdings-summary-head{
+  align-items:flex-start!important;
+  gap:12px!important;
+}
+#holdingsSection .holdings-summary-head h3{
+  color:#18233f!important;
+  font-size:22px!important;
+  font-weight:950!important;
+  letter-spacing:-.035em!important;
+}
+#holdingsSection .holdings-summary-note{
+  color:#53617c!important;
+  font-size:11.5px!important;
+  font-weight:850!important;
+}
+.holding-matrix-tabs{display:none}
+.holding-matrix-wrap{
+  width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  border:1px solid #cfd7ed;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 8px 22px rgba(42,54,101,.08);
+  scrollbar-color:#7b6ee3 #edf0f8;
+  scrollbar-width:thin;
+}
+.holding-matrix-table{
+  width:100%;
+  min-width:900px;
+  border:0;
+  border-collapse:separate;
+  border-spacing:0;
+  table-layout:fixed;
+  color:#1e2a45;
+}
+.holding-matrix-table th,
+.holding-matrix-table td{
+  min-width:0;
+  padding:10px 7px;
+  border-right:1px solid #dfe4f1;
+  border-bottom:1px solid #dfe4f1;
+  vertical-align:middle;
+}
+.holding-matrix-table tr>*:last-child{border-right:0}
+.holding-matrix-table tbody tr:last-child>*{border-bottom:0}
+.holding-matrix-table thead th{text-align:center}
+.holding-matrix-table .matrix-corner,
+.holding-matrix-table .matrix-metric-row>th:first-child,
+.holding-matrix-table tbody>tr>th{
+  width:126px;
+  min-width:126px;
+}
+.holding-matrix-table .matrix-corner{
+  color:#66728c;
+  background:linear-gradient(145deg,#f8faff,#edf1fa);
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.holding-matrix-table .matrix-owner{
+  padding:10px 8px 9px;
+  color:#fff;
+}
+.holding-matrix-table .matrix-owner span{
+  display:block;
+  font-size:17px;
+  font-weight:950;
+  letter-spacing:-.02em;
+}
+.holding-matrix-table .matrix-owner small{
+  display:block;
+  margin-top:2px;
+  color:rgba(255,255,255,.85);
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.holding-matrix-table .matrix-owner-sarada{background:linear-gradient(135deg,#754fc2,#9a63e8)}
+.holding-matrix-table .matrix-owner-niharika{background:linear-gradient(135deg,#df7136,#f49a43)}
+.holding-matrix-table .matrix-owner-combined{background:linear-gradient(135deg,#395dd2,#24a9a0)}
+.holding-matrix-table .matrix-metric-row th{
+  padding:9px 5px;
+  color:#4b5873;
+  background:#f5f7fc;
+  font-size:10.5px;
+  font-weight:950;
+  line-height:1.15;
+  letter-spacing:.025em;
+  text-transform:uppercase;
+}
+.holding-matrix-table .matrix-metric-row th[data-owner="sarada"]{background:#f3edff;color:#6e43aa}
+.holding-matrix-table .matrix-metric-row th[data-owner="niharika"]{background:#fff1e6;color:#a75425}
+.holding-matrix-table .matrix-metric-row th[data-owner="combined"]{background:#eaf3ff;color:#3154ad}
+.holding-matrix-table tbody>tr>th{
+  position:relative;
+  padding:11px 9px;
+  text-align:left;
+  background:#f9faff;
+}
+.holding-matrix-table tbody>tr>th strong,
+.holding-matrix-table tbody>tr>th small{display:block}
+.holding-matrix-table tbody>tr>th strong{
+  margin-top:5px;
+  color:#24304c;
+  font-size:12px;
+  font-weight:950;
+  line-height:1.18;
+}
+.holding-matrix-table tbody>tr>th small{
+  margin-top:3px;
+  color:#7a879b;
+  font-size:8.5px;
+  font-weight:800;
+  line-height:1.2;
+}
+.matrix-asset-badge{
+  display:inline-flex;
+  min-width:30px;
+  min-height:22px;
+  align-items:center;
+  justify-content:center;
+  padding:3px 7px;
+  border-radius:999px;
+  color:#fff;
+  background:#69758e;
+  box-shadow:0 4px 10px rgba(40,51,87,.14);
+  font-size:8.5px;
+  font-weight:950;
+  letter-spacing:.055em;
+}
+.matrix-value{
+  position:relative;
+  height:62px;
+  text-align:center;
+  background:#fff;
+}
+.matrix-value[data-owner="sarada"]{background:linear-gradient(145deg,#fff,#faf6ff)}
+.matrix-value[data-owner="niharika"]{background:linear-gradient(145deg,#fff,#fff9f2)}
+.matrix-value[data-owner="combined"]{background:linear-gradient(145deg,#fff,#f3f8ff)}
+.matrix-value>span,
+.matrix-value>small{
+  display:block;
+  overflow:hidden;
+  color:#78869c;
+  font-size:8.5px;
+  font-weight:850;
+  line-height:1.18;
+  text-overflow:ellipsis;
+}
+.matrix-value>span{margin-bottom:4px;text-transform:uppercase;letter-spacing:.025em}
+.matrix-value>small{margin-top:4px;white-space:normal}
+.matrix-value>small b{color:#2a795f;font-weight:950}
+.matrix-value>strong{
+  display:block;
+  width:100%;
+  overflow-wrap:anywhere;
+  color:#26334f;
+  font-size:clamp(10.5px,.78vw,14.5px);
+  font-weight:950;
+  line-height:1.18;
+  letter-spacing:-.025em;
+}
+.matrix-value.matrix-invested>strong{color:#4258a9}
+.matrix-value.matrix-present>strong{color:#182f68;font-size:clamp(12px,.9vw,16px)}
+.matrix-value.matrix-growth>strong.positive,
+.matrix-value.matrix-growth.gain-positive>strong{color:#05865e}
+.matrix-value.matrix-growth>strong.negative,
+.matrix-value.matrix-growth.gain-negative>strong{color:#d23f55}
+.matrix-value.matrix-growth>strong.neutral,
+.matrix-value.matrix-growth.gain-neutral>strong{color:#536179}
+.matrix-mf-row>th{border-left:5px solid #16a071!important;background:#effaf5!important}
+.matrix-mf-row .matrix-asset-badge{background:linear-gradient(135deg,#078a62,#2fbb8c)}
+.matrix-stock-row>th{border-left:5px solid #ef8b35!important;background:#fff6ed!important}
+.matrix-stock-row .matrix-asset-badge{background:linear-gradient(135deg,#d66d1e,#f4a340)}
+.matrix-gpf-row>th{border-left:5px solid #11a28f!important;background:#ecfbf8!important}
+.matrix-gpf-row .matrix-asset-badge{background:linear-gradient(135deg,#087f72,#31bda3)}
+.matrix-gpf-row .matrix-value{height:82px}
+.matrix-gpf-row .matrix-growth{background:linear-gradient(145deg,#f9fffc,#e9faf3)!important}
+.matrix-gpf-row .matrix-growth>strong{color:#05865e}
+.matrix-gpf-row .matrix-present{background:linear-gradient(145deg,#f9fffe,#e9f8ff)!important}
+.matrix-total-row>th{border-left:5px solid #6754d8!important;background:linear-gradient(145deg,#f2efff,#e9edff)!important}
+.matrix-total-row .matrix-asset-badge{background:linear-gradient(135deg,#5143bd,#7769ed)}
+.matrix-total-row .matrix-value{height:70px;background:linear-gradient(145deg,#fff,#edf2ff)!important}
+.matrix-total-row .matrix-value>strong{font-size:clamp(12.5px,.95vw,17px)}
+
+@media(max-width:860px){
+  #holdingsSection .holdings-summary-head{
+    display:block!important;
+    margin-bottom:8px!important;
+  }
+  #holdingsSection .holdings-summary-head-actions{
+    align-items:flex-start!important;
+    margin-top:8px!important;
+  }
+  #holdingsSection .holdings-summary-note{font-size:11px!important}
+  #holdingsSection .summary-value-legend{display:none!important}
+  .holding-matrix-tabs{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;
+    margin:0 0 8px;
+    padding:5px;
+    border:1px solid #d8def0;
+    border-radius:13px;
+    background:#eef1f9;
+  }
+  .holding-matrix-tabs button{
+    min-height:42px;
+    padding:8px 6px;
+    border:0;
+    border-radius:10px;
+    color:#59667e;
+    background:transparent;
+    font-size:12.5px;
+    font-weight:950;
+  }
+  .holding-matrix-tabs button[data-matrix-owner="sarada"].is-active{color:#fff;background:linear-gradient(135deg,#754fc2,#9a63e8);box-shadow:0 7px 15px rgba(117,79,194,.25)}
+  .holding-matrix-tabs button[data-matrix-owner="niharika"].is-active{color:#fff;background:linear-gradient(135deg,#df7136,#f49a43);box-shadow:0 7px 15px rgba(223,113,54,.25)}
+  .holding-matrix-tabs button[data-matrix-owner="combined"].is-active{color:#fff;background:linear-gradient(135deg,#395dd2,#24a9a0);box-shadow:0 7px 15px rgba(57,93,210,.24)}
+  .holding-matrix-wrap{overflow:hidden;border-radius:14px}
+  .holding-matrix-table{
+    width:100%;
+    min-width:0;
+    table-layout:fixed;
+  }
+  .holding-matrix-table [data-owner]{display:none}
+  .holding-matrix-wrap[data-matrix-owner-view="sarada"] [data-owner="sarada"],
+  .holding-matrix-wrap[data-matrix-owner-view="niharika"] [data-owner="niharika"],
+  .holding-matrix-wrap[data-matrix-owner-view="combined"] [data-owner="combined"]{display:table-cell}
+  .holding-matrix-table .matrix-corner,
+  .holding-matrix-table .matrix-metric-row>th:first-child,
+  .holding-matrix-table tbody>tr>th{
+    width:82px;
+    min-width:82px;
+  }
+  .holding-matrix-table th,
+  .holding-matrix-table td{padding:9px 5px}
+  .holding-matrix-table .matrix-owner{padding:9px 6px}
+  .holding-matrix-table .matrix-owner span{font-size:16px}
+  .holding-matrix-table .matrix-owner small{font-size:8.5px}
+  .holding-matrix-table .matrix-metric-row th{font-size:9.5px;line-height:1.1;word-break:normal}
+  .holding-matrix-table tbody>tr>th{padding:9px 5px}
+  .holding-matrix-table tbody>tr>th strong{font-size:10.5px;overflow-wrap:anywhere}
+  .holding-matrix-table tbody>tr>th small{font-size:7.7px}
+  .matrix-asset-badge{min-width:27px;min-height:20px;padding:3px 5px;font-size:7.5px}
+  .matrix-value{height:66px}
+  .matrix-value>strong{font-size:12px;line-height:1.22}
+  .matrix-value.matrix-present>strong{font-size:13.5px}
+  .matrix-value>span,.matrix-value>small{font-size:7.7px;line-height:1.15}
+  .matrix-gpf-row .matrix-value{height:94px}
+  .matrix-total-row .matrix-value{height:72px}
+  .matrix-total-row .matrix-value>strong{font-size:13.5px}
+}
+
+@media(max-width:390px){
+  #holdingsSection .holdings-summary-panel{padding:8px!important}
+  .holding-matrix-tabs button{min-height:40px;font-size:11.5px}
+  .holding-matrix-table .matrix-corner,
+  .holding-matrix-table .matrix-metric-row>th:first-child,
+  .holding-matrix-table tbody>tr>th{width:74px;min-width:74px}
+  .holding-matrix-table th,.holding-matrix-table td{padding:8px 3px}
+  .holding-matrix-table .matrix-metric-row th{font-size:8.7px}
+  .matrix-value>strong{font-size:11px}
+  .matrix-value.matrix-present>strong,.matrix-total-row .matrix-value>strong{font-size:12px}
+}

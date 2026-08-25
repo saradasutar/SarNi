@@ -1,6 +1,6 @@
 {
-  "version": "19.4.16",
-  "build": "20260825-19416-lite1",
-  "frontend": "19.4.16",
+  "version": "19.4.17",
+  "build": "20260825-19417-matrix1",
+  "frontend": "19.4.17",
   "backendExpected": "3.17.5"
 }
