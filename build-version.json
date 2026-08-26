@@ -1,6 +1,6 @@
 {
-  "version": "19.4.20",
-  "build": "20260826-19420-sticky1",
-  "frontend": "19.4.20",
-  "backendExpected": "3.17.7"
+  "version": "19.4.21",
+  "build": "20260826-19421-stickyhistory1",
+  "frontend": "19.4.21",
+  "backendExpected": "3.17.8"
 }

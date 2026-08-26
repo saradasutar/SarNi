@@ -2235,6 +2235,25 @@ body{background:radial-gradient(circle at 72% -10%,rgba(105,85,226,.14),transpar
 }
 .sticky-notes-list::-webkit-scrollbar{height:7px}
 .sticky-notes-list::-webkit-scrollbar-thumb{border-radius:999px;background:#ccd3e5}
+.sticky-history-panel{margin-top:18px;padding-top:18px;border-top:1px solid #e1e6f2}
+.sticky-history-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.sticky-history-head h3{margin:2px 0 0;font-size:18px;color:#17213b}
+.sticky-history-head>span{padding:6px 10px;border-radius:999px;background:#eef2ff;color:#5144b8;font-size:12px;font-weight:800}
+.sticky-history-help{margin:7px 0 12px;color:#6d7690;font-size:12px}
+.sticky-history-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sticky-history-column{min-width:0;padding:10px;border:1px solid #e1e6f2;border-radius:16px;background:#f8faff}
+.sticky-history-column.target-history{background:linear-gradient(145deg,#f0fff8,#f8fffc);border-color:#bfe9d4}
+.sticky-history-column.reminder-history{background:linear-gradient(145deg,#fff8e8,#fffdf6);border-color:#f2d99a}
+.sticky-history-column>h4{display:flex;justify-content:space-between;gap:8px;margin:0 0 8px;font-size:12px;color:#28334f}
+.sticky-history-column>h4 span{min-width:24px;text-align:center;border-radius:999px;background:#fff;padding:2px 6px}
+.sticky-history-list{display:grid;gap:8px;max-height:330px;overflow:auto}
+.sticky-history-card{padding:10px;border-radius:12px;background:#fff;border-left:4px solid #22a06b;box-shadow:0 4px 14px rgba(44,55,94,.07)}
+.sticky-history-card.reminder{border-left-color:#e7a523}
+.sticky-history-card-top{display:flex;justify-content:space-between;gap:8px;color:#79819a;font-size:10px;font-weight:700}
+.sticky-history-card h5{margin:6px 0 4px;color:#17213b;font-size:13px}
+.sticky-history-card p{margin:0;color:#505a73;font-size:11px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.sticky-history-empty-column{margin:8px;color:#8a92a8;font-size:11px;text-align:center}
+@media(max-width:700px){.sticky-history-columns{grid-template-columns:1fr}.sticky-history-list{max-height:260px}}
 .sticky-note-card{
   flex:0 0 270px;
   min-height:118px;
@@ -9143,7 +9162,7 @@ button,input,select,textarea{
   .matrix-value.matrix-present>strong,.matrix-total-row .matrix-value>strong{font-size:12px}
 }
 
-/* FE v19.4.20 — professional expenditure categories and subcategories. */
+/* FE v19.4.21 — professional expenditure categories and subcategories. */
 #expenditureSection .expense-filter-bar{gap:8px}
 #expenditureSection .expense-filter-bar input,
 #expenditureSection .expense-filter-bar select,
