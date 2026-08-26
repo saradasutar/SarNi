@@ -9111,7 +9111,7 @@ button,input,select,textarea{
   .matrix-value.matrix-present>strong,.matrix-total-row .matrix-value>strong{font-size:12px}
 }
 
-/* FE v19.4.18 — professional expenditure categories and subcategories. */
+/* FE v19.4.19 — professional expenditure categories and subcategories. */
 #expenditureSection .expense-filter-bar{gap:8px}
 #expenditureSection .expense-filter-bar input,
 #expenditureSection .expense-filter-bar select,
@@ -9137,8 +9137,27 @@ button,input,select,textarea{
 #expenditureSection .expense-subcategory-display.empty{color:#9aa3b3;background:#f7f8fa}
 #expenditureSection .expense-actions{gap:6px;min-width:188px}
 #expenditureSection .expense-actions .small-button{min-height:32px;padding:6px 10px;font-size:10px}
+#expenditureSection .expense-table th[data-exp-col="actions"]{position:sticky;top:0;right:0;z-index:18;min-width:275px;box-shadow:-6px 0 12px rgba(48,62,100,.08)}
+#expenditureSection .expense-table td.expense-actions{position:sticky;right:0;z-index:7;min-width:275px;box-shadow:-6px 0 12px rgba(48,62,100,.08)}
+#expenditureSection .expense-table tbody tr:nth-child(odd) td.expense-actions{background:#fff}
+#expenditureSection .expense-table tbody tr:nth-child(even) td.expense-actions{background:#f0f5ff}
+#expenditureSection .expense-table tbody tr:hover td.expense-actions{background:#fff8e8}
 #expenditureSection .expense-edit-button{border-color:#c9c3ff!important;color:#5d43b5!important;background:#f4f0ff!important;font-weight:950!important}
 #expenditureSection .expense-edit-button:hover{border-color:#7658df!important;color:#fff!important;background:#7658df!important}
+#expenditureSection .expense-row-edit-button{border-color:#9edac8!important;color:#126b57!important;background:#eaf9f3!important;font-weight:950!important}
+#expenditureSection .expense-row-edit-button:hover{border-color:#20926f!important;color:#fff!important;background:#20926f!important}
+#expenditureSection .expense-inline-edit-row td{background:#fff9e9!important;box-shadow:inset 0 1px 0 #ead9a6,inset 0 -1px 0 #ead9a6}
+#expenditureSection .expense-inline-edit-row td:first-child{box-shadow:inset 4px 0 0 #e2a52b,inset 0 1px 0 #ead9a6,inset 0 -1px 0 #ead9a6}
+#expenditureSection .expense-inline-edit-row input,
+#expenditureSection .expense-inline-edit-row select,
+#expenditureSection .expense-inline-edit-row textarea{display:block;width:100%;min-width:92px;min-height:38px;padding:7px 8px;border:1px solid #cbd4e4;border-radius:8px;background:#fff;color:#253651;font:inherit;font-weight:700;box-sizing:border-box;outline:none}
+#expenditureSection .expense-inline-edit-row textarea{min-width:145px;resize:vertical;line-height:1.35}
+#expenditureSection .expense-inline-edit-row input:focus,
+#expenditureSection .expense-inline-edit-row select:focus,
+#expenditureSection .expense-inline-edit-row textarea:focus{border-color:#6f59da;box-shadow:0 0 0 3px rgba(111,89,218,.14)}
+#expenditureSection .expense-inline-stack{display:grid;gap:5px;min-width:155px}
+#expenditureSection .expense-inline-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;min-width:180px}
+#expenditureSection .expense-inline-save{min-height:36px;padding:7px 10px;font-size:10px;white-space:nowrap}
 #expenditureSection .expense-subcategory-toggle{border-color:#b8c8e8;color:#40578a;background:#eef4ff;font-weight:900}
 body.expense-subcategories-hidden #expenditureSection [data-exp-col="subcategory"],
 body.expense-subcategories-hidden #expenditureSection .expense-subcategory-cell{display:none!important}

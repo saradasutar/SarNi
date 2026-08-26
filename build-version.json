@@ -1,6 +1,6 @@
 {
-  "version": "19.4.18",
-  "build": "20260825-19418-expense1",
-  "frontend": "19.4.18",
+  "version": "19.4.19",
+  "build": "20260826-19419-inline1",
+  "frontend": "19.4.19",
   "backendExpected": "3.17.6"
 }
