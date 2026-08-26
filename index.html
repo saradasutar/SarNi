@@ -8,7 +8,7 @@
   <meta http-equiv="Expires" content="0">
   <meta name="theme-color" content="#eef5ff">
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
-  <meta name="myfinance-build" content="20260826-19419-inline1">
+  <meta name="myfinance-build" content="20260826-19420-sticky1">
   <style>
     html.myfinance-cache-healing body{visibility:hidden}
     html.myfinance-cache-healing::after{
@@ -22,7 +22,7 @@
     // On a new frontend build, remove old app caches/service workers before any
     // application script runs, then reload once. The valid login token, saved
     // username, portfolio snapshot, diary drafts and UI preferences are kept.
-    window.__MYFINANCE_PAGE_BUILD__ = '20260826-19419-inline1';
+    window.__MYFINANCE_PAGE_BUILD__ = '20260826-19420-sticky1';
     (function(){
       try{
         var build=window.__MYFINANCE_PAGE_BUILD__;
@@ -54,7 +54,7 @@
 
           var go=function(){
             var next=new URL(location.href);
-            next.searchParams.set('v','19419-inline1');
+            next.searchParams.set('v','19420-sticky1');
             next.searchParams.set('healed',build);
             next.searchParams.set('_',String(Date.now()));
             location.replace(next.pathname+next.search);
@@ -84,7 +84,7 @@
   </script>
   <title>My Finance</title>
   <link rel="preconnect" href="https://script.google.com">
-  <link rel="stylesheet" href="styles.css?v=20260826-19419-inline1">
+  <link rel="stylesheet" href="styles.css?v=20260826-19420-sticky1">
 </head>
 <body>
   <noscript>This dashboard requires JavaScript.</noscript>
@@ -110,7 +110,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.4.19</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.17.6</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.4.20</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.17.7</span></div>
           <button id="repairBrowserBtn" class="login-repair-button" type="button">↻ Repair browser cache/session</button>
         </div>
       </form>
@@ -145,21 +145,21 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v19.4.19</span><span id="dashboardBackendVersion">Backend · v3.17.6</span>
+        <span id="dashboardVersion">Frontend · v19.4.20</span><span id="dashboardBackendVersion">Backend · v3.17.7</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.4.19</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.17.6</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.4.20</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.17.7</span></div></div></div>
         <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
       </header>
 
       <div id="mobileSessionBar" class="mobile-session-bar" aria-label="Mobile session controls">
         <div class="mobile-session-versions">
-          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.4.19</span>
-          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.17.6</span>
+          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.4.20</span>
+          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.17.7</span>
         </div>
         <div class="mobile-session-actions">
           <button id="mobileChangePasswordBtn" class="mobile-session-button" type="button">Password</button>
@@ -1425,8 +1425,8 @@
         <label>Type<select id="stickyNoteType"><option value="TARGET">Target</option><option value="REMINDER">Reminder</option></select></label>
         <label>Title<input id="stickyNoteTitle" required maxlength="120" placeholder="What needs attention?"></label>
         <label>Due date <small>(optional)</small><input id="stickyNoteDueDate" type="date"></label>
-        <label>Details<textarea id="stickyNoteText" rows="5" maxlength="1000" placeholder="Short details, next action, amount, person, etc."></textarea></label>
-        <p class="tiny muted">Click <strong>Done</strong> on the dashboard when completed. It will automatically be saved in your Daily Diary.</p>
+        <label>Details<textarea id="stickyNoteText" rows="7" maxlength="5000" placeholder="Write any number of lines, next actions, amounts or people. Line breaks will be preserved."></textarea></label>
+        <p class="tiny muted">Pin the note, drag its Move bar anywhere and drag the lower-right corner to resize. Clicking <strong>Completed</strong> removes it from active targets and saves the full note in Daily Diary.</p>
         <div class="form-actions"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="saveStickyNoteBtn" type="submit" class="primary-button">Save sticky</button></div>
       </form>
     </div>
@@ -1498,7 +1498,7 @@
       <span>Auto logout in <strong id="idleWarningCountdown">60 sec</strong> due to inactivity.</span>
       <button id="staySignedInBtn" type="button">Stay signed in</button>
     </div>
-  <script src="config.js?v=20260826-19419-inline1"></script>
+  <script src="config.js?v=20260826-19420-sticky1"></script>
   <script>
     (function(){
       try{
@@ -1507,13 +1507,13 @@
         if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(target.toString()))return;
         window.__MYFINANCE_NATIVE_REDIRECT__=true;
         target.searchParams.set('app','1');
-        target.searchParams.set('v','19419-inline1');
+        target.searchParams.set('v','19420-sticky1');
         var saved=localStorage.getItem('portfolio_saved_username')||'';
         if(/^[A-Za-z0-9._-]{1,60}$/.test(saved))target.searchParams.set('user',saved);
         location.replace(target.toString());
       }catch(e){}
     })();
   </script>
-  <script src="app-v19-4-19.js?v=20260826-19419-inline1" defer></script>
+  <script src="app-v19-4-20.js?v=20260826-19420-sticky1" defer></script>
 </body>
 </html>

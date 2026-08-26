@@ -5655,33 +5655,47 @@ td.negative strong{
 }
 .pinned-sticky-layer{
   position:fixed;
-  top:82px;
-  right:18px;
+  inset:0;
   z-index:185;
-  width:min(315px,calc(100vw - 28px));
-  max-height:calc(100vh - 160px);
-  display:grid;
-  gap:10px;
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding:2px 3px 10px;
+  width:100vw;
+  height:100dvh;
+  overflow:hidden;
   pointer-events:none;
-  scrollbar-width:thin;
 }
 .pinned-sticky-layer.hidden{display:none!important}
 .pinned-sticky-layer .sticky-note-card{
   pointer-events:auto;
 }
 .sticky-note-card.pinned-floating{
-  width:100%;
+  position:absolute;
   min-height:0;
   flex:none;
-  padding:13px;
+  display:flex;
+  flex-direction:column;
+  padding:0 13px 13px;
   border-width:1px;
   box-shadow:0 14px 36px rgba(24,31,69,.22),0 0 0 1px rgba(255,255,255,.7) inset;
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
+  overflow:hidden;
 }
+.sticky-floating-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-height:34px;
+  margin:0 -13px 9px;
+  padding:7px 10px;
+  border-bottom:1px solid rgba(91,82,190,.14);
+  border-radius:13px 13px 0 0;
+  background:rgba(255,255,255,.54);
+  cursor:grab;
+  user-select:none;
+  touch-action:none;
+}
+.sticky-floating-toolbar:active{cursor:grabbing}
+.sticky-move-grip{color:#5148ad;font-size:9px;font-weight:950;letter-spacing:.035em;text-transform:uppercase}
 .sticky-pinned-badge{
   display:inline-flex;
   align-items:center;
@@ -5697,6 +5711,9 @@ td.negative strong{
 }
 .pinned-actions{
   flex-wrap:wrap;
+  margin-top:auto;
+  padding-top:8px;
+  border-top:1px solid rgba(71,81,112,.10);
 }
 .pinned-sticky-layer .sticky-note-card h4{
   font-size:13px;
@@ -5704,13 +5721,28 @@ td.negative strong{
 .pinned-sticky-layer .sticky-note-card p{
   font-size:10px;
 }
+.sticky-full-text{white-space:pre-wrap;overflow-wrap:anywhere}
+.pinned-sticky-layer .sticky-full-text{flex:1;min-height:42px;overflow:auto;padding-right:3px;white-space:pre-wrap}
+.sticky-resize-handle{
+  position:absolute;
+  right:2px;
+  bottom:2px;
+  width:24px;
+  height:24px;
+  border-radius:8px 0 10px 0;
+  cursor:nwse-resize;
+  touch-action:none;
+}
+.sticky-resize-handle::before,.sticky-resize-handle::after{content:"";position:absolute;right:5px;bottom:5px;border-right:2px solid rgba(79,72,173,.7);border-bottom:2px solid rgba(79,72,173,.7)}
+.sticky-resize-handle::before{width:12px;height:12px}.sticky-resize-handle::after{width:6px;height:6px}
+body.sticky-pointer-active{user-select:none!important;cursor:grabbing!important}
 @media(max-width:760px){
   .pinned-sticky-layer{
-    top:68px;
-    right:8px;
-    width:min(290px,calc(100vw - 16px));
-    max-height:calc(100vh - 130px);
+    inset:0;
+    width:100vw;
+    height:100dvh;
   }
+  .sticky-note-card.pinned-floating{min-width:245px!important}
 }
 body.data-fullscreen-open .pinned-sticky-layer{
   visibility:visible!important;
@@ -9111,7 +9143,7 @@ button,input,select,textarea{
   .matrix-value.matrix-present>strong,.matrix-total-row .matrix-value>strong{font-size:12px}
 }
 
-/* FE v19.4.19 — professional expenditure categories and subcategories. */
+/* FE v19.4.20 — professional expenditure categories and subcategories. */
 #expenditureSection .expense-filter-bar{gap:8px}
 #expenditureSection .expense-filter-bar input,
 #expenditureSection .expense-filter-bar select,
