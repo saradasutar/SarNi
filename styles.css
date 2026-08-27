@@ -19,6 +19,28 @@
   --radius: 22px;
 }
 
+/* v19.4.22: permanent, high-visibility sign-out control in the top-right. */
+.header-logout-button{
+  min-height:43px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:0 15px;
+  border:1px solid #f1a5ad;
+  border-radius:13px;
+  color:#fff;
+  background:linear-gradient(135deg,#e34d61,#bd2948);
+  box-shadow:0 9px 22px rgba(190,41,72,.24);
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+  cursor:pointer;
+}
+.header-logout-button:hover{transform:translateY(-1px);box-shadow:0 12px 27px rgba(190,41,72,.31)}
+.header-logout-button:focus-visible{outline:3px solid rgba(227,77,97,.25);outline-offset:2px}
+@media(max-width:860px){.header-logout-button{display:none!important}}
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
@@ -9162,7 +9184,7 @@ button,input,select,textarea{
   .matrix-value.matrix-present>strong,.matrix-total-row .matrix-value>strong{font-size:12px}
 }
 
-/* FE v19.4.21 — professional expenditure categories and subcategories. */
+/* FE v19.4.22 — professional expenditure categories and subcategories. */
 #expenditureSection .expense-filter-bar{gap:8px}
 #expenditureSection .expense-filter-bar input,
 #expenditureSection .expense-filter-bar select,
