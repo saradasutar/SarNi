@@ -19,7 +19,7 @@
   --radius: 22px;
 }
 
-/* v19.4.22: permanent, high-visibility sign-out control in the top-right. */
+/* v19.4.24: permanent, high-visibility sign-out control in the top-right. */
 .header-logout-button{
   min-height:43px;
   display:inline-flex;
@@ -6375,6 +6375,92 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
   }
 }
 
+/* FE v19.4.24 — clean two-decimal values, overlap-proof summary and Watchlist. */
+#holdingsSection .holding-matrix-table{
+  min-width:1120px!important;
+}
+#holdingsSection .matrix-value{
+  min-width:110px!important;
+  overflow:hidden!important;
+}
+#holdingsSection .matrix-value>strong{
+  display:grid!important;
+  align-content:center;
+  justify-items:center;
+  gap:3px;
+  min-width:0;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  overflow-wrap:normal!important;
+  font-variant-numeric:tabular-nums;
+}
+#holdingsSection .matrix-gain-amount,
+#holdingsSection .matrix-gain-percent{
+  display:block;
+  width:100%;
+  overflow:hidden;
+  text-align:center;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+#holdingsSection .matrix-gain-percent{
+  color:inherit;
+  font-size:10px;
+  font-weight:950;
+  line-height:1.05;
+}
+#holdingsSection .holding-pnl-pill,
+#holdingsSection [data-standard-key="invested"],
+#holdingsSection [data-standard-key="currentValue"]{
+  white-space:nowrap!important;
+  font-variant-numeric:tabular-nums;
+}
+
+/* Watchlist has only one frozen column. The former shared Asset rule left it
+   100px from the left and caused it to cover Live Price/NAV. */
+#watchlistSection .watchlist-details-table th.asset-col,
+#watchlistSection .watchlist-details-table td.asset-col{
+  left:0!important;
+  width:280px!important;
+  min-width:280px!important;
+  max-width:280px!important;
+  overflow:hidden!important;
+  box-shadow:8px 0 14px -10px rgba(31,48,91,.35)!important;
+}
+#watchlistSection .watchlist-details-table th:nth-child(2),
+#watchlistSection .watchlist-details-table td:nth-child(2){
+  min-width:170px!important;
+  padding-left:16px!important;
+  background-clip:padding-box;
+}
+#watchlistSection .watchlist-details-table .asset-cell{
+  min-width:0!important;
+  overflow:hidden!important;
+}
+#watchlistSection .watchlist-details-table .asset-cell>div:last-child{
+  min-width:0!important;
+  overflow:hidden!important;
+}
+#watchlistSection .watchlist-details-table .asset-cell strong,
+#watchlistSection .watchlist-details-table .asset-cell span{
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+@media(max-width:860px){
+  #holdingsSection .holding-matrix-table{min-width:0!important}
+  #holdingsSection .matrix-value{min-width:0!important}
+  #watchlistSection .watchlist-details-table th.asset-col,
+  #watchlistSection .watchlist-details-table td.asset-col{
+    width:220px!important;
+    min-width:220px!important;
+    max-width:220px!important;
+  }
+  #watchlistSection .watchlist-details-table th:nth-child(2),
+  #watchlistSection .watchlist-details-table td:nth-child(2){min-width:150px!important}
+}
+
 /* =========================================================
    FE v19.4.8 — PROFESSIONAL DIARY WORKSPACE
    Editor first; all recent and searchable history follows below.
@@ -9184,7 +9270,7 @@ button,input,select,textarea{
   .matrix-value.matrix-present>strong,.matrix-total-row .matrix-value>strong{font-size:12px}
 }
 
-/* FE v19.4.22 — professional expenditure categories and subcategories. */
+/* FE v19.4.24 — professional expenditure categories and subcategories. */
 #expenditureSection .expense-filter-bar{gap:8px}
 #expenditureSection .expense-filter-bar input,
 #expenditureSection .expense-filter-bar select,
@@ -9257,5 +9343,22 @@ body.expense-subcategories-hidden #expenditureSection .expense-subcategory-cell{
   #expenditureSection .expense-table td{font-size:12.5px}
   #expenditureSection .expense-category-grid{grid-template-columns:1fr}
   #expenditureSection .expense-category-card strong{font-size:14px}
-  #expenditureSection .expense-category-card small,#expenditureSection .expense-subcategory-chip{font-size:10.5px}
+#expenditureSection .expense-category-card small,#expenditureSection .expense-subcategory-chip{font-size:10.5px}
+}
+
+/* v19.4.24 final geometry overrides — keep these last. */
+#holdingsSection .holding-matrix-table{min-width:1120px!important}
+#holdingsSection .matrix-value{min-width:110px!important;overflow:hidden!important}
+#holdingsSection .matrix-value>strong{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;overflow-wrap:normal!important}
+#watchlistSection .watchlist-details-table th.asset-col,
+#watchlistSection .watchlist-details-table td.asset-col{left:0!important;width:280px!important;min-width:280px!important;max-width:280px!important;overflow:hidden!important}
+#watchlistSection .watchlist-details-table th:nth-child(2),
+#watchlistSection .watchlist-details-table td:nth-child(2){min-width:170px!important;padding-left:16px!important}
+@media(max-width:860px){
+  #holdingsSection .holding-matrix-table{min-width:0!important}
+  #holdingsSection .matrix-value{min-width:0!important}
+  #watchlistSection .watchlist-details-table th.asset-col,
+  #watchlistSection .watchlist-details-table td.asset-col{width:220px!important;min-width:220px!important;max-width:220px!important}
+  #watchlistSection .watchlist-details-table th:nth-child(2),
+  #watchlistSection .watchlist-details-table td:nth-child(2){min-width:150px!important}
 }
