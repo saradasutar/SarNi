@@ -6,16 +6,20 @@
   <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
   <meta name="theme-color" content="#111a3b">
   <meta name="description" content="SarNi family portfolio dashboard">
-  <meta name="sarni-build" content="20260830-19601-namedviews1">
+  <meta name="sarni-build" content="20260830-20000-premium1">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
+  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+  <link rel="icon" href="./favicon.svg?v=20000-premium1" type="image/svg+xml">
   <title>SarNi</title>
   <style>
     *{box-sizing:border-box}
-    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f5f7ff;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f5f7ff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
     #sarniFrame{position:fixed;inset:0;width:100%;height:100dvh;border:0;background:#f5f7ff}
-    #opening{position:fixed;inset:0;z-index:5;display:grid;place-items:center;padding:24px;color:#28345d;background:radial-gradient(circle at 20% 15%,#e8e5ff,transparent 35%),linear-gradient(145deg,#edf5ff,#faf7ff);text-align:center;transition:opacity .25s ease}
+    #opening{position:fixed;inset:0;z-index:5;display:grid;place-items:center;padding:24px;color:#28345d;background:radial-gradient(circle at 15% 10%,#e7e6ff,transparent 36%),radial-gradient(circle at 90% 80%,#dff8f1,transparent 32%),linear-gradient(145deg,#f3f7ff,#fbfaff);text-align:center;transition:opacity .25s ease}
     #opening.done{pointer-events:none;opacity:0}
-    .opening-card{width:min(430px,92vw);padding:30px;border:1px solid #dce2f2;border-radius:24px;background:rgba(255,255,255,.94);box-shadow:0 24px 70px rgba(32,43,90,.16)}
-    .mark{width:64px;height:64px;display:grid;place-items:center;margin:0 auto 14px;border-radius:20px;color:#fff;background:linear-gradient(135deg,#18b8b0,#7358e4);font-size:30px;font-weight:900;box-shadow:0 13px 30px rgba(91,92,226,.25)}
+    .opening-card{width:min(430px,92vw);padding:32px;border:1px solid rgba(214,221,238,.9);border-radius:24px;background:rgba(255,255,255,.94);box-shadow:0 28px 80px rgba(32,43,90,.14);backdrop-filter:blur(18px)}
+    .mark{width:64px;height:64px;display:grid;place-items:center;margin:0 auto 14px;border-radius:20px;color:#fff;background:transparent;font-size:30px;font-weight:900}.mark img{display:block;width:64px;height:64px}
     h1{margin:0;color:#182344;font-size:27px}p{margin:9px 0 0;color:#697792;font-size:14px;font-weight:700;line-height:1.5}
     .loader{width:42px;height:42px;margin:22px auto 0;border:4px solid #e1e5f2;border-top-color:#6557dd;border-radius:50%;animation:spin .8s linear infinite}
     #directLink{display:none;margin:18px auto 0;padding:11px 15px;border:0;border-radius:11px;color:#fff;background:#5d50d1;font-weight:850;text-decoration:none}
@@ -23,8 +27,8 @@
   </style>
 </head>
 <body>
-  <div id="opening" role="status" aria-live="polite"><div class="opening-card"><div class="mark">₹</div><h1>Opening SarNi</h1><p id="openingMessage">Preparing your saved portfolio views…</p><div class="loader" aria-hidden="true"></div><a id="directLink" href="https://script.google.com/macros/s/AKfycbwXA1YBWRfOjYvZwDz9dkCr4HZujn9D_YoPmQyjggZxR5hUUs1ZsARytOX8rUR4zRbs/exec?app=1&amp;v=19601-namedviews1">Open directly</a></div></div>
-  <iframe id="sarniFrame" title="SarNi Financial Command Centre" src="https://script.google.com/macros/s/AKfycbwXA1YBWRfOjYvZwDz9dkCr4HZujn9D_YoPmQyjggZxR5hUUs1ZsARytOX8rUR4zRbs/exec?app=1&amp;embedded=1&amp;v=19601-namedviews1" allow="clipboard-read; clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <div id="opening" role="status" aria-live="polite"><div class="opening-card"><div class="mark"><img src="./favicon.svg?v=20000-premium1" alt="" width="64" height="64"></div><h1>Opening SarNi</h1><p id="openingMessage">Preparing your premium financial command centre…</p><div class="loader" aria-hidden="true"></div><a id="directLink" href="https://script.google.com/macros/s/AKfycbwXA1YBWRfOjYvZwDz9dkCr4HZujn9D_YoPmQyjggZxR5hUUs1ZsARytOX8rUR4zRbs/exec?app=1&amp;v=20000-premium1">Open directly</a></div></div>
+  <iframe id="sarniFrame" title="SarNi Financial Command Centre" src="https://script.google.com/macros/s/AKfycbwXA1YBWRfOjYvZwDz9dkCr4HZujn9D_YoPmQyjggZxR5hUUs1ZsARytOX8rUR4zRbs/exec?app=1&amp;embedded=1&amp;v=20000-premium1" allow="clipboard-read; clipboard-write" referrerpolicy="strict-origin-when-cross-origin" loading="eager"></iframe>
   <script>
     (function(){
       var frame=document.getElementById('sarniFrame'),opening=document.getElementById('opening'),message=document.getElementById('openingMessage'),direct=document.getElementById('directLink');
