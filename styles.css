@@ -19,7 +19,222 @@
   --radius: 22px;
 }
 
-/* v19.4.24: permanent, high-visibility sign-out control in the top-right. */
+/* =====================================================================
+   SarNi v19.6.0 — Financial Command Centre
+   ===================================================================== */
+:root{
+  --bg:#f6f8fb;
+  --surface:#ffffff;
+  --surface-soft:#f8fafc;
+  --ink:#172033;
+  --muted:#66758f;
+  --line:#e3e8ef;
+  --brand:#635bff;
+  --brand-dark:#4f46e5;
+  --cyan:#00a6b2;
+  --green:#09825d;
+  --red:#c9364f;
+  --orange:#d97706;
+  --purple:#635bff;
+  --navy:#0f172a;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.04),0 5px 18px rgba(15,23,42,.035);
+  --shadow:0 2px 5px rgba(15,23,42,.045),0 14px 34px rgba(15,23,42,.055);
+  --radius:15px;
+}
+body{
+  color:#172033!important;
+  background:#f6f8fb!important;
+}
+.main-content{
+  background:linear-gradient(180deg,#fbfcfe 0,#f6f8fb 240px)!important;
+}
+
+/* Linear-inspired navigation: quiet, dense, fast to scan. */
+.sidebar{
+  border-right:1px solid rgba(255,255,255,.07)!important;
+  background:
+    radial-gradient(circle at 20% -5%,rgba(99,91,255,.23),transparent 29%),
+    linear-gradient(180deg,#111827 0%,#0f172a 58%,#10162b 100%)!important;
+  box-shadow:8px 0 30px rgba(15,23,42,.10)!important;
+}
+.side-brand{padding-bottom:18px!important;border-bottom:1px solid rgba(255,255,255,.07)}
+.side-brand .brand-mark{border-radius:13px!important;background:linear-gradient(145deg,#635bff,#8b5cf6)!important;box-shadow:0 8px 22px rgba(99,91,255,.30)!important}
+.side-brand strong{font-size:16px!important;letter-spacing:-.01em!important}
+.side-brand span{color:#8994aa!important;font-size:9px!important;letter-spacing:.12em!important}
+.side-nav{gap:4px!important}
+.nav-item{
+  min-height:39px!important;
+  border:1px solid transparent!important;
+  border-radius:9px!important;
+  color:#aeb8ca!important;
+  font-size:12px!important;
+  font-weight:760!important;
+}
+.nav-item:hover{color:#fff!important;background:rgba(255,255,255,.055)!important}
+.nav-item.active{
+  color:#fff!important;
+  border-color:rgba(139,126,255,.22)!important;
+  background:linear-gradient(90deg,rgba(99,91,255,.31),rgba(99,91,255,.13))!important;
+  box-shadow:inset 3px 0 0 #8b82ff!important;
+}
+.nav-item.active span{color:#a9a2ff!important}
+.sidebar-session-card{border-color:rgba(255,255,255,.08)!important;border-radius:11px!important;background:rgba(255,255,255,.035)!important;box-shadow:none!important}
+
+/* Stripe-inspired workspace header and controls. */
+.topbar{
+  min-height:72px!important;
+  border-bottom:1px solid #e6eaf0!important;
+  background:rgba(255,255,255,.94)!important;
+  box-shadow:0 1px 0 rgba(15,23,42,.025)!important;
+  backdrop-filter:blur(14px)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+}
+.topbar h1{color:#172033!important;font-size:25px!important;font-weight:850!important;letter-spacing:-.035em!important}
+.topbar .eyebrow{color:#69758b!important;font-size:9px!important;letter-spacing:.09em!important}
+.dashboard-version-chip{border-color:#e3e7ef!important;color:#667085!important;background:#f8fafc!important;box-shadow:none!important}
+.dashboard-version-chip.backend-chip{color:#087b60!important;background:#effaf6!important}
+.auto-refresh-control,.sync-status,.icon-button{
+  border-color:#dfe4eb!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.04)!important;
+}
+.primary-button{
+  border:1px solid #5149e7!important;
+  border-radius:9px!important;
+  color:#fff!important;
+  background:linear-gradient(180deg,#6b63ff,#5851df)!important;
+  box-shadow:0 2px 5px rgba(79,70,229,.22)!important;
+}
+.primary-button:hover{background:linear-gradient(180deg,#625af1,#4f47d3)!important;transform:translateY(-1px)}
+.secondary-button,.small-button,.print-view-button,.fullscreen-view-button{
+  border-color:#dce2ea!important;
+  border-radius:8px!important;
+  color:#344054!important;
+  background:#fff!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.035)!important;
+}
+.header-logout-button{border-radius:9px!important;background:linear-gradient(180deg,#dc4b61,#c9364f)!important;box-shadow:0 2px 6px rgba(201,54,79,.22)!important}
+
+/* Stripe financial surfaces: exact hierarchy, subtle borders, minimal noise. */
+.panel,.summary-card,.welcome-banner,.holdings-summary-panel,.watchlist-live-strip,.sip-hero,.expense-hero,.diary-hero{
+  border:1px solid #e2e7ee!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  box-shadow:var(--shadow-sm)!important;
+}
+.panel-head h3{color:#1d2939!important;font-size:16px!important;font-weight:820!important;letter-spacing:-.02em!important}
+.panel-subcopy,.performance-note{color:#667085!important}
+.summary-card{position:relative;overflow:hidden;padding:17px!important}
+.summary-card::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:#635bff}
+.summary-card.accent-green::before{background:#0a8f68}.summary-card.accent-red::before{background:#d1455b}.summary-card.accent-orange::before{background:#df8a18}
+.summary-card p{color:#667085!important;font-size:10px!important;font-weight:760!important;letter-spacing:.035em!important;text-transform:uppercase}
+.summary-card>strong{color:#172033!important;font-size:22px!important;letter-spacing:-.035em!important}
+.summary-trend{border-radius:6px!important}
+.portfolio-switcher,.asset-switcher,.range-switcher{padding:3px!important;border-color:#e1e6ed!important;border-radius:9px!important;background:#f2f4f7!important}
+.portfolio-switcher button,.asset-switcher button,.range-switcher button{border-radius:7px!important;color:#667085!important}
+.portfolio-switcher button.active,.asset-switcher button.active,.range-switcher button.active{color:#344054!important;background:#fff!important;box-shadow:0 1px 3px rgba(15,23,42,.10)!important}
+
+/* Cleaner Stripe-like data tables. */
+.table-panel{overflow:hidden}
+.table-wrap{border:1px solid #e2e7ee!important;border-radius:11px!important;background:#fff!important}
+table{font-variant-numeric:tabular-nums}
+.holdings-table thead th,.watchlist-details-table thead th,.transaction-table thead th,.expense-table thead th,.sip-table thead th{
+  color:#475467!important;
+  background:#f8fafc!important;
+  border-bottom:1px solid #dfe5ec!important;
+  font-size:9.5px!important;
+  font-weight:850!important;
+  letter-spacing:.045em!important;
+  text-transform:uppercase!important;
+}
+.holdings-table td,.watchlist-details-table td,.transaction-table td,.expense-table td,.sip-table td{border-bottom:1px solid #edf0f4!important;color:#344054!important;background:#fff!important}
+.holdings-table tbody tr:nth-child(even) td,.watchlist-details-table tbody tr:nth-child(even) td,.transaction-table tbody tr:nth-child(even) td,.expense-table tbody tr:nth-child(even) td{background:#fbfcfd!important}
+.holdings-table tbody tr:hover td,.watchlist-details-table tbody tr:hover td,.transaction-table tbody tr:hover td,.expense-table tbody tr:hover td{background:#f5f7ff!important}
+.owner-tag,.asset-badge,.expense-category-badge{border-radius:7px!important;box-shadow:none!important}
+.holding-pnl-pill{border-radius:6px!important}
+.positive,.profit{color:#087b60!important}.negative,.loss{color:#c9364f!important}
+
+/* Financial summary matrix: Stripe report hierarchy with restrained colour. */
+#holdingsSection .holdings-summary-panel{padding:14px!important;background:#fff!important}
+.holding-matrix-wrap{border-color:#dde3eb!important;border-radius:12px!important;box-shadow:none!important}
+.holding-matrix-table .matrix-owner{background:#344054!important}
+.holding-matrix-table .matrix-owner-sarada{background:linear-gradient(135deg,#5145b8,#7166d9)!important}
+.holding-matrix-table .matrix-owner-niharika{background:linear-gradient(135deg,#9d5d29,#c17838)!important}
+.holding-matrix-table .matrix-owner-combined{background:linear-gradient(135deg,#334e8d,#287f85)!important}
+.holding-matrix-table th,.holding-matrix-table td{border-color:#e4e8ee!important}
+.matrix-value[data-owner]{background:#fff!important}
+.matrix-total-row .matrix-value{background:#f7f8ff!important}
+
+/* Notion-inspired writing surfaces: spacious, paper-like, distraction-free. */
+#diarySection .diary-editor-card,#diarySection .monthly-editor-card,#diarySection .recent-diary-rail,#diarySection .diary-list-panel,
+.sticky-note-diary-panel,.quick-diary-panel{
+  border:1px solid #e5e7eb!important;
+  border-radius:12px!important;
+  background:#fff!important;
+  box-shadow:0 1px 2px rgba(15,23,42,.025)!important;
+}
+#diarySection textarea,.quick-diary-panel textarea,.sticky-note-modal textarea{
+  border-color:#e1e5eb!important;
+  border-radius:8px!important;
+  color:#252a34!important;
+  background:#fff!important;
+  font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif!important;
+  font-size:15px!important;
+  line-height:1.7!important;
+}
+#diarySection input,#diarySection select{border-color:#e1e5eb!important;border-radius:8px!important;background:#fff!important}
+.diary-entry-card,.monthly-entry-card,.sticky-history-card{border-color:#e7e9ed!important;border-radius:9px!important;background:#fff!important;box-shadow:none!important}
+
+/* Login: polished finance product rather than a marketing splash page. */
+.login-view{background:linear-gradient(145deg,#f3f5f9,#f8f7ff)!important}
+.login-shell{border:1px solid #dde3eb!important;border-radius:20px!important;background:#fff!important;box-shadow:0 30px 80px rgba(15,23,42,.14)!important}
+.brand-panel{background:linear-gradient(150deg,#111827,#1f2740 58%,#37306d)!important}
+.login-card{background:#fff!important}
+.login-card h1{color:#172033!important;letter-spacing:-.04em!important}
+.login-card input{border-color:#dce2ea!important;border-radius:9px!important;background:#fff!important}
+
+@media(max-width:860px){
+  .topbar{min-height:58px!important;background:#fff!important;backdrop-filter:none!important}
+  .topbar h1{font-size:20px!important}
+  .panel,.summary-card,.holdings-summary-panel,.watchlist-live-strip,.sip-hero,.expense-hero,.diary-hero{border-radius:11px!important}
+  .summary-card{padding:13px!important}
+  .summary-card>strong{font-size:19px!important}
+  .mobile-session-bar{border:1px solid #e2e7ee!important;background:#fff!important;box-shadow:none!important}
+}
+
+/* v19.5.0 definitive visual layer — deliberately last so legacy skins cannot win. */
+body{background:#f6f8fb!important;color:#1f2937!important}
+.main-content,.content-area,.dashboard-content{background:#f6f8fb!important}
+.sidebar{background:linear-gradient(180deg,#101828 0%,#172033 100%)!important;border-right:1px solid rgba(255,255,255,.08)!important;box-shadow:8px 0 28px rgba(15,23,42,.12)!important}
+.sidebar-brand,.brand-name{color:#fff!important}
+.nav-item{border-radius:8px!important;color:#aeb9cb!important;margin:2px 10px!important}
+.nav-item:hover{background:rgba(255,255,255,.07)!important;color:#fff!important}
+.nav-item.active{background:#fff!important;color:#182230!important;box-shadow:0 6px 18px rgba(0,0,0,.16)!important}
+.topbar{background:rgba(255,255,255,.96)!important;border-bottom:1px solid #e7ebf2!important;box-shadow:0 1px 0 rgba(15,23,42,.03)!important}
+.panel,.card,.summary-card,.holding-matrix-shell,.watchlist-table-shell,.expense-table-shell{background:#fff!important;border:1px solid #e4e8ef!important;border-radius:14px!important;box-shadow:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(16,24,40,.04)!important}
+button,.button,.btn{border-radius:8px!important}
+.primary-button,.btn-primary,.save-button{background:#635bff!important;border-color:#635bff!important;color:#fff!important;box-shadow:0 2px 5px rgba(99,91,255,.22)!important}
+table{border-collapse:separate!important;border-spacing:0!important}
+thead th{background:#f8fafc!important;color:#475467!important;border-bottom:1px solid #dfe4ec!important;font-size:11px!important;letter-spacing:.035em!important;text-transform:uppercase!important}
+tbody td{border-bottom:1px solid #edf0f4!important}
+tbody tr:hover td{background:#f8faff!important}
+.status-chip,.pill,.badge{border-radius:999px!important;box-shadow:none!important}
+#holdingsSection .holding-matrix-table th{background:#f7f8fc!important}
+#holdingsSection .matrix-investor-head.combined{background:#eef0ff!important;color:#4338ca!important}
+#holdingsSection .matrix-value>strong{font-variant-numeric:tabular-nums!important;letter-spacing:-.02em!important}
+#watchlistSection .watchlist-details-table td.asset-col{background:#fff!important;box-shadow:8px 0 16px -16px rgba(15,23,42,.55)!important}
+#watchlistSection .watchlist-details-table tbody tr:nth-child(even) td{background:#f8fafc!important}
+#watchlistSection .watchlist-details-table tbody tr:nth-child(even) td.asset-col{background:#f8fafc!important}
+#diarySection textarea,#quickDiarySection textarea,.sticky-note-diary-card,.sticky-card{background:#fffdf7!important;border:1px solid #ece5d5!important;box-shadow:0 6px 20px rgba(99,78,28,.07)!important}
+input,select,textarea{border-color:#d8dee8!important;border-radius:8px!important;box-shadow:none!important}
+input:focus,select:focus,textarea:focus{border-color:#635bff!important;box-shadow:0 0 0 3px rgba(99,91,255,.12)!important;outline:0!important}
+@media(max-width:860px){
+  .sidebar{box-shadow:none!important}
+  .panel,.card,.summary-card,.holding-matrix-shell,.watchlist-table-shell,.expense-table-shell{border-radius:12px!important}
+}
+
+/* v19.5.0: permanent, high-visibility sign-out control in the top-right. */
 .header-logout-button{
   min-height:43px;
   display:inline-flex;
@@ -6375,7 +6590,7 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
   }
 }
 
-/* FE v19.4.24 — clean two-decimal values, overlap-proof summary and Watchlist. */
+/* FE v19.5.0 — clean two-decimal values, overlap-proof summary and Watchlist. */
 #holdingsSection .holding-matrix-table{
   min-width:1120px!important;
 }
@@ -6459,6 +6674,36 @@ body.data-fullscreen-open .pinned-sticky-layer .sticky-note-card{
   }
   #watchlistSection .watchlist-details-table th:nth-child(2),
   #watchlistSection .watchlist-details-table td:nth-child(2){min-width:150px!important}
+}
+
+/* v19.5.0 final theme lock — this block must remain the final stylesheet layer. */
+body{background:#f6f8fb!important;color:#1f2937!important}
+.main-content,.content-area,.dashboard-content{background:#f6f8fb!important}
+.sidebar{background:linear-gradient(180deg,#101828 0%,#172033 100%)!important;border-right:1px solid rgba(255,255,255,.08)!important;box-shadow:8px 0 28px rgba(15,23,42,.12)!important}
+.sidebar-brand,.brand-name{color:#fff!important}
+.nav-item{border-radius:8px!important;color:#aeb9cb!important;margin:2px 10px!important;background:transparent!important}
+.nav-item:hover{background:rgba(255,255,255,.07)!important;color:#fff!important}
+.nav-item.active{background:#fff!important;color:#182230!important;box-shadow:0 6px 18px rgba(0,0,0,.16)!important}
+.topbar{background:rgba(255,255,255,.96)!important;border-bottom:1px solid #e7ebf2!important;box-shadow:0 1px 0 rgba(15,23,42,.03)!important}
+.panel,.card,.summary-card,.holding-matrix-shell,.watchlist-table-shell,.expense-table-shell{background:#fff!important;border:1px solid #e4e8ef!important;border-radius:14px!important;box-shadow:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(16,24,40,.04)!important}
+button,.button,.btn{border-radius:8px!important}
+.primary-button,.btn-primary,.save-button{background:#635bff!important;border-color:#635bff!important;color:#fff!important;box-shadow:0 2px 5px rgba(99,91,255,.22)!important}
+table{border-collapse:separate!important;border-spacing:0!important}
+thead th{background:#f8fafc!important;color:#475467!important;border-bottom:1px solid #dfe4ec!important;font-size:11px!important;letter-spacing:.035em!important;text-transform:uppercase!important}
+tbody td{border-bottom:1px solid #edf0f4!important}
+tbody tr:hover td{background:#f8faff!important}
+#holdingsSection .holding-matrix-table th{background:#f7f8fc!important}
+#holdingsSection .matrix-investor-head.combined{background:#eef0ff!important;color:#4338ca!important}
+#holdingsSection .matrix-value>strong{font-variant-numeric:tabular-nums!important;letter-spacing:-.02em!important}
+#watchlistSection .watchlist-details-table td.asset-col{background:#fff!important;box-shadow:8px 0 16px -16px rgba(15,23,42,.55)!important}
+#watchlistSection .watchlist-details-table tbody tr:nth-child(even) td{background:#f8fafc!important}
+#watchlistSection .watchlist-details-table tbody tr:nth-child(even) td.asset-col{background:#f8fafc!important}
+#diarySection textarea,#quickDiarySection textarea,.sticky-note-diary-card,.sticky-card{background:#fffdf7!important;border:1px solid #ece5d5!important;box-shadow:0 6px 20px rgba(99,78,28,.07)!important}
+input,select,textarea{border-color:#d8dee8!important;border-radius:8px!important;box-shadow:none!important}
+input:focus,select:focus,textarea:focus{border-color:#635bff!important;box-shadow:0 0 0 3px rgba(99,91,255,.12)!important;outline:0!important}
+@media(max-width:860px){
+  .sidebar{box-shadow:none!important}
+  .panel,.card,.summary-card,.holding-matrix-shell,.watchlist-table-shell,.expense-table-shell{border-radius:12px!important}
 }
 
 /* =========================================================
@@ -9270,7 +9515,7 @@ button,input,select,textarea{
   .matrix-value.matrix-present>strong,.matrix-total-row .matrix-value>strong{font-size:12px}
 }
 
-/* FE v19.4.24 — professional expenditure categories and subcategories. */
+/* FE v19.5.0 — professional expenditure categories and subcategories. */
 #expenditureSection .expense-filter-bar{gap:8px}
 #expenditureSection .expense-filter-bar input,
 #expenditureSection .expense-filter-bar select,
@@ -9346,7 +9591,7 @@ body.expense-subcategories-hidden #expenditureSection .expense-subcategory-cell{
 #expenditureSection .expense-category-card small,#expenditureSection .expense-subcategory-chip{font-size:10.5px}
 }
 
-/* v19.4.24 final geometry overrides — keep these last. */
+/* v19.5.0 final geometry overrides — keep these last. */
 #holdingsSection .holding-matrix-table{min-width:1120px!important}
 #holdingsSection .matrix-value{min-width:110px!important;overflow:hidden!important}
 #holdingsSection .matrix-value>strong{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;overflow-wrap:normal!important}
@@ -9361,4 +9606,155 @@ body.expense-subcategories-hidden #expenditureSection .expense-subcategory-cell{
   #watchlistSection .watchlist-details-table td.asset-col{width:220px!important;min-width:220px!important;max-width:220px!important}
   #watchlistSection .watchlist-details-table th:nth-child(2),
   #watchlistSection .watchlist-details-table td:nth-child(2){min-width:150px!important}
+}
+
+/* v19.5.0 definitive tail overrides. */
+body,.main-content,.content-area,.dashboard-content{background:#f6f8fb!important;color:#1f2937!important}
+.sidebar{background:linear-gradient(180deg,#101828,#172033)!important;border-right:1px solid rgba(255,255,255,.08)!important;box-shadow:8px 0 28px rgba(15,23,42,.12)!important}
+.sidebar-brand,.brand-name{color:#fff!important}
+.nav-item{border-radius:8px!important;color:#aeb9cb!important;margin:2px 10px!important;background:transparent!important}
+.nav-item:hover{background:rgba(255,255,255,.07)!important;color:#fff!important}
+.nav-item.active{background:#fff!important;color:#182230!important;box-shadow:0 6px 18px rgba(0,0,0,.16)!important}
+.topbar{background:rgba(255,255,255,.96)!important;border-bottom:1px solid #e7ebf2!important;box-shadow:0 1px 0 rgba(15,23,42,.03)!important}
+.panel,.card,.summary-card,.holding-matrix-shell,.watchlist-table-shell,.expense-table-shell{background:#fff!important;border:1px solid #e4e8ef!important;border-radius:14px!important;box-shadow:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(16,24,40,.04)!important}
+.primary-button,.btn-primary,.save-button{background:#635bff!important;border-color:#635bff!important;color:#fff!important;box-shadow:0 2px 5px rgba(99,91,255,.22)!important}
+thead th{background:#f8fafc!important;color:#475467!important;border-bottom:1px solid #dfe4ec!important}
+tbody td{border-bottom:1px solid #edf0f4!important}
+tbody tr:hover td{background:#f8faff!important}
+#holdingsSection .holding-matrix-table th{background:#f7f8fc!important}
+#holdingsSection .matrix-investor-head.combined{background:#eef0ff!important;color:#4338ca!important}
+#holdingsSection .matrix-value>strong{font-variant-numeric:tabular-nums!important;letter-spacing:-.02em!important}
+#watchlistSection .watchlist-details-table td.asset-col{box-shadow:8px 0 16px -16px rgba(15,23,42,.55)!important}
+#watchlistSection .watchlist-details-table tbody tr:nth-child(even) td{background:#f8fafc!important}
+#diarySection textarea,#quickDiarySection textarea,.sticky-note-diary-card,.sticky-card{background:#fffdf7!important;border:1px solid #ece5d5!important;box-shadow:0 6px 20px rgba(99,78,28,.07)!important}
+input:focus,select:focus,textarea:focus{border-color:#635bff!important;box-shadow:0 0 0 3px rgba(99,91,255,.12)!important;outline:0!important}
+
+/* =====================================================================
+   SarNi v19.6.0 — responsive command centre and personal display choices
+   ===================================================================== */
+.overview-investment-mode-hidden{display:inline-flex!important}
+.overview-mode-switcher{grid-template-columns:repeat(2,minmax(150px,1fr))!important}
+#investmentOverviewContent:not(.hidden){display:block!important}
+#investmentOverviewContent.hidden{display:none!important}
+.overview-default-button{display:inline-flex!important}
+.display-preferences{display:flex;align-items:center;gap:5px;padding:4px;border:1px solid #e3e8ef;border-radius:9px;background:#f8fafc}
+.display-preferences select{height:30px;max-width:105px;padding:0 6px;border:0!important;background:transparent!important;color:#475467;font-size:9px;font-weight:850}
+.side-brand{position:relative;display:grid!important;grid-template-columns:auto 1fr auto;align-items:center;gap:9px}
+.sidebar-collapse-button{display:grid;place-items:center;width:28px;height:28px;padding:0;border:1px solid rgba(255,255,255,.12);border-radius:7px;background:rgba(255,255,255,.05);color:#c7d0df;font-size:20px;line-height:1}
+.sidebar-collapse-button:hover{background:rgba(255,255,255,.11);color:#fff}
+body.sidebar-compact .app-view{grid-template-columns:82px 1fr!important}
+body.sidebar-compact .side-brand{grid-template-columns:1fr;justify-items:center;padding-left:0!important;padding-right:0!important}
+body.sidebar-compact .side-brand>div:nth-child(2),body.sidebar-compact .sidebar-session-card{display:none!important}
+body.sidebar-compact .sidebar-collapse-button{position:static}
+body.sidebar-compact .nav-item{font-size:0!important;justify-content:center!important;padding-left:0!important;padding-right:0!important;margin-left:7px!important;margin-right:7px!important}
+body.sidebar-compact .nav-item>span{font-size:16px!important;margin:0!important}
+body.sidebar-compact .sidebar-foot .nav-item strong{display:none!important}
+
+body.ui-compact .main-content{padding-left:18px!important;padding-right:18px!important}
+body.ui-compact .panel,body.ui-compact .card{padding:12px!important}
+body.ui-compact table td{padding-top:7px!important;padding-bottom:7px!important}
+body.ui-compact .summary-card{min-height:92px!important;padding:12px!important}
+body.ui-compact .summary-card>strong{font-size:19px!important}
+
+.summary-compare-button{min-height:30px;padding:6px 10px;border:1px solid #cdd4e2;border-radius:8px;background:#fff;color:#344054;font-size:9.5px;font-weight:900}
+.summary-compare-button[aria-pressed="true"]{border-color:#635bff;background:#eeedff;color:#4f46e5}
+.holding-matrix-wrap:not(.is-compare-all) .holding-matrix-table{min-width:700px!important;width:100%!important;table-layout:fixed!important}
+.holding-matrix-wrap:not(.is-compare-all) [data-owner]{display:none!important}
+.holding-matrix-wrap:not(.is-compare-all)[data-matrix-owner-view="sarada"] [data-owner="sarada"],
+.holding-matrix-wrap:not(.is-compare-all)[data-matrix-owner-view="niharika"] [data-owner="niharika"],
+.holding-matrix-wrap:not(.is-compare-all)[data-matrix-owner-view="combined"] [data-owner="combined"]{display:table-cell!important}
+.holding-matrix-wrap:not(.is-compare-all) .matrix-corner,
+.holding-matrix-wrap:not(.is-compare-all) tbody>tr>th{width:170px!important;min-width:170px!important}
+.holding-matrix-wrap:not(.is-compare-all) .matrix-value{min-width:0!important;padding:15px 12px!important}
+.holding-matrix-wrap:not(.is-compare-all) .matrix-value>strong{font-size:15px!important;text-overflow:clip!important}
+.holding-matrix-wrap.is-compare-all .holding-matrix-table{min-width:1120px!important}
+
+.own-gain-column{background:#fbfaff!important}
+.own-gain-column.group-start{border-left:3px solid #a78bfa!important}
+.own-holding-gain{min-width:125px;text-align:right!important;font-variant-numeric:tabular-nums}
+.own-holding-gain strong{display:block;white-space:nowrap;font-size:11px}
+.own-holding-gain small{display:block;margin-top:2px;font-size:9px;font-weight:850}
+.own-holding-gain.positive strong,.own-holding-gain.positive small{color:#087a55!important}
+.own-holding-gain.negative strong,.own-holding-gain.negative small{color:#c9364f!important}
+
+.watch-mobile-cards{display:none}
+@media(max-width:860px){
+  .display-preferences{display:none}
+  .sidebar-collapse-button{display:none}
+  body.sidebar-compact .app-view{grid-template-columns:1fr!important}
+  .overview-mode-switcher{grid-template-columns:repeat(2,minmax(0,1fr))!important;width:100%}
+  .overview-mode-switcher button{min-width:0!important}
+  .holding-matrix-wrap:not(.is-compare-all) .holding-matrix-table{min-width:0!important}
+  .holding-matrix-wrap:not(.is-compare-all) .matrix-corner,
+  .holding-matrix-wrap:not(.is-compare-all) tbody>tr>th{width:92px!important;min-width:92px!important}
+  .holding-matrix-wrap.is-compare-all{overflow-x:auto}
+  #watchlistSection .table-wrap[data-layout-scroll="watchlist"]{display:none!important}
+  .watch-mobile-cards{display:grid;gap:11px;padding:10px 0}
+  .watch-mobile-card{padding:14px;border:1px solid #e2e7ef;border-radius:13px;background:#fff;box-shadow:0 4px 14px rgba(15,23,42,.05)}
+  .watch-mobile-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .watch-priority{padding:4px 7px;border-radius:999px;background:#eef2f7;color:#667085;font-size:8px;font-weight:950;letter-spacing:.06em}
+  .watch-priority.high{background:#fff1f2;color:#be123c}.watch-priority.low{background:#ecfdf3;color:#087a55}
+  .watch-mobile-price{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+  .watch-mobile-price>div{display:grid;gap:3px;padding:10px;border-radius:10px;background:#f7f9fc}
+  .watch-mobile-price span,.watch-mobile-metrics small{color:#667085;font-size:8px;font-weight:850;text-transform:uppercase;letter-spacing:.04em}
+  .watch-mobile-price strong{font-size:16px;color:#101828}
+  .watch-mobile-price small{font-size:9px;font-weight:900}
+  .watch-mobile-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;overflow:hidden;border:1px solid #e7eaf0;border-radius:9px;background:#e7eaf0}
+  .watch-mobile-metrics span{display:grid;gap:3px;padding:8px 5px;background:#fff;text-align:center}
+  .watch-mobile-metrics b{font-size:9px;white-space:nowrap}
+  .watch-mobile-note{margin:10px 0 0;padding:9px;border-left:3px solid #a78bfa;background:#faf8ff;color:#475467;font-size:10px;line-height:1.45}
+  .watch-mobile-actions{display:flex;gap:6px;margin-top:10px}
+  .watch-mobile-actions button{flex:1}
+}
+
+body.theme-dark{background:#0b1220!important;color:#d8e0ec!important}
+body.theme-dark .main-content,body.theme-dark .content-area,body.theme-dark .dashboard-content{background:#0b1220!important;color:#d8e0ec!important}
+body.theme-dark .topbar{background:rgba(15,23,42,.96)!important;border-bottom-color:#273244!important}
+body.theme-dark .topbar h1,body.theme-dark h2,body.theme-dark h3,body.theme-dark strong{color:#f3f6fb}
+body.theme-dark .panel,body.theme-dark .card,body.theme-dark .summary-card,body.theme-dark .holding-matrix-shell,body.theme-dark .watchlist-table-shell,body.theme-dark .expense-table-shell,body.theme-dark .watch-mobile-card{background:#111b2e!important;border-color:#28364c!important;box-shadow:none!important}
+body.theme-dark thead th{background:#18243a!important;color:#b8c2d3!important;border-bottom-color:#334158!important}
+body.theme-dark tbody td{background:#111b2e!important;color:#d5ddec!important;border-bottom-color:#253349!important}
+body.theme-dark tbody tr:hover td{background:#17243a!important}
+body.theme-dark input,body.theme-dark select,body.theme-dark textarea{background:#101a2c!important;border-color:#334158!important;color:#e5eaf2!important}
+body.theme-dark .display-preferences,body.theme-dark .watch-mobile-price>div{background:#18243a!important;border-color:#334158!important}
+body.theme-dark .display-preferences select,body.theme-dark .watch-mobile-price span,body.theme-dark .watch-mobile-metrics small{color:#aeb9ca!important}
+body.theme-dark .watch-mobile-price strong{color:#f2f5f9!important}
+body.theme-dark .watch-mobile-metrics{background:#334158!important;border-color:#334158!important}
+body.theme-dark .watch-mobile-metrics span{background:#111b2e!important}
+body.theme-dark #diarySection textarea,body.theme-dark #quickDiarySection textarea,body.theme-dark .sticky-note-diary-card{background:#1d2533!important;border-color:#394256!important}
+
+/* v19.6.0 research-scanner fields. */
+.watch-filter-tools{align-items:center!important}
+.watch-filter-tools .compact-select{max-width:165px}
+.watch-growth-cell{min-width:150px;max-width:220px;white-space:normal!important;font-size:10px;line-height:1.35}
+.range-position{display:grid;grid-template-columns:minmax(70px,1fr) auto;align-items:center;gap:6px;min-width:110px}
+.range-position:before{content:"";grid-column:1;grid-row:1;height:6px;border-radius:999px;background:#e5e7eb}
+.range-position i{grid-column:1;grid-row:1;z-index:1;height:6px;max-width:100%;border-radius:999px;background:linear-gradient(90deg,#22c55e,#f59e0b,#ef4444)}
+.range-position b{grid-column:2;font-size:9px;color:#475467}
+.research-readiness{display:inline-flex;align-items:center;margin:0 6px 5px 0;padding:3px 6px;border-radius:999px;font-size:7.5px;font-weight:950;letter-spacing:.035em;text-transform:uppercase;white-space:nowrap}
+.research-readiness.ready{background:#e8f8f1;color:#087a55}
+.research-readiness.incomplete{background:#fff3e7;color:#b45309}
+.watch-mobile-badges{display:grid;justify-items:end;gap:4px}
+.watch-mobile-badges .research-readiness{margin:0}
+body.theme-dark .range-position:before{background:#334158}
+body.theme-dark .range-position b{color:#b8c2d3}
+body.theme-dark .research-readiness.ready{background:#123b32;color:#6ee7b7}
+body.theme-dark .research-readiness.incomplete{background:#472f16;color:#fdba74}
+
+/* v19.6.1 — multiple named Holdings and Watchlist views. */
+.named-view-controls{display:flex;align-items:center;gap:7px;flex:1 1 100%;padding-top:8px;border-top:1px solid #e6eaf1;flex-wrap:wrap}
+.named-view-label{color:#344054;font-size:8.5px;font-weight:1000;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.named-view-controls select{min-width:185px;max-width:240px;font-weight:850}
+.named-view-controls input{width:175px;min-height:32px;padding:6px 9px;border:1px solid #d8dee8;border-radius:8px;background:#fff;color:#344054;font-size:10px;font-weight:750}
+.named-view-controls .named-view-save{border-color:#b9b4ff!important;background:#efeeff!important;color:#4f46e5!important;font-weight:950!important}
+.named-view-controls .danger{margin-left:1px}
+.named-view-status{margin-left:auto;color:#667085;font-size:8.5px;font-weight:800;white-space:nowrap}
+body.theme-dark .named-view-controls{border-top-color:#334158}
+body.theme-dark .named-view-label{color:#d2d9e5}
+body.theme-dark .named-view-status{color:#9ba8bb}
+@media(max-width:860px){
+  .named-view-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px;width:100%}
+  .named-view-label,.named-view-status{grid-column:1/-1;margin:0}
+  .named-view-controls select,.named-view-controls input{width:100%;max-width:none;min-width:0;box-sizing:border-box}
+  .named-view-controls button{min-height:36px}
 }

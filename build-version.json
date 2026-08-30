@@ -1,6 +1,6 @@
 {
-  "version": "19.4.24",
-  "build": "20260829-19424-summarydecimal1",
-  "frontend": "19.4.24",
+  "version": "19.6.1",
+  "build": "20260830-19601-namedviews1",
+  "frontend": "19.6.1",
   "backendExpected": "3.17.8"
 }
