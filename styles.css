@@ -9760,7 +9760,7 @@ body.theme-dark .named-view-status{color:#9ba8bb}
 }
 
 /* =====================================================================
-   SarNi v20.0.0 — premium command centre quality pass
+   SarNi v20.0.1 — premium command centre quality pass
    Fast, calm, accessible and responsive without changing portfolio data.
    ===================================================================== */
 :root{
@@ -9953,6 +9953,24 @@ body.theme-dark #watchlistSection .watchlist-details-table th.asset-col,body.the
 body.theme-dark #watchlistSection .watchlist-details-table thead th.asset-col{background:#18243a!important}
 body.theme-dark #watchlistSection .watchlist-details-table tbody tr:nth-child(even) td.asset-col{background:#142036!important}
 body.theme-dark #watchlistSection .watchlist-details-table tbody tr:hover td.asset-col{background:#1a2942!important}
+
+/* v20.0.1: dark mode must never place white text on light-tinted Home cards. */
+body.theme-dark .personal-home-hero,
+body.theme-dark .personal-home-card,
+body.theme-dark .personal-home-footer{background:#111b2e!important;border-color:#2b394f!important;color:#d8e0ec!important}
+body.theme-dark .personal-home-card.tint-blue{background:linear-gradient(145deg,#101d31,#13253b)!important}
+body.theme-dark .personal-home-card.tint-yellow{background:linear-gradient(145deg,#1c1c2c,#2c2518)!important}
+body.theme-dark .personal-home-footer.tint-green{background:linear-gradient(145deg,#111f25,#102a28)!important}
+body.theme-dark .personal-home-hero h2,
+body.theme-dark .personal-home-card h3,
+body.theme-dark .personal-home-card strong,
+body.theme-dark .personal-home-footer strong{color:#f5f7fb!important}
+body.theme-dark .personal-home-hero p:not(.eyebrow),
+body.theme-dark .personal-home-card p,
+body.theme-dark .personal-home-card span,
+body.theme-dark .personal-home-footer span{color:#b7c1d1!important}
+body.theme-dark .home-sticky-summary>div{background:#17243a!important;border-color:#34435a!important}
+body.theme-dark .home-sticky-preview>*{background:#271c27!important;border-color:#5d3445!important;color:#f0c9d4!important}
 
 /* Responsive behaviour */
 @media(max-width:1280px){
