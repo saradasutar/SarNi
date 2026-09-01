@@ -1,6 +1,6 @@
 {
-  "version": "20.1.0",
-  "build": "20260901-20100-majorprojects1",
-  "frontend": "20.1.0",
+  "version": "20.1.1",
+  "build": "20260901-20101-summarynav1",
+  "frontend": "20.1.1",
   "backendExpected": "3.17.9"
 }
