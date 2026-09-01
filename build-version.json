@@ -1,6 +1,6 @@
 {
-  "version": "20.1.5",
-  "build": "20260901-20105-monthlyrows1",
-  "frontend": "20.1.5",
+  "version": "20.1.6",
+  "build": "20260901-20106-glance1",
+  "frontend": "20.1.6",
   "backendExpected": "3.17.10"
 }
