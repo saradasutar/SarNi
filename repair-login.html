@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>Repairing SarNi sign-in</title>
-  <link rel="icon" href="./favicon.svg?v=20101-summarynav1" type="image/svg+xml">
+  <link rel="icon" href="./favicon.svg?v=20102-security1" type="image/svg+xml">
   <style>
     *{box-sizing:border-box}
     body{min-height:100vh;margin:0;display:grid;place-items:center;padding:24px;background:linear-gradient(145deg,#eef5ff,#f7f3ff);color:#233052;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -25,7 +25,7 @@
   </main>
   <script>
     (function(){
-      var build='20260901-20101-summarynav1';
+      var build='20260901-20102-security1';
       try{
         ['portfolio_token','portfolio_username','myfinance_last_activity_at','myfinance_last_hidden_at'].forEach(function(key){localStorage.removeItem(key);});
         localStorage.setItem('myfinance_current_build_id',build);
@@ -49,7 +49,7 @@
 
       var go=function(){
         document.getElementById('status').textContent='Repair complete · opening SarNi…';
-        setTimeout(function(){location.replace('./?v=20101-summarynav1&repaired='+Date.now());},250);
+        setTimeout(function(){location.replace('./?v=20102-security1&repaired='+Date.now());},250);
       };
       Promise.race([Promise.all(tasks),new Promise(function(resolve){setTimeout(resolve,2200);})]).then(go,go);
     })();
