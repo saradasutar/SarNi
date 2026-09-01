@@ -10036,3 +10036,217 @@ body.theme-dark .home-sticky-preview>*{background:#271c27!important;border-color
 /* Administrator-controlled security policy. */
 .security-settings-panel{margin-bottom:18px;padding:22px;border:1px solid #dbe3f1;background:linear-gradient(135deg,#f7f5ff,#f1fbf8)}.security-policy-badge{display:inline-flex;padding:7px 11px;border:1px solid #cfc8ff;border-radius:999px;background:#eeeaff;color:#5949bf;font-size:12px;font-weight:900}.security-settings-form{display:grid;grid-template-columns:minmax(230px,320px) 1fr auto;align-items:end;gap:14px;margin-top:16px}.security-settings-form label{display:grid;gap:7px;color:#53617c;font-size:12px;font-weight:850}.security-settings-form select{min-height:42px;border:1px solid #cfd8e8;border-radius:10px;background:#fff;color:#24324f;padding:8px 11px;font-weight:800}.security-policy-facts{display:flex;flex-wrap:wrap;gap:8px}.security-policy-facts span{padding:9px 11px;border:1px solid #dce4ef;border-radius:10px;background:#fff;color:#66738a;font-size:11px}.security-policy-facts strong{color:#293b68}.security-settings-status{margin:12px 0 0;color:#536681;font-size:12px;font-weight:750}.security-settings-panel .primary-button{min-height:42px}
 @media(max-width:900px){.security-settings-form{grid-template-columns:1fr}.security-settings-panel .primary-button{width:100%}}
+
+/* =========================================================
+   FE v20.1.3 — overlap-proof Wealth Centre KPI cards
+   Each card reserves a complete row for its primary value.
+   Status text can wrap below it and never competes for width.
+   ========================================================= */
+#investmentOverviewContent .summary-grid{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:12px !important;
+  width:100% !important;
+  margin:10px 0 0 !important;
+}
+#investmentOverviewContent .summary-card{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  gap:7px !important;
+  min-width:0 !important;
+  min-height:118px !important;
+  padding:14px 15px 13px !important;
+  overflow:hidden !important;
+}
+#investmentOverviewContent .summary-card-head{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  min-width:0 !important;
+}
+#investmentOverviewContent .summary-card .card-icon{
+  flex:0 0 34px !important;
+  width:34px !important;
+  height:34px !important;
+  border-radius:10px !important;
+  font-size:13px !important;
+}
+#investmentOverviewContent .summary-card p{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  margin:0 !important;
+  color:#667085 !important;
+  font-size:10.5px !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+  letter-spacing:.045em !important;
+  overflow-wrap:anywhere;
+}
+#investmentOverviewContent .summary-card > strong{
+  display:block !important;
+  flex:0 0 auto !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  margin:0 !important;
+  color:#101828 !important;
+  font-size:clamp(23px,1.7vw,30px) !important;
+  font-weight:950 !important;
+  line-height:1.05 !important;
+  letter-spacing:-.04em !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+#investmentOverviewContent .summary-card-footer{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  flex-wrap:wrap !important;
+  gap:6px 8px !important;
+  min-width:0 !important;
+  margin-top:auto !important;
+}
+#investmentOverviewContent .summary-card-footer > span{
+  flex:0 1 auto !important;
+  min-width:0 !important;
+  margin:0 !important;
+  color:#7c899e !important;
+  font-size:9.5px !important;
+  font-weight:800 !important;
+  line-height:1.25 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+#investmentOverviewContent .summary-card .summary-trend{
+  flex:0 1 auto !important;
+  width:auto !important;
+  max-width:min(100%,210px) !important;
+  min-width:0 !important;
+  margin:0 !important;
+  padding:5px 8px !important;
+  border-radius:999px !important;
+  font-size:8.5px !important;
+  font-weight:900 !important;
+  line-height:1.2 !important;
+  text-align:center !important;
+  white-space:normal !important;
+  overflow-wrap:anywhere;
+}
+body.ui-compact #investmentOverviewContent .summary-card{
+  min-height:108px !important;
+  padding:12px 13px !important;
+}
+body.ui-compact #investmentOverviewContent .summary-card > strong{
+  font-size:clamp(22px,1.55vw,27px) !important;
+}
+
+/* Preserve every character in the desktop auto-update interval. */
+.top-actions .auto-refresh-control{
+  flex:0 0 auto !important;
+}
+.top-actions .auto-refresh-control select,
+#autoRefreshSelect{
+  flex:0 0 78px !important;
+  width:78px !important;
+  min-width:78px !important;
+  max-width:78px !important;
+  padding-inline:9px 24px !important;
+  text-overflow:clip !important;
+}
+
+#investmentOverviewContent #sumGain.positive{
+  color:var(--profit-green,#078a5b) !important;
+}
+#investmentOverviewContent #sumGain.negative{
+  color:var(--loss-red,#d63f52) !important;
+}
+
+@media(max-width:1450px){
+  #investmentOverviewContent .summary-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+  #investmentOverviewContent .summary-card > strong{
+    font-size:clamp(24px,2.3vw,31px) !important;
+  }
+}
+@media(max-width:720px){
+  #investmentOverviewContent .summary-grid{
+    grid-template-columns:1fr !important;
+  }
+  #investmentOverviewContent .summary-card{
+    min-height:112px !important;
+  }
+  #investmentOverviewContent .summary-card > strong{
+    font-size:27px !important;
+  }
+}
+@media(max-width:390px){
+  #investmentOverviewContent .summary-card-footer{
+    align-items:flex-start !important;
+    flex-direction:column !important;
+  }
+}
+
+/* v20.1.4 — reusable bills, fresh payment amount per occurrence. */
+#expenditureSection .regular-bills-panel{padding:18px;min-width:0;background:#f8faff;border-top:1px solid #e0e6f1}
+.regular-bills-heading,.regular-bill-header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.regular-bills-heading h3{margin:4px 0 7px;color:#17243c;font-size:21px}
+.regular-bills-heading p{margin:0;color:#53617b;font-size:13px;line-height:1.5}
+.regular-bills-heading .eyebrow{font-size:10px;color:#6252ca;letter-spacing:.09em}
+.regular-bills-tools,.regular-bill-presets,.regular-bill-labels,.regular-bill-setup-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.regular-bill-presets{margin:16px 0 10px}
+.regular-bill-presets>span{font-size:12px;font-weight:700;color:#56657d}
+.regular-bill-presets button{min-height:34px;border:1px solid #d6deee;background:#fff;color:#43557e;border-radius:9px;padding:7px 11px;font-size:12px;font-weight:700;cursor:pointer}
+.regular-bill-help{margin:10px 0 18px!important;font-size:12px!important;line-height:1.6;color:#53617b!important}
+.regular-bill-list{display:grid;gap:14px;min-width:0}
+.regular-bill-card{min-width:0;padding:18px;border:1px solid #dce3ef;border-left:4px solid #7563de;border-radius:14px;background:#fff;box-shadow:0 3px 12px #22385805}
+.regular-bill-card:nth-child(even){background:#f1f5ff;border-left-color:#179888}
+.regular-bill-card.is-paused{border-left-color:#98a2b3;background:#f4f5f8}
+.regular-bill-header>div:first-child{min-width:0;flex:1 1 230px}
+.regular-bill-header h4{margin:0 0 8px;color:#17243c;font-size:17px;overflow-wrap:anywhere}
+.regular-bill-labels{color:#56657d;font-size:12px}
+.regular-bill-labels .regular-bill-subcategory{font-weight:700}
+.regular-bill-context{display:flex;flex-wrap:wrap;gap:6px 18px;padding:12px 0;color:#5b6880;font-size:12px;line-height:1.5}
+.regular-bill-context strong{color:#334565}
+#expenditureSection .regular-bill-fields{display:grid;grid-template-columns:minmax(150px,1fr) minmax(145px,.85fr) minmax(150px,1fr) auto;align-items:end;gap:12px;margin:0;padding:0;border:0;min-width:0}
+#expenditureSection .regular-bill-fields label{display:flex;flex-direction:column;gap:6px;min-width:0;color:#40516e;font-size:12px;font-weight:750}
+#expenditureSection .regular-bill-fields input{box-sizing:border-box;width:100%;min-width:0;min-height:42px;border:1px solid #cbd5e5;border-radius:9px;padding:9px 11px;background:#fff;color:#17243c;font-size:14px;line-height:1.35}
+#expenditureSection .regular-bill-fields input:focus{outline:2px solid #7563de;outline-offset:2px}
+#expenditureSection .regular-bill-fields .regular-bill-note{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:5px 7px}
+.regular-bill-note small{font-weight:400}
+#expenditureSection .regular-bill-note input{grid-column:1/-1}
+#expenditureSection .regular-bill-pay{min-height:42px;white-space:nowrap;font-size:13px}
+.regular-bill-fields:disabled{opacity:.65}
+.regular-bill-history{margin-top:14px;padding-top:12px;border-top:1px solid #dce4f0}
+.regular-bill-history>summary,.regular-bill-register>summary{cursor:pointer;color:#485a87;font-size:13px;font-weight:750;padding:5px 0}
+.regular-bill-history-scroll{max-width:100%;overflow:auto;margin-top:10px}
+#expenditureSection .regular-bill-history table{width:100%;min-width:530px;border-collapse:collapse;table-layout:auto;font-size:12px}
+#expenditureSection .regular-bill-history th,#expenditureSection .regular-bill-history td{position:static!important;padding:9px 10px!important;min-width:0!important;white-space:normal!important;text-align:left;border-bottom:1px solid #dfe5f0;color:#344563;background:transparent!important}
+#expenditureSection .regular-bill-history th{color:#61708c;font-size:11px}
+#expenditureSection .regular-bill-history td:nth-child(2){font-weight:800;white-space:nowrap!important}
+.regular-bill-register{border:1px solid #dce3ef;border-radius:12px;margin:10px 18px 18px;background:#fff}
+.regular-bill-register>summary{padding:14px}
+.regular-bill-status{padding:10px;background:#fff4d8;color:#795009;border-radius:8px;font-size:12px}
+body.expense-subcategories-hidden .regular-bill-subcategory{display:none!important}
+.regular-bills-panel button:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:1100px){#expenditureSection .regular-bill-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.regular-bill-pay{width:100%}}
+@media(max-width:600px){#expenditureSection .regular-bills-panel{padding:12px}.regular-bill-card{padding:14px}.regular-bills-tools{width:100%}.regular-bills-tools>button{flex:1}.regular-bill-setup-actions{width:100%}.regular-bill-context{flex-direction:column}#expenditureSection .regular-bill-fields{grid-template-columns:minmax(0,1fr)}.regular-bill-register{margin-inline:12px}.regular-bill-help{font-size:11px!important}}
+
+/* The summary has its own navigation, independent from the holdings table. */
+.holding-summary-navigator{grid-template-columns:72px minmax(0,1fr) 46px 72px!important}
+.holding-summary-navigator button{width:72px;font-size:13px}
+.holding-summary-navigator>div{min-width:0;flex-wrap:wrap;gap:3px}
+.holding-summary-navigator input{min-width:0;min-height:26px;margin:0}
+.holding-summary-navigator span{white-space:normal}
+.holding-summary-navigator button:disabled{opacity:.45;cursor:default}
+.summary-jump-right{border-color:#6b5ce7!important;background:#eeeaff!important;color:#5143be!important}
+.summary-jump-right[hidden]{display:none!important}
+.summary-jump-right:disabled{opacity:.6}
+#holdingsSection .holding-matrix-wrap:focus-visible{outline:2px solid #7563de;outline-offset:3px}
+#holdingsSection .holding-matrix-wrap.is-compare-all .holding-matrix-table .matrix-owner{color:#fff!important}
+#holdingsSection .holding-matrix-wrap .holding-matrix-table .matrix-owner-sarada{background:#6953bb!important}
+#holdingsSection .holding-matrix-wrap .holding-matrix-table .matrix-owner-niharika{background:#ab662d!important}
+#holdingsSection .holding-matrix-wrap .holding-matrix-table .matrix-owner-combined{background:#227b7b!important}
+@media(max-width:760px){.holding-summary-navigator{grid-template-columns:65px minmax(0,1fr) 65px!important}.holding-summary-navigator button{width:65px}.holding-summary-navigator span{display:block;font-size:10px}.holding-summary-navigator>div{display:flex}}

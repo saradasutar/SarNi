@@ -1,6 +1,6 @@
 {
-  "version": "20.1.2",
-  "build": "20260901-20102-security1",
-  "frontend": "20.1.2",
+  "version": "20.1.4",
+  "build": "20260901-20104-regularpayments1",
+  "frontend": "20.1.4",
   "backendExpected": "3.17.10"
 }
