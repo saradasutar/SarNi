@@ -10231,6 +10231,33 @@ body.ui-compact #investmentOverviewContent .summary-card > strong{
 .regular-bill-status{padding:10px;background:#fff4d8;color:#795009;border-radius:8px;font-size:12px}
 body.expense-subcategories-hidden .regular-bill-subcategory{display:none!important}
 .regular-bills-panel button:disabled{opacity:.55;cursor:not-allowed}
+.regular-bill-group{min-width:0}
+.regular-bill-group-heading{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 12px;margin:10px 0}
+.regular-bill-group-heading h4{margin:0;color:#253753;font-size:16px}
+.regular-bill-group-heading>span{color:#64718a;font-size:11px}
+.regular-bill-group-rows{display:grid;gap:10px;min-width:0}
+.regular-bill-example-picker{margin-top:12px;color:#586786;font-size:12px}
+.regular-bill-example-picker>summary{padding:6px 0;font-weight:700;cursor:pointer}
+.regular-bill-example-picker .regular-bill-presets{margin:8px 0}
+.regular-bill-entry-row{display:grid;grid-template-columns:minmax(200px,1fr) minmax(380px,1.8fr);gap:8px 20px;padding:15px 16px}
+.regular-bill-entry-row .regular-bill-header{display:block;min-width:0}
+.regular-bill-entry-row .regular-bill-header h4{font-size:16px;margin-bottom:5px}
+.regular-bill-entry-row .regular-bill-setup-actions{margin-top:8px;gap:6px}
+.regular-bill-entry-row .regular-bill-setup-actions button{font-size:11px;padding:4px 8px;min-height:28px}
+.regular-bill-entry-row form{min-width:0;margin:0}
+#expenditureSection .regular-bill-entry-row .regular-bill-fields{grid-template-columns:minmax(120px,1fr) minmax(135px,1fr) auto;gap:8px 10px;align-items:end}
+#expenditureSection .regular-bill-entry-row .regular-bill-fields input{font-variant-numeric:tabular-nums}
+#expenditureSection .regular-bill-entry-row .regular-bill-fields input[type=number]{font-weight:800;font-size:16px}
+.regular-bill-optional{grid-column:1/-1;min-width:0}
+.regular-bill-optional>summary{color:#596887;font-size:11px;font-weight:700;cursor:pointer;padding:3px 0}
+.regular-bill-optional>summary small{font-weight:400}
+.regular-bill-optional>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;padding-top:8px}
+.regular-bill-entry-row .regular-bill-context{grid-column:1/-1;padding:5px 0 0;gap:5px 16px;font-size:11px;border-top:1px solid #e3e8f2}
+.regular-bill-entry-row .regular-bill-history{grid-column:1/-1;margin-top:0;padding-top:5px}
+.regular-bill-entry-row .regular-bill-history>summary{font-size:11px;padding:0}
+.regular-bill-entry-row .regular-bill-status{grid-column:1/-1;margin:0}
+@media(max-width:1150px){.regular-bill-entry-row{grid-template-columns:minmax(0,1fr)}.regular-bill-entry-row .regular-bill-header{display:flex}.regular-bill-entry-row .regular-bill-setup-actions{margin-top:0}.regular-bill-entry-row .regular-bill-header>div:first-child{flex:1 1 160px}}
+@media(max-width:600px){#expenditureSection .regular-bill-entry-row .regular-bill-fields{grid-template-columns:repeat(2,minmax(0,1fr))}#expenditureSection .regular-bill-entry-row .regular-bill-pay{grid-column:1/-1}.regular-bill-optional>div{grid-template-columns:minmax(0,1fr)}.regular-bill-entry-row .regular-bill-setup-actions{width:auto!important}.regular-bill-entry-row .regular-bill-context{flex-direction:row!important}}
 @media(max-width:1100px){#expenditureSection .regular-bill-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.regular-bill-pay{width:100%}}
 @media(max-width:600px){#expenditureSection .regular-bills-panel{padding:12px}.regular-bill-card{padding:14px}.regular-bills-tools{width:100%}.regular-bills-tools>button{flex:1}.regular-bill-setup-actions{width:100%}.regular-bill-context{flex-direction:column}#expenditureSection .regular-bill-fields{grid-template-columns:minmax(0,1fr)}.regular-bill-register{margin-inline:12px}.regular-bill-help{font-size:11px!important}}
 
