@@ -1,6 +1,6 @@
 {
-  "version": "20.0.1",
-  "build": "20260830-20001-lightfix1",
-  "frontend": "20.0.1",
-  "backendExpected": "3.17.8"
+  "version": "20.1.0",
+  "build": "20260901-20100-majorprojects1",
+  "frontend": "20.1.0",
+  "backendExpected": "3.17.9"
 }
