@@ -1,6 +1,6 @@
 {
-  "version": "20.1.6",
-  "build": "20260901-20106-glance1",
-  "frontend": "20.1.6",
+  "version": "20.1.7",
+  "build": "20260901-20107-easyscroll1",
+  "frontend": "20.1.7",
   "backendExpected": "3.17.10"
 }

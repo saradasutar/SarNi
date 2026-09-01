@@ -10272,7 +10272,7 @@ body.expense-subcategories-hidden .regular-bill-subcategory{display:none!importa
 .summary-jump-right[hidden]{display:none!important}
 .summary-jump-right:disabled{opacity:.6}
 
-/* v20.1.6: four columns, all investors visible; no inherited wide-matrix widths. */
+/* v20.1.7: four columns, all investors visible; no inherited wide-matrix widths. */
 #holdingsSection .at-a-glance-summary{min-width:0!important;max-width:100%!important;max-height:none!important;padding:14px!important;overflow:visible!important}
 #holdingsSection .at-a-glance-summary.is-collapsed{display:none!important}
 #holdingsSection .summary-glance-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px}
@@ -10351,3 +10351,74 @@ body.summary-fullscreen-open{overflow:hidden!important}
 #holdingsSection .holding-matrix-wrap .holding-matrix-table .matrix-owner-niharika{background:#ab662d!important}
 #holdingsSection .holding-matrix-wrap .holding-matrix-table .matrix-owner-combined{background:#227b7b!important}
 @media(max-width:760px){.holding-summary-navigator{grid-template-columns:65px minmax(0,1fr) 65px!important}.holding-summary-navigator button{width:65px}.holding-summary-navigator span{display:block;font-size:10px}.holding-summary-navigator>div{display:flex}}
+
+/* v20.1.7 — one natural vertical page scroll for all matching holdings.
+   This explicit viewport ID supersedes the historical 64vh/650px limit. */
+#holdingsSection{content-visibility:visible!important;contain:none!important}
+body.section-holdings .main-content{padding-bottom:calc(180px + env(safe-area-inset-bottom))!important}
+#holdingsSection>.table-panel{overflow:visible!important;min-width:0!important}
+#holdingsTableViewport{
+  height:auto!important;max-height:none!important;min-height:0!important;
+  overflow-x:auto!important;overflow-y:auto!important;
+  overscroll-behavior-x:contain!important;overscroll-behavior-y:auto!important;
+  touch-action:pan-x pan-y pinch-zoom!important;overflow-anchor:none;
+  scrollbar-width:auto;scrollbar-color:#7a86a8 #edf1f7;
+}
+#holdingsTableViewport::-webkit-scrollbar{width:14px!important;height:14px!important}
+#holdingsTableViewport::-webkit-scrollbar-thumb{background:#7a86a8!important;border:3px solid #edf1f7!important;border-radius:12px}
+#holdingsTableViewport[data-row-scroll="table"]{max-height:72vh!important;max-height:72dvh!important}
+#holdingsTableViewport:focus-visible{outline:3px solid #7b6ae4;outline-offset:3px}
+#holdingsReadingBar{
+  position:sticky;top:var(--holdings-reading-top,80px);z-index:62;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:10px 12px;margin:8px 0 0;border:1px solid #dbe3ef;
+  border-radius:12px 12px 0 0;background:#f8faff;color:#263957;
+  box-shadow:0 3px 10px rgba(32,47,76,.06);
+}
+.holdings-reading-copy{min-width:140px;flex:1 1 220px}
+.holdings-reading-copy strong{display:block;font-size:13px;font-weight:850}
+.holdings-reading-copy small{display:block;margin-top:3px;color:#64748b;font-size:11px;line-height:1.3}
+#holdingsReadingBar label{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:750}
+#holdingsReadingBar select,#holdingsReadingBar button{
+  min-height:38px;padding:7px 10px;border:1px solid #cdd7e7;border-radius:8px;
+  background:#fff;color:#334764;font:750 12px/1.2 system-ui;cursor:pointer;
+}
+#holdingsReadingBar select{width:178px;max-width:100%}
+.holdings-reading-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+#holdingsReaderExpandBtn{color:#5745c2!important;background:#f0edff!important;border-color:#cfc5fa!important}
+#holdingsReadingBar button:disabled,#holdingsReadingBar select:disabled{opacity:.5;cursor:default}
+#holdingsReadingBar button:focus-visible,#holdingsReadingBar select:focus-visible{outline:3px solid #9685f0;outline-offset:2px}
+.holdings-reading-header{position:fixed;z-index:61;overflow:hidden;background:#f5f7fc;box-shadow:0 2px 0 #ced6e8}
+.holdings-reading-header[hidden]{display:none!important}
+.holdings-reading-header-cell{position:absolute;top:0;box-sizing:border-box;display:block;overflow:hidden;background:#f5f7fc;color:#34527a;border-right:1px solid #e2e7ef;white-space:normal;overflow-wrap:break-word;text-transform:uppercase}
+
+/* Full screen is a rows-first reader, not a second dashboard squeezed above it.
+   Hide surrounding panels temporarily; their data/settings are not changed. */
+#holdingsSection.data-fullscreen-active>.holdings-summary-panel,
+#holdingsSection.data-fullscreen-active>.portfolio-filter-bar,
+#holdingsSection.data-fullscreen-active>.table-panel>.panel-head,
+#holdingsSection.data-fullscreen-active .holdings-advanced-tools,
+#holdingsSection.data-fullscreen-active .holding-pnl-strip{display:none!important}
+#holdingsSection.data-fullscreen-active>.table-panel{overflow:hidden!important;padding:0!important}
+#holdingsSection.data-fullscreen-active #holdingsReadingBar{position:relative;top:auto;flex:0 0 auto;margin:0;box-shadow:none}
+#holdingsSection.data-fullscreen-active #holdingsTableViewport{flex:1 1 0!important;height:auto!important;max-height:none!important;min-height:0!important;overflow:auto!important}
+body.theme-dark #holdingsReadingBar{background:#172338;color:#edf2fa;border-color:#344258}
+body.theme-dark .holdings-reading-copy small{color:#b0bdd1}
+body.theme-dark #holdingsReadingBar select,body.theme-dark #holdingsReadingBar button{background:#223049;color:#edf2fa;border-color:#44536c}
+body.summary-fullscreen-open .holdings-reading-header{display:none!important}
+@media(max-width:680px){
+  #holdingsReadingBar{gap:7px;padding:8px}
+  .holdings-reading-copy{flex-basis:100%}
+  .holdings-reading-copy small{display:none}
+  #holdingsReadingBar label{flex:1;min-width:120px}
+  #holdingsReadingBar select{width:100%;min-width:0;max-width:195px}
+  #holdingsReadingBar button,#holdingsReadingBar select{min-height:40px;font-size:11px;padding:6px 8px}
+}
+@media(max-height:520px){
+  #holdingsSection.data-fullscreen-active .holdings-reading-copy{flex-basis:auto}
+  #holdingsSection.data-fullscreen-active .holdings-reading-copy small{display:none}
+}
+@media print{
+  #holdingsReadingBar,.holdings-reading-header{display:none!important}
+  #holdingsSection #holdingsTableViewport,#holdingsSection.data-fullscreen-active #holdingsTableViewport{height:auto!important;max-height:none!important;overflow:visible!important}
+}
