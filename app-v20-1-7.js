@@ -131,6 +131,9 @@ const state = {
   dataFullscreenSection: '',
   overviewMode: 'PERSONAL',
   diary: [],
+  books: [],
+  activeBookId: null,
+  activeBookDetail: null,
   monthlyDiary: [],
   monthStatus: [],
   diaryView: 'DAILY',
@@ -167,7 +170,15 @@ const $ = (id) => document.getElementById(id);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 const els = {};
 [
-  'loginView','appView','runtimeWarning','portfolioStartupOverlay','portfolioStartupTitle','portfolioStartupMessage','portfolioStartupRetryBtn','loginForm','loginUsername','loginPassword','rememberUsername','loginVersion','loginBackendVersion','loginButton','loginMessage','sideAppName','dashboardUsername','dashboardVersion','dashboardBackendVersion','dashboardVersionTop','dashboardBackendVersionTop','mobileSessionBar','mobileFrontendVersion','mobileBackendVersion','mobileChangePasswordBtn','mobileLogoutBtn','todayLabel','pageTitle','displayDensitySelect','displayThemeSelect','sidebarCollapseBtn','autoRefreshSelect','autoRefreshCountdown','syncStatus','refreshBtn','addInvestmentBtn','addInvestmentTableBtn','bulkImportBtn','logoutBtn','profileButton','avatarInitial','personalHomeModeBtn','investmentHomeModeBtn','overviewSetDefaultBtn','personalHomeContent','investmentOverviewContent','personalHomeGreeting','homeDailyWriteBtn','homeMonthlyWriteBtn','homeAddTargetBtn','homeDiaryCount','homeDiaryPreview','homeDiaryQuickBtn','homeFullDiaryBtn','homeStickyCount','homeStickyDueToday','homeStickyOverdue','homeStickyUpcoming','homeStickyPreview','homeTargetAddBtn','homeTargetsOpenBtn','homeQuoteCard','homeQuoteText','homeQuoteAuthor','homeQuoteAutoStatus','homeQuoteNextBtn','homeQuotesOpenBtn','homeShowInvestmentsBtn','welcomeTitle','lastUpdatedText','viewChip','overviewStickyShortcut','overviewStickyShortcutCount','overviewQuoteShortcut','utilityDrawerOpenBtn','utilityDrawerCloseBtn','utilityDrawerScrim','utilityDrawer','utilityStickyBadge','utilityStickyTabCount','utilityStickySection','utilityQuoteSection','lifeQuoteText','lifeQuoteAuthor','lifeQuoteShuffleStatus','lifeQuoteNextBtn','lifeQuotePauseBtn','lifeQuoteLibraryBtn','lifeQuoteModal','lifeQuoteForm','lifeQuoteId','lifeQuoteInput','lifeQuoteAuthorInput','lifeQuoteSearch','lifeQuoteCount','lifeQuoteList','lifeQuoteEmpty','clearLifeQuoteBtn','saveLifeQuoteBtn','stickyNotesCount','stickyNotesList','stickyNotesEmpty','addStickyNoteBtn','pinnedStickyLayer','ownerSwitcher','assetViewSwitcher','typeSummaryGrid','holdingsHeading','holdingsAdvancedTools','sumInvestedLabel','sumCurrentLabel','importBtn','exportBtn','sumInvested','sumCurrent','sumGain','sumReturn','sumAssetCount','sumPricedCount','sumSplit','sumWatchCount','sumInvestedTrend','sumCurrentTrend','sumGainTrend','sumWatchTrend','growthRangeButtons','growthInvestedDelta','growthInvestedPct','growthValueDelta','growthValuePct','growthGainNow','growthReturnNow','portfolioGrowthChart','growthHistoryNote','watchPulseBadge','watchAtTarget','watchNearTarget','watchAverageGap','watchPulseCount','watchlistTrendChart','watchTrendNote','watchlistLastAutoUpdate','watchStripAtTarget','watchStripNear','watchStripGap','allocationChart','investorSummary','topHoldings','replaceMasterDataBtn','masterDataStatus','masterLoadBanner','masterLoadNowBtn','showAllInvestmentsBtn','holdingSearch','holdingTypeFilter','holdingResultFilter','holdingNotesFilter','holdingTradeFilter','holdingsFilterCount','holdingsSummaryPanel','toggleHoldingsSummaryBtn','holdingsMatrixCompareBtn','holdingsSummaryFullscreenBtn','holdingSummaryNavigator','holdingSummaryLeftBtn','holdingSummaryScrollRange','holdingSummaryScrollLabel','holdingSummaryRightBtn','holdingsViewPreset','saveHoldingsDefaultViewBtn','restoreHoldingsDefaultViewBtn','resetHoldingsViewBtn','holdingsDefaultViewStatus','printHoldingsBtn','holdingsFullscreenBtn','holdRowMinusBtn','holdRowPlusBtn','holdRowSizeLabel','holdRowSlider','holdWidthMinusBtn','holdWidthPlusBtn','holdWidthSizeLabel','holdWidthSlider','holdLayoutSavedStatus','holdSizeResetBtn','holdSumCombinedTotalInvested','holdSumCombinedTotalCurrent','holdSumCombinedTotalGrowth','holdSumCombinedMfInvested','holdSumCombinedMfCurrent','holdSumCombinedMfGrowth','holdSumCombinedStockInvested','holdSumCombinedStockCurrent','holdSumCombinedStockGrowth','holdSumNiharikaTotalInvested','holdSumNiharikaTotalCurrent','holdSumNiharikaTotalGrowth','holdSumNiharikaMfInvested','holdSumNiharikaMfCurrent','holdSumNiharikaMfGrowth','holdSumNiharikaStockInvested','holdSumNiharikaStockCurrent','holdSumNiharikaStockGrowth','holdSumSaradaTotalInvested','holdSumSaradaTotalCurrent','holdSumSaradaTotalGrowth','holdSumSaradaStockInvested','holdSumSaradaStockCurrent','holdSumSaradaStockGrowth','holdingsBody','holdingsEmpty','holdCurrentPnlToday','holdRealizedPnl','holdTotalPnlToDate','holdTradeDateCoverage','holdPnlAsOf','mfNavHealthBadge','manageHoldingsColumnsBtn','showAllHoldingColumnsBtn','viewAllNotesBtn','watchAllNotesBtn','columnManagerModal','columnManagerTitle','customColumnForm','customColumnId','customColumnSection','customColumnLabel','customColumnKey','customColumnType','customColumnOrder','clearCustomColumnBtn','saveCustomColumnBtn','standardColumnsList','saveColumnsAsDefaultBtn','showAllColumnsTempBtn','resetStandardColumnsBtn','customColumnsList','customColumnsEmpty','customColumnCount','customValueModal','customValueTitle','customValueRecord','customValueForm','customValueSection','customValueRecordId','customValueColumnKey','customValueFieldLabel','customValueInput','saveCustomValueBtn','notesModal','notesSearch','notesSource','notesScope','notesFilter','notesSummary','notesList','notesEmpty','transactionSearch','transactionOwnerFilter','transactionAssetFilter','transactionSideFilter','transactionFromDate','transactionToDate','transactionFilterCount','transactionBuyTotal','transactionSaleTotal','transactionRealizedPnl','transactionCount','transactionBody','transactionEmpty','transactionImportBtn','printTransactionsBtn','watchSearch','watchTypeFilter','watchPriorityFilter','watchTargetFilter','watchNotesFilter','watchFilterCount','saveWatchDefaultViewBtn','restoreWatchDefaultViewBtn','watchDefaultViewStatus','printWatchlistBtn','watchlistFullscreenBtn','watchRowMinusBtn','watchRowPlusBtn','watchRowSizeLabel','watchRowSlider','watchWidthMinusBtn','watchWidthPlusBtn','watchWidthSizeLabel','watchWidthSlider','watchLayoutSavedStatus','watchSizeResetBtn','manageWatchlistColumnsBtn','showAllWatchColumnsBtn','watchBody','watchMobileCards','watchEmpty','addSipPlanBtn','sipOwnerFilter','sipStatusFilter','sipPlanCount','sipMonthlyCommitment','sipNext30Amount','sipNext30Count','sipNext12Amount','sipActiveCount','sipPausedCount','sipPlansBody','sipPlansEmpty','sipHorizonSelect','sipScheduleCount','sipScheduleBody','sipScheduleEmpty','sipPlanModal','sipPlanModalTitle','sipPlanForm','sipPlanId','sipPlanOwner','sipPlanAssetType','sipPlanAssetName','sipAssetSuggestions','sipPlanCode','sipPlanAmount','sipPlanFrequency','sipPlanDay','sipPlanStartDate','sipPlanEndDate','sipPlanStepUpPct','sipPlanExpectedReturnPct','sipPlanStatus','sipPlanNotes','saveSipPlanBtn','addExpenseBtn','addExpensePlanBtn','addRecurringExpenseBtn','majorExpenseProjectsView','majorExpenseProjectGrid','majorExpenseProjectEmpty','addMajorExpenseProjectBtn','majorExpenseProjectModal','majorExpenseProjectForm','majorExpenseProjectModalTitle','majorExpenseProjectId','majorExpenseProjectName','majorExpenseProjectBudget','majorExpenseProjectStart','majorExpenseProjectTarget','majorExpenseProjectStatus','majorExpenseProjectColor','majorExpenseProjectNotes','saveMajorExpenseProjectBtn','expenseMonthActual','expenseMonthActualCount','expensePlannedPending','expensePlannedCount','expenseRegularDue','expenseRegularDueCount','expenseYearActual','expenseDataPanel','expenseCategoriesView','expenseSearch','expenseFromDate','expenseToDate','expenseCategoryFilter','expenseSubcategoryFilter','expenseAccountFilter','expenseSort','expenseSubcategoryToggle','expenseResetFiltersBtn','expensePrintBtn','expenseResultCount','actualExpenseView','plannedExpenseView','regularExpenseView','actualExpenseTable','plannedExpenseTable','regularExpenseTable','actualExpenseBody','plannedExpenseBody','regularExpenseBody','actualExpenseEmpty','plannedExpenseEmpty','regularExpenseEmpty','addExpenseCategoryBtn','expenseCategoryGrid','expenseCategoryEmpty','expenseModal','expenseModalEyebrow','expenseModalTitle','expenseModalSubcopy','expenseForm','expenseRecordId','expenseRecordMode','expenseRegularNameGroup','expenseRegularName','expenseAmount','expenseDateGroup','expenseDateLabel','expenseDate','expensePaidTo','expenseDebitedFrom','expenseAccountSuggestions','expenseReason','expenseCategory','expenseSubcategory','expenseSubcategoryHelp','expenseMajorProjectGroup','expenseMajorProject','expenseFrequencyGroup','expenseFrequency','expenseEndDateGroup','expenseEndDate','expenseStatusGroup','expenseStatus','expenseNotes','saveExpenseBtn','expensePaymentModal','expensePaymentTitle','expensePaymentForm','expensePaymentSourceType','expensePaymentSourceId','expensePaymentAmount','expensePaymentDate','expensePaymentPaidTo','expensePaymentAccount','expensePaymentNotes','confirmExpensePaymentBtn','expenseCategoryModal','expenseCategoryModalTitle','expenseCategoryForm','expenseCategoryId','expenseCategoryName','expenseCategoryColor','expenseCategorySubcategories','saveExpenseCategoryBtn','expensePrintModal','expensePrintTitle','expensePrintOrientation','expensePrintColumns','expensePrintAllColumnsBtn','expensePrintPreview','runExpensePrintBtn','diaryForm','diaryId','diaryDate','diaryPrevDayBtn','diaryTodayBtn','diaryNextDayBtn','diaryTitle','diaryText','diaryDraftStatus','diaryCharCount','saveDiaryBtn','clearDiaryBtn','newDiaryEntryBtn','diarySaveStatus','diaryViewSwitcher','diarySearch','diarySearchClearBtn','diaryDayControl','diaryMonthControl','diaryRangeControl','diaryBrowseDate','diaryBrowseMonth','diaryFromDate','diaryToDate','printDiaryBtn','diarySummary','diaryList','diaryEmpty','diaryHeroStatus','diaryWorkspaceSwitcher','dailyDiaryWorkspace','monthlyDiaryWorkspace','recentDailyRail','recentDailyMobileCount','recentDailyCount','recentDailyLimit','recentDailySearch','recentDailyList','recentDailyEmpty','recentMonthlyRail','recentMonthlyMobileCount','recentMonthlyCount','recentMonthlyLimit','recentMonthlySearch','recentMonthlyList','recentMonthlyEmpty','monthlyYearFilter','monthlyMonthFilter','monthlyTypeFilter','monthlyStatusFilter','monthlySearch','printMonthlyBtn','monthCompletionPanel','monthCompletionTitle','monthCompletionText','monthProgressBar','monthProgressLabel','completeMonthBtn','monthlyForm','monthlyId','monthlyEntryMonth','monthlyPrevMonthBtn','monthlyThisMonthBtn','monthlyNextMonthBtn','monthlyEntryType','monthlyTitle','monthlyText','monthlyDraftStatus','monthlyCharCount','monthlyTargetHelp','monthlySaveStatus','clearMonthlyBtn','saveMonthlyBtn','monthlyListTitle','monthlyResultCount','completedMonthArchive','monthlyList','monthlyEmpty','securitySettingsForm','securityIdleTimeout','securityPolicyBadge','saveSecuritySettingsBtn','securitySettingsStatus','usersBody','modalBackdrop','investmentModal','investmentForm','holdingId','holdingOwner','holdingType','holdingName','holdingCode','holdingExchange','holdingUnits','holdingInvested','holdingManualPrice','holdingBuyDate','holdingNotes','holdingCodeLabel','exchangeLabel','mfHelp','bulkImportModal','bulkImportForm','bulkCsvFile','bulkImportStatus','runBulkImportBtn','downloadImportTemplateBtn','mfImportHelp','mfSnapshotImportHelp','stockImportHelp','stockTradeImportHelp','stockOwnerLabel','importOwner','importFileHint','watchModal','watchForm','watchId','watchType','watchName','watchCode','watchExchange','watchTarget','watchManualPrice','watchPriority','watchNotes','watchCodeLabel','watchExchangeLabel','watchMfHelp','stickyNoteModal','stickyNoteForm','stickyNoteId','stickyNoteType','stickyNoteTitle','stickyNoteDueDate','stickyNoteText','stickyNoteModalTitle','saveStickyNoteBtn','passwordModal','passwordForm','currentPassword','newPassword','confirmPassword','userModal','userForm','userModalTitle','userFormMode','editOriginalUsername','newUsername','usernameEditHelp','newDisplayName','newUserRole','newUserActiveLabel','newUserActive','userPasswordGroup','newUserPassword','generateUserPasswordBtn','copyUserPasswordBtn','userFormStatus','saveUserBtn','quickDiaryBtn','quickDiaryMobileBtn','quickDiaryPanel','quickDiaryCloseBtn','quickDailyForm','quickDailyDate','quickDailyTitle','quickDailyText','quickDailyStatus','quickDailyCount','quickDailySaveBtn','quickMonthlyForm','quickMonthlyMonth','quickMonthlyType','quickMonthlyTitle','quickMonthlyText','quickMonthlyStatus','quickMonthlyCount','quickMonthlySaveBtn','openFullDiaryBtn','dashboardHScroll','dashboardHScrollRange','dashboardHScrollLabel','dashboardHScrollPct','dashboardHScrollLeft','dashboardHScrollRight','holdingDrawerBackdrop','holdingDrawer','drawerEyebrow','drawerAssetBadge','drawerTitle','drawerSubtitle','drawerContent','drawerCloseBtn','drawerEditBtn','drawerDoneBtn','idleWarningBar','idleWarningCountdown','staySignedInBtn','repairBrowserBtn','toastRegion'
+  'loginView','appView','runtimeWarning','portfolioStartupOverlay','portfolioStartupTitle','portfolioStartupMessage','portfolioStartupRetryBtn','loginForm','loginUsername','loginPassword','rememberUsername','loginVersion','loginBackendVersion','loginButton','loginMessage','sideAppName','dashboardUsername','dashboardVersion','dashboardBackendVersion','dashboardVersionTop','dashboardBackendVersionTop','mobileSessionBar','mobileFrontendVersion','mobileBackendVersion','mobileChangePasswordBtn','mobileLogoutBtn','todayLabel','pageTitle','displayDensitySelect','displayThemeSelect','sidebarCollapseBtn','autoRefreshSelect','autoRefreshCountdown','syncStatus','refreshBtn','addInvestmentBtn','addInvestmentTableBtn','bulkImportBtn','logoutBtn','profileButton','avatarInitial','personalHomeModeBtn','investmentHomeModeBtn','overviewSetDefaultBtn','personalHomeContent','investmentOverviewContent','personalHomeGreeting','homeDailyWriteBtn','homeMonthlyWriteBtn','homeAddTargetBtn','homeDiaryCount','homeDiaryPreview','homeDiaryQuickBtn','homeFullDiaryBtn','homeStickyCount','homeStickyDueToday','homeStickyOverdue','homeStickyUpcoming','homeStickyPreview','homeTargetAddBtn','homeTargetsOpenBtn','homeQuoteCard','homeQuoteText','homeQuoteAuthor','homeQuoteAutoStatus','homeQuoteNextBtn','homeQuotesOpenBtn','homeShowInvestmentsBtn','welcomeTitle','lastUpdatedText','viewChip','overviewStickyShortcut','overviewStickyShortcutCount','overviewQuoteShortcut','utilityDrawerOpenBtn','utilityDrawerCloseBtn','utilityDrawerScrim','utilityDrawer','utilityStickyBadge','utilityStickyTabCount','utilityStickySection','utilityQuoteSection','lifeQuoteText','lifeQuoteAuthor','lifeQuoteShuffleStatus','lifeQuoteNextBtn','lifeQuotePauseBtn','lifeQuoteLibraryBtn','lifeQuoteModal','lifeQuoteForm','lifeQuoteId','lifeQuoteInput','lifeQuoteAuthorInput','lifeQuoteSearch','lifeQuoteCount','lifeQuoteList','lifeQuoteEmpty','clearLifeQuoteBtn','saveLifeQuoteBtn','stickyNotesCount','stickyNotesList','stickyNotesEmpty','addStickyNoteBtn','pinnedStickyLayer','ownerSwitcher','assetViewSwitcher','typeSummaryGrid','holdingsHeading','holdingsAdvancedTools','sumInvestedLabel','sumCurrentLabel','importBtn','exportBtn','sumInvested','sumCurrent','sumGain','sumReturn','sumAssetCount','sumPricedCount','sumSplit','sumWatchCount','sumInvestedTrend','sumCurrentTrend','sumGainTrend','sumWatchTrend','growthRangeButtons','growthInvestedDelta','growthInvestedPct','growthValueDelta','growthValuePct','growthGainNow','growthReturnNow','portfolioGrowthChart','growthHistoryNote','watchPulseBadge','watchAtTarget','watchNearTarget','watchAverageGap','watchPulseCount','watchlistTrendChart','watchTrendNote','watchlistLastAutoUpdate','watchStripAtTarget','watchStripNear','watchStripGap','allocationChart','investorSummary','topHoldings','replaceMasterDataBtn','masterDataStatus','masterLoadBanner','masterLoadNowBtn','showAllInvestmentsBtn','holdingSearch','holdingTypeFilter','holdingResultFilter','holdingNotesFilter','holdingTradeFilter','holdingsFilterCount','holdingsSummaryPanel','toggleHoldingsSummaryBtn','holdingsMatrixCompareBtn','holdingsSummaryFullscreenBtn','holdingSummaryNavigator','holdingSummaryLeftBtn','holdingSummaryScrollRange','holdingSummaryScrollLabel','holdingSummaryRightBtn','holdingsViewPreset','saveHoldingsDefaultViewBtn','restoreHoldingsDefaultViewBtn','resetHoldingsViewBtn','holdingsDefaultViewStatus','printHoldingsBtn','holdingsFullscreenBtn','holdRowMinusBtn','holdRowPlusBtn','holdRowSizeLabel','holdRowSlider','holdWidthMinusBtn','holdWidthPlusBtn','holdWidthSizeLabel','holdWidthSlider','holdLayoutSavedStatus','holdSizeResetBtn','holdSumCombinedTotalInvested','holdSumCombinedTotalCurrent','holdSumCombinedTotalGrowth','holdSumCombinedMfInvested','holdSumCombinedMfCurrent','holdSumCombinedMfGrowth','holdSumCombinedStockInvested','holdSumCombinedStockCurrent','holdSumCombinedStockGrowth','holdSumNiharikaTotalInvested','holdSumNiharikaTotalCurrent','holdSumNiharikaTotalGrowth','holdSumNiharikaMfInvested','holdSumNiharikaMfCurrent','holdSumNiharikaMfGrowth','holdSumNiharikaStockInvested','holdSumNiharikaStockCurrent','holdSumNiharikaStockGrowth','holdSumSaradaTotalInvested','holdSumSaradaTotalCurrent','holdSumSaradaTotalGrowth','holdSumSaradaStockInvested','holdSumSaradaStockCurrent','holdSumSaradaStockGrowth','holdingsBody','holdingsEmpty','holdCurrentPnlToday','holdRealizedPnl','holdTotalPnlToDate','holdTradeDateCoverage','holdPnlAsOf','mfNavHealthBadge','manageHoldingsColumnsBtn','showAllHoldingColumnsBtn','viewAllNotesBtn','watchAllNotesBtn','columnManagerModal','columnManagerTitle','customColumnForm','customColumnId','customColumnSection','customColumnLabel','customColumnKey','customColumnType','customColumnOrder','clearCustomColumnBtn','saveCustomColumnBtn','standardColumnsList','saveColumnsAsDefaultBtn','showAllColumnsTempBtn','resetStandardColumnsBtn','customColumnsList','customColumnsEmpty','customColumnCount','customValueModal','customValueTitle','customValueRecord','customValueForm','customValueSection','customValueRecordId','customValueColumnKey','customValueFieldLabel','customValueInput','saveCustomValueBtn','notesModal','notesSearch','notesSource','notesScope','notesFilter','notesSummary','notesList','notesEmpty','transactionSearch','transactionOwnerFilter','transactionAssetFilter','transactionSideFilter','transactionFromDate','transactionToDate','transactionFilterCount','transactionBuyTotal','transactionSaleTotal','transactionRealizedPnl','transactionCount','transactionBody','transactionEmpty','transactionImportBtn','printTransactionsBtn','watchSearch','watchTypeFilter','watchPriorityFilter','watchTargetFilter','watchNotesFilter','watchFilterCount','saveWatchDefaultViewBtn','restoreWatchDefaultViewBtn','watchDefaultViewStatus','printWatchlistBtn','watchlistFullscreenBtn','watchRowMinusBtn','watchRowPlusBtn','watchRowSizeLabel','watchRowSlider','watchWidthMinusBtn','watchWidthPlusBtn','watchWidthSizeLabel','watchWidthSlider','watchLayoutSavedStatus','watchSizeResetBtn','manageWatchlistColumnsBtn','showAllWatchColumnsBtn','watchBody','watchMobileCards','watchEmpty','addSipPlanBtn','sipOwnerFilter','sipStatusFilter','sipPlanCount','sipMonthlyCommitment','sipNext30Amount','sipNext30Count','sipNext12Amount','sipActiveCount','sipPausedCount','sipPlansBody','sipPlansEmpty','sipHorizonSelect','sipScheduleCount','sipScheduleBody','sipScheduleEmpty','sipPlanModal','sipPlanModalTitle','sipPlanForm','sipPlanId','sipPlanOwner','sipPlanAssetType','sipPlanAssetName','sipAssetSuggestions','sipPlanCode','sipPlanAmount','sipPlanFrequency','sipPlanDay','sipPlanStartDate','sipPlanEndDate','sipPlanStepUpPct','sipPlanExpectedReturnPct','sipPlanStatus','sipPlanNotes','saveSipPlanBtn','addExpenseBtn','addExpensePlanBtn','addRecurringExpenseBtn','majorExpenseProjectsView','majorExpenseProjectGrid','majorExpenseProjectEmpty','addMajorExpenseProjectBtn','majorExpenseProjectModal','majorExpenseProjectForm','majorExpenseProjectModalTitle','majorExpenseProjectId','majorExpenseProjectName','majorExpenseProjectBudget','majorExpenseProjectStart','majorExpenseProjectTarget','majorExpenseProjectStatus','majorExpenseProjectColor','majorExpenseProjectNotes','saveMajorExpenseProjectBtn','expenseMonthActual','expenseMonthActualCount','expensePlannedPending','expensePlannedCount','expenseRegularDue','expenseRegularDueCount','expenseYearActual','expenseDataPanel','expenseCategoriesView','expenseSearch','expenseFromDate','expenseToDate','expenseCategoryFilter','expenseSubcategoryFilter','expenseAccountFilter','expenseSort','expenseSubcategoryToggle','expenseResetFiltersBtn','expensePrintBtn','expenseResultCount','actualExpenseView','plannedExpenseView','regularExpenseView','actualExpenseTable','plannedExpenseTable','regularExpenseTable','actualExpenseBody','plannedExpenseBody','regularExpenseBody','actualExpenseEmpty','plannedExpenseEmpty','regularExpenseEmpty','addExpenseCategoryBtn','expenseCategoryGrid','expenseCategoryEmpty','expenseModal','expenseModalEyebrow','expenseModalTitle','expenseModalSubcopy','expenseForm','expenseRecordId','expenseRecordMode','expenseRegularNameGroup','expenseRegularName','expenseAmount','expenseDateGroup','expenseDateLabel','expenseDate','expensePaidTo','expenseDebitedFrom','expenseAccountSuggestions','expenseReason','expenseCategory','expenseSubcategory','expenseSubcategoryHelp','expenseMajorProjectGroup','expenseMajorProject','expenseFrequencyGroup','expenseFrequency','expenseEndDateGroup','expenseEndDate','expenseStatusGroup','expenseStatus','expenseNotes','saveExpenseBtn','expensePaymentModal','expensePaymentTitle','expensePaymentForm','expensePaymentSourceType','expensePaymentSourceId','expensePaymentAmount','expensePaymentDate','expensePaymentPaidTo','expensePaymentAccount','expensePaymentNotes','confirmExpensePaymentBtn','expenseCategoryModal','expenseCategoryModalTitle','expenseCategoryForm','expenseCategoryId','expenseCategoryName','expenseCategoryColor','expenseCategorySubcategories','saveExpenseCategoryBtn','expensePrintModal','expensePrintTitle','expensePrintOrientation','expensePrintColumns','expensePrintAllColumnsBtn','expensePrintPreview','runExpensePrintBtn','diaryForm','diaryId','diaryDate','diaryPrevDayBtn','diaryTodayBtn','diaryNextDayBtn','diaryTitle','diaryText','diaryDraftStatus','diaryCharCount','saveDiaryBtn','clearDiaryBtn','newDiaryEntryBtn','diarySaveStatus','diaryViewSwitcher','diarySearch','diarySearchClearBtn','diaryDayControl','diaryMonthControl','diaryRangeControl','diaryBrowseDate','diaryBrowseMonth','diaryFromDate','diaryToDate','printDiaryBtn','diarySummary','diaryList','diaryEmpty','diaryHeroStatus','diaryWorkspaceSwitcher','dailyDiaryWorkspace','monthlyDiaryWorkspace','recentDailyRail','recentDailyMobileCount','recentDailyCount','recentDailyLimit','recentDailySearch','recentDailyList','recentDailyEmpty','recentMonthlyRail','recentMonthlyMobileCount','recentMonthlyCount','recentMonthlyLimit','recentMonthlySearch','recentMonthlyList','recentMonthlyEmpty','monthlyYearFilter','monthlyMonthFilter','monthlyTypeFilter','monthlyStatusFilter','monthlySearch','printMonthlyBtn','monthCompletionPanel','monthCompletionTitle','monthCompletionText','monthProgressBar','monthProgressLabel','completeMonthBtn','monthlyForm','monthlyId','monthlyEntryMonth','monthlyPrevMonthBtn','monthlyThisMonthBtn','monthlyNextMonthBtn','monthlyEntryType','monthlyTitle','monthlyText','monthlyDraftStatus','monthlyCharCount','monthlyTargetHelp','monthlySaveStatus','clearMonthlyBtn','saveMonthlyBtn','monthlyListTitle','monthlyResultCount','completedMonthArchive','monthlyList','monthlyEmpty','securitySettingsForm','securityIdleTimeout','securityPolicyBadge','saveSecuritySettingsBtn','securitySettingsStatus','usersBody','modalBackdrop','investmentModal','investmentForm','holdingId','holdingOwner','holdingType','holdingName','holdingCode','holdingExchange','holdingUnits','holdingInvested','holdingManualPrice','holdingBuyDate','holdingNotes','holdingCodeLabel','exchangeLabel','mfHelp','bulkImportModal','bulkImportForm','bulkCsvFile','bulkImportStatus','runBulkImportBtn','downloadImportTemplateBtn','mfImportHelp','mfSnapshotImportHelp','stockImportHelp','stockTradeImportHelp','stockOwnerLabel','importOwner','importFileHint','watchModal','watchForm','watchId','watchType','watchName','watchCode','watchExchange','watchTarget','watchManualPrice','watchPriority','watchNotes','watchCodeLabel','watchExchangeLabel','watchMfHelp','stickyNoteModal','stickyNoteForm','stickyNoteId','stickyNoteType','stickyNoteTitle','stickyNoteDueDate','stickyNoteText','stickyNoteModalTitle','saveStickyNoteBtn','passwordModal','passwordForm','currentPassword','newPassword','confirmPassword','userModal','userForm','userModalTitle','userFormMode','editOriginalUsername','newUsername','usernameEditHelp','newDisplayName','newUserRole','newUserActiveLabel','newUserActive','userPasswordGroup','newUserPassword','generateUserPasswordBtn','copyUserPasswordBtn','userFormStatus','saveUserBtn','quickDiaryBtn','quickDiaryMobileBtn','quickDiaryPanel','quickDiaryCloseBtn','quickDailyForm','quickDailyDate','quickDailyTitle','quickDailyText','quickDailyStatus','quickDailyCount','quickDailySaveBtn','quickMonthlyForm','quickMonthlyMonth','quickMonthlyType','quickMonthlyTitle','quickMonthlyText','quickMonthlyStatus','quickMonthlyCount','quickMonthlySaveBtn','openFullDiaryBtn','dashboardHScroll','dashboardHScrollRange','dashboardHScrollLabel','dashboardHScrollPct','dashboardHScrollLeft','dashboardHScrollRight','holdingDrawerBackdrop','holdingDrawer','drawerEyebrow','drawerAssetBadge','drawerTitle','drawerSubtitle','drawerContent','drawerCloseBtn','drawerEditBtn','drawerDoneBtn','idleWarningBar','idleWarningCountdown','staySignedInBtn','repairBrowserBtn','toastRegion',
+  'holdSumCombinedMfUpdated','holdSumCombinedStockUpdated','holdSumNiharikaMfUpdated','holdSumNiharikaStockUpdated','holdSumSaradaMfUpdated','holdSumSaradaStockUpdated',
+  'booksGrid','booksEmpty','addBookBtn','bookDetailView','bookDetailBackBtn','bookDetailTitle','bookDetailGenre','bookDetailStatusBadge','bookDetailRoleBadge','bookDetailEditBtn','bookDetailArchiveBtn','bookDetailDescription',
+  'bookCollabList','bookCollabAddBtn','bookChaptersList','bookChaptersEmpty','addChapterBtn',
+  'bookProgressTotalWords','bookProgressStreak','bookProgressChart','logProgressBtn',
+  'bookModal','bookForm','bookModalTitle','bookId','bookTitle','bookGenre','bookDescription','bookStatus','bookCoverColor','bookTargetWordCount','bookTargetDate','saveBookBtn',
+  'chapterModal','chapterForm','chapterModalTitle','chapterBookId','chapterId','chapterTitle','chapterStatus','chapterAssignedTo','chapterContent','chapterWordCountLive','chapterNotes','saveChapterBtn','chapterRteToolbar','chapterTextColor','chapterHighlightColor','chapterHeadingSelect',
+  'bookCollabModal','bookCollabForm','bookCollabBookId','bookCollabUsername','bookCollabRole','saveBookCollabBtn',
+  'bookProgressModal','bookProgressForm','bookProgressBookId','bookProgressChapter','bookProgressWords','bookProgressMinutes','bookProgressDate','bookProgressNotes','saveBookProgressBtn'
 ].forEach((id) => { els[id] = $(id); });
 ['watchPerformanceFilter','watchRangeFilter','watchCapFilter','watchResearchFilter','holdSumSaradaMfInvested','holdSumSaradaMfCurrent','holdSumSaradaMfGrowth','holdingsNamedViewSelect','holdingsNamedViewName','holdingsSaveNamedViewBtn','holdingsApplyNamedViewBtn','holdingsDeleteNamedViewBtn','holdingsNamedViewStatus','watchNamedViewSelect','watchNamedViewName','watchSaveNamedViewBtn','watchApplyNamedViewBtn','watchDeleteNamedViewBtn','watchNamedViewStatus','commandPaletteBtn','commandPalette','commandPaletteCloseBtn','commandPaletteInput','commandPaletteResults'].forEach(id=>{els[id]=$(id);});
 
@@ -597,6 +608,9 @@ function clearSession(){
   state.customColumns=[];
   state.customValues=[];
   state.diary=[];
+  state.books=[];
+  state.activeBookId=null;
+  state.activeBookDetail=null;
   state.monthlyDiary=[];
   state.monthStatus=[];
   state.users=[];
@@ -2838,7 +2852,282 @@ function renderSectionData(section){
     renderDiary();
     renderMonthlyDiary();
   }else if(section==='users'&&state.user?.role==='ADMIN')renderUsers();
+  else if(section==='books')loadBooks();
 }
+
+/* ===================== BOOK WRITING MODULE ===================== */
+const BOOK_STATUS_LABEL={PLANNING:'Planning',DRAFTING:'Drafting',EDITING:'Editing',COMPLETE:'Complete'};
+const CHAPTER_STATUS_LABEL={NOT_STARTED:'Not started',DRAFTING:'Drafting',REVIEW:'In review',DONE:'Done'};
+const BOOK_ROLE_LABEL={OWNER:'Owner',CO_AUTHOR:'Co-author',EDITOR:'Editor',VIEWER:'Viewer'};
+
+async function loadBooks(){
+  if(!els.booksGrid)return;
+  try{
+    const r=await api('listBooks',{});
+    state.books=r.data.books||[];
+    if(state.activeBookId&&!state.books.some(b=>b.id===state.activeBookId)){state.activeBookId=null;state.activeBookDetail=null;}
+    renderBooksPage();
+  }catch(e){toast(e.message,'error');}
+}
+function renderBooksPage(){
+  if(state.activeBookId){
+    els.booksGrid?.closest('.books-list-view')?.classList.add('hidden');
+    els.bookDetailView?.classList.remove('hidden');
+    renderBookDetailView();
+  }else{
+    els.bookDetailView?.classList.add('hidden');
+    els.booksGrid?.closest('.books-list-view')?.classList.remove('hidden');
+    renderBooksGrid();
+  }
+}
+function renderBooksGrid(){
+  if(!els.booksGrid)return;
+  const rows=state.books;
+  els.booksEmpty?.classList.toggle('hidden',rows.length>0);
+  els.booksGrid.innerHTML=rows.map(b=>{
+    const pct=b.chapterCount?Math.round(b.doneChapterCount/b.chapterCount*100):0;
+    const collabChips=b.collaborators.map(c=>`<span class="book-collab-chip" title="${escapeHtml(c.username)} · ${escapeHtml(BOOK_ROLE_LABEL[c.role]||c.role)}">${escapeHtml(c.username.slice(0,2).toUpperCase())}</span>`).join('');
+    return `<article class="book-card ${String(b.coverColor||'PURPLE').toLowerCase()}" data-open-book="${escapeHtml(b.id)}">
+      <div class="book-card-head"><span class="book-status-badge">${escapeHtml(BOOK_STATUS_LABEL[b.status]||b.status)}</span><span class="book-role-badge">${escapeHtml(BOOK_ROLE_LABEL[b.role]||b.role||'')}</span></div>
+      <h4>${escapeHtml(b.title)}</h4>
+      <small>${escapeHtml(b.genre||'No genre set')}</small>
+      <div class="book-card-progress"><i style="width:${pct}%"></i></div>
+      <div class="book-card-metrics"><span>${b.chapterCount} chapter${b.chapterCount===1?'':'s'}</span><span>${b.totalWordCount.toLocaleString('en-IN')} words</span></div>
+      <div class="book-card-collabs">${collabChips||'<span class="book-collab-chip owner-only">Just you</span>'}</div>
+    </article>`;
+  }).join('');
+}
+function openBookDetail(bookId){
+  state.activeBookId=bookId;
+  state.activeBookDetail=null;
+  renderBooksPage();
+  api('bookDetail',{bookId}).then(r=>{state.activeBookDetail=r.data;renderBookDetailView();}).catch(e=>{toast(e.message,'error');state.activeBookId=null;renderBooksPage();});
+}
+function backToBooksList(){state.activeBookId=null;state.activeBookDetail=null;renderBooksPage();}
+
+function renderBookDetailView(){
+  const d=state.activeBookDetail;
+  if(!d){if(els.bookDetailTitle)els.bookDetailTitle.textContent='Loading…';return;}
+  const b=d.book,isOwner=d.role==='OWNER',canEdit=d.role==='OWNER'||d.role==='CO_AUTHOR'||d.role==='EDITOR';
+  if(els.bookDetailTitle)els.bookDetailTitle.textContent=b.title;
+  if(els.bookDetailGenre)els.bookDetailGenre.textContent=b.genre||'No genre set';
+  if(els.bookDetailStatusBadge)els.bookDetailStatusBadge.textContent=BOOK_STATUS_LABEL[b.status]||b.status;
+  if(els.bookDetailRoleBadge)els.bookDetailRoleBadge.textContent=BOOK_ROLE_LABEL[d.role]||d.role;
+  if(els.bookDetailDescription)els.bookDetailDescription.textContent=b.description||'No description yet.';
+  els.bookDetailEditBtn?.classList.toggle('hidden',!isOwner);
+  els.bookDetailArchiveBtn?.classList.toggle('hidden',!isOwner);
+  els.bookCollabAddBtn?.classList.toggle('hidden',!isOwner);
+  els.addChapterBtn?.classList.toggle('hidden',!canEdit);
+
+  if(els.bookCollabList){
+    const rows=[{username:b.ownerUsername,role:'OWNER'}].concat(b.collaborators);
+    els.bookCollabList.innerHTML=rows.map(c=>`<div class="book-collab-row"><span>${escapeHtml(c.username)}</span><span class="book-role-badge">${escapeHtml(BOOK_ROLE_LABEL[c.role]||c.role)}</span>${isOwner&&c.role!=='OWNER'?`<button class="small-button danger" data-remove-collab="${escapeHtml(c.username)}">Remove</button>`:''}</div>`).join('');
+  }
+
+  if(els.bookChaptersList){
+    const rows=d.chapters;
+    els.bookChaptersEmpty?.classList.toggle('hidden',rows.length>0);
+    els.bookChaptersList.innerHTML=rows.map((c,i)=>`<div class="book-chapter-row" data-chapter-status="${escapeHtml(c.status)}">
+      <div class="book-chapter-move">${canEdit?`<button class="small-button" data-move-chapter-up="${escapeHtml(c.id)}" ${i===0?'disabled':''}>↑</button><button class="small-button" data-move-chapter-down="${escapeHtml(c.id)}" ${i===rows.length-1?'disabled':''}>↓</button>`:''}</div>
+      <div class="book-chapter-main" data-edit-chapter="${escapeHtml(c.id)}">
+        <strong>${i+1}. ${escapeHtml(c.title)}</strong>
+        <small>${escapeHtml(CHAPTER_STATUS_LABEL[c.status]||c.status)} · ${c.wordCount.toLocaleString('en-IN')} words${c.assignedTo?' · '+escapeHtml(c.assignedTo):''}</small>
+      </div>
+      ${canEdit?`<button class="small-button danger" data-archive-chapter="${escapeHtml(c.id)}">Delete</button>`:''}
+    </div>`).join('');
+  }
+
+  renderBookProgress(d);
+}
+function renderBookProgress(d){
+  const dates=Object.keys(d.progressByDate||{}).sort();
+  const totalWords=dates.reduce((s,k)=>s+(d.progressByDate[k]||0),0);
+  if(els.bookProgressTotalWords)els.bookProgressTotalWords.textContent=totalWords.toLocaleString('en-IN')+' words logged';
+  let streak=0,cursor=new Date();
+  for(;;){
+    const iso=cursor.toISOString().slice(0,10);
+    if((d.progressByDate||{})[iso]>0){streak++;cursor.setDate(cursor.getDate()-1);}else break;
+  }
+  if(els.bookProgressStreak)els.bookProgressStreak.textContent=streak+' day streak';
+  if(els.bookProgressChart){
+    const last14=[];
+    const cur=new Date();
+    for(let i=13;i>=0;i--){const dt=new Date(cur);dt.setDate(cur.getDate()-i);last14.push(dt.toISOString().slice(0,10));}
+    const max=Math.max(1,...last14.map(k=>(d.progressByDate||{})[k]||0));
+    els.bookProgressChart.innerHTML=last14.map(k=>{const v=(d.progressByDate||{})[k]||0;const h=Math.max(2,Math.round(v/max*40));return `<div class="book-progress-bar" title="${k}: ${v} words"><i style="height:${h}px"></i></div>`;}).join('');
+  }
+}
+
+function openBookModal(book=null){
+  els.bookForm?.reset();
+  if(els.bookId)els.bookId.value=book?.id||'';
+  if(els.bookModalTitle)els.bookModalTitle.textContent=book?'Edit book':'New book';
+  if(els.bookTitle)els.bookTitle.value=book?.title||'';
+  if(els.bookGenre)els.bookGenre.value=book?.genre||'';
+  if(els.bookDescription)els.bookDescription.value=book?.description||'';
+  if(els.bookStatus)els.bookStatus.value=book?.status||'PLANNING';
+  if(els.bookCoverColor)els.bookCoverColor.value=book?.coverColor||'PURPLE';
+  if(els.bookTargetWordCount)els.bookTargetWordCount.value=book?.targetWordCount||'';
+  if(els.bookTargetDate)els.bookTargetDate.value=book?.targetDate||'';
+  openModal('bookModal');
+}
+async function saveBookForm(event){
+  event.preventDefault();
+  const book={id:els.bookId.value.trim(),title:els.bookTitle.value.trim(),genre:els.bookGenre.value.trim(),description:els.bookDescription.value.trim(),status:els.bookStatus.value,coverColor:els.bookCoverColor.value,targetWordCount:Number(els.bookTargetWordCount.value)||0,targetDate:els.bookTargetDate.value};
+  setBusy(els.saveBookBtn,true,'Saving…');
+  try{
+    const r=await api('saveBook',{book});
+    state.books=r.data.books||[];
+    closeModals();
+    renderBooksPage();
+    toast('Book saved.','success');
+  }catch(e){toast(e.message,'error');}finally{setBusy(els.saveBookBtn,false);}
+}
+async function archiveBookUI(id){
+  const b=state.books.find(x=>x.id===id);
+  if(!b||!confirm(`Archive "${b.title}"? Chapters and progress history are kept safe.`))return;
+  try{
+    const r=await api('archiveBook',{id});
+    state.books=r.data.books||[];
+    state.activeBookId=null;state.activeBookDetail=null;
+    renderBooksPage();
+    toast('Book archived.','success');
+  }catch(e){toast(e.message,'error');}
+}
+
+function openBookCollabModal(){
+  els.bookCollabForm?.reset();
+  if(els.bookCollabBookId)els.bookCollabBookId.value=state.activeBookId||'';
+  if(els.bookCollabRole)els.bookCollabRole.value='CO_AUTHOR';
+  openModal('bookCollabModal');
+}
+async function saveBookCollabForm(event){
+  event.preventDefault();
+  const bookId=els.bookCollabBookId.value,username=els.bookCollabUsername.value.trim(),role=els.bookCollabRole.value;
+  setBusy(els.saveBookCollabBtn,true,'Adding…');
+  try{
+    const r=await api('addBookCollaborator',{bookId,username,role});
+    state.books=r.data.books||[];
+    closeModals();
+    openBookDetail(bookId);
+    toast('Collaborator added.','success');
+  }catch(e){toast(e.message,'error');}finally{setBusy(els.saveBookCollabBtn,false);}
+}
+async function removeCollaboratorUI(username){
+  if(!confirm(`Remove ${username} from this book?`))return;
+  const bookId=state.activeBookId;
+  try{
+    const r=await api('removeBookCollaborator',{bookId,username});
+    state.books=r.data.books||[];
+    openBookDetail(bookId);
+    toast('Collaborator removed.','success');
+  }catch(e){toast(e.message,'error');}
+}
+
+function openChapterModal(chapter=null){
+  els.chapterForm?.reset();
+  if(els.chapterBookId)els.chapterBookId.value=state.activeBookId||'';
+  if(els.chapterId)els.chapterId.value=chapter?.id||'';
+  if(els.chapterModalTitle)els.chapterModalTitle.textContent=chapter?'Edit chapter':'New chapter';
+  if(els.chapterTitle)els.chapterTitle.value=chapter?.title||'';
+  if(els.chapterStatus)els.chapterStatus.value=chapter?.status||'NOT_STARTED';
+  if(els.chapterContent)els.chapterContent.innerHTML=chapter?.content||'';
+  if(els.chapterNotes)els.chapterNotes.value=chapter?.notes||'';
+  const d=state.activeBookDetail,collabOptions=d?[{username:d.book.ownerUsername}].concat(d.book.collaborators):[];
+  if(els.chapterAssignedTo){
+    els.chapterAssignedTo.innerHTML='<option value="">Unassigned</option>'+collabOptions.map(c=>`<option value="${escapeHtml(c.username)}">${escapeHtml(c.username)}</option>`).join('');
+    els.chapterAssignedTo.value=chapter?.assignedTo||'';
+  }
+  updateChapterWordCountLive();
+  const isViewer=state.activeBookDetail?.role==='VIEWER';
+  if(els.chapterContent)els.chapterContent.contentEditable=isViewer?'false':'true';
+  els.chapterRteToolbar?.classList.toggle('hidden',isViewer);
+  if(els.saveChapterBtn)els.saveChapterBtn.classList.toggle('hidden',isViewer);
+  openModal('chapterModal');
+  setTimeout(()=>els.chapterContent?.focus(),80);
+}
+function updateChapterWordCountLive(){
+  if(!els.chapterContent||!els.chapterWordCountLive)return;
+  const plain=(els.chapterContent.innerText||'').trim();
+  const words=plain?plain.split(/\s+/).length:0;
+  els.chapterWordCountLive.textContent=words.toLocaleString('en-IN')+' words';
+}
+function runRteCommand(command,value=null){
+  els.chapterContent?.focus();
+  try{document.execCommand(command,false,value);}catch{}
+  updateChapterWordCountLive();
+}
+function applyChapterHeading(tag){
+  els.chapterContent?.focus();
+  try{document.execCommand('formatBlock',false,tag==='P'?'P':tag);}catch{}
+}
+async function saveChapterForm(event){
+  event.preventDefault();
+  const chapter={bookId:els.chapterBookId.value,id:els.chapterId.value.trim(),title:els.chapterTitle.value.trim(),status:els.chapterStatus.value,content:els.chapterContent.innerHTML,assignedTo:els.chapterAssignedTo.value,notes:els.chapterNotes.value.trim()};
+  setBusy(els.saveChapterBtn,true,'Saving…');
+  try{
+    const r=await api('saveChapter',{chapter});
+    state.activeBookDetail=r.data;
+    closeModals();
+    renderBookDetailView();
+    toast('Chapter saved.','success');
+  }catch(e){toast(e.message,'error');}finally{setBusy(els.saveChapterBtn,false);}
+}
+async function moveChapter(id,direction){
+  const d=state.activeBookDetail;if(!d)return;
+  const order=d.chapters.map(c=>c.id);
+  const idx=order.indexOf(id);
+  const swapWith=direction==='up'?idx-1:idx+1;
+  if(swapWith<0||swapWith>=order.length)return;
+  [order[idx],order[swapWith]]=[order[swapWith],order[idx]];
+  try{
+    const r=await api('reorderChapters',{bookId:state.activeBookId,order});
+    state.activeBookDetail=r.data;
+    renderBookDetailView();
+  }catch(e){toast(e.message,'error');}
+}
+async function archiveChapterUI(id){
+  if(!confirm('Delete this chapter? This cannot be undone.'))return;
+  try{
+    const r=await api('archiveChapter',{id});
+    state.activeBookDetail=r.data;
+    renderBookDetailView();
+    toast('Chapter deleted.','success');
+  }catch(e){toast(e.message,'error');}
+}
+
+function openBookProgressModal(){
+  els.bookProgressForm?.reset();
+  if(els.bookProgressBookId)els.bookProgressBookId.value=state.activeBookId||'';
+  if(els.bookProgressDate)els.bookProgressDate.value=localIsoDate();
+  const d=state.activeBookDetail;
+  if(els.bookProgressChapter){
+    els.bookProgressChapter.innerHTML='<option value="">Not tied to a chapter</option>'+(d?.chapters||[]).map(c=>`<option value="${escapeHtml(c.id)}">${escapeHtml(c.title)}</option>`).join('');
+  }
+  openModal('bookProgressModal');
+}
+async function saveBookProgressForm(event){
+  event.preventDefault();
+  const progress={bookId:els.bookProgressBookId.value,chapterId:els.bookProgressChapter.value,wordsWritten:Number(els.bookProgressWords.value),minutesSpent:Number(els.bookProgressMinutes.value)||0,logDate:els.bookProgressDate.value,notes:els.bookProgressNotes.value.trim()};
+  setBusy(els.saveBookProgressBtn,true,'Logging…');
+  try{
+    const r=await api('logWritingProgress',{progress});
+    state.activeBookDetail=r.data;
+    closeModals();
+    renderBookDetailView();
+    toast('Progress logged. Nice work!','success');
+  }catch(e){toast(e.message,'error');}finally{setBusy(els.saveBookProgressBtn,false);}
+}
+
+document.addEventListener('click',event=>{
+  const openBook=event.target.closest('[data-open-book]');if(openBook){openBookDetail(openBook.dataset.openBook);return;}
+  if(event.target.closest('[data-remove-collab]')){removeCollaboratorUI(event.target.closest('[data-remove-collab]').dataset.removeCollab);return;}
+  const editChapter=event.target.closest('[data-edit-chapter]');if(editChapter){const d=state.activeBookDetail;const ch=d?.chapters.find(c=>c.id===editChapter.dataset.editChapter);if(ch)openChapterModal(ch);return;}
+  const archiveChapterBtn=event.target.closest('[data-archive-chapter]');if(archiveChapterBtn){archiveChapterUI(archiveChapterBtn.dataset.archiveChapter);return;}
+  const moveUp=event.target.closest('[data-move-chapter-up]');if(moveUp&&!moveUp.disabled){moveChapter(moveUp.dataset.moveChapterUp,'up');return;}
+  const moveDown=event.target.closest('[data-move-chapter-down]');if(moveDown&&!moveDown.disabled){moveChapter(moveDown.dataset.moveChapterDown,'down');return;}
+});
+/* =================== END BOOK WRITING MODULE =================== */
 function scheduleIdleUiWork(callback){
   if('requestIdleCallback' in window)return window.requestIdleCallback(callback,{timeout:650});
   return window.setTimeout(callback,32);
@@ -2865,7 +3154,7 @@ function renderAll(){
   renderPersonalHome();
   setOverviewMode(state.overviewMode);
 
-  const sections=['holdings','transactions','watchlist','sip','expenditure','diary'];
+  const sections=['holdings','transactions','watchlist','sip','expenditure','diary','books'];
   if(state.user?.role==='ADMIN')sections.push('users');
   if(state.activeSection!=='overview')renderSectionData(state.activeSection);
   renderDeferredSections(epoch,sections.filter(section=>section!==state.activeSection));
@@ -6696,11 +6985,11 @@ function switchSection(section){
   if(state.dataFullscreenSection&&state.dataFullscreenSection!==section)exitDataFullscreen();
   state.activeSection=section;
   scheduleHoldingsReadingRefresh();
-  document.body.classList.remove('section-overview','section-holdings','section-transactions','section-watchlist','section-sip','section-expenditure','section-diary','section-users');
+  document.body.classList.remove('section-overview','section-holdings','section-transactions','section-watchlist','section-sip','section-expenditure','section-diary','section-users','section-books');
   document.body.classList.add(`section-${section}`);
-  const titles={overview:state.overviewMode==='INVESTMENT'?'Investment overview':'My dashboard',holdings:'Holdings & performance',transactions:'Transactions',watchlist:'Watchlist',sip:'SIP Planner & Future Investment',expenditure:'Expenditure',diary:'Diary',users:'User administration'};
+  const titles={overview:state.overviewMode==='INVESTMENT'?'Investment overview':'My dashboard',holdings:'Holdings & performance',transactions:'Transactions',watchlist:'Watchlist',sip:'SIP Planner & Future Investment',expenditure:'Expenditure',diary:'Diary',users:'User administration',books:'Book Writing'};
   if(els.pageTitle)els.pageTitle.textContent=titles[section]||'My Finance';
-  ['overview','holdings','transactions','watchlist','sip','expenditure','diary','users'].forEach(name=>{
+  ['overview','holdings','transactions','watchlist','sip','expenditure','diary','users','books'].forEach(name=>{
     const sec=$(`${name}Section`);
     if(sec)sec.classList.toggle('hidden',name!==section);
   });
@@ -7008,6 +7297,25 @@ function bindEvents(){
   
   safeOn(els.autoRefreshSelect,'change',changeAutoRefresh);safeOn(els.rememberUsername,'change',()=>{if(!els.rememberUsername.checked)localStorage.removeItem('portfolio_saved_username');});safeOn(els.diaryForm,'submit',saveDiaryEntry);safeOn(els.clearDiaryBtn,'click',()=>{clearDailyDraft();resetDiaryForm();updateDiaryWritingMeta();});safeOn(els.newDiaryEntryBtn,'click',()=>{switchSection('diary');if(state.diaryWorkspace==='MONTHLY'){resetMonthlyForm(currentMonthlyFilterKey()||localIsoMonth());setTimeout(()=>els.monthlyTitle?.focus(),30);}else{resetDiaryForm(els.diaryBrowseDate.value||localIsoDate());setTimeout(()=>els.diaryTitle?.focus(),30);}});safeOn(els.diarySearch,'input',()=>queueUiRender('diary-search',renderDiary));safeOn(els.recentDailySearch,'input',()=>queueUiRender('recent-daily-search',renderRecentDailyEntries));safeOn(els.recentDailyLimit,'change',renderRecentDailyEntries);safeOn(els.recentMonthlySearch,'input',()=>queueUiRender('recent-monthly-search',renderRecentMonthlyEntries));safeOn(els.recentMonthlyLimit,'change',renderRecentMonthlyEntries);safeOn(els.diaryBrowseDate,'change',()=>{if(!els.diaryId.value)els.diaryDate.value=els.diaryBrowseDate.value;renderDiary();});safeOn(els.diaryBrowseMonth,'change',renderDiary);safeOn(els.diaryFromDate,'change',renderDiary);safeOn(els.diaryToDate,'change',renderDiary);safeOn(els.printDiaryBtn,'click',printDiaryView);
   safeOn(els.monthlyForm,'submit',saveMonthlyItem);
+  safeOn(els.addBookBtn,'click',()=>openBookModal());
+  safeOn(els.bookForm,'submit',saveBookForm);
+  safeOn(els.bookDetailBackBtn,'click',backToBooksList);
+  safeOn(els.bookDetailEditBtn,'click',()=>{const d=state.activeBookDetail;if(d)openBookModal(d.book);});
+  safeOn(els.bookDetailArchiveBtn,'click',()=>{if(state.activeBookId)archiveBookUI(state.activeBookId);});
+  safeOn(els.bookCollabAddBtn,'click',openBookCollabModal);
+  safeOn(els.bookCollabForm,'submit',saveBookCollabForm);
+  safeOn(els.addChapterBtn,'click',()=>openChapterModal());
+  safeOn(els.chapterForm,'submit',saveChapterForm);
+  safeOn(els.chapterContent,'input',updateChapterWordCountLive);
+  safeOn(els.chapterRteToolbar,'click',event=>{
+    const btn=event.target.closest('[data-rte-cmd]');
+    if(btn){event.preventDefault();runRteCommand(btn.dataset.rteCmd);}
+  });
+  safeOn(els.chapterTextColor,'input',()=>runRteCommand('foreColor',els.chapterTextColor.value));
+  safeOn(els.chapterHighlightColor,'input',()=>{try{document.execCommand('hiliteColor',false,els.chapterHighlightColor.value);}catch{try{document.execCommand('backColor',false,els.chapterHighlightColor.value);}catch{}}els.chapterContent?.focus();});
+  safeOn(els.chapterHeadingSelect,'change',()=>{applyChapterHeading(els.chapterHeadingSelect.value);els.chapterHeadingSelect.value='P';});
+  safeOn(els.logProgressBtn,'click',openBookProgressModal);
+  safeOn(els.bookProgressForm,'submit',saveBookProgressForm);
   safeOn(els.clearMonthlyBtn,'click',()=>{clearMonthlyDraft();resetMonthlyForm();updateDiaryWritingMeta();});
   safeOn(els.monthlyEntryType,'change',updateMonthlyTargetHelp);
   safeOn(els.monthlyYearFilter,'change',renderMonthlyDiary);
