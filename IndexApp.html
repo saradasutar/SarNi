@@ -8,15 +8,46 @@
   <meta http-equiv="Expires" content="0">
   <meta name="theme-color" content="#eef5ff">
   <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
-  <meta name="myfinance-build" content="20260825-19413-newexec1">
+  <meta name="myfinance-build" content="20260901-20107-easyscroll1">
+  <meta name="color-scheme" content="light dark">
   <script>
-    window.__MYFINANCE_PAGE_BUILD__='20260825-19413-newexec1';
+    window.__MYFINANCE_PAGE_BUILD__='20260901-20107-easyscroll1';
     window.__MYFINANCE_NATIVE__=true;
+    window.__SAR_NI_ASSETS__={css:false,app:false};
+    window.sarNiAssetLoaded=function(kind){
+      window.__SAR_NI_ASSETS__[kind]=true;
+      if(window.__SAR_NI_ASSETS__.css&&window.__SAR_NI_ASSETS__.app){
+        document.documentElement.classList.add('sarni-assets-ready');
+      }
+    };
+    window.sarNiAssetFailed=function(kind){
+      window.__SAR_NI_ASSETS__[kind]=false;
+      document.documentElement.classList.add('sarni-asset-error');
+      var box=document.getElementById('sarniAssetStatus');
+      if(box)box.innerHTML='<strong>Dashboard file loading failed.</strong><br>Upload all seven v20.1.7 files to GitHub, wait two minutes, then reload.';
+    };
+    setTimeout(function(){
+      if(document.documentElement.classList.contains('sarni-assets-ready'))return;
+      var box=document.getElementById('sarniAssetStatus');
+      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Please confirm the v20.1.7 GitHub files were uploaded.';
+    },12000);
   </script>
-  <title>My Finance</title>
-  <style><?!= includeFile_('StylesApp'); ?></style>
+  <title>SarNi</title>
+  <link rel="icon" href="https://saradasutar.github.io/SarNi/favicon.svg?v=20107-easyscroll1" type="image/svg+xml">
+  <style>
+    html:not(.sarni-assets-ready) body>*{visibility:hidden}
+    html:not(.sarni-assets-ready) #sarniAssetStatus{visibility:visible;position:fixed;inset:0;z-index:999999;display:grid;place-items:center;padding:28px;text-align:center;background:linear-gradient(145deg,#eef5ff,#f8f4ff);color:#33426a;font:700 17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+    html.sarni-assets-ready #sarniAssetStatus{display:none}
+    #sarniAssetStatus strong{font-size:22px;color:#273566}
+  </style>
+  <link rel="preconnect" href="https://saradasutar.github.io" crossorigin>
+  <link rel="preload" href="https://saradasutar.github.io/SarNi/styles.css?v=20260901-20107-easyscroll1" as="style">
+  <link rel="preload" href="https://saradasutar.github.io/SarNi/app-v20-1-7.js?v=20260901-20107-easyscroll1" as="script">
+  <link rel="stylesheet" href="https://saradasutar.github.io/SarNi/styles.css?v=20260901-20107-easyscroll1" onload="sarNiAssetLoaded('css')" onerror="sarNiAssetFailed('css')">
 </head>
 <body>
+  <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
+  <div id="sarniAssetStatus" role="status" aria-live="polite"><div><strong>Opening SarNi securely…</strong><br>Loading the lightweight dashboard.</div></div>
   <noscript>This dashboard requires JavaScript.</noscript>
 
   <section id="loginView" class="login-view">
@@ -40,7 +71,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v19.4.13</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.17.5</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v20.1.7</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.17.10</span></div>
           <button id="repairBrowserBtn" class="login-repair-button" type="button">↻ Repair browser cache/session</button>
         </div>
       </form>
@@ -60,7 +91,7 @@
       </div>
     </div>
     <aside class="sidebar">
-      <div class="side-brand"><div class="brand-mark small">₹</div><div><strong id="sideAppName">My Finance</strong><span>Family portfolio</span></div></div>
+      <div class="side-brand"><div class="brand-mark small">₹</div><div><strong id="sideAppName">SarNi</strong><span>Financial Command Centre</span></div><button id="sidebarCollapseBtn" class="sidebar-collapse-button" type="button" title="Collapse sidebar" aria-label="Collapse sidebar">‹</button></div>
       <nav class="side-nav" aria-label="Main navigation">
         <button class="nav-item active" data-section="overview"><span>◫</span>Overview</button>
         <button class="nav-item" data-section="holdings"><span>▥</span>Holdings</button>
@@ -75,21 +106,21 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v19.4.13</span><span id="dashboardBackendVersion">Backend · v3.17.5</span>
+        <span id="dashboardVersion">Frontend · v20.1.7</span><span id="dashboardBackendVersion">Backend · v3.17.10</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
-    <main class="main-content">
+    <main id="mainDashboard" class="main-content" tabindex="-1">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Portfolio overview</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v19.4.13</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.17.5</span></div></div></div>
-        <div class="top-actions"><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button"><span id="avatarInitial">A</span></button></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Financial Command Centre</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v20.1.7</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.17.10</span></div></div></div>
+        <div class="top-actions"><button id="commandPaletteBtn" class="command-palette-button" type="button" title="Search pages and actions (Ctrl/⌘ K)" aria-haspopup="dialog"><span>⌕</span><strong>Search</strong><kbd>⌘K</kbd></button><div class="display-preferences" title="Personalise dashboard appearance"><select id="displayDensitySelect" aria-label="Dashboard density"><option value="COMFORTABLE">Comfortable</option><option value="COMPACT">Compact</option></select><select id="displayThemeSelect" aria-label="Dashboard theme"><option value="LIGHT" selected>Light</option><option value="AUTO">Auto theme</option><option value="DARK">Dark</option></select></div><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs" aria-label="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button" aria-label="Signed-in user"><span id="avatarInitial">A</span></button><button id="headerLogoutBtn" class="header-logout-button" type="button" title="Sign out of SarNi" aria-label="Sign out"><span aria-hidden="true">↪</span><strong>Sign out</strong></button></div>
       </header>
 
       <div id="mobileSessionBar" class="mobile-session-bar" aria-label="Mobile session controls">
         <div class="mobile-session-versions">
-          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v19.4.13</span>
-          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.17.5</span>
+          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v20.1.7</span>
+          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.17.10</span>
         </div>
         <div class="mobile-session-actions">
           <button id="mobileChangePasswordBtn" class="mobile-session-button" type="button">Password</button>
@@ -119,9 +150,9 @@
   <div class="overview-mode-bar">
     <div class="overview-mode-switcher" role="tablist" aria-label="Dashboard view">
       <button id="personalHomeModeBtn" type="button" class="active" data-overview-mode="PERSONAL"><span>⌂</span> My Home</button>
-      <button id="investmentHomeModeBtn" class="overview-investment-mode-hidden" type="button" data-overview-mode="INVESTMENT" aria-hidden="true" tabindex="-1"><span>₹</span> Investments</button>
+      <button id="investmentHomeModeBtn" type="button" data-overview-mode="INVESTMENT"><span>₹</span> Wealth Centre</button>
     </div>
-    <button id="overviewSetDefaultBtn" type="button" class="overview-default-button overview-investment-mode-hidden" aria-hidden="true" tabindex="-1">✓ Default view</button>
+    <button id="overviewSetDefaultBtn" type="button" class="overview-default-button">✓ Default view</button>
   </div>
 
   <div id="personalHomeContent" class="personal-home-content">
@@ -215,10 +246,26 @@
         </div>
 
         <div class="summary-grid">
-          <article class="summary-card accent-blue"><div class="card-icon">₹</div><p id="sumInvestedLabel">Invested / cost value</p><strong id="sumInvested">₹0</strong><span id="sumAssetCount">0 holdings</span><div id="sumInvestedTrend" class="summary-trend neutral">Tracking growth…</div></article>
-          <article class="summary-card accent-green"><div class="card-icon">↗</div><p id="sumCurrentLabel">Current value</p><strong id="sumCurrent">₹0</strong><span id="sumPricedCount">0 priced</span><div id="sumCurrentTrend" class="summary-trend neutral">Tracking growth…</div></article>
-          <article class="summary-card accent-purple"><div class="card-icon">±</div><p>Total gain / loss</p><strong id="sumGain">₹0</strong><span id="sumReturn">0.00%</span><div id="sumGainTrend" class="summary-trend neutral">Latest portfolio result</div></article>
-          <article class="summary-card accent-orange"><div class="card-icon">☆</div><p>Watchlist pulse</p><strong id="sumSplit">All investments</strong><span id="sumWatchCount">0 watchlist</span><div id="sumWatchTrend" class="summary-trend neutral">Tracking opportunities…</div></article>
+          <article class="summary-card accent-blue">
+            <div class="summary-card-head"><div class="card-icon">₹</div><p id="sumInvestedLabel">Invested / cost value</p></div>
+            <strong id="sumInvested">₹0</strong>
+            <div class="summary-card-footer"><span id="sumAssetCount">0 holdings</span><div id="sumInvestedTrend" class="summary-trend neutral">Tracking growth…</div></div>
+          </article>
+          <article class="summary-card accent-green">
+            <div class="summary-card-head"><div class="card-icon">↗</div><p id="sumCurrentLabel">Current value</p></div>
+            <strong id="sumCurrent">₹0</strong>
+            <div class="summary-card-footer"><span id="sumPricedCount">0 priced</span><div id="sumCurrentTrend" class="summary-trend neutral">Tracking growth…</div></div>
+          </article>
+          <article class="summary-card accent-purple">
+            <div class="summary-card-head"><div class="card-icon">±</div><p>Total gain / loss</p></div>
+            <strong id="sumGain">₹0</strong>
+            <div class="summary-card-footer"><span id="sumReturn">0.00%</span><div id="sumGainTrend" class="summary-trend neutral">Latest portfolio result</div></div>
+          </article>
+          <article class="summary-card accent-orange">
+            <div class="summary-card-head"><div class="card-icon">☆</div><p>Watchlist pulse</p></div>
+            <strong id="sumSplit">All investments</strong>
+            <div class="summary-card-footer"><span id="sumWatchCount">0 watchlist</span><div id="sumWatchTrend" class="summary-trend neutral">Tracking opportunities…</div></div>
+          </article>
         </div>
         <div class="insight-grid">
           <article class="panel trend-panel portfolio-trend-panel">
@@ -251,130 +298,47 @@
 </section>
 
 <section id="holdingsSection" class="page-section hidden">
-        <section id="holdingsSummaryPanel" class="holdings-summary-panel is-collapsed" aria-label="Investment summary" aria-hidden="true">
-          <div class="holdings-summary-head">
-            <div>
-              <p class="eyebrow">HOLDINGS SUMMARY</p>
-              <h3>Portfolio at a glance</h3>
-            </div>
-            <div class="holdings-summary-head-actions">
-              <span class="holdings-summary-note">Unified family position first · individual investors below</span>
-              <div class="summary-value-legend" aria-label="Summary colour guide">
-                <span class="invested">Invested</span>
-                <span class="present">Present value</span>
-                <span class="growth">Growth / Loss</span>
-                <span class="gpf">GPF projection</span>
-              </div>
+        <section id="holdingsSummaryPanel" class="holdings-summary-panel at-a-glance-summary is-collapsed" aria-label="Investment summary" aria-hidden="true">
+          <header class="summary-glance-header">
+            <div><p class="eyebrow">HOLDINGS SUMMARY</p><h3>Sarada · Niharika · Combined</h3></div>
+            <div class="summary-glance-actions">
+              <button id="holdingsSummaryFullscreenBtn" class="summary-compare-button" type="button" aria-pressed="false">⛶ Expand summary</button>
               <button id="hideHoldingsSummaryInsideBtn" class="summary-inline-hide" type="button" data-hide-holdings-summary>Hide summary ↑</button>
             </div>
+          </header>
+          <div class="summary-glance-wrap">
+            <table class="summary-glance-table" aria-label="All investors and asset types at a glance">
+              <colgroup><col class="glance-asset-col"><col><col><col></colgroup>
+              <thead><tr><th scope="col">Investment</th><th scope="col" class="glance-owner-sarada">Sarada</th><th scope="col" class="glance-owner-niharika">Niharika</th><th scope="col" class="glance-owner-combined">Combined</th></tr></thead>
+              <tbody>
+                <tr class="glance-asset-row glance-mf-row">
+                  <th scope="row"><span class="glance-asset-badge">MF</span><strong>Mutual funds</strong></th>
+                  <td class="glance-investor-cell glance-cell-sarada"><span class="glance-mobile-owner">Sarada</span><div class="glance-metric glance-invested"><span>Invested</span><strong id="holdSumSaradaMfInvested">₹0.00</strong></div><div class="glance-metric glance-growth"><span>Gain / loss</span><strong id="holdSumSaradaMfGrowth">₹0.00</strong></div><div class="glance-metric glance-current"><span>Present</span><strong id="holdSumSaradaMfCurrent">₹0.00</strong></div><div class="glance-metric glance-updated"><span>Updated</span><strong id="holdSumSaradaMfUpdated">—</strong></div></td>
+                  <td class="glance-investor-cell glance-cell-niharika"><span class="glance-mobile-owner">Niharika</span><div class="glance-metric glance-invested"><span>Invested</span><strong id="holdSumNiharikaMfInvested">₹0.00</strong></div><div class="glance-metric glance-growth"><span>Gain / loss</span><strong id="holdSumNiharikaMfGrowth">₹0.00</strong></div><div class="glance-metric glance-current"><span>Present</span><strong id="holdSumNiharikaMfCurrent">₹0.00</strong></div><div class="glance-metric glance-updated"><span>Updated</span><strong id="holdSumNiharikaMfUpdated">—</strong></div></td>
+                  <td class="glance-investor-cell glance-cell-combined"><span class="glance-mobile-owner">Combined</span><div class="glance-metric glance-invested"><span>Invested</span><strong id="holdSumCombinedMfInvested">₹0.00</strong></div><div class="glance-metric glance-growth"><span>Gain / loss</span><strong id="holdSumCombinedMfGrowth">₹0.00</strong></div><div class="glance-metric glance-current"><span>Present</span><strong id="holdSumCombinedMfCurrent">₹0.00</strong></div><div class="glance-metric glance-updated"><span>Updated</span><strong id="holdSumCombinedMfUpdated">—</strong></div></td>
+                </tr>
+                <tr class="glance-asset-row glance-stock-row">
+                  <th scope="row"><span class="glance-asset-badge">ST</span><strong>Stocks &amp; ETFs</strong></th>
+                  <td class="glance-investor-cell glance-cell-sarada"><span class="glance-mobile-owner">Sarada</span><div class="glance-metric glance-invested"><span>Invested</span><strong id="holdSumSaradaStockInvested">₹0.00</strong></div><div class="glance-metric glance-growth"><span>Gain / loss</span><strong id="holdSumSaradaStockGrowth">₹0.00</strong></div><div class="glance-metric glance-current"><span>Present</span><strong id="holdSumSaradaStockCurrent">₹0.00</strong></div><div class="glance-metric glance-updated"><span>Updated</span><strong id="holdSumSaradaStockUpdated">—</strong></div></td>
+                  <td class="glance-investor-cell glance-cell-niharika"><span class="glance-mobile-owner">Niharika</span><div class="glance-metric glance-invested"><span>Invested</span><strong id="holdSumNiharikaStockInvested">₹0.00</strong></div><div class="glance-metric glance-growth"><span>Gain / loss</span><strong id="holdSumNiharikaStockGrowth">₹0.00</strong></div><div class="glance-metric glance-current"><span>Present</span><strong id="holdSumNiharikaStockCurrent">₹0.00</strong></div><div class="glance-metric glance-updated"><span>Updated</span><strong id="holdSumNiharikaStockUpdated">—</strong></div></td>
+                  <td class="glance-investor-cell glance-cell-combined"><span class="glance-mobile-owner">Combined</span><div class="glance-metric glance-invested"><span>Invested</span><strong id="holdSumCombinedStockInvested">₹0.00</strong></div><div class="glance-metric glance-growth"><span>Gain / loss</span><strong id="holdSumCombinedStockGrowth">₹0.00</strong></div><div class="glance-metric glance-current"><span>Present</span><strong id="holdSumCombinedStockCurrent">₹0.00</strong></div><div class="glance-metric glance-updated"><span>Updated</span><strong id="holdSumCombinedStockUpdated">—</strong></div></td>
+                </tr>
+                <tr class="glance-asset-row glance-gpf-row">
+                  <th scope="row"><span class="glance-asset-badge">GPF</span><strong>GPF</strong><small>12-month projection</small></th>
+                  <td class="glance-investor-cell glance-cell-sarada"><span class="glance-mobile-owner">Sarada</span><div class="glance-metric glance-present"><span>Balance</span><strong id="holdSumSaradaGpfPresent">₹0.00</strong></div><div class="glance-metric glance-interest"><span>Est. interest</span><strong id="holdSumSaradaGpfInterest">₹0.00</strong></div><div class="glance-metric glance-projected"><span>12M value</span><strong id="holdSumSaradaGpfProjected">₹0.00</strong></div><p class="glance-gpf-monthly">Monthly contribution <b id="holdSumSaradaGpfMonthly">₹0.00</b></p></td>
+                  <td class="glance-investor-cell glance-cell-niharika"><span class="glance-mobile-owner">Niharika</span><div class="glance-metric glance-present"><span>Balance</span><strong id="holdSumNiharikaGpfPresent">₹0.00</strong></div><div class="glance-metric glance-interest"><span>Est. interest</span><strong id="holdSumNiharikaGpfInterest">₹0.00</strong></div><div class="glance-metric glance-projected"><span>12M value</span><strong id="holdSumNiharikaGpfProjected">₹0.00</strong></div><p class="glance-gpf-monthly">Monthly contribution <b id="holdSumNiharikaGpfMonthly">₹0.00</b></p></td>
+                  <td class="glance-investor-cell glance-cell-combined"><span class="glance-mobile-owner">Combined</span><div class="glance-metric glance-present"><span>Balance</span><strong id="holdSumCombinedGpfPresent">₹0.00</strong></div><div class="glance-metric glance-interest"><span>Est. interest</span><strong id="holdSumCombinedGpfInterest">₹0.00</strong></div><div class="glance-metric glance-projected"><span>12M value</span><strong id="holdSumCombinedGpfProjected">₹0.00</strong></div><p class="glance-gpf-monthly">Monthly contribution <b id="holdSumCombinedGpfMonthly">₹0.00</b></p></td>
+                </tr>
+                <tr class="glance-asset-row glance-total-row">
+                  <th scope="row"><span class="glance-asset-badge">ALL</span><strong>Total portfolio</strong><small>Current position</small></th>
+                  <td class="glance-investor-cell glance-cell-sarada"><span class="glance-mobile-owner">Sarada</span><div class="glance-metric glance-invested"><span>Invested</span><strong id="holdSumSaradaTotalInvested">₹0.00</strong></div><div class="glance-metric glance-growth"><span>Gain / loss</span><strong id="holdSumSaradaTotalGrowth">₹0.00</strong></div><div class="glance-metric glance-current"><span>Present</span><strong id="holdSumSaradaTotalCurrent">₹0.00</strong></div></td>
+                  <td class="glance-investor-cell glance-cell-niharika"><span class="glance-mobile-owner">Niharika</span><div class="glance-metric glance-invested"><span>Invested</span><strong id="holdSumNiharikaTotalInvested">₹0.00</strong></div><div class="glance-metric glance-growth"><span>Gain / loss</span><strong id="holdSumNiharikaTotalGrowth">₹0.00</strong></div><div class="glance-metric glance-current"><span>Present</span><strong id="holdSumNiharikaTotalCurrent">₹0.00</strong></div></td>
+                  <td class="glance-investor-cell glance-cell-combined"><span class="glance-mobile-owner">Combined</span><div class="glance-metric glance-invested"><span>Invested</span><strong id="holdSumCombinedTotalInvested">₹0.00</strong></div><div class="glance-metric glance-growth"><span>Gain / loss</span><strong id="holdSumCombinedTotalGrowth">₹0.00</strong></div><div class="glance-metric glance-current"><span>Present</span><strong id="holdSumCombinedTotalCurrent">₹0.00</strong></div></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-
-          <div class="holdings-summary-matrix holdings-value-growth-matrix">
-            <div class="holdings-summary-row summary-row-combined">
-              <div class="summary-owner-label">
-                <strong>Combined</strong>
-                <span>Unified family portfolio</span>
-              </div>
-
-              <article class="holdings-mini-card total">
-                <span class="summary-card-title">Total Portfolio</span>
-                <div class="summary-metric"><span>Invested</span><strong id="holdSumCombinedTotalInvested">₹0</strong></div>
-                <div class="summary-metric"><span>Present value</span><strong id="holdSumCombinedTotalCurrent">₹0</strong></div>
-                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumCombinedTotalGrowth">₹0 · 0.00%</strong></div>
-              </article>
-
-              <article class="holdings-mini-card mf">
-                <span class="summary-card-title">Mutual Funds</span>
-                <div class="summary-metric"><span>Invested</span><strong id="holdSumCombinedMfInvested">₹0</strong></div>
-                <div class="summary-metric"><span>Present value</span><strong id="holdSumCombinedMfCurrent">₹0</strong></div>
-                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumCombinedMfGrowth">₹0 · 0.00%</strong></div>
-              </article>
-
-              <article class="holdings-mini-card stock">
-                <span class="summary-card-title">Stocks &amp; ETFs</span>
-                <div class="summary-metric"><span>Invested</span><strong id="holdSumCombinedStockInvested">₹0</strong></div>
-                <div class="summary-metric"><span>Present value</span><strong id="holdSumCombinedStockCurrent">₹0</strong></div>
-                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumCombinedStockGrowth">₹0 · 0.00%</strong></div>
-              </article>
-
-              <article class="holdings-mini-card gpf">
-                <span class="summary-card-title">GPF</span>
-                <div class="summary-metric"><span>Present balance</span><strong id="holdSumCombinedGpfPresent">₹0</strong></div>
-                <div class="summary-metric"><span>Monthly payment</span><strong id="holdSumCombinedGpfMonthly">₹0</strong></div>
-                <div class="summary-metric growth gpf-projection-metric"><span>Projected 12M</span><strong id="holdSumCombinedGpfProjected">₹0</strong><small id="holdSumCombinedGpfInterest">₹0 interest</small></div>
-              </article>
-            </div>
-
-            <div class="holdings-summary-row summary-row-niharika">
-              <div class="summary-owner-label">
-                <strong>Niharika</strong>
-                <span>Separate investments</span>
-              </div>
-
-              <article class="holdings-mini-card total">
-                <span class="summary-card-title">Total Portfolio</span>
-                <div class="summary-metric"><span>Invested</span><strong id="holdSumNiharikaTotalInvested">₹0</strong></div>
-                <div class="summary-metric"><span>Present value</span><strong id="holdSumNiharikaTotalCurrent">₹0</strong></div>
-                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumNiharikaTotalGrowth">₹0 · 0.00%</strong></div>
-              </article>
-
-              <article class="holdings-mini-card mf">
-                <span class="summary-card-title">Mutual Funds</span>
-                <div class="summary-metric"><span>Invested</span><strong id="holdSumNiharikaMfInvested">₹0</strong></div>
-                <div class="summary-metric"><span>Present value</span><strong id="holdSumNiharikaMfCurrent">₹0</strong></div>
-                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumNiharikaMfGrowth">₹0 · 0.00%</strong></div>
-              </article>
-
-              <article class="holdings-mini-card stock">
-                <span class="summary-card-title">Stocks &amp; ETFs</span>
-                <div class="summary-metric"><span>Invested</span><strong id="holdSumNiharikaStockInvested">₹0</strong></div>
-                <div class="summary-metric"><span>Present value</span><strong id="holdSumNiharikaStockCurrent">₹0</strong></div>
-                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumNiharikaStockGrowth">₹0 · 0.00%</strong></div>
-              </article>
-
-              <article class="holdings-mini-card gpf">
-                <span class="summary-card-title">GPF</span>
-                <div class="summary-metric"><span>Present balance</span><strong id="holdSumNiharikaGpfPresent">₹0</strong></div>
-                <div class="summary-metric"><span>Monthly payment</span><strong id="holdSumNiharikaGpfMonthly">₹0</strong></div>
-                <div class="summary-metric growth gpf-projection-metric"><span>Projected 12M</span><strong id="holdSumNiharikaGpfProjected">₹0</strong><small id="holdSumNiharikaGpfInterest">₹0 interest</small></div>
-              </article>
-            </div>
-
-            <div class="holdings-summary-row summary-row-sarada">
-              <div class="summary-owner-label">
-                <strong>Sarada</strong>
-                <span>Separate investments</span>
-              </div>
-
-              <article class="holdings-mini-card total">
-                <span class="summary-card-title">Total Portfolio</span>
-                <div class="summary-metric"><span>Invested</span><strong id="holdSumSaradaTotalInvested">₹0</strong></div>
-                <div class="summary-metric"><span>Present value</span><strong id="holdSumSaradaTotalCurrent">₹0</strong></div>
-                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumSaradaTotalGrowth">₹0 · 0.00%</strong></div>
-              </article>
-
-              <article class="holdings-mini-card mf">
-                <span class="summary-card-title">Mutual Funds</span>
-                <div class="summary-metric"><span>Invested</span><strong id="holdSumSaradaMfInvested">₹0</strong></div>
-                <div class="summary-metric"><span>Present value</span><strong id="holdSumSaradaMfCurrent">₹0</strong></div>
-                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumSaradaMfGrowth">₹0 · 0.00%</strong></div>
-              </article>
-
-              <article class="holdings-mini-card stock">
-                <span class="summary-card-title">Stocks &amp; ETFs</span>
-                <div class="summary-metric"><span>Invested</span><strong id="holdSumSaradaStockInvested">₹0</strong></div>
-                <div class="summary-metric"><span>Present value</span><strong id="holdSumSaradaStockCurrent">₹0</strong></div>
-                <div class="summary-metric growth"><span>Growth</span><strong id="holdSumSaradaStockGrowth">₹0 · 0.00%</strong></div>
-              </article>
-
-              <article class="holdings-mini-card gpf">
-                <span class="summary-card-title">GPF</span>
-                <div class="summary-metric"><span>Present balance</span><strong id="holdSumSaradaGpfPresent">₹0</strong></div>
-                <div class="summary-metric"><span>Monthly payment</span><strong id="holdSumSaradaGpfMonthly">₹0</strong></div>
-                <div class="summary-metric growth gpf-projection-metric"><span>Projected 12M</span><strong id="holdSumSaradaGpfProjected">₹0</strong><small id="holdSumSaradaGpfInterest">₹0 interest</small></div>
-              </article>
-            </div>
-          </div>
+          <p class="summary-glance-footnote">Values use two decimals · Totals use current values; the GPF projection is shown separately.</p>
         </section>
 
         <article class="panel table-panel">
@@ -382,6 +346,8 @@
             <div class="holdings-title-block"><h3 id="holdingsHeading"><span class="holdings-title-label">PORTFOLIO DETAILS</span><span class="holdings-title-sep">·</span><span>Mutual funds, stocks, ETFs &amp; GPF</span></h3><p id="masterDataStatus" class="master-data-status">Master spreadsheet not loaded yet.</p></div>
             <div class="table-tools"><button id="toggleHoldingsSummaryBtn" class="summary-toggle-button" type="button" aria-expanded="false">▾ Show Holding Summary</button><button id="replaceMasterDataBtn" class="master-data-button" type="button">⇄ Replace from Master Sheet</button><button id="showAllInvestmentsBtn" class="show-all-button" type="button">▦ Show All Investments</button><input id="holdingSearch" class="search-input" type="search" placeholder="Search holdings…"><select id="holdingTypeFilter" class="compact-select"><option value="ALL">All assets</option><option value="MF">Mutual funds</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="GPF">GPF</option><option value="OTHER">Other</option></select><select id="holdingResultFilter" class="compact-select advanced-filter"><option value="ALL">All results</option><option value="CURRENT_PROFIT">Current profit</option><option value="CURRENT_LOSS">Current loss</option><option value="TOTAL_PROFIT">Total profit</option><option value="TOTAL_LOSS">Total loss</option><option value="REALISED_PROFIT">Realised profit</option><option value="REALISED_LOSS">Realised loss</option><option value="PNL_PENDING">P/L pending</option></select><select id="holdingNotesFilter" class="compact-select advanced-filter"><option value="ALL">All notes</option><option value="WITH_NOTES">Has notes</option><option value="WITHOUT_NOTES">No notes</option></select><select id="holdingTradeFilter" class="compact-select advanced-filter"><option value="ALL">All trade history</option><option value="HAS_PURCHASE">Has purchase date</option><option value="HAS_SALE">Has sale/redemption</option><option value="MISSING_DATES">Missing exact dates</option></select><span id="holdingsFilterCount" class="filter-result-pill">0 visible</span><button id="printHoldingsBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="holdingsFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Holdings to full browser area">⛶ Full screen</button><button id="showAllHoldingColumnsBtn" class="secondary-button default-column-toggle-btn" type="button">👁 Show all columns</button><button id="manageHoldingsColumnsBtn" class="secondary-button column-manager-main-btn" type="button">⚙ Add / Edit / Delete Columns</button><button id="viewAllNotesBtn" class="secondary-button">📝 All notes</button><button id="bulkImportBtn" class="secondary-button">⇧ Import</button><button id="addInvestmentTableBtn" class="primary-button">+ Add</button></div>
           </div>
+          <details id="holdingsAdvancedTools" class="holdings-advanced-tools">
+            <summary><span>⚙ View tools</span><small>Saved views, columns, sizing and advanced controls</small></summary>
           <div class="saved-view-bar holdings-saved-view-bar">
   <div class="saved-view-left">
     <span class="saved-view-label">Default dashboard view</span>
@@ -396,6 +362,15 @@
     <button id="restoreHoldingsDefaultViewBtn" type="button" class="small-button">↺ Restore saved</button>
     <button id="resetHoldingsViewBtn" type="button" class="small-button">Reset</button>
     <span id="holdingsDefaultViewStatus" class="saved-view-status">Recommended: My Investment Result</span><span id="mfNavHealthBadge" class="mf-nav-health neutral">MF NAV status pending</span>
+  </div>
+  <div class="named-view-controls" aria-label="Named Holdings views">
+    <span class="named-view-label">My saved views</span>
+    <select id="holdingsNamedViewSelect" class="compact-select"><option value="">Choose saved view</option></select>
+    <input id="holdingsNamedViewName" type="text" maxlength="50" placeholder="Name this view">
+    <button id="holdingsSaveNamedViewBtn" type="button" class="small-button named-view-save">＋ Save / Update</button>
+    <button id="holdingsApplyNamedViewBtn" type="button" class="small-button">Apply</button>
+    <button id="holdingsDeleteNamedViewBtn" type="button" class="small-button danger">Delete</button>
+    <span id="holdingsNamedViewStatus" class="named-view-status">Filters, columns and layout</span>
   </div>
   <div class="investment-view-legend">
     <span class="view-legend-chip transaction">Trade history</span>
@@ -420,16 +395,22 @@
             <span id="holdLayoutSavedStatus" class="layout-saved-status">✓ Saved</span>
             <button id="holdSizeResetBtn" type="button" class="size-reset-button">Reset</button>
           </div>
-          <div class="performance-note">1D–10Y columns show the asset/scheme price or NAV performance for that period. XIRR is available for mutual funds imported from transaction statements.</div>
+          <div class="performance-note">Asset Performance shows price/NAV movement. Optional Own Holding Gain columns show the estimated rupee movement of your current units for 1D–10Y; Since Investment uses your recorded cost basis. These optional columns are hidden by default.</div>
+          </details>
           <div class="holding-pnl-strip" aria-label="Profit and loss to date">
             <article class="holding-pnl-card current"><span>Current P/L till today*</span><strong id="holdCurrentPnlToday">₹0</strong><small>Remaining holdings vs current cost</small></article>
             <article class="holding-pnl-card realised"><span>Realised P/L</span><strong id="holdRealizedPnl">₹0</strong><small>Completed sales/redemptions</small></article>
             <article class="holding-pnl-card total"><span>Total P/L to date</span><strong id="holdTotalPnlToDate">₹0</strong><small>Current + realised, where history is complete</small></article>
             <article class="holding-pnl-card coverage"><span>Exact trade-date coverage</span><strong id="holdTradeDateCoverage">0 / 0</strong><small id="holdPnlAsOf">*Using latest available price/NAV</small></article>
           </div>
-          <div class="table-wrap wide-table" data-layout-scroll="holdings">
+          <div id="holdingsReadingBar" class="holdings-reading-bar" role="group" aria-label="Holdings row navigation">
+            <div class="holdings-reading-copy"><strong id="holdingsReadingCount" aria-live="polite">0 holdings</strong><small id="holdingsReadingHint">Scroll down the page to see every matching holding.</small></div>
+            <label>Rows <select id="holdingsReadingMode" aria-controls="holdingsTableViewport"><option value="page">All rows · page scroll</option><option value="table">Scroll inside table</option></select></label>
+            <div class="holdings-reading-actions"><button type="button" id="holdingsFirstRowBtn" aria-controls="holdingsTableViewport">↑ First</button><button type="button" id="holdingsLastRowBtn" aria-controls="holdingsTableViewport">↓ Last</button><button type="button" id="holdingsReaderExpandBtn" aria-controls="holdingsTableViewport" aria-pressed="false">⛶ Full screen</button></div>
+          </div>
+          <div id="holdingsTableViewport" class="table-wrap wide-table holdings-reading-viewport" data-layout-scroll="holdings" data-row-scroll="page" tabindex="0" role="region" aria-label="All matching holdings" aria-describedby="holdingsReadingHint">
             <table class="holdings-table">
-              <thead><tr id="holdingsHeadRow"><th class="sticky-col owner-col">Investor</th><th class="sticky-col asset-col">Asset</th><th class="trade-date-head purchase-head">Purchase Date(s)</th><th class="trade-date-head sale-head">Sale Date(s)</th><th>Qty / Units</th><th>Avg Buy</th><th>Invested</th><th>Current Price / NAV</th><th>Current Value</th><th>P/L Till Today</th><th>Realised P/L</th><th>Total P/L to Date</th><th>Gain %</th><th>XIRR</th><th>1D</th><th>1W</th><th>1M</th><th>6M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead>
+              <thead><tr id="holdingsHeadRow"><th class="sticky-col owner-col">Investor</th><th class="sticky-col asset-col">Asset</th><th class="trade-date-head purchase-head">Purchase Date(s)</th><th class="trade-date-head sale-head">Sale Date(s)</th><th>Qty / Units</th><th>Avg Buy</th><th>Invested</th><th>Current Price / NAV</th><th>Current Value</th><th>P/L Till Today</th><th>Realised P/L</th><th>Total P/L to Date</th><th>Gain %</th><th>XIRR</th><th>Asset 1D</th><th>Asset 1W</th><th>Asset 1M</th><th>Asset 6M</th><th>Asset 1Y</th><th>Asset 3Y</th><th>Asset 5Y</th><th>Asset 10Y</th><th>Own Gain 1D</th><th>Own Gain 7D</th><th>Own Gain 1M</th><th>Own Gain 6M</th><th>Own Gain 1Y</th><th>Own Gain 3Y</th><th>Own Gain 5Y</th><th>Own Gain 10Y</th><th>Since Investment</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead>
               <tbody id="holdingsBody"></tbody>
             </table>
           </div>
@@ -483,12 +464,21 @@
       </section>
 
       <section id="watchlistSection" class="page-section hidden"><div class="watchlist-live-strip"><div><span class="live-dot"></span><strong>Live watchlist tracking</strong><span id="watchlistLastAutoUpdate" class="muted">Waiting for update…</span></div><div class="watchlist-live-stats"><span>At target <b id="watchStripAtTarget">0</b></span><span>Near target <b id="watchStripNear">0</b></span><span>Avg gap <b id="watchStripGap">—</b></span></div></div>
-        <article class="panel table-panel"><div class="panel-head responsive-head"><div><p class="eyebrow">FUTURE IDEAS</p><h3>Investment watchlist</h3></div><div class="table-tools watch-filter-tools"><input id="watchSearch" class="search-input" type="search" placeholder="Search watchlist…"><select id="watchTypeFilter" class="compact-select"><option value="ALL">All types</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="MF">Mutual funds</option></select><select id="watchPriorityFilter" class="compact-select"><option value="ALL">All priority</option><option value="HIGH">High</option><option value="MEDIUM">Medium</option><option value="LOW">Low</option></select><select id="watchTargetFilter" class="compact-select"><option value="ALL">All target status</option><option value="AT">At / below target</option><option value="NEAR">Within 5%</option><option value="FAR">More than 5% away</option><option value="NO_TARGET">No target</option></select><select id="watchNotesFilter" class="compact-select"><option value="ALL">All notes</option><option value="WITH_NOTES">Has notes</option><option value="WITHOUT_NOTES">No notes</option></select><span id="watchFilterCount" class="filter-result-pill">0 visible</span><button id="printWatchlistBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="watchlistFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Watchlist to full browser area">⛶ Full screen</button><button id="showAllWatchColumnsBtn" class="secondary-button default-column-toggle-btn" type="button">👁 Show all columns</button><button id="manageWatchlistColumnsBtn" class="secondary-button column-manager-main-btn" type="button">⚙ Add / Edit / Delete Columns</button><button id="watchAllNotesBtn" class="secondary-button">📝 All notes</button><button id="addWatchBtn" class="primary-button">+ Add</button></div></div><div class="saved-view-bar watch-saved-view-bar">
+        <article class="panel table-panel"><div class="panel-head responsive-head"><div><p class="eyebrow">RESEARCH SCANNER</p><h3>Investment watchlist</h3></div><div class="table-tools watch-filter-tools"><input id="watchSearch" class="search-input" type="search" placeholder="Search name, code, growth, moat…"><select id="watchTypeFilter" class="compact-select"><option value="ALL">All types</option><option value="STOCK">Stocks</option><option value="ETF">ETFs</option><option value="MF">Mutual funds</option></select><select id="watchPriorityFilter" class="compact-select"><option value="ALL">All priority</option><option value="HIGH">High</option><option value="MEDIUM">Medium</option><option value="LOW">Low</option></select><select id="watchTargetFilter" class="compact-select"><option value="ALL">All target status</option><option value="AT">At / below target</option><option value="NEAR">Within 5%</option><option value="FAR">More than 5% away</option><option value="NO_TARGET">No target</option></select><select id="watchPerformanceFilter" class="compact-select"><option value="ALL">All performance</option><option value="POS_1Y">Positive 1Y</option><option value="NEG_1Y">Negative 1Y</option><option value="POS_3Y">Positive 3Y</option><option value="NEG_3Y">Negative 3Y</option></select><select id="watchRangeFilter" class="compact-select"><option value="ALL">All 52W positions</option><option value="NEAR_LOW">Within 10% of 52W low</option><option value="NEAR_HIGH">Within 10% of 52W high</option></select><select id="watchCapFilter" class="compact-select"><option value="ALL">All market caps</option><option value="LARGE">Large cap ≥ ₹20,000 Cr</option><option value="MID">Mid cap ₹5,000–20,000 Cr</option><option value="SMALL">Small cap &lt; ₹5,000 Cr</option></select><select id="watchResearchFilter" class="compact-select"><option value="ALL">All research status</option><option value="READY">Research ready</option><option value="INCOMPLETE">Research incomplete</option></select><select id="watchNotesFilter" class="compact-select"><option value="ALL">All notes</option><option value="WITH_NOTES">Has notes</option><option value="WITHOUT_NOTES">No notes</option></select><span id="watchFilterCount" class="filter-result-pill">0 visible</span><button id="printWatchlistBtn" class="print-view-button" type="button">⎙ Preview / Print</button><button id="watchlistFullscreenBtn" class="fullscreen-view-button" type="button" aria-pressed="false" title="Expand Watchlist to full browser area">⛶ Full screen</button><button id="showAllWatchColumnsBtn" class="secondary-button default-column-toggle-btn" type="button">👁 Show all columns</button><button id="manageWatchlistColumnsBtn" class="secondary-button column-manager-main-btn" type="button">⚙ Research columns</button><button id="watchAllNotesBtn" class="secondary-button">📝 All notes</button><button id="addWatchBtn" class="primary-button">+ Add</button></div></div><div class="saved-view-bar watch-saved-view-bar">
   <div class="saved-view-left">
     <span class="saved-view-label">Watchlist default view</span>
     <button id="saveWatchDefaultViewBtn" type="button" class="small-button saved-view-save">★ Save current as default</button>
     <button id="restoreWatchDefaultViewBtn" type="button" class="small-button">↺ Restore saved</button>
     <span id="watchDefaultViewStatus" class="saved-view-status">Filters and visible columns can be saved</span>
+  </div>
+  <div class="named-view-controls" aria-label="Named Watchlist views">
+    <span class="named-view-label">My saved scans</span>
+    <select id="watchNamedViewSelect" class="compact-select"><option value="">Choose saved scan</option></select>
+    <input id="watchNamedViewName" type="text" maxlength="50" placeholder="Name this scan">
+    <button id="watchSaveNamedViewBtn" type="button" class="small-button named-view-save">＋ Save / Update</button>
+    <button id="watchApplyNamedViewBtn" type="button" class="small-button">Apply</button>
+    <button id="watchDeleteNamedViewBtn" type="button" class="small-button danger">Delete</button>
+    <span id="watchNamedViewStatus" class="named-view-status">Filters, columns and layout</span>
   </div>
 </div>
 <div class="table-view-size-bar" data-table-size-for="watchlist">
@@ -508,7 +498,7 @@
             <span id="watchLayoutSavedStatus" class="layout-saved-status">✓ Saved</span>
             <button id="watchSizeResetBtn" type="button" class="size-reset-button">Reset</button>
           </div>
-          <div class="performance-note">Live price comes from the backend. Sheet columns retain the uploaded workbook’s valuation, growth, 52-week and performance details.</div><div class="table-wrap wide-table" data-layout-scroll="watchlist"><table class="watchlist-details-table"><thead><tr id="watchHeadRow"><th class="sticky-col asset-col">Asset</th><th>Live Price/NAV</th><th>Sheet Day %</th><th>Target</th><th>Distance</th><th>52W H/L</th><th>P/E or P/B</th><th>1M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th>Remark / Moat</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead><tbody id="watchBody"></tbody></table></div><div id="watchEmpty" class="empty-state hidden">No watchlist items match this search.</div></article>
+          <div class="performance-note">Scan target gap, valuation, market cap, growth, liquidity, 52-week position, performance and research completeness. Stock-only metrics show — for mutual funds when unavailable.</div><div class="table-wrap wide-table" data-layout-scroll="watchlist"><table class="watchlist-details-table"><thead><tr id="watchHeadRow"><th class="sticky-col asset-col">Asset</th><th>Live Price/NAV</th><th>Sheet Day %</th><th>Target</th><th>Distance</th><th>52W H/L</th><th>P/E or P/B</th><th>Market Cap</th><th>Sales Growth</th><th>Profit Growth</th><th>Volume</th><th>52W Position</th><th>1M</th><th>1Y</th><th>3Y</th><th>5Y</th><th>10Y</th><th>Remark / Moat</th><th class="personal-note-head">Personal Note</th><th></th></tr></thead><tbody id="watchBody"></tbody></table></div><div id="watchMobileCards" class="watch-mobile-cards" aria-label="Mobile watchlist cards"></div><div id="watchEmpty" class="empty-state hidden">No watchlist items match this research scan.</div></article>
       </section>
 
 
@@ -643,6 +633,7 @@
           <button type="button" class="expense-view-tab active" data-expense-view="ACTUAL">Actual Expenses</button>
           <button type="button" class="expense-view-tab" data-expense-view="PLANNED">Preplanned</button>
           <button type="button" class="expense-view-tab" data-expense-view="REGULAR">Regular Payments</button>
+          <button type="button" class="expense-view-tab" data-expense-view="PROJECTS">Major Projects</button>
           <button type="button" class="expense-view-tab" data-expense-view="CATEGORIES">Categories</button>
         </div>
 
@@ -652,25 +643,27 @@
             <label>From <input id="expenseFromDate" type="date"></label>
             <label>To <input id="expenseToDate" type="date"></label>
             <select id="expenseCategoryFilter" aria-label="Expense category filter"><option value="ALL">All categories</option></select>
+            <select id="expenseSubcategoryFilter" aria-label="Expense subcategory filter"><option value="ALL">All subcategories</option></select>
             <select id="expenseAccountFilter" aria-label="Debited from filter"><option value="ALL">All accounts</option></select>
             <select id="expenseSort" aria-label="Sort expenses">
               <option value="DATE_DESC">Date · newest</option><option value="DATE_ASC">Date · oldest</option>
               <option value="AMOUNT_DESC">Amount · high to low</option><option value="AMOUNT_ASC">Amount · low to high</option>
               <option value="CATEGORY">Category · A–Z</option><option value="NAME">Name / Paid to · A–Z</option><option value="ACCOUNT">Debited from · A–Z</option>
             </select>
+            <button id="expenseSubcategoryToggle" type="button" class="small-button expense-subcategory-toggle" aria-pressed="false">Hide subcategory</button>
             <button id="expenseResetFiltersBtn" type="button" class="small-button">Reset</button>
             <button id="expensePrintBtn" type="button" class="small-button expense-print-button">▣ Print</button>
             <span id="expenseResultCount" class="filter-result-pill">0 records</span>
           </div>
 
-          <div class="expense-table-help"><strong>Tip:</strong> Drag any heading edge to change that column width. The heading row stays frozen while you scroll. Your widths are saved on this device.</div>
+          <div class="expense-table-help"><strong>Quick editing:</strong> Use the fixed Actions column to choose <strong>Row edit</strong> for direct changes or <strong>Popup edit</strong> for the full form. Drag heading edges to resize columns.</div>
 
           <div id="actualExpenseView" class="expense-data-view">
             <div class="expense-table-wrap" data-expense-table="ACTUAL">
               <table id="actualExpenseTable" class="expense-table">
                 <thead><tr>
                   <th data-exp-col="amount">Amount</th><th data-exp-col="date">Dt Spent</th><th data-exp-col="paidTo">Paid To / Name</th>
-                  <th data-exp-col="account">Debited From</th><th data-exp-col="reason">Reason</th><th data-exp-col="category">Category of Exp</th>
+                  <th data-exp-col="account">Debited From</th><th data-exp-col="reason">Reason</th><th data-exp-col="category">Category</th><th data-exp-col="subcategory">Subcategory</th>
                   <th data-exp-col="notes">Notes to Remember</th><th data-exp-col="actions">Actions</th>
                 </tr></thead><tbody id="actualExpenseBody"></tbody>
               </table>
@@ -683,7 +676,7 @@
               <table id="plannedExpenseTable" class="expense-table">
                 <thead><tr>
                   <th data-exp-col="amount">Planned Amount</th><th data-exp-col="date">Planned Date</th><th data-exp-col="paidTo">Paid To / Name</th>
-                  <th data-exp-col="account">Debited From</th><th data-exp-col="reason">Reason</th><th data-exp-col="category">Category</th>
+                  <th data-exp-col="account">Debited From</th><th data-exp-col="reason">Reason</th><th data-exp-col="category">Category</th><th data-exp-col="subcategory">Subcategory</th>
                   <th data-exp-col="notes">Notes</th><th data-exp-col="status">Status</th><th data-exp-col="actions">Actions</th>
                 </tr></thead><tbody id="plannedExpenseBody"></tbody>
               </table>
@@ -692,27 +685,47 @@
           </div>
 
           <div id="regularExpenseView" class="expense-data-view hidden">
+            <section class="regular-bills-panel" aria-labelledby="regularBillsTitle">
+              <div class="regular-bills-heading">
+                <div><p class="eyebrow">YOUR REUSABLE PAYMENT LIST</p><h3 id="regularBillsTitle">Monthly bills &amp; regular payments</h3><p>One bill per row. Enter its amount and paid date, then Record paid. Next month’s amount can be different.</p></div>
+                <div class="regular-bills-tools"><button type="button" class="secondary-button" data-regular-manage-categories>Manage categories</button><button type="button" class="primary-button" data-regular-add>+ Add regular payment</button></div>
+              </div>
+              <details class="regular-bill-example-picker"><summary>Add a bill from an example</summary><div class="regular-bill-presets" aria-label="Optional payment examples">
+                <span>Start with an example:</span>
+                <button type="button" data-regular-preset="icici">CC ICICI</button><button type="button" data-regular-preset="axis">CC Axis</button><button type="button" data-regular-preset="hdfc">CC HDFC</button><button type="button" data-regular-preset="electricity">Electricity</button><button type="button" data-regular-preset="rent">Rent</button><button type="button" data-regular-preset="insurance">Insurance</button><button type="button" data-regular-add>+ Your own payment</button>
+              </div></details>
+              <p class="regular-bill-help">Amounts start blank for every new payment. Record paid adds the payment to Actual Expenses once—do not enter it again there. It records a payment already made; it does not pay the bill. Reset the filters above to see all saved bills.</p>
+              <div id="regularBillQuickList" class="regular-bill-list"></div>
+              <div id="regularBillQuickEmpty" class="empty-state">Add your first regular payment above, or reset the filters to see your saved bills.</div>
+            </section>
+            <details class="regular-bill-register"><summary>Detailed schedule · row editing &amp; print</summary>
             <div class="expense-table-wrap" data-expense-table="REGULAR">
               <table id="regularExpenseTable" class="expense-table">
                 <thead><tr>
                   <th data-exp-col="name">Regular Payment</th><th data-exp-col="amount">Amount</th><th data-exp-col="account">Debited From</th>
-                  <th data-exp-col="category">Category</th><th data-exp-col="frequency">Frequency</th><th data-exp-col="date">Next Due</th>
+                  <th data-exp-col="category">Category</th><th data-exp-col="subcategory">Subcategory</th><th data-exp-col="frequency">Frequency</th><th data-exp-col="date">Next Due</th>
                   <th data-exp-col="reason">Reason</th><th data-exp-col="notes">Notes</th><th data-exp-col="status">Status</th><th data-exp-col="actions">Actions</th>
                 </tr></thead><tbody id="regularExpenseBody"></tbody>
               </table>
             </div>
             <div id="regularExpenseEmpty" class="empty-state">No regular payments match this view.</div>
+            </details>
           </div>
         </article>
 
         <article id="expenseCategoriesView" class="panel expense-category-panel hidden">
           <div class="panel-head responsive-head">
-            <div><p class="eyebrow">CATEGORY MANAGER</p><h3>Choose, add, rename or delete expense categories</h3></div>
+            <div><p class="eyebrow">CATEGORY MANAGER</p><h3>Categories with flexible subcategories</h3></div>
             <button id="addExpenseCategoryBtn" type="button" class="primary-button">+ Add category</button>
           </div>
-          <div class="expense-category-note">Renaming a category also updates existing Actual, Preplanned and Regular Payment records using that category. A category in use cannot be deleted until those records are moved or renamed.</div>
+          <div class="expense-category-note"><strong>Example:</strong> Credit Card → Axis, HDFC, ICICI. Edit a card to add or rename its subcategories. Renaming the main category updates existing records; deleting a category in use remains protected.</div>
           <div id="expenseCategoryGrid" class="expense-category-grid"></div>
           <div id="expenseCategoryEmpty" class="empty-state">No expense categories yet.</div>
+        </article>
+        <article id="majorExpenseProjectsView" class="panel major-project-panel hidden">
+          <div class="panel-head responsive-head"><div><p class="eyebrow">MAJOR EXPENDITURE</p><h3>Projects without double entry</h3><p class="muted">House building, renovation, education or another large project. Totals come from the same Actual Expense rows.</p></div><button id="addMajorExpenseProjectBtn" type="button" class="primary-button">+ New project</button></div>
+          <div id="majorExpenseProjectGrid" class="major-project-grid"></div>
+          <div id="majorExpenseProjectEmpty" class="empty-state">No major expenditure project yet. Create “House Building”, then link expenses to it.</div>
         </article>
       </section>
 
@@ -940,6 +953,18 @@
       </section>
 
       <section id="usersSection" class="page-section hidden">
+        <article class="panel security-settings-panel">
+          <div class="panel-head responsive-head">
+            <div><p class="eyebrow">ADMINISTRATION → SECURITY SETTINGS</p><h3>Automatic sign-out policy</h3><p class="user-admin-help">Choose the inactivity limit for every SarNi user. A warning appears during the final minute.</p></div>
+            <span id="securityPolicyBadge" class="security-policy-badge">30-minute default</span>
+          </div>
+          <form id="securitySettingsForm" class="security-settings-form">
+            <label>Sign out after inactivity<select id="securityIdleTimeout" required><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option><option value="30" selected>30 minutes (default)</option></select></label>
+            <div class="security-policy-facts"><span><strong>1 minute</strong> warning</span><span><strong>5 minutes</strong> secure background/closed fallback</span><span><strong>All users</strong> and devices</span></div>
+            <button id="saveSecuritySettingsBtn" type="submit" class="primary-button">Save security settings</button>
+          </form>
+          <p id="securitySettingsStatus" class="security-settings-status" aria-live="polite">Current policy: sign out after 30 minutes of inactivity.</p>
+        </article>
         <article class="panel table-panel user-admin-panel">
           <div class="panel-head responsive-head">
             <div>
@@ -1019,6 +1044,18 @@
           <p class="sticky-pin-help">📌 Pin a note to keep it floating above other dashboard fields. Done and Delete remain available while pinned.</p>
           <div id="stickyNotesList" class="sticky-notes-list"></div>
           <div id="stickyNotesEmpty" class="sticky-empty">No active target or reminder. Add one when something needs your attention.</div>
+          <section class="sticky-history-panel" aria-label="Sticky Note Diary">
+            <div class="sticky-history-head">
+              <div><p class="eyebrow">STICKY NOTE DIARY</p><h3>Completed history</h3></div>
+              <span id="stickyHistoryCount">0 completed</span>
+            </div>
+            <p class="sticky-history-help">Completed items are stored here separately and do not enter your regular Diary.</p>
+            <div class="sticky-history-columns">
+              <section class="sticky-history-column target-history"><h4>✓ Completed targets <span id="stickyTargetHistoryCount">0</span></h4><div id="stickyTargetHistoryList" class="sticky-history-list"></div></section>
+              <section class="sticky-history-column reminder-history"><h4>✓ Completed reminders <span id="stickyReminderHistoryCount">0</span></h4><div id="stickyReminderHistoryList" class="sticky-history-list"></div></section>
+            </div>
+            <div id="stickyHistoryEmpty" class="sticky-empty">Completed targets and reminders will appear here.</div>
+          </section>
         </section>
       </div>
 
@@ -1051,6 +1088,18 @@
     </div>
 
     <nav class="mobile-nav"><button class="mobile-nav-item active" data-section="overview"><span>◫</span>Overview</button><button class="mobile-nav-item" data-section="holdings"><span>▥</span>Holdings</button><button class="mobile-nav-item" data-section="transactions"><span>⇄</span>Trades</button><button class="mobile-nav-item" data-section="watchlist"><span>☆</span>Watchlist</button><button class="mobile-nav-item" data-section="sip"><span>₹</span>SIP</button><button class="mobile-nav-item" data-section="expenditure"><span>₹</span>Spend</button><button class="mobile-nav-item" data-section="diary"><span>✎</span>Diary</button><button id="quickDiaryMobileBtn" class="mobile-nav-item" type="button"><span>✚</span>Quick</button></nav>
+  </div>
+
+  <div id="commandPalette" class="command-palette-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="commandPaletteTitle">
+    <section class="command-palette-shell">
+      <header class="command-palette-head">
+        <div><p class="eyebrow">QUICK ACCESS</p><h2 id="commandPaletteTitle">Go anywhere in SarNi</h2></div>
+        <button id="commandPaletteCloseBtn" class="icon-button" type="button" aria-label="Close quick access">×</button>
+      </header>
+      <label class="command-palette-search"><span>⌕</span><input id="commandPaletteInput" type="search" autocomplete="off" placeholder="Search pages and actions…" aria-label="Search pages and actions"></label>
+      <div id="commandPaletteResults" class="command-palette-results" role="listbox" aria-label="Available pages and actions"></div>
+      <footer><span>↑↓ Navigate</span><span>Enter Open</span><span>Esc Close</span></footer>
+    </section>
   </div>
 
   <div id="modalBackdrop" class="modal-backdrop hidden" aria-hidden="true">
@@ -1218,17 +1267,33 @@
       <form id="expenseForm" class="form-grid">
         <input id="expenseRecordId" type="hidden"><input id="expenseRecordMode" type="hidden" value="ACTUAL">
         <label id="expenseRegularNameGroup" class="span-2 hidden">Regular payment name<input id="expenseRegularName" maxlength="140" placeholder="e.g. Electricity bill / Insurance premium"></label>
-        <label>Amount<input id="expenseAmount" type="number" min="0.01" step="0.01" required></label>
+        <label><span id="expenseAmountLabel">Amount</span><input id="expenseAmount" type="number" min="0.01" step="0.01" required><small id="regularAmountHelp" class="field-help hidden">Planning estimate only. Enter the actual amount afresh whenever you record a payment.</small></label>
         <label id="expenseDateGroup"><span id="expenseDateLabel">Date spent</span><input id="expenseDate" type="date" required></label>
         <label>Paid To / Name <small>(optional)</small><input id="expensePaidTo" maxlength="140" placeholder="Person, shop, service…"></label>
         <label>Debited From<input id="expenseDebitedFrom" list="expenseAccountSuggestions" maxlength="120" placeholder="SBI / HDFC / Cash / Credit Card / UPI…"><datalist id="expenseAccountSuggestions"></datalist></label>
         <label class="span-2">Reason<input id="expenseReason" maxlength="220" required placeholder="What was this payment for?"></label>
         <label>Category of expense<select id="expenseCategory" required></select></label>
+        <label>Subcategory <small>(optional)</small><select id="expenseSubcategory"><option value="">No subcategory</option></select><small id="expenseSubcategoryHelp" class="field-help">Add subcategories in Category Manager whenever needed.</small></label>
+        <label id="expenseMajorProjectGroup" class="span-2">Major expenditure project <small>(optional)</small><select id="expenseMajorProject"><option value="">Not linked to a major project</option></select><small class="field-help">Enter the expense only once. Linking it makes the same row appear in the selected project report.</small></label>
         <label id="expenseFrequencyGroup" class="hidden">Frequency<select id="expenseFrequency"><option value="MONTHLY">Monthly</option><option value="QUARTERLY">Quarterly</option><option value="HALF_YEARLY">Half-yearly</option><option value="YEARLY">Yearly</option></select></label>
         <label id="expenseEndDateGroup" class="hidden">End date <small>(optional)</small><input id="expenseEndDate" type="date"></label>
         <label id="expenseStatusGroup" class="hidden">Status<select id="expenseStatus"><option value="ACTIVE">Active</option><option value="PAUSED">Paused</option><option value="STOPPED">Stopped</option></select></label>
         <label class="span-2">Notes to remember <small>(optional)</small><textarea id="expenseNotes" rows="3" maxlength="1000" placeholder="Anything useful to remember later…"></textarea></label>
         <div class="form-actions span-2"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="saveExpenseBtn" type="submit" class="primary-button">Save expense</button></div>
+      </form>
+    </div>
+
+    <div id="majorExpenseProjectModal" class="modal compact-modal hidden" role="dialog" aria-modal="true" aria-labelledby="majorExpenseProjectModalTitle">
+      <div class="modal-head"><div><p class="eyebrow">MAJOR EXPENDITURE PROJECT</p><h2 id="majorExpenseProjectModalTitle">New project</h2></div><button class="modal-close" data-close-modal aria-label="Close">×</button></div>
+      <form id="majorExpenseProjectForm" class="form-grid">
+        <input id="majorExpenseProjectId" type="hidden">
+        <label class="span-2">Project name<input id="majorExpenseProjectName" maxlength="140" required placeholder="e.g. House Building"></label>
+        <label>Proposed budget<input id="majorExpenseProjectBudget" type="number" min="0" step="0.01" required></label>
+        <label>Status<select id="majorExpenseProjectStatus"><option value="PLANNED">Planned</option><option value="ACTIVE" selected>Active</option><option value="ON_HOLD">On hold</option><option value="COMPLETED">Completed</option><option value="ARCHIVED">Archived</option></select></label>
+        <label>Start date<input id="majorExpenseProjectStart" type="date"></label><label>Target completion<input id="majorExpenseProjectTarget" type="date"></label>
+        <label>Colour<select id="majorExpenseProjectColor"><option value="PURPLE">Purple</option><option value="BLUE">Blue</option><option value="TEAL">Teal</option><option value="GREEN">Green</option><option value="ORANGE">Orange</option><option value="PINK">Pink</option><option value="GOLD">Gold</option></select></label>
+        <label class="span-2">Notes<textarea id="majorExpenseProjectNotes" rows="4" maxlength="1200" placeholder="Contractor, approvals, milestones or anything useful…"></textarea></label>
+        <div class="form-actions span-2"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="saveMajorExpenseProjectBtn" type="submit" class="primary-button">Save project</button></div>
       </form>
     </div>
 
@@ -1250,8 +1315,9 @@
       <div class="modal-head"><div><p class="eyebrow">EXPENSE CATEGORY</p><h2 id="expenseCategoryModalTitle">Add category</h2></div><button class="modal-close" data-close-modal aria-label="Close">×</button></div>
       <form id="expenseCategoryForm" class="form-grid">
         <input id="expenseCategoryId" type="hidden">
-        <label class="span-2">Category name<input id="expenseCategoryName" maxlength="80" required placeholder="e.g. Household"></label>
+        <label class="span-2">Category name<input id="expenseCategoryName" maxlength="80" required placeholder="e.g. Credit Card"></label>
         <label class="span-2">Colour<select id="expenseCategoryColor"><option value="BLUE">Blue</option><option value="GREEN">Green</option><option value="PURPLE">Purple</option><option value="ORANGE">Orange</option><option value="PINK">Pink</option><option value="TEAL">Teal</option><option value="GOLD">Gold</option><option value="GREY">Grey</option></select></label>
+        <label class="span-2">Subcategories <small>(one per line or comma-separated)</small><textarea id="expenseCategorySubcategories" rows="6" maxlength="1600" placeholder="Axis&#10;HDFC&#10;ICICI"></textarea><small class="field-help">These choices appear only when this category is selected. Existing historical values remain safe if you later change this list.</small></label>
         <div class="form-actions span-2"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="saveExpenseCategoryBtn" type="submit" class="primary-button">Save category</button></div>
       </form>
     </div>
@@ -1383,8 +1449,8 @@
         <label>Type<select id="stickyNoteType"><option value="TARGET">Target</option><option value="REMINDER">Reminder</option></select></label>
         <label>Title<input id="stickyNoteTitle" required maxlength="120" placeholder="What needs attention?"></label>
         <label>Due date <small>(optional)</small><input id="stickyNoteDueDate" type="date"></label>
-        <label>Details<textarea id="stickyNoteText" rows="5" maxlength="1000" placeholder="Short details, next action, amount, person, etc."></textarea></label>
-        <p class="tiny muted">Click <strong>Done</strong> on the dashboard when completed. It will automatically be saved in your Daily Diary.</p>
+        <label>Details<textarea id="stickyNoteText" rows="7" maxlength="5000" placeholder="Write any number of lines, next actions, amounts or people. Line breaks will be preserved."></textarea></label>
+        <p class="tiny muted">Pin the note, drag its Move bar anywhere and drag the lower-right corner to resize. Clicking <strong>Completed</strong> removes it from active notes and saves every line in the separate Sticky Note Diary.</p>
         <div class="form-actions"><button type="button" class="secondary-button" data-close-modal>Cancel</button><button id="saveStickyNoteBtn" type="submit" class="primary-button">Save sticky</button></div>
       </form>
     </div>
@@ -1456,7 +1522,12 @@
       <span>Auto logout in <strong id="idleWarningCountdown">60 sec</strong> due to inactivity.</span>
       <button id="staySignedInBtn" type="button">Stay signed in</button>
     </div>
-  <script><?!= includeFile_('ConfigApp'); ?></script>
-  <script><?!= includeFile_('AppApp'); ?></script>
+  <script>
+    window.PORTFOLIO_CONFIG={
+      API_URL:'https://script.google.com/macros/s/AKfycbwXA1YBWRfOjYvZwDz9dkCr4HZujn9D_YoPmQyjggZxR5hUUs1ZsARytOX8rUR4zRbs/exec',
+      APP_NAME:'SarNi',CURRENCY:'INR',REQUEST_TIMEOUT_MS:60000,OWNERS:['Sarada','Niharika']
+    };
+  </script>
+  <script src="https://saradasutar.github.io/SarNi/app-v20-1-7.js?v=20260901-20107-easyscroll1" defer onload="sarNiAssetLoaded('app')" onerror="sarNiAssetFailed('app')"></script>
 </body>
 </html>
