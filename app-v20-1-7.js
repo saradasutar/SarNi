@@ -3365,6 +3365,39 @@ function handleSummaryFullscreenKeydown(event){
   if(event.shiftKey&&(document.activeElement===first||!panel.contains(document.activeElement))){event.preventDefault();last.focus();}
   else if(!event.shiftKey&&(document.activeElement===last||!panel.contains(document.activeElement))){event.preventDefault();first.focus();}
 }
+function parsePriceDateFlexible(value){
+  if(!value)return null;
+  const iso=new Date(value);
+  if(!isNaN(iso.getTime()))return iso;
+  const m=String(value).match(/^(\d{1,2})-([A-Za-z]{3})-(\d{4})/);
+  if(m){
+    const months={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+    const mon=months[m[2]];
+    if(mon!==undefined)return new Date(Number(m[3]),mon,Number(m[1]));
+  }
+  return null;
+}
+function latestPriceDate(items){
+  let latest=null;
+  (items||[]).forEach(h=>{
+    const d=parsePriceDateFlexible(h.priceDate);
+    if(d&&(!latest||d.getTime()>latest.getTime()))latest=d;
+  });
+  return latest;
+}
+function formatUpdatedBadge(items){
+  const d=latestPriceDate(items);
+  if(!d)return '—';
+  const today=new Date();
+  const isToday=d.getFullYear()===today.getFullYear()&&d.getMonth()===today.getMonth()&&d.getDate()===today.getDate();
+  const timePart=d.getHours()||d.getMinutes()?`, ${d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`:'';
+  return isToday?`Today${timePart}`:d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'})+timePart;
+}
+function setFreshnessBadge(prefix,items){
+  const el=els[`${prefix}Updated`];
+  if(!el)return;
+  el.textContent=formatUpdatedBadge(items);
+}
 function renderHoldingsSummary(){
   const all=[...state.holdings];
   const niharika=all.filter(h=>canonicalOwner(h.owner).toLowerCase().includes('niharika'));
@@ -3372,17 +3405,23 @@ function renderHoldingsSummary(){
 
   setHoldingValueGrowth('holdSumCombinedTotal',all);
   setHoldingValueGrowth('holdSumCombinedMf',holdingSummarySubset(all,'MF'));
+  setFreshnessBadge('holdSumCombinedMf',holdingSummarySubset(all,'MF'));
   setHoldingValueGrowth('holdSumCombinedStock',holdingSummarySubset(all,'STOCKS'));
+  setFreshnessBadge('holdSumCombinedStock',holdingSummarySubset(all,'STOCKS'));
   setGpfHoldingSummary('holdSumCombinedGpf',all);
 
   setHoldingValueGrowth('holdSumNiharikaTotal',niharika);
   setHoldingValueGrowth('holdSumNiharikaMf',holdingSummarySubset(niharika,'MF'));
+  setFreshnessBadge('holdSumNiharikaMf',holdingSummarySubset(niharika,'MF'));
   setHoldingValueGrowth('holdSumNiharikaStock',holdingSummarySubset(niharika,'STOCKS'));
+  setFreshnessBadge('holdSumNiharikaStock',holdingSummarySubset(niharika,'STOCKS'));
   setGpfHoldingSummary('holdSumNiharikaGpf',niharika);
 
   setHoldingValueGrowth('holdSumSaradaTotal',sarada);
   setHoldingValueGrowth('holdSumSaradaMf',holdingSummarySubset(sarada,'MF'));
+  setFreshnessBadge('holdSumSaradaMf',holdingSummarySubset(sarada,'MF'));
   setHoldingValueGrowth('holdSumSaradaStock',holdingSummarySubset(sarada,'STOCKS'));
+  setFreshnessBadge('holdSumSaradaStock',holdingSummarySubset(sarada,'STOCKS'));
   setGpfHoldingSummary('holdSumSaradaGpf',sarada);
 }
 
