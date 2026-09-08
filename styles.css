@@ -10497,3 +10497,9 @@ body.summary-fullscreen-open .holdings-reading-header{display:none!important}
 
 #holdingsSection .glance-metric.glance-updated>span{color:#0e8f86!important}
 #holdingsSection .glance-metric.glance-updated>strong{color:#0b756d!important;font-weight:750!important}
+
+/* ===== Draggable Notes & Quotes launcher ===== */
+.utility-drawer-launcher{touch-action:none;cursor:grab}
+.utility-drawer-launcher:active{cursor:grabbing}
+body.notes-launcher-dragging{cursor:grabbing!important;user-select:none!important}
+body.notes-launcher-dragging .utility-drawer-launcher{cursor:grabbing!important}

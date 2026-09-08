@@ -8,7 +8,7 @@ const SESSION_HEARTBEAT_MS = 2 * 60 * 1000;
 const ACTIVITY_WRITE_THROTTLE_MS = 10000;
 const LAST_ACTIVITY_KEY = 'myfinance_last_activity_at';
 const LAST_HIDDEN_KEY = 'myfinance_last_hidden_at';
-const APP_BUILD_ID = '20260905-20108-colorpop1';
+const APP_BUILD_ID = '20260905-20109-draggable1';
 const APP_BUILD_STORAGE_KEY = 'myfinance_current_build_id';
 const AUTOMATIC_LOGIN_RECOVERY_KEY = `myfinance_login_recovery_${APP_BUILD_ID}`;
 const STARTUP_STUCK_MS = 30000;
@@ -834,7 +834,107 @@ function closeUtilityDrawer(){
   document.body.classList.remove('utility-drawer-open');
   if(lifeQuoteAutoContextVisible())startLifeQuoteShuffle();else stopLifeQuoteShuffle();
 }
+/* ===== Draggable Notes & Quotes launcher (same pattern as ADG-B Report Portal) ===== */
+const NOTES_LAUNCHER_LAYOUT_KEY='sarniNotesLauncherLayoutV1';
+const NOTES_LAUNCHER_DRAG_THRESHOLD_PX=6;
+state.notesLauncherLayout=readNotesLauncherLayout();
+state.notesLauncherDrag=null;
+state.notesLauncherJustDragged=false;
+
+function readNotesLauncherLayout(){
+  try{
+    const parsed=JSON.parse(localStorage.getItem(NOTES_LAUNCHER_LAYOUT_KEY)||'null');
+    if(!parsed||typeof parsed!=='object')return{x:null,y:null};
+    return{x:Number.isFinite(parsed.x)?parsed.x:null,y:Number.isFinite(parsed.y)?parsed.y:null};
+  }catch{return{x:null,y:null};}
+}
+function saveNotesLauncherLayout(){
+  try{localStorage.setItem(NOTES_LAUNCHER_LAYOUT_KEY,JSON.stringify(state.notesLauncherLayout));}catch{}
+}
+function applyNotesLauncherPosition(){
+  const btn=els.utilityDrawerOpenBtn;
+  if(!btn)return;
+  if(!Number.isFinite(state.notesLauncherLayout.x)||!Number.isFinite(state.notesLauncherLayout.y)){
+    btn.style.removeProperty('left');btn.style.removeProperty('top');
+    btn.style.removeProperty('right');btn.style.removeProperty('transform');
+    return;
+  }
+  btn.style.setProperty('left',`${state.notesLauncherLayout.x}px`,'important');
+  btn.style.setProperty('top',`${state.notesLauncherLayout.y}px`,'important');
+  btn.style.setProperty('right','auto','important');
+  btn.style.setProperty('transform','none','important');
+}
+function clampNotesLauncherPosition(){
+  const btn=els.utilityDrawerOpenBtn;
+  if(!btn||!Number.isFinite(state.notesLauncherLayout.x)||!Number.isFinite(state.notesLauncherLayout.y))return;
+  const rect=btn.getBoundingClientRect();
+  const maxX=Math.max(8,window.innerWidth-rect.width-8);
+  const maxY=Math.max(8,window.innerHeight-rect.height-8);
+  state.notesLauncherLayout.x=Math.max(8,Math.min(maxX,state.notesLauncherLayout.x));
+  state.notesLauncherLayout.y=Math.max(8,Math.min(maxY,state.notesLauncherLayout.y));
+  applyNotesLauncherPosition();
+}
+function startNotesLauncherDrag(event){
+  if(event.pointerType==='mouse'&&event.button!==0)return;
+  const btn=els.utilityDrawerOpenBtn;
+  if(!btn)return;
+  const rect=btn.getBoundingClientRect();
+  state.notesLauncherDrag={pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,originX:rect.left,originY:rect.top,moved:false};
+  try{btn.setPointerCapture(event.pointerId);}catch{}
+}
+function moveNotesLauncherDrag(event){
+  const drag=state.notesLauncherDrag;
+  if(!drag||drag.pointerId!==event.pointerId)return;
+  const dx=event.clientX-drag.startX,dy=event.clientY-drag.startY;
+  if(!drag.moved){
+    if(Math.abs(dx)<NOTES_LAUNCHER_DRAG_THRESHOLD_PX&&Math.abs(dy)<NOTES_LAUNCHER_DRAG_THRESHOLD_PX)return;
+    drag.moved=true;
+    document.body.classList.add('notes-launcher-dragging');
+  }
+  const btn=els.utilityDrawerOpenBtn;
+  const rect=btn.getBoundingClientRect();
+  const maxX=Math.max(8,window.innerWidth-rect.width-8);
+  const maxY=Math.max(8,window.innerHeight-rect.height-8);
+  state.notesLauncherLayout.x=Math.max(8,Math.min(maxX,drag.originX+dx));
+  state.notesLauncherLayout.y=Math.max(8,Math.min(maxY,drag.originY+dy));
+  applyNotesLauncherPosition();
+  event.preventDefault();
+}
+function finishNotesLauncherDrag(event){
+  const drag=state.notesLauncherDrag;
+  if(!drag||drag.pointerId!==event.pointerId)return;
+  state.notesLauncherDrag=null;
+  document.body.classList.remove('notes-launcher-dragging');
+  if(drag.moved){
+    saveNotesLauncherLayout();
+    state.notesLauncherJustDragged=true;
+    setTimeout(()=>{state.notesLauncherJustDragged=false;},0);
+  }
+}
+function initNotesLauncherDrag(){
+  const btn=els.utilityDrawerOpenBtn;
+  if(!btn)return;
+  applyNotesLauncherPosition();
+  requestAnimationFrame(clampNotesLauncherPosition);
+  if(state.notesLauncherDragBound)return;
+  state.notesLauncherDragBound=true;
+  btn.addEventListener('pointerdown',startNotesLauncherDrag);
+  btn.addEventListener('dblclick',event=>{
+    event.preventDefault();
+    state.notesLauncherLayout={x:null,y:null};
+    saveNotesLauncherLayout();
+    applyNotesLauncherPosition();
+    toast('Notes & Quotes position reset.','success');
+  });
+  window.addEventListener('pointermove',moveNotesLauncherDrag);
+  window.addEventListener('pointerup',finishNotesLauncherDrag);
+  window.addEventListener('pointercancel',finishNotesLauncherDrag);
+  window.addEventListener('resize',clampNotesLauncherPosition);
+}
+/* ===== end draggable Notes & Quotes launcher ===== */
+
 function toggleUtilityDrawer(){
+  if(state.notesLauncherJustDragged)return;
   if(state.utilityDrawerOpen)closeUtilityDrawer();
   else openUtilityDrawer('STICKY');
 }
@@ -1883,6 +1983,7 @@ function showApp(){
   updateVersionLabels();
   showStoredSessionIdentity();
   els.todayLabel.textContent=new Intl.DateTimeFormat('en-IN',{weekday:'long',day:'numeric',month:'long'}).format(new Date()).toUpperCase();
+  initNotesLauncherDrag();
   startSessionActivityMonitor();
   startQuickValueSync();
   refreshAllNamedViewOptions();
