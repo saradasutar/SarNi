@@ -1,6 +1,6 @@
 {
   "version": "20.1.8",
-  "build": "20260909-20108-codingbook",
+  "build": "20260910-20108-codingbook",
   "frontend": "20.1.8",
   "backendExpected": "3.17.10"
 }

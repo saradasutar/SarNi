@@ -84,7 +84,7 @@ function clearTransientBrowserStateForUpdate(){
 }
 const BROWSER_STORAGE_REPAIRED_ON_LOAD = clearTransientBrowserStateForUpdate();
 
-const MOBILE_DATA_CACHE_VERSION = '20.1.7-premium-command-centre-1';
+const MOBILE_DATA_CACHE_VERSION = '20.1.8-premium-command-centre-1';
 const state = {
   token: localStorage.getItem('portfolio_token') || '',
   username: localStorage.getItem('portfolio_username') || '',
@@ -6314,7 +6314,7 @@ function setMonthlyEntryMonth(value,{syncFilter=true,restore=true}={}){
   if(syncFilter){refreshMonthlyYearFilter();els.monthlyYearFilter.value=value.slice(0,4);els.monthlyMonthFilter.value=value.slice(5,7);}
   if(!els.monthlyId.value){els.monthlyTitle.value='';els.monthlyText.value='';}renderMonthlyDiary();if(restore)restoreMonthlyDraft();updateDiaryWritingMeta();
 }
-// v20.1.7: ordinary page scrolling is the default for the complete holdings list.
+// v20.1.8: ordinary page scrolling is the default for the complete holdings list.
 // The optional compact viewport and full-screen reader keep native vertical scroll.
 const HOLDINGS_READING_MODE_KEY='sarni_holdings_rows_mode_v1';
 let holdingsReadingRaf=0;
@@ -7675,7 +7675,7 @@ async function init(){
     try{loadSavedUsername();}catch{}
   }
 }
-console.info('SarNi v20.1.7 loaded — premium responsive command centre ready');
+console.info('SarNi v20.1.8 loaded — premium responsive command centre ready');
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.utilityDrawerOpen)closeUtilityDrawer();});
 window.addEventListener('error',event=>{
   const message=String(event.message||'');
