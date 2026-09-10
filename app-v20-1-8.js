@@ -1,14 +1,14 @@
 'use strict';
 
 const CONFIG = window.PORTFOLIO_CONFIG || {};
-const APP_VERSION = '20.1.7';
+const APP_VERSION = '20.1.8';
 const EXPECTED_BACKEND_VERSION = '3.17.10';
 const HIDDEN_SECURITY_FALLBACK_MS = 5 * 60 * 1000;
 const SESSION_HEARTBEAT_MS = 2 * 60 * 1000;
 const ACTIVITY_WRITE_THROTTLE_MS = 10000;
 const LAST_ACTIVITY_KEY = 'myfinance_last_activity_at';
 const LAST_HIDDEN_KEY = 'myfinance_last_hidden_at';
-const APP_BUILD_ID = '20260905-20109-draggable1';
+const APP_BUILD_ID = '20260909-20108-codingbook';
 const APP_BUILD_STORAGE_KEY = 'myfinance_current_build_id';
 const AUTOMATIC_LOGIN_RECOVERY_KEY = `myfinance_login_recovery_${APP_BUILD_ID}`;
 const STARTUP_STUCK_MS = 30000;
