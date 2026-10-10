@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="sarni-personal-only">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -7,12 +7,13 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="theme-color" content="#eef5ff">
-  <meta name="description" content="Private family stock and mutual fund portfolio dashboard">
+  <meta name="description" content="Private family finance, expenses, diary and planning dashboard">
   <meta name="myfinance-build" content="20260910-20108-codingbook">
   <meta name="color-scheme" content="light dark">
   <script>
-    window.__MYFINANCE_PAGE_BUILD__='20260910-20108-codingbook';
+    window.__MYFINANCE_PAGE_BUILD__='20261010-20202-personal-gpf';
     window.__MYFINANCE_NATIVE__=true;
+    try { localStorage.setItem('portfolio_overview_default','PERSONAL'); } catch(e) {}
     window.__SAR_NI_ASSETS__={css:false,app:false};
     window.sarNiAssetLoaded=function(kind){
       window.__SAR_NI_ASSETS__[kind]=true;
@@ -24,25 +25,101 @@
       window.__SAR_NI_ASSETS__[kind]=false;
       document.documentElement.classList.add('sarni-asset-error');
       var box=document.getElementById('sarniAssetStatus');
-      if(box)box.innerHTML='<strong>Dashboard file loading failed.</strong><br>Upload all seven v20.1.8 files to GitHub, wait two minutes, then reload.';
+      if(box)box.innerHTML='<strong>Dashboard file loading failed.</strong><br>Upload the files from the SarNi v20.2.2 package to GitHub, wait two minutes, then reload.';
     };
     setTimeout(function(){
       if(document.documentElement.classList.contains('sarni-assets-ready'))return;
       var box=document.getElementById('sarniAssetStatus');
-      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Please confirm the v20.1.8 GitHub files were uploaded.';
+      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Please confirm the SarNi v20.2.2 GitHub files were uploaded.';
     },12000);
   </script>
   <title>SarNi</title>
   <link rel="icon" href="https://saradasutar.github.io/SarNi/favicon.svg?v=20108-codingbook" type="image/svg+xml">
   <style>
+/* Personal-only SarNi: investment management is hosted exclusively in Analysis. */
+html.sarni-personal-only #holdingsSection,
+html.sarni-personal-only #transactionsSection,
+html.sarni-personal-only #sipSection,
+html.sarni-personal-only #investmentOverviewContent,
+html.sarni-personal-only #investmentHomeModeBtn,
+html.sarni-personal-only #addInvestmentBtn,
+html.sarni-personal-only #addInvestmentTableBtn,
+html.sarni-personal-only #transactionImportBtn,
+html.sarni-personal-only #bulkImportBtn,
+
+html.sarni-personal-only #importModal,
+html.sarni-personal-only #holdingDrawer,
+html.sarni-personal-only #holdingDrawerBackdrop,
+html.sarni-personal-only #holdingSummaryFullscreenModal,
+html.sarni-personal-only #printTransactionsBtn,
+html.sarni-personal-only #overviewSetDefaultBtn,
+html.sarni-personal-only [data-section="holdings"],
+html.sarni-personal-only [data-section="transactions"],
+html.sarni-personal-only [data-section="sip"],
+html.sarni-personal-only [data-command-key="HOLDINGS"],
+html.sarni-personal-only [data-command-key="TRANSACTIONS"],
+html.sarni-personal-only [data-command-key="SIP"],
+html.sarni-personal-only [data-command-key="ADD_INVESTMENT"]
+ {display:none!important;visibility:hidden!important;pointer-events:none!important}
+
+/* SarNi personal dashboard – investment module relocation */
+html.sarni-personal-only .side-nav [data-section="holdings"],
+html.sarni-personal-only .side-nav [data-section="transactions"],
+html.sarni-personal-only .side-nav [data-section="sip"],
+html.sarni-personal-only #investmentHomeModeBtn,
+html.sarni-personal-only #overviewSetDefaultBtn,
+html.sarni-personal-only #investmentOverviewContent,
+html.sarni-personal-only #addInvestmentBtn,
+html.sarni-personal-only #importBtn,
+html.sarni-personal-only #exportBtn,
+html.sarni-personal-only .portfolio-filter-bar,
+html.sarni-personal-only #homeShowInvestmentsBtn {display:none!important}
+html.sarni-personal-only .analysis-moved-link {
+  display:flex;align-items:center;gap:9px;margin:6px 9px 10px;padding:11px 14px;
+  border:1px solid #b8d7ff;border-radius:11px;background:linear-gradient(105deg,#eaf3ff,#eafaf3);
+  color:#1c477a;text-decoration:none;font-weight:800;font-size:13px;line-height:1.4
+}
+html.sarni-personal-only .analysis-moved-link:hover{background:#dcecff;color:#123c7e}
+
     html:not(.sarni-assets-ready) body>*{visibility:hidden}
     html:not(.sarni-assets-ready) #sarniAssetStatus{visibility:visible;position:fixed;inset:0;z-index:999999;display:grid;place-items:center;padding:28px;text-align:center;background:linear-gradient(145deg,#eef5ff,#f8f4ff);color:#33426a;font:700 17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
     html.sarni-assets-ready #sarniAssetStatus{display:none}
     #sarniAssetStatus strong{font-size:22px;color:#273566}
-  </style>
+  
+/* Keep the old investment watchlist, portfolio quick-actions and wealth UI off SarNi. */
+html.sarni-personal-only #watchlistSection,
+html.sarni-personal-only [data-section="watchlist"],
+html.sarni-personal-only [data-command-key="WATCHLIST"],
+html.sarni-personal-only [data-command-key="ADD_WATCHLIST"],
+html.sarni-personal-only #addWatchBtn,
+html.sarni-personal-only #watchlistModal,
+html.sarni-personal-only #portfolioStartupOverlay,
+html.sarni-personal-only #refreshBtn,
+html.sarni-personal-only #autoRefreshSelect,
+html.sarni-personal-only .auto-refresh-control,
+html.sarni-personal-only .watchlist-pulse,
+html.sarni-personal-only .portfolio-switch-wrap {display:none!important;visibility:hidden!important;pointer-events:none!important}
+html.sarni-personal-only #holdingType option:not([value="GPF"]) {display:none!important}
+html.sarni-personal-only #investmentModal input[disabled] {opacity:.7}
+
+/* SarNi personal GPF - own module, not the transferred investment portal */
+html.sarni-personal-only .gpf-page{max-width:1400px;margin:0 auto;padding:12px 5px 36px}
+html.sarni-personal-only .gpf-title{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:linear-gradient(120deg,#eef5ff,#effdf6);border:1px solid #d7e5ef;border-radius:17px;padding:22px;margin-bottom:18px}
+html.sarni-personal-only .gpf-title h2{color:#1d3562;margin:6px 0;font-size:23px}
+html.sarni-personal-only .gpf-title p{line-height:1.5;color:#64748b;max-width:800px}
+html.sarni-personal-only .gpf-records{display:grid;gap:12px}
+html.sarni-personal-only .gpf-record{display:flex;align-items:center;flex-wrap:wrap;gap:16px;background:white;border:1px solid #dbe5f1;border-radius:14px;padding:19px;box-shadow:0 4px 12px rgba(15,35,65,.04)}
+html.sarni-personal-only .gpf-record>div:first-child{flex:2 1 230px}
+html.sarni-personal-only .gpf-record h3{margin:0 0 5px;color:#1e3558}
+html.sarni-personal-only .gpf-record p{margin:0;color:#64748b;font-size:12px}
+html.sarni-personal-only .gpf-metric{flex:1 1 130px;display:grid;gap:3px}
+html.sarni-personal-only .gpf-metric span{font-size:11px;color:#64748b}
+html.sarni-personal-only .gpf-metric strong{color:#1e3558;font-size:16px}
+html.sarni-personal-only .gpf-empty{background:#f8fbff;border:1px dashed #9fb9d9;padding:22px;border-radius:14px;color:#51617d}
+</style>
   <link rel="preconnect" href="https://saradasutar.github.io" crossorigin>
   <link rel="preload" href="https://saradasutar.github.io/SarNi/styles.css?v=20260910-20108-codingbook" as="style">
-  <link rel="preload" href="https://saradasutar.github.io/SarNi/app-v20-1-8.js?v=20260910-20108-codingbook" as="script">
+  <link rel="preload" href="https://saradasutar.github.io/SarNi/app-v20-2-2.js?v=20261010-20202-personal-gpf" as="script">
   <link rel="stylesheet" href="https://saradasutar.github.io/SarNi/styles.css?v=20260910-20108-codingbook" onload="sarNiAssetLoaded('css')" onerror="sarNiAssetFailed('css')">
 </head>
 <body>
@@ -54,10 +131,10 @@
     <div class="login-shell">
       <div class="brand-panel">
         <div class="brand-mark">₹</div>
-        <p class="eyebrow">PRIVATE FAMILY PORTFOLIO</p>
-        <h1>One dashboard.<br>Two investors.</h1>
-        <p class="brand-copy">Track mutual funds, stocks and ETFs with automatic current value, gain/loss and long-period performance.</p>
-        <div class="feature-pills"><span>MF statement import</span><span>Zerodha ready</span><span>Auto prices</span><span>Family view</span></div>
+        <p class="eyebrow">SARNI · PERSONAL FINANCE</p>
+        <h1>One dashboard.<br>Personal finance.</h1>
+        <p class="brand-copy">Manage personal expenses, regular payments, diary, writing and family planning in SarNi.</p>
+        <div class="feature-pills"><span>Expenses</span><span>Household planning</span><span>Diary</span><span>Family view</span></div>
       </div>
       <form id="loginForm" class="login-card" autocomplete="on">
         <div><p class="eyebrow">WELCOME BACK</p><h2>Sign in</h2><p class="muted">Use your Apps Script dashboard username and password.</p></div>
@@ -71,7 +148,7 @@
         <p id="loginMessage" class="form-message" role="alert"></p>
         <div class="login-meta">
           <p class="tiny muted">Your password is never stored in the browser.</p>
-          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v20.1.8</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.17.10</span></div>
+          <div class="version-pair"><span id="loginVersion" class="version-badge">Frontend · v20.2.2</span><span id="loginBackendVersion" class="version-badge backend-version">Backend · v3.17.14</span></div>
           <button id="repairBrowserBtn" class="login-repair-button" type="button">↻ Repair browser cache/session</button>
         </div>
       </form>
@@ -84,20 +161,22 @@
       <div class="portfolio-startup-card">
         <div class="portfolio-startup-spinner" aria-hidden="true"></div>
         <div>
-          <strong id="portfolioStartupTitle">Loading your portfolio…</strong>
-          <span id="portfolioStartupMessage">Holdings are updating quietly in the background.</span>
+          <strong id="portfolioStartupTitle">Loading SarNi…</strong>
+          <span id="portfolioStartupMessage">Personal data is loading…</span>
         </div>
         <button id="portfolioStartupRetryBtn" type="button" class="secondary-button hidden">Retry load</button>
       </div>
     </div>
     <aside class="sidebar">
-      <div class="side-brand"><div class="brand-mark small">₹</div><div><strong id="sideAppName">SarNi</strong><span>Financial Command Centre</span></div><button id="sidebarCollapseBtn" class="sidebar-collapse-button" type="button" title="Collapse sidebar" aria-label="Collapse sidebar">‹</button></div>
+      <div class="side-brand"><div class="brand-mark small">₹</div><div><strong id="sideAppName">SarNi</strong><span>Personal Finance Centre</span></div><button id="sidebarCollapseBtn" class="sidebar-collapse-button" type="button" title="Collapse sidebar" aria-label="Collapse sidebar">‹</button></div>
       <nav class="side-nav" aria-label="Main navigation">
         <button class="nav-item active" data-section="overview"><span>◫</span>Overview</button>
         <button class="nav-item" data-section="holdings"><span>▥</span>Holdings</button>
         <button class="nav-item" data-section="transactions"><span>⇄</span>Transactions</button>
         <button class="nav-item" data-section="watchlist"><span>☆</span>Watchlist</button>
         <button class="nav-item" data-section="sip"><span>₹</span>SIP Planner</button>
+        <a class="analysis-moved-link" href="https://sutartech.github.io/Analysis/#investment" target="_blank" rel="noopener noreferrer" title="Open investment modules in Analysis">↗ Open Analysis dashboard</a>
+        <button class="nav-item" data-section="gpf"><span>▣</span> GPF</button>
         <button class="nav-item" data-section="expenditure"><span>₹</span>Expenditure</button>
         <button class="nav-item" data-section="diary"><span>✎</span>Diary</button>
         <button class="nav-item" data-section="books"><span>▤</span>Books</button>
@@ -107,21 +186,21 @@
       <div class="sidebar-session-card">
         <span class="sidebar-session-label">SIGNED IN AS</span>
         <strong id="dashboardUsername">—</strong>
-        <span id="dashboardVersion">Frontend · v20.1.8</span><span id="dashboardBackendVersion">Backend · v3.17.10</span>
+        <span id="dashboardVersion">Frontend · v20.2.2</span><span id="dashboardBackendVersion">Backend · v3.17.14</span>
       </div>
       <div class="sidebar-foot"><button id="changePasswordBtn" class="nav-item"><span>⌁</span>Change password</button><button id="logoutBtn" class="nav-item danger-text"><span>↪</span>Log out</button></div>
     </aside>
 
     <main id="mainDashboard" class="main-content" tabindex="-1">
       <header class="topbar">
-        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Financial Command Centre</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v20.1.8</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.17.10</span></div></div></div>
+        <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Personal Finance Centre</h1></div><div class="dashboard-version-pair"><span id="dashboardVersionTop" class="dashboard-version-chip">FE v20.2.2</span><span id="dashboardBackendVersionTop" class="dashboard-version-chip backend-chip">BE v3.17.14</span></div></div></div>
         <div class="top-actions"><button id="commandPaletteBtn" class="command-palette-button" type="button" title="Search pages and actions (Ctrl/⌘ K)" aria-haspopup="dialog"><span>⌕</span><strong>Search</strong><kbd>⌘K</kbd></button><div class="display-preferences" title="Personalise dashboard appearance"><select id="displayDensitySelect" aria-label="Dashboard density"><option value="COMFORTABLE">Comfortable</option><option value="COMPACT">Compact</option></select><select id="displayThemeSelect" aria-label="Dashboard theme"><option value="LIGHT" selected>Light</option><option value="AUTO">Auto theme</option><option value="DARK">Dark</option></select></div><div class="auto-refresh-control" title="Automatically refresh portfolio and watchlist prices while this dashboard is open"><span class="auto-pulse"></span><div class="auto-refresh-copy"><strong>Auto update</strong><span id="autoRefreshCountdown">15 min</span></div><select id="autoRefreshSelect" aria-label="Auto update interval"><option value="5">5 min</option><option value="15" selected>15 min</option><option value="30">30 min</option><option value="60">60 min</option><option value="0">Off</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button id="refreshBtn" class="icon-button" title="Refresh prices and NAVs" aria-label="Refresh prices and NAVs">↻</button><button id="addInvestmentBtn" class="primary-button">+ Add investment</button><button id="profileButton" class="avatar-button" aria-label="Signed-in user"><span id="avatarInitial">A</span></button><button id="headerLogoutBtn" class="header-logout-button" type="button" title="Sign out of SarNi" aria-label="Sign out"><span aria-hidden="true">↪</span><strong>Sign out</strong></button></div>
       </header>
 
       <div id="mobileSessionBar" class="mobile-session-bar" aria-label="Mobile session controls">
         <div class="mobile-session-versions">
-          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v20.1.8</span>
-          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.17.10</span>
+          <span id="mobileFrontendVersion" class="mobile-version-chip">FE v20.2.2</span>
+          <span id="mobileBackendVersion" class="mobile-version-chip backend">BE v3.17.14</span>
         </div>
         <div class="mobile-session-actions">
           <button id="mobileChangePasswordBtn" class="mobile-session-button" type="button">Password</button>
@@ -161,7 +240,7 @@
       <div>
         <p class="eyebrow">MY DAILY DASHBOARD</p>
         <h2 id="personalHomeGreeting">Your day at a glance</h2>
-        <p>Diary, targets, reminders and a daily thought. Investment details stay hidden until you choose to view them.</p>
+        <p>Diary, targets, reminders and a daily thought. Manage investments in the SutarTech Analysis dashboard.</p>
       </div>
       <div class="personal-home-actions">
         <button id="homeDailyWriteBtn" type="button" class="primary-button">✎ Daily diary</button>
@@ -170,6 +249,10 @@
       </div>
     </section>
 
+    <section class="personal-home-hero tint-green" id="sarniGpfPersonal" style="margin-top:12px;display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+      <div><p class="eyebrow">PERSONAL SAVINGS · GPF</p><h3 id="sarniGpfTotal">₹0</h3><p id="sarniGpfContribution">Monthly contribution ₹0 · Your existing GPF records remain in SarNi.</p><div id="sarniGpfRows" style="font-size:13px;margin-top:6px"></div></div>
+      <button id="sarniGpfAdd" type="button" class="secondary-button">+ Add GPF</button>
+    </section>
     <div class="personal-home-grid">
       <article class="personal-home-card diary-home-card tint-blue">
         <div class="personal-card-head">
@@ -220,8 +303,8 @@
 
     <section class="personal-home-footer tint-green">
       <div>
-        <strong>Investment details stay outside the Overview.</strong>
-        <span>Open Holdings or Watchlist from the left menu only when you want financial details.</span>
+        <strong>Investments are now managed in Analysis.</strong>
+        <span>Use the Investment Portfolio link in the menu to open Analysis. SarNi keeps your personal expenses, diary, targets, notes and GPF.</span>
       </div>
       <button id="homeShowInvestmentsBtn" type="button">▥ Open Holdings</button>
     </section>
@@ -295,6 +378,14 @@
         </div>
 
         <article class="panel"><div class="panel-head"><div><p class="eyebrow">TOP HOLDINGS</p><h3>Largest current holdings</h3></div><button class="link-button" data-section-link="holdings">View all</button></div><div id="topHoldings" class="mini-holdings empty-state">Add investments to begin.</div></article>
+  </div>
+</section>
+
+<section id="gpfSection" class="page-section hidden" aria-label="General Provident Fund">
+  <div class="gpf-page">
+    <div class="gpf-title"><div><p class="eyebrow">SARNI · PERSONAL SAVINGS</p><h2>General Provident Fund (GPF)</h2><p>Keep your GPF balance, monthly contribution and interest details here. Your stock, mutual fund and SIP data are managed separately in Analysis.</p></div>
+      <button type="button" class="primary-button" id="gpfAddBtn">+ Add GPF</button></div>
+    <div id="gpfRecords" class="gpf-records" aria-live="polite"></div>
   </div>
 </section>
 
@@ -1686,6 +1777,6 @@
       APP_NAME:'SarNi',CURRENCY:'INR',REQUEST_TIMEOUT_MS:60000,OWNERS:['Sarada','Niharika']
     };
   </script>
-  <script src="https://saradasutar.github.io/SarNi/app-v20-1-8.js?v=20260910-20108-codingbook" defer onload="sarNiAssetLoaded('app')" onerror="sarNiAssetFailed('app')"></script>
+  <script src="https://saradasutar.github.io/SarNi/app-v20-2-2.js?v=20261010-20202-personal-gpf" defer onload="sarNiAssetLoaded('app')" onerror="sarNiAssetFailed('app')"></script>
 </body>
 </html>
