@@ -1,6 +1,6 @@
 {
-  "version": "20.3.0",
-  "build": "20261010-20300-life-studio",
-  "frontend": "20.3.0",
-  "backendExpected": "3.17.15"
+  "version": "20.3.1",
+  "frontend": "20.3.1",
+  "backendExpected": "3.17.16",
+  "build": "20261010-20310-dual-calendar"
 }
