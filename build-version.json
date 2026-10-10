@@ -1,6 +1,6 @@
 {
-  "version": "20.1.8",
-  "build": "20260910-20108-codingbook",
-  "frontend": "20.1.8",
-  "backendExpected": "3.17.10"
+  "version": "20.2.2",
+  "build": "20261010-20202-personal-gpf",
+  "frontend": "20.2.2",
+  "backendExpected": "3.17.14"
 }
