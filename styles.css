@@ -10503,3 +10503,61 @@ body.summary-fullscreen-open .holdings-reading-header{display:none!important}
 .utility-drawer-launcher:active{cursor:grabbing}
 body.notes-launcher-dragging{cursor:grabbing!important;user-select:none!important}
 body.notes-launcher-dragging .utility-drawer-launcher{cursor:grabbing!important}
+
+
+/* ===== SarNi v20.3.0 · Life Centre ===== */
+.life-shell{margin:18px 0 22px;padding:clamp(14px,2.2vw,24px);border:1px solid var(--line,#dde5f2);border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.98),rgba(246,249,255,.98));box-shadow:0 14px 42px rgba(23,42,82,.045);color:var(--ink,#182445)}
+.life-section-title{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:15px}
+.life-section-title h2{margin:3px 0 4px;font-weight:850;font-size:clamp(19px,2.5vw,26px);letter-spacing:-.55px;color:var(--ink,#192541)}
+.life-section-title p{margin:0;color:var(--muted,#667993);line-height:1.5;font-size:13px}
+.life-eyebrow{font-size:10px;color:#5e62bb;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+.life-private-pill{border-radius:100px;padding:7px 12px;background:#edf8f4;color:#087860;font-size:11px;font-weight:800}
+.life-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:15px}
+.life-stat-grid.life-three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.life-stat{padding:15px;border:1px solid #e3eaf5;border-radius:16px;background:white;min-width:0;box-shadow:0 4px 13px rgba(16,37,80,.022)}
+.life-stat span,.life-stat small{display:block;color:#64748b;font-size:11px;line-height:1.6}
+.life-stat strong{display:block;font-size:clamp(18px,2.2vw,26px);letter-spacing:-.6px;color:#1b3160;font-variant-numeric:tabular-nums;margin:4px 0;font-weight:850}
+.life-duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.life-card{border:1px solid #e2eafa;border-radius:17px;padding:clamp(13px,1.8vw,21px);background:#fff;min-width:0;box-shadow:0 5px 17px rgba(24,44,85,.035)}
+.life-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:13px;gap:8px}
+.life-card h3{margin:3px 0 1px;font-size:17px;color:#183158;letter-spacing:-.3px}
+.life-card-icon{display:grid;place-items:center;width:37px;height:37px;border-radius:12px;color:#5253b0;background:#edeeff;font-size:19px;font-weight:800}
+.life-entry-form{display:flex;flex-direction:column;gap:12px}
+.life-entry-form label,.life-month-label,.life-report-tools label,.life-form-foot label{display:flex;flex-direction:column;gap:4px;min-width:0;font-size:12px;font-weight:750;color:#52627d}
+.life-entry-form input,.life-entry-form select,.life-entry-form textarea,.life-month-label input,.life-report-tools select,.life-form-foot select,.life-table input,.life-table select{width:100%;max-width:100%;min-width:0;background:#fbfcff;color:#172b51;border:1px solid #d7e0f0;border-radius:10px;padding:10px 11px;font-size:13px;line-height:1.4;font-family:inherit;transition:border-color .12s ease,box-shadow .12s ease}
+.life-entry-form textarea{min-height:90px;resize:vertical}
+.life-entry-form input:focus,.life-entry-form select:focus,.life-entry-form textarea:focus,.life-table input:focus{outline:none;border-color:#655ae0;box-shadow:0 0 0 3px rgba(101,90,224,.11)}
+.life-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.life-extra{background:#f8faff;border:1px dashed #d7e0f0;border-radius:10px;padding:7px 10px;font-size:12px}
+.life-extra summary{cursor:pointer;list-style:revert;color:#4e5c7b;font-weight:700}
+.life-extra[open]{display:flex;flex-direction:column;gap:9px}
+.life-form-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.life-form-foot [data-life-status]{color:#60738a;font-size:11px;max-width:270px;line-height:1.35}
+.life-form-foot [data-life-status].is-error{color:#b4233a}
+.life-save,.life-quiet,.life-prompt-row button,.life-template-grid button,.life-head-chip,.life-row-btn{cursor:pointer;border:1px solid #cbd6eb;background:white;color:#334867;border-radius:10px;padding:9px 12px;font-family:inherit;font-weight:750;font-size:12px;transition:background .12s ease,transform .12s ease}
+.life-save{background:linear-gradient(130deg,#504ed4,#6653dd);color:#fff;border-color:transparent;padding:10px 16px;box-shadow:0 4px 12px rgba(80,78,212,.17)}
+.life-save:hover{background:#4141ba}.life-save:disabled{opacity:.55;cursor:wait}
+.life-quiet:hover,.life-prompt-row button:hover,.life-template-grid button:hover,.life-head-chip:hover,.life-row-btn:hover{background:#f0f3ff}
+.life-prompt-row{display:flex;flex-wrap:wrap;gap:7px}.life-prompt-row button{padding:6px 9px;font-size:11px}
+.life-heads{margin-top:13px;display:flex;flex-wrap:wrap;gap:7px;max-height:170px;overflow:auto}
+.life-head-chip{text-align:left;line-height:1.4}.life-head-chip strong{font-size:12px;display:block}.life-head-chip small{font-weight:500;color:#60738a}
+.life-report-card{margin:16px 0}.life-report-tools{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:11px}.life-report-tools label{min-width:155px}
+.life-table-scroll{overflow-x:auto;max-width:100%;border:1px solid #e3e9f3;border-radius:12px}
+.life-table{width:100%;border-collapse:collapse;min-width:690px;font-size:12px}.life-table th{background:#f0f4fc;color:#405576;font-size:11px;letter-spacing:.03em;text-transform:uppercase}.life-table td,.life-table th{padding:10px 11px;vertical-align:middle;text-align:left;border-bottom:1px solid #e8edf5}
+.life-table tr:last-child td{border-bottom:0}.life-table td:nth-child(5){font-weight:800;color:#20355e;font-variant-numeric:tabular-nums;white-space:nowrap}.life-table td:last-child{white-space:nowrap}
+.life-table .life-row-btn{padding:6px 10px;margin-right:4px}.life-table .life-row-btn.is-danger{color:#b4233a;border-color:#f4d6dc}
+.life-hint{font-size:12px;line-height:1.5;color:#62738b;margin:9px 0 0}
+.life-trend{display:grid;gap:8px;margin-top:15px}.life-trend-row{display:grid;grid-template-columns:80px minmax(0,1fr) 110px;align-items:center;gap:10px;font-size:12px;color:#50627e}.life-trend-track{height:11px;border-radius:100px;background:#edf1fa;overflow:hidden}.life-trend-track i{display:block;background:linear-gradient(90deg,#8c89f0,#4e66cb);height:100%;border-radius:100px}
+.life-trend-row strong{text-align:right;font-variant-numeric:tabular-nums;color:#233759}
+.life-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;max-width:440px}.life-calendar-label{text-align:center;color:#65748d;font-size:11px;font-weight:750}.life-calendar-day{position:relative;aspect-ratio:1;min-width:0;display:grid;place-items:center;border:1px solid #e4eaf5;border-radius:10px;background:#fff;color:#283b5c;font-weight:750;cursor:pointer}.life-calendar-day.has-entry{background:#e8f6ef;border-color:#b8e4cd;color:#147b53}.life-calendar-day.today{outline:2px solid #6261d1;outline-offset:-2px}.life-calendar-day.has-entry:after{content:"";position:absolute;bottom:4px;width:4px;height:4px;border-radius:50%;background:#147b53}
+.life-template-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:12px 0}.life-template-grid button{text-align:left;min-height:42px;white-space:normal}
+.life-month-label{font-size:12px}.life-month-label input{min-height:38px}
+.life-diary-insights{margin-bottom:16px}
+.life-shell button:focus-visible{outline:3px solid #a49af6;outline-offset:2px}
+@media(max-width:1050px){.life-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.life-stat-grid.life-three{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.life-duo{grid-template-columns:1fr}.life-section-title{align-items:flex-start}.life-shell{padding:13px;border-radius:15px}.life-stat-grid.life-three{grid-template-columns:repeat(2,minmax(0,1fr))}.life-stat strong{font-size:20px}.life-report-tools{align-items:stretch}.life-report-tools label{flex:1}.life-trend-row{grid-template-columns:64px minmax(0,1fr) 86px}}
+@media(max-width:430px){.life-fields{grid-template-columns:1fr}.life-stat-grid{gap:7px}.life-stat{padding:11px}.life-stat-grid.life-three{grid-template-columns:1fr 1fr}.life-stat strong{font-size:18px}.life-template-grid{grid-template-columns:1fr}.life-form-foot{align-items:stretch}.life-form-foot .life-save{width:100%}}
+@media print{.life-entry-form,.life-save,.life-quiet,.life-prompt-row,.life-template-grid,.life-row-btn,.life-diary-insights,.life-heads{display:none!important}.life-card,.life-shell{box-shadow:none!important}}
+
+#lifePrintSheet{display:none}
+@media print{body:has(#lifePrintSheet) > *:not(#lifePrintSheet){display:none!important}#lifePrintSheet{display:block!important;color:black;font-family:Arial,sans-serif;background:white;padding:12mm}#lifePrintSheet h1{font-size:18pt}#lifePrintSheet table{width:100%;border-collapse:collapse;font-size:10pt}#lifePrintSheet td,#lifePrintSheet th{border:1px solid #ccc;padding:6px;text-align:left}#lifePrintSheet h3{margin-top:15px;text-align:right}}

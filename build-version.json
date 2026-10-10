@@ -1,6 +1,6 @@
 {
-  "version": "20.2.2",
-  "build": "20261010-20202-personal-gpf",
-  "frontend": "20.2.2",
-  "backendExpected": "3.17.14"
+  "version": "20.3.0",
+  "build": "20261010-20300-life-studio",
+  "frontend": "20.3.0",
+  "backendExpected": "3.17.15"
 }
