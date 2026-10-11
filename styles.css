@@ -10903,3 +10903,83 @@ button.sarni-insight-legend-row:hover{background:#f5f5ff}
  #sarniInsightPrintSheet button{display:none!important}
  @page{size:A4 landscape;margin:12mm}
 }
+
+
+/* SarNi 20.3.7: unified desktop/mobile usability, fixed discoverability */
+/* Always-readable Quick Diary, pleasant paper tone and typed deep-red bold text. */
+.side-diary-compose{background:#fff8ed!important;border:1px solid #f3dbc1!important;box-shadow:0 5px 18px rgba(12,20,48,.1)!important;border-radius:16px!important}
+.side-diary-title,.side-diary-title strong{color:#4c2f2b!important;font-size:13px!important}
+.side-diary-title span{color:#875c49!important;font-size:10px!important}
+.side-diary-compose input[name="title"],.side-diary-compose textarea[name="text"]{background:#fffefa!important;border:1px solid #eacdb4!important;color:#941d2e!important;font-family:inherit!important;font-size:13px!important;font-weight:800!important;line-height:1.5!important;caret-color:#941d2e!important}
+.side-diary-compose textarea[name="text"]{min-height:96px!important;resize:vertical!important;max-height:195px!important}
+.side-diary-compose input::placeholder,.side-diary-compose textarea::placeholder{color:#9f7c77!important;font-weight:500!important}
+.side-diary-compose select{background:#fffefa!important;border-color:#eacdb4!important;color:#712c38!important;font-weight:700!important}
+.side-diary-compose .side-diary-controls label{color:#763327!important;font-weight:800!important}
+.side-diary-compose .side-diary-save{background:linear-gradient(120deg,#633de4,#5b52d9)!important;color:#fff!important;border-radius:10px!important;min-height:43px!important;box-shadow:none!important}
+.side-diary-compose small{color:#694d50!important;font-weight:650!important}
+/* Match the same writing treatment in mobile Home/Diary without new popups. */
+#lifeHome textarea[name="text"],#quickDiaryInlineForm textarea[name="text"],#diaryForm textarea{background:#fffefa!important;color:#941d2e!important;font-weight:750!important;caret-color:#941d2e!important;border-color:#efd5c1!important}
+#lifeHome textarea[name="text"]::placeholder,#quickDiaryInlineForm textarea[name="text"]::placeholder{font-weight:500!important;color:#986d75!important}
+/* Menu essentials visible above scrolling nav in desktop. */
+.diary-left-shortcuts .book-writing-nav{background:rgba(151,179,255,.13)!important;color:#f0ecff!important;border:1px solid rgba(193,209,255,.19)!important}
+.diary-left-shortcuts .book-writing-nav span{color:#dfcaff!important}
+.admin-security-shortcut{display:flex;align-items:center;gap:10px;padding:10px 12px;min-height:52px;flex:0 0 auto;margin:0 0 8px;width:100%;border:1px solid #ccbffb;border-radius:12px;background:#f0ecff;color:#433494;cursor:pointer;text-align:left;font-family:inherit}
+.admin-security-shortcut.hidden{display:none!important}
+.admin-security-shortcut>span:nth-child(2){flex:1;display:grid;gap:3px;min-width:0}
+.admin-security-shortcut strong{font-weight:900;font-size:12px;line-height:1.2}
+.admin-security-shortcut small{font-weight:650;font-size:10px;color:#695b95;line-height:1.25}
+.admin-security-shortcut>span:first-child{font-size:20px}
+.admin-security-shortcut:focus-visible{outline:3px solid #927aff;outline-offset:2px}
+#adminSecurityPanel{scroll-margin-top:100px}
+/* Roomier English+Saka dual calendar on desktops and tablets. */
+@media(min-width:1081px){.calendar-dedicated-grid{grid-template-columns:minmax(0,1.5fr) minmax(300px,.75fr)!important}}
+#calendarSection #standaloneCalendarGrid{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:8px!important;min-height:480px!important}
+#calendarSection #standaloneCalendarGrid .dual-calendar-day{min-height:79px!important;padding:8px 4px!important;border-radius:12px!important;gap:6px!important}
+#calendarSection #standaloneCalendarGrid .dual-english{font-size:24px!important;font-weight:950!important;color:#1650ad!important;background:#e8f1ff!important;padding:2px 6px!important}
+#calendarSection #standaloneCalendarGrid .dual-saka{font-size:13px!important;font-weight:900!important;color:#a74907!important;background:#fff0d9!important;padding:3px 5px!important}
+#calendarSection #standaloneCalendarGrid .life-calendar-label{font-weight:850!important;color:#506488!important;font-size:12px!important}
+#calendarSection .calendar-key{font-size:13px;gap:18px}
+@media(max-width:860px){
+  #calendarSection #standaloneCalendarGrid{gap:4px!important;min-height:365px!important}
+  #calendarSection #standaloneCalendarGrid .dual-calendar-day{min-height:59px!important;padding:5px 1px!important;border-radius:9px!important;gap:4px!important}
+  #calendarSection #standaloneCalendarGrid .dual-english{font-size:19px!important;padding:1px 3px!important}
+  #calendarSection #standaloneCalendarGrid .dual-saka{font-size:10px!important;padding:2px!important}
+  #calendarSection .life-card{padding:13px!important}
+  #quickDiaryInlineForm textarea[name="text"]{min-height:145px!important}
+}
+@media(max-width:375px){
+  #calendarSection #standaloneCalendarGrid{gap:2px!important}
+  #calendarSection #standaloneCalendarGrid .dual-calendar-day{min-height:54px!important}
+  #calendarSection #standaloneCalendarGrid .dual-english{font-size:17px!important}
+  #calendarSection #standaloneCalendarGrid .dual-saka{font-size:9px!important}
+}
+@media print{.admin-security-shortcut{display:none!important}}
+
+/* Always retain enough sidebar room for navigation on shorter desktop screens. */
+@media(min-width:861px){
+  .sidebar{padding:15px 12px!important;overflow-y:auto!important;overscroll-behavior:contain;scrollbar-width:thin}
+  .side-brand{min-height:53px!important;padding:0 4px 8px!important}
+  .diary-left-shortcuts{margin:7px 0 6px!important;padding-bottom:6px!important;gap:4px!important}
+  .diary-left-shortcuts .nav-item{min-height:39px!important;padding:7px 10px!important}
+  .side-diary-compose{gap:5px!important;padding:8px!important;margin-bottom:6px!important}
+  .side-diary-compose input[name="title"],.side-diary-compose select{padding:7px!important;min-height:35px!important}
+  .side-diary-compose textarea[name="text"]{min-height:76px!important;max-height:150px!important;padding:7px!important}
+  .side-diary-compose .side-diary-save{min-height:36px!important}
+  .side-diary-compose small{font-size:9px!important}
+  .admin-security-shortcut{min-height:47px!important;margin-bottom:5px!important;padding:7px 10px!important}
+  .sidebar .side-nav{flex:1 0 134px!important;min-height:134px!important;padding-top:3px!important;overflow-y:auto!important}
+  .sidebar-session-card{margin:5px 4px 4px!important;padding:7px 8px!important;gap:2px!important}
+  .sidebar-session-card .person-avatar{height:27px;width:27px}
+  .sidebar-foot{gap:1px!important;margin-top:1px!important}
+  .sidebar-foot .nav-item{min-height:33px!important}
+}
+
+/* Credit Card Centre · calm mobile-first layout, no unnecessary widgets */
+.sarni-cc-head{display:flex;gap:15px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin:12px 0 18px;padding:22px;border-radius:22px;background:linear-gradient(118deg,#edf2ff,#f7f9ff 55%,#e9faf3);border:1px solid #dce5f2}
+.sarni-cc-head h2{margin:3px 0;color:#182d58;font-size:27px}.sarni-cc-head p{color:#576c86;line-height:1.55;max-width:720px}.sarni-cc-head-actions{display:flex;gap:9px;flex-wrap:wrap}
+.sarni-cc-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:10px 0 14px}.sarni-cc-stats>div{padding:18px;background:#fff;border:1px solid #e1e7f2;border-radius:18px;box-shadow:0 5px 16px rgba(20,42,88,.035)}.sarni-cc-stats small{display:block;color:#6d7c91;font-size:12px;font-weight:750}.sarni-cc-stats strong{display:block;margin-top:7px;color:#233962;font-size:21px}
+.sarni-cc-status{font-size:13px;font-weight:720;color:#187355;padding:10px 14px;border-radius:12px;background:#f0fbf5}.sarni-cc-status.error{color:#b3263e;background:#fff2f3}
+.sarni-cc-card-manager,.sarni-cc-workspace,.sarni-cc-register{background:#fff;border-radius:20px;border:1px solid #dee5f1;padding:17px;margin-bottom:14px;box-shadow:0 6px 22px rgba(16,42,82,.035)}
+.sarni-cc-card-manager>summary,.sarni-cc-register>summary{font-size:15px;color:#24345a;font-weight:850;cursor:pointer;padding:5px}.sarni-cc-smallform,.sarni-cc-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}.sarni-cc-smallform{align-items:end}.sarni-cc-smallform label,.sarni-cc-form label{display:grid;gap:6px;color:#344466;font-size:13px;font-weight:780}.sarni-cc-smallform input,.sarni-cc-form input,.sarni-cc-form select{width:100%;min-height:43px;border:1px solid #cdd7e8;border-radius:11px;background:#fbfcff;color:#1f3056;padding:9px 12px;font-size:15px}.sarni-cc-form input:focus,.sarni-cc-form select:focus{outline:2px solid #7767df;outline-offset:1px}.sarni-cc-form .hidden{display:none!important}.sarni-cc-wide,.sarni-cc-footer{grid-column:1/-1}.sarni-cc-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid #ecf0f7;padding-top:13px}.sarni-cc-footer span,.sarni-cc-hint{color:#697a92;font-size:12px;line-height:1.5}.sarni-cc-tabs{display:flex;flex-wrap:wrap;gap:8px}.sarni-cc-tabs button{border:1px solid #d5deef;background:#f3f6fd;border-radius:13px;padding:12px 15px;font-weight:820;cursor:pointer;color:#314468}.sarni-cc-tabs button.active{background:#5747c3;color:#fff;border-color:#5747c3}
+.sarni-cc-panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.sarni-cc-panel-head h3{color:#22345b;margin:0 0 14px}.sarni-cc-panel-head small,.sarni-cc-empty{color:#6c7a93}.sarni-cc-entry{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:14px;border-top:1px solid #edf1f7;padding:13px 0;align-items:center}.sarni-cc-entry-main strong{display:block;font-size:15px;color:#293c67}.sarni-cc-entry-main small,.sarni-cc-entry-main span{display:block;margin-top:4px;color:#62738f;font-size:12px}.sarni-cc-amount{text-align:right}.sarni-cc-amount strong{display:block;color:#263b65;font-size:17px}.sarni-cc-amount small{font-size:11px;color:#647590}.sarni-cc-entry-actions{display:flex;gap:5px}.sarni-cc-entry-actions button,.sarni-cc-row button{background:#f1f4fd;border:1px solid #dfe6f5;border-radius:8px;padding:8px 10px;color:#374d7c;cursor:pointer;font-weight:700}.sarni-cc-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:12px;padding:12px 0;border-bottom:1px solid #edf1f8;align-items:center}.sarni-cc-row span{color:#2c4269;font-weight:720}.sarni-cc-row small{display:block;color:#74839c;font-weight:500}.sarni-cc-row strong{white-space:nowrap;color:#283e67}
+@media(max-width:860px){.sarni-cc-head{padding:16px}.sarni-cc-head h2{font-size:23px}.sarni-cc-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.sarni-cc-stats>div{padding:13px}.sarni-cc-stats strong{font-size:17px}.sarni-cc-form,.sarni-cc-smallform{grid-template-columns:minmax(0,1fr)}.sarni-cc-tabs button{flex:1;min-width:85px;font-size:12px;padding:12px 8px}.sarni-cc-entry{grid-template-columns:minmax(0,1fr) auto}.sarni-cc-entry-actions{grid-column:1/-1}.sarni-cc-row{grid-template-columns:minmax(0,1fr) auto}.sarni-cc-row button{min-height:36px}.sarni-cc-head-actions button{min-height:44px}}

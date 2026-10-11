@@ -1,3 +1,3 @@
-# SarNi v20.3.6 — Quick Use / Detailed View
+# SarNi Frontend v20.3.7
 
-Lean GitHub Pages files. Signed-in dashboard comes from the existing Apps Script project, no extra database or charting library. Keep all financial records in your private Google Sheet.
+This is a public GitHub Pages frontend for an existing private Google Apps Script backend v3.17.18. Only release assets are included. Never upload personal financial/diary data or credentials. Follow `INSTALL-FIRST.md` from the complete package before deploying.
