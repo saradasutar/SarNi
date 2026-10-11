@@ -1,6 +1,6 @@
 {
-  "version": "20.3.8",
-  "frontend": "20.3.8",
-  "backendExpected": "3.17.19",
-  "build": "20261011-20380-cards-couple"
+  "version": "20.4.1",
+  "frontend": "20.4.1",
+  "backendExpected": "3.17.20",
+  "build": "20261011-20410-personal-only"
 }
