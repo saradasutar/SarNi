@@ -10590,3 +10590,316 @@ body.notes-launcher-dragging .utility-drawer-launcher{cursor:grabbing!important}
 }
 @media(max-width:390px){.quick-diary-calendar-card .dual-calendar-day{min-height:58px}}
 @media print{.mobile-left-quick-diary,.diary-left-shortcuts{display:none!important}}
+
+/* SarNi 20.3.3 — calendar and always-visible sidebar diary */
+.diary-left-shortcuts{margin-bottom:8px!important;padding-bottom:6px!important}
+.side-diary-compose{padding:12px 10px 10px;margin:0 0 10px;border:1px solid rgba(199,206,255,.22);border-radius:14px;background:rgba(108,97,220,.13);display:grid;gap:8px;flex:0 0 auto}
+.side-diary-title{display:flex;align-items:center;justify-content:space-between;gap:6px;color:#fff;font-size:12px}.side-diary-title span{font-size:9px;color:#bbc9f4}
+.side-diary-compose input[type=text],.side-diary-compose textarea,.side-diary-compose select{width:100%;min-width:0;padding:9px;border-radius:9px;border:1px solid #515c84;background:#f8faff;color:#17203b;font:600 12px/1.5 inherit;font-family:inherit}
+.side-diary-compose textarea{resize:vertical;min-height:72px;max-height:135px;font-weight:500}
+.side-diary-controls{display:flex;align-items:center;gap:6px}.side-diary-controls select{flex:1;width:65%;font-size:11px}.side-diary-controls label{white-space:nowrap;font-size:12px;color:#ffd580}
+.side-diary-save{background:linear-gradient(115deg,#7064ff,#54a9da);color:#fff;border:0;border-radius:9px;min-height:38px;font-size:12px;font-weight:850;cursor:pointer}
+.side-diary-save:disabled{opacity:.55}.side-diary-compose small{font-size:10px;line-height:1.45;color:#c9d5fc}
+.calendar-dedicated-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,0.75fr);gap:16px;margin:14px 0}
+.calendar-legend-en{color:#2464c7;font-weight:850}.calendar-legend-saka{color:#bd5a0c;font-weight:850}.calendar-key{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;font-weight:750;margin-top:16px;color:#52627d}
+.dual-era-calendar .dual-english{color:#1456bd!important;background:rgba(56,126,231,.09);border-radius:6px;padding:0 3px;font-weight:900!important;font-size:17px!important}
+.dual-era-calendar .dual-saka{color:#a65312!important;background:rgba(255,187,91,.15);border-radius:6px;padding:2px 4px;font-size:10px!important;font-weight:850!important}
+#standaloneCalendarGrid{min-height:340px}
+.sidebar-account-line{display:flex;align-items:center;gap:8px;min-width:0}.sidebar-account-line strong{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.person-avatar{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;width:34px;height:34px;border-radius:50%;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,#e7e7ff,#d3f4f0);color:#5653af;border:1px solid rgba(103,90,203,.2);font-weight:900;font-size:13px}
+.person-avatar img{width:100%;height:100%;object-fit:cover;display:block}.person-avatar-inline{width:31px;height:31px}.person-avatar.is-large{width:83px;height:83px;font-size:38px}.header-user-photo{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.photo-manager-row{display:flex;gap:18px;align-items:flex-start;margin-top:10px}.photo-manager-fields{display:grid;gap:10px;min-width:0;flex:1}.photo-manager-fields input{max-width:390px;color:#344564}.photo-manager-fields small{color:#64748b}
+.person-spend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px}.person-spend-card{border:1px solid #dce4f3;border-radius:15px;background:linear-gradient(145deg,#fff,#f7faff);padding:13px;display:grid;gap:8px}.person-spend-heading{display:flex;align-items:center;gap:9px}.person-spend-heading div{display:grid;gap:3px}.person-spend-heading small{color:#6f8099;font-size:11px}.person-spend-card strong.sum{font-size:21px;color:#243456}
+.life-table .person-avatar-inline{width:24px;height:24px;vertical-align:middle}
+@media(max-width:1080px){.calendar-dedicated-grid{grid-template-columns:1fr}}
+@media(max-width:860px){.side-diary-compose{display:none}.calendar-dedicated-grid{grid-template-columns:1fr}.photo-manager-row{flex-direction:column}}
+
+
+
+/* ===== SarNi 20.3.4 · Mobile First — polished, fast, calm ===== */
+.mobile-top-brand,.mobile-life-hello,.mobile-more-backdrop,.mobile-more-sheet{display:none}
+@media screen and (max-width:860px){
+  html{scroll-padding-top:70px}
+  body{background:#f4f6fc!important;color:#1d2945;-webkit-tap-highlight-color:transparent}
+  body.sarni-mobile-more-open{overflow:hidden!important}
+  .app-view,.main-content,.page-section,#personalHomeContent,.personal-home-content{min-width:0!important;max-width:100vw}
+  .main-content{padding:0 13px calc(112px + env(safe-area-inset-bottom))!important;overflow-x:clip!important}
+  .topbar{position:sticky!important;top:0;z-index:45;display:flex!important;gap:11px!important;min-height:62px!important;padding:11px 3px 10px!important;margin:0 -1px 9px!important;border-bottom:1px solid #e9ecf5!important;background:rgba(246,248,255,.97)!important;box-shadow:none!important;backdrop-filter:none!important;align-items:center!important}
+  .mobile-top-brand{display:grid;place-items:center;flex:0 0 39px;height:39px;border-radius:14px;background:#5341c7;color:#fff;font-weight:950;font-size:23px;box-shadow:0 3px 10px rgba(59,43,155,.12)}
+  .topbar>div:first-of-type{flex:1 1 auto;min-width:0}
+  .topbar-title-line{min-width:0!important}
+  .topbar h1{font-size:17px!important;line-height:1.17!important;max-width:min(52vw,235px)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.4px;color:#182441!important}
+  #todayLabel{font-size:10px!important;letter-spacing:.01em!important;color:#747e9c!important;display:block!important}
+  .top-actions{flex:0 0 auto!important;gap:3px!important;overflow:visible!important}
+  .top-actions .command-palette-button{min-width:40px!important;width:40px!important;height:40px!important;border-radius:13px!important;color:#5546cb!important;border:1px solid #e5e8f7!important;background:white!important}
+  .top-actions #headerLogoutBtn,.top-actions #profileButton,.top-actions #refreshBtn,.top-actions .sync-status,.top-actions .display-preferences,.top-actions .auto-refresh-control,.mobile-session-bar{display:none!important}
+  #sarniGpfPersonal,.personal-home-content>.personal-home-hero:not(.mobile-life-hello),.personal-home-content>.personal-home-grid,.personal-home-content>.personal-home-footer{display:none!important}
+  .personal-home-content{display:flex!important;flex-direction:column!important;gap:0!important}
+  .mobile-life-hello{display:block;order:-2;border-radius:23px;padding:19px 18px 18px;background:linear-gradient(135deg,#342d8c,#5944c7 61%,#785be1);color:white;box-shadow:0 12px 24px rgba(50,39,126,.14);margin:1px 0 14px}
+  .mobile-hello-date{display:flex;gap:7px;align-items:center;font-weight:800;font-size:10px;letter-spacing:.12em;color:#e9e5ff}
+  .mobile-hello-icon{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:rgba(255,255,255,.17);font-size:16px;color:#fff}
+  .mobile-life-hello h2{margin:11px 0 6px;color:#fff!important;font-size:24px;line-height:1.1;letter-spacing:-.75px}
+  .mobile-life-hello p{margin:0;color:#e5e3fc!important;font-size:12px;line-height:1.55}
+  .mobile-hello-actions{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:8px;margin-top:16px}
+  .mobile-hello-actions button{min-width:0;min-height:46px;padding:10px 5px;border-radius:12px;background:rgba(255,255,255,.13);color:#fff;border:1px solid rgba(255,255,255,.20);font:800 11px/1.2 inherit;cursor:pointer;white-space:nowrap}
+  .mobile-hello-actions .mobile-hello-primary{background:#fff!important;color:#4632b3!important;border-color:#fff!important;box-shadow:0 3px 9px rgba(21,15,74,.12)}
+  #lifeHome{order:-1;padding:0!important;margin:0 0 15px!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+  #lifeHome>.life-section-title{display:none!important}
+  #lifeHome .life-stat-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin:0 0 12px!important}
+  #lifeHome .life-stat{padding:14px!important;border-radius:16px!important;border:1px solid #e8ecf7!important;box-shadow:none!important;background:#fff!important;min-height:95px}
+  #lifeHome .life-stat span{font-size:10px!important;color:#737e96!important;font-weight:750!important}
+  #lifeHome .life-stat strong{font-size:21px!important;color:#202d50!important;line-height:1.15!important;margin:8px 0 3px!important}
+  #lifeHome .life-stat small{font-size:10px!important;color:#8b96a9!important}
+  #lifeHome .life-duo{display:block!important}
+  #lifeHome .life-duo>.life-card:first-child{padding:16px!important;margin:0!important;background:#fff!important;border-radius:19px!important;border:1px solid #e7eaf5!important;box-shadow:0 6px 18px rgba(24,36,80,.04)!important}
+  #lifeHome .life-duo>.life-card:nth-child(2){display:none!important}
+  #lifeHome .life-card h3{font-size:17px!important}
+  #lifeHome .life-entry-form{gap:11px!important}
+  #lifeHome .life-fields:first-child{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}
+  #lifeHome .life-fields:not(:first-child){grid-template-columns:1fr!important;gap:9px!important}
+  #lifeHome .life-entry-form input,#lifeHome .life-entry-form select,#lifeHome .life-entry-form textarea{font-size:16px!important;min-height:47px!important;border-radius:12px!important;background:#fcfdff!important}
+  #lifeHome .life-entry-form .life-save{min-height:49px!important;border-radius:13px!important;font-size:14px!important;width:100%!important}
+  .mobile-nav{position:fixed!important;left:0;right:0;bottom:0;width:100%;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;height:calc(70px + env(safe-area-inset-bottom))!important;max-height:none!important;padding:7px 7px calc(7px + env(safe-area-inset-bottom))!important;gap:4px!important;overflow:visible!important;background:#fff!important;border-top:1px solid #e9ecf5!important;box-shadow:0 -4px 17px rgba(29,41,74,.055)!important;backdrop-filter:none!important;z-index:65!important}
+  .mobile-nav-item{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0!important;width:auto!important;flex:1 1 0!important;min-height:52px!important;height:54px!important;padding:5px 0!important;border-radius:13px!important;font-size:10px!important;font-weight:780!important;line-height:1!important;color:#7b849a!important;background:transparent!important;box-shadow:none!important}
+  .mobile-nav-item>span{display:grid!important;place-items:center;width:29px;height:26px;margin:0!important;font-size:21px!important;line-height:1!important;color:inherit!important}
+  .mobile-nav-item.active,.mobile-nav-item[aria-current="page"]{background:#f0edff!important;color:#503dc5!important}
+  .mobile-nav-item:focus-visible,.mobile-hello-actions button:focus-visible,.mobile-more-sheet button:focus-visible{outline:2px solid #7760de!important;outline-offset:1px!important}
+  .mobile-left-quick-diary{display:none!important} /* Quick Diary has a permanent bottom-left visible entry. */
+  .mobile-more-backdrop:not(.hidden){display:block!important;position:fixed;inset:0;background:rgba(13,21,44,.43);z-index:85}
+  .mobile-more-sheet:not(.hidden){display:block!important;position:fixed;left:0;right:0;bottom:0;z-index:86;max-height:calc(90dvh - env(safe-area-inset-top));overflow-y:auto;padding:13px 17px calc(25px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0;background:#fff;box-shadow:0 -15px 65px rgba(12,23,53,.18);color:#202d50}
+  .mobile-more-handle{width:38px;height:5px;background:#d9ddea;border-radius:20px;margin:0 auto 15px}
+  .mobile-more-title-row{display:flex;align-items:start;justify-content:space-between;gap:8px;margin:0 0 17px}
+  .mobile-more-title-row small{font-size:10px;color:#8072c1;letter-spacing:.12em;font-weight:850}
+  .mobile-more-title-row h2{margin:5px 0 0;font-size:22px;letter-spacing:-.6px;color:#172441}
+  .mobile-more-close{border:1px solid #e7ebf3;background:#f8f9fd;width:43px;height:43px;border-radius:14px;font-size:24px;color:#4e5980}
+  .mobile-more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  .mobile-more-grid button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:4px;padding:15px;border:1px solid #e8ebf5;border-radius:16px;background:#fbfcff;min-height:121px;color:#1b2c4c;font:inherit}
+  .mobile-more-grid button.hidden{display:none!important}
+  .mobile-more-glyph{display:grid;place-items:center;width:32px;height:32px;border-radius:11px;background:#efedff;color:#584bd2;font-size:20px;margin-bottom:5px}
+  .mobile-more-grid strong{font-size:14px}
+  .mobile-more-grid small{font-size:11px;color:#78859d}
+  .mobile-more-settings{display:grid;gap:8px;margin-top:18px;border-top:1px solid #e9edf5;padding-top:16px}
+  .mobile-more-settings button{text-align:left;padding:13px;border:1px solid #e8ecf5;border-radius:13px;background:#fff;font:750 13px/1.25 inherit;color:#354260;min-height:48px}
+  #mobileMoreLogout{color:#b83148}
+  .mobile-more-versions{display:flex;gap:14px;justify-content:center;margin-top:18px;color:#8c95a8;font-size:11px}
+  .page-section:not(.hidden){animation:none!important;content-visibility:visible!important}
+  .page-section{gap:13px!important}
+  #expenditureSection .expense-hero{padding:17px!important;border-radius:17px!important;margin-bottom:11px!important;background:#f2f0ff!important;box-shadow:none!important}
+  #expenditureSection .expense-hero h2{font-size:21px!important}
+  #expenditureSection .expense-hero-actions{display:flex!important;width:100%!important;gap:8px!important;overflow-x:auto}
+  #expenditureSection .expense-hero-actions button{min-height:43px!important;flex:0 0 auto!important;font-size:11px!important}
+  #expenditureSection .expense-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  #expenditureSection .expense-kpi-card{border-radius:16px!important;min-height:98px!important;padding:13px!important;box-shadow:none!important}
+  #expenditureSection .expense-kpi-card strong{font-size:19px!important}
+  #expenditureSection .expense-view-tabs{display:flex!important;overflow-x:auto!important;flex-wrap:nowrap!important;scrollbar-width:none;gap:8px!important;padding-bottom:7px!important}
+  #expenditureSection .expense-view-tab{min-height:45px!important;white-space:nowrap!important;flex:0 0 auto!important;border-radius:12px!important}
+  #expenditureSection .expense-panel{padding:12px!important;border-radius:17px!important}
+  #expenditureSection .expense-filter-bar{display:flex!important;flex-wrap:wrap!important;gap:7px!important}
+  #expenditureSection .expense-search-wrap{flex:1 1 100%!important;min-width:0!important}
+  #expenditureSection .expense-filter-bar label,#expenditureSection .expense-filter-bar select{min-width:0!important;flex:1 1 calc(50% - 8px)!important}
+  #expenditureSection .expense-table-help{font-size:10px!important;line-height:1.55!important}
+  /* Expenses become readable cards on phones rather than an 1,030px table. */
+  #actualExpenseView .expense-table-wrap{overflow:visible!important;max-height:none!important;border:0!important}
+  #actualExpenseTable{display:block!important;min-width:0!important;width:100%!important;table-layout:auto!important;background:transparent!important}
+  #actualExpenseTable thead{display:none!important}
+  #actualExpenseTable tbody{display:grid!important;gap:10px!important}
+  #actualExpenseTable tbody>tr{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:5px 10px!important;min-width:0!important;max-width:100%!important;padding:13px!important;border:1px solid #e6eafa!important;border-radius:15px!important;background:#fff!important;box-shadow:0 3px 9px rgba(25,38,73,.035)!important}
+  #actualExpenseTable td{position:static!important;display:block!important;min-width:0!important;width:auto!important;max-width:100%!important;padding:2px!important;border:0!important;white-space:normal!important;overflow-wrap:anywhere!important;font-size:12px!important;box-shadow:none!important;background:transparent!important}
+  #actualExpenseTable td:nth-child(1){grid-column:2;grid-row:1;text-align:right!important;font-size:18px!important;font-weight:900!important;color:#2f3280!important;font-variant-numeric:tabular-nums}
+  #actualExpenseTable td:nth-child(2){grid-column:1;grid-row:1;color:#8b96a9!important;font-size:11px!important;align-self:center}
+  #actualExpenseTable td:nth-child(3){grid-column:1/-1;grid-row:2;font-size:15px!important;font-weight:850!important;color:#213459!important}
+  #actualExpenseTable td:nth-child(4){grid-column:1/-1;color:#65748f!important}
+  #actualExpenseTable td:nth-child(4):not(:empty)::before{content:'From  ';font-weight:750;color:#73809b}
+  #actualExpenseTable td:nth-child(5){grid-column:1/-1;color:#586783!important}
+  #actualExpenseTable td:nth-child(6){grid-column:1/-1;display:inline-flex!important;align-items:center;width:fit-content!important;border-radius:7px!important;background:#f2efff!important;color:#5949bb!important;font-weight:750!important;padding:4px 9px!important;font-size:11px!important}
+  #actualExpenseTable td:nth-child(7),#actualExpenseTable td:nth-child(8){grid-column:1/-1;color:#8b94a6!important;font-size:11px!important}
+  #actualExpenseTable td:nth-child(9){grid-column:1/-1;border-top:1px solid #edf0f8!important;margin-top:5px!important;padding-top:10px!important;display:flex!important;gap:8px!important;flex-wrap:wrap!important}
+  #actualExpenseTable td:nth-child(9) button{min-height:42px!important;border-radius:10px!important;font-size:12px!important}
+  #actualExpenseTable td input,#actualExpenseTable td select{max-width:100%!important;min-width:0!important;font-size:16px!important}
+  /* Compact the remaining screens, preserve their full feature set. */
+  .life-shell,.life-card,.quick-diary-calendar-card,.calendar-dedicated-grid>.life-card{border-radius:17px!important;box-shadow:none!important}
+  #quickDiarySection .quick-diary-layout,#quickDiarySection .quick-diary-bottom-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:11px!important}
+  #quickDiarySection .life-section-title,#calendarSection .life-section-title{gap:7px!important}
+  .dual-era-calendar .dual-english{font-size:16px!important;color:#195bb8!important}
+  .dual-era-calendar .dual-saka{font-size:10px!important;color:#a65011!important}
+  #calendarSection .life-calendar-day,.dual-era-calendar .life-calendar-day{min-height:46px!important}
+  input,textarea,select{scroll-margin-bottom:90px}
+}
+@media screen and (max-width:390px){
+  .main-content{padding-left:11px!important;padding-right:11px!important}
+  .mobile-life-hello{padding:17px 15px}
+  .mobile-hello-actions{gap:5px}
+  .mobile-hello-actions button{font-size:10px!important}
+  .mobile-nav{padding-left:4px!important;padding-right:4px!important;gap:2px!important}
+  .mobile-nav-item{font-size:9px!important}
+  #lifeHome .life-stat strong{font-size:19px!important}
+}
+@media screen and (min-width:861px){
+  .mobile-life-hello,.mobile-more-backdrop,.mobile-more-sheet,.mobile-top-brand{display:none!important}
+}
+@media print{.mobile-life-hello,.mobile-more-backdrop,.mobile-more-sheet{display:none!important}}
+
+/* 20.3.4 mobile refinement: preserve the user's always-available writing area and reduce duplicate controls. */
+.mobile-expense-tools{display:none}
+@media screen and (max-width:860px){
+  #overviewSection .overview-mode-bar{display:none!important}
+  #personalHomeContent #lifeHome .life-duo>.life-card:nth-child(2){display:block!important;padding:16px!important;margin:13px 0 0!important;background:#fff!important;border-radius:19px!important;border:1px solid #e7eaf5!important;box-shadow:0 6px 18px rgba(24,36,80,.04)!important}
+  #personalHomeContent #lifeDiaryHome textarea{min-height:100px!important;max-height:180px!important;font-size:16px!important}
+  #personalHomeContent #lifeDiaryHome .life-prompt-row{display:flex;gap:6px;flex-wrap:wrap}
+  #personalHomeContent #lifeDiaryHome .life-prompt-row button{min-height:38px;flex:1 1 auto}
+  .utility-drawer-launcher{display:none!important} /* Notes remain accessible through the full app on desktop; avoid covering mobile forms. */
+  #expenditureSection .expense-hero{display:none!important}
+  #expenditureSection .expense-kpi-grid{display:none!important} /* Duplicate values already visible in Life Expense Studio. */
+  #peopleExpenseModule{display:none!important}
+  #lifeExpenseStudio .life-duo>.life-card:nth-child(2){display:none!important}
+  #lifeExpenseStudio>.life-card:last-child{display:none!important}
+  body.sarni-mobile-expense-expanded #peopleExpenseModule{display:block!important}
+  body.sarni-mobile-expense-expanded #lifeExpenseStudio .life-duo>.life-card:nth-child(2){display:block!important}
+  body.sarni-mobile-expense-expanded #lifeExpenseStudio>.life-card:last-child{display:block!important}
+  #lifeExpenseStudio .life-duo>.life-card:first-child{margin:0!important}
+  #lifeExpenseStudio .life-section-title{display:flex!important;flex-direction:column!important;gap:9px!important}
+  #lifeExpenseStudio .life-section-title h2{font-size:20px!important;line-height:1.2!important;overflow-wrap:anywhere}
+  #lifeExpenseStudio .life-section-title p{font-size:12px!important}
+  .mobile-expense-tools{display:flex!important;gap:8px;margin:0 0 14px;position:relative;z-index:1}
+  .mobile-expense-tools button{flex:1 1 50%;min-width:0;min-height:43px;padding:9px 7px;border-radius:12px;border:1px solid #e2dff4;background:#f7f5ff;color:#5744b4;font:800 12px/1.25 system-ui;cursor:pointer}
+  #lifeExpenseStudio .life-duo{display:block!important}
+  #lifeExpenseStudio .life-duo>.life-card:nth-child(2){margin-top:12px!important}
+  #lifeExpenseStudio .life-table-scroll{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  #lifeExpenseStudio .life-report-tools{display:flex!important;flex-wrap:wrap!important;gap:7px!important}
+  #lifeExpenseStudio .life-report-tools>div:first-child{flex:1 1 100%}
+  #lifeExpenseStudio .life-report-tools label{flex:1 1 100%;min-width:0}
+  #expenditureSection .page-section,#expenditureSection .panel,#expenditureSection .life-shell{max-width:100%!important;min-width:0!important}
+  #expenditureSection .expense-data-view{min-width:0!important;max-width:100%!important}
+  #expenditureSection .expense-view-tabs{margin-top:12px!important}
+  #expenditureSection .expense-table-help{display:none!important}
+  #expenditureSection #actualExpenseTable td:nth-child(4):not(:empty)::before{content:'Account: ';}
+  #expenditureSection .expense-table-wrap{max-width:100%!important}
+}
+@media screen and (prefers-reduced-motion:reduce){.mobile-nav,.mobile-life-hello,.mobile-more-sheet{animation:none!important;transition:none!important}}
+
+/* Mobile login: place the form on the first viewport and keep branding compact. */
+@media screen and (max-width:860px){
+  .login-view{padding:11px!important;align-items:start!important;overflow-y:auto!important}
+  .login-shell{width:100%!important;max-width:520px!important;border-radius:19px!important;overflow:hidden!important}
+  .brand-panel{min-height:0!important;padding:17px 23px 16px!important}
+  .brand-panel .brand-mark{height:38px!important;width:38px!important;font-size:22px!important;border-radius:11px!important;margin:0 0 12px!important}
+  .brand-panel .eyebrow{font-size:10px!important;margin:0 0 6px!important}
+  .brand-panel h1{font-size:22px!important;line-height:1.12!important;letter-spacing:-.7px!important}
+  .brand-panel .brand-copy,.brand-panel .feature-pills{display:none!important}
+  .login-card{padding:19px 22px 21px!important;gap:13px!important}
+  .login-card h2{font-size:28px!important;margin:0 0 3px!important}
+  .login-card .muted{font-size:12px!important;line-height:1.35!important}
+  .login-card label{font-size:12px!important}
+  .login-card input{min-height:47px!important;font-size:16px!important}
+  .login-card .primary-button.full{min-height:47px!important}
+  .login-card .login-meta{padding-top:8px!important}
+  .login-card .login-options{gap:7px!important}
+}
+
+
+/* SarNi v20.3.5 — Expense Insights: lightweight, high-contrast, no third-party chart dependencies */
+.sarni-insight-section{--sar-ni:#6254da;--sar-line:#e4e7f4;min-width:0;margin:15px 0 21px;background:linear-gradient(145deg,#fff 0%,#fbfcff 90%);border:1px solid var(--sar-line);border-radius:22px;box-shadow:0 9px 28px rgba(22,31,67,.045);padding:18px;color:#182441}
+.sarni-insight-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sarni-insight-eyebrow{display:block;color:#6d5fcd;font-size:10px;font-weight:900;letter-spacing:.11em;text-transform:uppercase}
+.sarni-insight-head h3{margin:4px 0;color:#1e294b}
+.sarni-insight-head h3{font-size:22px;font-weight:900;letter-spacing:-.03em}
+.sarni-insight-head p{font-size:12px;color:#687490;margin:5px 0}
+.sarni-insight-link{border:1px solid #dddaf7;background:#f4f1ff;color:#5544b4;border-radius:12px;padding:10px 13px;font-size:12px;font-weight:900;min-height:39px;cursor:pointer}
+.sarni-insight-link:hover{background:#e9e4ff}
+.sarni-insight-home-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-top:14px}
+.sarni-insight-plot{min-width:0;border:1px solid #eaedf6;border-radius:17px;background:white;padding:14px}
+.sarni-insight-plot h4{font-size:14px;font-weight:900;margin:0 0 5px;color:#27314c}
+.sarni-insight-plot>p{font-size:11px;color:#72809a;margin:0 0 13px}
+.sarni-donut-region{display:flex;align-items:center;gap:16px;min-width:0;flex-wrap:wrap;padding:7px 0}
+.sarni-insight-donut{width:152px;height:152px;flex:0 0 152px;border-radius:100%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.03)}
+.sarni-insight-donut-hole{width:110px;height:110px;border-radius:50%;background:#fff;display:grid;align-content:center;text-align:center;gap:4px;padding:10px}
+.sarni-insight-donut-hole small{font-size:10px;font-weight:750;color:#748199}
+.sarni-insight-donut-hole strong{font-size:16px;line-height:1.2;color:#1e2a4d;overflow-wrap:anywhere}
+.sarni-insight-legend{display:grid;gap:4px;flex:1 1 175px;min-width:0}
+.sarni-insight-legend-row{display:grid;grid-template-columns:10px minmax(60px,1fr) auto 35px;gap:8px;align-items:center;width:100%;background:transparent;border:0;color:#394661;text-align:left;padding:6px 4px;min-height:32px;font:700 11px/1.4 system-ui;border-radius:7px}
+button.sarni-insight-legend-row{cursor:pointer}
+button.sarni-insight-legend-row:hover{background:#f5f5ff}
+.sarni-insight-legend-row strong{font-weight:900;white-space:nowrap}.sarni-insight-legend-row small{color:#78869b;text-align:right}
+.sarni-insight-legend-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.sarni-insight-dot{width:10px;height:10px;border-radius:4px;display:inline-block}
+.sarni-monthly-bars{overflow-x:auto;max-width:100%;padding:6px 2px 0}
+.sarni-insight-bars{display:flex;align-items:stretch;justify-content:space-between;min-width:270px;height:175px;gap:4px}
+.sarni-insight-bar-item{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px}
+.sarni-insight-bar-item small{font-size:10px;color:#717d93;font-weight:850}
+.sarni-insight-bar-track{flex:1;width:100%;max-width:30px;background:linear-gradient(#f5f6fb,#eff1f9);border-radius:7px;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.sarni-insight-bar-track i{width:100%;display:block;background:linear-gradient(180deg,#958bfa,#6e63e9);border-radius:7px 7px 2px 2px;transition:height .16s ease-out}
+.sarni-insight-bar-track i.current{background:linear-gradient(180deg,#27c0b2,#069b91)}
+.sarni-insight-bar-item>strong{font-size:10px;color:#43506a;font-weight:900;white-space:nowrap}
+.sarni-insight-note{color:#78859a;font-size:11px;margin:12px 0 0}
+.sarni-insight-toggle{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;padding:3px 0;min-height:44px}
+.sarni-insight-toggle::-webkit-details-marker{display:none}
+.sarni-insight-toggle strong{display:block;color:#24314d;font-size:19px;font-weight:900;margin:3px 0}
+.sarni-insight-toggle small{color:#77829a;font-size:11px}
+.sarni-insight-chevron{color:#6254da;font-size:20px;transform:rotate(0deg)}
+.sarni-insight-detail details[open] .sarni-insight-chevron{transform:rotate(180deg)}
+.sarni-insight-content{padding-top:14px}
+.sarni-insight-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.sarni-insight-total{font-size:15px;font-weight:900;color:#273454}
+.sarni-insight-full-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.sarni-breakdown{display:grid;gap:13px;padding:6px 0}
+.sarni-insight-headrow>div:first-child{display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:750;color:#384662}
+.sarni-insight-headrow>div:first-child span{white-space:normal;overflow-wrap:anywhere}
+.sarni-insight-headrow>div:first-child strong{font-size:12px;white-space:nowrap;color:#263451}
+.sarni-insight-headtrack{height:10px;border-radius:20px;background:#f0f2fa;overflow:hidden;margin-top:5px}
+.sarni-insight-headtrack i{height:100%;display:block;border-radius:20px}
+.sarni-compare-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sarni-compare-metrics>div{padding:12px;border-radius:13px;background:#f5f7fe}
+.sarni-compare-metrics small{display:block;color:#717f95;font-size:11px;font-weight:750;margin-bottom:4px}
+.sarni-compare-metrics strong{font-size:19px;color:#263551}
+.sarni-compare-tracks{display:grid;gap:10px;padding:18px 0}
+.sarni-compare-tracks>div{background:#f1f2fa;border-radius:10px;height:14px;position:relative}
+.sarni-compare-tracks span{position:absolute;left:0;top:-16px;font-size:9px;color:#7b84a0}
+.sarni-compare-tracks i{display:block;height:100%;border-radius:10px}
+.sarni-compare-callout{border-radius:10px;background:#e9f8f4;color:#117f70;font-size:12px;font-weight:800;padding:9px 10px}
+.sarni-compare-callout.increase{background:#fff4e9;color:#a65c24}
+.sarni-insight-empty{min-height:105px;display:grid;place-items:center;border-radius:12px;background:#f7f8fc;color:#758198;text-align:center;font-size:12px;padding:14px;flex:1}
+@media(max-width:1050px){.sarni-insight-home-grid,.sarni-insight-full-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:860px){
+ .sarni-insight-section{padding:13px;margin:12px 0;border-radius:18px}
+ .sarni-insight-head h3{font-size:19px}
+ .sarni-insight-home-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+ .sarni-insight-plot{padding:12px;border-radius:15px}
+ .sarni-insight-home-grid .sarni-insight-plot:nth-child(2){display:none} /* Keep Home focused; full trend in Expenses */
+ .sarni-insight-donut{width:123px;height:123px;flex-basis:123px}
+ .sarni-insight-donut-hole{width:89px;height:89px;padding:5px}
+ .sarni-insight-donut-hole strong{font-size:12px}
+ .sarni-insight-legend-row{gap:5px;grid-template-columns:9px minmax(45px,1fr) auto 30px;font-size:10px}
+ .sarni-insight-toggle strong{font-size:15px}
+ .sarni-insight-full-grid{grid-template-columns:minmax(0,1fr)}
+ .sarni-insight-bars{height:152px}
+ .sarni-insight-bar-item strong{font-size:9px}
+}
+@media (prefers-reduced-motion:reduce){.sarni-insight-bar-track i{transition:none}}
+@media print{.sarni-insight-link{display:none!important}.sarni-insight-section{box-shadow:none!important;break-inside:avoid}}
+
+/* SarNi v20.3.6 · daily-first workflow and archive search */
+.sarni-workflow-tabs{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:8px 0 17px;padding:8px;background:linear-gradient(110deg,#f5f6ff,#f7fbff);border:1px solid #e2e8f6;border-radius:17px}
+.sarni-workflow-tabs .sarni-workflow-tab{border:1px solid #dce2f2;padding:12px 15px;color:#253355;background:#fff;border-radius:12px;font-weight:850;cursor:pointer;min-height:46px}
+.sarni-workflow-tabs .sarni-workflow-tab.active{background:#6154dc;color:#fff;border-color:#6154dc;box-shadow:0 6px 15px #6055df24}
+.sarni-workflow-tabs>span{font-size:12px;color:#75819a;padding:0 4px}
+.sarni-record-filters{display:flex;align-items:end;gap:12px;flex-wrap:wrap;padding:13px;margin:12px 0;background:#f6f8ff;border-radius:13px;border:1px solid #e4e8f4}
+.sarni-record-filters label{font-size:12px;font-weight:800;color:#4b5a77;display:flex;gap:7px}
+.sarni-search-field{flex:1 1 260px;flex-direction:column}
+.sarni-record-filters input[type=search]{border:1px solid #cdd5e8;border-radius:11px;padding:12px;background:#fff;min-height:45px;font-size:14px;width:100%;color:#1d2945}
+.sarni-all-dates{align-items:center;min-height:44px;cursor:pointer}
+.sarni-all-dates input{width:18px;height:18px;accent-color:#6154dc}
+#sarniExpenseFilterInfo{color:#34467b;font-weight:850;font-size:12px}
+.sarni-record-filters button{min-height:44px}
+@media(max-width:860px){.sarni-workflow-tabs{display:grid;grid-template-columns:1fr 1fr;padding:7px;gap:6px}.sarni-workflow-tabs .sarni-workflow-tab{min-height:48px;font-size:12px;padding:9px 7px}.sarni-workflow-tabs>span{grid-column:1/-1;font-size:10px;text-align:center}.sarni-record-filters{display:grid;grid-template-columns:1fr 1fr;padding:10px;gap:9px}.sarni-search-field{grid-column:1/-1}.sarni-record-filters #sarniExpenseFilterInfo{grid-column:1/-1}.sarni-all-dates{font-size:11px!important}}
+@media(prefers-reduced-motion:reduce){.sarni-workflow-tabs *{scroll-behavior:auto}}
+
+#sarniInsightPrintSheet{display:none}
+@media print{
+ body:has(#sarniInsightPrintSheet)>*:not(#sarniInsightPrintSheet){display:none!important}
+ #sarniInsightPrintSheet{display:block!important;color:#13233d!important;background:white!important;padding:8mm!important;font:12px/1.45 Arial,sans-serif!important}
+ #sarniInsightPrintSheet h1{font-size:21px;margin-bottom:4px}
+ #sarniInsightPrintSheet .sarni-insight-full-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:12px!important}
+ #sarniInsightPrintSheet .sarni-insight-plot{break-inside:avoid;border:1px solid #d3dae7;padding:9px;background:white;border-radius:10px}
+ #sarniInsightPrintSheet .sarni-insight-bar-track{min-height:150px}
+ #sarniInsightPrintSheet button{display:none!important}
+ @page{size:A4 landscape;margin:12mm}
+}

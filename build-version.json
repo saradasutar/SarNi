@@ -1,6 +1,6 @@
 {
-  "version": "20.3.2",
-  "frontend": "20.3.2",
-  "backendExpected": "3.17.16",
-  "build": "20261010-20320-left-diary"
+  "version": "20.3.6",
+  "frontend": "20.3.6",
+  "backendExpected": "3.17.18",
+  "build": "20261011-20360-quick-detailed"
 }

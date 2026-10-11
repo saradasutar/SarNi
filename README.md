@@ -1,5 +1,3 @@
-# SarNi v20.3.1
+# SarNi v20.3.6 — Quick Use / Detailed View
 
-Private personal-life and expense dashboard frontend. `index.html` launches the existing private Google Apps Script deployment; `app-v20-3-1.js` and `styles.css` power the application.
-
-See INSTALL-FIRST.md in the distribution ZIP. No private user data belongs in this public repository.
+Lean GitHub Pages files. Signed-in dashboard comes from the existing Apps Script project, no extra database or charting library. Keep all financial records in your private Google Sheet.
