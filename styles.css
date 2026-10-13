@@ -11185,3 +11185,23 @@ html.sarni-personal-only #investmentOverviewContent,html.sarni-personal-only #gp
 .sarni-recent-row div{display:grid;gap:4px;min-width:0}.sarni-recent-row strong{font-size:.92rem;overflow-wrap:anywhere}.sarni-recent-row small{color:#687b95;font-size:.74rem}.sarni-recent-row b{white-space:nowrap;color:#333b7c}
 .sarni-shared-author{font-size:.76rem;color:#516386;font-weight:700}
 @media(max-width:860px){.sarni-home-recent-grid{grid-template-columns:1fr;gap:12px}.sarni-recent-card{padding:14px}}
+
+/* SarNi v20.7.1 — focused layout cleanup; preserve legacy renderer DOM mounts. */
+#overviewSection .overview-mode-bar {display:none!important;} /* only one Home mode remains */
+#expenditureSection .sarni-compat-kpis,
+#expenditureSection .sarni-compat-monthly-trend,
+#expenditureSection #sarniLegacyKpis {display:none!important;}
+#adminSessionShortcut {display:none!important;} /* Admin Settings already in sidebar and header */
+.sarni-compact-chart-details{margin:14px 0 4px;border:1px solid #e1e7f2;border-radius:16px;background:#f8faff;overflow:hidden}
+.sarni-compact-chart-details>summary{display:flex;align-items:center;gap:10px;min-height:52px;padding:13px 16px;cursor:pointer;color:#29365d;list-style:none;font-weight:850}
+.sarni-compact-chart-details>summary::-webkit-details-marker{display:none}
+.sarni-compact-chart-details>summary small{margin-left:auto;font-size:12px;font-weight:600;color:#718098;text-align:right}
+.sarni-compact-chart-details[open]>summary{border-bottom:1px solid #e1e7f2;background:#f2f4ff}
+.sarni-compact-chart-details .sarni-trip-visual-grid{padding:14px}
+@media (max-width:860px){
+  #quickDiaryMobilePinned{display:none!important;} /* Bottom Diary + Home quick entry already available */
+  .sarni-compact-chart-details>summary{gap:8px;padding:11px}
+  .sarni-compact-chart-details>summary small{font-size:10px}
+  .sarni-compact-chart-details .sarni-trip-visual-grid{padding:9px}
+}
+@media print { .sarni-compact-chart-details>summary {display:none!important;} }

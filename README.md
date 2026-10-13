@@ -1,7 +1,5 @@
-# SarNi Personal Life Manager — Frontend v20.7.0
+# SarNi FE v20.7.1
 
-Upload only the included production files to `saradasutar/SarNi` on GitHub Pages.
-The Google Apps Script project separately needs both `Code.gs` and `IndexApp.html` v3.17.24 / v20.7.0.
-Private financial and diary data must NEVER be pushed to public GitHub.
+Current JS: `app-v20-7-1.js`; paired backend: `Code.gs` v3.17.24.
 
-Do not run `setupSystem()` on an existing SarNi installation.
+Update the existing Apps Script `IndexApp.html` whenever deploying new FE assets, and redeploy the same web app. Do not publish private data to GitHub.

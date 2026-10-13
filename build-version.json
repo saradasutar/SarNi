@@ -1,6 +1,6 @@
 {
-  "version": "20.7.0",
-  "frontend": "20.7.0",
+  "version": "20.7.1",
+  "frontend": "20.7.1",
   "backendExpected": "3.17.24",
-  "build": "20261013-20700-life-manager"
+  "build": "20261013-20701-clutterfree"
 }
