@@ -1,3 +1,7 @@
-# SarNi Frontend v20.3.7
+# SarNi Personal Life Manager — Frontend v20.7.0
 
-This is a public GitHub Pages frontend for an existing private Google Apps Script backend v3.17.18. Only release assets are included. Never upload personal financial/diary data or credentials. Follow `INSTALL-FIRST.md` from the complete package before deploying.
+Upload only the included production files to `saradasutar/SarNi` on GitHub Pages.
+The Google Apps Script project separately needs both `Code.gs` and `IndexApp.html` v3.17.24 / v20.7.0.
+Private financial and diary data must NEVER be pushed to public GitHub.
+
+Do not run `setupSystem()` on an existing SarNi installation.

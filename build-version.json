@@ -1,6 +1,6 @@
 {
-  "version": "20.4.1",
-  "frontend": "20.4.1",
-  "backendExpected": "3.17.20",
-  "build": "20261011-20410-personal-only"
+  "version": "20.7.0",
+  "frontend": "20.7.0",
+  "backendExpected": "3.17.24",
+  "build": "20261013-20700-life-manager"
 }

@@ -11144,3 +11144,44 @@ body.section-expenditure.sarni-expense-actual:not(.sarni-legacy-table-open) #exp
 
 /* v20.4.1 — Investment and GPF panels no longer take part in SarNi navigation. */
 html.sarni-personal-only #investmentOverviewContent,html.sarni-personal-only #gpfSection,html.sarni-personal-only #holdingsSection,html.sarni-personal-only #watchlistSection,html.sarni-personal-only #transactionsSection,html.sarni-personal-only #sipSection,html.sarni-personal-only #portfolioStartupOverlay{display:none!important}
+
+
+/* SarNi v20.4.2: Life Experiences — responsive and calm. */
+.life-experience-page{max-width:1450px;margin:auto;padding:12px 4px 48px}
+.life-experience-hero{background:linear-gradient(115deg,#f1efff,#e8f9f5);border:1px solid #d8dff4;border-radius:20px;padding:23px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.life-experience-hero h2{font-size:clamp(23px,2.5vw,32px);color:#202e52;margin:6px 0}.life-experience-hero p{max-width:700px;color:#536481}
+.life-experience-layout{display:grid;grid-template-columns:minmax(330px,.92fr) minmax(320px,1.08fr);gap:18px;align-items:start}
+.life-experience-editor,.life-experience-list-panel{min-width:0;border:1px solid #dee5f4;box-shadow:0 6px 22px rgba(16,39,70,.05);border-radius:18px;background:white;padding:21px}
+.life-experience-editor h3,.life-experience-list-panel h3{font-size:21px;color:#203058;margin:0 0 18px}
+#lifeExperienceForm{display:grid;gap:13px}#lifeExperienceForm label{display:grid;gap:6px;font-weight:780;font-size:13px;color:#4b5673}
+#lifeExperienceForm input:not([type=checkbox]),#lifeExperienceForm textarea,#lifeExperienceForm select{width:100%;min-width:0;border:1px solid #ced8eb;border-radius:10px;background:#fcfdff;color:#1c2f4d;padding:12px;font:600 14px/1.45 inherit;font-family:inherit;min-height:44px}
+#lifeExperienceForm textarea{resize:vertical;line-height:1.55;font-weight:650}
+.life-experience-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.life-experience-preview{min-height:50px;padding:12px;border:1px dashed #b6c5dd;background:#f7faff;border-radius:12px;color:#72809d;font-size:12px}.life-experience-preview img{display:block;max-width:140px;max-height:140px;border-radius:12px;object-fit:cover}
+#lifeExperienceForm .life-experience-remove{display:flex;flex-direction:row;align-items:center;gap:8px;font-size:12px}
+.life-experience-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:15px}.life-experience-tools h3{margin:0;flex:1 1 100%}.life-experience-tools input{flex:1 1 150px;min-width:0;min-height:42px;border:1px solid #ccd6e7;border-radius:12px;padding:10px}
+.life-experience-list{display:grid;gap:12px}.life-experience-card{display:flex;gap:13px;border:1px solid #e0e7f4;background:#fafbff;border-radius:14px;padding:12px;align-items:flex-start}
+.life-experience-thumb,.life-experience-image-placeholder{width:100px;height:94px;flex:none;object-fit:cover;border-radius:11px;background:#e9e5ff;color:#6d57c9;display:grid;place-items:center;font-size:24px}
+.life-experience-card-body{flex:1;min-width:0}.life-experience-card-body h4{font-size:16px;margin:5px 0;color:#1f3456}.life-experience-card-body p{margin:4px 0 7px;color:#41516e;white-space:pre-wrap;font-size:13px;line-height:1.55}.life-experience-card-body small{display:block;color:#71809b;font-size:11px}
+.life-experience-tag{display:inline-block;font-size:10px;letter-spacing:.045em;font-weight:850;color:#6757bf}.life-experience-card-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.life-context-hint,.life-upcoming-lessons{border:1px solid #e2c17b;border-left:4px solid #e59b20;background:#fffae8;color:#544222;border-radius:12px;padding:10px 13px;margin:10px 0;font-size:13px}
+.life-tip-row{border-bottom:1px solid #f1dfb0;padding:5px 0}.life-tip-row:last-of-type{border-bottom:0}.life-tip-row strong,.life-upcoming-item strong{display:block;color:#734e16}.life-tip-row p,.life-upcoming-item p{line-height:1.45;margin:4px 0;font-weight:700}.life-tip-row small,.life-upcoming-item small{color:#897246}
+.life-upcoming-item{padding:8px 0;border-bottom:1px solid #ead7a9}.life-upcoming-item:last-child{border:0}
+#lifeExperiencePrintSheet{display:none}
+@media(max-width:900px){.life-experience-layout{grid-template-columns:1fr}.life-experience-page{padding:9px 0 85px}.life-experience-editor,.life-experience-list-panel{padding:15px}}
+@media(max-width:420px){.life-experience-two{grid-template-columns:1fr}.life-experience-thumb,.life-experience-image-placeholder{width:76px;height:78px}.life-experience-hero{padding:16px}}
+@media print{body>*:not(#lifeExperiencePrintSheet){display:none!important}#lifeExperiencePrintSheet{display:block!important;color:black;font:12pt Georgia,serif}#lifeExperiencePrintSheet article{break-inside:avoid;border-bottom:1px solid #bbb;padding:12px 0}#lifeExperiencePrintSheet pre{white-space:pre-wrap;font:11pt Georgia,serif}}
+
+/* SarNi 20.7 — calm couple-first daily layout */
+.sarni-diary-privacy{display:flex;align-items:center;gap:.6rem;color:#43557b;font-weight:750;font-size:.82rem;margin:.6rem 0}
+.sarni-diary-privacy select{flex:1;min-width:0;min-height:38px;border:1px solid #d8dff1;border-radius:10px;background:#fff;color:#273a64;font-size:.88rem;padding:.45rem}
+.sarni-home-recent-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0}
+.sarni-recent-card{min-width:0;background:#fff;border:1px solid #e4e9f4;border-radius:20px;padding:18px;box-shadow:0 5px 17px rgba(31,43,74,.035)}
+.sarni-recent-heading{display:flex;justify-content:space-between;align-items:center;gap:9px}
+.sarni-recent-heading h3{margin:0;font-size:1.05rem;color:#172b4d}
+.sarni-recent-heading button{border:0;background:#eef0ff;color:#4b42be;border-radius:10px;padding:8px 10px;font-weight:800;cursor:pointer}
+.sarni-recent-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #edf1f8;color:#283653}
+.sarni-recent-row:last-child{border-bottom:0}
+.sarni-recent-row div{display:grid;gap:4px;min-width:0}.sarni-recent-row strong{font-size:.92rem;overflow-wrap:anywhere}.sarni-recent-row small{color:#687b95;font-size:.74rem}.sarni-recent-row b{white-space:nowrap;color:#333b7c}
+.sarni-shared-author{font-size:.76rem;color:#516386;font-weight:700}
+@media(max-width:860px){.sarni-home-recent-grid{grid-template-columns:1fr;gap:12px}.sarni-recent-card{padding:14px}}
