@@ -1,5 +1,9 @@
-# SarNi FE v20.7.1
+# SarNi – Personal Life Centre
 
-Current JS: `app-v20-7-1.js`; paired backend: `Code.gs` v3.17.24.
+FE v20.8.0 / BE v3.17.25. Private household expenses, diary, Book Writing, goals, reminders, calendar, life experiences and festivals.
 
-Update the existing Apps Script `IndexApp.html` whenever deploying new FE assets, and redeploy the same web app. Do not publish private data to GitHub.
+GitHub Pages is only the **frontend**. Google Apps Script hosts the database logic; private data stays in Google Sheets and Google Drive.
+
+The Odia-focused calendar presents dates in Odia script for ordinary days, and displays traditional lunar **tithi only for saved, year-specific Panjika-verified occasions**. Saka National Calendar is a separate solar calendar.
+
+Use INSTALL-FIRST.md from the complete release. Do not publish passwords, financial CSV exports, private diary text or Drive originals on GitHub.

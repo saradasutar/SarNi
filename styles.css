@@ -11205,3 +11205,28 @@ html.sarni-personal-only #investmentOverviewContent,html.sarni-personal-only #gp
   .sarni-compact-chart-details .sarni-trip-visual-grid{padding:9px}
 }
 @media print { .sarni-compact-chart-details>summary {display:none!important;} }
+
+/* SarNi v20.7.2 | Personal Life Centre and Odia-aware yearly planner */
+.sarni-planner-page,.sarni-family-calendar-card{max-width:1500px;margin-inline:auto}
+.sarni-planner-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px 19px;border-radius:19px;background:linear-gradient(125deg,#f2f3ff,#fafcff);border:1px solid #dce4f7;margin-bottom:14px}
+.sarni-planner-head h2{margin:2px 0;color:#27376b;font-size:clamp(22px,2.3vw,29px)}
+.sarni-planner-head p{margin:4px 0 0;color:#6b7994}
+.sarni-planner-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:15px}
+.sarni-planner-toolbar input[type=search]{flex:1 1 180px;max-width:500px}.sarni-planner-toolbar input,.sarni-planner-toolbar select{background:#fff;border:1px solid #d8def0;border-radius:11px;min-height:42px;padding:9px}
+.sarni-planner-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:13px;margin:10px 0 22px}
+.sarni-planner-card,.sarni-occasion-card{border-radius:16px;border:1px solid #dee4f6;background:#fff;box-shadow:0 7px 19px rgba(25,38,71,.055);padding:15px;min-width:0}
+.sarni-planner-card-title,.sarni-planner-card-actions{display:flex;justify-content:space-between;align-items:center;gap:8px}.sarni-planner-card-title{color:#5b5ec4;font-weight:800;font-size:12px}.sarni-planner-card h3{font-size:18px;color:#24345b;margin:12px 0 5px}.sarni-planner-card p{color:#5b6980;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}.sarni-planner-card-actions{margin-top:15px;justify-content:flex-end}
+.sarni-planner-progress{height:9px;border-radius:9px;background:#e9e9fc;overflow:hidden;margin:10px 0 5px}.sarni-planner-progress i{display:block;height:100%;background:linear-gradient(90deg,#5655c9,#9c76dd);border-radius:9px}
+.sarni-year-summary{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}.sarni-year-summary span{border-radius:12px;background:#eef2ff;padding:10px 14px;color:#445278}.sarni-year-summary strong{font-size:17px;color:#2b3287}
+.sarni-occasion-card{display:flex;gap:12px;align-items:flex-start}.sarni-occasion-date{flex:0 0 65px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f1effe;color:#5740b3;padding:12px 7px;border-radius:13px}.sarni-occasion-date strong{font-size:25px}.sarni-occasion-date small{font-weight:800}.sarni-occasion-detail{flex:1;min-width:0}.sarni-occasion-detail h3{margin:5px 0;color:#23355f;font-size:16px}.sarni-occasion-detail p{margin:3px 0;color:#7d5da0;font-size:12px}.sarni-occasion-detail small{color:#62738c}.sarni-occasion-type{font-size:10px;font-weight:900;letter-spacing:.07em;color:#5d58b8}.sarni-occasion-card.needs-confirmation{border-style:dashed;background:#fffaf5}.sarni-occasion-card.needs-confirmation .sarni-occasion-date{background:#fff0de;color:#935d25}.sarni-festival-explain{background:#f8f5ff;border-left:3px solid #876bc1;border-radius:5px;padding:10px 13px;font-size:12px;color:#53637e}
+.sarni-calendar-view-pref{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px;border:1px solid #e1e6f6;border-radius:12px;background:#f9fbff}.sarni-calendar-view-pref label{min-width:200px}.sarni-calendar-view-pref small{flex:1;min-width:180px;color:#687690}
+.sarni-odia-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.sarni-odia-control-row{display:flex;flex-wrap:wrap;gap:10px}.sarni-odia-control-row label{flex:1 1 180px}.sarni-odia-admin{margin-bottom:18px}.sarni-odia-admin-form{display:flex;flex-wrap:wrap;align-items:end;gap:14px;padding:15px}.sarni-odia-admin-form>label{display:grid;gap:6px;min-width:160px}.sarni-odia-admin-form .sarni-odia-admin-check{display:flex;align-items:center}.sarni-festival-alert{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:8px;padding:12px 14px;background:#fffaf0;border:1px solid #f0d6ad;border-radius:12px;color:#735223}
+.sarni-cal-odia-indicator{font-size:10px;color:#7a4bbd;font-weight:900;margin:2px}
+.purple-dot{background:#9364c7;display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+@media(max-width:690px){.sarni-planner-head{padding:13px}.sarni-planner-toolbar>*{flex:1 1 140px}.sarni-planner-cards{grid-template-columns:1fr}.sarni-odia-fields{grid-template-columns:1fr}.sarni-occasion-card{padding:11px}.sarni-occasion-date{flex-basis:55px}}
+@media print{.sarni-occasion-card{break-inside:avoid}}
+
+/* Odia-focused mode uses Odia-script Gregorian day numbers; lunar tithi stays Panjika verified */
+.odia-script-date{color:#844baf;font-weight:950;font-size:1.15em}.sarni-festival-home:empty{display:none}.sarni-festival-home{grid-column:1/-1;margin:8px 0}
+
+.sarni-global-odia-mode{display:flex;align-items:center;gap:5px;font-size:11px;color:#60708a;font-weight:750;white-space:nowrap}.sarni-global-odia-mode select{max-width:150px;min-height:34px;border:1px solid #d6def0;border-radius:9px;background:#fff;color:#33476a;padding:5px}@media(max-width:860px){.sarni-global-odia-mode{position:absolute;right:9px;top:9px;z-index:4;max-width:160px;font-size:0}.sarni-global-odia-mode select{font-size:11px;max-width:128px;min-height:32px}}

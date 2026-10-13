@@ -1,6 +1,6 @@
 {
-  "version": "20.7.1",
-  "frontend": "20.7.1",
-  "backendExpected": "3.17.24",
-  "build": "20261013-20701-clutterfree"
+  "version": "20.8.0",
+  "frontend": "20.8.0",
+  "backendExpected": "3.17.25",
+  "build": "20261013-20800-odia-life"
 }
