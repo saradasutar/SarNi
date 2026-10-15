@@ -10,6 +10,18 @@
   "theme_color": "#142954",
   "icons": [
     {
+      "src": "/SarNi/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/SarNi/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
       "src": "/SarNi/sarni-life-icon.svg",
       "type": "image/svg+xml",
       "sizes": "any",
