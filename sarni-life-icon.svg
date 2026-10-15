@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SarNi personal life dashboard - sunrise, growth and open book">
+ <defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#142954"/><stop offset="1" stop-color="#39317A"/></linearGradient>
+  <linearGradient id="leafL" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4BE2B3"/><stop offset="1" stop-color="#079E9B"/></linearGradient>
+  <linearGradient id="leafR" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#A38CFF"/><stop offset="1" stop-color="#6054D7"/></linearGradient>
+ </defs>
+ <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#bg)"/>
+ <circle cx="32" cy="16.7" r="6.5" fill="#FFC451"/>
+ <path d="M17 16l-2.8-3.7M47 16l2.8-3.7M32 6v-2" fill="none" stroke="#FFC451" stroke-width="2.5" stroke-linecap="round"/>
+ <path d="M31.5 44.5C20.3 42 13.3 33.2 13.4 23.6C23.4 24.2 30.5 31 31.5 44.5Z" fill="url(#leafL)"/>
+ <path d="M32.5 44.5C43.7 42 50.7 33.2 50.6 23.6C40.6 24.2 33.5 31 32.5 44.5Z" fill="url(#leafR)"/>
+ <path d="M31.5 44.5C30.3 35 26.1 30 20.8 27M32.5 44.5C33.7 35 37.9 30 43.2 27" stroke="#C9F8ED" stroke-opacity=".85" stroke-width="2" fill="none" stroke-linecap="round"/>
+ <path d="M11 44.8C20 43 26.7 45 32 50.5C37.3 45 44 43 53 44.8V52C44.3 50.3 37.6 52.2 32 57C26.4 52.2 19.7 50.3 11 52Z" fill="#F9FBFF"/>
+ <path d="M32 50.5V56.4" stroke="#9EB9E7" stroke-width="1.5"/>
+</svg>
