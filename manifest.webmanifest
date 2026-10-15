@@ -1,0 +1,19 @@
+{
+  "id": "/SarNi/",
+  "name": "SarNi — Personal Life Dashboard",
+  "short_name": "SarNi",
+  "description": "Personal life dashboard for planning, calendar, expenses, diary and memories",
+  "start_url": "/SarNi/",
+  "scope": "/SarNi/",
+  "display": "standalone",
+  "background_color": "#f5f7ff",
+  "theme_color": "#142954",
+  "icons": [
+    {
+      "src": "/SarNi/sarni-life-icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ]
+}
