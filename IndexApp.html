@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+
+<html class="sarni-personal-only" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+<meta content="no-cache" http-equiv="Pragma"/>
+<meta content="0" http-equiv="Expires"/>
+<meta content="#eef5ff" name="theme-color"/>
+<meta content="Private family finance, expenses, diary and planning dashboard" name="description"/>
+<meta content="20261016-20803-smartpaste" name="myfinance-build"/>
+<meta content="light dark" name="color-scheme"/>
+<script>
+    window.__MYFINANCE_PAGE_BUILD__='20261016-20803-smartpaste';
+    window.__MYFINANCE_NATIVE__=true;
+    try { localStorage.setItem('portfolio_overview_default','PERSONAL'); } catch(e) {}
+    window.__SAR_NI_ASSETS__={css:false,app:false};
+    window.sarNiAssetLoaded=function(kind){
+      window.__SAR_NI_ASSETS__[kind]=true;
+      if(window.__SAR_NI_ASSETS__.css&&window.__SAR_NI_ASSETS__.app){
+        document.documentElement.classList.add('sarni-assets-ready');
+      }
+    };
+    window.sarNiAssetFailed=function(kind){
+      window.__SAR_NI_ASSETS__[kind]=false;
+      document.documentElement.classList.add('sarni-asset-error');
+      var box=document.getElementById('sarniAssetStatus');
+      if(box)box.innerHTML='<strong>Dashboard file loading failed.</strong><br>Upload the files from the SarNi v20.7.0 package to GitHub, wait two minutes, then reload.';
+    };
+    setTimeout(function(){
+      if(document.documentElement.classList.contains('sarni-assets-ready'))return;
+      var box=document.getElementById('sarniAssetStatus');
+      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Please confirm the SarNi v20.7.0 GitHub files were uploaded.';
+    },12000);
+  </script>
+<title>SarNi · Personal Life Centre</title>
+<link href="https://saradasutar.github.io/SarNi/sarni-life-icon.svg?v=20261015-life-brand" rel="icon" type="image/svg+xml"/>
+<style>
+/* Personal-only SarNi: investment management is hosted exclusively in Analysis. */
+html.sarni-personal-only #holdingsSection,
+html.sarni-personal-only #transactionsSection,
+html.sarni-personal-only #sipSection,
+html.sarni-personal-only #investmentOverviewContent,
+html.sarni-personal-only #investmentHomeModeBtn,
+html.sarni-personal-only #addInvestmentBtn,
+html.sarni-personal-only #addInvestmentTableBtn,
+html.sarni-personal-only #transactionImportBtn,
+html.sarni-personal-only #bulkImportBtn,
+
+html.sarni-personal-only #importModal,
+html.sarni-personal-only #holdingDrawer,
+html.sarni-personal-only #holdingDrawerBackdrop,
+html.sarni-personal-only #holdingSummaryFullscreenModal,
+html.sarni-personal-only #printTransactionsBtn,
+html.sarni-personal-only #overviewSetDefaultBtn,
+html.sarni-personal-only [data-section="holdings"],
+html.sarni-personal-only [data-section="transactions"],
+html.sarni-personal-only [data-section="sip"],
+html.sarni-personal-only [data-command-key="HOLDINGS"],
+html.sarni-personal-only [data-command-key="TRANSACTIONS"],
+html.sarni-personal-only [data-command-key="SIP"],
+html.sarni-personal-only [data-command-key="ADD_INVESTMENT"]
+ {display:none!important;visibility:hidden!important;pointer-events:none!important}
+
+/* SarNi personal dashboard – investment module relocation */
+html.sarni-personal-only .side-nav [data-section="holdings"],
+html.sarni-personal-only .side-nav [data-section="transactions"],
+html.sarni-personal-only .side-nav [data-section="sip"],
+html.sarni-personal-only #investmentHomeModeBtn,
+html.sarni-personal-only #overviewSetDefaultBtn,
+html.sarni-personal-only #investmentOverviewContent,
+html.sarni-personal-only #addInvestmentBtn,
+html.sarni-personal-only #importBtn,
+html.sarni-personal-only #exportBtn,
+html.sarni-personal-only .portfolio-filter-bar,
+html.sarni-personal-only #homeShowInvestmentsBtn {display:none!important}
+html.sarni-personal-only .analysis-moved-link {
+  display:flex;align-items:center;gap:9px;margin:6px 9px 10px;padding:11px 14px;
+  border:1px solid #b8d7ff;border-radius:11px;background:linear-gradient(105deg,#eaf3ff,#eafaf3);
+  color:#1c477a;text-decoration:none;font-weight:800;font-size:13px;line-height:1.4
+}
+html.sarni-personal-only .analysis-moved-link:hover{background:#dcecff;color:#123c7e}
+
+    html:not(.sarni-assets-ready) body>*{visibility:hidden}
+    html:not(.sarni-assets-ready) #sarniAssetStatus{visibility:visible;position:fixed;inset:0;z-index:999999;display:grid;place-items:center;padding:28px;text-align:center;background:linear-gradient(145deg,#eef5ff,#f8f4ff);color:#33426a;font:700 17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+    html.sarni-assets-ready #sarniAssetStatus{display:none}
+    #sarniAssetStatus strong{font-size:22px;color:#273566}
+  
+/* Keep the old investment watchlist, portfolio quick-actions and wealth UI off SarNi. */
+html.sarni-personal-only #watchlistSection,
+html.sarni-personal-only [data-section="watchlist"],
+html.sarni-personal-only [data-command-key="WATCHLIST"],
+html.sarni-personal-only [data-command-key="ADD_WATCHLIST"],
+html.sarni-personal-only #addWatchBtn,
+html.sarni-personal-only #watchlistModal,
+html.sarni-personal-only #portfolioStartupOverlay,
+html.sarni-personal-only #refreshBtn,
+html.sarni-personal-only #autoRefreshSelect,
+html.sarni-personal-only .auto-refresh-control,
+html.sarni-personal-only .watchlist-pulse,
+html.sarni-personal-only .portfolio-switch-wrap {display:none!important;visibility:hidden!important;pointer-events:none!important}
+html.sarni-personal-only #holdingType option:not([value="GPF"]) {display:none!important}
+html.sarni-personal-only #investmentModal input[disabled] {opacity:.7}
+
+/* SarNi personal GPF - own module, not the transferred investment portal */
+html.sarni-personal-only .gpf-page{max-width:1400px;margin:0 auto;padding:12px 5px 36px}
+html.sarni-personal-only .gpf-title{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:linear-gradient(120deg,#eef5ff,#effdf6);border:1px solid #d7e5ef;border-radius:17px;padding:22px;margin-bottom:18px}
+html.sarni-personal-only .gpf-title h2{color:#1d3562;margin:6px 0;font-size:23px}
+html.sarni-personal-only .gpf-title p{line-height:1.5;color:#64748b;max-width:800px}
+html.sarni-personal-only .gpf-records{display:grid;gap:12px}
+html.sarni-personal-only .gpf-record{display:flex;align-items:center;flex-wrap:wrap;gap:16px;background:white;border:1px solid #dbe5f1;border-radius:14px;padding:19px;box-shadow:0 4px 12px rgba(15,35,65,.04)}
+html.sarni-personal-only .gpf-record>div:first-child{flex:2 1 230px}
+html.sarni-personal-only .gpf-record h3{margin:0 0 5px;color:#1e3558}
+html.sarni-personal-only .gpf-record p{margin:0;color:#64748b;font-size:12px}
+html.sarni-personal-only .gpf-metric{flex:1 1 130px;display:grid;gap:3px}
+html.sarni-personal-only .gpf-metric span{font-size:11px;color:#64748b}
+html.sarni-personal-only .gpf-metric strong{color:#1e3558;font-size:16px}
+html.sarni-personal-only .gpf-empty{background:#f8fbff;border:1px dashed #9fb9d9;padding:22px;border-radius:14px;color:#51617d}
+</style>
+<link crossorigin="" href="https://saradasutar.github.io" rel="preconnect"/>
+<link as="style" href="https://saradasutar.github.io/SarNi/styles.css?v=20261016-20803-smartpaste" rel="preload"/>
+<link as="script" href="https://saradasutar.github.io/SarNi/app-v20-8-3.js?v=20261016-20803-smartpaste" rel="preload"/>
+<link href="https://saradasutar.github.io/SarNi/styles.css?v=20261016-20803-smartpaste" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
+<style id="sarniOdiaStyles">
+.sarni-odia-settings{margin:12px 0 16px;border:1px solid #e8cae5;border-radius:15px;padding:15px;background:linear-gradient(140deg,#fff9ff,#fffdfb);min-width:0}
+.sarni-odia-settings legend{padding:0 8px;color:#743c78;font-weight:850;font-size:14px}
+.sarni-odia-settings label{font-size:12px;font-weight:700;color:#53647d}
+.sarni-odia-settings .life-fields{margin:9px 0;align-items:end}
+.sarni-odia-settings .life-fields>*{min-width:0}
+.sarni-odia-settings .sarni-odia-check{display:flex;gap:8px;align-items:center;align-self:center}
+.sarni-odia-settings input[type=checkbox]{width:17px;height:17px;flex-shrink:0;accent-color:#8050b8}
+.sarni-odia-preview{background:#f4eefa;border:1px solid #e3cde8;padding:10px;border-radius:10px;color:#602e83;font-size:12px;line-height:1.5}
+.sarni-odia-hint,.sarni-odia-source{font-size:11px;line-height:1.6;color:#667488}
+.sarni-odia-lunar-cols{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.sarni-odia-status{font-weight:700;color:#1b7972;font-size:12px;line-height:1.5;margin:8px 0 0}
+.sarni-odia-status.error{color:#a43042}
+.sarni-odia-correction{padding:10px;border:1px dashed #dcc8e7;border-radius:10px;margin:10px 0}
+.sarni-odia-correction summary{cursor:pointer;font-size:12px;font-weight:750;color:#714c8d}
+.sarni-odia-festival-panel{padding:17px;margin:16px 0;border:1px solid #ebcce3;border-radius:15px;background:#fffafc}
+.sarni-odia-head{display:flex;gap:14px;justify-content:space-between;align-items:center}.sarni-odia-head h3{margin:3px 0 0;color:#693f76;font-size:18px}.sarni-odia-head p{font-size:12px;color:#6b6b80;margin:4px 0}
+.sarni-odia-panels{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}.sarni-odia-panels>div{min-width:0;background:#fff;border:1px solid #efe3ee;padding:12px;border-radius:12px}
+.sarni-odia-panels h4{font-size:13px;color:#6f3a72;margin:0 0 8px}
+.sarni-odia-row{display:flex;align-items:start;justify-content:space-between;gap:10px;padding:8px 2px;border-bottom:1px solid #f3e9f2;font-size:12px;line-height:1.5}
+.sarni-odia-row strong{color:#514169}.sarni-odia-row small{display:block;color:#8c8295;font-size:10px}.sarni-odia-row b{white-space:nowrap;color:#934f82;font-size:11px}
+.sarni-odia-festival-panel .sarni-odia-source{display:block;margin-top:8px}
+#standaloneCalendarGrid .sarni-odia-festival{color:#7a356f;background:#fff0fa;border:1px solid #f0cbe3}
+#standaloneCalendarGrid .sarni-odia-occasion{color:#286f67;background:#e8fbf2;border:1px solid #b6dfd3}
+#standaloneCalendarGrid .sarni-family-saka{color:#8c398c}
+#standaloneCalendarGrid .sarni-family-saka:empty{display:none}
+#standaloneSakaHeading{display:none}
+@media(max-width:650px){.sarni-odia-panels{grid-template-columns:1fr}.sarni-odia-lunar-cols{grid-template-columns:1fr 1fr!important}.sarni-odia-settings{padding:11px}.sarni-odia-head{align-items:start}}
+</style>
+<style id="sarniPremiumStyles">
+/* Scoped v20.8 design: preserve all original functional IDs and forms. */
+#standaloneSelectedSaka{display:none!important}
+.sarni-focus-shell{max-width:1420px;margin:12px auto 24px;font-family:inherit;color:#1a2b4b}
+.sarni-focus-hero{display:flex;justify-content:space-between;align-items:center;gap:18px;border:1px solid #e2e8f5;border-radius:22px;padding:24px 26px;background:linear-gradient(120deg,#f8f9ff,#f5fffc);box-shadow:0 14px 45px rgba(32,44,85,.05)}
+.sarni-focus-kicker{margin:0;color:#6764b5;font-size:10px;letter-spacing:.14em;font-weight:850}
+.sarni-focus-hero h2{font-weight:850;font-size:clamp(25px,3vw,34px);line-height:1.18;margin:8px 0;color:#1c2b4a}
+.sarni-focus-hero p:last-child{color:#64738c;margin:0;font-size:13px}
+.sarni-focus-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.sarni-quick-primary,.sarni-focus-refresh{border:1px solid #dddff0;border-radius:12px;padding:12px 15px;font-size:13px;font-weight:800;cursor:pointer}
+.sarni-quick-primary{background:#5c50d0;color:#fff;border-color:#5c50d0}.sarni-focus-refresh{color:#36446d;background:#fff}
+.sarni-quick-menu{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0;padding:10px;border-radius:14px;border:1px solid #e0e4f1;background:white}
+.sarni-quick-menu[hidden],.sarni-more-menu[hidden]{display:none!important}
+.sarni-quick-menu button,.sarni-more-menu button{background:#f7f8fd;border:1px solid #e3e8f4;border-radius:10px;padding:10px 12px;color:#33446b;cursor:pointer;font-weight:750}
+.sarni-quick-menu button:hover,.sarni-more-menu button:hover{background:#edeaff;color:#5044bd}
+.sarni-focus-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px}
+.sarni-focus-metrics button{display:grid;gap:7px;text-align:left;border:1px solid #e2e8f4;background:#fff;border-radius:16px;padding:17px;cursor:pointer;min-width:0;box-shadow:0 4px 18px rgba(24,40,73,.025)}
+.sarni-focus-metrics small{font-weight:850;color:#717f9c;letter-spacing:.09em;font-size:10px}
+.sarni-focus-metrics strong{color:#20345b;font-size:clamp(19px,2vw,27px);font-weight:880;overflow-wrap:anywhere}
+.sarni-focus-metrics span{color:#6159b6;font-size:11px;font-weight:720}
+.sarni-focus-columns{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:14px}
+.sarni-focus-panel{min-width:0;border:1px solid #e2e8f4;background:#fff;border-radius:17px;padding:20px;min-height:190px}
+.sarni-focus-panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.sarni-focus-panel h3{font-size:16px;color:#213355;margin:0}.sarni-focus-panel-head button,.sarni-focus-foot button{font-size:11px;background:none;color:#5b51b6;border:0;font-weight:780;cursor:pointer}
+.sarni-focus-empty,.sarni-focus-row small{font-size:12px;line-height:1.55;color:#7c879c}
+.sarni-focus-row{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #edf0f7;align-items:start}
+.sarni-focus-row:last-child{border-bottom:none}.sarni-focus-row .date{font-size:11px;font-weight:850;min-width:85px;color:#705aa9}
+.sarni-focus-row strong{display:block;font-size:13px;color:#2c3d60;font-weight:780}.sarni-focus-row small{display:block;margin-top:3px}
+.sarni-focus-memory{background:#fbfcff}.sarni-focus-lesson{border-left:3px solid #81bdaf;padding:4px 0 5px 13px;margin-bottom:12px}
+.sarni-focus-lesson strong{display:block;font-size:13px;color:#244c57}.sarni-focus-lesson p{color:#3f5368;line-height:1.58;font-size:12px;margin:6px 0}.sarni-focus-lesson small{font-size:11px;color:#64738c}
+.sarni-focus-foot{display:flex;justify-content:space-between;gap:12px;margin-top:12px;padding:0 5px;font-size:11px;color:#8089a3;align-items:center}
+.sarni-advanced-home{margin:18px 0 30px;border:1px solid #e4e8f4;border-radius:16px;background:#fff;overflow:hidden}
+.sarni-advanced-home>summary{list-style:none;padding:15px 18px;cursor:pointer;color:#5d52b5;font-weight:800;font-size:13px}
+.sarni-advanced-home>summary::-webkit-details-marker{display:none}
+.sarni-advanced-home-body{padding:12px 14px 20px}
+.sarni-simplified-nav{display:flex;align-items:center;gap:3px;position:sticky;top:0;z-index:95;padding:7px 11px;background:rgba(255,255,255,.96);border-bottom:1px solid #e4e8f3;backdrop-filter:blur(15px)}
+.sarni-simplified-nav>button{background:transparent;border:0;border-radius:10px;padding:10px 16px;font-size:12px;font-weight:800;color:#627087;cursor:pointer;white-space:nowrap}
+.sarni-simplified-nav>button span{margin-right:8px;font-size:16px}.sarni-simplified-nav>button.active{background:#eeecff;color:#5145bd}
+.sarni-more-menu{position:absolute;right:14px;top:49px;display:grid;grid-template-columns:1fr 1fr;gap:7px;min-width:270px;padding:12px;border:1px solid #dfe4f2;border-radius:13px;background:white;box-shadow:0 22px 55px rgba(22,35,80,.15)}
+.sarni-sidebar-compose-toggle{margin:11px 9px 5px;padding:11px;text-align:left;border:1px solid #514c86;background:#252443;color:#eeebff;border-radius:12px;width:calc(100% - 18px);font-size:12px;font-weight:750;cursor:pointer}
+.sarni-sidebar-compose-toggle span{float:right}
+#sideDiaryForm:not(.sarni-compose-open){display:none!important}
+body.sarni-premium-layout .side-nav{display:none!important}
+.sarni-focus-shell button:focus-visible,.sarni-simplified-nav button:focus-visible,.sarni-sidebar-compose-toggle:focus-visible{outline:3px solid #9d8aff;outline-offset:2px}
+@media(max-width:1050px){.sarni-focus-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:860px){
+ .sarni-simplified-nav{position:fixed;inset:auto 0 0;z-index:200;bottom:0;justify-content:space-around;padding:6px 3px calc(6px + env(safe-area-inset-bottom,0px));box-shadow:0 -5px 24px rgba(32,43,79,.1)}
+ .sarni-simplified-nav>button{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;padding:5px 1px;min-width:0;font-size:10px}
+ .sarni-simplified-nav>button span{margin:0;font-size:20px}
+ .sarni-more-menu{bottom:calc(65px + env(safe-area-inset-bottom,0px));top:auto;right:8px;left:8px;min-width:unset}
+ .main-content{padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))!important}
+ .sarni-focus-hero{padding:17px;align-items:start;flex-direction:column;border-radius:17px}
+ .sarni-focus-tools{width:100%}.sarni-focus-tools button{flex:1}
+ .sarni-focus-columns{grid-template-columns:1fr}
+ .sarni-focus-panel{padding:15px;min-height:120px}
+ .sarni-focus-metrics{gap:8px}.sarni-focus-metrics button{padding:12px}.sarni-focus-metrics strong{font-size:19px}
+ .sarni-focus-foot{flex-direction:column;align-items:start}
+}
+@media(max-width:400px){.sarni-focus-metrics strong{font-size:17px}.sarni-focus-metrics small{font-size:9px}.sarni-focus-shell{margin-top:6px}}
+@media(prefers-reduced-motion:reduce){.sarni-focus-shell *{scroll-behavior:auto!important;transition:none!important}}
+</style>
+
+<style id="sarniDelight2082">
+/* SarNi Delight: aesthetic refinement that respects existing functional markup */
+:root{--sarni-indigo:#554bd2;--sarni-ink:#1d2c50;--sarni-teal:#087f80}
+.sarni-brand-symbol{display:grid!important;place-items:center;padding:0!important;background:none!important;box-shadow:none!important}
+.sarni-brand-symbol img{display:block;object-fit:contain;border-radius:11px}
+html.sarni-personal-only .sarni-focus-shell{font-feature-settings:'tnum' 1}
+html.sarni-personal-only .sarni-focus-hero{position:relative;overflow:hidden;padding:clamp(19px,2.2vw,31px);border-color:#dbe2ef;background:linear-gradient(120deg,#f6f7ff 0%,#effaf7 100%);box-shadow:0 12px 35px rgba(40,46,107,.045)}
+html.sarni-personal-only .sarni-focus-hero:after{content:'';pointer-events:none;position:absolute;right:-85px;top:-110px;width:240px;height:240px;border:35px solid rgba(111,101,220,.05);border-radius:50%}
+html.sarni-personal-only .sarni-focus-hero h2{letter-spacing:-.035em}
+html.sarni-personal-only .sarni-focus-metrics button,html.sarni-personal-only .sarni-focus-panel{border:1px solid #e1e7f1;box-shadow:0 6px 25px rgba(32,45,86,.04);background:#fff;transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease}
+html.sarni-personal-only .sarni-focus-metrics button:hover{transform:translateY(-2px);border-color:#bfb8f5;box-shadow:0 12px 28px rgba(71,56,143,.1)}
+html.sarni-personal-only .sarni-focus-panel:hover{border-color:#cdd7ed}
+html.sarni-personal-only .sarni-focus-panel h3{font-weight:820;letter-spacing:-.015em}
+html.sarni-personal-only .sarni-focus-row{border-bottom-color:#eff2f8}
+html.sarni-personal-only .sarni-focus-row .date{border-radius:8px;background:#f0edff;padding:6px 8px;min-width:62px;text-align:center;flex-shrink:0;color:#594caa}
+html.sarni-personal-only .sarni-focus-row strong{line-height:1.45}
+html.sarni-personal-only .sarni-quick-primary{background:linear-gradient(110deg,#5d4cda,#6257bc);border-color:#5c4dd1;box-shadow:0 6px 15px rgba(88,72,190,.19)}
+html.sarni-personal-only .sarni-quick-primary:hover{filter:brightness(1.06)}
+html.sarni-personal-only .sarni-quick-primary:active,html.sarni-personal-only .sarni-focus-refresh:active{transform:translateY(1px)}
+html.sarni-personal-only .sarni-simplified-nav{background:rgba(255,255,255,.975);border-color:#e1e7f3}
+html.sarni-personal-only .sarni-simplified-nav>button.active{background:#ebe9ff;color:#5144b4}
+html.sarni-personal-only .sarni-quick-menu{box-shadow:0 12px 28px rgba(34,46,83,.08)}
+html.sarni-personal-only .sarni-advanced-home>summary:hover{background:#f7f7ff}
+html.sarni-personal-only :is(.sarni-focus-shell,.sarni-simplified-nav) button:focus-visible{outline:3px solid #a393ff;outline-offset:3px}
+html.sarni-personal-only .sarni-focus-shell :is(button,.sarni-focus-row){touch-action:manipulation}
+html.sarni-personal-only .sarni-focus-shell button[disabled]{opacity:.55;cursor:wait}
+html.sarni-personal-only .sarni-focus-shell :is(button,.sarni-focus-panel){min-width:0}
+@media(max-width:860px){html.sarni-personal-only .sarni-focus-shell{padding-inline:2px}html.sarni-personal-only .sarni-simplified-nav{padding-bottom:calc(9px + env(safe-area-inset-bottom,0px))}html.sarni-personal-only .sarni-focus-row .date{min-width:58px}}
+@media(prefers-reduced-motion:reduce){html.sarni-personal-only .sarni-focus-shell *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
+<div aria-live="polite" id="sarniAssetStatus" role="status"><div><strong>Opening SarNi securely…</strong><br/>Loading the lightweight dashboard.</div></div>
+<noscript>This dashboard requires JavaScript.</noscript>
+<section class="login-view" id="loginView">
+<div class="login-shell">
+<div class="brand-panel">
+<div class="brand-mark sarni-brand-symbol"><img src="https://saradasutar.github.io/SarNi/sarni-life-icon.svg?v=20261015-life-brand" alt="SarNi" width="52" height="52"></div>
+<p class="eyebrow">SARNI · PERSONAL FINANCE</p>
+<h1>One dashboard.<br/>Personal finance.</h1>
+<p class="brand-copy">Manage personal expenses, regular payments, diary, writing and family planning in SarNi.</p>
+<div class="feature-pills"><span>Expenses</span><span>Household planning</span><span>Diary</span><span>Family view</span></div>
+</div>
+<form autocomplete="on" class="login-card" id="loginForm">
+<div><p class="eyebrow">WELCOME BACK</p><h2>Sign in</h2><p class="muted">Use your Apps Script dashboard username and password.</p></div>
+<label>Username<input autocomplete="username" id="loginUsername" maxlength="60" name="username" placeholder="admin" required=""/></label>
+<label>Password<div class="password-wrap"><input autocomplete="current-password" id="loginPassword" maxlength="200" name="password" placeholder="Your password" required="" type="password"/><button class="text-button" data-toggle-password="loginPassword" type="button">Show</button></div></label>
+<div class="login-options">
+<label class="remember-user"><input id="rememberUsername" type="checkbox"/><span>Save username on this device</span></label>
+<span class="remember-note">Password is never saved</span>
+</div>
+<button class="primary-button full" id="loginButton" type="submit">Sign in</button>
+<p class="form-message" id="loginMessage" role="alert"></p>
+<div class="login-meta">
+<p class="tiny muted">Your password is never stored in the browser.</p>
+<div class="version-pair"><span class="version-badge" id="loginVersion">Frontend · v20.8.3</span><span class="version-badge backend-version" id="loginBackendVersion">Backend · v3.17.28</span></div>
+<button class="login-repair-button" id="repairBrowserBtn" type="button">↻ Repair browser cache/session</button>
+</div>
+</form>
+</div>
+</section>
+<div class="app-view hidden" id="appView">
+<div class="runtime-warning hidden" id="runtimeWarning" role="alert"></div>
+<aside class="sidebar">
+<div class="side-brand"><div class="brand-mark small sarni-brand-symbol"><img src="https://saradasutar.github.io/SarNi/sarni-life-icon.svg?v=20261015-life-brand" alt="" width="32" height="32"></div><div><strong id="sideAppName">SarNi</strong><span>Personal Life Centre</span></div><button aria-label="Collapse sidebar" class="sidebar-collapse-button" id="sidebarCollapseBtn" title="Collapse sidebar" type="button">‹</button></div>
+<div aria-label="Diary quick access" class="diary-left-shortcuts" role="group">
+<button class="nav-item quick-diary-nav" data-section="quickDiary" id="quickDiaryBtn" title="Open Quick Diary without a popup" type="button"><span>✎</span> Quick Diary <small>Write &amp; save</small></button>
+<button class="nav-item saka-calendar-nav" data-section="calendar" id="sakaCalendarBtn" title="Open calendar with English dates and Odia lunar tithis" type="button"><span>▦</span> Calendar · English &amp; Odia</button>
+<button class="nav-item life-experience-nav" data-section="experiences" type="button"><span>✦</span> Life Experiences</button>
+<button class="nav-item book-writing-nav" data-section="books" id="pinnedBookWritingBtn" title="Open Book Writing" type="button"><span>▤</span> Book Writing</button>
+</div>
+<div class="life-context-hint hidden" id="sidebarExperienceHint" role="status"></div>
+<button type="button" id="sarniSidebarDiaryToggle" class="sarni-sidebar-compose-toggle" aria-expanded="false">✎ Write a quick note <span>⌄</span></button>
+<form aria-label="Always visible quick diary" class="side-diary-compose" id="sideDiaryForm">
+<div class="side-diary-title"><strong>✎ Write something</strong><span>Shared or private</span></div>
+<input aria-label="Diary title" maxlength="120" name="title" placeholder="Title (optional)" type="text"/>
+<textarea aria-label="Quick diary text" maxlength="5000" name="text" placeholder="Write a note, learning or target…" required="" rows="3"></textarea>
+<div class="side-diary-controls"><select aria-label="Diary type" name="entryType"><option value="PERSONAL">Personal</option><option value="LEARNING">Learning</option><option value="TARGET">Target</option><option value="IDEA">Idea</option><option value="GRATITUDE">Gratitude</option></select><label title="Important diary entry"><input name="important" type="checkbox"/> ★</label></div>
+<label class="sarni-diary-privacy">Who can read? <select name="visibility" aria-label="Diary sharing"><option value="SHARED" selected>👥 Shared with spouse</option><option value="PRIVATE">🔒 Only me</option></select></label>
+<button class="side-diary-save" type="submit">Save diary</button>
+<small id="sideDiaryStatus" role="status">Shared with spouse by default · saved privately in your Sheet</small>
+</form>
+<button aria-label="Admin security settings and automatic sign-out policy" class="admin-security-shortcut admin-only hidden" id="adminSecurityShortcut" type="button">
+<span aria-hidden="true">⚙</span><span><strong>Admin Settings</strong><small>Automatic sign-out · User photos</small></span><span aria-hidden="true">›</span>
+</button>
+<nav aria-label="Main navigation" class="side-nav">
+<button class="nav-item active" data-section="overview"><span>◫</span>Overview</button>
+<button class="nav-item" data-section="expenditure"><span>₹</span>Expenditure</button>
+<button class="nav-item" data-section="creditCards"><span>▣</span>Credit Cards</button>
+<button class="nav-item" data-section="diary"><span>✎</span>Diary</button>
+<button class="nav-item admin-only hidden" data-section="users"><span>♙</span>Users</button>
+</nav>
+<button aria-label="Open admin settings and sign-out policy" class="sarni-admin-session-link admin-only hidden" id="adminSessionShortcut" type="button">⚙ Admin Settings · Auto sign-out</button>
+<div class="sidebar-session-card">
+<span class="sidebar-session-label">SIGNED IN AS</span>
+<div class="sidebar-account-line"><span class="person-avatar" id="sidebarUserPhoto">👤</span><strong id="dashboardUsername">—</strong></div>
+<span id="dashboardVersion">Frontend · v20.8.3</span><span id="dashboardBackendVersion">Backend · v3.17.28</span>
+</div>
+<div class="sidebar-foot"><button class="nav-item" id="changePasswordBtn"><span>⌁</span>Change password</button><button class="nav-item danger-text" id="logoutBtn"><span>↪</span>Log out</button></div>
+</aside>
+<button class="mobile-left-quick-diary" id="quickDiaryMobilePinned" title="Quick Diary — always available" type="button">✎ Quick Diary</button>
+<main class="main-content" id="mainDashboard" tabindex="-1">
+<header class="topbar"><span aria-hidden="true" class="mobile-top-brand">S</span>
+<div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Personal Life Centre</h1></div><div class="dashboard-version-pair"><span class="dashboard-version-chip" id="dashboardVersionTop">FE v20.8.3</span><span class="dashboard-version-chip backend-chip" id="dashboardBackendVersionTop">BE v3.17.28</span></div></div></div>
+<div class="top-actions"><button aria-haspopup="dialog" class="command-palette-button" id="commandPaletteBtn" title="Search pages and actions (Ctrl/⌘ K)" type="button"><span>⌕</span><strong>Search</strong><kbd>⌘K</kbd></button><div class="display-preferences" title="Personalise dashboard appearance"><select aria-label="Dashboard density" id="displayDensitySelect"><option value="COMFORTABLE">Comfortable</option><option value="COMPACT">Compact</option></select><select aria-label="Dashboard theme" id="displayThemeSelect"><option selected="" value="LIGHT">Light</option><option value="AUTO">Auto theme</option><option value="DARK">Dark</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button aria-label="Refresh personal records" class="icon-button" id="refreshBtn" title="Refresh personal records">↻</button><button aria-label="Signed-in user" class="avatar-button" id="profileButton"><span id="avatarInitial">A</span><img alt="Your profile photo" class="header-user-photo hidden" id="headerUserPhoto"/></button><button aria-label="Administrator settings" class="sarni-header-admin admin-only hidden" id="headerAdminSettingsBtn" type="button">⚙ Admin settings</button><button aria-label="Sign out" class="header-logout-button" id="headerLogoutBtn" title="Sign out of SarNi" type="button"><span aria-hidden="true">↪</span><strong>Sign out</strong></button></div>
+</header>
+<nav class="sarni-simplified-nav" id="sarniSimplifiedNav" aria-label="Main sections">
+  <button type="button" data-sarni-nav="home" class="active"><span aria-hidden="true">⌂</span>Home</button>
+  <button type="button" data-sarni-nav="money"><span aria-hidden="true">₹</span>Money</button>
+  <button type="button" data-sarni-nav="calendar"><span aria-hidden="true">▦</span>Calendar</button>
+  <button type="button" data-sarni-nav="diary"><span aria-hidden="true">✎</span>Diary</button>
+  <button type="button" data-sarni-nav="more" aria-expanded="false"><span aria-hidden="true">☷</span>More</button>
+  <div id="sarniMoreMenu" hidden class="sarni-more-menu"><button type="button" data-sarni-nav="experiences">✦ Life Experiences</button><button type="button" data-sarni-nav="creditCards">▣ Credit Cards</button><button type="button" data-sarni-nav="books">▤ Book Writing</button><button type="button" data-sarni-nav="quickDiary">✎ Quick Diary</button><button type="button" data-sarni-nav="users" class="admin-only hidden">♙ Users</button><button type="button" id="sarniRemindersHealth" class="admin-only hidden">◷ Reminder health</button></div>
+</nav>
+<div aria-label="Mobile session controls" class="mobile-session-bar" id="mobileSessionBar">
+<div class="mobile-session-versions">
+<span class="mobile-version-chip" id="mobileFrontendVersion">FE v20.8.3</span>
+<span class="mobile-version-chip backend" id="mobileBackendVersion">BE v3.17.28</span>
+</div>
+<div class="mobile-session-actions">
+<button class="mobile-session-button" id="mobileChangePasswordBtn" type="button">Password</button>
+<button class="mobile-session-button danger" id="mobileLogoutBtn" type="button">Log out</button>
+</div>
+</div>
+<section class="page-section" id="overviewSection">
+<div class="overview-mode-bar">
+<div aria-label="Dashboard view" class="overview-mode-switcher" role="tablist">
+<button class="active" data-overview-mode="PERSONAL" id="personalHomeModeBtn" type="button"><span>⌂</span> My Home</button>
+</div>
+<button class="overview-default-button" id="overviewSetDefaultBtn" type="button">✓ Default view</button>
+</div>
+<div class="personal-home-content" id="personalHomeContent">
+<section class="sarni-focus-shell" id="sarniFocusShell" aria-label="Your day at a glance">
+  <div class="sarni-focus-hero"><div><p class="sarni-focus-kicker">YOUR DAY · MADE SIMPLE</p><h2 id="sarniFocusGreeting">Today's Focus</h2><p id="sarniFocusDate">Your personal day at a glance</p></div>
+    <div class="sarni-focus-tools"><button type="button" class="sarni-focus-refresh" id="sarniFocusRefresh" title="Refresh upcoming occasions">↻ Refresh</button><button type="button" class="sarni-focus-refresh" data-sarni-smartpaste-open title="Paste itinerary or expense text">✧ Smart Paste</button><button type="button" class="sarni-quick-primary" id="sarniQuickOpen" aria-expanded="false" aria-controls="sarniQuickMenu">＋ Quick Add</button></div>
+  </div>
+  <div id="sarniQuickMenu" class="sarni-quick-menu" hidden aria-label="Quickly create a record">
+    <button type="button" data-sarni-smartpaste-open>✧ Smart Paste</button><button type="button" data-sarni-quick="expense">₹ Expense</button><button type="button" data-sarni-quick="diary">✎ Diary</button><button type="button" data-sarni-quick="reminder">◫ Reminder</button><button type="button" data-sarni-quick="experience">✦ Experience</button><button type="button" data-sarni-quick="task">✓ Task</button>
+  </div>
+  <div class="sarni-focus-metrics">
+    <button type="button" data-sarni-nav="money"><small>THIS MONTH</small><strong id="sarniFocusSpend">—</strong><span>Actual spending →</span></button>
+    <button type="button" data-sarni-nav="calendar"><small>NEXT 7 DAYS</small><strong id="sarniFocusNextCount">—</strong><span>Upcoming occasions →</span></button>
+    <button type="button" data-sarni-nav="diary"><small>THIS MONTH</small><strong id="sarniFocusDiaryCount">—</strong><span>Diary entries →</span></button>
+    <button type="button" data-sarni-nav="money"><small>UPCOMING BILLS</small><strong id="sarniFocusBillsCount">—</strong><span>Payments due →</span></button>
+  </div>
+  <div class="sarni-focus-columns">
+    <article class="sarni-focus-panel"><div class="sarni-focus-panel-head"><h3>Important for you</h3><button type="button" data-sarni-nav="calendar">Calendar ↗</button></div><div id="sarniFocusEvents" aria-live="polite"><p class="sarni-focus-empty">Your reminders will appear here after sign-in.</p></div></article>
+    <article class="sarni-focus-panel sarni-focus-memory"><div class="sarni-focus-panel-head"><h3>Useful experience to remember</h3><button type="button" data-sarni-nav="experiences">Life Experiences ↗</button></div><div id="sarniFocusLessons" aria-live="polite"><p class="sarni-focus-empty">A saved lesson will appear when relevant.</p></div></article>
+  </div>
+  <div class="sarni-focus-foot"><div id="sarniFocusSync" role="status">Local summary updates when your records load.</div><button type="button" data-sarni-nav="diary" id="sarniOnThisDay">↗ Memories from previous years</button></div>
+</section>
+<details class="sarni-advanced-home" id="sarniAdvancedHome"><summary>▦ More home tools · Quick entry, detailed charts and recent records</summary><div class="sarni-advanced-home-body">
+
+<section aria-label="Today's quick actions" class="mobile-life-hello">
+<div class="mobile-hello-date"><span aria-hidden="true" class="mobile-hello-icon">✦</span><span>YOUR PERSONAL SPACE</span></div>
+<h2>Your day, made simple.</h2><p>Expenses, diary and important dates—always within reach.</p>
+<div class="mobile-hello-actions">
+<button class="mobile-hello-primary" id="mobileJumpExpense" type="button">＋ Add expense</button>
+<button data-section="quickDiary" type="button">✎ Write diary</button>
+<button data-section="calendar" type="button">▦ Calendar</button>
+</div>
+</section>
+<section class="personal-home-hero tint-lilac">
+<div>
+<p class="eyebrow">MY DAILY DASHBOARD</p>
+<h2 id="personalHomeGreeting">Your day, beautifully organised</h2>
+<p>Your expenses, diary, important dates and plans, organized simply for everyday use.</p>
+</div>
+<div class="personal-home-actions">
+<button class="primary-button" id="homeDailyWriteBtn" type="button">✎ Daily diary</button>
+<button class="secondary-button" id="homeMonthlyWriteBtn" type="button">▣ Monthly diary</button>
+<button class="secondary-button" id="homeAddTargetBtn" type="button">+ Target / reminder</button>
+</div>
+</section>
+<!-- SarNi Life Centre v20.7.0: live private data, inline quick entry -->
+<section aria-label="Personal expense and diary quick entry" class="life-shell" id="lifeHome">
+<div class="life-section-title"><div><span class="life-eyebrow">YOUR DAY, MADE SIMPLE</span><h2>Personal Life Centre</h2><p>One expense, one record — reflected in every relevant monthly and major-head report.</p></div><span class="life-private-pill">◉ Saved in your private SarNi Sheet</span></div>
+<div class="life-stat-grid">
+<div class="life-stat"><span>Spent this month</span><strong data-life-stat="month">₹0</strong><small data-life-stat="monthCount">0 recorded expenses</small></div>
+<div class="life-stat"><span>Spent this year</span><strong data-life-stat="year">₹0</strong><small>Actual spending only</small></div>
+<div class="life-stat"><span>Active trip / work heads</span><strong data-life-stat="heads">0</strong><small>Budget is optional</small></div>
+<div class="life-stat"><span>Diary this month</span><strong data-life-stat="diary">0</strong><small data-life-stat="streak">Start writing today</small></div>
+</div>
+<div class="life-duo">
+<article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">QUICK EXPENSE</span><h3>Add expense here</h3></div><span class="life-card-icon">₹</span></div>
+<div id="expenseExperienceHint" class="life-context-hint hidden" role="status"></div><form class="life-entry-form" data-life-expense-form="" id="lifeExpenseHome">
+<div class="life-fields"><label>Date<input name="date" required="" type="date"/></label><label>Amount ₹<input inputmode="decimal" min="0.01" name="amount" placeholder="0.00" required="" step="0.01" type="number"/></label></div>
+<label>What was it for?<input maxlength="220" name="reason" placeholder="Lunch, petrol, building material…" required=""/></label>
+<div class="life-fields"><label>Category<select name="category" required=""></select></label><label>Trip / work / major head<select name="head"><option value="">General expense</option></select></label></div>
+<details class="life-extra"><summary>Payment details &amp; notes</summary><div class="life-fields"><label>Paid to<input maxlength="140" name="paidTo" placeholder="Shop / person"/></label><label>Paid from<input maxlength="120" name="account" placeholder="Cash / UPI / Card"/></label></div><label>Notes<input maxlength="1000" name="notes" placeholder="Optional details"/></label></details>
+<div class="life-form-foot"><span data-life-status="" role="status">Ready to save</span><button class="life-save" type="submit">✓ Save &amp; Next</button></div>
+</form>
+</article>
+<article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">QUICK DIARY</span><h3>Remember today</h3></div><span class="life-card-icon">✎</span></div>
+<div id="diaryExperienceHint" class="life-context-hint hidden" role="status"></div><form class="life-entry-form" data-life-diary-form="" id="lifeDiaryHome"><div class="life-fields"><label>Entry date<input name="date" required="" type="date"/></label><label>Title (optional)<input maxlength="120" name="title" placeholder="A day worth remembering"/></label></div><div class="quick-diary-inline-options"><label>Type<select name="entryType"><option value="PERSONAL">Personal</option><option value="LEARNING">Learning</option><option value="TARGET">Target</option><option value="IDEA">Idea</option><option value="GRATITUDE">Gratitude</option></select></label><label class="quick-important-toggle"><input name="important" type="checkbox"/>★ Important</label></div><label>Write directly here<textarea maxlength="5000" name="text" placeholder="Today I felt… / Things I did… / Something I learned…" required="" rows="5"></textarea></label>
+<label class="sarni-diary-privacy">Who can read? <select name="visibility"><option value="SHARED">👥 Shared</option><option value="PRIVATE">🔒 Private</option></select></label>
+<div class="life-prompt-row"><button data-life-prompt="gratitude" type="button">♡ Gratitude</button><button data-life-prompt="highlight" type="button">✧ Highlight</button><button data-life-prompt="tomorrow" type="button">◎ Tomorrow</button></div>
+<div class="life-form-foot"><span data-life-status="" role="status">Draft stays on this device until saved</span><button class="life-save" type="submit">Save diary</button></div>
+</form>
+</article>
+</div>
+</section>
+<section aria-labelledby="sarniInsightsHomeTitle" class="sarni-insight-section sarni-insight-home hidden" id="sarniExpenseInsightsHome">
+<div class="sarni-insight-head"><div><span class="sarni-insight-eyebrow">SPENDING, MADE CLEAR</span><h3 id="sarniInsightsHomeTitle">Expense Insights</h3><p id="sarniInsightHomePeriod">Your monthly spending at a glance</p></div><button class="sarni-insight-link" id="sarniInsightOpenFull" type="button">View all charts <span aria-hidden="true">↗</span></button></div>
+<div class="sarni-insight-home-grid">
+<div class="sarni-insight-plot"><h4>Where money went</h4><div aria-live="polite" class="sarni-donut-region" id="sarniHomeCategoryChart"></div></div>
+<div class="sarni-insight-plot"><h4>Last 6 months</h4><div aria-live="polite" class="sarni-monthly-bars" id="sarniHomeTrendChart"></div></div>
+</div>
+<p class="sarni-insight-note">Actual paid expenses only · Planned and future bills are not added twice</p>
+</section>
+<div class="sarni-home-recent-grid">
+  <article class="sarni-recent-card"><div class="sarni-recent-heading"><h3>Latest 5 expenses</h3><button type="button" data-section="expenditure">View all →</button></div><div id="sarniHomeRecentExpenses" aria-live="polite"></div></article>
+  <article class="sarni-recent-card"><div class="sarni-recent-heading"><h3>Latest 5 diary entries</h3><button type="button" data-section="diary">View all →</button></div><div id="sarniHomeRecentDiaries" aria-live="polite"></div></article>
+</div>
+<div class="personal-home-grid">
+<article class="personal-home-card diary-home-card tint-blue">
+<div class="personal-card-head">
+<div><p class="eyebrow">TODAY'S DIARY</p><h3>Write &amp; remember</h3></div>
+<span class="personal-count-badge" id="homeDiaryCount">0 today</span>
+</div>
+<div class="home-diary-preview" id="homeDiaryPreview">
+<p class="personal-empty-copy">Nothing written today yet.</p>
+</div>
+<div class="personal-card-actions">
+<button id="homeDiaryQuickBtn" type="button">+ Write now</button>
+<button id="homeFullDiaryBtn" type="button">Open Diary</button>
+</div>
+</article>
+<article class="personal-home-card target-home-card tint-yellow">
+<div class="personal-card-head">
+<div><p class="eyebrow">TARGETS &amp; REMINDERS</p><h3>What needs attention</h3></div>
+<span class="personal-count-badge target-count" id="homeStickyCount">0 active</span>
+</div>
+<div class="home-sticky-summary" id="homeStickySummary">
+<div><strong id="homeStickyDueToday">0</strong><span>Due today</span></div>
+<div><strong id="homeStickyOverdue">0</strong><span>Overdue</span></div>
+<div><strong id="homeStickyUpcoming">0</strong><span>Upcoming</span></div>
+</div>
+<div class="home-sticky-preview" id="homeStickyPreview">
+<p class="personal-empty-copy">No active target or reminder.</p>
+</div>
+<div class="personal-card-actions">
+<button id="homeTargetAddBtn" type="button">+ Add</button>
+<button id="homeTargetsOpenBtn" type="button">Open panel</button>
+</div>
+</article>
+<article class="personal-home-card quote-home-card quote-tone-0" id="homeQuoteCard">
+<div class="personal-card-head">
+<div><p class="eyebrow">QUOTE OF THE DAY</p><h3>Pause for a thought</h3></div>
+<div class="quote-head-tools"><span class="quote-auto-status" id="homeQuoteAutoStatus">Auto move · 12s</span><span class="quote-mini-mark">“</span></div>
+</div>
+<blockquote id="homeQuoteText">Your saved life quote will appear here.</blockquote>
+<div class="home-quote-author" id="homeQuoteAuthor">— Quote Library</div>
+<div class="personal-card-actions">
+<button id="homeQuoteNextBtn" type="button">↻ Another</button>
+<button id="homeQuotesOpenBtn" type="button">Open Quotes</button>
+</div>
+</article>
+</div>
+</div>
+</div></details>
+</section>
+<section class="page-section hidden" id="expenditureSection">
+<div class="expense-hero">
+<div>
+<p class="eyebrow">SARNI · SIMPLE EXPENSE MANAGER</p>
+<h2>Household expenses &amp; payments</h2>
+<p>Record actual spending, pre-plan upcoming expenses, manage recurring payments, and keep categories organised — without mixing planned amounts with actual expenditure.</p>
+</div>
+<div class="expense-hero-actions">
+<button class="primary-button" id="addExpenseBtn" type="button">+ Add expense</button>
+<button class="secondary-button" id="addExpensePlanBtn" type="button">+ Preplan</button>
+<button class="secondary-button" id="addRecurringExpenseBtn" type="button">+ Regular payment</button>
+</div>
+</div>
+<section aria-label="MyTrip-style expenditure overview" class="sarni-trip-overview" id="sarniSpendOverview">
+<div class="sarni-trip-heading"><div><span class="life-eyebrow">AT A GLANCE · ACTUAL SPENDING ONLY</span><h2>Expenses &amp; payments</h2><p>Monthly, household and major spending in one view. Every saved expense is counted once.</p></div><label class="sarni-trip-month">Report month <input aria-label="Expense report month" id="sarniSpendMonth" type="month"/></label></div>
+<div class="sarni-trip-metrics">
+<article><span>This month</span><strong id="sarniSpendMonthTotal">₹0</strong><small id="sarniSpendMonthCount">0 expenses</small></article>
+<article><span>Selected year</span><strong id="sarniSpendYearTotal">₹0</strong><small>Actual expenditure</small></article>
+<article><span>Major heads · month</span><strong id="sarniSpendMajorTotal">₹0</strong><small>Already included in total</small></article>
+<article><span>Regular due · next 30 days</span><strong id="sarniSpendDueTotal">₹0</strong><small>Upcoming, not counted as spent</small></article>
+</div>
+<div class="sarni-trip-visual-grid">
+<article class="sarni-trip-visual"><div class="sarni-trip-card-header"><div><span class="life-eyebrow">WHERE THE MONEY WENT</span><h3>Spending by category</h3></div><button class="life-quiet" hidden="" id="sarniSpendClearCategory" type="button">Clear filter</button></div><div aria-live="polite" class="sarni-trip-donut-wrap" id="sarniSpendDonut"></div></article>
+<article class="sarni-trip-visual"><div class="sarni-trip-card-header"><div><span class="life-eyebrow">BY DAY</span><h3>Daily spending</h3></div><small id="sarniSpendDailyAverage">Avg ₹0/day</small></div><div aria-live="polite" class="sarni-trip-daily" id="sarniSpendDaily"></div></article>
+</div>
+<div class="sarni-trip-bottom-actions"><span id="sarniSpendStatus" role="status">Select a category to filter the detailed records</span><button class="life-save" id="sarniSpendJumpAdd" type="button">＋ Add expense — no popup</button><button class="life-quiet" id="sarniSpendJumpRecords" type="button">View detailed statement ↓</button></div>
+</section>
+<section aria-label="Expense summary by user" class="life-shell person-spend-module" id="peopleExpenseModule">
+<div class="life-section-title"><div><span class="life-eyebrow">PERSON-WISE REPORT</span><h2>Expenses by user</h2><p>Each saved expense is counted once under the signed-in account that recorded it.</p></div><label class="life-month-label">Month <input id="personExpenseMonth" type="month"/></label></div>
+<div class="person-spend-grid" id="personSpendCards"><p class="life-hint">Sign in to view user-wise expenses.</p></div>
+<p class="life-hint" id="personSpendFoot">Admins can see user totals. Other users see only their own spending.</p>
+</section>
+<section aria-label="Expense management centre" class="life-shell life-expense-studio" id="lifeExpenseStudio">
+<div aria-label="Expense navigation" class="mobile-expense-tools"><button id="mobileExpenseRecordsBtn" type="button">▤ View records</button><button aria-expanded="false" id="mobileExpenseExtrasBtn" type="button">✧ Reports &amp; heads ▾</button></div>
+<div class="life-section-title"><div><span class="life-eyebrow">YOUR EXPENSE CENTRE</span><h2>Trip, Work &amp; Monthly Spending</h2><p>Record a daily expense once. Track it under any purpose, with or without a budget.</p></div><label class="life-month-label">Report month<input id="lifeExpenseMonth" type="month"/></label></div>
+<nav aria-label="Expense Centre view" class="sarni-workflow-tabs">
+<button aria-pressed="true" class="sarni-workflow-tab active" id="sarniQuickMode" type="button">⚡ Quick Use · Save</button>
+<button aria-pressed="false" class="sarni-workflow-tab" id="sarniDetailedMode" type="button">▤ Detailed View · Search &amp; Print</button>
+<span>Both views share one private expense register.</span>
+</nav>
+<div class="life-stat-grid life-three">
+<div class="life-stat"><span>Selected month</span><strong id="lifeMonthTotal">₹0</strong><small id="lifeMonthCount">0 expenses</small></div>
+<div class="life-stat"><span>Year-to-date</span><strong id="lifeYearTotal">₹0</strong><small>Actual payments</small></div>
+<div class="life-stat"><span>Selected head total</span><strong id="lifeHeadTotal">₹0</strong><small id="lifeHeadCount">All major heads</small></div>
+</div>
+<div class="life-duo">
+<article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">NO POPUP</span><h3>Quick add expense</h3></div><span class="life-card-icon">＋</span></div>
+<form class="life-entry-form" data-life-expense-form="" id="lifeExpenseMain">
+<div class="life-fields"><label>Date<input name="date" required="" type="date"/></label><label>Amount ₹<input inputmode="decimal" min="0.01" name="amount" required="" step="0.01" type="number"/></label></div>
+<label>Description<input maxlength="220" name="reason" placeholder="What did you pay for?" required=""/></label>
+<div class="life-fields"><label>Category<select name="category" required=""></select></label><label>Trip / work / major head<select name="head"><option value="">General expense</option></select></label></div>
+<details class="life-extra"><summary>Payment details &amp; notes</summary><div class="life-fields"><label>Paid to<input maxlength="140" name="paidTo"/></label><label>Paid from<input maxlength="120" name="account"/></label></div><label>Notes<input maxlength="1000" name="notes"/></label></details>
+<div class="life-form-foot"><span data-life-status="" role="status">Ready to save</span><button class="life-save" type="submit">✓ Save &amp; Next</button></div>
+</form>
+</article>
+<article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">OPTIONAL BUDGET</span><h3>Create a new expense head</h3></div><span class="life-card-icon">▤</span></div>
+<form class="life-entry-form" id="lifeHeadForm"><label>Head name<input maxlength="140" name="name" placeholder="Bhubaneswar Trip / House Repair / Medical" required=""/></label>
+<div class="life-fields"><label>Budget ₹ (optional)<input min="0" name="budget" placeholder="Leave blank" step="0.01" type="number"/></label><label>Purpose / note<input maxlength="1200" name="notes" placeholder="What is this for?"/></label></div>
+<div class="life-form-foot"><span data-life-status="" role="status">No budget required</span><button class="life-save" type="submit">+ Create head</button></div>
+</form>
+<div aria-live="polite" class="life-heads" id="lifeHeadsList"></div>
+</article>
+</div>
+<article class="life-card life-report-card" id="sarniDetailedExpenseStatement"><div class="life-report-tools"><div><span class="life-eyebrow">DAILY ENTRIES</span><h3>Expenses — edit directly in each row</h3></div><label>Filter head<select id="lifeHeadFilter"><option value="ALL">All expenses</option></select></label><button class="life-quiet" id="lifeExportExpenses" type="button">↓ Export CSV</button><button class="life-quiet" id="lifePrintExpenses" type="button">⎙ Print / PDF</button></div>
+<div aria-label="Find past expense records" class="sarni-record-filters" role="search">
+<label class="sarni-search-field"><span>Find expenses</span><input aria-label="Find saved expenses" autocomplete="off" id="sarniExpenseSearch" placeholder="Search description, notes, payee, category or date…" type="search"/></label>
+<label class="sarni-all-dates"><input id="sarniExpenseAllDates" type="checkbox"/> Search across every month</label>
+<button class="life-quiet" id="sarniExpenseClearSearch" type="button">Clear search</button>
+<span aria-live="polite" id="sarniExpenseFilterInfo" role="status"></span>
+</div>
+<div class="life-table-scroll"><table class="life-table"><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Head</th><th>Amount</th><th>Actions</th></tr></thead><tbody id="lifeRecentExpenses"></tbody></table></div><p class="life-hint" id="lifeExpenseFoot"></p>
+</article>
+<section aria-label="Expense insights and charts" class="sarni-insight-section sarni-insight-detail" id="sarniExpenseInsights">
+<details id="sarniExpenseChartsDetails">
+<summary class="sarni-insight-toggle"><span><span class="sarni-insight-eyebrow">VISUAL EXPENDITURE REPORT</span><strong>Expense Insights · interactive charts</strong><small id="sarniInsightPeriod">Select a report month above</small></span><span aria-hidden="true" class="sarni-insight-chevron">⌄</span></summary>
+<div class="sarni-insight-content">
+<div class="sarni-insight-toolbar"><span class="sarni-insight-total" id="sarniInsightsTotal">₹0 · 0 actual expenses</span><button class="sarni-insight-link" id="sarniInsightsPrint" type="button">⎙ Print charts</button></div>
+<div class="sarni-insight-full-grid">
+<div class="sarni-insight-plot"><h4>Monthly spending trend</h4><p>January to December · selected year</p><div aria-live="polite" class="sarni-monthly-bars" id="sarniYearTrendChart"></div></div>
+<div class="sarni-insight-plot"><h4>Spending by category</h4><p>Selected month · tap a category to see entries</p><div aria-live="polite" class="sarni-donut-region" id="sarniMonthCategoryChart"></div></div>
+<div class="sarni-insight-plot"><h4>Trips, works &amp; major heads</h4><p>Selected year · budget not required</p><div aria-live="polite" class="sarni-breakdown" id="sarniHeadChart"></div></div>
+<div class="sarni-insight-plot"><h4>Last month comparison</h4><p>At a glance · compared with previous month</p><div aria-live="polite" class="sarni-compare" id="sarniComparisonChart"></div></div>
+</div>
+<p class="sarni-insight-note">The charts use your authenticated expense records. Admin user-wise totals remain in the separate Expenses by User section.</p>
+</div>
+</details>
+</section>
+<article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">LONG-TERM VIEW</span><h3>Monthly spending trend</h3></div></div><div class="life-trend" id="lifeMonthlyTrend"></div></article>
+</section>
+<div class="expense-kpi-grid" id="sarniLegacyKpis">
+<article class="expense-kpi-card actual"><span>SPENT THIS MONTH</span><strong id="expenseMonthActual">₹0</strong><small id="expenseMonthActualCount">0 expenses</small></article>
+<article class="expense-kpi-card planned"><span>PREPLANNED PENDING</span><strong id="expensePlannedPending">₹0</strong><small id="expensePlannedCount">0 pending</small></article>
+<article class="expense-kpi-card regular"><span>REGULAR DUE · 30 DAYS</span><strong id="expenseRegularDue">₹0</strong><small id="expenseRegularDueCount">0 payments</small></article>
+<article class="expense-kpi-card year"><span>SPENT THIS YEAR</span><strong id="expenseYearActual">₹0</strong><small>Actual expenditure only</small></article>
+</div>
+<div class="sarni-advanced-controls"><button aria-expanded="false" class="life-quiet" id="sarniAdvancedStatementToggle" type="button">Advanced table &amp; filters ▾</button></div>
+<div aria-label="Expenditure views" class="expense-view-tabs" role="tablist">
+<button class="expense-view-tab active" data-expense-view="ACTUAL" type="button">Actual Expenses</button>
+<button class="expense-view-tab" data-expense-view="PLANNED" type="button">Preplanned</button>
+<button class="expense-view-tab" data-expense-view="REGULAR" type="button">Regular Payments</button>
+<button class="expense-view-tab" data-expense-view="PROJECTS" type="button">Major Projects</button>
+<button class="expense-view-tab" data-expense-view="CATEGORIES" type="button">Categories</button>
+</div>
+<article class="panel expense-panel" id="expenseDataPanel">
+<div class="expense-filter-bar">
+<div class="expense-search-wrap"><span>⌕</span><input id="expenseSearch" placeholder="Search reason, name, notes, account…" type="search"/></div>
+<label>From <input id="expenseFromDate" type="date"/></label>
+<label>To <input id="expenseToDate" type="date"/></label>
+<select aria-label="Expense category filter" id="expenseCategoryFilter"><option value="ALL">All categories</option></select>
+<select aria-label="Expense subcategory filter" id="expenseSubcategoryFilter"><option value="ALL">All subcategories</option></select>
+<select aria-label="Debited from filter" id="expenseAccountFilter"><option value="ALL">All accounts</option></select>
+<select aria-label="Sort expenses" id="expenseSort">
+<option value="DATE_DESC">Date · newest</option><option value="DATE_ASC">Date · oldest</option>
+<option value="AMOUNT_DESC">Amount · high to low</option><option value="AMOUNT_ASC">Amount · low to high</option>
+<option value="CATEGORY">Category · A–Z</option><option value="NAME">Name / Paid to · A–Z</option><option value="ACCOUNT">Debited from · A–Z</option>
+</select>
+<button aria-pressed="false" class="small-button expense-subcategory-toggle" id="expenseSubcategoryToggle" type="button">Hide subcategory</button>
+<button class="small-button" id="expenseResetFiltersBtn" type="button">Reset</button>
+<button class="small-button expense-print-button" id="expensePrintBtn" type="button">▣ Print</button>
+<span class="filter-result-pill" id="expenseResultCount">0 records</span>
+</div>
+<div class="expense-table-help"><strong>Quick editing:</strong> Use the fixed Actions column to choose <strong>Row edit</strong> for direct changes or <strong>Popup edit</strong> for the full form. Drag the edge of any column heading to resize it; the last width is restored for your login on this device.</div>
+<div class="expense-data-view" id="actualExpenseView">
+<div class="expense-table-wrap" data-expense-table="ACTUAL">
+<table class="expense-table" id="actualExpenseTable">
+<thead><tr>
+<th data-exp-col="amount">Amount</th><th data-exp-col="date">Dt Spent</th><th data-exp-col="paidTo">Paid To / Name</th>
+<th data-exp-col="account">Debited From</th><th data-exp-col="reason">Reason</th><th data-exp-col="category">Category</th><th data-exp-col="subcategory">Subcategory</th>
+<th data-exp-col="notes">Notes to Remember</th><th data-exp-col="actions">Actions</th>
+</tr></thead><tbody id="actualExpenseBody"></tbody>
+</table>
+</div>
+<div class="empty-state" id="actualExpenseEmpty">No actual expenditure matches this view.</div>
+</div>
+<div class="expense-data-view hidden" id="plannedExpenseView">
+<div class="expense-table-wrap" data-expense-table="PLANNED">
+<table class="expense-table" id="plannedExpenseTable">
+<thead><tr>
+<th data-exp-col="amount">Planned Amount</th><th data-exp-col="date">Planned Date</th><th data-exp-col="paidTo">Paid To / Name</th>
+<th data-exp-col="account">Debited From</th><th data-exp-col="reason">Reason</th><th data-exp-col="category">Category</th><th data-exp-col="subcategory">Subcategory</th>
+<th data-exp-col="notes">Notes</th><th data-exp-col="status">Status</th><th data-exp-col="actions">Actions</th>
+</tr></thead><tbody id="plannedExpenseBody"></tbody>
+</table>
+</div>
+<div class="empty-state" id="plannedExpenseEmpty">No preplanned expenses match this view.</div>
+</div>
+<div class="expense-data-view hidden" id="regularExpenseView">
+<section aria-labelledby="regularBillsTitle" class="regular-bills-panel">
+<div class="regular-bills-heading">
+<div><p class="eyebrow">YOUR REUSABLE PAYMENT LIST</p><h3 id="regularBillsTitle">Monthly bills &amp; regular payments</h3><p>One bill per row. Enter its amount and paid date, then Record paid. Next month’s amount can be different.</p></div>
+<div class="regular-bills-tools"><button class="secondary-button" data-regular-manage-categories="" type="button">Manage categories</button><button class="primary-button" data-regular-add="" type="button">+ Add regular payment</button></div>
+</div>
+<details class="regular-bill-example-picker"><summary>Add a bill from an example</summary><div aria-label="Optional payment examples" class="regular-bill-presets">
+<span>Start with an example:</span>
+<button data-regular-preset="icici" type="button">CC ICICI</button><button data-regular-preset="axis" type="button">CC Axis</button><button data-regular-preset="hdfc" type="button">CC HDFC</button><button data-regular-preset="electricity" type="button">Electricity</button><button data-regular-preset="rent" type="button">Rent</button><button data-regular-preset="insurance" type="button">Insurance</button><button data-regular-add="" type="button">+ Your own payment</button>
+</div></details>
+<p class="regular-bill-help">Amounts start blank for every new payment. Record paid adds the payment to Actual Expenses once—do not enter it again there. It records a payment already made; it does not pay the bill. Reset the filters above to see all saved bills.</p>
+<div class="regular-bill-list" id="regularBillQuickList"></div>
+<div class="empty-state" id="regularBillQuickEmpty">Add your first regular payment above, or reset the filters to see your saved bills.</div>
+</section>
+<details class="regular-bill-register"><summary>Detailed schedule · row editing &amp; print</summary>
+<div class="expense-table-wrap" data-expense-table="REGULAR">
+<table class="expense-table" id="regularExpenseTable">
+<thead><tr>
+<th data-exp-col="name">Regular Payment</th><th data-exp-col="amount">Amount</th><th data-exp-col="account">Debited From</th>
+<th data-exp-col="category">Category</th><th data-exp-col="subcategory">Subcategory</th><th data-exp-col="frequency">Frequency</th><th data-exp-col="date">Next Due</th>
+<th data-exp-col="reason">Reason</th><th data-exp-col="notes">Notes</th><th data-exp-col="status">Status</th><th data-exp-col="actions">Actions</th>
+</tr></thead><tbody id="regularExpenseBody"></tbody>
+</table>
+</div>
+<div class="empty-state" id="regularExpenseEmpty">No regular payments match this view.</div>
+</details>
+</div>
+</article>
+<article class="panel expense-category-panel hidden" id="expenseCategoriesView">
+<div class="panel-head responsive-head">
+<div><p class="eyebrow">CATEGORY MANAGER</p><h3>Categories with flexible subcategories</h3></div>
+<button class="primary-button" id="addExpenseCategoryBtn" type="button">+ Add category</button>
+</div>
+<div class="expense-category-note"><strong>Example:</strong> Credit Card → Axis, HDFC, ICICI. Edit a card to add or rename its subcategories. Renaming the main category updates existing records; deleting a category in use remains protected.</div>
+<div class="expense-category-grid" id="expenseCategoryGrid"></div>
+<div class="empty-state" id="expenseCategoryEmpty">No expense categories yet.</div>
+</article>
+<article class="panel major-project-panel hidden" id="majorExpenseProjectsView">
+<div class="panel-head responsive-head"><div><p class="eyebrow">MAJOR EXPENDITURE</p><h3>Projects without double entry</h3><p class="muted">House building, renovation, education or another large project. Totals come from the same Actual Expense rows.</p></div><button class="primary-button" id="addMajorExpenseProjectBtn" type="button">+ New project</button></div>
+<div class="major-project-grid" id="majorExpenseProjectGrid"></div>
+<div class="empty-state" id="majorExpenseProjectEmpty">No major expenditure project yet. Create “House Building”, then link expenses to it.</div>
+</article>
+</section>
+<section aria-label="Credit card centre" class="page-section hidden" id="creditCardsSection">
+<div class="sarni-cc-head"><div><p class="life-eyebrow">HOUSEHOLD FINANCE · SIMPLE MODE</p><h2>Credit Cards</h2><p>Record only important purchases and one monthly statement. Each purchase is included once in Expenses; bill payments are transfers, not more expenses.</p></div><div class="sarni-cc-head-actions"><button class="secondary-button" id="sarCcRefresh" type="button">↻ Refresh</button><button class="secondary-button" id="sarCcPrint" type="button">▣ Print statement</button></div></div>
+<div class="sarni-cc-stats"><div><small>Statement purchases</small><strong id="sarCcTotal">₹0</strong></div><div><small>Major purchases</small><strong id="sarCcMajor">₹0</strong></div><div><small>Payments recorded</small><strong id="sarCcPaid">₹0</strong></div><div><small>Amount still due</small><strong id="sarCcDue">₹0</strong></div></div>
+<p class="sarni-cc-status" id="sarCcStatus" role="status">Ready · Only card name and last four digits are needed.</p>
+<details class="sarni-cc-card-manager"><summary>＋ Add your credit card (one-time setup)</summary><form class="sarni-cc-smallform" id="sarCcAddCardForm"><label>Card name<input maxlength="70" name="name" placeholder="e.g. HDFC Regalia Gold" required=""/></label><label>Last 4 digits only (optional)<input inputmode="numeric" maxlength="4" name="last4" pattern="[0-9]{4}" placeholder="1234"/></label><button class="primary-button" type="submit">Save card</button><small>Never enter your full card number, PIN, OTP or CVV.</small></form></details>
+<article class="sarni-cc-workspace"><div aria-label="Credit card actions" class="sarni-cc-tabs" id="sarCcModes" role="group"><button class="active" data-cc-mode="purchase" type="button">＋ Major Purchase</button><button data-cc-mode="monthly" type="button">▣ Monthly Summary</button><button data-cc-mode="payment" type="button">✓ Bill Paid</button></div>
+<form class="sarni-cc-form" id="sarCcPurchaseForm"><input name="id" type="hidden"/><input name="requestKey" type="hidden"/><label>Credit card<select id="sarCcPurchaseCard" name="cardId" required=""></select></label><label>Purchase date<input name="dateSpent" required="" type="date"/></label><label class="sarni-cc-wide">Avoid duplicate? Link a purchase already in Expenses<select id="sarCcLinkExpense" name="existingExpenseId"></select></label><label data-cc-new="">Amount (₹)<input inputmode="decimal" min="0.01" name="amount" required="" step="0.01" type="number"/></label><label data-cc-new="">What was purchased?<input maxlength="220" name="reason" placeholder="e.g. Refrigerator" required=""/></label><label data-cc-new="">Category<select id="sarCcCategory" name="category"></select></label><label data-cc-new="">Major expenditure head (optional)<select id="sarCcProject" name="majorProjectId"></select></label><div class="sarni-cc-footer"><span>Saved once and linked automatically to Expenditure.</span><button class="primary-button" type="submit">Save Purchase</button></div></form>
+<form class="sarni-cc-form hidden" id="sarCcMonthlyForm"><input name="id" type="hidden"/><label>Credit card<select id="sarCcCycleCard" name="cardId" required=""></select></label><label>From date<input name="startDate" required="" type="date"/></label><label>To date<input name="endDate" required="" type="date"/></label><label>New purchases total (₹)<input inputmode="decimal" min="0" name="totalPurchases" required="" step="0.01" type="number"/></label><label>Bill due date<input name="dueDate" required="" type="date"/></label><label>Amount on bill (₹)<input inputmode="decimal" min="0" name="billAmount" placeholder="Optional: same as purchases" step="0.01" type="number"/></label><p class="sarni-cc-hint sarni-cc-wide">Enter <strong>new purchases during this billing cycle</strong>, not outstanding from previous statements. SarNi subtracts existing major purchases and records only the difference as Other Card Spending.</p><div class="sarni-cc-footer"><span>You can update a statement later. Overlapping cycles are blocked.</span><button class="primary-button" type="submit">Save Monthly Summary</button></div></form>
+<form class="sarni-cc-form hidden" id="sarCcPaymentForm"><input name="id" type="hidden"/><input name="requestKey" type="hidden"/><label>Credit card<select id="sarCcPaymentCard" name="cardId" required=""></select></label><label>Billing statement<select id="sarCcPaymentCycle" name="cycleId" required=""></select></label><label>Amount paid (₹)<input inputmode="decimal" min="0.01" name="amount" required="" step="0.01" type="number"/></label><label>Payment date<input name="paidDate" required="" type="date"/></label><label>Bank / payment account<input maxlength="120" name="bank" placeholder="e.g. SBI Savings"/></label><label>Notes (optional)<input maxlength="500" name="notes" placeholder="e.g. UPI payment"/></label><div class="sarni-cc-footer"><span>Bill payment reduces dues, without increasing Expenditure.</span><button class="primary-button" type="submit">Mark Bill Paid</button></div></form>
+</article>
+<article class="sarni-cc-register"><div class="sarni-cc-panel-head"><h3>Statements &amp; outstanding</h3><small>Card-wise summary; edit or remove an entry</small></div><div id="sarCcRecent"></div></article>
+<details class="sarni-cc-register"><summary>Major purchases · edit, delete &amp; history</summary><div id="sarCcMajorList"></div></details>
+<details class="sarni-cc-register"><summary>Bill payment history · edit &amp; delete</summary><div id="sarCcPaymentList"></div></details>
+</section>
+<section aria-label="English and Odia family calendar" class="page-section hidden" id="calendarSection">
+<div id="upcomingExperienceLessons" class="life-upcoming-lessons hidden" aria-live="polite"></div>
+<div class="sarni-family-cal-intro">
+<div><p class="life-eyebrow">YOUR PERSONAL CALENDAR</p><h2>Family calendar</h2><p>One beautiful month view, with your important days, diary dates and reminders together.</p></div>
+<div class="sarni-family-cal-color-guide"><span><i class="blue-dot"></i>English date</span><span><i class="orange-dot"></i>Odia lunar day</span></div>
+</div>
+<article class="life-card sarni-family-calendar-card">
+<div class="sarni-family-cal-toolbar">
+<div class="sarni-family-cal-toolbar-label"><h3 id="sarniCalendarMonthTitle">October 2026</h3><span class="sarni-saka-period" id="standaloneSakaHeading">Saka calendar</span></div>
+<div class="sarni-family-cal-nav">
+<button aria-label="Previous month" class="sarni-calendar-nav-button" id="sarniCalPrev" type="button">‹</button>
+<label class="sarni-month-chooser" title="Choose another month">Jump <input aria-label="Choose calendar month" id="standaloneCalendarMonth" type="month"/></label>
+<button aria-label="Next month" class="sarni-calendar-nav-button" id="sarniCalNext" type="button">›</button>
+<button class="sarni-calendar-nav-button sarni-calendar-today" id="sarniCalToday" type="button">Today</button>
+</div>
+</div>
+<div class="sarni-calendar-legend"><span><i class="sarni-cal-dot reminder"></i>Reminder</span><span><i class="sarni-cal-dot anniversary"></i>Anniversary</span><span><i class="sarni-cal-dot target"></i>Target</span><span><i class="sarni-cal-dot diary"></i>Diary</span><span>★ Important date</span></div>
+<div aria-label="Month view: large English dates, orange Saka dates and saved events" class="life-calendar sarni-family-calendar-grid" id="standaloneCalendarGrid"></div><section class="sarni-odia-festival-panel" aria-label="Odia festivals and yearly lunar occasions"><div class="sarni-odia-head"><div><span class="life-eyebrow">ଓଡ଼ିଆ ପର୍ବପର୍ବାଣୀ · AUTOMATIC CALENDAR</span><h3>Odia festivals &amp; yearly birthdays</h3><p id="odiaFestivalStatus" role="status">Calculated tithi calendar will appear after sign-in.</p></div><button type="button" class="life-quiet" id="odiaFestivalRefresh">↻ Refresh</button></div>
+<div class="sarni-odia-panels"><div><h4>❀ Festivals this month</h4><div id="sarniOdiaFestivalItems">Loading…</div></div><div><h4>★ Personal occasions</h4><div id="sarniOdiaRecurringItems">Loading…</div></div></div>
+<small class="sarni-odia-source" id="odiaCalendarSource">Astronomical estimates only; check Kohinoor for official observance.</small></section>
+<p class="sarni-calendar-help">Select any date to add or edit an important occasion. English dates are shown with Odia tithis. Odia festival dates are astronomical estimates, not an official Kohinoor Panjika.</p>
+</article>
+<div class="sarni-family-calendar-below">
+<article class="life-card sarni-calendar-event-card">
+<div class="life-card-top"><div><span class="life-eyebrow">SAVE A SPECIAL DAY</span><h3>★ Save important date</h3></div></div>
+<form class="life-entry-form" id="calendarEventForm"><input name="id" type="hidden"/>
+<div class="life-fields"><label>English date<input name="eventDate" required="" type="date"/></label><label>Type<select name="kind"><option value="PERSONAL">Personal</option><option value="BIRTHDAY">Birthday</option><option value="ANNIVERSARY">Anniversary</option><option value="DEATH_ANNIVERSARY">Death anniversary</option><option value="REMINDER">Reminder</option><option value="TARGET">Target</option><option value="OTHER">Other</option><option value="FLIGHT">Flight / Air travel</option><option value="TRAIN">Train journey</option></select></label></div>
+<div class="life-fields"><label>Departure city (flight)<input name="departureCity" placeholder="Bengaluru" maxlength="120"/></label><label>Arrival city (optional)<input name="arrivalCity" placeholder="Delhi" maxlength="120"/></label></div>
+<fieldset class="sarni-odia-settings" aria-label="Annual Odia Kohinoor lunar reminders"><legend>🌺 Odia Kohinoor-style annual reminder</legend>
+<div class="life-fields"><label>Repeat this occasion<select name="calendarBasis"><option value="GREGORIAN">English date every year</option><option value="ODIA">Odia lunar tithi every year</option><option value="BOTH">Both English and Odia dates</option></select></label><label class="sarni-odia-check"><input type="checkbox" name="repeatYearly"/> Repeat every year</label></div>
+<p id="odiaRepeatNote" class="sarni-odia-hint">Save once and get future occurrences automatically.</p>
+<div id="odiaTithiControls" hidden><p id="odiaBirthPreview" class="sarni-odia-preview">Enter a birthday (e.g. 20 October 1983) to calculate its original sunrise tithi.</p>
+<div class="life-fields sarni-odia-lunar-cols"><label>Odia month<select name="odiaMonth"><option value="0">Chaitra</option><option value="1">Baisakha</option><option value="2">Jyestha</option><option value="3">Asadha</option><option value="4">Srabana</option><option value="5">Bhadraba</option><option value="6">Aswina</option><option value="7">Kartika</option><option value="8">Margasira</option><option value="9">Pausa</option><option value="10">Magha</option><option value="11">Phalguna</option></select></label><label>Paksha<select name="odiaPaksha"><option value="SHUKLA">ଶୁକ୍ଳ · Shukla</option><option value="KRISHNA">କୃଷ୍ଣ · Krishna</option></select></label><label>Tithi<select name="odiaTithi"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option></select></label></div>
+<div class="life-fields"><label>Lunar-month rule<select name="odiaAdhika"><option value="REGULAR">Regular month (recommended)</option><option value="ADHIKA">Adhika month only</option><option value="EITHER">Either (when applicable)</option></select></label><label class="sarni-odia-check"><input name="odiaVerified" type="checkbox"/> Original tithi verified against Kohinoor</label></div>
+<button type="button" id="odiaRecalculate" class="life-quiet">↻ Recalculate original tithi</button></div>
+<div class="life-fields"><label>Remind me<select name="reminderDays"><option value="7,1,0">7 days, 1 day and same day</option><option value="1,0">1 day before and same day</option><option value="0">On the day</option><option value="14,7,1,0">14, 7, 1 and same day</option></select></label><label>Email (optional)<input type="email" name="reminderEmail" maxlength="180" placeholder="For 8 AM email reminders" autocomplete="off"/></label></div>
+<details class="sarni-odia-correction"><summary>Verified Kohinoor date correction (optional)</summary><p id="odiaOverrideHelp" class="sarni-odia-hint">Save your occasion, then edit to correct a specific year's calculated date.</p>
+<div class="life-fields"><label>Year<input id="odiaOverrideYear" type="number" min="1900" max="2105" value="2026"/></label><label>Verified English date<input id="odiaOverrideDate" type="date"/></label></div><button type="button" id="odiaSaveVerifiedOverride" class="life-quiet">Save verified correction</button></details>
+<p class="sarni-odia-hint">Calculations use Bhubaneswar sunrise and Lahiri ayanamsa. They are not guaranteed to match printed Kohinoor observance. Verified corrections take priority.</p>
+<p id="odiaEventStatus" class="sarni-odia-status" role="status"></p></fieldset><p class="saka-inline-label" id="standaloneSelectedSaka">Saka date</p>
+<label>Event title<input maxlength="160" name="title" placeholder="Anniversary, reminder, learning goal…" required=""/></label>
+<label>Details (optional)<textarea maxlength="1200" name="notes" placeholder="Your reminder or notes" rows="3"></textarea></label>
+<div class="life-form-foot"><span id="calendarEventStatus" role="status">Saved privately in SarNi</span><div class="quick-action-pair"><button class="life-quiet" id="calendarEventClear" type="button">New</button><button class="life-save" type="submit">★ Save important date</button></div></div>
+</form>
+</article>
+<article class="life-card sarni-calendar-list-card"><div class="life-card-top"><h3>Saved important dates</h3></div><input aria-label="Search important dates" id="calendarEventSearch" placeholder="Search saved dates and events" type="search"/><div class="important-dates-list" id="standaloneImportantList"></div></article>
+</div>
+</section>
+<section aria-label="Quick Diary and personal calendar" class="page-section hidden" id="quickDiarySection">
+<div class="life-section-title quick-page-title"><div><span class="life-eyebrow">ALWAYS AVAILABLE FROM LEFT SIDEBAR</span><h2>Quick Diary · Your personal daybook</h2><p>Write, save and find your memories without opening a popup.</p></div><button class="life-quiet" id="quickDiaryPrint" type="button">⎙ Print entries</button></div>
+<div class="quick-diary-layout">
+<article class="life-card quick-diary-compose"><div class="life-card-top"><div><span class="life-eyebrow">NEW OR EDIT ENTRY</span><h3>Write directly here</h3></div><span class="life-card-icon">✎</span></div>
+<div id="quickExperienceHint" class="life-context-hint hidden" role="status"></div><form class="life-entry-form" id="quickDiaryInlineForm"><input name="id" type="hidden"/>
+<div class="life-fields"><label>English date<input name="date" required="" type="date"/></label><label>Diary type<select name="entryType"><option value="PERSONAL">Personal</option><option value="LEARNING">Learning</option><option value="TARGET">Target</option><option value="IDEA">Idea</option><option value="GRATITUDE">Gratitude</option></select></label></div>
+<p aria-live="polite" class="saka-inline-label" id="quickDiarySakaDate">Saka date appears here</p>
+<label>Title<input maxlength="120" name="title" placeholder="What happened, learned or planned?"/></label>
+<label>Your entry<textarea maxlength="5000" name="text" placeholder="Write today's experience, learning, progress or goal…" required="" rows="8"></textarea></label>
+<div class="quick-diary-inline-options"><label class="sarni-diary-privacy">Who can read? <select name="visibility"><option value="SHARED">👥 Shared</option><option value="PRIVATE">🔒 Private</option></select></label><label class="quick-important-toggle"><input name="important" type="checkbox"/> ★ Mark as important</label><span id="quickDiaryWordCount">0 words</span></div>
+<div class="life-form-foot"><span data-life-status="" role="status">Ready to write · Cmd/Ctrl + Enter to save</span><div class="quick-action-pair"><button class="life-quiet" id="quickDiaryNew" type="button">New entry</button><button class="life-save" type="submit">Save diary</button></div></div>
+</form>
+</article>
+<article class="life-card quick-diary-calendar-card"><div class="life-card-top"><div><span class="life-eyebrow">ENGLISH + SAKA ERA</span><h3>Dual calendar</h3></div><button class="life-quiet" id="quickCalendarSaveDate" type="button">★ Important Date</button><label class="life-month-label">Month <input id="quickDiaryCalendarMonth" type="month"/></label></div><p class="saka-inline-label" id="quickDiarySakaHeading"></p><div aria-label="English and Saka calendar" class="life-calendar dual-era-calendar" id="quickDiaryCalendar"></div><p class="life-hint">Choose a day to write an entry or save an important event. ● Saved diary · ★ Important</p></article>
+</div>
+<div class="quick-diary-bottom-grid">
+<article class="life-card quick-diary-history"><div class="life-card-top"><div><span class="life-eyebrow">RECENT &amp; SEARCHABLE</span><h3>My latest entries</h3></div><span class="life-card-icon" id="quickDiaryResultCount">0</span></div>
+<div class="quick-history-controls"><input aria-label="Search diary entries" id="quickDiarySearch" placeholder="Search diary text, title or date" type="search"/><select aria-label="Filter diary type" id="quickDiaryFilter"><option value="ALL">All entries</option><option value="IMPORTANT">★ Important</option><option value="LEARNING">Learning</option><option value="TARGET">Target</option><option value="PERSONAL">Personal</option><option value="IDEA">Idea</option><option value="GRATITUDE">Gratitude</option></select></div>
+<div class="quick-diary-recent-list" id="quickDiaryRecentList"></div><button class="life-quiet" id="quickDiaryViewMore" type="button">View all in Diary →</button>
+</article>
+<article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">IMPORTANT DATES</span><h3>Save special days</h3></div></div>
+<div id="importantDateExperienceHint" class="life-context-hint hidden" role="status"></div>
+<form class="life-entry-form" id="importantDateForm"><input name="id" type="hidden"/><div class="life-fields"><label>English date<input name="eventDate" required="" type="date"/></label><label>Event type<select name="kind"><option value="PERSONAL">Personal</option><option value="REMINDER">Reminder</option><option value="FLIGHT">Flight / Air Travel</option><option value="TRAIN">Train Travel</option><option value="TARGET">Target</option><option value="ANNIVERSARY">Anniversary</option><option value="OTHER">Other</option></select></label></div><label>Title<input maxlength="160" name="title" placeholder="Appointment, deadline, anniversary…" required=""/></label><label>Location (optional)<input name="location" maxlength="120" placeholder="Bengaluru / Bangalore"/></label><label>Notes (optional)<textarea maxlength="1200" name="notes" placeholder="Details to remember" rows="2"></textarea></label><div class="life-form-foot"><span data-life-status="" role="status">Private to your login</span><div class="quick-action-pair"><button class="life-quiet" id="importantDateNew" type="button">Clear</button><button class="life-save" type="submit">★ Save important date</button></div></div></form>
+<div aria-label="Saved important dates" class="important-dates-list" id="importantDatesList"></div>
+</article>
+</div>
+</section>
+
+<section class="page-section hidden life-experience-page" id="experiencesSection" aria-label="Life Experiences and smart lessons">
+  <div class="life-experience-hero"><div><p class="eyebrow">OUR LESSONS · LONG-TERM MEMORY</p><h2>Life Experiences</h2><p>Remember what life taught you, save your photographs privately and see the right lesson at the right moment.</p></div><button type="button" id="experienceNew" class="life-save">+ New Experience</button></div>
+  <div class="life-experience-layout">
+    <article class="life-experience-editor"><h3 id="experienceFormTitle">Write a new experience</h3><button type="button" class="life-quiet" id="experienceBengaluruExample">✈ Use Bengaluru flight example</button>
+    <form id="lifeExperienceForm" autocomplete="off"><input type="hidden" name="id"/>
+      <label>Title <input name="title" placeholder="Bengaluru airport — leave earlier" maxlength="160" required/></label>
+      <div class="life-experience-two"><label>Topic<select name="topic"><option value="TRAVEL">Travel</option><option value="FAMILY">Family</option><option value="HEALTH">Health</option><option value="HOUSEHOLD">Household</option><option value="FINANCE">Finance</option><option value="LEARNING">Learning</option><option value="WORK">Work</option><option value="OTHER">Other</option></select></label><label>Who can see it?<select name="visibility"><option value="SHARED">Shared with spouse</option><option value="PRIVATE">Private to me</option></select></label></div>
+      <label>What I learnt / rule to remember<textarea name="lesson" rows="4" maxlength="7000" placeholder="When flying from Bengaluru, start for the airport at least five hours before departure…" required></textarea></label>
+      <div class="life-experience-two"><label>Reminder for<select name="triggerKind"><option value="ANY">Matching keyword / situation</option><option value="FLIGHT">Air travel / flight</option><option value="TRAIN">Train travel</option><option value="ROAD">Road travel</option></select></label><label>Place (optional)<input name="location" placeholder="Bengaluru" maxlength="120"/></label></div>
+      <div class="life-experience-two"><label>Departure city (optional)<input name="departureCity" placeholder="Bengaluru (flight starts here)" maxlength="120"/></label><label>Arrival city (optional)<input name="arrivalCity" placeholder="Delhi" maxlength="120"/></label></div>
+<label>Extra matching words (optional)<input name="keywords" placeholder="airport, flight, BLR" maxlength="400"/></label>
+      <label>Make from one of my diary entries (optional)<select name="sourceDiaryId" id="experienceDiarySource"><option value="">Create independently</option></select></label><button type="button" id="experienceUseDiary" class="life-quiet">Use selected diary's title and text</button>
+      <div class="life-experience-two"><label>Attach original photo to private Google Drive<input id="experiencePhotoInput" type="file" accept="image/png,image/jpeg,image/webp"/></label><label>Or link an image (HTTPS URL)<input name="imageUrl" type="url" placeholder="https://example.com/photo.jpg" maxlength="900"/></label></div>
+      <div class="life-experience-preview" id="experiencePhotoPreview">No photo selected</div>
+      <label class="life-experience-remove"><input type="checkbox" name="removePhoto"/> Remove attached Drive photo when saving</label>
+      <div class="life-form-foot"><span id="experienceSaveStatus" role="status">Ready to save</span><button type="submit" class="life-save" id="experienceSave">Save Experience</button></div>
+    </form></article>
+    <article class="life-experience-list-panel"><div class="life-experience-tools"><h3>Saved experiences</h3><input id="experienceSearch" type="search" placeholder="Search a topic, place or lesson…" aria-label="Search experiences"/><button type="button" class="life-quiet" id="experiencePrint">⎙ Print</button></div><div id="experienceList" class="life-experience-list"><p class="life-hint">Open this page to load your life experiences.</p></div><button id="experienceLoadMore" type="button" class="life-quiet hidden">Load more experiences</button></article>
+  </div>
+</section>
+<section class="page-section hidden" id="diarySection">
+<div class="diary-hero">
+<div>
+<p class="eyebrow">PERSONAL DIARY &amp; MONTHLY LIFE PLAN</p>
+<h2>Daily diary, monthly plans, experiences &amp; targets</h2>
+<p>Write day-to-day notes, plan each month, record experiences, set targets, mark achievements, and keep completed months permanently.</p>
+</div>
+<div class="diary-hero-actions">
+<span class="diary-hero-status" id="diaryHeroStatus">Private to your login</span>
+<button class="primary-button" id="newDiaryEntryBtn" type="button">+ New daily entry</button>
+</div>
+</div>
+<section aria-label="Diary calendar and writing progress" class="life-shell life-diary-insights" id="lifeDiaryInsights">
+<div class="life-section-title"><div><span class="life-eyebrow">YOUR PERSONAL STORY</span><h2>A clearer diary, every day</h2><p>Capture memories here and revisit any day without losing your writing.</p></div><label class="life-month-label">Browse month<input id="lifeDiaryMonth" type="month"/></label></div>
+<div class="life-stat-grid life-three"><div class="life-stat"><span>Entries this month</span><strong id="lifeDiaryMonthly">0</strong><small>Saved entries</small></div><div class="life-stat"><span>Writing streak</span><strong id="lifeDiaryStreak">0 days</strong><small>Consecutive writing days</small></div><div class="life-stat"><span>Words this month</span><strong id="lifeDiaryWords">0</strong><small>In saved entries</small></div></div>
+<div class="life-duo diary-duo"><article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">DIARY CALENDAR</span><h3>English and Saka calendar</h3></div></div><div aria-label="Diary month calendar" class="life-calendar" id="lifeDiaryCalendar"></div></article>
+<article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">WRITE WITH PURPOSE</span><h3>Reflection prompts</h3></div></div><p class="life-hint">Tap a prompt to insert it into the diary editor below. No popup.</p><div class="life-template-grid"><button data-life-full-prompt="gratitude" type="button">♡ What am I thankful for?</button><button data-life-full-prompt="highlight" type="button">✧ Today's highlight</button><button data-life-full-prompt="lesson" type="button">✦ What I learned</button><button data-life-full-prompt="tomorrow" type="button">◎ Tomorrow's plan</button></div><div class="life-form-foot"><label>Find a tag<select id="lifeDiaryTag"><option value="">All diary entries</option></select></label><button class="life-quiet" id="lifeExportDiary" type="button">↓ Month CSV</button></div></article>
+</div>
+</section>
+<div class="diary-workspace-switcher" id="diaryWorkspaceSwitcher">
+<button class="active" data-diary-workspace="DAILY" type="button"><span>☀</span> Daily Diary</button>
+<button data-diary-workspace="MONTHLY" type="button"><span>▣</span> Monthly Diary / Plan / Experience</button>
+</div>
+<div id="dailyDiaryWorkspace">
+<div class="diary-layout">
+<article class="panel diary-compose-panel">
+<div class="panel-head">
+<div><p class="eyebrow">WRITE / EDIT</p><h3>Daily diary entry</h3></div>
+<span class="tiny muted" id="diarySaveStatus">New entry</span>
+</div>
+<div class="diary-compose-with-recent">
+<form class="diary-form" id="diaryForm">
+<input id="diaryId" type="hidden"/>
+<label class="sarni-diary-privacy">Visibility <select id="diaryVisibility" name="visibility"><option value="SHARED">👥 Shared with spouse</option><option value="PRIVATE">🔒 Private to me</option></select></label>
+<div class="diary-date-row">
+<label>Date<input id="diaryDate" required="" type="date"/></label>
+<div aria-label="Diary date navigation" class="diary-date-nav">
+<button class="diary-nav-button" id="diaryPrevDayBtn" title="Previous day" type="button">‹</button>
+<button class="diary-nav-button diary-today-button" id="diaryTodayBtn" type="button">Today</button>
+<button class="diary-nav-button" id="diaryNextDayBtn" title="Next day" type="button">›</button>
+</div>
+</div>
+<div class="life-fields diary-meta-fields"><label>Type<select id="diaryEntryType"><option value="PERSONAL">Personal</option><option value="LEARNING">Learning</option><option value="TARGET">Target</option><option value="IDEA">Idea</option><option value="GRATITUDE">Gratitude</option></select></label><label class="quick-important-toggle"><input id="diaryImportant" type="checkbox"/> ★ Important</label></div>
+<label>Title <small>(optional)</small><input id="diaryTitle" maxlength="120" placeholder="Give this day a meaningful title" type="text"/></label>
+<div aria-label="Diary writing starters" class="diary-writing-starters">
+<div><strong>Writing starters</strong><span>Choose one to begin, or write freely.</span></div>
+<div class="diary-starter-buttons">
+<button data-diary-starter="highlight" type="button">✨ Today’s highlight</button>
+<button data-diary-starter="gratitude" type="button">♡ Gratitude</button>
+<button data-diary-starter="lesson" type="button">💡 Lesson learned</button>
+<button data-diary-starter="tomorrow" type="button">◎ Tomorrow’s focus</button>
+</div>
+</div>
+<label class="diary-entry-field">Reflection
+                  <textarea id="diaryText" maxlength="5000" placeholder="Reflect on what happened, how you felt, what you learned, and what you want to carry forward…" required="" rows="8"></textarea>
+<div class="diary-writing-meta">
+<span id="diaryDraftStatus">Draft ready</span>
+<span class="diary-writing-progress"><span id="diaryWordCount">0 words</span><span id="diaryReadTime">Ready to write</span><span id="diaryCharCount">0 / 5000</span></span>
+</div>
+</label>
+<div class="diary-keyboard-tip">Tip: press <strong>⌘/Ctrl + Enter</strong> to save quickly.</div>
+<div class="diary-form-actions diary-sticky-actions">
+<button class="secondary-button" id="clearDiaryBtn" type="button">Clear</button>
+<button class="primary-button" id="saveDiaryBtn" type="submit">Save diary entry</button>
+</div>
+</form>
+<aside aria-label="Recent daily diary entries" class="recent-diary-rail mobile-collapsed" id="recentDailyRail">
+<button aria-expanded="false" class="recent-diary-mobile-toggle" data-recent-rail-toggle="daily" type="button">
+                  Recent entries <span id="recentDailyMobileCount">0</span>
+</button>
+<div class="recent-diary-rail-body">
+<div class="recent-diary-head">
+<div><p class="eyebrow">RECENT REFLECTIONS</p><h4>Your latest diary entries</h4></div>
+<span class="tiny muted" id="recentDailyCount">0 entries</span>
+</div>
+<div class="recent-diary-tools">
+<select aria-label="Number of recent daily entries" id="recentDailyLimit">
+<option value="3">Recent 3</option>
+<option selected="" value="5">Recent 5</option>
+<option value="10">Recent 10</option>
+</select>
+<input id="recentDailySearch" placeholder="Search recent…" type="search"/>
+</div>
+<div class="recent-diary-list" id="recentDailyList"></div>
+<div class="recent-diary-empty" id="recentDailyEmpty">No recent daily entries yet.</div>
+</div>
+</aside>
+</div>
+</article>
+<article class="panel diary-browser-panel">
+<div class="panel-head diary-browser-head">
+<div><p class="eyebrow">DIARY ARCHIVE</p><h3>Search and revisit your diary</h3></div>
+<div class="range-switcher diary-view-switcher" id="diaryViewSwitcher">
+<button class="active" data-diary-view="DAILY" type="button">Day</button>
+<button data-diary-view="MONTHLY" type="button">Month</button><button data-diary-view="RANGE" type="button">Range</button>
+</div>
+</div>
+<div class="diary-controls">
+<div class="diary-search-wrap"><input class="search-input diary-search" id="diarySearch" placeholder="Search title, entry or date…" type="search"/><button class="search-clear-button" id="diarySearchClearBtn" title="Clear search" type="button">×</button></div>
+<label class="diary-date-control" id="diaryDayControl">Day<input id="diaryBrowseDate" type="date"/></label>
+<label class="diary-date-control hidden" id="diaryMonthControl">Month<input id="diaryBrowseMonth" type="month"/></label>
+<div class="diary-range-control hidden" id="diaryRangeControl"><label>From<input id="diaryFromDate" type="date"/></label><label>To<input id="diaryToDate" type="date"/></label></div>
+<button class="print-view-button diary-print-button" id="printDiaryBtn" type="button">⎙ Print filtered diary</button>
+</div>
+<div class="diary-summary" id="diarySummary"></div>
+<div class="diary-list" id="diaryList"></div>
+<div class="empty-state hidden" id="diaryEmpty">No daily diary entries match this view.</div>
+</article>
+</div>
+</div>
+<div class="hidden" id="monthlyDiaryWorkspace">
+<div class="monthly-control-bar">
+<div class="monthly-filter-group">
+<label>Year<select id="monthlyYearFilter"></select></label>
+<label>Month<select id="monthlyMonthFilter">
+<option value="ALL">All months</option>
+<option value="01">January</option><option value="02">February</option><option value="03">March</option>
+<option value="04">April</option><option value="05">May</option><option value="06">June</option>
+<option value="07">July</option><option value="08">August</option><option value="09">September</option>
+<option value="10">October</option><option value="11">November</option><option value="12">December</option>
+</select></label>
+<label>Type<select id="monthlyTypeFilter">
+<option value="ALL">All types</option>
+<option value="DIARY">Diary</option>
+<option value="PLAN">Plan</option>
+<option value="EXPERIENCE">Experience</option>
+<option value="TARGET">Target</option>
+</select></label>
+<label>Status<select id="monthlyStatusFilter">
+<option value="ALL">All status</option>
+<option value="OPEN">Open targets</option>
+<option value="COMPLETED">Completed targets</option>
+</select></label>
+</div>
+<div class="monthly-search-actions"><input class="search-input monthly-search" id="monthlySearch" placeholder="Search monthly diary, plan, experience or target…" type="search"/><button class="print-view-button" id="printMonthlyBtn" type="button">⎙ Print filtered view</button></div>
+</div>
+<div class="month-completion-panel" id="monthCompletionPanel">
+<div>
+<p class="eyebrow">MONTH PROGRESS</p>
+<h3 id="monthCompletionTitle">This month</h3>
+<p class="muted" id="monthCompletionText">Add targets to track completion.</p>
+</div>
+<div class="month-progress-side">
+<div class="month-progress-track"><div class="month-progress-bar" id="monthProgressBar"></div></div>
+<strong id="monthProgressLabel">0 / 0 targets completed</strong>
+<button class="primary-button" id="completeMonthBtn" type="button">✓ Complete month</button>
+</div>
+</div>
+<div class="monthly-workspace-grid">
+<article class="panel monthly-compose-panel">
+<div class="panel-head">
+<div><p class="eyebrow">ADD / EDIT MONTHLY ITEM</p><h3>Diary, plan, experience or target</h3></div>
+<span class="tiny muted" id="monthlySaveStatus">New monthly item</span>
+</div>
+<div class="diary-compose-with-recent monthly-compose-with-recent">
+<form class="diary-form" id="monthlyForm">
+<input id="monthlyId" type="hidden"/>
+<div class="diary-date-row">
+<label>Month<input id="monthlyEntryMonth" required="" type="month"/></label>
+<div aria-label="Monthly entry navigation" class="diary-date-nav">
+<button class="diary-nav-button" id="monthlyPrevMonthBtn" title="Previous month" type="button">‹</button>
+<button class="diary-nav-button diary-today-button" id="monthlyThisMonthBtn" type="button">This month</button>
+<button class="diary-nav-button" id="monthlyNextMonthBtn" title="Next month" type="button">›</button>
+</div>
+</div>
+<label>Type<select id="monthlyEntryType" required="">
+<option value="DIARY">Monthly Diary</option>
+<option value="PLAN">Plan</option>
+<option value="EXPERIENCE">Experience</option>
+<option value="TARGET">Target</option>
+</select></label>
+<label>Title<input id="monthlyTitle" maxlength="140" placeholder="e.g. Health target, Trip plan, Monthly reflection" type="text"/></label>
+<label class="diary-entry-field">Details
+                  <textarea id="monthlyText" maxlength="5000" placeholder="Write the monthly diary, plan, experience or target details…" required="" rows="7"></textarea>
+<div class="diary-writing-meta"><span id="monthlyDraftStatus">Draft ready</span><span id="monthlyCharCount">0 / 5000</span></div>
+</label>
+<div class="diary-keyboard-tip">Tip: press <strong>⌘/Ctrl + Enter</strong> to save quickly.</div>
+<div class="monthly-target-help" id="monthlyTargetHelp">
+                  For a Target, save it first. Then use <strong>Mark completed</strong> when achieved.
+                </div>
+<div class="diary-form-actions">
+<button class="secondary-button" id="clearMonthlyBtn" type="button">Clear</button>
+<button class="primary-button" id="saveMonthlyBtn" type="submit">Save monthly item</button>
+</div>
+</form>
+<aside aria-label="Recent monthly diary entries" class="recent-diary-rail recent-monthly-rail mobile-collapsed" id="recentMonthlyRail">
+<button aria-expanded="false" class="recent-diary-mobile-toggle" data-recent-rail-toggle="monthly" type="button">
+                  Recent monthly <span id="recentMonthlyMobileCount">0</span>
+</button>
+<div class="recent-diary-rail-body">
+<div class="recent-diary-head">
+<div><p class="eyebrow">IMMEDIATE HISTORY</p><h4>Recent monthly entries</h4></div>
+<span class="tiny muted" id="recentMonthlyCount">0 items</span>
+</div>
+<div class="recent-diary-tools">
+<select aria-label="Number of recent monthly entries" id="recentMonthlyLimit">
+<option value="3">Recent 3</option>
+<option selected="" value="5">Recent 5</option>
+<option value="10">Recent 10</option>
+</select>
+<input id="recentMonthlySearch" placeholder="Search recent…" type="search"/>
+</div>
+<div class="recent-diary-list" id="recentMonthlyList"></div>
+<div class="recent-diary-empty" id="recentMonthlyEmpty">No recent monthly entries yet.</div>
+</div>
+</aside>
+</div>
+</article>
+<article class="panel monthly-list-panel">
+<div class="panel-head">
+<div><p class="eyebrow">MONTHLY RECORDS</p><h3 id="monthlyListTitle">Monthly diary / plan / experience</h3></div>
+<span class="tiny muted" id="monthlyResultCount">0 items</span>
+</div>
+<div class="completed-month-archive" id="completedMonthArchive"></div>
+<div class="monthly-list" id="monthlyList"></div>
+<div class="empty-state hidden" id="monthlyEmpty">No monthly records match these filters.</div>
+</article>
+</div>
+</div>
+</section>
+<section class="page-section hidden" id="booksSection">
+<div class="books-list-view">
+<div class="panel-head responsive-head">
+<div><p class="eyebrow">BOOK WRITING</p><h2>Your books</h2></div>
+<div class="book-toolbar-actions"><button class="primary-button" id="createCodingBookBtn" type="button">📚 Create Coding Book</button><button class="secondary-button" id="addBookBtn" type="button">＋ New book</button></div>
+</div>
+<div class="books-grid" id="booksGrid"></div>
+<div class="empty-state" id="booksEmpty">No books yet — start your first one.</div>
+</div>
+<div class="book-detail-view hidden" id="bookDetailView">
+<button class="small-button" id="bookDetailBackBtn" type="button">← All books</button>
+<div class="panel-head responsive-head">
+<div>
+<div class="book-detail-badges"><span class="book-status-badge" id="bookDetailStatusBadge"></span><span class="book-role-badge" id="bookDetailRoleBadge"></span></div>
+<h2 id="bookDetailTitle">—</h2>
+<small id="bookDetailGenre"></small>
+</div>
+<div class="book-detail-actions">
+<button class="small-button hidden" id="bookDetailEditBtn" type="button">Edit book</button>
+<button class="small-button danger hidden" id="bookDetailArchiveBtn" type="button">Archive</button>
+</div>
+</div>
+<p class="book-detail-description" id="bookDetailDescription"></p>
+<div class="book-detail-grid">
+<article class="panel">
+<div class="panel-head"><h3>Collaborators</h3><button class="small-button hidden" id="bookCollabAddBtn" type="button">＋ Add</button></div>
+<div class="book-collab-list" id="bookCollabList"></div>
+</article>
+<article class="panel">
+<div class="panel-head"><h3>Writing progress</h3><button class="small-button" id="logProgressBtn" type="button">＋ Log today</button></div>
+<div class="book-progress-summary"><strong id="bookProgressTotalWords">0 words logged</strong><span id="bookProgressStreak">0 day streak</span></div>
+<div class="book-progress-chart" id="bookProgressChart"></div>
+</article>
+</div>
+<article class="panel">
+<div class="panel-head"><h3>Chapters</h3><button class="small-button hidden" id="addChapterBtn" type="button">＋ Add chapter</button></div>
+<div class="book-chapters-list" id="bookChaptersList"></div>
+<div class="empty-state" id="bookChaptersEmpty">No chapters yet.</div>
+</article>
+</div>
+</section>
+<section class="page-section hidden" id="usersSection">
+<article class="panel security-settings-panel" id="adminSecurityPanel" tabindex="-1">
+<div class="panel-head responsive-head">
+<div><p class="eyebrow">ADMINISTRATION → SECURITY SETTINGS</p><h3>Automatic sign-out policy</h3><p class="user-admin-help">Set the same inactivity limit for desktop and mobile. All SarNi users receive a one-minute warning.</p></div>
+<span class="security-policy-badge" id="securityPolicyBadge">30-minute default</span>
+</div>
+<form class="security-settings-form" id="securitySettingsForm">
+<label>Sign out after inactivity<select id="securityIdleTimeout" required=""><option value="5">5 minutes</option><option selected="" value="30">30 minutes (default)</option><option value="60">1 hour</option><option value="120">2 hours</option></select></label>
+<div class="security-policy-facts"><span><strong>1 minute</strong> warning</span><span><strong>Same limit</strong> for background inactivity</span><span><strong>All users</strong> and devices</span></div>
+<button class="primary-button" id="saveSecuritySettingsBtn" type="submit">Save security settings</button>
+</form>
+<p aria-live="polite" class="security-settings-status" id="securitySettingsStatus">Current policy: sign out after 30 minutes of inactivity.</p>
+</article>
+<article aria-label="Manage private user photos" class="life-card admin-photo-manager" id="adminPhotoManager">
+<div class="life-card-top"><div><span class="life-eyebrow">ADMIN ONLY · PRIVATE GOOGLE DRIVE</span><h3>User photos</h3><p>Choose a user in the table, then upload, replace or remove their photo. Only admins can make changes.</p></div></div>
+<div class="photo-manager-row"><div class="person-avatar is-large" id="photoPreview">👤</div><div class="photo-manager-fields"><strong id="photoSelectedUser">Select a user below</strong><input accept="image/jpeg,image/png,image/webp" aria-label="User photo" id="photoFileInput" type="file"/><div class="quick-action-pair"><button class="life-save" disabled="" id="photoUploadBtn" type="button">Upload / replace</button><button class="life-quiet" disabled="" id="photoRemoveBtn" type="button">Remove photo</button></div><small id="photoAdminStatus" role="status">Compressed thumbnail stored privately. Full photo saved in a private Google Drive folder.</small></div></div>
+</article>
+<article class="panel table-panel user-admin-panel">
+<div class="panel-head responsive-head">
+<div>
+<p class="eyebrow">ADMINISTRATION</p>
+<h3>Dashboard users</h3>
+<p class="user-admin-help">Create accounts, edit name/role/status, reset password or delete an account. Deleting a login account does not delete saved personal records.</p>
+</div>
+<button class="primary-button" id="addUserBtn" type="button">+ Create user</button>
+</div>
+<div class="table-wrap user-table-wrap">
+<table class="users-table">
+<thead><tr><th>Username</th><th>Name</th><th>Role</th><th>Status</th><th>Last login</th><th>Actions</th></tr></thead>
+<tbody id="usersBody"></tbody>
+</table>
+</div>
+</article>
+</section>
+</main>
+<aside aria-hidden="true" class="quick-diary-panel" id="quickDiaryPanel">
+<div class="quick-diary-head">
+<div><p class="eyebrow">QUICK DIARY</p><h3>Write without leaving dashboard</h3></div>
+<button aria-label="Close quick diary" class="icon-button" id="quickDiaryCloseBtn" type="button">×</button>
+</div>
+<div class="quick-diary-tabs">
+<button class="active" data-quick-diary-mode="DAILY" type="button">Daily Diary</button>
+<button data-quick-diary-mode="MONTHLY" type="button">Monthly Diary</button>
+</div>
+<form class="quick-diary-form" id="quickDailyForm">
+<label>Date<input id="quickDailyDate" required="" type="date"/></label>
+<label>Title<input id="quickDailyTitle" maxlength="120" placeholder="Optional title" type="text"/></label>
+<label>Entry<textarea id="quickDailyText" maxlength="5000" placeholder="Write your daily diary…" required="" rows="8"></textarea></label>
+<div class="quick-diary-meta"><span id="quickDailyStatus">Ready</span><span id="quickDailyCount">0 / 5000</span></div>
+<button class="primary-button" id="quickDailySaveBtn" type="submit">Save daily entry</button>
+</form>
+<form class="quick-diary-form hidden" id="quickMonthlyForm">
+<label>Month<input id="quickMonthlyMonth" required="" type="month"/></label>
+<label>Type<select id="quickMonthlyType">
+<option value="DIARY">Monthly Diary</option>
+<option value="PLAN">Plan</option>
+<option value="EXPERIENCE">Experience</option>
+<option value="TARGET">Target</option>
+</select></label>
+<label>Title<input id="quickMonthlyTitle" maxlength="140" placeholder="Optional title" type="text"/></label>
+<label>Details<textarea id="quickMonthlyText" maxlength="5000" placeholder="Write monthly diary / plan / experience / target…" required="" rows="8"></textarea></label>
+<div class="quick-diary-meta"><span id="quickMonthlyStatus">Ready</span><span id="quickMonthlyCount">0 / 5000</span></div>
+<button class="primary-button" id="quickMonthlySaveBtn" type="submit">Save monthly item</button>
+</form>
+<button class="secondary-button quick-full-diary" id="openFullDiaryBtn" type="button">Open full Diary</button>
+</aside>
+<button aria-controls="utilityDrawer" aria-expanded="false" class="utility-drawer-launcher" id="utilityDrawerOpenBtn" title="Open targets, reminders and quotes" type="button">
+<span class="utility-launcher-icon">✦</span>
+<span class="utility-launcher-text">Notes &amp; Quotes</span>
+<span class="utility-launcher-badge" id="utilityStickyBadge">0</span>
+</button>
+<div aria-hidden="true" class="utility-drawer-scrim" id="utilityDrawerScrim"></div>
+<aside aria-hidden="true" class="utility-drawer" id="utilityDrawer">
+<div class="utility-drawer-head">
+<div><p class="eyebrow">RIGHT UTILITY PANEL</p><h3>Notes &amp; Quotes</h3><p>Targets, reminders and inspiration without occupying dashboard space.</p></div>
+<button aria-label="Close right utility panel" class="icon-button" id="utilityDrawerCloseBtn" type="button">×</button>
+</div>
+<div aria-label="Right panel sections" class="utility-drawer-tabs" role="tablist">
+<button class="active" data-utility-tab="STICKY" type="button">📌 Sticky <span id="utilityStickyTabCount">0</span></button>
+<button data-utility-tab="QUOTE" type="button">💬 Quotes</button>
+</div>
+<div class="utility-drawer-section active" id="utilityStickySection">
+<section aria-label="Sticky targets and reminders" class="sticky-notes-panel">
+<div class="sticky-notes-head">
+<div><p class="eyebrow">STICKY NOTES</p><h3>Targets &amp; reminders</h3></div>
+<div class="sticky-head-actions"><span id="stickyNotesCount">0 active</span><button class="sticky-add-button" id="addStickyNoteBtn" type="button">+ Add sticky</button></div>
+</div>
+<p class="sticky-pin-help">📌 Pin a note to keep it floating above other dashboard fields. Done and Delete remain available while pinned.</p>
+<div class="sticky-notes-list" id="stickyNotesList"></div>
+<div class="sticky-empty" id="stickyNotesEmpty">No active target or reminder. Add one when something needs your attention.</div>
+<section aria-label="Sticky Note Diary" class="sticky-history-panel">
+<div class="sticky-history-head">
+<div><p class="eyebrow">STICKY NOTE DIARY</p><h3>Completed history</h3></div>
+<span id="stickyHistoryCount">0 completed</span>
+</div>
+<p class="sticky-history-help">Completed items are stored here separately and do not enter your regular Diary.</p>
+<div class="sticky-history-columns">
+<section class="sticky-history-column target-history"><h4>✓ Completed targets <span id="stickyTargetHistoryCount">0</span></h4><div class="sticky-history-list" id="stickyTargetHistoryList"></div></section>
+<section class="sticky-history-column reminder-history"><h4>✓ Completed reminders <span id="stickyReminderHistoryCount">0</span></h4><div class="sticky-history-list" id="stickyReminderHistoryList"></div></section>
+</div>
+<div class="sticky-empty" id="stickyHistoryEmpty">Completed targets and reminders will appear here.</div>
+</section>
+</section>
+</div>
+<div class="utility-drawer-section hidden" id="utilityQuoteSection">
+<section aria-label="Daily life quote" class="life-quote-panel">
+<div class="life-quote-mark">“</div>
+<div class="life-quote-copy">
+<div class="life-quote-label"><span>QUOTE OF THE DAY</span><span id="lifeQuoteShuffleStatus">Auto shuffle · 30s</span></div>
+<blockquote id="lifeQuoteText">Add your favorite life quotes to start the daily rotation.</blockquote>
+<div class="life-quote-author" id="lifeQuoteAuthor">— Quote Library</div>
+</div>
+<div class="life-quote-actions">
+<button id="lifeQuoteNextBtn" title="Show another quote" type="button">↻ Next</button>
+<button id="lifeQuotePauseBtn" title="Pause automatic shuffle" type="button">Ⅱ Pause</button>
+<button class="quote-library-button" id="lifeQuoteLibraryBtn" title="Manage saved quotes" type="button">☰ Library</button>
+</div>
+</section>
+</div>
+</aside>
+<div aria-label="Pinned sticky notes" class="pinned-sticky-layer hidden" id="pinnedStickyLayer"></div>
+<div aria-label="Horizontal dashboard scroller" class="dashboard-hscroll hidden" id="dashboardHScroll">
+<button class="dashboard-hscroll-arrow" id="dashboardHScrollLeft" title="Scroll left" type="button">‹</button>
+<div class="dashboard-hscroll-center">
+<div class="dashboard-hscroll-labels"><span id="dashboardHScrollLabel">Horizontal scroll</span><span id="dashboardHScrollPct">0%</span></div>
+<input aria-label="Move table left or right" class="dashboard-hscroll-range" id="dashboardHScrollRange" max="1000" min="0" step="1" type="range" value="0"/>
+</div>
+<button class="dashboard-hscroll-arrow" id="dashboardHScrollRight" title="Scroll right" type="button">›</button>
+</div>
+<nav aria-label="Mobile main navigation" class="mobile-nav">
+<button aria-label="Home" class="mobile-nav-item active" data-section="overview"><span aria-hidden="true">⌂</span>Home</button>
+<button aria-label="Expenses" class="mobile-nav-item" data-section="expenditure"><span aria-hidden="true">₹</span>Expenses</button>
+<button aria-label="Quick Diary" class="mobile-nav-item" data-mobile-section="quickDiary" id="quickDiaryMobileBtn"><span aria-hidden="true">✎</span>Diary</button>
+<button aria-label="English and Saka Calendar" class="mobile-nav-item" data-section="calendar"><span aria-hidden="true">▦</span>Calendar</button>
+<button aria-controls="mobileMoreSheet" aria-expanded="false" aria-label="More features" class="mobile-nav-item mobile-more-button" id="mobileMoreBtn" type="button"><span aria-hidden="true">☰</span>More</button>
+</nav>
+<div class="mobile-more-backdrop hidden" id="mobileMoreBackdrop"></div>
+<aside aria-labelledby="mobileMoreTitle" aria-modal="true" class="mobile-more-sheet hidden" id="mobileMoreSheet" role="dialog" tabindex="-1">
+<div aria-hidden="true" class="mobile-more-handle"></div>
+<header class="mobile-more-title-row"><div><small>EXPLORE SARNI</small><h2 id="mobileMoreTitle">All your essentials</h2></div><button aria-label="Close menu" class="mobile-more-close" id="mobileMoreClose" type="button">×</button></header>
+<div class="mobile-more-grid">
+<button data-section="diary" type="button"><span class="mobile-more-glyph">▤</span><strong>Full Diary</strong><small>History &amp; writing</small></button>
+<button data-section="creditCards" type="button"><span class="mobile-more-glyph">▣</span><strong>Credit Cards</strong><small>Major purchases · Bills</small></button>
+<button data-section="experiences" type="button"><span class="mobile-more-glyph">✦</span><strong>Life Experiences</strong><small>Lessons that remind you</small></button>
+<button data-section="books" type="button"><span class="mobile-more-glyph">▣</span><strong>Book Writing</strong><small>Your writing</small></button>
+<button id="mobileMoreNotes" type="button"><span class="mobile-more-glyph">✦</span><strong>Notes &amp; targets</strong><small>Reminders &amp; quotes</small></button>
+<button aria-label="Open automatic sign-out settings" class="admin-only hidden" id="mobileAdminSecurityShortcut" type="button"><span class="mobile-more-glyph">⚙</span><strong>Admin Settings</strong><small>Auto sign-out · User management</small></button>
+</div>
+<div class="mobile-more-settings">
+<button id="mobileMorePassword" type="button">⌁   Change password</button>
+<button id="mobileMoreLogout" type="button">↪   Sign out</button>
+</div>
+<div class="mobile-more-versions"><span id="moreFrontendVersion">FE v20.8.3</span><span id="moreBackendVersion">BE v3.17.28</span></div>
+</aside>
+</div>
+<div aria-labelledby="commandPaletteTitle" aria-modal="true" class="command-palette-backdrop hidden" id="commandPalette" role="dialog">
+<section class="command-palette-shell">
+<header class="command-palette-head">
+<div><p class="eyebrow">QUICK ACCESS</p><h2 id="commandPaletteTitle">Go anywhere in SarNi</h2></div>
+<button aria-label="Close quick access" class="icon-button" id="commandPaletteCloseBtn" type="button">×</button>
+</header>
+<label class="command-palette-search"><span>⌕</span><input aria-label="Search pages and actions" autocomplete="off" id="commandPaletteInput" placeholder="Search pages and actions…" type="search"/></label>
+<div aria-label="Available pages and actions" class="command-palette-results" id="commandPaletteResults" role="listbox"></div>
+<footer><span>↑↓ Navigate</span><span>Enter Open</span><span>Esc Close</span></footer>
+</section>
+</div>
+<div aria-hidden="true" class="modal-backdrop hidden" id="modalBackdrop">
+
+
+<div aria-labelledby="bookModalTitle" aria-modal="true" class="modal hidden" id="bookModal" role="dialog">
+<div class="modal-head">
+<div><p class="eyebrow">BOOK WRITING</p><h2 id="bookModalTitle">New book</h2></div>
+<button aria-label="Close" class="modal-close" data-close-modal="">×</button>
+</div>
+<form class="stack-form" id="bookForm">
+<input id="bookId" type="hidden"/>
+<label>Title<input id="bookTitle" maxlength="200" required=""/></label>
+<label>Genre<input id="bookGenre" maxlength="80" placeholder="e.g. Memoir, Fiction, Poetry"/></label>
+<label>Description<textarea id="bookDescription" maxlength="2000" rows="3"></textarea></label>
+<div class="form-grid-2">
+<label>Status
+            <select id="bookStatus"><option value="PLANNING">Planning</option><option value="DRAFTING">Drafting</option><option value="EDITING">Editing</option><option value="COMPLETE">Complete</option></select>
+</label>
+<label>Cover colour
+            <select id="bookCoverColor"><option value="PURPLE">Purple</option><option value="BLUE">Blue</option><option value="TEAL">Teal</option><option value="GREEN">Green</option><option value="ORANGE">Orange</option><option value="PINK">Pink</option><option value="GOLD">Gold</option></select>
+</label>
+</div>
+<div class="form-grid-2">
+<label>Target word count<input id="bookTargetWordCount" min="0" type="number"/></label>
+<label>Target date<input id="bookTargetDate" type="date"/></label>
+</div>
+<div class="form-actions">
+<button class="secondary-button" data-close-modal="" type="button">Cancel</button>
+<button class="primary-button" id="saveBookBtn" type="submit">Save book</button>
+</div>
+</form>
+</div>
+<div aria-labelledby="chapterModalTitle" aria-modal="true" class="modal hidden" id="chapterModal" role="dialog">
+<div class="modal-head">
+<div><p class="eyebrow">CHAPTER</p><h2 id="chapterModalTitle">New chapter</h2></div>
+<button aria-label="Close" class="modal-close" data-close-modal="">×</button>
+</div>
+<form class="stack-form" id="chapterForm">
+<input id="chapterBookId" type="hidden"/>
+<input id="chapterId" type="hidden"/>
+<label>Title<input id="chapterTitle" maxlength="200" required=""/></label>
+<div class="form-grid-2">
+<label>Status
+            <select id="chapterStatus"><option value="NOT_STARTED">Not started</option><option value="DRAFTING">Drafting</option><option value="REVIEW">In review</option><option value="DONE">Done</option></select>
+</label>
+<label>Assigned to<select id="chapterAssignedTo"></select></label>
+</div>
+<label>Content <span class="tiny muted" id="chapterWordCountLive"></span></label>
+<div class="rte-toolbar" id="chapterRteToolbar">
+<button class="rte-btn" data-rte-cmd="bold" title="Bold" type="button"><b>B</b></button>
+<button class="rte-btn" data-rte-cmd="italic" title="Italic" type="button"><i>I</i></button>
+<button class="rte-btn" data-rte-cmd="underline" title="Underline" type="button"><u>U</u></button>
+<button class="rte-btn" data-rte-cmd="strikeThrough" title="Strikethrough" type="button"><s>S</s></button>
+<span class="rte-sep"></span>
+<label class="rte-color-btn" title="Text colour">A<input id="chapterTextColor" type="color" value="#17203b"/></label>
+<label class="rte-color-btn highlight" title="Highlight">H<input id="chapterHighlightColor" type="color" value="#fff176"/></label>
+<button class="rte-btn" data-rte-cmd="removeFormat" title="Clear formatting" type="button">✕</button>
+<span class="rte-sep"></span>
+<button class="rte-btn" data-rte-cmd="insertUnorderedList" title="Bullet list" type="button">•≡</button>
+<button class="rte-btn" data-rte-cmd="insertOrderedList" title="Numbered list" type="button">1≡</button>
+<select class="rte-select" id="chapterHeadingSelect" title="Text style">
+<option value="P">Paragraph</option>
+<option value="H2">Heading</option>
+<option value="H3">Subheading</option>
+</select>
+</div>
+<div class="rte-editor" contenteditable="true" data-placeholder="Write here…" id="chapterContent"></div>
+<label>Notes<textarea id="chapterNotes" maxlength="2000" rows="2"></textarea></label>
+<div class="form-actions">
+<button class="secondary-button" data-close-modal="" type="button">Cancel</button>
+<button class="primary-button" id="saveChapterBtn" type="submit">Save chapter</button>
+</div>
+</form>
+</div>
+<div aria-labelledby="bookCollabModalTitle" aria-modal="true" class="modal small-modal hidden" id="bookCollabModal" role="dialog">
+<div class="modal-head">
+<div><p class="eyebrow">COLLABORATOR</p><h2 id="bookCollabModalTitle">Add collaborator</h2></div>
+<button aria-label="Close" class="modal-close" data-close-modal="">×</button>
+</div>
+<form class="stack-form" id="bookCollabForm">
+<input id="bookCollabBookId" type="hidden"/>
+<label>Username<input id="bookCollabUsername" placeholder="e.g. niharika" required=""/></label>
+<label>Role
+          <select id="bookCollabRole"><option value="CO_AUTHOR">Co-author (can write &amp; edit)</option><option value="EDITOR">Editor (can edit, not add chapters)</option><option value="VIEWER">Viewer (read only)</option></select>
+</label>
+<div class="form-actions">
+<button class="secondary-button" data-close-modal="" type="button">Cancel</button>
+<button class="primary-button" id="saveBookCollabBtn" type="submit">Add</button>
+</div>
+</form>
+</div>
+<div aria-labelledby="bookProgressModalTitle" aria-modal="true" class="modal small-modal hidden" id="bookProgressModal" role="dialog">
+<div class="modal-head">
+<div><p class="eyebrow">WRITING PROGRESS</p><h2 id="bookProgressModalTitle">Log today's writing</h2></div>
+<button aria-label="Close" class="modal-close" data-close-modal="">×</button>
+</div>
+<form class="stack-form" id="bookProgressForm">
+<input id="bookProgressBookId" type="hidden"/>
+<label>Chapter<select id="bookProgressChapter"></select></label>
+<div class="form-grid-2">
+<label>Words written<input id="bookProgressWords" min="1" required="" type="number"/></label>
+<label>Minutes spent<input id="bookProgressMinutes" min="0" type="number"/></label>
+</div>
+<label>Date<input id="bookProgressDate" required="" type="date"/></label>
+<label>Notes<textarea id="bookProgressNotes" maxlength="500" rows="2"></textarea></label>
+<div class="form-actions">
+<button class="secondary-button" data-close-modal="" type="button">Cancel</button>
+<button class="primary-button" id="saveBookProgressBtn" type="submit">Log progress</button>
+</div>
+</form>
+</div>
+
+<div aria-labelledby="expenseModalTitle" aria-modal="true" class="modal expense-modal hidden" id="expenseModal" role="dialog">
+<div class="modal-head"><div><p class="eyebrow" id="expenseModalEyebrow">ACTUAL EXPENSE</p><h2 id="expenseModalTitle">Add expense</h2><p class="modal-subcopy" id="expenseModalSubcopy">Record money already spent.</p></div><button aria-label="Close" class="modal-close" data-close-modal="">×</button></div>
+<form class="form-grid" id="expenseForm">
+<input id="expenseRecordId" type="hidden"/><input id="expenseRecordMode" type="hidden" value="ACTUAL"/>
+<label class="span-2 hidden" id="expenseRegularNameGroup">Regular payment name<input id="expenseRegularName" maxlength="140" placeholder="e.g. Electricity bill / Insurance premium"/></label>
+<label><span id="expenseAmountLabel">Amount</span><input id="expenseAmount" min="0.01" required="" step="0.01" type="number"/><small class="field-help hidden" id="regularAmountHelp">Planning estimate only. Enter the actual amount afresh whenever you record a payment.</small></label>
+<label id="expenseDateGroup"><span id="expenseDateLabel">Date spent</span><input id="expenseDate" required="" type="date"/></label>
+<label>Paid To / Name <small>(optional)</small><input id="expensePaidTo" maxlength="140" placeholder="Person, shop, service…"/></label>
+<label>Debited From<input id="expenseDebitedFrom" list="expenseAccountSuggestions" maxlength="120" placeholder="SBI / HDFC / Cash / Credit Card / UPI…"/><datalist id="expenseAccountSuggestions"></datalist></label>
+<label class="span-2">Reason<input id="expenseReason" maxlength="220" placeholder="What was this payment for?" required=""/></label>
+<label>Category of expense<select id="expenseCategory" required=""></select></label>
+<label>Subcategory <small>(optional)</small><select id="expenseSubcategory"><option value="">No subcategory</option></select><small class="field-help" id="expenseSubcategoryHelp">Add subcategories in Category Manager whenever needed.</small></label>
+<label class="span-2" id="expenseMajorProjectGroup">Major expenditure project <small>(optional)</small><select id="expenseMajorProject"><option value="">Not linked to a major project</option></select><small class="field-help">Enter the expense only once. Linking it makes the same row appear in the selected project report.</small></label>
+<label class="hidden" id="expenseFrequencyGroup">Frequency<select id="expenseFrequency"><option value="MONTHLY">Monthly</option><option value="QUARTERLY">Quarterly</option><option value="HALF_YEARLY">Half-yearly</option><option value="YEARLY">Yearly</option></select></label>
+<label class="hidden" id="expenseEndDateGroup">End date <small>(optional)</small><input id="expenseEndDate" type="date"/></label>
+<label class="hidden" id="expenseStatusGroup">Status<select id="expenseStatus"><option value="ACTIVE">Active</option><option value="PAUSED">Paused</option><option value="STOPPED">Stopped</option></select></label>
+<label class="span-2">Notes to remember <small>(optional)</small><textarea id="expenseNotes" maxlength="1000" placeholder="Anything useful to remember later…" rows="3"></textarea></label>
+<div class="form-actions span-2"><button class="secondary-button" data-close-modal="" type="button">Cancel</button><button class="primary-button" id="saveExpenseBtn" type="submit">Save expense</button></div>
+</form>
+</div>
+<div aria-labelledby="majorExpenseProjectModalTitle" aria-modal="true" class="modal compact-modal hidden" id="majorExpenseProjectModal" role="dialog">
+<div class="modal-head"><div><p class="eyebrow">MAJOR EXPENDITURE PROJECT</p><h2 id="majorExpenseProjectModalTitle">New project</h2></div><button aria-label="Close" class="modal-close" data-close-modal="">×</button></div>
+<form class="form-grid" id="majorExpenseProjectForm">
+<input id="majorExpenseProjectId" type="hidden"/>
+<label class="span-2">Project name<input id="majorExpenseProjectName" maxlength="140" placeholder="e.g. House Building" required=""/></label>
+<label>Proposed budget (optional)<input id="majorExpenseProjectBudget" min="0" placeholder="Optional — leave blank" step="0.01" type="number"/></label>
+<label>Status<select id="majorExpenseProjectStatus"><option value="PLANNED">Planned</option><option selected="" value="ACTIVE">Active</option><option value="ON_HOLD">On hold</option><option value="COMPLETED">Completed</option><option value="ARCHIVED">Archived</option></select></label>
+<label>Start date<input id="majorExpenseProjectStart" type="date"/></label><label>Target completion<input id="majorExpenseProjectTarget" type="date"/></label>
+<label>Colour<select id="majorExpenseProjectColor"><option value="PURPLE">Purple</option><option value="BLUE">Blue</option><option value="TEAL">Teal</option><option value="GREEN">Green</option><option value="ORANGE">Orange</option><option value="PINK">Pink</option><option value="GOLD">Gold</option></select></label>
+<label class="span-2">Notes<textarea id="majorExpenseProjectNotes" maxlength="1200" placeholder="Contractor, approvals, milestones or anything useful…" rows="4"></textarea></label>
+<div class="form-actions span-2"><button class="secondary-button" data-close-modal="" type="button">Cancel</button><button class="primary-button" id="saveMajorExpenseProjectBtn" type="submit">Save project</button></div>
+</form>
+</div>
+<div aria-labelledby="expensePaymentTitle" aria-modal="true" class="modal expense-payment-modal hidden" id="expensePaymentModal" role="dialog">
+<div class="modal-head"><div><p class="eyebrow">CONVERT TO ACTUAL EXPENDITURE</p><h2 id="expensePaymentTitle">Mark paid</h2><p class="modal-subcopy">Confirm the actual payment details. A new Actual Expense will be created.</p></div><button aria-label="Close" class="modal-close" data-close-modal="">×</button></div>
+<form class="form-grid" id="expensePaymentForm">
+<input id="expensePaymentSourceType" type="hidden"/><input id="expensePaymentSourceId" type="hidden"/>
+<label>Actual amount<input id="expensePaymentAmount" min="0.01" required="" step="0.01" type="number"/></label>
+<label>Date paid<input id="expensePaymentDate" required="" type="date"/></label>
+<label>Paid To / Name<input id="expensePaymentPaidTo" maxlength="140"/></label>
+<label>Debited From<input id="expensePaymentAccount" list="expenseAccountSuggestions" maxlength="120"/></label>
+<label class="span-2">Additional note <small>(optional)</small><textarea id="expensePaymentNotes" maxlength="600" rows="2"></textarea></label>
+<div class="expense-convert-note span-2">After confirmation, the amount appears in Actual Expenses. For a Regular Payment, the next due date is automatically advanced.</div>
+<div class="form-actions span-2"><button class="secondary-button" data-close-modal="" type="button">Cancel</button><button class="primary-button" id="confirmExpensePaymentBtn" type="submit">✓ Mark paid &amp; add actual</button></div>
+</form>
+</div>
+<div aria-labelledby="expenseCategoryModalTitle" aria-modal="true" class="modal compact-modal hidden" id="expenseCategoryModal" role="dialog">
+<div class="modal-head"><div><p class="eyebrow">EXPENSE CATEGORY</p><h2 id="expenseCategoryModalTitle">Add category</h2></div><button aria-label="Close" class="modal-close" data-close-modal="">×</button></div>
+<form class="form-grid" id="expenseCategoryForm">
+<input id="expenseCategoryId" type="hidden"/>
+<label class="span-2">Category name<input id="expenseCategoryName" maxlength="80" placeholder="e.g. Credit Card" required=""/></label>
+<label class="span-2">Colour<select id="expenseCategoryColor"><option value="BLUE">Blue</option><option value="GREEN">Green</option><option value="PURPLE">Purple</option><option value="ORANGE">Orange</option><option value="PINK">Pink</option><option value="TEAL">Teal</option><option value="GOLD">Gold</option><option value="GREY">Grey</option></select></label>
+<label class="span-2">Subcategories <small>(one per line or comma-separated)</small><textarea id="expenseCategorySubcategories" maxlength="1600" placeholder="Axis
+HDFC
+ICICI" rows="6"></textarea><small class="field-help">These choices appear only when this category is selected. Existing historical values remain safe if you later change this list.</small></label>
+<div class="form-actions span-2"><button class="secondary-button" data-close-modal="" type="button">Cancel</button><button class="primary-button" id="saveExpenseCategoryBtn" type="submit">Save category</button></div>
+</form>
+</div>
+<div aria-labelledby="expensePrintTitle" aria-modal="true" class="modal expense-print-modal hidden" id="expensePrintModal" role="dialog">
+<div class="modal-head"><div><p class="eyebrow">PRINT PREVIEW</p><h2 id="expensePrintTitle">Expenditure print</h2><p class="modal-subcopy">Print the current filtered view. Choose columns and drag preview headings to adjust widths.</p></div><button aria-label="Close" class="modal-close" data-close-modal="">×</button></div>
+<div class="expense-print-controls">
+<label>Orientation<select id="expensePrintOrientation"><option selected="" value="landscape">Landscape</option><option value="portrait">Portrait</option></select></label>
+<div class="expense-print-columns" id="expensePrintColumns"></div>
+<button class="small-button" id="expensePrintAllColumnsBtn" type="button">All columns</button>
+</div>
+<div class="expense-print-preview" id="expensePrintPreview"></div>
+<div class="form-actions"><button class="secondary-button" data-close-modal="" type="button">Close</button><button class="primary-button" id="runExpensePrintBtn" type="button">Print current preview</button></div>
+</div>
+
+<div aria-modal="true" class="modal quote-library-modal hidden" id="lifeQuoteModal" role="dialog">
+<div class="modal-head">
+<div><p class="eyebrow">DAILY LIFE QUOTES</p><h2>Quote Library</h2><p class="modal-subcopy">Saved permanently in the Google Sheet tab <strong>DailyQuotes</strong>. The dashboard chooses a different starting quote each day and auto-shuffles while open.</p></div>
+<button class="modal-close" data-close-modal="">×</button>
+</div>
+<div class="quote-library-layout">
+<form class="stack-form quote-editor" id="lifeQuoteForm">
+<input id="lifeQuoteId" type="hidden"/>
+<label>Quote<textarea id="lifeQuoteInput" maxlength="500" placeholder="Write or paste a life quote…" required="" rows="5"></textarea></label>
+<label>Author / source <small>(optional)</small><input id="lifeQuoteAuthorInput" maxlength="120" placeholder="e.g. Personal note, book author, My Finance"/></label>
+<div class="form-actions"><button class="secondary-button" id="clearLifeQuoteBtn" type="button">Clear</button><button class="primary-button" id="saveLifeQuoteBtn" type="submit">Save quote</button></div>
+</form>
+<div class="quote-library-list-wrap">
+<div class="quote-library-tools"><input class="search-input" id="lifeQuoteSearch" placeholder="Search saved quotes…" type="search"/><span class="filter-result-pill" id="lifeQuoteCount">0 quotes</span></div>
+<div class="quote-library-list" id="lifeQuoteList"></div>
+<div class="empty-state hidden" id="lifeQuoteEmpty">No quotes saved yet.</div>
+</div>
+</div>
+</div>
+<div aria-modal="true" class="modal small-modal sticky-note-modal hidden" id="stickyNoteModal" role="dialog">
+<div class="modal-head"><div><p class="eyebrow">DASHBOARD STICKY</p><h2 id="stickyNoteModalTitle">Add target or reminder</h2></div><button class="modal-close" data-close-modal="">×</button></div>
+<form class="stack-form" id="stickyNoteForm">
+<input id="stickyNoteId" type="hidden"/>
+<label>Type<select id="stickyNoteType"><option value="TARGET">Target</option><option value="REMINDER">Reminder</option></select></label>
+<label>Title<input id="stickyNoteTitle" maxlength="120" placeholder="What needs attention?" required=""/></label>
+<label>Due date <small>(optional)</small><input id="stickyNoteDueDate" type="date"/></label>
+<label>Details<textarea id="stickyNoteText" maxlength="5000" placeholder="Write any number of lines, next actions, amounts or people. Line breaks will be preserved." rows="7"></textarea></label>
+<p class="tiny muted">Pin the note, drag its Move bar anywhere and drag the lower-right corner to resize. Clicking <strong>Completed</strong> removes it from active notes and saves every line in the separate Sticky Note Diary.</p>
+<div class="form-actions"><button class="secondary-button" data-close-modal="" type="button">Cancel</button><button class="primary-button" id="saveStickyNoteBtn" type="submit">Save sticky</button></div>
+</form>
+</div>
+<div aria-modal="true" class="modal small-modal hidden" id="passwordModal" role="dialog"><div class="modal-head"><div><p class="eyebrow">ACCOUNT SECURITY</p><h2>Change password</h2></div><button class="modal-close" data-close-modal="">×</button></div><form class="stack-form" id="passwordForm"><label>Current password<input id="currentPassword" required="" type="password"/></label><label>New password<input id="newPassword" minlength="10" required="" type="password"/></label><label>Confirm new password<input id="confirmPassword" minlength="10" required="" type="password"/></label><p class="tiny muted">At least 10 characters with upper-case, lower-case, number and symbol.</p><div class="form-actions"><button class="secondary-button" data-close-modal="" type="button">Cancel</button><button class="primary-button" type="submit">Update password</button></div></form></div>
+<div aria-labelledby="userModalTitle" aria-modal="true" class="modal small-modal hidden user-admin-modal" id="userModal" role="dialog">
+<div class="modal-head">
+<div><p class="eyebrow">ADMINISTRATION</p><h2 id="userModalTitle">Create user</h2></div>
+<button class="modal-close" data-close-modal="" type="button">×</button>
+</div>
+<form class="stack-form" id="userForm">
+<input id="userFormMode" type="hidden" value="CREATE"/>
+<input id="editOriginalUsername" type="hidden" value=""/>
+<label>Username
+        <input autocomplete="off" id="newUsername" maxlength="60" pattern="[A-Za-z0-9._-]+" required=""/>
+<small class="form-help" id="usernameEditHelp">3–60 characters: letters, numbers, dot, underscore or hyphen.</small>
+</label>
+<label>Display name<input id="newDisplayName" maxlength="100" required=""/></label>
+<label>Role
+        <select id="newUserRole"><option value="USER">User</option><option value="ADMIN">Admin</option></select>
+</label>
+<label class="user-active-label hidden" id="newUserActiveLabel">Account status
+        <select id="newUserActive"><option value="true">Active</option><option value="false">Disabled</option></select>
+</label>
+<div class="user-password-group" id="userPasswordGroup">
+<label>Temporary password
+          <div class="user-password-row">
+<input autocomplete="new-password" id="newUserPassword" minlength="10" type="text"/>
+<button class="secondary-button compact-user-btn" id="generateUserPasswordBtn" type="button">Generate</button>
+<button class="secondary-button compact-user-btn" id="copyUserPasswordBtn" type="button">Copy</button>
+</div>
+<small class="form-help">At least 10 characters with uppercase, lowercase, number and symbol. A strong password is generated automatically.</small>
+</label>
+</div>
+<div aria-live="polite" class="user-form-status" id="userFormStatus"></div>
+<div class="form-actions">
+<button class="secondary-button" data-close-modal="" type="button">Cancel</button>
+<button class="primary-button" id="saveUserBtn" type="submit">Create user</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Investment detail drawer: click any holding to open -->
+
+
+<div aria-live="polite" class="toast-region" id="toastRegion"></div>
+<div aria-live="polite" class="idle-warning-bar hidden" id="idleWarningBar" role="status">
+<span>Auto logout in <strong id="idleWarningCountdown">60 sec</strong> due to inactivity.</span>
+<button id="staySignedInBtn" type="button">Stay signed in</button>
+</div>
+<script>
+    window.PORTFOLIO_CONFIG={
+      API_URL:'https://script.google.com/macros/s/AKfycbwXA1YBWRfOjYvZwDz9dkCr4HZujn9D_YoPmQyjggZxR5hUUs1ZsARytOX8rUR4zRbs/exec',
+      APP_NAME:'SarNi',CURRENCY:'INR',REQUEST_TIMEOUT_MS:60000,OWNERS:['Sarada','Niharika']
+    };
+  </script>
+<script defer="" onerror="sarNiAssetFailed('app')" onload="sarNiAssetLoaded('app')" src="https://saradasutar.github.io/SarNi/app-v20-8-3.js?v=20261016-20803-smartpaste"></script>
+<script>
+/* SarNi Odia Calendar v20.8.0 — optional companion to app-v20-7-0.js.
+ * All festival and recurrence dates are calculated on the authenticated backend.
+ * These are astronomical estimates, NOT a reproduced/official Kohinoor publication.
+ */
+(function(){
+'use strict';
+const months=['Chaitra','Baisakha','Jyestha','Asadha','Srabana','Bhadraba','Aswina','Kartika','Margasira','Pausa','Magha','Phalguna'];
+const cache=new Map();
+const byId=id=>document.getElementById(id);
+let previewSerial=0,monthSerial=0,patched=false,lookupReadyFor="";
+function escapeText(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function message(s,bad){const el=byId('odiaEventStatus');if(el){el.textContent=s;el.classList.toggle('error',!!bad);}}
+function form(){return byId('calendarEventForm');}
+function setValue(name,value){const x=form()?.elements?.namedItem(name);if(x)x.type==='checkbox'?x.checked=!!value:x.value=value==null?'':String(value);}
+function getValue(name){const x=form()?.elements?.namedItem(name);return x?(x.type==='checkbox'?x.checked:x.value):'';}
+function label(day){return day?`${day.monthName} · ${day.paksha==='SHUKLA'?'ଶୁକ୍ଳ':'କୃଷ୍ଣ'} ${day.tithi}${day.adhika?' · ଅଧିକ ମାସ':''}`:'Unavailable';}
+function hasSession(){return typeof state!=='undefined'&&Boolean(state.token);}
+function recurring(){return ['ODIA','BOTH','GREGORIAN'].includes(getValue('calendarBasis'))&&getValue('repeatYearly');}
+function updateFields(){const show=getValue('calendarBasis')!=='GREGORIAN';const part=byId('odiaTithiControls');if(part)part.hidden=!show;
+ const note=byId('odiaRepeatNote');if(note)note.textContent=getValue('repeatYearly')?'Yearly recurrence enabled — the original English date is preserved.':'A one-time date will be saved; enable yearly recurrence for annual birthdays.';
+}
+async function lookupBirthday(force){const f=form();if(!f||!hasSession())return;const date=f.elements.eventDate.value;
+ if(!date)return;lookupReadyFor='';const serial=++previewSerial;
+ message('Reading the Odia lunar tithi for '+date+'…');
+ try{const r=await api('lookupOdiaDate',{date},{retry:false});if(serial!==previewSerial)return;
+ if(!r?.ok)throw Error(r?.message||'Date lookup failed');lookupReadyFor=date;
+ if(force&&!getValue('odiaVerified')){setValue('odiaMonth',r.odia.month);setValue('odiaPaksha',r.odia.paksha);setValue('odiaTithi',r.odia.tithi);setValue('odiaAdhika',r.odia.adhika?'ADHIKA':'REGULAR');}
+ const original=byId('odiaBirthPreview');if(original)original.textContent='Original English day '+date+' → '+label(r.odia)+' (Bhubaneswar sunrise calculation)';
+ message('Calculated successfully. Check the original tithi against a trusted Kohinoor Panjika when exact observance is essential.');
+ }catch(err){if(serial!==previewSerial)return;message(err.message||'Could not calculate Odia date.',true);}
+}
+function fillExtra(row){
+ setValue('calendarBasis',row?.calendarBasis||'GREGORIAN');setValue('repeatYearly',!!row?.repeatYearly);
+ setValue('odiaMonth',row?.odiaMonth??'');setValue('odiaPaksha',row?.odiaPaksha||'SHUKLA');setValue('odiaTithi',row?.odiaTithi||1);
+ setValue('odiaAdhika',row?.odiaAdhika||'REGULAR');setValue('odiaVerified',!!row?.odiaVerified);
+ setValue('reminderDays',row?.reminderDays||'7,1,0');setValue('reminderEmail',row?.reminderEmail||'');
+ const yr=byId('odiaOverrideYear');if(yr)yr.value=new Date().getFullYear();
+ const helper=byId('odiaOverrideHelp');if(helper)helper.textContent=row?.id?'Set a verified Kohinoor English date for any selected year (optional).':'Save the reminder first to enter verified yearly corrections.';
+ updateFields();
+}
+async function saveEvent(ev){
+ ev.preventDefault();ev.stopImmediatePropagation();
+ const f=form();if(!f)return;const id=f.elements.id.value;
+ const event={id,eventDate:f.elements.eventDate.value,title:f.elements.title.value.trim(),kind:f.elements.kind.value,notes:f.elements.notes.value.trim(),
+ departureCity:f.elements.departureCity?.value.trim()||'',arrivalCity:f.elements.arrivalCity?.value.trim()||'',
+ calendarBasis:getValue('calendarBasis'),repeatYearly:!!getValue('repeatYearly'),odiaMonth:getValue('odiaMonth'),
+ odiaPaksha:getValue('odiaPaksha'),odiaTithi:Number(getValue('odiaTithi')),odiaAdhika:getValue('odiaAdhika'),
+ odiaVerified:!!getValue('odiaVerified'),reminderDays:getValue('reminderDays'),reminderEmail:getValue('reminderEmail').trim()};
+ if(!event.title||!event.eventDate){message('Enter the original English date and a title.',true);return;}
+ if(event.calendarBasis!=='GREGORIAN'&&!event.odiaVerified&&lookupReadyFor!==event.eventDate){message('Wait for the original Odia tithi calculation, or enter a verified Kohinoor tithi and tick the verification checkbox.',true);return;}
+ if(event.calendarBasis!=='GREGORIAN'&&(!event.odiaMonth||!event.odiaTithi)&&event.odiaMonth!==0){message('Please calculate or select the original Odia month and tithi.',true);return;}
+ const btn=f.querySelector('[type="submit"]');if(btn)btn.disabled=true;
+ try{const r=await api('saveImportantDate',{event},{retry:false});if(!r?.ok)throw Error(r?.message||'Save failed');
+ applyBootstrap(r.data);saveCache(r.data);cache.clear();
+ f.reset();f.elements.id.value='';f.elements.eventDate.value=localIsoDate();fillExtra(null);
+ message('✓ Saved to SarNi. Odia recurrence will calculate automatically every year.');
+ renderStandaloneCalendar();if(typeof toast==='function')toast('Important date and yearly reminder saved.','success');
+ }catch(err){message(err.message||'Unable to save.',true);if(typeof toast==='function')toast(err.message||'Save failed','error');}
+ finally{if(btn)btn.disabled=false;}
+}
+async function saveOverride(){const f=form(),id=f?.elements?.id?.value||'';
+ if(!id){message('First open a previously saved reminder using Edit.',true);return;}
+ const year=Number(byId('odiaOverrideYear')?.value),date=byId('odiaOverrideDate')?.value||'';
+ if(date&&!date.startsWith(year+'-')){message('Verified English date must fall within the selected year.',true);return;}
+ try{const r=await api('setOdiaOccurrenceOverride',{id,year,date},{retry:false});if(!r?.ok)throw Error(r?.message||'Unable to save correction');
+ applyBootstrap(r.data);saveCache(r.data);cache.clear();renderStandaloneCalendar();message(date?'✓ Kohinoor correction saved for '+year+'.':'Kohinoor correction cleared for '+year+'.');
+ }catch(err){message(err.message,true);}
+}
+function monthKey(){return byId('standaloneCalendarMonth')?.value||new Date().toISOString().slice(0,7);}
+async function fetchMonth(key){if(!hasSession())return null;const userKey=String(state.username||'')+':'+key;if(cache.has(userKey))return cache.get(userKey);
+ const [year,month]=key.split('-').map(Number),r=await api('getOdiaCalendar',{year,month},{retry:false});
+ if(!r?.ok)throw Error(r?.message||'Odia calendar is unavailable. Deploy SarNi Code.gs v3.17.26.');cache.set(userKey,r);return r;
+}
+function applyMonth(data){
+ const key=monthKey(),expected=data.year+'-'+String(data.month).padStart(2,'0');if(key!==expected)return;
+ const byDate=new Map((data.daily||[]).filter(Boolean).map(d=>[d.date,d]));
+ document.querySelectorAll('#standaloneCalendarGrid [data-standalone-date]').forEach(cell=>{
+  const iso=cell.dataset.standaloneDate,day=byDate.get(iso),small=cell.querySelector('.sarni-family-saka');
+  if(small){small.textContent=day?'ଓ '+day.tithi:'';small.title=day?label(day):'';}
+  const events=cell.querySelector('.sarni-family-events');if(!events)return;
+  const entries=[...(data.festivals||[]).filter(x=>x.date===iso).map(x=>({...x,category:'festival'})),
+     ...(data.occurrences||[]).filter(x=>x.date===iso).map(x=>({...x,category:'occasion'}))];
+  entries.forEach(item=>{const span=document.createElement('span');span.className='sarni-cal-event sarni-odia-'+item.category;
+   span.textContent=(item.category==='festival'?'❀ ':'★ ')+item.title+(item.calendarKind==='ODIA'?' · ଓଡ଼ିଆ':'');
+   span.title=item.title+' · '+item.source;
+   events.appendChild(span);
+  });
+ });
+ const source=byId('odiaCalendarSource');if(source)source.textContent=data.source;
+ const list=byId('sarniOdiaFestivalItems');if(list){const festivals=(data.festivals||[]).sort((a,b)=>a.date.localeCompare(b.date));
+  list.innerHTML=festivals.length?festivals.map(x=>`<div class="sarni-odia-row"><span><strong>❀ ${escapeText(x.title)}</strong><small>${escapeText(x.source)}</small></span><b>${escapeText(x.date)}</b></div>`).join(''):'<p>No listed festivals for this month. Other regional festivals may still apply.</p>';
+ }
+ const recurring=byId('sarniOdiaRecurringItems');if(recurring){const arr=(data.occurrences||[]).sort((a,b)=>a.date.localeCompare(b.date));
+ recurring.innerHTML=arr.length?arr.map(x=>`<div class="sarni-odia-row"><span><strong>★ ${escapeText(x.title)}</strong><small>${escapeText(x.calendarKind)} · ${x.verified?'Verified/English':'Calculated lunar date'}</small></span><b>${escapeText(x.date)}</b></div>`).join(''):'<p>No personal recurring dates for this month.</p>';
+ }
+ const status=byId('odiaFestivalStatus');if(status)status.textContent='Automatic astronomical calendar loaded · '+(data.festivals||[]).length+' listed festivals this month';
+}
+async function paintMonth(){if(!hasSession())return;const key=monthKey();if(!/^\d{4}-\d{2}$/.test(key))return;
+ const serial=++monthSerial,status=byId('odiaFestivalStatus');if(status)status.textContent='Loading astronomical Odia dates…';
+ try{const result=await fetchMonth(key);if(serial!==monthSerial)return;applyMonth(result);}
+ catch(e){if(serial!==monthSerial)return;if(status)status.textContent=e.message||'Calendar temporarily unavailable.';}
+}
+function install(){const f=form();if(!f)return;
+ // App JavaScript may be loaded separately. Never alter investment, diary or expense handlers.
+ const prev=renderStandaloneCalendar;
+ renderStandaloneCalendar=function(){prev();const head=byId('standaloneSakaHeading');if(head)head.textContent='Odia lunar calendar · Bhubaneswar sunrise';if(state.activeSection==='calendar')void paintMonth();};
+ if(typeof updateVersionLabels==='function'){
+   const oldVersionLabels=updateVersionLabels;
+   updateVersionLabels=function(){const result=oldVersionLabels.apply(this,arguments);
+     ['loginVersion','dashboardVersion'].forEach(id=>{const x=byId(id);if(x)x.textContent='Frontend · v20.8.3';});
+     ['dashboardVersionTop','mobileFrontendVersion'].forEach(id=>{const x=byId(id);if(x)x.textContent='FE v20.8.3';});
+     return result;
+   };
+ }
+ // capture is essential: the existing app form listener is retained for backwards compatibility,
+ // but this handler saves the expanded Odia fields instead of allowing a second save.
+ f.addEventListener('submit',saveEvent,true);
+ f.elements.eventDate.addEventListener('change',()=>{if(!getValue('odiaVerified'))void lookupBirthday(true);});
+ f.elements.eventDate.addEventListener('input',()=>{if(!getValue('odiaVerified'))void lookupBirthday(true);});
+ f.elements.calendarBasis.addEventListener('change',()=>{if(getValue('calendarBasis')!=='GREGORIAN')setValue('repeatYearly',true);updateFields();void lookupBirthday(true);});
+ f.elements.repeatYearly.addEventListener('change',updateFields);
+ byId('odiaRecalculate')?.addEventListener('click',()=>{setValue('odiaVerified',false);void lookupBirthday(true);});
+ byId('odiaSaveVerifiedOverride')?.addEventListener('click',saveOverride);
+ byId('odiaFestivalRefresh')?.addEventListener('click',()=>{cache.delete(String(state.username||'')+':'+monthKey());void paintMonth();});
+ byId('calendarEventClear')?.addEventListener('click',()=>setTimeout(()=>{fillExtra(null);void lookupBirthday(true);},0));
+ byId('standaloneImportantList')?.addEventListener('click',event=>{
+  const btn=event.target.closest('[data-cal-edit]');if(btn){const row=(state.importantDates||[]).find(x=>x.id===btn.dataset.calEdit);if(row)setTimeout(()=>{fillExtra(row);void lookupBirthday(false);},0);}
+ },true);
+ document.querySelectorAll('[data-section="calendar"]').forEach(btn=>btn.addEventListener('click',()=>setTimeout(paintMonth,0)));
+ fillExtra(null);
+ if(f.elements.eventDate.value)void lookupBirthday(true);
+ if(state.activeSection==='calendar')void paintMonth();patched=true;
+}
+function wait(){if(patched)return;try{if(typeof renderStandaloneCalendar==='function'&&typeof api==='function'&&typeof state!=='undefined'){install();return;}}catch(err){console.warn('SarNi Odia integration waiting',err);}
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wait);else wait();
+})();
+
+</script>
+<script id="sarniPremiumScript">
+/* SarNi v20.8: Progressive UI only. No new data store, credential handling or writes.
+ * The existing authenticated app retains all backend/API ownership and permissions.
+ */
+(function(){
+'use strict';
+const el=id=>document.getElementById(id),safe=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let focusResult=null,fetching=false,lastFocusAt=0,initialised=false,focusOwner='',focusSignature='';
+function dateIso(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');}
+function dateFor(iso){if(!iso)return '';const d=new Date(iso+'T12:00:00');return Number.isNaN(d.getTime())?iso:d.toLocaleDateString('en-IN',{day:'numeric',month:'short'});}
+function isReady(){try{return Boolean(state&&state.token&&state.user);}catch{return false;}}
+function stateValue(name){try{return Array.isArray(state[name])?state[name]:[];}catch{return [];}}
+function goto(section){if(!isReady())return;
+  const view={home:'overview',money:'expenditure',calendar:'calendar',diary:'diary',experiences:'experiences',creditCards:'creditCards',books:'books',quickDiary:'quickDiary',users:'users'}[section]||section;
+  if(typeof switchSection==='function')switchSection(view);
+  if(view==='calendar'&&typeof renderStandaloneCalendar==='function')renderStandaloneCalendar();
+  document.querySelectorAll('#sarniSimplifiedNav>[data-sarni-nav]').forEach(x=>x.classList.toggle('active',x.dataset.sarniNav===section||(section==='experiences'&&x.dataset.sarniNav==='more')));
+  const menu=el('sarniMoreMenu');if(menu)menu.hidden=true;
+  const more=document.querySelector('#sarniSimplifiedNav>[data-sarni-nav="more"]');if(more)more.setAttribute('aria-expanded','false');
+}
+function showAdvanced(id){goto('home');const details=el('sarniAdvancedHome');if(details)details.open=true;
+  requestAnimationFrame(()=>{const target=el(id);if(target){target.scrollIntoView({behavior:'smooth',block:'center'});target.querySelector('input,textarea')?.focus({preventScroll:true});}});
+}
+function quick(kind){if(kind==='expense')showAdvanced('lifeExpenseHome');else if(kind==='diary')showAdvanced('lifeDiaryHome');else if(kind==='reminder'){goto('calendar');requestAnimationFrame(()=>el('calendarEventForm')?.scrollIntoView({block:'start'}));}
+else if(kind==='experience'){goto('experiences');requestAnimationFrame(()=>el('lifeExperienceForm')?.scrollIntoView({block:'start'}));}
+else if(kind==='task'){goto('home');el('homeAddTargetBtn')?.click();}
+const m=el('sarniQuickMenu');if(m)m.hidden=true;el('sarniQuickOpen')?.setAttribute('aria-expanded','false');}
+function relevantLessons(events){
+ const rules=stateValue('lifeExperienceRules').filter(x=>x&&x.lesson&&x.title),out=[];
+ for(const event of events.slice(0,18)){
+  const text=[event.title,event.notes,event.location,event.departureCity,event.arrivalCity,event.kind].join(' ').toLowerCase();
+  for(const rule of rules){
+   const trigger=String(rule.triggerKind||'ANY').toUpperCase();
+   const travel=trigger==='FLIGHT'?/flight|airport|air travel|airline|plane|ବିମାନ/.test(text):trigger==='TRAIN'?/train|railway|station/.test(text):trigger==='ROAD'?/drive|road|car|taxi|bus/.test(text):true;
+   if(!travel)continue;
+   const departure=String(rule.departureCity||'').toLowerCase().trim();
+   const arrival=String(rule.arrivalCity||'').toLowerCase().trim();
+   if(departure&&!(String(event.departureCity||'').toLowerCase().includes(departure)||text.includes(departure)))continue;
+   if(arrival&&!(String(event.arrivalCity||'').toLowerCase().includes(arrival)||text.includes(arrival)))continue;
+   const loc=String(rule.location||'').toLowerCase().trim(),words=String(rule.keywords||'').toLowerCase().split(/[,;]+/).map(x=>x.trim()).filter(x=>x.length>=3),kw=words.some(x=>text.includes(x));
+   const locMatch=loc&&text.includes(loc),topic=String(rule.topic||'').toLowerCase(),topicMatch=topic!=='other'&&text.includes(topic);
+   if(!departure&&!arrival&&!locMatch&&!kw&&!topicMatch)continue; // avoid generic, irrelevant suggestions
+   const score=(departure?5:0)+(arrival?4:0)+(locMatch?3:0)+(kw?2:0)+(topicMatch?1:0)+(trigger!=='ANY'?2:0);
+   if(score<3)continue;
+   out.push({event,rule,score});
+  }
+ }
+ return out.sort((a,b)=>b.score-a.score||a.event.date.localeCompare(b.event.date)).filter((x,i,arr)=>arr.findIndex(v=>v.rule.id===x.rule.id)===i).slice(0,2);
+}
+function renderFocus(){if(!isReady())return;
+ if(focusOwner!==String(state.username||'')){focusResult=null;lastFocusAt=0;focusOwner=String(state.username||'');focusSignature='';}
+ const signature=JSON.stringify(stateValue('importantDates').map(x=>[x.id,x.eventDate,x.title,x.repeatYearly,x.calendarBasis,x.odiaMonth,x.odiaPaksha,x.odiaTithi]));
+ if(signature!==focusSignature){focusSignature=signature;focusResult=null;lastFocusAt=0;}
+ const today=dateIso(),month=today.slice(0,7),expenses=stateValue('expenses'),diaries=stateValue('diary'),bills=stateValue('recurringExpenses');
+ const spent=expenses.filter(x=>String(x.dateSpent||'').slice(0,7)===month&&x.active!==false).reduce((sum,x)=>sum+(Number(x.amount)||0),0);
+ const money=typeof lifeRupees==='function'?lifeRupees(spent):'₹'+Math.round(spent).toLocaleString('en-IN');
+ const dCount=diaries.filter(x=>String(x.entryDate||'').slice(0,7)===month).length;
+ const dueBills=bills.filter(x=>{const d=String(x.nextDueDate||'').slice(0,10);return d>=today&&d<=addDays(today,30)&&String(x.status||'ACTIVE').toUpperCase()!=='INACTIVE';});
+ const events=(focusResult?.events||[]).filter(x=>x.date>=today&&x.date<=addDays(today,45));
+ const festivals=(focusResult?.festivals||[]).filter(x=>x.date>=today&&x.date<=addDays(today,45));
+ const sticky=stateValue('stickyNotes').filter(x=>x.dueDate&&String(x.dueDate).slice(0,10)<=addDays(today,7));
+ const nextSeven=events.filter(x=>x.date<=addDays(today,7)).length+dueBills.filter(x=>x.nextDueDate<=addDays(today,7)).length+sticky.length;
+ const isAdmin=String(state.user?.role||state.authenticatedRole||'').toUpperCase()==='ADMIN';
+ [el('sarniRemindersHealth'),document.querySelector('#sarniMoreMenu [data-sarni-nav="users"]')].forEach(x=>x?.classList.toggle('hidden',!isAdmin));
+ const greeting=new Date().getHours()<12?'Good morning':new Date().getHours()<17?'Good afternoon':'Good evening';
+ if(el('sarniFocusGreeting'))el('sarniFocusGreeting').textContent=greeting+(state.user?.displayName?' · '+state.user.displayName.split(' ')[0]:'');
+ if(el('sarniFocusDate'))el('sarniFocusDate').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ for(const [id,value] of [['sarniFocusSpend',money],['sarniFocusNextCount',String(nextSeven)],['sarniFocusDiaryCount',String(dCount)],['sarniFocusBillsCount',String(dueBills.length)]]){const node=el(id);if(node)node.textContent=value;}
+ const rows=[...events.map(e=>({date:e.date,title:e.title,label:e.calendarKind==='ODIA'?(e.verified?'Verified Odia occasion':'Calculated Odia tithi'):e.calendarKind==='GREGORIAN'?'English anniversary':e.kind})),
+  ...dueBills.map(x=>({date:String(x.nextDueDate).slice(0,10),title:x.name||x.reason||'Upcoming payment',label:'Payment due'})),
+  ...sticky.map(x=>({date:String(x.dueDate).slice(0,10),title:x.title||'Task',label:'Task / reminder'})),
+  ...festivals.map(x=>({date:x.date,title:x.title,label:x.verified?'Published festival date':'Estimated festival date'}))]
+  .filter(x=>x.date).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
+ const pane=el('sarniFocusEvents');if(pane)pane.innerHTML=rows.length?rows.map(x=>'<div class="sarni-focus-row"><span class="date">'+safe(dateFor(x.date))+'</span><span><strong>'+safe(x.title)+'</strong><small>'+safe(x.label)+'</small></span></div>').join(''):'<p class="sarni-focus-empty">No upcoming occasions or bills found. Add a reminder or browse your calendar.</p>';
+ const lessonPane=el('sarniFocusLessons'),matches=relevantLessons(events);
+ if(lessonPane)lessonPane.innerHTML=matches.length?matches.map(x=>'<div class="sarni-focus-lesson"><strong>'+safe(x.rule.title)+'</strong><p>'+safe(x.rule.lesson).slice(0,420)+'</p><small>Related to '+safe(x.event.title)+' · '+safe(dateFor(x.event.date))+'</small></div>').join(''):'<p class="sarni-focus-empty">When an upcoming activity matches your saved lessons, SarNi will show useful advice here automatically.</p>';
+ const old=diaries.filter(x=>String(x.entryDate||'').slice(5,10)===today.slice(5,10)&&String(x.entryDate||'').slice(0,4)<today.slice(0,4)).sort((a,b)=>String(b.entryDate).localeCompare(String(a.entryDate)));
+ const onThis=el('sarniOnThisDay');if(onThis)onThis.textContent=old.length?'✧ On This Day: '+old.length+' earlier diary '+(old.length===1?'memory':'memories')+' →':'↗ Browse diary memories';
+}
+function addDays(iso,n){const d=new Date(iso+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);}
+async function fetchFocus(force){if(!isReady()||fetching||(!force&&Date.now()-lastFocusAt<180000))return;
+ fetching=true;lastFocusAt=Date.now();const requestOwner=String(state.username||'');const status=el('sarniFocusSync');if(status)status.textContent='Refreshing upcoming occasions in the background…';
+ try{const r=await api('getSarNiFocus',{}, {retry:false});if(!r?.ok)throw Error(r?.message||'Unable to get future events');if(requestOwner!==String(state.username||''))return;focusResult=r;
+  if(status)status.textContent='Upcoming occasions updated · '+new Date().toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit'});
+ }catch(e){if(status)status.textContent='Saved records are still available. Upcoming Odia dates need backend v3.17.26.';}
+ finally{fetching=false;renderFocus();if(requestOwner!==String(state.username||'')&&isReady())void fetchFocus(true);}
+}
+function applyVersion(){for(const id of ['loginVersion','dashboardVersion']){const x=el(id);if(x)x.textContent='Frontend · v20.8.3';}
+ for(const id of ['dashboardVersionTop','mobileFrontendVersion']){const x=el(id);if(x)x.textContent='FE v20.8.3';}}
+function init(){if(initialised)return;initialised=true;document.body.classList.add('sarni-premium-layout');
+ el('sarniAdvancedHome')?.addEventListener('toggle',()=>{
+  if(!el('sarniAdvancedHome').open||!isReady())return;
+  try{if(typeof renderLifeHub==='function')renderLifeHub();if(typeof renderPersonalHome==='function')renderPersonalHome();if(typeof renderLifeQuote==='function')renderLifeQuote(true);}catch(e){console.warn('Advanced home rendering',e);}
+ });
+ const note=el('sideDiaryForm'),noteToggle=el('sarniSidebarDiaryToggle');noteToggle?.addEventListener('click',()=>{const opened=note.classList.toggle('sarni-compose-open');noteToggle.setAttribute('aria-expanded',String(opened));if(opened)note.querySelector('textarea')?.focus();});
+ document.addEventListener('click',e=>{const nav=e.target.closest('[data-sarni-nav]');if(nav){e.preventDefault();const name=nav.dataset.sarniNav;
+   if(name==='more'){const menu=el('sarniMoreMenu');menu.hidden=!menu.hidden;nav.setAttribute('aria-expanded',String(!menu.hidden));}
+   else goto(name);return;}
+   const kind=e.target.closest('[data-sarni-quick]');if(kind){e.preventDefault();quick(kind.dataset.sarniQuick);}
+ });
+ el('sarniQuickOpen')?.addEventListener('click',()=>{const p=el('sarniQuickMenu');p.hidden=!p.hidden;el('sarniQuickOpen').setAttribute('aria-expanded',String(!p.hidden));});
+ el('sarniFocusRefresh')?.addEventListener('click',()=>{lastFocusAt=0;void fetchFocus(true);});
+ el('sarniRemindersHealth')?.addEventListener('click',async()=>{try{const r=await api('getSarNiReminderHealth',{},{retry:false});if(!r?.ok)throw Error(r?.message||'Unavailable');
+   window.alert('SarNi reminder health\nScheduled: '+(r.scheduled?'Yes':'No')+'\nLast run: '+(r.lastRun||'Never')+'\nLast success: '+(r.lastSuccess||'Never')+'\nLast error: '+(r.lastError||'None'));
+ }catch(e){window.alert('Reminder health could not be loaded: '+e.message);}});
+ if(typeof renderAll==='function'){const originalRender=renderAll;renderAll=function(){const result=originalRender.apply(this,arguments);applyVersion();renderFocus();void fetchFocus(false);return result;};}
+ if(typeof updateVersionLabels==='function'){const old=updateVersionLabels;updateVersionLabels=function(){const x=old.apply(this,arguments);applyVersion();return x;};}
+ applyVersion();renderFocus();void fetchFocus(false);
+ const app=el('appView');if(app)new MutationObserver(()=>{if(isReady()){renderFocus();void fetchFocus(false);}}).observe(app,{attributes:true,attributeFilter:['class']});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+<script id="sarniDelightRuntime2083">
+(function(){'use strict';
+  // The v20.8.3 main script natively delays hidden diary/calendar rendering.
+  // Keep this tiny enhancement isolated from login and data operations.
+  document.addEventListener('keydown',function(event){
+    if(event.key!=='Escape')return;
+    const quick=document.getElementById('sarniQuickMenu');
+    const more=document.getElementById('sarniMoreMenu');
+    if(quick&&!quick.hidden){quick.hidden=true;document.getElementById('sarniQuickOpen')?.setAttribute('aria-expanded','false');}
+    if(more&&!more.hidden){more.hidden=true;document.querySelector('#sarniSimplifiedNav [data-sarni-nav="more"]')?.setAttribute('aria-expanded','false');}
+  });
+})();
+</script>
+
+<dialog id="sarniSmartPasteDialog" class="sarni-smart-paste-dialog" aria-labelledby="sarniSmartPasteHeading">
+  <div class="sarni-sp-head"><div><small>SARNI · QUICK ORGANISE</small><h2 id="sarniSmartPasteHeading">✧ Smart Paste</h2><p>Paste trip details, an itinerary, expenses or mixed text. Nothing is saved until you review it.</p></div><button type="button" class="sarni-sp-close" id="sarniSmartPasteClose" aria-label="Close Smart Paste">×</button></div>
+  <label class="sarni-sp-input-label" for="sarniSmartPasteText">Paste your text here</label>
+  <textarea id="sarniSmartPasteText" rows="5" maxlength="12000" placeholder="20 Oct 2026 — Flight Bengaluru to Bhubaneswar, departure 15:45, fare ₹5,300 paid
+21 Oct 2026 — Hotel ₹2,800 planned
+21/10/2026 — Taxi ₹450 paid"></textarea>
+  <div class="sarni-sp-toolbar"><button type="button" id="sarniSmartPasteParse">↻ Read &amp; arrange</button><small>English text · DD/MM/YYYY or YYYY-MM-DD · ₹ / INR / Rs</small></div>
+  <div id="sarniSmartPasteRows" class="sarni-sp-list" aria-label="Entries to review"></div>
+  <div class="sarni-sp-footer"><p id="sarniSmartPasteStatus" role="status" aria-live="polite">Review each destination before saving.</p><button type="button" id="sarniSmartPasteSave" disabled>✓ Confirm &amp; save selected</button></div>
+</dialog>
+<style id="sarniSmartPasteStyles">
+.sarni-smart-paste-dialog{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;border:1px solid #dce4f5;border-radius:22px;box-shadow:0 25px 90px #121f4673;background:#fff;color:#162748;width:min(920px,95vw);max-height:min(90dvh,880px);padding:0;overflow-y:auto}
+.sarni-smart-paste-dialog::backdrop{background:#0f1c3b9c;backdrop-filter:blur(3px)}
+.sarni-sp-head,.sarni-sp-footer{padding:18px 22px;background:linear-gradient(120deg,#f3f7ff,#f9f4ff);display:flex;align-items:start;justify-content:space-between;gap:12px}
+.sarni-sp-head h2{margin:3px 0;font-size:23px}.sarni-sp-head small{font-size:11px;letter-spacing:.09em;color:#6156cf;font-weight:800}.sarni-sp-head p{font-size:13px;color:#526481;margin:8px 0 0}.sarni-sp-close{border:0;background:#e5e9fb;border-radius:12px;width:38px;height:38px;font-size:25px;cursor:pointer;color:#263663}
+.sarni-sp-input-label{display:block;margin:17px 22px 8px;font-size:13px;font-weight:800}.sarni-smart-paste-dialog textarea{display:block;width:calc(100% - 44px);margin:0 22px;border:1px solid #bccbe6;border-radius:13px;padding:14px;box-sizing:border-box;resize:vertical;font:14px/1.6 system-ui;color:#1d2d4b;background:#fff}
+.sarni-sp-toolbar{padding:12px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.sarni-sp-toolbar button,.sarni-sp-footer button{border:0;background:#5e53d9;color:white;font-weight:800;border-radius:12px;padding:11px 17px;cursor:pointer}.sarni-sp-toolbar small{color:#70819a}.sarni-sp-footer{align-items:center;position:sticky;bottom:0}.sarni-sp-footer p{font-size:12px;color:#344468;margin:0;max-width:65%;line-height:1.4}.sarni-sp-footer button:disabled{opacity:.45;cursor:not-allowed}
+.sarni-sp-list{display:grid;gap:11px;padding:0 22px 16px}.sarni-sp-row{border:1px solid #dce5f4;border-radius:14px;padding:11px;background:#fbfcff}.sarni-sp-check{font-weight:800;font-size:12px}.sarni-sp-fields{display:grid;grid-template-columns:1.1fr 1fr 2fr 1fr 1fr;gap:9px;margin:9px 0}.sarni-sp-fields label{display:grid;gap:4px;font-size:11px;font-weight:700;color:#425371;min-width:0}.sarni-sp-fields label[hidden]{display:none!important}.sarni-sp-fields input,.sarni-sp-fields select{border:1px solid #ccd5e9;border-radius:8px;padding:8px;font:13px system-ui;width:100%;min-width:0;box-sizing:border-box;background:white;color:#263656}.sarni-sp-row-info{font-size:11px;color:#657693;margin:4px 0;line-height:1.4;overflow-wrap:anywhere}
+@media(max-width:730px){.sarni-sp-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.sarni-sp-fields label:nth-child(3){grid-column:1/-1}.sarni-sp-head,.sarni-sp-footer{padding:14px}.sarni-smart-paste-dialog textarea{width:calc(100% - 28px);margin:0 14px}.sarni-sp-list{padding:0 12px 12px}.sarni-sp-footer{flex-direction:column;align-items:stretch}.sarni-sp-footer p{max-width:100%}.sarni-sp-toolbar{padding:12px 14px}}
+</style>
+
+<script id="sarniSmartPasteClient2083">
+/* SarNi Smart Paste v20.8.3 — local, review-first parser. No clipboard access or external AI calls. */
+(function(root){'use strict';
+  const ISO=/^\d{4}-\d{2}-\d{2}$/;
+  const MONTHS={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,sept:9,oct:10,nov:11,dec:12};
+  function validDate(y,m,d){const k=new Date(Date.UTC(+y,+m-1,+d));return +y>=1900&&+y<=2105&&k.getUTCFullYear()===+y&&k.getUTCMonth()+1===+m&&k.getUTCDate()===+d;}
+  function iso(y,m,d){return validDate(y,m,d)?String(y).padStart(4,'0')+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0'):'';}
+  function findDate(text, inheritedYear){
+    const s=String(text||'').replace(/\u00a0/g,' ');let m;
+    // YYYY-MM-DD is unambiguous; Indian slash dates are DD/MM/YYYY.
+    if((m=s.match(/\b(20\d{2}|19\d{2})[-\/.](\d{1,2})[-\/.](\d{1,2})\b/)))return iso(m[1],m[2],m[3]);
+    if((m=s.match(/\b(\d{1,2})[\/.\-](\d{1,2})[\/.\-](19\d{2}|20\d{2})\b/)))return iso(m[3],m[2],m[1]);
+    if((m=s.match(/\b(\d{1,2})(?:st|nd|rd|th)?[ \-]+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)[, \-]+(19\d{2}|20\d{2})\b/i)))return iso(m[3],MONTHS[m[2].slice(0,3).toLowerCase()],m[1]);
+    if((m=s.match(/\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)[ \-]+(\d{1,2})(?:st|nd|rd|th)?[,]?[ \-]+(19\d{2}|20\d{2})\b/i)))return iso(m[3],MONTHS[m[1].slice(0,3).toLowerCase()],m[2]);
+    if(inheritedYear&&(m=s.match(/\b(\d{1,2})(?:st|nd|rd|th)?[ \-]+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\b/i)))return iso(inheritedYear,MONTHS[m[2].slice(0,3).toLowerCase()],m[1]);
+    return '';
+  }
+  function amount(text){let m=String(text).match(/(?:₹|\bINR\s*|\bRs\.?\s*)([\d,]+(?:\.\d{1,2})?)/i);
+    if(!m)m=String(text).match(/\b(?:amount|fare|total|cost|paid|spent|price|charge|expense|budget)\s*[:=]?\s*(?:₹|Rs\.?|INR)?\s*([\d,]+(?:\.\d{1,2})?)\b/i);
+    const value=m?Number(m[1].replace(/,/g,'')):0;return Number.isFinite(value)&&value>0&&value<10000000000?value:0;
+  }
+  function time(text){const s=String(text||'');let m=s.match(/\b([01]?\d|2[0-3]):([0-5]\d)\s*(AM|PM)?\b/i);
+    if(m){let h=+m[1],mins=+m[2];if(m[3]){if(h===12)h=0;if(m[3].toUpperCase()==='PM')h+=12;}return String(h).padStart(2,'0')+':'+String(mins).padStart(2,'0');}
+    m=s.match(/\b(1[0-2]|[1-9])\s*(AM|PM)\b/i);if(!m)return '';
+    let h=+m[1];if(h===12)h=0;if(m[2].toUpperCase()==='PM')h+=12;return String(h).padStart(2,'0')+':00';
+  }
+  function extractTravel(text){const match=String(text).match(/\b(?:from\s+)?([\p{L} .]{2,28}?)\s+(?:to|→|->)\s+([\p{L} .]{2,28}?)(?=\s+(?:at|on|dep(?:arture)?|arriv(?:al|e)|₹|Rs\.?|INR|\d{1,2}:\d{2}|flight|train|fare|paid|cost)|\s*$)/iu);
+    return match?{departureCity:match[1].replace(/^(?:flight|train|bus|from)\s+/i,'').trim(),arrivalCity:match[2].trim()}:{departureCity:'',arrivalCity:''};}
+  function chooseTitle(line){return line.replace(/^\s*(?:[-*•]|\d+[.)])\s*/,'').replace(/\s+/g,' ').trim().slice(0,160);}
+  function classify(line){const travel=/\b(flight|airport|boarding|departure|depart|arrival|arrive|train|railway|itinerary|check[ -]?in|check[ -]?out|hotel|stay|visit|tour|travell?ing|journey|bus|meeting)\b/i.test(line);
+    const planned=/\b(estimate|estimated|plan(?:ned)?|budget|due|to pay|payable|expected|advance booking|quotation)\b/i.test(line);
+    const actuallyPaid=/\b(paid|spent|debited|purchased|bought|payment successful|transaction|receipt|expense)\b/i.test(line);
+    const type=/\bflight|airport|boarding\b/i.test(line)?'FLIGHT':/\btrain|railway\b/i.test(line)?'TRAIN':'OTHER';return {travel,planned,actuallyPaid,type};
+  }
+  function categoryHint(line){if(/\b(flight|train|bus|taxi|cab|uber|ola|petrol|fuel|toll|travel|airport)\b/i.test(line))return 'travel';
+    if(/\b(hotel|stay|room|accommodation)\b/i.test(line))return 'travel';
+    if(/\b(food|lunch|breakfast|dinner|restaurant|snack|meal|tea)\b/i.test(line))return 'food';
+    if(/\b(electricity|water|internet|phone|rent|bill)\b/i.test(line))return 'utilities';return 'other';}
+  function parse(text){const all=String(text||'').replace(/\r\n/g,'\n').split('\n').map(s=>s.trim()).filter(Boolean).slice(0,80);
+    const result=[];let year=0,currentDate='',skipped=0;
+    for(const raw of all){const line=raw.replace(/^[-*•]\s*/,'').trim();if(!line||/^\s*(?:total|grand total|summary|itinerary|expenses?)\s*[:\-]?\s*$/i.test(line))continue;
+      const explicitYear=line.match(/\b(19\d{2}|20\d{2})\b/);if(explicitYear)year=+explicitYear[1];
+      const found=findDate(line,year),money=amount(line),cl=classify(line),clock=time(line);
+      // A bare date establishes the section heading. Never create a record for it alone.
+      if(found&&!money&&!cl.travel&&line.length<27){currentDate=found;continue;}
+      const day=found||currentDate;
+      if(!money&&!cl.travel){skipped++;continue;}
+      const title=chooseTitle(line),travel=extractTravel(line);
+      const item={date:day,title,notes:raw.slice(0,1000),time:clock,amount:money,categoryHint:categoryHint(line),departureCity:travel.departureCity,arrivalCity:travel.arrivalCity,eventKind:cl.type,needsReview:!day||(!money&&!cl.travel)};
+      if(cl.travel)result.push({...item,kind:'CALENDAR',amount:0,needsReview:!day});
+      if(money){const kind=cl.actuallyPaid&&!cl.planned?'EXPENSE':'PLAN';result.push({...item,kind,needsReview:!day||(!cl.actuallyPaid&&!cl.planned)});}
+    }
+    return {items:result.slice(0,30),skipped,overflow:result.length>30,sourceCount:all.length};
+  }
+  function escapeHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function hashString(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return(h>>>0).toString(16);}
+  function UI(){const $=id=>document.getElementById(id),dialog=$('sarniSmartPasteDialog');if(!dialog)return;
+    const body=$('sarniSmartPasteRows'),raw=$('sarniSmartPasteText'),status=$('sarniSmartPasteStatus'),save=$('sarniSmartPasteSave');let entries=[],busy=false;
+    const currentCategories=()=>Array.isArray(root.state?.expenseCategories)?root.state.expenseCategories:(typeof state!=='undefined'?state.expenseCategories:[]);
+    const matchingCat=h=>{const cats=currentCategories(),candidate=cats.find(c=>String(c.name).toLowerCase().includes(h));return candidate?.name||cats.find(c=>String(c.name).toLowerCase()==='other')?.name||cats[0]?.name||'Other';};
+    function setStatus(s){status.textContent=s;}
+    function render(){body.innerHTML=entries.map((e,i)=>`<div class="sarni-sp-row" data-index="${i}"><label class="sarni-sp-check"><input type="checkbox" data-field="selected" ${e.selected?'checked':''}> Include</label><div class="sarni-sp-fields"><label>Destination<select data-field="kind"><option value="EXPENSE" ${e.kind==='EXPENSE'?'selected':''}>Actual expense</option><option value="PLAN" ${e.kind==='PLAN'?'selected':''}>Planned expense</option><option value="CALENDAR" ${e.kind==='CALENDAR'?'selected':''}>Calendar itinerary</option></select></label><label>Date<input type="date" data-field="date" value="${escapeHTML(e.date)}" required></label><label>Description<input data-field="title" maxlength="160" value="${escapeHTML(e.title)}" required></label><label class="sarni-sp-amount" ${e.kind==='CALENDAR'?'hidden':''}>Amount ₹<input type="number" data-field="amount" step="0.01" min="0.01" value="${e.amount||''}"></label><label class="sarni-sp-category" ${e.kind==='CALENDAR'?'hidden':''}>Category<select data-field="category">${currentCategories().map(c=>`<option value="${escapeHTML(c.name)}" ${c.name===e.category?'selected':''}>${escapeHTML(c.name)}</option>`).join('')||'<option>Other</option>'}</select></label></div><p class="sarni-sp-row-info">${e.needsReview?'<strong>Review suggested classification/date</strong> · ':''}${e.time?'Time '+escapeHTML(e.time)+' · ':''}${escapeHTML(e.notes).slice(0,280)}</p></div>`).join('');save.disabled=!entries.some(x=>x.selected)||busy;}
+    function readEdits(){body.querySelectorAll('[data-index]').forEach(row=>{const e=entries[+row.dataset.index];for(const f of row.querySelectorAll('[data-field]')){const k=f.dataset.field;e[k]=k==='selected'?f.checked:k==='amount'?Number(f.value):f.value;}if(e.kind==='CALENDAR')e.amount=0;});}
+    function onParse(){if(busy)return;const r=parse(raw.value);entries=r.items.map(e=>({...e,category:matchingCat(e.categoryHint),selected:true}));render();setStatus(`${entries.length} entries identified. ${r.skipped?`${r.skipped} other lines ignored. `:''}${r.overflow?'Only the first 30 entries are shown. ':''}Review the dates, category and payment status before saving.`);}
+    function open(){if(typeof state==='undefined'||!state.token){setStatus('Sign in to use Smart Paste.');return;}raw.value='';entries=[];render();setStatus('Nothing is saved until you review and confirm.');if(typeof dialog.showModal==='function')dialog.showModal();else dialog.hidden=false;raw.focus();}
+    function close(){if(busy)return;if(typeof dialog.close==='function')dialog.close();else dialog.hidden=true;}
+    async function onSave(){if(busy)return;readEdits();const accepted=entries.filter(e=>e.selected);if(!accepted.length){setStatus('Choose at least one entry.');return;}
+      for(let i=0;i<accepted.length;i++){const e=accepted[i];if(!ISO.test(e.date)||!validDate(...e.date.split('-').map(Number))){setStatus(`Entry ${i+1}: enter a valid date.`);return;}
+        if(!e.title.trim()){setStatus(`Entry ${i+1}: a description is required.`);return;}
+        if(e.kind!=='CALENDAR'&&(!Number.isFinite(e.amount)||e.amount<=0||!e.category)){setStatus(`Entry ${i+1}: amount and expense category are required.`);return;}}
+      busy=true;save.disabled=true;setStatus('Saving reviewed records securely…');
+      try{const owner=state.username,request={entries:accepted.map(x=>({kind:x.kind,title:x.title,date:x.date,notes:x.notes,time:x.time,amount:x.amount,category:x.category,eventKind:x.eventKind,departureCity:x.departureCity,arrivalCity:x.arrivalCity})),sourceHash:hashString(raw.value)};
+        const res=await api('importSmartPaste',request,{retry:false});if(!res?.ok)throw Error(res?.message||'Could not save.');
+        if(owner!==state.username){setStatus('Account changed; refresh your dashboard before continuing.');return;}
+        const failures=Array.isArray(res.errors)?res.errors:[];
+        setStatus(`Saved ${res.created||0} records · ${res.duplicate||0} already imported. ${failures.length?'Some entries failed and can be retried. ':''}Refreshing dashboard…`);
+        try{const fresh=await api('bootstrap',{}, {retry:false});if(fresh?.ok&&fresh?.data){applyBootstrap(fresh.data);saveCache(fresh.data);}}catch(refreshErr){setStatus('Records saved. Refresh the dashboard to display them: '+refreshErr.message);return;}
+        if(failures.length){setStatus(`Saved ${res.created||0}; skipped ${res.duplicate||0} duplicate(s). Entry ${Number(failures[0].index)+1} could not be saved: ${failures[0].message}. You may review and retry; already saved entries will be skipped.`);}
+        else {entries=[];raw.value='';render();setStatus(`Done: ${res.created||0} new record(s), ${res.duplicate||0} duplicates skipped.`);}
+      }catch(e){setStatus('Nothing more was submitted automatically. '+(e.message||'Save failed')+' — review before retrying.');}
+      finally{busy=false;save.disabled=!entries.some(x=>x.selected);}
+    }
+    document.addEventListener('click',e=>{if(e.target.closest('[data-sarni-smartpaste-open]')){e.preventDefault();open();}});
+    $('sarniSmartPasteParse')?.addEventListener('click',onParse);save?.addEventListener('click',onSave);$('sarniSmartPasteClose')?.addEventListener('click',close);
+    body.addEventListener('change',e=>{if(e.target.matches('[data-field]')){readEdits();render();}});
+    body.addEventListener('input',e=>{if(e.target.matches('[data-field]')){const el=e.target;const row=el.closest('[data-index]');const x=entries[Number(row?.dataset.index)];if(!x)return;x[el.dataset.field]=el.dataset.field==='amount'?Number(el.value):el.value;}});
+    dialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();});
+    raw.addEventListener('paste',()=>{setTimeout(()=>{if(raw.value.length>0)onParse();},80);});
+  }
+  const apiObj={parse,findDate,amount,time,extractTravel,categoryHint,escapeHTML};root.SarNiSmartPaste=apiObj;
+  if(typeof document!=='undefined'){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',UI,{once:true});else UI();}
+})(typeof window!=='undefined'?window:globalThis);
+
+</script>
+</body>
+</html>
