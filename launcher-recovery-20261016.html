@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#142954">
+<meta name="description" content="SarNi Personal Life Dashboard - secure launcher">
+<meta name="sarni-build" content="20261016-sarni-endpoint-recovery">
+<meta name="color-scheme" content="light">
+<link rel="manifest" href="./manifest.webmanifest?v=20261016" type="application/manifest+json">
+<link rel="icon" href="./sarni-life-icon.svg?v=20261016" type="image/svg+xml">
+<title>SarNi · Connect Dashboard</title>
+<style>
+*{box-sizing:border-box}html{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:22px;background:radial-gradient(ellipse at 5% 0%,#ddf7f2,transparent 45%),radial-gradient(ellipse at 100% 90%,#ece8ff,transparent 50%),#f7f9fc;color:#17294d}
+main{width:min(510px,100%);padding:28px 26px;border-radius:24px;background:#fff;border:1px solid #e0e7f2;box-shadow:0 24px 80px rgba(24,40,88,.09)}
+header{display:flex;align-items:center;gap:14px}header img{width:58px;height:58px}h1{font-size:26px;margin:0;letter-spacing:-.055em}h2{font-size:18px;margin:21px 0 5px}p{color:#66758e;font-size:14px;line-height:1.6;margin:8px 0 14px}
+.notice{padding:12px 14px;border:1px solid #f2d8ad;border-radius:13px;background:#fff9ed;color:#845b21;font-size:13px;line-height:1.5;margin:22px 0}
+ol{padding-left:22px;color:#3a4b66;font-size:14px;line-height:1.85;margin:10px 0 22px}
+label{display:block;font-size:13px;font-weight:800;color:#22365e;margin-bottom:8px}
+input{width:100%;min-height:48px;padding:12px;font:inherit;font-size:14px;border:1px solid #cdd8e9;border-radius:12px;outline:none}input:focus{border-color:#695ee0;box-shadow:0 0 0 3px #e9e6ff}
+button,a.btn{appearance:none;display:block;width:100%;border:0;border-radius:12px;padding:13px 16px;font-weight:800;font-size:14px;cursor:pointer;text-align:center;text-decoration:none;margin-top:11px}
+button.primary{background:#167d79;color:white}button.primary:hover{background:#116966}button.secondary{background:#eeedff;color:#4834aa}button:disabled{opacity:.5;cursor:not-allowed}
+#status{min-height:18px;font-size:13px;color:#a34433;font-weight:650;margin:9px 0 0}
+.small{font-size:12px;color:#78849a;margin-top:14px}
+details{margin-top:18px;border-top:1px solid #e8ecf4;padding-top:12px}summary{cursor:pointer;font-size:13px;font-weight:700;color:#6855c8}
+@media(max-width:380px){main{padding:22px 18px}h1{font-size:23px}}
+</style>
+</head>
+<body>
+<main>
+<header><img src="./sarni-life-icon.svg?v=20261016" alt="" width="58" height="58"><div><h1>SarNi</h1><p style="margin:2px 0">Personal Life Dashboard</p></div></header>
+<div class="notice"><strong>Connection needs correction.</strong> The earlier link opened a <strong>Family Dashboard</strong> backend, not SarNi. Automatic redirection to that link has been stopped to protect your workflow.</div>
+<h2>Connect the correct SarNi project</h2>
+<ol>
+<li>Open your <strong>SarNi</strong> project in <a href="https://script.google.com/home/projects" target="_blank" rel="noopener noreferrer">Google Apps Script</a> (not MyFamily).</li>
+<li>Check that <code>Code.gs</code> is the SarNi backend. Under <strong>Deploy → Manage deployments</strong>, copy its Web app URL ending in <code>/exec</code>. If that deployment runs Family code, use the correct project and deploy a new web-app version.</li>
+<li>Paste the URL below and press <strong>Test URL</strong>. In the new tab, confirm that the page is <strong>SarNi</strong>, not Family Dashboard. Only then save it.</li>
+</ol>
+<label for="url">SarNi Apps Script Web app URL</label>
+<input id="url" type="url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://script.google.com/macros/s/.../exec">
+<button class="primary" type="button" id="test">Test SarNi URL ↗</button>
+<button class="secondary" type="button" id="confirm" hidden>Yes, this is SarNi — Save &amp; Open</button>
+<p id="status" role="status" aria-live="polite"></p>
+<details><summary>Have you already connected SarNi?</summary><p>Once you confirm a working SarNi link, this GitHub address will open it automatically on this device. To change the link later, visit <a href="?setup=1">Connection settings</a>.</p><button type="button" id="clear" class="secondary">Clear saved link</button></details>
+<p class="small">No username, password, or Google Sheet data is collected here. The deployment URL is stored only in this browser.</p>
+</main>
+<script>
+(function(){
+'use strict';
+var key='sarni_verified_webapp_url_v1';
+var input=document.getElementById('url'),test=document.getElementById('test'),confirm=document.getElementById('confirm'),status=document.getElementById('status');
+var pending='';
+function normalize(v){
+ try{var u=new URL(String(v||'').trim());if(u.protocol!=='https:'||u.hostname!=='script.google.com'||!/^\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(u.pathname))return '';return u.origin+u.pathname}catch(e){return ''}
+}
+function show(v){status.textContent=v}
+function urlWithApp(u){return u+'?app=1'}
+var stored='';
+try{stored=normalize(localStorage.getItem(key)||'')}catch(e){}
+var setup=new URLSearchParams(location.search).has('setup');
+if(stored&&!setup){location.replace(urlWithApp(stored));return}
+if(stored)input.value=stored;
+test.addEventListener('click',function(){
+ pending=normalize(input.value);confirm.hidden=true;
+ if(!pending){show('Enter a valid Apps Script Web app URL ending in /exec.');return}
+ window.open(urlWithApp(pending),'_blank','noopener,noreferrer');
+ show('Check the test tab. If it does not open, allow pop-ups and try again. If it shows Family Dashboard, do NOT save the link.');
+ confirm.hidden=false;
+});
+confirm.addEventListener('click',function(){
+ if(!pending||pending!==normalize(input.value)){show('Please test the current URL first.');confirm.hidden=true;return}
+ try{localStorage.setItem(key,pending)}catch(e){}
+ location.assign(urlWithApp(pending));
+});
+input.addEventListener('input',function(){pending='';confirm.hidden=true;show('')});
+document.getElementById('clear').addEventListener('click',function(){try{localStorage.removeItem(key)}catch(e){}pending='';input.value='';confirm.hidden=true;show('Saved link cleared.')});
+})();
+</script>
+</body>
+</html>
