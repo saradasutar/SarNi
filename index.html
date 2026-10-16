@@ -3,39 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
   <meta name="theme-color" content="#142954">
-  <meta name="description" content="SarNi personal life dashboard — finance, diary, calendar, memories and planning">
-  <meta name="sarni-build" content="20261012-20700-life-manager">
-  <meta name="color-scheme" content="light dark">
-  <link rel="preconnect" href="https://script.google.com" crossorigin>
-  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
-  <link rel="manifest" href="./manifest.webmanifest?v=20261015-life-brand" type="application/manifest+json">
-  <meta name="application-name" content="SarNi">
-  <link rel="icon" href="./sarni-life-icon.svg?v=20261015-home-v2" type="image/svg+xml">
-  <title>SarNi</title>
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="SarNi personal life dashboard - diary, calendar, expenses and memories">
+  <meta name="sarni-build" content="20261016-direct-launch-fix">
+  <link rel="manifest" href="./manifest.webmanifest?v=20261016" type="application/manifest+json">
+  <link rel="icon" href="./sarni-life-icon.svg?v=20261016-direct" type="image/svg+xml">
+  <title>Opening SarNi · Personal Life Dashboard</title>
   <style>
     *{box-sizing:border-box}
-    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f5f7ff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-    #sarniFrame{position:fixed;inset:0;width:100%;height:100dvh;border:0;background:#f5f7ff}
-    #opening{position:fixed;inset:0;z-index:5;display:grid;place-items:center;padding:24px;color:#28345d;background:radial-gradient(circle at 15% 10%,#e7e6ff,transparent 36%),radial-gradient(circle at 90% 80%,#dff8f1,transparent 32%),linear-gradient(145deg,#f3f7ff,#fbfaff);text-align:center;transition:opacity .25s ease}
-    #opening.done{pointer-events:none;opacity:0}
-    .opening-card{width:min(430px,92vw);padding:32px;border:1px solid rgba(214,221,238,.9);border-radius:24px;background:rgba(255,255,255,.94);box-shadow:0 28px 80px rgba(32,43,90,.14);backdrop-filter:blur(18px)}
-    .mark{width:64px;height:64px;display:grid;place-items:center;margin:0 auto 14px;border-radius:20px;color:#fff;background:transparent;font-size:30px;font-weight:900}.mark img{display:block;width:64px;height:64px}
-    h1{margin:0;color:#182344;font-size:27px}p{margin:9px 0 0;color:#697792;font-size:14px;font-weight:700;line-height:1.5}
-    .loader{width:42px;height:42px;margin:22px auto 0;border:4px solid #e1e5f2;border-top-color:#6557dd;border-radius:50%;animation:spin .8s linear infinite}
-    #directLink{display:none;margin:18px auto 0;padding:11px 15px;border:0;border-radius:11px;color:#fff;background:#5d50d1;font-weight:850;text-decoration:none}
-    @keyframes spin{to{transform:rotate(360deg)}}
+    html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+    body{min-height:100dvh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 10% 0%,#e8f8f6,transparent 42%),radial-gradient(ellipse at 95% 85%,#ece9ff,transparent 48%),#f7f9fd;color:#182849}
+    .card{width:min(440px,100%);padding:34px 28px 30px;border-radius:26px;border:1px solid #e0e6f2;background:#fff;box-shadow:0 24px 76px rgba(24,36,80,.09);text-align:center}
+    .icon{width:78px;height:78px;margin:0 auto 13px;display:block}
+    h1{font-size:27px;margin:0;letter-spacing:-.045em}p{color:#64728b;margin:11px 0 0;font-size:14px;line-height:1.6}
+    .bar{height:4px;background:#e8edf5;border-radius:8px;overflow:hidden;margin:23px auto;max-width:230px}.bar:before{content:"";display:block;width:48%;height:100%;border-radius:8px;background:linear-gradient(90deg,#14a994,#7063e8);animation:move 1.3s ease-in-out infinite alternate}
+    @keyframes move{to{transform:translateX(110%)}}
+    a.open{display:block;border:0;border-radius:14px;background:#166f70;color:#fff;text-align:center;text-decoration:none;padding:14px 18px;font-weight:800;font-size:15px;box-shadow:0 9px 26px rgba(13,104,100,.16)}
+    a.open:hover,a.open:focus-visible{background:#125d60;outline:3px solid #c7f1e7;outline-offset:2px}
+    .hint{font-size:12px;color:#7a8597;margin-top:15px}
+    @media(prefers-reduced-motion:reduce){.bar:before{animation:none}}
   </style>
 </head>
 <body>
-  <div id="opening" role="status" aria-live="polite"><div class="opening-card"><div class="mark"><img src="./sarni-life-icon.svg?v=20261015-home-v2" alt="" width="64" height="64"></div><h1>Opening SarNi</h1><p id="openingMessage">Preparing your personal life dashboard…</p><div class="loader" aria-hidden="true"></div><a id="directLink" href="https://script.google.com/macros/s/AKfycbwXA1YBWRfOjYvZwDz9dkCr4HZujn9D_YoPmQyjggZxR5hUUs1ZsARytOX8rUR4zRbs/exec?app=1&amp;v=20700-life-manager">Open directly</a></div></div>
-  <iframe id="sarniFrame" title="SarNi Personal Life Dashboard" src="https://script.google.com/macros/s/AKfycbwXA1YBWRfOjYvZwDz9dkCr4HZujn9D_YoPmQyjggZxR5hUUs1ZsARytOX8rUR4zRbs/exec?app=1&amp;embedded=1&amp;v=20700-life-manager" allow="clipboard-read; clipboard-write" referrerpolicy="strict-origin-when-cross-origin" loading="eager"></iframe>
+  <main class="card">
+    <img class="icon" src="./sarni-life-icon.svg?v=20261016-direct" alt="SarNi" width="78" height="78">
+    <h1>Opening SarNi</h1>
+    <p id="message">Opening your secure personal life dashboard directly…</p>
+    <div class="bar" aria-hidden="true"></div>
+    <a class="open" id="directLink" href="https://script.google.com/macros/s/AKfycbwXA1YBWRfOjYvZwDz9dkCr4HZujn9D_YoPmQyjggZxR5hUUs1ZsARytOX8rUR4zRbs/exec?app=1&amp;v=20700-life-manager">Open SarNi Dashboard <span aria-hidden="true">↗</span></a>
+    <p class="hint">If the dashboard does not open automatically, select the button above. Sign in with your authorised account if Google asks.</p>
+  </main>
   <script>
     (function(){
-      var frame=document.getElementById('sarniFrame'),opening=document.getElementById('opening'),message=document.getElementById('openingMessage'),direct=document.getElementById('directLink');
-      frame.addEventListener('load',function(){setTimeout(function(){opening.classList.add('done')},350)});
-      setTimeout(function(){if(opening.classList.contains('done'))return;message.textContent='The secure dashboard is taking longer than usual. You may continue waiting or open it directly.';direct.style.display='inline-block'},15000);
+      var url=document.getElementById('directLink').href;
+      var manual=new URLSearchParams(location.search).has('manual');
+      if(!manual){setTimeout(function(){location.replace(url);},750);}
+      else{document.getElementById('message').textContent='Select the button below to open SarNi securely.';}
     })();
   </script>
 </body>
