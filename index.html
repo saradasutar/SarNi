@@ -63,9 +63,8 @@ if(stored)input.value=stored;
 test.addEventListener('click',function(){
  pending=normalize(input.value);confirm.hidden=true;
  if(!pending){show('Enter a valid Apps Script Web app URL ending in /exec.');return}
- var win=window.open(urlWithApp(pending),'_blank','noopener,noreferrer');
- if(!win)show('Your browser may have blocked the new tab. Enable pop-ups for this site and try again.');
- else show('Check the opened tab. If it is the Family backend, do NOT save this link.');
+ window.open(urlWithApp(pending),'_blank','noopener,noreferrer');
+ show('Check the test tab. If it does not open, allow pop-ups and try again. If it shows Family Dashboard, do NOT save the link.');
  confirm.hidden=false;
 });
 confirm.addEventListener('click',function(){
