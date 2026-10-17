@@ -168,3 +168,13 @@ html.sarni-personal-only .sarni-life-backend-warning[hidden]{display:none!import
  html.sarni-personal-only #experienceRichEditor{font-size:17px;min-height:165px;padding:14px}
 }
 @media print{html.sarni-personal-only .sarni-rich-toolbar{display:none!important}}
+
+/* 20.8.11: clear one-tap real deployment version for mobile photo uploads */
+html.sarni-personal-only .sarni-life-backend-check{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:12px 0;padding:12px 13px;border:1px solid #c8dbed;border-radius:14px;background:linear-gradient(110deg,#edf9f6,#f3f1ff)}
+html.sarni-personal-only #sarniLifeBackendStatus{font-size:14px;font-weight:800;line-height:1.5;color:#2d5270;overflow-wrap:anywhere;flex:1}
+html.sarni-personal-only #sarniLifeCheckBackend{border:1px solid #719dbb;background:#fff;border-radius:11px;color:#264e71;font-size:14px;font-weight:850;min-height:43px;padding:9px 13px;cursor:pointer}
+html.sarni-personal-only #sarniLifeCheckBackend:focus-visible{outline:3px solid #8b81e0;outline-offset:2px}
+@media(max-width:520px){
+ html.sarni-personal-only .sarni-life-backend-check{align-items:stretch}
+ html.sarni-personal-only #sarniLifeCheckBackend{width:100%}
+}
