@@ -8821,7 +8821,7 @@ async function sarLifeDelete(id){
   try{const r=await api('deleteLifeExperience',{id},{retry:false});if(!r?.ok)throw Error(r?.message||'Delete failed');applyBootstrap(r.data);saveCache(r.data);await loadLifeExperiences();toast('Experience removed.','success');}catch(e){toast(e.message||'Cannot delete','error');}
 }
 function sarLifePrint(){const items=sarLifeVisibleItems();if(!items.length){toast('No experiences to print.','info');return;}
-  const sheet=document.createElement('section');sheet.id='lifeExperiencePrintSheet';sheet.innerHTML='<h1>SarNi · Life Experiences</h1>'+items.map(x=>`<article><h2>${escapeHtml(x.title)}</h2><p>${escapeHtml(x.topic)} · ${escapeHtml(x.location)} · ${escapeHtml(x.visibility)}</p><pre>${escapeHtml(sarLifePlain(x.lesson))}</pre></article>`).join('');document.body.append(sheet);window.addEventListener('afterprint',()=>sheet.remove(),{once:true});window.print();
+  const sheet=document.createElement('section');sheet.id='lifeExperiencePrintSheet';sheet.innerHTML='<h1>SarNi · Life Experiences</h1>'+items.map(x=>`<article><h2>${escapeHtml(x.title)}</h2><p>${escapeHtml(x.topic)} · ${escapeHtml(x.location)} · ${escapeHtml(x.visibility)}</p><div class="sarni-life-lesson">${sarLifeDisplayMarkup(x.lesson)}</div></article>`).join('');document.body.append(sheet);window.addEventListener('afterprint',()=>sheet.remove(),{once:true});window.print();
 }
 function initLifeExperiences(){
   const f=$('lifeExperienceForm');if(!f)return;
