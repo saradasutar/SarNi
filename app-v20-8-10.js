@@ -8796,14 +8796,25 @@ async function saveLifeExperienceForm(event){
   experience.removePhoto=!!f.elements.removePhoto.checked;
   if(!experience.title||!sarLifePlain(experience.lesson)){status.textContent='Enter title and lesson.';return;}
   if(experience.lesson.length>7000){status.textContent='Formatting plus text exceeds 7,000 characters. Shorten the lesson or clear some formatting.';return;}
-  const file=$('experiencePhotoInput')?.files?.[0];btn.disabled=true;status.textContent=file?'Preparing your original and its small thumbnail…':'Saving securely…';
+  const file=$('experiencePhotoInput')?.files?.[0];btn.disabled=true;if($('sarniLifeBackendLink'))$('sarniLifeBackendLink').hidden=true;status.textContent=file?'Preparing your original and its small thumbnail…':'Saving securely…';
   try{
     if(file){if(file.size>SARNI_MAX_IMAGE_UPLOAD_BYTES)throw Error('Original exceeds 20 MB. Choose a smaller file for Apps Script upload.');
       const [raw,thumbnail]=await Promise.all([sarLifeReadPhoto(file),compressedJpeg(file,112,.52)]);
       if(thumbnail.length>19800)throw Error('Thumbnail generation exceeded the safe preview size. Try a different photo.');experience.photoBase64=raw;experience.thumbnailBase64=thumbnail;status.textContent='Saving unchanged original in private Drive…';}
     const r=await api('saveLifeExperience',{experience},{retry:false,timeoutMs:120000});
     if(!r?.ok)throw Error(r?.message||'Save failed');applyBootstrap(r.data);saveCache(r.data);sarLifeReset();await loadLifeExperiences();status.textContent='✓ Experience saved in SarNi.';toast('Life Experience saved.','success');
-  }catch(e){status.textContent=e.message||'Unable to save';toast(e.message||'Unable to save','error');}finally{btn.disabled=false;}
+  }catch(e){
+    const rawMessage=String(e?.message||'Unable to save');
+    const oldPhotoRule=/Choose an image of at most 2 MB|original image or thumbnail is too large|maximum 2 MB|2 MB or smaller/i.test(rawMessage);
+    const link=$('sarniLifeBackendLink');
+    if(link){
+      link.hidden=!oldPhotoRule;
+      const backend=String(window.PORTFOLIO_CONFIG?.API_URL||'');
+      if(oldPhotoRule&&/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(backend))link.href=backend;
+    }
+    const message=oldPhotoRule?'The live Apps Script backend still enforces the old 2 MB image limit. Your original has NOT been saved. Check the /exec version and update the existing deployment to Code.gs v3.17.30.':rawMessage;
+    status.textContent=message;toast(message,'error');
+  }finally{btn.disabled=false;}
 }
 async function sarLifeDelete(id){
   if(!confirm('Remove this Life Experience? Your original image stays in the private Drive folder for recovery.'))return;
