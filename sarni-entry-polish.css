@@ -50,3 +50,93 @@ html.sarni-personal-only [data-life-status]{font-size:12px;font-weight:750;line-
 }
 @media(prefers-reduced-motion:reduce){html.sarni-personal-only :is(input,select,textarea,.life-save){transition:none!important;animation:none!important}}
 @media print{html.sarni-personal-only .sarni-entry-recent{display:none!important}}
+
+/* v20.8.9 readable type scale: modest increase without overcrowding mobile. */
+html.sarni-personal-only body{
+ font-size:16px;
+ font-weight:550;
+ line-height:1.54;
+ -webkit-text-size-adjust:100%;
+ text-size-adjust:100%;
+}
+html.sarni-personal-only :is(.page-section,.life-shell,.life-experience-page,.personal-home-grid,.recent-diary-rail,.life-experience-list-panel,.panel) :is(p,li,small){
+ line-height:1.55;
+}
+html.sarni-personal-only :is(.page-section,.life-shell,.life-experience-page,.panel) :is(h2,h3,h4){
+ font-weight:850;
+ letter-spacing:-.015em;
+}
+html.sarni-personal-only :is(.life-card,.life-experience-editor,.life-experience-list-panel,.personal-home-card,.panel) h3{
+ font-size:clamp(19px,2vw,23px);
+}
+html.sarni-personal-only :is(.life-experience-page,.page-section) h2{
+ font-size:clamp(23px,3vw,30px);
+}
+html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm,#quickDiaryInlineForm,#sideDiaryForm,.stack-form) label{
+ font-size:15.5px;
+ font-weight:800;
+ line-height:1.45;
+}
+html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm,#quickDiaryInlineForm,#sideDiaryForm,.stack-form) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),select,textarea){
+ font-size:17px;
+ font-weight:650;
+ line-height:1.48;
+ min-width:0;
+}
+html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm,#quickDiaryInlineForm,#sideDiaryForm,.stack-form) textarea{
+ font-weight:580;
+}
+html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm,#quickDiaryInlineForm,#sideDiaryForm,.stack-form) :is(input,textarea)::placeholder{
+ font-weight:500;
+ opacity:.8;
+}
+html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm,#quickDiaryInlineForm,#sideDiaryForm,.stack-form) :is(button,.life-save){
+ font-size:16px;
+ font-weight:800;
+ line-height:1.35;
+}
+html.sarni-personal-only :is(.life-experience-card-body,.personal-home-card,.life-card,.panel) :is(p,.life-hint){
+ font-size:15.5px;
+ font-weight:560;
+ line-height:1.52;
+}
+html.sarni-personal-only :is(.life-experience-card-body,.life-experience-card-actions,.personal-home-card,.panel) small{
+ font-size:13px;
+ font-weight:650;
+ line-height:1.48;
+}
+html.sarni-personal-only .life-experience-card-body h4{font-size:18px;font-weight:850}
+html.sarni-personal-only :is(.life-experience-tools input,#experienceSearch,.life-entry-form select,.life-entry-form input){max-width:100%}
+html.sarni-personal-only :is(.life-form-foot,[data-life-status],#experienceSaveStatus){
+ font-size:14px;
+ font-weight:750;
+ line-height:1.5;
+}
+html.sarni-personal-only :is(.life-recent-table,.data-table,.diary-list,.important-date-row,.life-experience-list) :is(td,th){
+ font-size:14.5px;
+ font-weight:620;
+ line-height:1.5;
+}
+html.sarni-personal-only :is(.life-experience-two,.life-fields,.form-grid,.life-form-foot)>*{
+ min-width:0;
+ overflow-wrap:break-word;
+}
+html.sarni-personal-only .sarni-entry-recent-title{font-size:14px;font-weight:850}
+html.sarni-personal-only .sarni-entry-chip{font-size:14px;font-weight:800}
+html.sarni-personal-only :is(.side-nav,.mobile-bottom-nav,.mobile-nav,.mobile-more-sheet) button{
+ font-weight:800;
+}
+@media(max-width:860px){
+ html.sarni-personal-only body{font-size:16px}
+ html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm,#quickDiaryInlineForm,#sideDiaryForm,.stack-form) label{font-size:15.5px}
+ html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm,#quickDiaryInlineForm,#sideDiaryForm,.stack-form) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),select,textarea){font-size:17px}
+ html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm,#quickDiaryInlineForm,#sideDiaryForm,.stack-form) :is(button,.life-save){font-size:16px;min-height:46px}
+ html.sarni-personal-only .life-experience-card-body p{font-size:16px}
+ html.sarni-personal-only .life-experience-card-body h4{font-size:18px}
+ html.sarni-personal-only .life-experience-preview small{font-size:13px}
+ html.sarni-personal-only .sarni-entry-chip{font-size:14px}
+}
+@media(max-width:390px){
+ html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm) label{font-size:15px}
+ html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm) :is(input,select,textarea){font-size:16px}
+}
