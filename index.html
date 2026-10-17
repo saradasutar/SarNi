@@ -426,6 +426,11 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 }
 </style>
 <link rel="stylesheet" href="./sarni-delight.css?v=20261017" media="all">
+<style id="sarniBackendDiagnosticHelp">
+.sarni-backend-help{display:block;margin:8px 0 14px;font-size:12px;line-height:1.5;font-weight:800;color:#2d5c95;text-decoration:underline;text-underline-offset:3px}
+#loginMessage:empty + .sarni-backend-help{display:none}
+.sarni-backend-help:focus-visible{outline:3px solid #7da2eb;outline-offset:3px}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
@@ -451,6 +456,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </div>
 <button class="primary-button full" id="loginButton" type="submit">Sign in</button>
 <p class="form-message" id="loginMessage" role="alert"></p>
+<a class="sarni-backend-help" href="./backend-check.html" target="_blank" rel="noopener noreferrer">Check backend connection without entering a password ↗</a>
 <div class="login-meta">
 <p class="tiny muted">Your password is never stored in the browser.</p>
 <div class="version-pair"><span class="version-badge" id="loginVersion">Frontend · v20.8.7</span><span class="version-badge backend-version" id="loginBackendVersion">Backend · v3.17.29</span></div>
