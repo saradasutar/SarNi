@@ -1,7 +1,8 @@
 {
-  "version": "20.8.7",
-  "frontend": "20.8.7",
-  "backendExpected": "3.17.29",
-  "build": "20261017-20807-github-direct-delight",
-  "hosting": "github-pages-direct-ui"
+  "version": "20.8.8",
+  "frontend": "20.8.8",
+  "backendExpected": "3.17.30",
+  "build": "20261018-20808-photo-entry",
+  "hosting": "github-pages-direct-ui",
+  "backendUpgradeRequiredForLargerPhotos": true
 }
