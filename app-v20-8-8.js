@@ -1,17 +1,16 @@
 'use strict';
 
 const CONFIG = window.PORTFOLIO_CONFIG || {};
-const APP_VERSION = '20.8.4';
-const EXPECTED_BACKEND_VERSION = '3.17.28';
+const APP_VERSION = '20.8.8';
+const EXPECTED_BACKEND_VERSION = '3.17.30';
 // Background timeout follows the same administrator-chosen inactivity policy.
 // Inactive sessions are always checked by the backend as well.
 const SESSION_HEARTBEAT_MS = 2 * 60 * 1000;
 const ACTIVITY_WRITE_THROTTLE_MS = 10000;
 const LAST_ACTIVITY_KEY = 'myfinance_last_activity_at';
 const LAST_HIDDEN_KEY = 'myfinance_last_hidden_at';
-const APP_BUILD_ID = '20261016-20804-admin-settings';
+const APP_BUILD_ID = '20261017-20807-login-transport-fix';
 const APP_BUILD_STORAGE_KEY = 'myfinance_current_build_id';
-const AUTOMATIC_LOGIN_RECOVERY_KEY = `myfinance_login_recovery_${APP_BUILD_ID}`;
 const STARTUP_STUCK_MS = 30000;
 const MOBILE_BREAKPOINT = 860;
 const QUICK_VALUE_SYNC_MS = 30 * 1000;
@@ -391,12 +390,15 @@ async function waitForAsyncResult(requestId,timeoutMs){
         if(!result.ok){
           const err=new Error(result.message||'Request failed.');
           err.code=result.code||'REQUEST_FAILED';
+          // A confirmed backend response is final; never hide it behind a polling timeout.
+          err.sarniBackendResponse=true;
           throw err;
         }
         return result;
       }
       lastError=null;
     }catch(err){
+      if(err?.sarniBackendResponse)throw err;
       lastError=err;
     }
     await new Promise(r=>setTimeout(r,pauseMs));
@@ -1531,21 +1533,18 @@ function isRecoverableLoginTransportError(error){
   return /timed out|could not reach|did not return|polling endpoint|network|failed to fetch|load failed/i.test(String(error?.message||error||''));
 }
 async function loginWithAutomaticBrowserRecovery(username,password){
+  // Try one authenticated request. Browser cache is not evidence of a transport failure.
+  // Start the existing safe JSONP polling fallback promptly if the Google frame is blocked.
   const payload={username,password,fastLogin:true};
+  if(els.loginMessage)els.loginMessage.textContent='Connecting securely to SarNi…';
   try{
-    // Give the direct secure iframe reply time to arrive before using JSONP.
-    // This avoids the polling endpoint that some normal browser profiles block.
-    return await api('login',payload,{timeoutMs:26000,pollFallbackDelayMs:12000});
+    return await api('login',payload,{timeoutMs:32000,pollFallbackDelayMs:1500});
   }catch(error){
-    let alreadyRecovered=false;
-    try{alreadyRecovered=sessionStorage.getItem(AUTOMATIC_LOGIN_RECOVERY_KEY)==='1';}catch{}
-    if(alreadyRecovered||!isRecoverableLoginTransportError(error))throw error;
-
-    try{sessionStorage.setItem(AUTOMATIC_LOGIN_RECOVERY_KEY,'1');}catch{}
-    if(els.loginMessage)els.loginMessage.textContent='Old browser cache detected. Repairing it and signing in again…';
-    await purgeAppManagedBrowserCaches();
-    await new Promise(resolve=>setTimeout(resolve,350));
-    return api('login',payload,{timeoutMs:36000,pollFallbackDelayMs:15000});
+    if(!isRecoverableLoginTransportError(error))throw error;
+    const detail=String(error?.message||'Network response not received.');
+    const failure=new Error('SarNi could not receive the Apps Script login response from this browser. Check that the web app is deployed for the intended users, and try an up-to-date Chrome or Edge browser. Details: '+detail);
+    failure.code='BACKEND_CONNECTION';
+    throw failure;
   }
 }
 
@@ -1593,7 +1592,6 @@ async function login(event){
     switchSection('overview');
     resetAutoRefreshClock();
     toast('Signed in successfully.','success');
-    try{sessionStorage.removeItem(AUTOMATIC_LOGIN_RECOVERY_KEY);}catch{}
     if(els.loginPassword)els.loginPassword.value='';
     setBusy(els.loginButton,false);
 
@@ -7827,6 +7825,43 @@ function lifeSaveDiaryDraft(form){
   try{sessionStorage.setItem(lifeDraftKey(form),JSON.stringify({date:form.elements.date.value,title:form.elements.title.value,text:form.elements.text.value}));}catch{};
   lifeStatus(form,'Draft saved on this device · click Save diary to publish');
 }
+
+// SarNi v20.8.8: convenient, private, one-tap reuse of previously saved expense details.
+// Suggestions only read authenticated in-memory rows; nothing is uploaded or created until Save.
+function sarniQuickExpenseSuggestions(form){
+ if(!form||form.querySelector('.sarni-entry-recent'))return;
+ const container=document.createElement('div');container.className='sarni-entry-recent';
+ const caption=document.createElement('span');caption.className='sarni-entry-recent-title';caption.textContent='↻ Reuse a recent expense';
+ const chips=document.createElement('div');chips.className='sarni-entry-chip-row';container.append(caption,chips);
+ const foot=form.querySelector('.life-form-foot');if(foot)form.insertBefore(container,foot);else form.append(container);
+ function update(){
+  chips.replaceChildren();
+  const seen=new Set();
+  const recent=(Array.isArray(state.expenses)?state.expenses:[])
+   .filter(r=>Number(r.amount)>0&&String(r.reason||'').trim())
+   .slice().sort((a,b)=>String(b.dateSpent||'').localeCompare(String(a.dateSpent||'')));
+  for(const item of recent){
+   const key=String(item.reason).trim().toLowerCase();
+   if(seen.has(key))continue;seen.add(key);
+   const button=document.createElement('button');button.type='button';button.className='sarni-entry-chip';
+   button.textContent=String(item.reason).slice(0,38);
+   button.title='Reuse '+String(item.reason).slice(0,80)+' and its category';
+   button.addEventListener('click',()=>{
+    form.elements.reason.value=String(item.reason||'');
+    if([...form.elements.category.options].some(o=>o.value===item.category))form.elements.category.value=item.category;
+    if(item.majorProjectId&&[...form.elements.head.options].some(o=>o.value===String(item.majorProjectId)))form.elements.head.value=item.majorProjectId;
+    if(item.debitedFrom)form.elements.account.value=String(item.debitedFrom);
+    if(item.paidTo)form.elements.paidTo.value=String(item.paidTo);
+    lifeStatus(form,'Earlier expense details filled · enter amount and save.');
+    form.elements.amount.focus({preventScroll:true});
+   });
+   chips.append(button);if(chips.childElementCount>=4)break;
+  }
+  container.hidden=!chips.childElementCount;
+ }
+ form.addEventListener('focusin',update);update();
+}
+
 async function lifeSaveExpense(form){
   const amount=Number(form.elements.amount.value),reason=form.elements.reason.value.trim(),category=form.elements.category.value;
   if(!Number.isFinite(amount)||amount<=0||!reason||!category){lifeStatus(form,'Enter an amount, description and category.',true);return;}
@@ -7907,7 +7942,7 @@ function lifePrintExpenses(){
 function lifeExportDiary(){const month=lifeDiaryMonth();lifeDownloadCSV('SarNi-Diary-'+month+'.csv',['Date','Title','Diary text'],(state.diary||[]).filter(x=>lifeDate(x.entryDate).startsWith(month)).map(x=>[lifeDate(x.entryDate),x.title,x.text]));}
 function initLifeHub(){
   document.querySelectorAll('[data-life-expense-form]').forEach(form=>{
-    form.elements.date.value=localIsoDate();form.addEventListener('submit',e=>{e.preventDefault();lifeSaveExpense(form);});
+    form.elements.date.value=localIsoDate();sarniQuickExpenseSuggestions(form);form.addEventListener('submit',e=>{e.preventDefault();lifeSaveExpense(form);});
     // Learn only from the existing private expense rows, never send data to an AI service.
     form.elements.reason.addEventListener('blur',()=>{
       const reason=form.elements.reason.value.trim().toLowerCase();if(reason.length<3)return;
@@ -8205,9 +8240,10 @@ function openUserPhotoEditor(username){
   peopleState.selectedUser=String(username||'');renderAdminPhotoPreview();
   $('adminPhotoManager')?.scrollIntoView({block:'center',behavior:'smooth'});
 }
+const SARNI_MAX_IMAGE_UPLOAD_BYTES=20*1024*1024; // Apps Script single-request transfer safety ceiling; originals are never resized.
 async function compressedJpeg(file,maxSize,quality){
   if(!file||!['image/png','image/jpeg','image/webp'].includes(file.type))throw new Error('Choose a JPEG, PNG or WebP image.');
-  if(file.size>6*1024*1024)throw new Error('Image must be 6 MB or smaller.');
+  if(file.size>SARNI_MAX_IMAGE_UPLOAD_BYTES)throw new Error('Original image exceeds the 20 MB Apps Script transfer ceiling.');
   const bitmap=await createImageBitmap(file);
   try{
     const scale=Math.min(1,maxSize/Math.max(bitmap.width,bitmap.height));
@@ -8221,12 +8257,12 @@ async function adminUploadPhoto(){
   if(!username||!file){if(status)status.textContent='Select a user and choose an image.';return;}
   btn.disabled=true;if(status)status.textContent='Optimizing image…';
   try{
-    if(file.size>2097152)throw new Error('Original photo must be 2 MB or smaller. Please choose a smaller original image.');
+    if(file.size>SARNI_MAX_IMAGE_UPLOAD_BYTES)throw new Error('Original exceeds 20 MB. Choose a smaller file for Apps Script upload.');
     const [originalDataUrl,thumbnailBase64]=await Promise.all([new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||''));reader.onerror=()=>reject(new Error('Could not read the original photo.'));reader.readAsDataURL(file);}),compressedJpeg(file,120,.62)]);
     const imageBase64=originalDataUrl.split(',')[1]||'';
-    if(!/^[A-Za-z0-9+/=]{300,2800000}$/.test(imageBase64)||thumbnailBase64.length>23000)throw new Error('This photo is too large or unsupported. Use JPG, PNG or WebP, maximum 2 MB.');
+    if(imageBase64.length<300||imageBase64.length>4*Math.ceil(SARNI_MAX_IMAGE_UPLOAD_BYTES/3)||!/^[A-Za-z0-9+/=]+$/.test(imageBase64)||thumbnailBase64.length>23000)throw new Error('Unsupported photo or exceeds the 20 MB transfer ceiling.');
     if(status)status.textContent='Saving in private Google Drive…';
-    const r=await api('adminSaveUserPhoto',{username,imageBase64,thumbnailBase64},{retry:false,timeoutMs:60000});
+    const r=await api('adminSaveUserPhoto',{username,imageBase64,thumbnailBase64},{retry:false,timeoutMs:120000});
     if(!r?.ok)throw new Error(r?.message||'Photo upload failed');
     if($('photoFileInput'))$('photoFileInput').value='';
     await loadPeopleDirectory(true);if(status)status.textContent='✓ Saved. Profile thumbnail updated.';
@@ -8726,12 +8762,12 @@ async function saveLifeExperienceForm(event){
   const experience={};fields.forEach(n=>experience[n]=String(f.elements[n]?.value||'').trim());
   experience.removePhoto=!!f.elements.removePhoto.checked;
   if(!experience.title||!experience.lesson){status.textContent='Enter title and lesson.';return;}
-  const file=$('experiencePhotoInput')?.files?.[0];btn.disabled=true;status.textContent='Saving securely…';
+  const file=$('experiencePhotoInput')?.files?.[0];btn.disabled=true;status.textContent=file?'Uploading original to private Drive (may take a minute)…':'Saving securely…';
   try{
-    if(file){if(file.size>2097152)throw Error('Please select an original photo under 2 MB.');
+    if(file){if(file.size>SARNI_MAX_IMAGE_UPLOAD_BYTES)throw Error('Original exceeds 20 MB. Choose a smaller file for Apps Script upload.');
       const [raw,thumbnail]=await Promise.all([sarLifeReadPhoto(file),compressedJpeg(file,112,.52)]);
       if(thumbnail.length>19800)throw Error('Thumbnail too large; choose a smaller image.');experience.photoBase64=raw;experience.thumbnailBase64=thumbnail;}
-    const r=await api('saveLifeExperience',{experience},{retry:false,timeoutMs:60000});
+    const r=await api('saveLifeExperience',{experience},{retry:false,timeoutMs:120000});
     if(!r?.ok)throw Error(r?.message||'Save failed');applyBootstrap(r.data);saveCache(r.data);sarLifeReset();await loadLifeExperiences();status.textContent='✓ Experience saved in SarNi.';toast('Life Experience saved.','success');
   }catch(e){status.textContent=e.message||'Unable to save';toast(e.message||'Unable to save','error');}finally{btn.disabled=false;}
 }
@@ -8753,8 +8789,8 @@ function initLifeExperiences(){
   $('experiencePrint')?.addEventListener('click',sarLifePrint);
   $('experiencePhotoInput')?.addEventListener('change',async e=>{
     const file=e.target.files?.[0];const p=$('experiencePhotoPreview');if(!file){p.textContent='No photo selected';return;}
-    if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>2097152){p.textContent='Choose JPG / PNG / WebP under 2 MB';return;}
-    try{const base=await compressedJpeg(file,160,.6),img=new Image();img.alt='Photo preview';img.src='data:image/jpeg;base64,'+base;p.replaceChildren(img);}catch(err){p.textContent=err.message;}
+    if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>SARNI_MAX_IMAGE_UPLOAD_BYTES){p.textContent='Choose JPG / PNG / WebP, maximum 20 MB';return;}
+    try{const base=await compressedJpeg(file,160,.6),img=new Image();img.alt='Photo preview';img.src='data:image/jpeg;base64,'+base;const note=document.createElement('small');note.textContent='Original kept in private Drive · '+(file.size/1024/1024).toFixed(2)+' MB · small preview only';p.replaceChildren(img,note);}catch(err){p.textContent=err.message;}
   });
   $('experienceList')?.addEventListener('click',e=>{
     const edit=e.target.closest('[data-life-edit]'),del=e.target.closest('[data-life-remove]');
