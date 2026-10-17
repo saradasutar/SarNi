@@ -6,7 +6,7 @@ SarNi's frontend is hosted directly on GitHub Pages. Google Apps Script is the *
 
 ## Current GitHub Pages frontend
 
-- Frontend: **v20.8.9** (`index.html` loads `app-v20-8-9.js`)
+- Frontend: **v20.8.10** (`index.html` loads `app-v20-8-10.js`)
 - Expected backend: **v3.17.30** — upload and deploy separately for original photos above 2 MB (verify against your active Apps Script deployment)
 - User interface: `styles.css`, `sarni-delight.css`, `sarni-delight.js`, and `sarni-entry-polish.css`
 - App installation: `manifest.webmanifest`
@@ -34,3 +34,9 @@ See [Deployment/verification details](./SARNI-20.8.8-RELEASE.md).
 ## v20.8.9 photo decoder and text clarity
 
 The frontend now reuses the selected photograph's thumbnail when saving, rather than attempting a second full-size image decode. If a browser cannot use `createImageBitmap`, it falls back to the standard image-element decoder. The preview explicitly says the original is **not yet saved** until Save Experience succeeds. Form text, buttons, table entries, and headings have been enlarged and made bolder on desktop and mobile while retaining accessible focus and responsive layouts. The existing backend v3.17.30 is unchanged.
+
+## v20.8.10 Life Experience editor
+
+You can format selected experience text as bold, italic, coloured or highlighted. Formatting is stored as restricted markup inside the existing authenticated Lesson field—no new Sheet columns or backend deployments are required. Older unformatted entries remain editable. Reminder text, search, and export use the readable plain text. Pasted material is converted to plain text, and unknown HTML tags/attributes are discarded before display. The editor uses browser rich-text commands (compatibility may differ across mobile keyboards), so test saving and reopening a short sample entry.
+
+**Photo upload note:** A remaining error `Choose an image of at most 2 MB` is returned by a still-outdated production Apps Script deployment, not the GitHub frontend. Confirm the production `/exec` JSON reports backend version `3.17.30`, and verify the deployment is running the updated `Code.gs` from the same project. The FE's expected version badge does not verify live backend version.

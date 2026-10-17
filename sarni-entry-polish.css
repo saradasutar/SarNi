@@ -140,3 +140,31 @@ html.sarni-personal-only :is(.side-nav,.mobile-bottom-nav,.mobile-nav,.mobile-mo
  html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm) label{font-size:15px}
  html.sarni-personal-only :is(.life-entry-form,#lifeExperienceForm,#expenseForm,#calendarEventForm,#diaryForm) :is(input,select,textarea){font-size:16px}
 }
+
+/* v20.8.10 Life Experiences: minimal accessible text formatting. */
+html.sarni-personal-only #lifeExperienceForm .sarni-rich-group{display:flex;flex-direction:column;gap:10px;min-width:0}
+html.sarni-personal-only #lifeExperienceForm .sarni-rich-group>label{font-size:16px;font-weight:850;color:#354469}
+html.sarni-personal-only .sarni-rich-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:linear-gradient(110deg,#f1efff,#edfaf7);border:1px solid #dedaf7;border-radius:15px;padding:10px}
+html.sarni-personal-only .sarni-rich-toolbar button{min-height:41px;min-width:44px;border:1px solid #c6c7e3;border-radius:11px;background:#fff;color:#424477;cursor:pointer;padding:8px 13px;font-size:16px;font-weight:850}
+html.sarni-personal-only .sarni-rich-toolbar button:hover{background:#e7e5ff}
+html.sarni-personal-only .sarni-rich-toolbar button:focus-visible{outline:3px solid #8c7bdb;outline-offset:2px}
+html.sarni-personal-only .sarni-rich-toolbar .sarni-rich-colour{display:inline-flex;align-items:center;justify-content:space-between;gap:7px;padding:5px 8px;min-height:41px;max-width:calc(50% - 4px);background:#fff;border:1px solid #d4d4ea;border-radius:11px;color:#4a537e;font-size:13px;font-weight:800;cursor:pointer}
+html.sarni-personal-only .sarni-rich-toolbar input[type="color"]{padding:0;min-width:32px;width:32px;height:29px;border:0;border-radius:6px;background:transparent;cursor:pointer}
+html.sarni-personal-only #experienceRichEditor{min-height:150px;max-height:46vh;overflow-y:auto;overflow-wrap:anywhere;white-space:pre-wrap;background:#fff;border:1.5px solid #d3d9e6;border-radius:15px;padding:15px 16px;font:650 17px/1.58 system-ui,-apple-system,"Segoe UI",sans-serif;color:#263b56;outline:0}
+html.sarni-personal-only #experienceRichEditor:focus{border-color:#8f7cdc;box-shadow:0 0 0 4px #8f7cdc20}
+html.sarni-personal-only #experienceRichEditor:empty::before{content:attr(data-placeholder);color:#7b879a;font-weight:500;pointer-events:none}
+html.sarni-personal-only #experienceRichEditor p{margin:0 0 .6em}
+html.sarni-personal-only #experienceRichEditor span[style*="background-color"],html.sarni-personal-only .sarni-life-lesson span[style*="background-color"]{padding:0 2px;border-radius:3px}
+html.sarni-personal-only .sarni-rich-source{display:none!important}
+html.sarni-personal-only .sarni-rich-help{color:#63718a;font-size:12.5px;line-height:1.48;font-weight:650}
+html.sarni-personal-only .sarni-life-lesson{font-size:16px;font-weight:550;line-height:1.65;overflow-wrap:anywhere;white-space:pre-wrap}
+html.sarni-personal-only .sarni-life-lesson p{margin:0 0 .7em}
+html.sarni-personal-only .sarni-life-backend-warning{display:block;margin:8px 0;padding:10px 12px;background:#fff4ee;border:1px solid #f1c6ad;border-radius:10px;color:#9b3f18;font-size:13px;font-weight:750}
+html.sarni-personal-only .sarni-life-backend-warning[hidden]{display:none!important}
+@media(max-width:640px){
+ html.sarni-personal-only .sarni-rich-toolbar{padding:8px;gap:6px}
+ html.sarni-personal-only .sarni-rich-toolbar button{padding:8px 10px;min-height:44px}
+ html.sarni-personal-only .sarni-rich-toolbar .sarni-rich-colour{font-size:12px;flex:1;max-width:none;min-width:124px}
+ html.sarni-personal-only #experienceRichEditor{font-size:17px;min-height:165px;padding:14px}
+}
+@media print{html.sarni-personal-only .sarni-rich-toolbar{display:none!important}}
