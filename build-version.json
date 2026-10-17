@@ -1,8 +1,8 @@
 {
-  "version": "20.8.10",
-  "frontend": "20.8.10",
+  "version": "20.8.11",
+  "frontend": "20.8.11",
   "backendExpected": "3.17.30",
-  "build": "20261018-20810-rich",
+  "build": "20261018-20811-photo-check",
   "hosting": "github-pages-direct-ui",
   "backendUpgradeRequiredForLargerPhotos": true
 }
