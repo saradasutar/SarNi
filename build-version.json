@@ -1,8 +1,8 @@
 {
-  "version": "20.8.8",
-  "frontend": "20.8.8",
+  "version": "20.8.9",
+  "frontend": "20.8.9",
   "backendExpected": "3.17.30",
-  "build": "20261018-20808-photo-entry",
+  "build": "20261018-20809-decode-font",
   "hosting": "github-pages-direct-ui",
   "backendUpgradeRequiredForLargerPhotos": true
 }
