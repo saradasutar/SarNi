@@ -954,7 +954,19 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
     <form id="lifeExperienceForm" autocomplete="off"><input type="hidden" name="id"/>
       <label>Title <input name="title" placeholder="Bengaluru airport — leave earlier" maxlength="160" required/></label>
       <div class="life-experience-two"><label>Topic<select name="topic"><option value="TRAVEL">Travel</option><option value="FAMILY">Family</option><option value="HEALTH">Health</option><option value="HOUSEHOLD">Household</option><option value="FINANCE">Finance</option><option value="LEARNING">Learning</option><option value="WORK">Work</option><option value="OTHER">Other</option></select></label><label>Who can see it?<select name="visibility"><option value="SHARED">Shared with spouse</option><option value="PRIVATE">Private to me</option></select></label></div>
-      <label>What I learnt / rule to remember<textarea name="lesson" rows="4" maxlength="7000" placeholder="When flying from Bengaluru, start for the airport at least five hours before departure…" required></textarea></label>
+      <div class="sarni-rich-group">
+  <label id="experienceRichLabel" for="experienceRichEditor">What I learnt / rule to remember</label>
+  <div class="sarni-rich-toolbar" role="toolbar" aria-label="Format your life experience">
+    <button type="button" data-life-format="bold" aria-label="Bold selected text" title="Bold (Ctrl+B)"><strong>B</strong></button>
+    <button type="button" data-life-format="italic" aria-label="Italic selected text" title="Italic (Ctrl+I)"><em>I</em></button>
+    <label class="sarni-rich-colour" title="Selected text colour">Text colour <input id="experienceTextColour" type="color" value="#3349a5" aria-label="Text colour for selected words"/></label>
+    <label class="sarni-rich-colour" title="Highlight selected words">Highlight <input id="experienceHighlightColour" type="color" value="#fff176" aria-label="Highlight colour for selected words"/></label>
+    <button type="button" data-life-format="removeFormat" aria-label="Clear selected text formatting">Clear</button>
+  </div>
+  <div id="experienceRichEditor" class="sarni-rich-editor" contenteditable="true" role="textbox" aria-labelledby="experienceRichLabel" aria-multiline="true" data-placeholder="Write your experience, select a few words and format them…"></div>
+  <textarea name="lesson" id="experienceLegacyLesson" class="sarni-rich-source" tabindex="-1" aria-hidden="true"></textarea>
+  <div class="sarni-rich-help">Select text to format · Only bold, italic, text colour and highlighting are saved · Maximum 7,000 characters including formatting</div>
+</div>
       <div class="life-experience-two"><label>Reminder for<select name="triggerKind"><option value="ANY">Matching keyword / situation</option><option value="FLIGHT">Air travel / flight</option><option value="TRAIN">Train travel</option><option value="ROAD">Road travel</option></select></label><label>Place (optional)<input name="location" placeholder="Bengaluru" maxlength="120"/></label></div>
       <div class="life-experience-two"><label>Departure city (optional)<input name="departureCity" placeholder="Bengaluru (flight starts here)" maxlength="120"/></label><label>Arrival city (optional)<input name="arrivalCity" placeholder="Delhi" maxlength="120"/></label></div>
 <label>Extra matching words (optional)<input name="keywords" placeholder="airport, flight, BLR" maxlength="400"/></label>
