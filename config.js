@@ -1,5 +1,5 @@
 window.PORTFOLIO_CONFIG = {
-  API_URL: 'https://script.google.com/macros/s/AKfycbxhbAH5YENkxqCwoqI6oSnOg9X0uImNHG5pbPLxhZcPXSWTKf8xMUzICisFwS9vCCvl/exec',
+  API_URL: 'https://script.google.com/macros/s/AKfycbyQtDpPMhVttQndvBXhnCHSarFBWS5_UiHMkopWS6eI5fbWQn-SJumB1_v5CIxvxHma/exec',
   APP_NAME: 'SarNi',
   CURRENCY: 'INR',
   REQUEST_TIMEOUT_MS: 60000,
