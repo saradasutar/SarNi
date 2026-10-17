@@ -2096,5 +2096,25 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});sync();
 })();
 </script>
+<!-- SarNi UI navigation guard: backend requests remain on Apps Script, pages remain on GitHub. -->
+<script id="sarni-github-navigation-guard">
+(function(){
+  'use strict';
+  const home='https://saradasutar.github.io/SarNi/';
+  // This only handles user-clicked navigation links; it does not intercept
+  // the hidden API transport (POST forms, scripts and backend polling).
+  document.addEventListener('click',function(event){
+    const anchor=event.target&&event.target.closest?event.target.closest('a[href]'):null;
+    if(!anchor)return;
+    let url;
+    try{url=new URL(anchor.href,location.href);}catch(_){return;}
+    const isWebApp=url.hostname==='script.google.com'&&/^\/macros\/s\/[^/]+\/exec$/.test(url.pathname);
+    const isDashboard=isWebApp&&(url.searchParams.get('app')==='1'||(!url.searchParams.has('action')&&!url.searchParams.has('callback')));
+    if(!isDashboard)return;
+    event.preventDefault();
+    window.location.assign(home);
+  },true);
+})();
+</script>
 </body>
 </html>
