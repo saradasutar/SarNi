@@ -6,7 +6,7 @@ SarNi's frontend is hosted directly on GitHub Pages. Google Apps Script is the *
 
 ## Current GitHub Pages frontend
 
-- Frontend: **v20.8.10** (`index.html` loads `app-v20-8-10.js`)
+- Frontend: **v20.8.11** (`index.html` loads `app-v20-8-11.js`)
 - Expected backend: **v3.17.30** — upload and deploy separately for original photos above 2 MB (verify against your active Apps Script deployment)
 - User interface: `styles.css`, `sarni-delight.css`, `sarni-delight.js`, and `sarni-entry-polish.css`
 - App installation: `manifest.webmanifest`
@@ -40,3 +40,10 @@ The frontend now reuses the selected photograph's thumbnail when saving, rather 
 You can format selected experience text as bold, italic, coloured or highlighted. Formatting is stored as restricted markup inside the existing authenticated Lesson field—no new Sheet columns or backend deployments are required. Older unformatted entries remain editable. Reminder text, search, and export use the readable plain text. Pasted material is converted to plain text, and unknown HTML tags/attributes are discarded before display. The editor uses browser rich-text commands (compatibility may differ across mobile keyboards), so test saving and reopening a short sample entry.
 
 **Photo upload note:** A remaining error `Choose an image of at most 2 MB` is returned by a still-outdated production Apps Script deployment, not the GitHub frontend. Confirm the production `/exec` JSON reports backend version `3.17.30`, and verify the deployment is running the updated `Code.gs` from the same project. The FE's expected version badge does not verify live backend version.
+
+## v20.8.11: accurate photo validation and backend status
+- SarNi now checks the real configured Apps Script backend version from within Life Experiences. Use the new **Check backend version** button, with no need to open the Apps Script editor.
+- Previous SarNi incorrectly interpreted `The original image or thumbnail is too large` as proof of the older 2 MB limit. That message also exists in backend 3.17.30, which can reject thumbnails over **14,500 decoded bytes**. Now the original error and actual version are differentiated.
+- Automatically generate an 84–100px JPEG thumbnail under **12,500 decoded bytes** before sending unchanged original bytes to Drive. The original remains untouched.
+- If confirmed backend 3.17.29 is connected and the original exceeds 2 MB, stop before transferring the large file and show the exact expected deployment fix.
+- Backend Code.gs is not modified by this frontend release. The actual live backend version must be checked from the app and an original above 2 MB test saved successfully before upload support is considered verified.
