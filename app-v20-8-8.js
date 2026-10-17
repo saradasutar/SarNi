@@ -8262,7 +8262,7 @@ async function adminUploadPhoto(){
     const imageBase64=originalDataUrl.split(',')[1]||'';
     if(imageBase64.length<300||imageBase64.length>4*Math.ceil(SARNI_MAX_IMAGE_UPLOAD_BYTES/3)||!/^[A-Za-z0-9+/=]+$/.test(imageBase64)||thumbnailBase64.length>23000)throw new Error('Unsupported photo or exceeds the 20 MB transfer ceiling.');
     if(status)status.textContent='Saving in private Google Drive…';
-    const r=await api('adminSaveUserPhoto',{username,imageBase64,thumbnailBase64},{retry:false,timeoutMs:60000});
+    const r=await api('adminSaveUserPhoto',{username,imageBase64,thumbnailBase64},{retry:false,timeoutMs:120000});
     if(!r?.ok)throw new Error(r?.message||'Photo upload failed');
     if($('photoFileInput'))$('photoFileInput').value='';
     await loadPeopleDirectory(true);if(status)status.textContent='✓ Saved. Profile thumbnail updated.';
@@ -8767,7 +8767,7 @@ async function saveLifeExperienceForm(event){
     if(file){if(file.size>SARNI_MAX_IMAGE_UPLOAD_BYTES)throw Error('Original exceeds 20 MB. Choose a smaller file for Apps Script upload.');
       const [raw,thumbnail]=await Promise.all([sarLifeReadPhoto(file),compressedJpeg(file,112,.52)]);
       if(thumbnail.length>19800)throw Error('Thumbnail too large; choose a smaller image.');experience.photoBase64=raw;experience.thumbnailBase64=thumbnail;}
-    const r=await api('saveLifeExperience',{experience},{retry:false,timeoutMs:60000});
+    const r=await api('saveLifeExperience',{experience},{retry:false,timeoutMs:120000});
     if(!r?.ok)throw Error(r?.message||'Save failed');applyBootstrap(r.data);saveCache(r.data);sarLifeReset();await loadLifeExperiences();status.textContent='✓ Experience saved in SarNi.';toast('Life Experience saved.','success');
   }catch(e){status.textContent=e.message||'Unable to save';toast(e.message||'Unable to save','error');}finally{btn.disabled=false;}
 }
