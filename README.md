@@ -6,7 +6,7 @@ SarNi's frontend is hosted directly on GitHub Pages. Google Apps Script is the *
 
 ## Current GitHub Pages frontend
 
-- Frontend: **v20.8.8** (`index.html` loads `app-v20-8-8.js`)
+- Frontend: **v20.8.9** (`index.html` loads `app-v20-8-9.js`)
 - Expected backend: **v3.17.30** — upload and deploy separately for original photos above 2 MB (verify against your active Apps Script deployment)
 - User interface: `styles.css`, `sarni-delight.css`, `sarni-delight.js`, and `sarni-entry-polish.css`
 - App installation: `manifest.webmanifest`
@@ -30,3 +30,7 @@ Legacy `IndexApp.html` and earlier versioned assets have been retained for compa
 - **Before large-image uploads** update the EXISTING Google Apps Script project's Code.gs from the matching v3.17.30 text file after backing up, then publish a NEW VERSION of the existing Web app deployment. Do not create an extra duplicate .gs file or run `setupSystem()`. Until then, uploads above 2 MB can still fail on the old backend.
 
 See [Deployment/verification details](./SARNI-20.8.8-RELEASE.md).
+
+## v20.8.9 photo decoder and text clarity
+
+The frontend now reuses the selected photograph's thumbnail when saving, rather than attempting a second full-size image decode. If a browser cannot use `createImageBitmap`, it falls back to the standard image-element decoder. The preview explicitly says the original is **not yet saved** until Save Experience succeeds. Form text, buttons, table entries, and headings have been enlarged and made bolder on desktop and mobile while retaining accessible focus and responsive layouts. The existing backend v3.17.30 is unchanged.
