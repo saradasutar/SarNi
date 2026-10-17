@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#142954">
+<title>SarNi · Backend Connection Check</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:20px;min-height:100dvh;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#20384a;background:linear-gradient(145deg,#edf8f6,#f3f6fe)}
+main{max-width:730px;margin:3vh auto;background:#fff;border-radius:22px;border:1px solid #dfe9ed;box-shadow:0 14px 46px #14394d13;padding:clamp(20px,4vw,36px)}
+h1{font-size:clamp(24px,5vw,32px);line-height:1.14;letter-spacing:-.035em;margin:4px 0 10px}h2{font-size:18px;margin:25px 0 8px}p,li{color:#5a6c7d}.eyebrow{font-size:11px;color:#0c7b74;font-weight:850;letter-spacing:.17em}
+.panel{background:#f3f7fb;border:1px solid #dee8ef;padding:16px;border-radius:13px;margin:20px 0}.panel.good{background:#eefaf4;border-color:#b1dfc3}.panel.bad{background:#fff6f4;border-color:#eebbb8}
+strong{color:#23405a}a{color:#126c90}button,.primary{min-height:43px;padding:10px 17px;border-radius:11px;font:inherit;font-weight:750;cursor:pointer}button{border:0;background:#0b736b;color:white}.primary{display:inline-flex;text-decoration:none;background:#edeafe;color:#493aa3}button:disabled{opacity:.65}
+.actions{display:flex;gap:10px;flex-wrap:wrap}.small{font-size:13px}.state{font-weight:800;color:#50647b}.state.good{color:#14714d}.state.bad{color:#aa3d44}.checks{margin:0;padding-left:22px}li{margin:9px 0}
+#endpoint{overflow-wrap:anywhere;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#526679}
+code{font-size:.92em;background:#edf1f5;padding:2px 4px;border-radius:4px}
+</style>
+<script src="./config.js"></script>
+</head>
+<body>
+<main>
+<p class="eyebrow">SARNI · SAFE DIAGNOSTICS</p>
+<h1>Check SarNi backend connection</h1>
+<p>This checks the same public Apps Script <em>polling endpoint</em> your sign-in uses, without sending a username, password, token or private records.</p>
+<div class="panel" id="resultPanel">
+<strong id="resultHeadline">Ready to check</strong>
+<p class="state" id="resultMessage" role="status" aria-live="polite">Not tested yet.</p>
+</div>
+<div class="actions"><button type="button" id="testButton">Run connection check</button><a class="primary" href="./">Back to SarNi</a></div>
+<h2>Verify the backend identity</h2>
+<p>A successful polling test only proves that the endpoint responds correctly. It does not prove that the backend is the <em>right SarNi deployment</em> or that login will succeed.</p>
+<p><a id="openBackend" href="#" target="_blank" rel="noopener noreferrer">Open the configured Apps Script endpoint ↗</a>. It should show JSON similar to <code>{"ok":true,"app":"SarNi Personal Finance","version":"3.17.29"}</code>. Do not enter your password on a page reached through this check.</p>
+<p class="small">Configured endpoint: <span id="endpoint">Reading configuration…</span></p>
+<h2>If the check fails</h2>
+<ol class="checks">
+<li><strong>Google sign-in, permission denied or 404:</strong> Open the <em>SarNi</em> Apps Script project. Check <em>Deploy → Manage deployments</em>, its access setting, and whether the URL ends in <code>/exec</code>.</li>
+<li><strong>Family Dashboard or another application:</strong> The frontend has the wrong deployment URL. Use the correct SarNi <code>/exec</code> URL and update both <code>index.html</code> and <code>config.js</code>.</li>
+<li><strong>SarNi JSON, but wrong version:</strong> Save the backend code and deploy a <em>new version</em> of the existing web app. Do not run <code>setupSystem()</code>, reset passwords or create a new database.</li>
+<li><strong>Correct SarNi JSON but polling still fails:</strong> Check whether the deployed code includes <code>pollResultOutput_</code>, and test Chrome Incognito to exclude browser blocking. The working editor code and the deployed version can differ.</li>
+</ol>
+<p class="small">This page cannot change your deployment or verify your password. If it fails, report the result and what the Apps Script endpoint displays. Do not share passwords, session tokens or Sheet contents.</p>
+</main>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const endpoint=String(window.PORTFOLIO_CONFIG?.API_URL||'').trim();
+const valid=/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint);
+$('endpoint').textContent=valid?endpoint:'Missing or invalid SarNi URL in config.js';
+if(valid){$('openBackend').href=endpoint;}else{$('openBackend').removeAttribute('href');}
+function state(kind,headline,message){$('resultPanel').className='panel '+kind;$('resultHeadline').textContent=headline;$('resultMessage').textContent=message;$('resultMessage').className='state '+kind;}
+function check(){
+ if(!valid){state('bad','Configuration missing','Set the correct /exec URL in config.js and in the GitHub Pages index.html.');return;}
+ const button=$('testButton');button.disabled=true;state('','Checking connection…','Waiting for a password-free Apps Script polling response (up to 15 seconds).');
+ const cb='__sarniProbe_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
+ const req='mfreq_diag_'+Date.now()+'_'+Math.random().toString(36).slice(2,14);
+ const src=new URL(endpoint);src.searchParams.set('action','pollResult');src.searchParams.set('requestId',req);src.searchParams.set('callback',cb);src.searchParams.set('_',String(Date.now()));
+ let finished=false;const script=document.createElement('script');script.async=true;script.src=src.href;
+ function done(ok,message){if(finished)return;finished=true;clearTimeout(timer);try{script.remove();}catch{}try{delete window[cb];}catch{window[cb]=undefined;}button.disabled=false;state(ok?'good':'bad',ok?'Polling endpoint reachable':'Polling endpoint did not respond',message);}
+ window[cb]=value=>{
+  if(value?.__myfinanceAsyncResult!==true||value.requestId!==req){done(false,'The script returned an unexpected response. Verify that this is the SarNi Apps Script deployment.');return;}
+  if(value.ready===false){done(true,'The SarNi-style polling callback was received. Next, open the endpoint above and verify its app name and actual version.');return;}
+  done(false,'The backend responded with an unexpected completed request or error: '+String(value?.payload?.code||'UNKNOWN_RESPONSE')+'. Check the deployed backend version.');
+ };
+ script.onerror=()=>done(false,'The browser could not load the polling endpoint as a script. Check deployment URL, permissions and whether it is accessible from this Chrome browser.');
+ const timer=setTimeout(()=>done(false,'No callback received within 15 seconds. Check if the deployed script handles action=pollResult and allows public web-app access.'),15000);
+ document.head.appendChild(script);
+}
+$('testButton').addEventListener('click',check);
+})();
+</script>
+</body>
+</html>
