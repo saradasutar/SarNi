@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#142954">
+<title>SarNi · Site Check</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(145deg,#f1faf8,#f8f6ff);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;color:#173349;padding:22px}main{max-width:760px;margin:4vh auto;background:white;border:1px solid #e1e8ef;border-radius:23px;box-shadow:0 14px 45px #183c4912;padding:clamp(20px,4vw,38px)}.eyebrow{text-transform:uppercase;letter-spacing:.17em;color:#078377;font-size:11px;font-weight:850}h1{font-size:clamp(25px,4.2vw,34px);line-height:1.1;margin:5px 0 12px}h2{font-size:17px;margin:22px 0 8px}p{color:#536478}ul{list-style:none;padding:0}li{display:flex;justify-content:space-between;gap:12px;padding:12px 1px;border-bottom:1px solid #e8eef2;flex-wrap:wrap}li strong{font-size:14px}.status{font-size:13px;font-weight:750;color:#536478}.status.ok{color:#117c59}.status.fail{color:#b33540}a,button{display:inline-flex;align-items:center;justify-content:center;border-radius:11px;min-height:43px;padding:9px 16px;font:inherit;font-weight:750;text-decoration:none;cursor:pointer}a.primary{background:#08786e;color:white}button{border:1px solid #bad2cd;background:#eef9f5;color:#17645d}.actions{display:flex;gap:9px;flex-wrap:wrap}.note{background:#f4f7ff;border-left:3px solid #7064d9;padding:14px 16px;border-radius:8px;color:#39456c}code{overflow-wrap:anywhere;color:#35426a}#summary{min-height:1.5em}
+</style>
+</head>
+<body>
+<main>
+<div class="eyebrow">SarNi / Troubleshooting</div><h1>GitHub Pages site check</h1>
+<p>Checks only publicly hosted frontend files. It does not access personal data, passwords, Google Sheets or the Apps Script backend.</p>
+<p><strong>Frontend:</strong> v20.8.7 <span aria-hidden="true">·</span> <strong>Expected backend:</strong> v3.17.29 (not verified here)</p>
+<h2>Frontend assets</h2><ul id="checks" aria-live="polite">
+<li data-file="./index.html"><strong>Website entry</strong><span class="status">Not checked</span></li>
+<li data-file="./styles.css"><strong>Main styles</strong><span class="status">Not checked</span></li>
+<li data-file="./app-v20-8-7.js"><strong>Dashboard application</strong><span class="status">Not checked</span></li>
+<li data-file="./sarni-delight.css"><strong>Visual enhancement</strong><span class="status">Not checked</span></li>
+<li data-file="./sarni-delight.js"><strong>UI enhancement</strong><span class="status">Not checked</span></li>
+<li data-file="./manifest.webmanifest"><strong>Mobile installation manifest</strong><span class="status">Not checked</span></li>
+</ul>
+<p id="summary" role="status"></p>
+<div class="actions"><button id="recheck" type="button">Recheck files</button><a class="primary" href="./">Open SarNi dashboard</a></div>
+<h2>Important distinction</h2>
+<div class="note">The address bar should remain on this site's GitHub Pages URL (or its future custom domain). Google Apps Script is the backend for requests; it is not the website to open. A passing frontend check does <strong>not</strong> prove login, saving, or backend deployment works.</div>
+<p>For help, check <a href="https://github.com/saradasutar/SarNi/blob/main/README.md" target="_blank" rel="noopener noreferrer">repository instructions</a>. The source files are public; never upload credentials or private records to GitHub.</p>
+</main>
+<script>
+(async function(){
+'use strict';
+const items=Array.from(document.querySelectorAll('[data-file]'));
+async function run(){
+ document.getElementById('recheck').disabled=true;
+ let passed=0;
+ await Promise.all(items.map(async item=>{
+  const status=item.querySelector('.status');
+  status.className='status';status.textContent='Checking…';
+  try{
+   const url=new URL(item.dataset.file,location.href);url.searchParams.set('health_check',String(Date.now()));
+   const response=await fetch(url,{method:'HEAD',cache:'no-store',credentials:'omit'});
+   if(!response.ok)throw Error('HTTP '+response.status);
+   status.textContent='Available';status.classList.add('ok');passed++;
+  }catch(e){status.textContent='Unavailable ('+(e.message||'network error')+')';status.classList.add('fail');}
+ }));
+ document.getElementById('summary').textContent=passed===items.length?'All '+passed+' public frontend files responded. Test login and saving separately.':passed+' of '+items.length+' public frontend files responded. Check failed files in GitHub.';
+ document.getElementById('recheck').disabled=false;
+}
+document.getElementById('recheck').addEventListener('click',run);
+run();
+})();
+</script>
+</body>
+</html>

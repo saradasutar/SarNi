@@ -7,7 +7,7 @@
 <meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
 <meta content="no-cache" http-equiv="Pragma"/>
 <meta content="0" http-equiv="Expires"/>
-<meta content="#eef5ff" name="theme-color"/>
+<!-- The single theme-color meta below follows the installed PWA theme. -->
 <meta content="Private family finance, expenses, diary and planning dashboard" name="description"/>
 <meta content="20261017-20807-loginfix-delight" name="myfinance-build"/>
 <meta content="light dark" name="color-scheme"/>
@@ -26,12 +26,12 @@
       window.__SAR_NI_ASSETS__[kind]=false;
       document.documentElement.classList.add('sarni-asset-error');
       var box=document.getElementById('sarniAssetStatus');
-      if(box)box.innerHTML='<strong>Dashboard file loading failed.</strong><br>Upload the files from the SarNi v20.7.0 package to GitHub, wait two minutes, then reload.';
+      if(box)box.innerHTML='<strong>Dashboard files could not be loaded.</strong><br>Check GitHub Pages assets for SarNi FE v20.8.7, then <a href="./?reload=1">retry here</a>. Keep using this website, not the Apps Script /exec link.';
     };
     setTimeout(function(){
       if(document.documentElement.classList.contains('sarni-assets-ready'))return;
       var box=document.getElementById('sarniAssetStatus');
-      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Please confirm the SarNi v20.7.0 GitHub files were uploaded.';
+      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Check that styles.css and app-v20-8-7.js are published. <a href="./?reload=1">Reload SarNi</a> or open <a href="./health.html">Site check</a>.';
     },12000);
   </script>
 <title>SarNi · Personal Life Centre</title>
@@ -123,7 +123,8 @@ html.sarni-personal-only .gpf-metric span{font-size:11px;color:#64748b}
 html.sarni-personal-only .gpf-metric strong{color:#1e3558;font-size:16px}
 html.sarni-personal-only .gpf-empty{background:#f8fbff;border:1px dashed #9fb9d9;padding:22px;border-radius:14px;color:#51617d}
 </style>
-<link crossorigin="" href="https://saradasutar.github.io" rel="preconnect"/>
+<link href="https://script.google.com" rel="preconnect" crossorigin="anonymous"/>
+<link href="https://script.google.com" rel="dns-prefetch"/>
 <link as="style" href="./styles.css?v=20261017-20807-loginfix-delight" rel="preload"/>
 <link as="script" href="./app-v20-8-7.js?v=20261017-20807-loginfix-delight" rel="preload"/>
 <link href="./styles.css?v=20261017-20807-loginfix-delight" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
@@ -2104,7 +2105,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script id="sarni-github-navigation-guard">
 (function(){
   'use strict';
-  const home='https://saradasutar.github.io/SarNi/';
+  const home=new URL('./',window.location.href).href; // Preserve GitHub Pages or an eventual custom domain.
   document.addEventListener('click',function(event){
     const link=event.target?.closest?.('a[href]');
     if(!link || event.defaultPrevented)return;
