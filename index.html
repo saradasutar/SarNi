@@ -9,11 +9,11 @@
 <meta content="0" http-equiv="Expires"/>
 <meta content="#eef5ff" name="theme-color"/>
 <meta content="Private family finance, expenses, diary and planning dashboard" name="description"/>
-<meta content="20261017-20806-delight-live" name="myfinance-build"/>
+<meta content="20261017-20900-delight" name="myfinance-build"/>
 <meta content="light dark" name="color-scheme"/>
 <script>
-    window.__MYFINANCE_PAGE_BUILD__='20261016-20806-github-direct-20261016';
-    window.__MYFINANCE_NATIVE__=false; // GitHub Pages direct frontend; Apps Script handles authenticated API calls.
+    window.__MYFINANCE_PAGE_BUILD__='20261017-20900-delight';
+    window.__MYFINANCE_NATIVE__=false; // Frontend stays on GitHub Pages; authenticated backend runs separately.
     try { localStorage.setItem('portfolio_overview_default','PERSONAL'); } catch(e) {}
     window.__SAR_NI_ASSETS__={css:false,app:false};
     window.sarNiAssetLoaded=function(kind){
@@ -39,6 +39,7 @@
 <meta name="application-name" content="SarNi"/>
 <meta name="theme-color" content="#142954"/>
 <meta name="sarni-hosting" content="github-pages-direct-ui"/>
+<meta name="sarni-theme-build" content="delight-1.0"/>
 <link href="./sarni-life-icon.svg?v=20261015-life-brand" rel="icon" type="image/svg+xml"/>
 <style>
 /* Personal-only SarNi: investment management is hosted exclusively in Analysis. */
@@ -123,9 +124,9 @@ html.sarni-personal-only .gpf-metric strong{color:#1e3558;font-size:16px}
 html.sarni-personal-only .gpf-empty{background:#f8fbff;border:1px dashed #9fb9d9;padding:22px;border-radius:14px;color:#51617d}
 </style>
 <link crossorigin="" href="https://saradasutar.github.io" rel="preconnect"/>
-<link as="style" href="./styles.css?v=20261016-20806-github-direct-20261016" rel="preload"/>
-<link as="script" href="./app-v20-8-6.js?v=20261016-20806-github-direct-20261016" rel="preload"/>
-<link href="./styles.css?v=20261016-20806-github-direct-20261016" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
+<link as="style" href="./styles.css?v=20261017-20900-delight" rel="preload"/>
+<link as="script" href="./app-v20-8-6.js?v=20261017-20900-delight" rel="preload"/>
+<link href="./styles.css?v=20261017-20900-delight" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
 <style id="sarniOdiaStyles">
 .sarni-odia-settings{margin:12px 0 16px;border:1px solid #e8cae5;border-radius:15px;padding:15px;background:linear-gradient(140deg,#fff9ff,#fffdfb);min-width:0}
 .sarni-odia-settings legend{padding:0 8px;color:#743c78;font-weight:850;font-size:14px}
@@ -423,12 +424,13 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
  .sarni-note-history-link{min-height:36px}
 }
 </style>
-<link rel="stylesheet" href="./sarni-delight.css?v=20261017-111" media="all"/>
+<link rel="stylesheet" href="./sarni-delight.css?v=20261017" media="all">
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
 <div aria-live="polite" id="sarniAssetStatus" role="status"><div><strong>Opening SarNi securely…</strong><br/>Loading the lightweight dashboard.</div></div>
 <noscript>This dashboard requires JavaScript.</noscript>
+<!-- Static GitHub Pages frontend; no embedded Apps Script iframe or automatic redirect. -->
 <section class="login-view" id="loginView">
 <div class="login-shell">
 <div class="brand-panel">
@@ -1664,7 +1666,7 @@ ICICI" rows="6"></textarea><small class="field-help">These choices appear only w
       APP_NAME:'SarNi',CURRENCY:'INR',REQUEST_TIMEOUT_MS:60000,OWNERS:['Sarada','Niharika']
     };
   </script>
-<script defer="" onerror="sarNiAssetFailed('app')" onload="sarNiAssetLoaded('app')" src="./app-v20-8-6.js?v=20261016-20806-github-direct-20261016"></script>
+<script defer="" onerror="sarNiAssetFailed('app')" onload="sarNiAssetLoaded('app')" src="./app-v20-8-6.js?v=20261017-20900-delight"></script>
 <script>
 /* SarNi Odia Calendar v20.8.0 — optional companion to app-v20-7-0.js.
  * All festival and recurrence dates are calculated on the authenticated backend.
@@ -2097,26 +2099,25 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});sync();
 })();
 </script>
-<!-- SarNi UI navigation guard: backend requests remain on Apps Script, pages remain on GitHub. -->
+<script src="./sarni-delight.js?v=20261017" defer></script>
+<!-- SarNi navigation guard: keep dashboard UI on GitHub Pages. API requests still use Apps Script. -->
 <script id="sarni-github-navigation-guard">
 (function(){
   'use strict';
   const home='https://saradasutar.github.io/SarNi/';
-  // This only handles user-clicked navigation links; it does not intercept
-  // the hidden API transport (POST forms, scripts and backend polling).
   document.addEventListener('click',function(event){
-    const anchor=event.target&&event.target.closest?event.target.closest('a[href]'):null;
-    if(!anchor)return;
+    const link=event.target?.closest?.('a[href]');
+    if(!link || event.defaultPrevented)return;
     let url;
-    try{url=new URL(anchor.href,location.href);}catch(_){return;}
-    const isWebApp=url.hostname==='script.google.com'&&/^\/macros\/s\/[^/]+\/exec$/.test(url.pathname);
-    const isDashboard=isWebApp&&(url.searchParams.get('app')==='1'||(!url.searchParams.has('action')&&!url.searchParams.has('callback')));
+    try{url=new URL(link.href,location.href);}catch(_){return;}
+    const isGoogleApp=url.hostname==='script.google.com' && /^\/macros\/s\/[^/]+\/exec$/.test(url.pathname);
+    if(!isGoogleApp)return;
+    const isDashboard=(url.searchParams.get('app')==='1'||(!url.searchParams.has('action')&&!url.searchParams.has('callback')));
     if(!isDashboard)return;
     event.preventDefault();
     window.location.assign(home);
   },true);
 })();
 </script>
-<script defer src="./sarni-delight.js?v=20261017-111"></script>
 </body>
 </html>

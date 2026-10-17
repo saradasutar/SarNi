@@ -1,0 +1,16 @@
+SARNI GITHUB SITE — INSTALL THESE 3 FILES ONLY
+
+1. Back up current index.html at https://github.com/saradasutar/SarNi
+2. Upload/replace GitHub-Pages/index.html
+3. Upload GitHub-Pages/sarni-delight.css
+4. Upload GitHub-Pages/sarni-delight.js
+5. Verify app-v20-8-6.js, styles.css and manifest.webmanifest already exist in your repository.
+6. Publish GitHub Pages, then open https://saradasutar.github.io/SarNi/
+7. Verify address bar stays on saradasutar.github.io/SarNi/ for login, Diary, Quick Diary and saving.
+8. Test with a normal user and administrator.
+
+IMPORTANT: Do not put index.html inside Apps Script; it is the GitHub Pages front end.
+Apps Script remains the background backend, using the already configured /exec URL.
+Do not copy Code-cleaned-OPTIONAL.gs.txt until you can test the full backend on a backup.
+
+BACKUP: Backups/index-before-delight.html, or roll back using GitHub commit history.

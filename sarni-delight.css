@@ -1,73 +1,219 @@
-/* SarNi Delight v1.1 — additive premium layer. Core styles and backend remain unchanged. */
-:root.sarni-delight-ui{--delight-ink:#172b41;--delight-muted:#52677b;--delight-teal:#087e78;--delight-paper:#f5f8fa;--delight-line:#e3eaf0;--delight-shadow:0 9px 30px rgba(22,48,71,.055)}
-html.sarni-delight-ui body{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif!important;color:var(--delight-ink);background:var(--delight-paper)!important;-webkit-font-smoothing:antialiased}
+/* SarNi Delight v1.0 — visual layer only; no data, login, or backend modifications.
+   The original styles.css and app-v20-8-6.js must remain loaded.
+   No web fonts, raster media or external UI dependencies. */
+:root.sarni-delight-ui{
+ --delight-ink:#172b41;--delight-muted:#60748a;
+ --delight-teal:#087e78;--delight-mint:#d8f5e9;
+ --delight-blue:#4c64bb;--delight-lilac:#6956cd;
+ --delight-paper:#f5f8fa;--delight-outline:#e3eaf0;
+ --delight-shadow:0 9px 30px rgba(22,48,71,.055);
+}
+html.sarni-delight-ui body{
+ font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif!important;
+ color:var(--delight-ink);background:var(--delight-paper)!important;
+ -webkit-font-smoothing:antialiased;
+}
 html.sarni-delight-ui .app-view{background:var(--delight-paper)!important}
-html.sarni-delight-ui :is(button,a,input,select,textarea):focus-visible{outline:3px solid #69cdb7!important;outline-offset:3px!important}
+html.sarni-delight-ui :is(button,a,input,select,textarea):focus-visible{
+ outline:3px solid #69cdb7!important;outline-offset:3px!important;
+}
 html.sarni-delight-ui :is(.sidebar,.topbar,.main-content){min-width:0}
+/* Sidebar retains accessible standalone Diary and Quick Diary composer. */
 @media(min-width:861px){
-html.sarni-delight-ui .sidebar{background:radial-gradient(circle at 20% -15%,rgba(33,169,157,.18),transparent 45%),linear-gradient(176deg,#10283f,#13233b 55%,#171c36)!important;border-right:1px solid rgba(255,255,255,.1)!important;box-shadow:10px 0 35px rgba(23,44,66,.08)!important}
-html.sarni-delight-ui .side-brand{border-bottom:1px solid rgba(255,255,255,.12)!important;padding-bottom:18px!important}
-html.sarni-delight-ui .side-brand strong{color:#fff;font-size:18px;letter-spacing:-.5px}
-html.sarni-delight-ui .side-brand span{color:#a5c1d0!important;font-size:10px!important;letter-spacing:.12em}
-html.sarni-delight-ui .sarni-sidebar-label{color:#9ebaca!important;letter-spacing:.15em!important;font-size:10px!important}
-html.sarni-delight-ui .side-nav.sarni-sidebar-primary .nav-item{color:#cad9e5!important;border:1px solid transparent!important;border-radius:13px!important;min-height:45px!important;transition:background-color .17s,transform .17s,border-color .17s!important}
-html.sarni-delight-ui .side-nav.sarni-sidebar-primary .nav-item:hover{background:rgba(112,229,204,.1)!important;border-color:rgba(160,232,220,.18)!important;color:#fff!important;transform:translateX(2px)}
-html.sarni-delight-ui .side-nav.sarni-sidebar-primary .nav-item.active{background:linear-gradient(104deg,#116c74,#437eaa)!important;color:#fff!important;border-color:rgba(167,238,226,.2)!important;box-shadow:0 8px 22px rgba(2,18,39,.16)!important}
-html.sarni-delight-ui .sarni-sidebar-compose-toggle{border-radius:13px!important;background:rgba(33,181,159,.1)!important;border-color:rgba(126,223,211,.27)!important;color:#e3fffa!important;min-height:42px!important}
-html.sarni-delight-ui .admin-security-shortcut{background:rgba(255,255,255,.07)!important;border-color:rgba(255,255,255,.12)!important;color:#f3f6ff!important;border-radius:13px!important}}
+ html.sarni-delight-ui .sidebar{
+  background:radial-gradient(circle at 20% -15%,rgba(33,169,157,.18),transparent 45%),linear-gradient(176deg,#10283f 0%,#13233b 55%,#171c36 100%)!important;
+  border-right:1px solid rgba(255,255,255,.1)!important;
+  box-shadow:10px 0 35px rgba(23,44,66,.08)!important;
+ }
+ html.sarni-delight-ui .side-brand{border-bottom:1px solid rgba(255,255,255,.12)!important;padding-bottom:18px!important}
+ html.sarni-delight-ui .side-brand strong{color:#fff;font-size:18px;letter-spacing:-.5px}
+ html.sarni-delight-ui .side-brand span{color:#a5c1d0!important;font-size:10px!important;letter-spacing:.12em}
+ html.sarni-delight-ui .sarni-sidebar-label{color:#90abbd!important;letter-spacing:.17em!important;font-size:10px!important}
+ html.sarni-delight-ui .side-nav.sarni-sidebar-primary .nav-item{
+  color:#cad9e5!important;border:1px solid transparent!important;border-radius:13px!important;
+  min-height:45px!important;transition:background-color .17s ease,transform .17s ease,border-color .17s ease!important;
+ }
+ html.sarni-delight-ui .side-nav.sarni-sidebar-primary .nav-item:hover{
+  background:rgba(112,229,204,.1)!important;border-color:rgba(160,232,220,.18)!important;color:#fff!important;transform:translateX(2px);
+ }
+ html.sarni-delight-ui .side-nav.sarni-sidebar-primary .nav-item.active{
+  background:linear-gradient(104deg,#116c74,#437eaa)!important;color:white!important;
+  border-color:rgba(167,238,226,.2)!important;box-shadow:0 8px 22px rgba(2,18,39,.16)!important;
+ }
+ html.sarni-delight-ui .sarni-sidebar-compose-toggle{
+  border-radius:13px!important;background:rgba(33,181,159,.1)!important;border-color:rgba(126,223,211,.27)!important;
+  color:#e3fffa!important;min-height:42px!important;
+ }
+ html.sarni-delight-ui .admin-security-shortcut{
+  background:rgba(255,255,255,.07)!important;border-color:rgba(255,255,255,.12)!important;color:#f3f6ff!important;
+  border-radius:13px!important;
+ }
+}
+/* Compact glass header without adding expensive blur to scrolling sections. */
 html.sarni-delight-ui .main-content{background:transparent!important}
-html.sarni-delight-ui .topbar{background:rgba(255,255,255,.96)!important;border:1px solid #e7edf4!important;border-radius:18px!important;box-shadow:0 5px 26px rgba(16,43,65,.045)!important;padding:13px clamp(12px,2vw,25px)!important}
+html.sarni-delight-ui .topbar{
+ background:rgba(255,255,255,.96)!important;border:1px solid #e7edf4!important;
+ border-radius:18px!important;box-shadow:0 5px 26px rgba(16,43,65,.045)!important;
+ padding:13px clamp(12px,2vw,25px)!important;
+}
 html.sarni-delight-ui .topbar h1{font-weight:850!important;letter-spacing:-.035em!important;color:var(--delight-ink)!important}
 html.sarni-delight-ui .topbar .eyebrow{color:var(--delight-teal)!important;font-weight:850!important}
-html.sarni-delight-ui :is(.command-palette-button,.dashboard-version-chip){border-radius:11px!important;border-color:#e2eaf0!important}
+html.sarni-delight-ui .command-palette-button,
+html.sarni-delight-ui .topbar .display-preferences,
+html.sarni-delight-ui .dashboard-version-chip{
+ border-radius:11px!important;border-color:#e2eaf0!important;
+}
+/* Strong, high-quality hero is CSS only, avoiding background-image downloads. */
 html.sarni-delight-ui .sarni-focus-shell{margin-top:12px!important}
-html.sarni-delight-ui .sarni-focus-hero{position:relative!important;isolation:isolate!important;overflow:hidden!important;padding:clamp(22px,2.8vw,37px)!important;background:radial-gradient(circle at 94% 8%,rgba(115,199,191,.21),transparent 34%),radial-gradient(circle at 8% 100%,rgba(176,165,247,.21),transparent 44%),linear-gradient(110deg,#fbfffe,#f2fcf8 47%,#f7f5ff)!important;border:1px solid #d6e8e4!important;border-radius:26px!important;box-shadow:0 20px 45px rgba(24,64,73,.07)!important;min-height:172px!important}
-html.sarni-delight-ui .sarni-focus-hero::after{content:""!important;position:absolute!important;z-index:-1!important;right:-57px!important;top:-118px!important;width:270px!important;height:270px!important;border:33px solid rgba(64,157,147,.075)!important;border-radius:50%!important;pointer-events:none!important}
-html.sarni-delight-ui .sarni-focus-kicker{color:#077b79!important;font-weight:950!important;letter-spacing:.14em!important}
-html.sarni-delight-ui #sarniFocusGreeting{color:#17374a!important;font-size:clamp(27px,3vw,39px)!important;line-height:1.11!important;letter-spacing:-.052em!important;font-weight:850!important}
+html.sarni-delight-ui .sarni-focus-hero{
+ position:relative!important;isolation:isolate!important;overflow:hidden!important;
+ padding:clamp(22px,2.8vw,37px)!important;
+ background:
+   radial-gradient(circle at 94% 8%,rgba(115,199,191,.21) 0,transparent 34%),
+   radial-gradient(circle at 8% 100%,rgba(176,165,247,.21) 0,transparent 44%),
+   linear-gradient(110deg,#fbfffe 0%,#f2fcf8 47%,#f7f5ff 100%)!important;
+ border:1px solid #d6e8e4!important;border-radius:26px!important;
+ box-shadow:0 20px 45px rgba(24,64,73,.07)!important;
+ min-height:172px!important;
+}
+html.sarni-delight-ui .sarni-focus-hero::after{
+ content:""!important;position:absolute!important;z-index:-1!important;
+ right:-57px!important;top:-118px!important;width:270px!important;height:270px!important;border:33px solid rgba(64,157,147,.075)!important;
+ border-radius:50%!important;pointer-events:none!important;
+}
+html.sarni-delight-ui .sarni-focus-kicker{
+ color:#077b79!important;font-weight:950!important;letter-spacing:.14em!important;
+}
+html.sarni-delight-ui #sarniFocusGreeting{
+ color:#17374a!important;font-size:clamp(27px,3vw,39px)!important;
+ line-height:1.11!important;letter-spacing:-.052em!important;font-weight:850!important;
+}
 html.sarni-delight-ui #sarniFocusDate{color:#57758a!important;font-size:clamp(13px,1.2vw,16px)!important}
-html.sarni-delight-ui .sarni-quick-primary{background:linear-gradient(115deg,#087e78,#238d85)!important;border:1px solid #087e78!important;box-shadow:0 9px 22px rgba(4,123,112,.18)!important;border-radius:13px!important;font-weight:850!important;transition:transform .17s,box-shadow .17s!important}
-html.sarni-delight-ui .sarni-quick-primary:hover{transform:translateY(-2px)!important;box-shadow:0 13px 27px rgba(4,123,112,.24)!important}
-html.sarni-delight-ui .sarni-focus-refresh{background:rgba(255,255,255,.84)!important;border:1px solid #dce9eb!important;color:#365669!important;border-radius:13px!important;transition:background-color .17s,transform .17s!important}
+html.sarni-delight-ui .sarni-quick-primary{
+ background:linear-gradient(115deg,#087e78,#238d85)!important;border:1px solid #087e78!important;
+ box-shadow:0 9px 22px rgba(4,123,112,.18)!important;border-radius:13px!important;
+ font-weight:850!important;transition:transform .17s ease,box-shadow .17s ease!important;
+}
+html.sarni-delight-ui .sarni-quick-primary:hover{
+ transform:translateY(-2px)!important;box-shadow:0 13px 27px rgba(4,123,112,.24)!important;
+}
+html.sarni-delight-ui .sarni-focus-refresh{
+ background:rgba(255,255,255,.84)!important;border:1px solid #dce9eb!important;
+ color:#365669!important;border-radius:13px!important;
+ transition:background-color .17s ease,transform .17s ease!important;
+}
 html.sarni-delight-ui .sarni-focus-refresh:hover{background:#fff!important;transform:translateY(-2px)}
+/* At-a-glance cards: clean, tactile, and not overly dense. */
 html.sarni-delight-ui .sarni-focus-metrics{gap:clamp(9px,1vw,15px)!important}
-html.sarni-delight-ui .sarni-focus-metrics>button{background:#fff!important;border:1px solid #e2eaf0!important;border-radius:20px!important;box-shadow:var(--delight-shadow)!important;padding:clamp(15px,1.7vw,23px)!important;min-height:115px!important;text-align:left!important;min-width:0!important;transition:transform .19s,box-shadow .19s,border-color .19s!important}
-html.sarni-delight-ui .sarni-focus-metrics>button:hover{transform:translateY(-3px)!important;border-color:#a6dcd1!important;box-shadow:0 14px 34px rgba(26,74,81,.11)!important}
+html.sarni-delight-ui .sarni-focus-metrics>button{
+ background:#fff!important;border:1px solid #e2eaf0!important;
+ border-radius:20px!important;box-shadow:var(--delight-shadow)!important;
+ padding:clamp(15px,1.7vw,23px)!important;
+ min-height:115px!important;
+ transition:transform .19s cubic-bezier(.2,.8,.2,1),box-shadow .19s ease,border-color .19s ease!important;
+ text-align:left!important;min-width:0!important;
+}
+html.sarni-delight-ui .sarni-focus-metrics>button:hover{
+ transform:translateY(-3px)!important;border-color:#a6dcd1!important;
+ box-shadow:0 14px 34px rgba(26,74,81,.11)!important;
+}
 html.sarni-delight-ui .sarni-focus-metrics>button:active{transform:scale(.985)!important}
-html.sarni-delight-ui .sarni-focus-metrics strong{color:#1c3a57!important;font-size:clamp(20px,2vw,27px)!important;letter-spacing:-.05em!important}
+html.sarni-delight-ui .sarni-focus-metrics strong{
+ color:#1c3a57!important;font-size:clamp(20px,2vw,27px)!important;letter-spacing:-.05em!important;
+}
 html.sarni-delight-ui .sarni-focus-metrics small{color:#52677b!important;font-weight:800!important;letter-spacing:.09em!important}
 html.sarni-delight-ui .sarni-focus-metrics button span{color:#087d77!important;font-weight:800!important}
 html.sarni-delight-ui .sarni-focus-metrics>button:nth-child(2){background:linear-gradient(135deg,#fff,#f5fafc)!important}
 html.sarni-delight-ui .sarni-focus-metrics>button:nth-child(3){background:linear-gradient(135deg,#fff,#f9f6ff)!important}
-html.sarni-delight-ui :is(.sarni-focus-primary,.sarni-focus-side,.life-card,.personal-card,.sarni-recent-card){background-color:#fff!important;border:1px solid #e4ebf1!important;border-radius:21px!important;box-shadow:var(--delight-shadow)!important}
-html.sarni-delight-ui :is(.life-card,.personal-card,.sarni-recent-card){transition:border-color .18s,box-shadow .18s!important}
-html.sarni-delight-ui :is(.life-card,.personal-card,.sarni-recent-card):hover{border-color:#d1e4e3!important;box-shadow:0 12px 32px rgba(18,67,71,.09)!important}
-html.sarni-delight-ui input:not([type=checkbox]):not([type=radio]),html.sarni-delight-ui textarea,html.sarni-delight-ui select{border-radius:12px}
-html.sarni-delight-ui .login-view{background:radial-gradient(circle at 8% 10%,rgba(24,173,142,.13),transparent 35%),radial-gradient(circle at 96% 92%,rgba(108,91,212,.14),transparent 42%),#f7fafb!important}
+/* Harmonize surface cards across existing feature modules. */
+html.sarni-delight-ui :is(.sarni-focus-primary,.sarni-focus-side,.life-card,.personal-card,.sarni-recent-card){
+ background-color:#fff!important;border:1px solid #e4ebf1!important;
+ border-radius:21px!important;box-shadow:var(--delight-shadow)!important;
+}
+html.sarni-delight-ui :is(.life-card,.personal-card,.sarni-recent-card){
+ transition:border-color .18s ease,box-shadow .18s ease!important;
+}
+html.sarni-delight-ui :is(.life-card,.personal-card,.sarni-recent-card):hover{
+ border-color:#d1e4e3!important;box-shadow:0 12px 32px rgba(18,67,71,.09)!important;
+}
+html.sarni-delight-ui input:not([type=checkbox]):not([type=radio]),
+html.sarni-delight-ui textarea,html.sarni-delight-ui select{
+ border-radius:12px;
+}
+/* Login and onboarding brand polish; existing authentication remains unchanged. */
+html.sarni-delight-ui .login-view{
+ background:radial-gradient(circle at 8% 10%,rgba(24,173,142,.13),transparent 35%),
+ radial-gradient(circle at 96% 92%,rgba(108,91,212,.14),transparent 42%),#f7fafb!important;
+}
 html.sarni-delight-ui .login-shell{border-radius:25px!important;box-shadow:0 26px 75px rgba(20,43,65,.12)!important}
+/* Touch-centric, calm Android dock inspired by MyTrip's ergonomics. */
 @media(max-width:860px){
-html.sarni-delight-ui body{background:#f7f9f8!important}
-html.sarni-delight-ui .main-content{padding-inline:clamp(10px,3vw,18px)!important;scroll-behavior:smooth}
-html.sarni-delight-ui .topbar{background:rgba(255,255,255,.98)!important;box-shadow:0 2px 15px rgba(16,45,61,.04)!important;border:0!important;border-radius:0 0 15px 15px!important;min-height:61px!important;margin-inline:0!important;padding:9px 11px!important}
-html.sarni-delight-ui .topbar h1{font-size:clamp(17px,5vw,21px)!important}
-html.sarni-delight-ui .sarni-focus-hero{min-height:150px!important;padding:23px 18px!important;border-radius:24px!important}
-html.sarni-delight-ui #sarniFocusGreeting{font-size:clamp(27px,7vw,34px)!important}
-html.sarni-delight-ui .sarni-focus-tools{gap:8px!important}
-html.sarni-delight-ui :is(.sarni-focus-refresh,.sarni-quick-primary){min-height:43px!important;border-radius:12px!important}
-html.sarni-delight-ui .sarni-focus-metrics{gap:10px!important}
-html.sarni-delight-ui .sarni-focus-metrics>button{min-height:104px!important;padding:15px 13px!important;border-radius:19px!important}
-html.sarni-delight-ui .sarni-focus-metrics strong{font-size:22px!important}
-html.sarni-delight-ui .sarni-mobile-dock{background:rgba(255,255,255,.98)!important;border-top:1px solid #e4ebe9!important;box-shadow:0 -5px 29px rgba(12,45,55,.095)!important}
-html.sarni-delight-ui .sarni-mobile-dock .mobile-nav-item.active{color:#087970!important;background:rgba(4,141,125,.09)!important}
-html.sarni-delight-ui .sarni-mobile-add-circle{background:linear-gradient(145deg,#08776f,#149d91)!important;box-shadow:0 10px 23px rgba(3,108,101,.25)!important}
-html.sarni-delight-ui .sarni-mobile-add-sheet:not(.hidden){border-radius:27px 27px 0 0!important}
-html.sarni-delight-ui .sarni-mobile-add-sheet button{min-height:44px!important}}
-@media(max-width:360px){html.sarni-delight-ui .sarni-focus-hero{padding:18px 14px!important}html.sarni-delight-ui .sarni-focus-metrics>button{padding:12px 10px!important}html.sarni-delight-ui .topbar{padding-inline:7px!important}}
-@media(prefers-reduced-motion:reduce){html.sarni-delight-ui *,html.sarni-delight-ui *::before,html.sarni-delight-ui *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
-@media(print){html.sarni-delight-ui .topbar,html.sarni-delight-ui .sarni-focus-metrics>button{box-shadow:none!important}}
-html.sarni-delight-ui body.theme-dark,html.sarni-delight-ui body.theme-dark .app-view{--delight-paper:#111927;--delight-ink:#e9f0f8;--delight-muted:#afc1d2;background:#111927!important;color:#e9f0f8!important}
-html.sarni-delight-ui body.theme-dark .topbar,html.sarni-delight-ui body.theme-dark :is(.sarni-focus-primary,.sarni-focus-side,.life-card,.personal-card,.sarni-recent-card,.sarni-focus-metrics>button){background:#1b2a3d!important;border-color:#32465a!important;color:#e9f0f8!important}
-html.sarni-delight-ui body.theme-dark .topbar h1,html.sarni-delight-ui body.theme-dark .sarni-focus-metrics strong{color:#e9f0f8!important}
-html.sarni-delight-ui body.theme-dark .sarni-focus-hero{background:linear-gradient(115deg,#1c3b42,#242c4b)!important;border-color:#395665!important}
-html.sarni-delight-ui body.theme-dark #sarniFocusGreeting,html.sarni-delight-ui body.theme-dark #sarniFocusDate{color:#e9f0f8!important}
+ html.sarni-delight-ui body{background:#f7f9f8!important}
+ html.sarni-delight-ui .main-content{padding-inline:clamp(10px,3vw,18px)!important}
+ html.sarni-delight-ui .topbar{
+  background:rgba(255,255,255,.98)!important;box-shadow:0 2px 15px rgba(16,45,61,.04)!important;
+  border:0!important;border-radius:0 0 15px 15px!important;min-height:61px!important;
+  margin-inline:0!important;padding:9px 11px!important;
+ }
+ html.sarni-delight-ui .topbar h1{font-size:clamp(17px,5vw,21px)!important}
+ html.sarni-delight-ui .sarni-focus-hero{min-height:150px!important;padding:23px 18px!important;border-radius:24px!important;}
+ html.sarni-delight-ui #sarniFocusGreeting{font-size:clamp(27px,7vw,34px)!important}
+ html.sarni-delight-ui .sarni-focus-tools{gap:8px!important}
+ html.sarni-delight-ui .sarni-focus-refresh,
+ html.sarni-delight-ui .sarni-quick-primary{min-height:43px!important;border-radius:12px!important}
+ html.sarni-delight-ui .sarni-focus-metrics{gap:10px!important}
+ html.sarni-delight-ui .sarni-focus-metrics>button{min-height:104px!important;padding:15px 13px!important;border-radius:19px!important}
+ html.sarni-delight-ui .sarni-focus-metrics strong{font-size:22px!important}
+ html.sarni-delight-ui .sarni-mobile-dock{
+  background:rgba(255,255,255,.98)!important;border-top:1px solid #e4ebe9!important;
+  box-shadow:0 -5px 29px rgba(12,45,55,.095)!important;
+ }
+ html.sarni-delight-ui .sarni-mobile-dock .mobile-nav-item.active{
+  color:#087970!important;background:rgba(4,141,125,.09)!important;
+ }
+ html.sarni-delight-ui .sarni-mobile-add-circle{
+  background:linear-gradient(145deg,#08776f,#149d91)!important;
+  box-shadow:0 10px 23px rgba(3,108,101,.25)!important;
+ }
+ html.sarni-delight-ui .sarni-mobile-add-sheet:not(.hidden){border-radius:27px 27px 0 0!important}
+ html.sarni-delight-ui .sarni-mobile-add-sheet button{min-height:44px!important}
+ /* Native smooth scrolling is cheap; avoid animated scroll for motion-sensitive users. */
+ html.sarni-delight-ui .main-content{scroll-behavior:smooth}
+}
+@media(max-width:360px){
+ html.sarni-delight-ui .sarni-focus-hero{padding:18px 14px!important}
+ html.sarni-delight-ui .sarni-focus-metrics>button{padding:12px 10px!important}
+ html.sarni-delight-ui .topbar{padding-inline:7px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ html.sarni-delight-ui *,html.sarni-delight-ui *::before,html.sarni-delight-ui *::after{
+  animation-duration:.01ms!important;animation-iteration-count:1!important;
+  transition-duration:.01ms!important;scroll-behavior:auto!important;
+ }
+}
+@media(print){
+ html.sarni-delight-ui .topbar{box-shadow:none!important}
+ html.sarni-delight-ui .sarni-focus-metrics>button{box-shadow:none!important}
+}
+
+/* Delight v1.1 refinements: AA labels, dark preference support and reduced-motion handling */
+html.sarni-delight-ui body.theme-dark,
+html.sarni-delight-ui body.theme-dark .app-view{
+  --delight-paper:#111927;--delight-ink:#e9f0f8;--delight-muted:#afc1d2;
+  background:#111927!important;color:#e9f0f8!important;
+}
+html.sarni-delight-ui body.theme-dark .topbar,
+html.sarni-delight-ui body.theme-dark :is(.sarni-focus-primary,.sarni-focus-side,.life-card,.personal-card,.sarni-recent-card,.sarni-focus-metrics>button){
+  background:#1b2a3d!important;border-color:#32465a!important;color:#e9f0f8!important;
+}
+html.sarni-delight-ui body.theme-dark .topbar h1,
+html.sarni-delight-ui body.theme-dark .sarni-focus-metrics strong{color:#e9f0f8!important}
+html.sarni-delight-ui body.theme-dark .sarni-focus-hero{
+  background:linear-gradient(115deg,#1c3b42,#242c4b)!important;border-color:#395665!important;
+}
+html.sarni-delight-ui body.theme-dark #sarniFocusGreeting,
+html.sarni-delight-ui body.theme-dark #sarniFocusDate{color:#e9f0f8!important}
 html.sarni-delight-ui body.theme-dark .sarni-focus-metrics small{color:#b5c5d3!important}
+@media (prefers-reduced-motion:reduce){
+ html.sarni-delight-ui .main-content{scroll-behavior:auto!important}
+}
