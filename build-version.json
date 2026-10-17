@@ -1,6 +1,7 @@
 {
-  "version": "20.7.0",
-  "frontend": "20.7.0",
-  "backendExpected": "3.17.24",
-  "build": "20261013-20700-life-manager"
+  "version": "20.8.7",
+  "frontend": "20.8.7",
+  "backendExpected": "3.17.29",
+  "build": "20261017-20807-github-direct-delight",
+  "hosting": "github-pages-direct-ui"
 }
