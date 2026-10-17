@@ -453,7 +453,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <p class="form-message" id="loginMessage" role="alert"></p>
 <div class="login-meta">
 <p class="tiny muted">Your password is never stored in the browser.</p>
-<div class="version-pair"><span class="version-badge" id="loginVersion">Frontend · v20.8.6</span><span class="version-badge backend-version" id="loginBackendVersion">Backend · v3.17.29</span></div>
+<div class="version-pair"><span class="version-badge" id="loginVersion">Frontend · v20.8.7</span><span class="version-badge backend-version" id="loginBackendVersion">Backend · v3.17.29</span></div>
 <button class="login-repair-button" id="repairBrowserBtn" type="button">↻ Repair browser cache/session</button>
 </div>
 </form>
@@ -495,14 +495,14 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <div class="sidebar-session-card">
 <span class="sidebar-session-label">SIGNED IN AS</span>
 <div class="sidebar-account-line"><span class="person-avatar" id="sidebarUserPhoto">👤</span><strong id="dashboardUsername">—</strong></div>
-<span id="dashboardVersion">Frontend · v20.8.6</span><span id="dashboardBackendVersion">Backend · v3.17.29</span>
+<span id="dashboardVersion">Frontend · v20.8.7</span><span id="dashboardBackendVersion">Backend · v3.17.29</span>
 </div>
 <div class="sidebar-foot"><button class="nav-item" id="changePasswordBtn"><span>⌁</span>Change password</button><button class="nav-item danger-text" id="logoutBtn"><span>↪</span>Log out</button></div>
 </aside>
 <button class="mobile-left-quick-diary" id="quickDiaryMobilePinned" title="Quick Diary — always available" type="button">✎ Quick Diary</button>
 <main class="main-content" id="mainDashboard" tabindex="-1">
 <header class="topbar"><span aria-hidden="true" class="mobile-top-brand">S</span>
-<div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Personal Life Centre</h1></div><div class="dashboard-version-pair"><span class="dashboard-version-chip" id="dashboardVersionTop">FE v20.8.6</span><span class="dashboard-version-chip backend-chip" id="dashboardBackendVersionTop">BE v3.17.29</span></div></div></div>
+<div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Personal Life Centre</h1></div><div class="dashboard-version-pair"><span class="dashboard-version-chip" id="dashboardVersionTop">FE v20.8.7</span><span class="dashboard-version-chip backend-chip" id="dashboardBackendVersionTop">BE v3.17.29</span></div></div></div>
 <div class="top-actions"><button aria-haspopup="dialog" class="command-palette-button" id="commandPaletteBtn" title="Search pages and actions (Ctrl/⌘ K)" type="button"><span>⌕</span><strong>Search</strong><kbd>⌘K</kbd></button><div class="display-preferences" title="Personalise dashboard appearance"><select aria-label="Dashboard density" id="displayDensitySelect"><option value="COMFORTABLE">Comfortable</option><option value="COMPACT">Compact</option></select><select aria-label="Dashboard theme" id="displayThemeSelect"><option selected="" value="LIGHT">Light</option><option value="AUTO">Auto theme</option><option value="DARK">Dark</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button aria-label="Refresh personal records" class="icon-button" id="refreshBtn" title="Refresh personal records">↻</button><button aria-label="Signed-in user" class="avatar-button" id="profileButton"><span id="avatarInitial">A</span><img alt="Your profile photo" class="header-user-photo hidden" id="headerUserPhoto"/></button><button aria-label="Sign out" class="header-logout-button" id="headerLogoutBtn" title="Sign out of SarNi" type="button"><span aria-hidden="true">↪</span><strong>Sign out</strong></button></div>
 </header>
 <nav class="sarni-simplified-nav" id="sarniSimplifiedNav" aria-label="Main sections">
@@ -515,7 +515,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </nav>
 <div aria-label="Mobile session controls" class="mobile-session-bar" id="mobileSessionBar">
 <div class="mobile-session-versions">
-<span class="mobile-version-chip" id="mobileFrontendVersion">FE v20.8.6</span>
+<span class="mobile-version-chip" id="mobileFrontendVersion">FE v20.8.7</span>
 <span class="mobile-version-chip backend" id="mobileBackendVersion">BE v3.17.29</span>
 </div>
 <div class="mobile-session-actions">
@@ -1390,7 +1390,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <button id="mobileMorePassword" type="button">⌁   Change password</button>
 <button id="mobileMoreLogout" type="button">↪   Sign out</button>
 </div>
-<div class="mobile-more-versions"><span id="moreFrontendVersion">FE v20.8.6</span><span id="moreBackendVersion">BE v3.17.29</span></div>
+<div class="mobile-more-versions"><span id="moreFrontendVersion">FE v20.8.7</span><span id="moreBackendVersion">BE v3.17.29</span></div>
 </aside>
 </div>
 <div aria-labelledby="commandPaletteTitle" aria-modal="true" class="command-palette-backdrop hidden" id="commandPalette" role="dialog">
@@ -1775,14 +1775,7 @@ function install(){const f=form();if(!f)return;
  // App JavaScript may be loaded separately. Never alter investment, diary or expense handlers.
  const prev=renderStandaloneCalendar;
  renderStandaloneCalendar=function(){prev();const head=byId('standaloneSakaHeading');if(head)head.textContent='Odia lunar calendar · Bhubaneswar sunrise';if(state.activeSection==='calendar')void paintMonth();};
- if(typeof updateVersionLabels==='function'){
-   const oldVersionLabels=updateVersionLabels;
-   updateVersionLabels=function(){const result=oldVersionLabels.apply(this,arguments);
-     ['loginVersion','dashboardVersion'].forEach(id=>{const x=byId(id);if(x)x.textContent='Frontend · v20.8.6';});
-     ['dashboardVersionTop','mobileFrontendVersion'].forEach(id=>{const x=byId(id);if(x)x.textContent='FE v20.8.6';});
-     return result;
-   };
- }
+ // Version labels are owned by the main app's APP_VERSION, not the calendar integration.
  // capture is essential: the existing app form listener is retained for backwards compatibility,
  // but this handler saves the expanded Odia fields instead of allowing a second save.
  f.addEventListener('submit',saveEvent,true);
@@ -1895,8 +1888,11 @@ async function fetchFocus(force){if(!isReady()||fetching||(!force&&Date.now()-la
  }catch(e){if(status)status.textContent='Saved records are still available. Upcoming Odia dates need backend v3.17.26.';}
  finally{fetching=false;renderFocus();if(requestOwner!==String(state.username||'')&&isReady())void fetchFocus(true);}
 }
-function applyVersion(){for(const id of ['loginVersion','dashboardVersion']){const x=el(id);if(x)x.textContent='Frontend · v20.8.6';}
- for(const id of ['dashboardVersionTop','mobileFrontendVersion']){const x=el(id);if(x)x.textContent='FE v20.8.6';}}
+function applyVersion(){
+ const version=(typeof APP_VERSION==='string' && APP_VERSION)?APP_VERSION:'20.8.7';
+ for(const id of ['loginVersion','dashboardVersion']){const x=el(id);if(x)x.textContent='Frontend · v'+version;}
+ for(const id of ['dashboardVersionTop','mobileFrontendVersion','moreFrontendVersion']){const x=el(id);if(x)x.textContent='FE v'+version;}
+}
 function init(){if(initialised)return;initialised=true;document.body.classList.add('sarni-premium-layout');
  el('sarniAdvancedHome')?.addEventListener('toggle',()=>{
   if(!el('sarniAdvancedHome').open||!isReady())return;
