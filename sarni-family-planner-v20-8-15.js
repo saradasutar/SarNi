@@ -152,6 +152,9 @@
   function render(){
     if(!panel||!main)return;
     const ready=Boolean(safeState());
+    const owner=String(safeState()?.username||'');
+    // Never show fetched occasions from another signed-in account on shared devices.
+    if(focusOwner!==owner){focusOwner=owner;focus=null;focusAt=0;}
     panel.classList.toggle('sfp-locked',!ready);
     count.textContent=ready?(tab==='targets'?active().filter(x=>type(x)==='TARGET').length+' active targets':(important().length+active().filter(x=>type(x)!=='TARGET').length)+' reminders'):'Sign in to view saved plans';
     panel.querySelectorAll('[data-sfp-tab]').forEach(b=>{
