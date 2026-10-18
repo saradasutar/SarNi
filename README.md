@@ -67,3 +67,13 @@ Resolved the `Cannot access 'sariWords' before initialization` error: initial au
 - **Data scope:** Custom festival records are stored in the *signed-in administrator's account*. They do not automatically propagate to other users. The administrator restriction is frontend-only; centrally shared and backend-enforced admin-managed festivals require a separately deployed Apps Script backend change. No additional `Code.gs` replacement is needed for the current personal-account version.
 - Built-in official/published dates are limited; other computed festival dates require checking against the printed Kohinoor Panjika. Backend per-year verified overrides for recurring occasions continue to work.
 - No Google Sheet structures, accounts, passwords, security settings or remote backend links were changed by this frontend release.
+
+## MyFamily-inspired Planning Centre (additive module v20.8.15)
+
+- Available in **Calendar → Targets / Reminders**, including the existing mobile More-menu shortcuts. The existing English/Odia calendar and yearly Festival editor are retained unchanged.
+- **Targets:** dedicated mobile-friendly cards for existing authenticated SarNi sticky-note targets, with due/overdue indicators, search, edit, mark completed, active/completed filters and completion history. The percentage is **completed tasks / all saved tasks**. It is **not** MyFamily's monetary target / contribution progress.
+- **Reminders:** searchable cards displaying the existing private important dates and quick sticky reminders. Displays annual English/Odia/both recurrence as saved, opens the original editor to preserve Odia verification and reminder settings, and shows upcoming occurrences returned by the existing authenticated backend.
+- Saving, editing and completing actions continue using the original Apps Script operations and original Google Sheet. This release does **not** create another database or alter the Apps Script backend, login flow, photos, finance ledger or notification trigger.
+- MyFamily's **shared-family email recipients, reminder photo attachments, and financial goal contributions** are not added here, because SarNi currently lacks matching backend storage and permissions. They need a separately reviewed backend migration if wanted.
+- Files: `sarni-family-planner-v20-8-15.js` and `sarni-family-planner-v20-8-15.css`; the existing FE app remains v20.8.14 until a full FE-version release.
+- Safety: source records are read only from the current authenticated state; the upcoming-occurrence cache is cleared when the signed-in username changes. Avoid storing private names/records in public GitHub source.
