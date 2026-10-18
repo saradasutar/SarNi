@@ -6,7 +6,7 @@ SarNi's frontend is hosted directly on GitHub Pages. Google Apps Script is the *
 
 ## Current GitHub Pages frontend
 
-- Frontend: **v20.8.12** (`index.html` loads `app-v20-8-12.js`)
+- Frontend: **v20.8.13** (`index.html` loads `app-v20-8-13.js`)
 - Expected backend: **v3.17.30** — upload and deploy separately for original photos above 2 MB (verify against your active Apps Script deployment)
 - User interface: `styles.css`, `sarni-delight.css`, `sarni-delight.js`, and `sarni-entry-polish.css`
 - App installation: `manifest.webmanifest`
@@ -53,3 +53,7 @@ You can format selected experience text as bold, italic, coloured or highlighted
 The centre **+** shows only **Quick Expense** and **Quick Diary**. Each opens the existing secure inline form, focuses the essential amount/diary text input, and preserves current save, duplicate alerts, visibility and sharing settings. **More tools** opens the existing **More** menu, which now additionally includes **Add Reminder** and **Smart Paste**. Life Experiences, Credit Cards, complete Diary history, Notes & Targets, writing and settings remain there.
 
 Under Quick Expense is a small **Last 3 expenses** collapsible list. Quick Diary has a collapsible **Last 3 diary entries** list (closed by default for privacy). Both use only the current user's authenticated records already in memory; no new API, storage or save operations. They refresh after an entry is saved and are cleared on sign-out. Read-only recent cards cannot accidentally edit, overwrite or duplicate a record. Complete records are still available in Money / Diary.
+
+## v20.8.13 startup fix
+
+Resolved the `Cannot access 'sariWords' before initialization` error: initial authenticated application startup (`init()`) now runs only after the Life Experience module and all other top-level declarations have been initialized. The v20.8.12 + button, recent quick entries, rich editor and backend connection remain unchanged. No sheet, account, photos or Apps Script deployment was changed.
