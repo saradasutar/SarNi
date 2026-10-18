@@ -875,6 +875,12 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </section>
 <section aria-label="English and Odia family calendar" class="page-section hidden" id="calendarSection">
 <div id="upcomingExperienceLessons" class="life-upcoming-lessons hidden" aria-live="polite"></div>
+<nav class="sarni-calendar-actions" aria-label="Calendar, reminders, targets and festivals">
+<button type="button" data-sarni-calendar-shortcut="calendar"><span>▦</span> Calendar</button>
+<button type="button" data-sarni-calendar-shortcut="reminder"><span>◷</span> Reminder</button>
+<button type="button" data-sarni-calendar-shortcut="target"><span>◎</span> Target</button>
+<button type="button" data-sarni-calendar-shortcut="festivals"><span>❀</span> Festivals</button>
+</nav>
 <div class="sarni-family-cal-intro">
 <div><p class="life-eyebrow">YOUR PERSONAL CALENDAR</p><h2>Family calendar</h2><p>One beautiful month view, with your important days, diary dates and reminders together.</p></div>
 <div class="sarni-family-cal-color-guide"><span><i class="blue-dot"></i>English date</span><span><i class="orange-dot"></i>Odia lunar day</span></div>
@@ -901,6 +907,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <form class="life-entry-form" id="calendarEventForm"><input name="id" type="hidden"/>
 <div class="life-fields"><label>English date<input name="eventDate" required="" type="date"/></label><label>Type<select name="kind"><option value="PERSONAL">Personal</option><option value="BIRTHDAY">Birthday</option><option value="ANNIVERSARY">Anniversary</option><option value="DEATH_ANNIVERSARY">Death anniversary</option><option value="REMINDER">Reminder</option><option value="TARGET">Target</option><option value="OTHER">Other</option><option value="FLIGHT">Flight / Air travel</option><option value="TRAIN">Train journey</option></select></label></div>
 <div class="life-fields"><label>Departure city (flight)<input name="departureCity" placeholder="Bengaluru" maxlength="120"/></label><label>Arrival city (optional)<input name="arrivalCity" placeholder="Delhi" maxlength="120"/></label></div>
+<div class="sarni-date-pair" id="odiaDatePairPreview" role="status" aria-live="polite">Choose an English date to view its Odia tithi automatically.</div>
 <fieldset class="sarni-odia-settings" aria-label="Annual Odia Kohinoor lunar reminders"><legend>🌺 Odia Kohinoor-style annual reminder</legend>
 <div class="life-fields"><label>Repeat this occasion<select name="calendarBasis"><option value="GREGORIAN">English date every year</option><option value="ODIA">Odia lunar tithi every year</option><option value="BOTH">Both English and Odia dates</option></select></label><label class="sarni-odia-check"><input type="checkbox" name="repeatYearly"/> Repeat every year</label></div>
 <p id="odiaRepeatNote" class="sarni-odia-hint">Save once and get future occurrences automatically.</p>
@@ -920,6 +927,29 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </article>
 <article class="life-card sarni-calendar-list-card"><div class="life-card-top"><h3>Saved important dates</h3></div><input aria-label="Search important dates" id="calendarEventSearch" placeholder="Search saved dates and events" type="search"/><div class="important-dates-list" id="standaloneImportantList"></div></article>
 </div>
+<section class="life-card sarni-festival-manager" id="sarniFestivalManager" aria-labelledby="sarniFestivalHeading">
+ <div class="life-card-top"><div><span class="life-eyebrow">❀ FESTIVALS · YEARLY REPEAT</span><h3 id="sarniFestivalHeading">My saved festivals</h3></div></div>
+ <p class="sarni-festival-caption">Festivals saved here appear each year according to the English date or Odia lunar tithi selected by the administrator. Calculated Odia observances may need Kohinoor verification.</p>
+ <form id="sarniFestivalForm" class="life-entry-form admin-only hidden" aria-label="Administrator festival editor">
+  <input type="hidden" name="id"/>
+  <label>Festival name<input required name="title" maxlength="160" placeholder="e.g. Our village annual festival"/></label>
+  <div class="life-fields">
+   <label>Original English date<input required type="date" name="eventDate"/></label>
+   <label>Repeat every year by<select name="calendarBasis"><option value="GREGORIAN">English date</option><option value="ODIA">Odia lunar tithi</option></select></label>
+  </div>
+  <div class="sarni-date-pair" id="sarniFestivalOdiaPreview" role="status" aria-live="polite">Selecting an English date will calculate its Odia tithi.</div>
+  <fieldset id="sarniFestivalLunarFields" class="sarni-festival-lunar" hidden><legend>Odia month and tithi (editable after calculation)</legend>
+   <div class="life-fields"><label>Month<select name="odiaMonth">
+<option value="0">Chaitra</option><option value="1">Baisakha</option><option value="2">Jyestha</option><option value="3">Asadha</option><option value="4">Srabana</option><option value="5">Bhadraba</option><option value="6">Aswina</option><option value="7">Kartika</option><option value="8">Margasira</option><option value="9">Pausa</option><option value="10">Magha</option><option value="11">Phalguna</option>
+   </select></label><label>Paksha<select name="odiaPaksha"><option value="SHUKLA">Shukla · ଶୁକ୍ଳ</option><option value="KRISHNA">Krishna · କୃଷ୍ଣ</option></select></label><label>Tithi<input type="number" name="odiaTithi" min="1" max="15" value="1"/></label></div>
+   <label class="sarni-festival-lunar"><input type="checkbox" name="odiaVerified"/> Checked against a trusted Odia Panjika</label>
+  </fieldset>
+  <label>Notes (optional)<textarea name="notes" rows="2" maxlength="1050" placeholder="Tradition, arrangements, location..."></textarea></label>
+  <p class="sarni-festival-hint">Saves to your existing SarNi important dates. Odia yearly dates use Bhubaneswar sunrise estimates; they are not automatically certified Kohinoor dates.</p>
+  <div class="life-form-foot"><span id="sarniFestivalSaveStatus" role="status">Ready to save</span><div class="quick-action-pair"><button type="button" class="life-quiet" id="sarniFestivalNew">New</button><button type="submit" class="life-save" id="sarniFestivalSaveBtn">❀ Save festival</button></div></div>
+ </form>
+ <div class="sarni-festival-saved"><h4>Annual festivals saved in this account</h4><div id="sarniFestivalSavedList" class="sarni-festival-saved-list" aria-live="polite"><p>Sign in to see your saved festivals.</p></div></div>
+</section>
 </section>
 <section aria-label="Quick Diary and personal calendar" class="page-section hidden" id="quickDiarySection">
 <div class="life-section-title quick-page-title"><div><span class="life-eyebrow">PART OF YOUR DIARY</span><h2>Quick Diary · Daybook</h2><p>Capture a thought, browse dates and find notes. Saved with your other Diary entries.</p></div><button class="life-quiet" id="quickDiaryPrint" type="button">⎙ Print entries</button></div>
@@ -1403,6 +1433,9 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <header class="mobile-more-title-row"><div><small>EXPLORE SARNI</small><h2 id="mobileMoreTitle">All your essentials</h2></div><button aria-label="Close menu" class="mobile-more-close" id="mobileMoreClose" type="button">×</button></header>
 <div class="mobile-more-grid">
 <button data-section="diary" type="button"><span class="mobile-more-glyph">▤</span><strong>Diary</strong><small>History · Monthly · Edit</small></button>
+<button data-section="calendar" type="button"><span class="mobile-more-glyph">▦</span><strong>Calendar</strong><small>English and Odia dates</small></button>
+<button type="button" data-sarni-calendar-shortcut="target"><span class="mobile-more-glyph">◎</span><strong>Add Target</strong><small>Create target or task</small></button>
+<button type="button" data-sarni-calendar-shortcut="festivals"><span class="mobile-more-glyph">❀</span><strong>Festivals</strong><small>Yearly English / Odia</small></button>
 <button type="button" data-sarni-quick="reminder"><span class="mobile-more-glyph">▦</span><strong>Add Reminder</strong><small>Birthdays · Plans · Important dates</small></button>
 <button type="button" data-sarni-smartpaste-open><span class="mobile-more-glyph">✧</span><strong>Smart Paste</strong><small>Turn pasted text into entries</small></button>
 <button data-section="creditCards" type="button"><span class="mobile-more-glyph">▣</span><strong>Credit Cards</strong><small>Major purchases · Bills</small></button>
@@ -1717,14 +1750,15 @@ function updateFields(){const show=getValue('calendarBasis')!=='GREGORIAN';const
  const note=byId('odiaRepeatNote');if(note)note.textContent=getValue('repeatYearly')?'Yearly recurrence enabled — the original English date is preserved.':'A one-time date will be saved; enable yearly recurrence for annual birthdays.';
 }
 async function lookupBirthday(force){const f=form();if(!f||!hasSession())return;const date=f.elements.eventDate.value;
- if(!date)return;lookupReadyFor='';const serial=++previewSerial;
+ if(!date){const pair=byId('odiaDatePairPreview');if(pair)pair.textContent='Choose an English date to view its Odia tithi.';return;}lookupReadyFor='';const serial=++previewSerial;
  message('Reading the Odia lunar tithi for '+date+'…');
  try{const r=await api('lookupOdiaDate',{date},{retry:false});if(serial!==previewSerial)return;
  if(!r?.ok)throw Error(r?.message||'Date lookup failed');lookupReadyFor=date;
  if(force&&!getValue('odiaVerified')){setValue('odiaMonth',r.odia.month);setValue('odiaPaksha',r.odia.paksha);setValue('odiaTithi',r.odia.tithi);setValue('odiaAdhika',r.odia.adhika?'ADHIKA':'REGULAR');}
  const original=byId('odiaBirthPreview');if(original)original.textContent='Original English day '+date+' → '+label(r.odia)+' (Bhubaneswar sunrise calculation)';
+ const pair=byId('odiaDatePairPreview');if(pair)pair.textContent='English '+date+'  →  ଓଡ଼ିଆ '+label(r.odia)+' · Bhubaneswar sunrise estimate';
  message('Calculated successfully. Check the original tithi against a trusted Kohinoor Panjika when exact observance is essential.');
- }catch(err){if(serial!==previewSerial)return;message(err.message||'Could not calculate Odia date.',true);}
+ }catch(err){if(serial!==previewSerial)return;const pair=byId('odiaDatePairPreview');if(pair)pair.textContent='Odia date unavailable: '+String(err.message||'Please try again');message(err.message||'Could not calculate Odia date.',true);}
 }
 function fillExtra(row){
  setValue('calendarBasis',row?.calendarBasis||'GREGORIAN');setValue('repeatYearly',!!row?.repeatYearly);
