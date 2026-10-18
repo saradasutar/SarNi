@@ -7778,7 +7778,7 @@ function sarniRenderRecentQuickEntries(){
    '<div class="sarni-recent-quick-row"><div class="sarni-recent-quick-main"><strong>'+
    escapeHtml(String(x.title||'Diary note').slice(0,90))+'</strong><small>'+
    escapeHtml(String(lifeDate(x.entryDate)||'').slice(0,10))+' · '+
-   escapeHtml(String(x.text||'').replace(/\\s+/g,' ').trim().slice(0,78))+
+   escapeHtml(String(x.text||'').replace(/\s+/g,' ').trim().slice(0,78))+
    '</small></div></div>'
   ).join(''):'<p class="sarni-recent-quick-empty">No saved diary entries yet.</p>';
  }
