@@ -7750,6 +7750,40 @@ function lifeUpdateOptions(){
   });
   const picker=$('lifeHeadFilter');if(picker)lifeSelectOptions(picker,heads.map(x=>({value:x.id,label:x.name})),['ALL','All expenses']);
 }
+
+/* SarNi v20.8.12: recent authenticated, read-only quick-entry context.
+ * No extra API calls, write actions, browser storage, or expensive history query.
+ * The full lists continue to live under Money and Diary respectively. */
+function sarniRenderRecentQuickEntries(){
+ const expenseNode=$('sarniRecentQuickExpense'),diaryNode=$('sarniRecentQuickDiary');
+ if(expenseNode){
+  const expenses=lifeRows().filter(x=>x&&x.active!==false&&Number(x.amount)>0)
+   .slice().sort((a,b)=>String(lifeDate(b.dateSpent)).localeCompare(String(lifeDate(a.dateSpent)))||String(b.id||'').localeCompare(String(a.id||''))).slice(0,3);
+  expenseNode.innerHTML=expenses.length?expenses.map(x=>
+   '<div class="sarni-recent-quick-row"><div class="sarni-recent-quick-main"><strong>'+
+   escapeHtml(String(x.reason||x.category||'Expense').slice(0,100))+'</strong><small>'+
+   escapeHtml(String(lifeDate(x.dateSpent)||'').slice(0,10))+' · '+escapeHtml(String(x.category||'Other').slice(0,50))+
+   '</small></div><b class="sarni-recent-quick-amount">'+escapeHtml(lifeRupees(Number(x.amount||0)))+'</b></div>'
+  ).join(''):'<p class="sarni-recent-quick-empty">No saved expenses yet.</p>';
+ }
+ if(diaryNode){
+  const username=String(state.username||state.user?.username||'').toLowerCase();
+  const entries=(Array.isArray(state.diary)?state.diary:[]).filter(x=>{
+   if(!x||x.active===false)return false;
+   const owner=String(x.owner||x.username||'').toLowerCase();
+   return !(String(x.visibility||'').toUpperCase()==='PRIVATE'&&owner&&owner!==username);
+  }).slice().sort((a,b)=>String(lifeDate(b.entryDate)).localeCompare(String(lifeDate(a.entryDate)))||
+   String(b.id||'').localeCompare(String(a.id||''))).slice(0,3);
+  diaryNode.innerHTML=entries.length?entries.map(x=>
+   '<div class="sarni-recent-quick-row"><div class="sarni-recent-quick-main"><strong>'+
+   escapeHtml(String(x.title||'Diary note').slice(0,90))+'</strong><small>'+
+   escapeHtml(String(lifeDate(x.entryDate)||'').slice(0,10))+' · '+
+   escapeHtml(String(x.text||'').replace(/\\s+/g,' ').trim().slice(0,78))+
+   '</small></div></div>'
+  ).join(''):'<p class="sarni-recent-quick-empty">No saved diary entries yet.</p>';
+ }
+}
+
 function renderLifeHub(){
   if(!$('lifeHome')&&!$('lifeExpenseStudio'))return;
   const rows=lifeRows(),month=lifeMonth(),year=month.slice(0,4),mRows=rows.filter(x=>lifeDate(x.dateSpent).startsWith(month)),yRows=rows.filter(x=>lifeDate(x.dateSpent).startsWith(year)),mCost=mRows.reduce((s,x)=>s+Number(x.amount||0),0),yCost=yRows.reduce((s,x)=>s+Number(x.amount||0),0);
@@ -7758,6 +7792,7 @@ function renderLifeHub(){
     document.querySelectorAll(`[data-life-stat="${key}"]`).forEach(el=>{el.textContent=value;});
   }
   lifeUpdateOptions();
+  sarniRenderRecentQuickEntries();
   // Avoid costly offscreen charts and tables on the first usable home screen.
   const advancedHome=Boolean(document.getElementById('sarniAdvancedHome')?.open);
   if(advancedHome||state.activeSection==='expenditure'){
@@ -7869,7 +7904,7 @@ async function lifeSaveExpense(form){
   if(maybeDuplicate&&!window.confirm('A similar expense is already recorded for this date and amount. Save another entry?')){lifeStatus(form,'Possible duplicate — entry was not saved.');return;}
   const button=form.querySelector('[type="submit"]');button.disabled=true;lifeStatus(form,'Saving to your private SarNi database…');
   const record={dateSpent:form.elements.date.value,amount,reason,category,majorProjectId:form.elements.head.value,paidTo:form.elements.paidTo.value.trim(),debitedFrom:form.elements.account.value.trim(),notes:form.elements.notes.value.trim(),subcategory:''};
-  try{const r=await api('saveExpense',{record});if(!r?.ok)throw new Error(r?.message||'Save failed');applyBootstrap(r.data);saveCache(r.data);
+  try{const r=await api('saveExpense',{record});if(!r?.ok)throw new Error(r?.message||'Save failed');applyBootstrap(r.data);saveCache(r.data);sarniRenderRecentQuickEntries();
     // Save & Next: keep contextual fields and date; clear only the changing fields.
     const saved={date:record.dateSpent,category:record.category,head:record.majorProjectId,account:record.debitedFrom,paidTo:record.paidTo};
     form.reset();form.elements.date.value=saved.date;form.elements.category.value=saved.category;form.elements.head.value=saved.head;
@@ -7884,7 +7919,7 @@ async function lifeSaveDiary(form){
   const text=form.elements.text.value.trim();if(!text){lifeStatus(form,'Write at least one line first.',true);return;}
   const button=form.querySelector('[type="submit"]');button.disabled=true;lifeStatus(form,'Saving diary securely…');
   const entry={entryDate:form.elements.date.value,title:form.elements.title.value.trim(),text,entryType:form.elements.entryType?.value||'PERSONAL',important:Boolean(form.elements.important?.checked),visibility:form.elements.visibility?.value||'SHARED'};
-  try{const r=await api('saveDiaryEntry',{entry});if(!r?.ok)throw new Error(r?.message||'Save failed');applyBootstrap(r.data);saveCache(r.data);
+  try{const r=await api('saveDiaryEntry',{entry});if(!r?.ok)throw new Error(r?.message||'Save failed');applyBootstrap(r.data);saveCache(r.data);sarniRenderRecentQuickEntries();
     form.elements.text.value='';form.elements.title.value='';if(form.elements.important)form.elements.important.checked=false;sessionStorage.removeItem(lifeDraftKey(form));lifeStatus(form,'✓ Diary saved in SarNi.');toast('Diary saved.','success');
   }catch(e){lifeStatus(form,String(e.message||e),true);}
   finally{button.disabled=false;}
