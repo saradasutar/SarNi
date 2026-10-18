@@ -9,10 +9,10 @@
 <meta content="0" http-equiv="Expires"/>
 <!-- The single theme-color meta below follows the installed PWA theme. -->
 <meta content="Private family finance, expenses, diary and planning dashboard" name="description"/>
-<meta content="20261018-20812-quick-add" name="myfinance-build"/>
+<meta content="20261018-20813-startup-fix" name="myfinance-build"/>
 <meta content="light dark" name="color-scheme"/>
 <script>
-    window.__MYFINANCE_PAGE_BUILD__='20261018-20812-quick-add';
+    window.__MYFINANCE_PAGE_BUILD__='20261018-20813-startup-fix';
     window.__MYFINANCE_NATIVE__=false; // Frontend stays on GitHub Pages; authenticated backend runs separately.
     try { localStorage.setItem('portfolio_overview_default','PERSONAL'); } catch(e) {}
     window.__SAR_NI_ASSETS__={css:false,app:false};
@@ -26,12 +26,12 @@
       window.__SAR_NI_ASSETS__[kind]=false;
       document.documentElement.classList.add('sarni-asset-error');
       var box=document.getElementById('sarniAssetStatus');
-      if(box)box.innerHTML='<strong>Dashboard files could not be loaded.</strong><br>Check GitHub Pages assets for SarNi FE v20.8.12, then <a href="./?reload=1">retry here</a>. Keep using this website, not the Apps Script /exec link.';
+      if(box)box.innerHTML='<strong>Dashboard files could not be loaded.</strong><br>Check GitHub Pages assets for SarNi FE v20.8.13, then <a href="./?reload=1">retry here</a>. Keep using this website, not the Apps Script /exec link.';
     };
     setTimeout(function(){
       if(document.documentElement.classList.contains('sarni-assets-ready'))return;
       var box=document.getElementById('sarniAssetStatus');
-      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Check that styles.css and app-v20-8-12.js are published. <a href="./?reload=1">Reload SarNi</a> or open <a href="./health.html">Site check</a>.';
+      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Check that styles.css and app-v20-8-13.js are published. <a href="./?reload=1">Reload SarNi</a> or open <a href="./health.html">Site check</a>.';
     },12000);
   </script>
 <title>SarNi · Personal Life Centre</title>
@@ -125,9 +125,9 @@ html.sarni-personal-only .gpf-empty{background:#f8fbff;border:1px dashed #9fb9d9
 </style>
 <link href="https://script.google.com" rel="preconnect" crossorigin="anonymous"/>
 <link href="https://script.google.com" rel="dns-prefetch"/>
-<link as="style" href="./styles.css?v=20261018-20812-quick-add" rel="preload"/>
-<link as="script" href="./app-v20-8-12.js?v=20261018-20812-quick-add" rel="preload"/>
-<link href="./styles.css?v=20261018-20812-quick-add" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
+<link as="style" href="./styles.css?v=20261018-20813-startup-fix" rel="preload"/>
+<link as="script" href="./app-v20-8-13.js?v=20261018-20813-startup-fix" rel="preload"/>
+<link href="./styles.css?v=20261018-20813-startup-fix" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
 <style id="sarniOdiaStyles">
 .sarni-odia-settings{margin:12px 0 16px;border:1px solid #e8cae5;border-radius:15px;padding:15px;background:linear-gradient(140deg,#fff9ff,#fffdfb);min-width:0}
 .sarni-odia-settings legend{padding:0 8px;color:#743c78;font-weight:850;font-size:14px}
@@ -460,7 +460,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <a class="sarni-backend-help" href="./backend-check.html" target="_blank" rel="noopener noreferrer">Check backend connection without entering a password ↗</a>
 <div class="login-meta">
 <p class="tiny muted">Your password is never stored in the browser.</p>
-<div class="version-pair"><span class="version-badge" id="loginVersion">Frontend · v20.8.12</span><span class="version-badge backend-version" id="loginBackendVersion">Backend · v3.17.30</span></div>
+<div class="version-pair"><span class="version-badge" id="loginVersion">Frontend · v20.8.13</span><span class="version-badge backend-version" id="loginBackendVersion">Backend · v3.17.30</span></div>
 <button class="login-repair-button" id="repairBrowserBtn" type="button">↻ Repair browser cache/session</button>
 </div>
 </form>
@@ -502,14 +502,14 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <div class="sidebar-session-card">
 <span class="sidebar-session-label">SIGNED IN AS</span>
 <div class="sidebar-account-line"><span class="person-avatar" id="sidebarUserPhoto">👤</span><strong id="dashboardUsername">—</strong></div>
-<span id="dashboardVersion">Frontend · v20.8.12</span><span id="dashboardBackendVersion">Backend · v3.17.30</span>
+<span id="dashboardVersion">Frontend · v20.8.13</span><span id="dashboardBackendVersion">Backend · v3.17.30</span>
 </div>
 <div class="sidebar-foot"><button class="nav-item" id="changePasswordBtn"><span>⌁</span>Change password</button><button class="nav-item danger-text" id="logoutBtn"><span>↪</span>Log out</button></div>
 </aside>
 <button class="mobile-left-quick-diary" id="quickDiaryMobilePinned" title="Quick Diary — always available" type="button">✎ Quick Diary</button>
 <main class="main-content" id="mainDashboard" tabindex="-1">
 <header class="topbar"><span aria-hidden="true" class="mobile-top-brand">S</span>
-<div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Personal Life Centre</h1></div><div class="dashboard-version-pair"><span class="dashboard-version-chip" id="dashboardVersionTop">FE v20.8.12</span><span class="dashboard-version-chip backend-chip" id="dashboardBackendVersionTop">BE v3.17.30</span></div></div></div>
+<div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Personal Life Centre</h1></div><div class="dashboard-version-pair"><span class="dashboard-version-chip" id="dashboardVersionTop">FE v20.8.13</span><span class="dashboard-version-chip backend-chip" id="dashboardBackendVersionTop">BE v3.17.30</span></div></div></div>
 <div class="top-actions"><button aria-haspopup="dialog" class="command-palette-button" id="commandPaletteBtn" title="Search pages and actions (Ctrl/⌘ K)" type="button"><span>⌕</span><strong>Search</strong><kbd>⌘K</kbd></button><div class="display-preferences" title="Personalise dashboard appearance"><select aria-label="Dashboard density" id="displayDensitySelect"><option value="COMFORTABLE">Comfortable</option><option value="COMPACT">Compact</option></select><select aria-label="Dashboard theme" id="displayThemeSelect"><option selected="" value="LIGHT">Light</option><option value="AUTO">Auto theme</option><option value="DARK">Dark</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button aria-label="Refresh personal records" class="icon-button" id="refreshBtn" title="Refresh personal records">↻</button><button aria-label="Signed-in user" class="avatar-button" id="profileButton"><span id="avatarInitial">A</span><img alt="Your profile photo" class="header-user-photo hidden" id="headerUserPhoto"/></button><button aria-label="Sign out" class="header-logout-button" id="headerLogoutBtn" title="Sign out of SarNi" type="button"><span aria-hidden="true">↪</span><strong>Sign out</strong></button></div>
 </header>
 <nav class="sarni-simplified-nav" id="sarniSimplifiedNav" aria-label="Main sections">
@@ -522,7 +522,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </nav>
 <div aria-label="Mobile session controls" class="mobile-session-bar" id="mobileSessionBar">
 <div class="mobile-session-versions">
-<span class="mobile-version-chip" id="mobileFrontendVersion">FE v20.8.12</span>
+<span class="mobile-version-chip" id="mobileFrontendVersion">FE v20.8.13</span>
 <span class="mobile-version-chip backend" id="mobileBackendVersion">BE v3.17.30</span>
 </div>
 <div class="mobile-session-actions">
@@ -1415,7 +1415,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <button id="mobileMorePassword" type="button">⌁   Change password</button>
 <button id="mobileMoreLogout" type="button">↪   Sign out</button>
 </div>
-<div class="mobile-more-versions"><span id="moreFrontendVersion">FE v20.8.12</span><span id="moreBackendVersion">BE v3.17.30</span></div>
+<div class="mobile-more-versions"><span id="moreFrontendVersion">FE v20.8.13</span><span id="moreBackendVersion">BE v3.17.30</span></div>
 </aside>
 </div>
 <div aria-labelledby="commandPaletteTitle" aria-modal="true" class="command-palette-backdrop hidden" id="commandPalette" role="dialog">
@@ -1693,7 +1693,7 @@ ICICI" rows="6"></textarea><small class="field-help">These choices appear only w
     };
   </script>
 <script defer src="./sarni-life-format.js?v=20261018-20810" onerror="sarNiAssetFailed('life-format')"></script>
-<script defer="" onerror="sarNiAssetFailed('app')" onload="sarNiAssetLoaded('app')" src="./app-v20-8-12.js?v=20261018-20812-quick-add"></script>
+<script defer="" onerror="sarNiAssetFailed('app')" onload="sarNiAssetLoaded('app')" src="./app-v20-8-13.js?v=20261018-20813-startup-fix"></script>
 <script>
 /* SarNi Odia Calendar v20.8.0 — optional companion to app-v20-7-0.js.
  * All festival and recurrence dates are calculated on the authenticated backend.
@@ -1924,7 +1924,7 @@ async function fetchFocus(force){if(!isReady()||fetching||(!force&&Date.now()-la
  finally{fetching=false;renderFocus();if(requestOwner!==String(state.username||'')&&isReady())void fetchFocus(true);}
 }
 function applyVersion(){
- const version=(typeof APP_VERSION==='string' && APP_VERSION)?APP_VERSION:'20.8.12';
+ const version=(typeof APP_VERSION==='string' && APP_VERSION)?APP_VERSION:'20.8.13';
  for(const id of ['loginVersion','dashboardVersion']){const x=el(id);if(x)x.textContent='Frontend · v'+version;}
  for(const id of ['dashboardVersionTop','mobileFrontendVersion','moreFrontendVersion']){const x=el(id);if(x)x.textContent='FE v'+version;}
 }
