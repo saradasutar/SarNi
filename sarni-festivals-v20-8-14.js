@@ -10,7 +10,7 @@ const TAG='[SARNI_FESTIVAL_V1] ';
 const $=id=>document.getElementById(id);
 const f=()=>$('sarniFestivalForm');
 const monthNames=['Chaitra','Baisakha','Jyestha','Asadha','Srabana','Bhadraba','Aswina','Kartika','Margasira','Pausa','Magha','Phalguna'];
-let installed=false,lookupEpoch=0;
+let installed=false,lookupEpoch=0,odiaLookupDate='';
 function loggedIn(){try{return Boolean(state?.token);}catch{return false;}}
 function admin(){try{return loggedIn()&&typeof isSarNiAdmin==='function'&&isSarNiAdmin();}catch{return false;}}
 function current(){try{return Array.isArray(state.importantDates)?state.importantDates:[];}catch{return [];}}
@@ -28,7 +28,7 @@ function showFields(){
 }
 function reset(){
  const form=f();if(!form)return;
- form.reset();form.elements.id.value='';
+ odiaLookupDate='';form.reset();form.elements.id.value='';
  form.elements.eventDate.value=typeof localIsoDate==='function'?localIsoDate():new Date().toISOString().slice(0,10);
  form.elements.calendarBasis.value='GREGORIAN';
  const preview=$('sarniFestivalOdiaPreview');if(preview)preview.textContent='English '+form.elements.eventDate.value+' · Odia calculation available below';
@@ -67,13 +67,14 @@ async function lookup(apply=true){
  const form=f();if(!form)return;
  const date=String(form.elements.eventDate.value||'');
  const preview=$('sarniFestivalOdiaPreview'),serial=++lookupEpoch;
- if(!date){if(preview)preview.textContent='Select an English date first.';return;}
+ if(!date){odiaLookupDate='';if(preview)preview.textContent='Select an English date first.';return;}
  if(!loggedIn()){if(preview)preview.textContent='Save an English date; sign in to calculate Odia tithi.';return;}
  if(preview)preview.textContent='Calculating Odia tithi for '+date+'…';
  try{
   const r=await api('lookupOdiaDate',{date},{retry:false,timeoutMs:25000});
   if(serial!==lookupEpoch||form.elements.eventDate.value!==date)return;
   if(!r?.ok||!r.odia)throw new Error(r?.message||'Odia lookup failed');
+  odiaLookupDate=date;
   if(preview)preview.textContent='English '+date+' → ଓଡ଼ିଆ '+dateLabel(r.odia)+' (sunrise estimate)';
   if(apply){
    form.elements.odiaMonth.value=String(r.odia.month);
@@ -83,7 +84,7 @@ async function lookup(apply=true){
   }
  }catch(err){
   if(serial!==lookupEpoch)return;
-  if(preview)preview.textContent='Odia lookup unavailable: '+String(err.message||'Try again');
+  odiaLookupDate='';if(preview)preview.textContent='Odia lookup unavailable: '+String(err.message||'Try again');
  }
 }
 function selectedRecord(id){return saved().find(x=>String(x.id)===String(id));}
@@ -117,7 +118,9 @@ async function saveEvent(event){
    !['SHUKLA','KRISHNA'].includes(lunar.paksha))){
    status('Select a valid Odia month, paksha and tithi.',true);return;
  }
- const id=String(form.elements.id.value||''),btn=$('sarniFestivalSaveBtn');
+ const id=String(form.elements.id.value||'');
+ if(odia&&!form.elements.odiaVerified.checked&&odiaLookupDate!==eventDate&&!id){status('Wait for the Odia calculation, or select verified month/paksha/tithi and confirm the original in a trusted Panjika.',true);return;}
+ const btn=$('sarniFestivalSaveBtn');
  if(btn)btn.disabled=true;status('Saving yearly festival securely…');
  const data={
   id,title,eventDate,kind:'OTHER',notes:TAG+originalNotes,
