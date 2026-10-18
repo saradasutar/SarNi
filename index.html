@@ -598,6 +598,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <details class="life-extra"><summary>Payment details &amp; notes</summary><div class="life-fields"><label>Paid to<input maxlength="140" name="paidTo" placeholder="Shop / person"/></label><label>Paid from<input maxlength="120" name="account" placeholder="Cash / UPI / Card"/></label></div><label>Notes<input maxlength="1000" name="notes" placeholder="Optional details"/></label></details>
 <div class="life-form-foot"><span data-life-status="" role="status">Ready to save</span><button class="life-save" type="submit">✓ Save &amp; Next</button></div>
 </form>
+<details class="sarni-recent-quick" id="sarniQuickRecentExpense" open><summary>Last 3 expenses <span>↻</span></summary><div id="sarniRecentQuickExpense" class="sarni-recent-quick-list" aria-live="polite">Your recent expenses appear after sign-in.</div></details>
 </article>
 <article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">QUICK DIARY</span><h3>Remember today</h3></div><span class="life-card-icon">✎</span></div>
 <div id="diaryExperienceHint" class="life-context-hint hidden" role="status"></div><form class="life-entry-form" data-life-diary-form="" id="lifeDiaryHome"><div class="life-fields"><label>Entry date<input name="date" required="" type="date"/></label><label>Title (optional)<input maxlength="120" name="title" placeholder="A day worth remembering"/></label></div><div class="quick-diary-inline-options"><label>Type<select name="entryType"><option value="PERSONAL">Personal</option><option value="LEARNING">Learning</option><option value="TARGET">Target</option><option value="IDEA">Idea</option><option value="GRATITUDE">Gratitude</option></select></label><label class="quick-important-toggle"><input name="important" type="checkbox"/>★ Important</label></div><label>Write directly here<textarea maxlength="5000" name="text" placeholder="Today I felt… / Things I did… / Something I learned…" required="" rows="5"></textarea></label>
@@ -605,6 +606,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <div class="life-prompt-row"><button data-life-prompt="gratitude" type="button">♡ Gratitude</button><button data-life-prompt="highlight" type="button">✧ Highlight</button><button data-life-prompt="tomorrow" type="button">◎ Tomorrow</button></div>
 <div class="life-form-foot"><span data-life-status="" role="status">Draft stays on this device until saved</span><button class="life-save" type="submit">Save diary</button></div>
 </form>
+<details class="sarni-recent-quick sarni-recent-quick-diary" id="sarniQuickRecentDiary"><summary>Last 3 diary entries <span>↻</span></summary><div id="sarniRecentQuickDiary" class="sarni-recent-quick-list" aria-live="polite">Your recent diary notes appear after sign-in.</div></details>
 </article>
 </div>
 </section>
