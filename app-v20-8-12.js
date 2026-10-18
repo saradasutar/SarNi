@@ -591,6 +591,9 @@ function loadCache(){
   return readGoodDashboardSnapshot()?.data||null;
 }
 function clearSession(){
+  // Never leave recent private diary text in the DOM after sign-out.
+  $('sarniRecentQuickExpense')?.replaceChildren();
+  $('sarniRecentQuickDiary')?.replaceChildren();
   // Remove cached personal records after sign-out; preserve only harmless UI preferences.
   try {
     for (const store of [localStorage, sessionStorage]) {
