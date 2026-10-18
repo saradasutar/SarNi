@@ -1810,8 +1810,9 @@ function applyMonth(data){
   const iso=cell.dataset.standaloneDate,day=byDate.get(iso),small=cell.querySelector('.sarni-family-saka');
   if(small){small.textContent=day?'ଓ '+day.tithi:'';small.title=day?label(day):'';}
   const events=cell.querySelector('.sarni-family-events');if(!events)return;
+  const customFestivalIds=new Set((state.importantDates||[]).filter(x=>String(x.notes||'').startsWith('[SARNI_FESTIVAL_V1] ')).map(x=>String(x.id)));
   const entries=[...(data.festivals||[]).filter(x=>x.date===iso).map(x=>({...x,category:'festival'})),
-     ...(data.occurrences||[]).filter(x=>x.date===iso).map(x=>({...x,category:'occasion'}))];
+     ...(data.occurrences||[]).filter(x=>x.date===iso).map(x=>({...x,category:customFestivalIds.has(String(x.id))?'festival':'occasion'}))];
   entries.forEach(item=>{const span=document.createElement('span');span.className='sarni-cal-event sarni-odia-'+item.category;
    span.textContent=(item.category==='festival'?'❀ ':'★ ')+item.title+(item.calendarKind==='ODIA'?' · ଓଡ଼ିଆ':'');
    span.title=item.title+' · '+item.source;
@@ -1819,10 +1820,11 @@ function applyMonth(data){
   });
  });
  const source=byId('odiaCalendarSource');if(source)source.textContent=data.source;
- const list=byId('sarniOdiaFestivalItems');if(list){const festivals=(data.festivals||[]).sort((a,b)=>a.date.localeCompare(b.date));
+ const customIds=new Set((state.importantDates||[]).filter(x=>String(x.notes||'').startsWith('[SARNI_FESTIVAL_V1] ')).map(x=>String(x.id)));
+ const list=byId('sarniOdiaFestivalItems');if(list){const festivals=[...(data.festivals||[]),...(data.occurrences||[]).filter(x=>customIds.has(String(x.id)))].sort((a,b)=>a.date.localeCompare(b.date));
   list.innerHTML=festivals.length?festivals.map(x=>`<div class="sarni-odia-row"><span><strong>❀ ${escapeText(x.title)}</strong><small>${escapeText(x.source)}</small></span><b>${escapeText(x.date)}</b></div>`).join(''):'<p>No listed festivals for this month. Other regional festivals may still apply.</p>';
  }
- const recurring=byId('sarniOdiaRecurringItems');if(recurring){const arr=(data.occurrences||[]).sort((a,b)=>a.date.localeCompare(b.date));
+ const recurring=byId('sarniOdiaRecurringItems');if(recurring){const arr=(data.occurrences||[]).filter(x=>!customIds.has(String(x.id))).sort((a,b)=>a.date.localeCompare(b.date));
  recurring.innerHTML=arr.length?arr.map(x=>`<div class="sarni-odia-row"><span><strong>★ ${escapeText(x.title)}</strong><small>${escapeText(x.calendarKind)} · ${x.verified?'Verified/English':'Calculated lunar date'}</small></span><b>${escapeText(x.date)}</b></div>`).join(''):'<p>No personal recurring dates for this month.</p>';
  }
  const status=byId('odiaFestivalStatus');if(status)status.textContent='Automatic astronomical calendar loaded · '+(data.festivals||[]).length+' listed festivals this month';
