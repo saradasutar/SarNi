@@ -154,6 +154,7 @@ async function remove(id){
 }
 function calendarNav(action){
  if(!loggedIn())return;
+ if(typeof closeSarNiMobileMore==='function')closeSarNiMobileMore();
  if(action==='target'){
   if(typeof openStickyNote==='function'){openStickyNote();return;}
   $('homeAddTargetBtn')?.click();return;
