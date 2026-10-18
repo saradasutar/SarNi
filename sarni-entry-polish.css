@@ -178,3 +178,39 @@ html.sarni-personal-only #sarniLifeCheckBackend:focus-visible{outline:3px solid 
  html.sarni-personal-only .sarni-life-backend-check{align-items:stretch}
  html.sarni-personal-only #sarniLifeCheckBackend{width:100%}
 }
+
+/* SarNi v20.8.12: two intentional daily actions, all secondary tools in More */
+html.sarni-personal-only .sarni-mobile-add-grid-simple{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+html.sarni-personal-only .sarni-mobile-add-grid-simple .sarni-add-primary{
+ min-height:142px;padding:15px 13px;border-radius:19px;gap:8px;
+ border:1px solid #bfe5da;background:linear-gradient(145deg,#effbf7,#fff);
+ box-shadow:0 5px 14px rgba(20,112,103,.065);color:#1a4450;
+}
+html.sarni-personal-only .sarni-mobile-add-grid-simple .sarni-add-diary{
+ border-color:#d7cef8;background:linear-gradient(145deg,#f6f2ff,#fff);
+}
+html.sarni-personal-only .sarni-mobile-add-grid-simple .sarni-add-primary strong{font-size:17px;font-weight:850;line-height:1.25}
+html.sarni-personal-only .sarni-mobile-add-grid-simple .sarni-add-primary small{font-size:12.5px;font-weight:650;line-height:1.45;color:#5f6c78}
+html.sarni-personal-only .sarni-mobile-add-grid-simple .sarni-add-primary .sarni-add-glyph{width:41px;height:41px;font-size:22px}
+html.sarni-personal-only .sarni-mobile-add-subtitle{font-size:13px;font-weight:650;color:#667887;margin:7px 0 0}
+html.sarni-personal-only .sarni-more-from-plus{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px;width:100%;margin-top:14px;
+ border:1px solid #dce5ee;border-radius:13px;background:#f7fafc;min-height:48px;padding:11px;color:#38546a;font-size:14px;font-weight:850}
+html.sarni-personal-only .sarni-more-from-plus small{display:block;width:100%;font-size:11.5px;font-weight:600;color:#77859a;line-height:1.3}
+html.sarni-personal-only .sarni-quick-entry-active{outline:2px solid #77bcad;outline-offset:6px;border-radius:16px}
+html.sarni-personal-only .sarni-recent-quick{margin:15px 0 1px;border:1px solid #dfe7f0;border-radius:16px;background:linear-gradient(145deg,#f8fbff,#f9fefc);overflow:hidden}
+html.sarni-personal-only .sarni-recent-quick summary{cursor:pointer;padding:12px 14px;font-size:14.5px;font-weight:850;color:#37566e;min-height:45px}
+html.sarni-personal-only .sarni-recent-quick summary span{color:#568a83;font-size:14px}
+html.sarni-personal-only .sarni-recent-quick-list{padding:0 12px 10px;display:grid;gap:7px}
+html.sarni-personal-only .sarni-recent-quick-row{display:flex;justify-content:space-between;align-items:start;gap:10px;padding:10px 11px;border:1px solid #e6ecf3;background:#fff;border-radius:12px;min-width:0}
+html.sarni-personal-only .sarni-recent-quick-main{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1;overflow-wrap:anywhere}
+html.sarni-personal-only .sarni-recent-quick-main strong{color:#27475b;font-size:14px;font-weight:800;line-height:1.3}
+html.sarni-personal-only .sarni-recent-quick-main small{color:#627587;font-size:12px;font-weight:600;line-height:1.4}
+html.sarni-personal-only .sarni-recent-quick-amount{font-size:15px;font-weight:900;color:#0b776f;white-space:nowrap}
+html.sarni-personal-only .sarni-recent-quick-empty{font-size:13px;color:#63788a;margin:2px 0 5px}
+html.sarni-personal-only .sarni-recent-quick-diary{background:linear-gradient(145deg,#fbf9ff,#fff)}
+@media(max-width:390px){
+ html.sarni-personal-only .sarni-mobile-add-grid-simple .sarni-add-primary{min-height:130px;padding:12px 10px}
+ html.sarni-personal-only .sarni-mobile-add-grid-simple .sarni-add-primary strong{font-size:15.5px}
+ html.sarni-personal-only .sarni-recent-quick-row{padding:9px}
+}
+@media print{html.sarni-personal-only .sarni-recent-quick{display:none!important}}
