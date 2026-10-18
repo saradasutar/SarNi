@@ -6,7 +6,7 @@ SarNi's frontend is hosted directly on GitHub Pages. Google Apps Script is the *
 
 ## Current GitHub Pages frontend
 
-- Frontend: **v20.8.13** (`index.html` loads `app-v20-8-13.js`)
+- Frontend: **v20.8.14** (`index.html` loads `app-v20-8-14.js`)
 - Expected backend: **v3.17.30** — upload and deploy separately for original photos above 2 MB (verify against your active Apps Script deployment)
 - User interface: `styles.css`, `sarni-delight.css`, `sarni-delight.js`, and `sarni-entry-polish.css`
 - App installation: `manifest.webmanifest`
@@ -57,3 +57,13 @@ Under Quick Expense is a small **Last 3 expenses** collapsible list. Quick Diary
 ## v20.8.13 startup fix
 
 Resolved the `Cannot access 'sariWords' before initialization` error: initial authenticated application startup (`init()`) now runs only after the Life Experience module and all other top-level declarations have been initialized. The v20.8.12 + button, recent quick entries, rich editor and backend connection remain unchanged. No sheet, account, photos or Apps Script deployment was changed.
+
+## v20.8.14 · MyFamily-style English/Odia calendar and festivals
+
+- The Calendar page now has prominent Calendar, Reminder, Target and Festivals shortcuts, including from the mobile More menu. The centre + button remains intentionally limited to Quick Expense and Quick Diary.
+- Selecting an English date shows its Odia month, paksha and lunar tithi using the existing authenticated Bhubaneswar-sunrise calculation. The displayed lunar conversion is an **estimate**, not an official Kohinoor publication.
+- Existing reminder and target saving continues through SarNi's private Google Sheet and Apps Script v3.17.30. Existing recurring occasions can repeat by English date, Odia lunar tithi, or both.
+- Admin-visible Festival editor uses existing `saveImportantDate` and `deleteImportantDate` operations, saving a private record of type `OTHER` with the `[SARNI_FESTIVAL_V1]` notes marker, and `repeatYearly=true`. The admin may select English-date or Odia-lunar-tithi recurrence. The year-by-year occurrence is calculated by the existing backend as the calendar is browsed.
+- **Data scope:** Custom festival records are stored in the *signed-in administrator's account*. They do not automatically propagate to other users. The administrator restriction is frontend-only; centrally shared and backend-enforced admin-managed festivals require a separately deployed Apps Script backend change. No additional `Code.gs` replacement is needed for the current personal-account version.
+- Built-in official/published dates are limited; other computed festival dates require checking against the printed Kohinoor Panjika. Backend per-year verified overrides for recurring occasions continue to work.
+- No Google Sheet structures, accounts, passwords, security settings or remote backend links were changed by this frontend release.

@@ -214,3 +214,45 @@ html.sarni-personal-only .sarni-recent-quick-diary{background:linear-gradient(14
  html.sarni-personal-only .sarni-recent-quick-row{padding:9px}
 }
 @media print{html.sarni-personal-only .sarni-recent-quick{display:none!important}}
+
+/* SarNi 20.8.14 · English + Odia calendar shortcuts and festival management. */
+html.sarni-personal-only .sarni-calendar-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:3px 0 16px}
+html.sarni-personal-only .sarni-calendar-actions button{display:flex;justify-content:center;align-items:center;gap:7px;padding:11px 8px;border-radius:14px;min-height:49px;background:linear-gradient(135deg,#f1f8ff,#f6f3ff);border:1px solid #dce2f1;color:#294f69;font-size:14px;font-weight:850;cursor:pointer}
+html.sarni-personal-only .sarni-calendar-actions button:nth-child(2){background:#f0fbf8;border-color:#cbeadf;color:#116e61}
+html.sarni-personal-only .sarni-calendar-actions button:nth-child(3){background:#fff8e9;border-color:#f4e5c5;color:#916218}
+html.sarni-personal-only .sarni-calendar-actions button:nth-child(4){background:#fff1fa;border-color:#efd5e8;color:#934b7d}
+html.sarni-personal-only .sarni-calendar-actions button span{font-size:19px;line-height:1}
+html.sarni-personal-only .sarni-calendar-actions button:focus-visible,html.sarni-personal-only .sarni-festival-manager button:focus-visible{outline:3px solid #7e77dd;outline-offset:2px}
+html.sarni-personal-only .sarni-date-pair{margin:10px 0;padding:11px 13px;border:1px solid #d9d0ec;border-radius:13px;background:linear-gradient(110deg,#f8f4ff,#f3fbf8);font-size:14px;font-weight:800;line-height:1.6;color:#4a4778}
+html.sarni-personal-only .sarni-festival-manager{margin-top:15px;padding:18px;border:1px solid #e4d5ed;border-radius:20px;background:linear-gradient(140deg,#fffdfc,#fdf7ff)}
+html.sarni-personal-only .sarni-festival-manager .life-card-top h3{font-size:22px;font-weight:900}
+html.sarni-personal-only .sarni-festival-caption,.sarni-festival-hint{font-size:13px;font-weight:620;line-height:1.6;color:#5d6880}
+html.sarni-personal-only #sarniFestivalForm{margin-top:14px;padding:13px;border-radius:15px;background:#fff;border:1px solid #eee7f3}
+html.sarni-personal-only #sarniFestivalForm.hidden{display:none!important}
+html.sarni-personal-only #sarniFestivalForm label{font-size:15px;font-weight:800;line-height:1.5}
+html.sarni-personal-only #sarniFestivalForm :is(input:not([type=checkbox]),select,textarea){font-size:16px;font-weight:680;min-height:45px;border-radius:12px}
+html.sarni-personal-only #sarniFestivalForm textarea{font-weight:570}
+html.sarni-personal-only #sarniFestivalLunarFields{padding:13px 11px;border:1px solid #e2d2f0;background:#fbf8ff;border-radius:14px;margin:10px 0}
+html.sarni-personal-only #sarniFestivalLunarFields[hidden]{display:none}
+html.sarni-personal-only #sarniFestivalLunarFields legend{font-size:14px;font-weight:850;color:#674c85}
+html.sarni-personal-only #sarniFestivalLunarFields .sarni-festival-lunar{display:flex;gap:9px;align-items:center;font-size:13px;font-weight:750}
+html.sarni-personal-only #sarniFestivalLunarFields input[type=checkbox]{width:20px;height:20px;flex:0 0 auto}
+html.sarni-personal-only #sarniFestivalSaveStatus{font-size:13.5px;line-height:1.5;font-weight:750}
+html.sarni-personal-only #sarniFestivalSaveStatus.error{color:#b62b51}
+html.sarni-personal-only .sarni-festival-saved{margin-top:19px}
+html.sarni-personal-only .sarni-festival-saved h4{margin:0 0 10px;color:#3d516f;font-size:16px;font-weight:850}
+html.sarni-personal-only .sarni-festival-saved-list{display:grid;gap:8px}
+html.sarni-personal-only .sarni-festival-saved-row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border:1px solid #e5e5ef;border-radius:14px;padding:12px;background:#fff}
+html.sarni-personal-only .sarni-festival-saved-text{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1;overflow-wrap:anywhere}
+html.sarni-personal-only .sarni-festival-saved-text strong{color:#633b73;font-size:15px;font-weight:850}
+html.sarni-personal-only .sarni-festival-saved-text small{color:#67758b;font-size:12.5px;line-height:1.5}
+html.sarni-personal-only .sarni-festival-actions{display:flex;flex-wrap:wrap;gap:6px}
+html.sarni-personal-only .sarni-festival-actions button{min-height:36px;font-size:12.5px}
+@media(max-width:680px){
+ html.sarni-personal-only .sarni-calendar-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ html.sarni-personal-only .sarni-calendar-actions button{min-height:51px;font-size:15px}
+ html.sarni-personal-only .sarni-festival-manager{padding:14px 11px}
+ html.sarni-personal-only .sarni-festival-saved-row{flex-wrap:wrap}
+ html.sarni-personal-only .sarni-festival-actions{width:100%;justify-content:flex-end}
+}
+@media(prefers-reduced-motion:reduce){html.sarni-personal-only .sarni-calendar-actions button{transition:none!important}}
