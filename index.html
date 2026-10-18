@@ -9,10 +9,10 @@
 <meta content="0" http-equiv="Expires"/>
 <!-- The single theme-color meta below follows the installed PWA theme. -->
 <meta content="Private family finance, expenses, diary and planning dashboard" name="description"/>
-<meta content="20261018-20811-photo-check" name="myfinance-build"/>
+<meta content="20261018-20812-quick-add" name="myfinance-build"/>
 <meta content="light dark" name="color-scheme"/>
 <script>
-    window.__MYFINANCE_PAGE_BUILD__='20261018-20811-photo-check';
+    window.__MYFINANCE_PAGE_BUILD__='20261018-20812-quick-add';
     window.__MYFINANCE_NATIVE__=false; // Frontend stays on GitHub Pages; authenticated backend runs separately.
     try { localStorage.setItem('portfolio_overview_default','PERSONAL'); } catch(e) {}
     window.__SAR_NI_ASSETS__={css:false,app:false};
@@ -26,12 +26,12 @@
       window.__SAR_NI_ASSETS__[kind]=false;
       document.documentElement.classList.add('sarni-asset-error');
       var box=document.getElementById('sarniAssetStatus');
-      if(box)box.innerHTML='<strong>Dashboard files could not be loaded.</strong><br>Check GitHub Pages assets for SarNi FE v20.8.11, then <a href="./?reload=1">retry here</a>. Keep using this website, not the Apps Script /exec link.';
+      if(box)box.innerHTML='<strong>Dashboard files could not be loaded.</strong><br>Check GitHub Pages assets for SarNi FE v20.8.12, then <a href="./?reload=1">retry here</a>. Keep using this website, not the Apps Script /exec link.';
     };
     setTimeout(function(){
       if(document.documentElement.classList.contains('sarni-assets-ready'))return;
       var box=document.getElementById('sarniAssetStatus');
-      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Check that styles.css and app-v20-8-11.js are published. <a href="./?reload=1">Reload SarNi</a> or open <a href="./health.html">Site check</a>.';
+      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Check that styles.css and app-v20-8-12.js are published. <a href="./?reload=1">Reload SarNi</a> or open <a href="./health.html">Site check</a>.';
     },12000);
   </script>
 <title>SarNi · Personal Life Centre</title>
@@ -125,9 +125,9 @@ html.sarni-personal-only .gpf-empty{background:#f8fbff;border:1px dashed #9fb9d9
 </style>
 <link href="https://script.google.com" rel="preconnect" crossorigin="anonymous"/>
 <link href="https://script.google.com" rel="dns-prefetch"/>
-<link as="style" href="./styles.css?v=20261018-20811-photo-check" rel="preload"/>
-<link as="script" href="./app-v20-8-11.js?v=20261018-20811-photo-check" rel="preload"/>
-<link href="./styles.css?v=20261018-20811-photo-check" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
+<link as="style" href="./styles.css?v=20261018-20812-quick-add" rel="preload"/>
+<link as="script" href="./app-v20-8-12.js?v=20261018-20812-quick-add" rel="preload"/>
+<link href="./styles.css?v=20261018-20812-quick-add" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
 <style id="sarniOdiaStyles">
 .sarni-odia-settings{margin:12px 0 16px;border:1px solid #e8cae5;border-radius:15px;padding:15px;background:linear-gradient(140deg,#fff9ff,#fffdfb);min-width:0}
 .sarni-odia-settings legend{padding:0 8px;color:#743c78;font-weight:850;font-size:14px}
@@ -426,7 +426,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 }
 </style>
 <link rel="stylesheet" href="./sarni-delight.css?v=20261017" media="all">
-<link rel="stylesheet" href="./sarni-entry-polish.css?v=20261018-20811" media="all">
+<link rel="stylesheet" href="./sarni-entry-polish.css?v=20261018-20812" media="all">
 <style id="sarniBackendDiagnosticHelp">
 .sarni-backend-help{display:block;margin:8px 0 14px;font-size:12px;line-height:1.5;font-weight:800;color:#2d5c95;text-decoration:underline;text-underline-offset:3px}
 #loginMessage:empty + .sarni-backend-help{display:none}
@@ -460,7 +460,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <a class="sarni-backend-help" href="./backend-check.html" target="_blank" rel="noopener noreferrer">Check backend connection without entering a password ↗</a>
 <div class="login-meta">
 <p class="tiny muted">Your password is never stored in the browser.</p>
-<div class="version-pair"><span class="version-badge" id="loginVersion">Frontend · v20.8.11</span><span class="version-badge backend-version" id="loginBackendVersion">Backend · v3.17.30</span></div>
+<div class="version-pair"><span class="version-badge" id="loginVersion">Frontend · v20.8.12</span><span class="version-badge backend-version" id="loginBackendVersion">Backend · v3.17.30</span></div>
 <button class="login-repair-button" id="repairBrowserBtn" type="button">↻ Repair browser cache/session</button>
 </div>
 </form>
@@ -502,14 +502,14 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <div class="sidebar-session-card">
 <span class="sidebar-session-label">SIGNED IN AS</span>
 <div class="sidebar-account-line"><span class="person-avatar" id="sidebarUserPhoto">👤</span><strong id="dashboardUsername">—</strong></div>
-<span id="dashboardVersion">Frontend · v20.8.11</span><span id="dashboardBackendVersion">Backend · v3.17.30</span>
+<span id="dashboardVersion">Frontend · v20.8.12</span><span id="dashboardBackendVersion">Backend · v3.17.30</span>
 </div>
 <div class="sidebar-foot"><button class="nav-item" id="changePasswordBtn"><span>⌁</span>Change password</button><button class="nav-item danger-text" id="logoutBtn"><span>↪</span>Log out</button></div>
 </aside>
 <button class="mobile-left-quick-diary" id="quickDiaryMobilePinned" title="Quick Diary — always available" type="button">✎ Quick Diary</button>
 <main class="main-content" id="mainDashboard" tabindex="-1">
 <header class="topbar"><span aria-hidden="true" class="mobile-top-brand">S</span>
-<div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Personal Life Centre</h1></div><div class="dashboard-version-pair"><span class="dashboard-version-chip" id="dashboardVersionTop">FE v20.8.11</span><span class="dashboard-version-chip backend-chip" id="dashboardBackendVersionTop">BE v3.17.30</span></div></div></div>
+<div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Personal Life Centre</h1></div><div class="dashboard-version-pair"><span class="dashboard-version-chip" id="dashboardVersionTop">FE v20.8.12</span><span class="dashboard-version-chip backend-chip" id="dashboardBackendVersionTop">BE v3.17.30</span></div></div></div>
 <div class="top-actions"><button aria-haspopup="dialog" class="command-palette-button" id="commandPaletteBtn" title="Search pages and actions (Ctrl/⌘ K)" type="button"><span>⌕</span><strong>Search</strong><kbd>⌘K</kbd></button><div class="display-preferences" title="Personalise dashboard appearance"><select aria-label="Dashboard density" id="displayDensitySelect"><option value="COMFORTABLE">Comfortable</option><option value="COMPACT">Compact</option></select><select aria-label="Dashboard theme" id="displayThemeSelect"><option selected="" value="LIGHT">Light</option><option value="AUTO">Auto theme</option><option value="DARK">Dark</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button aria-label="Refresh personal records" class="icon-button" id="refreshBtn" title="Refresh personal records">↻</button><button aria-label="Signed-in user" class="avatar-button" id="profileButton"><span id="avatarInitial">A</span><img alt="Your profile photo" class="header-user-photo hidden" id="headerUserPhoto"/></button><button aria-label="Sign out" class="header-logout-button" id="headerLogoutBtn" title="Sign out of SarNi" type="button"><span aria-hidden="true">↪</span><strong>Sign out</strong></button></div>
 </header>
 <nav class="sarni-simplified-nav" id="sarniSimplifiedNav" aria-label="Main sections">
@@ -522,7 +522,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </nav>
 <div aria-label="Mobile session controls" class="mobile-session-bar" id="mobileSessionBar">
 <div class="mobile-session-versions">
-<span class="mobile-version-chip" id="mobileFrontendVersion">FE v20.8.11</span>
+<span class="mobile-version-chip" id="mobileFrontendVersion">FE v20.8.12</span>
 <span class="mobile-version-chip backend" id="mobileBackendVersion">BE v3.17.30</span>
 </div>
 <div class="mobile-session-actions">
@@ -598,6 +598,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <details class="life-extra"><summary>Payment details &amp; notes</summary><div class="life-fields"><label>Paid to<input maxlength="140" name="paidTo" placeholder="Shop / person"/></label><label>Paid from<input maxlength="120" name="account" placeholder="Cash / UPI / Card"/></label></div><label>Notes<input maxlength="1000" name="notes" placeholder="Optional details"/></label></details>
 <div class="life-form-foot"><span data-life-status="" role="status">Ready to save</span><button class="life-save" type="submit">✓ Save &amp; Next</button></div>
 </form>
+<details class="sarni-recent-quick" id="sarniQuickRecentExpense" open><summary>Last 3 expenses <span>↻</span></summary><div id="sarniRecentQuickExpense" class="sarni-recent-quick-list" aria-live="polite">Your recent expenses appear after sign-in.</div></details>
 </article>
 <article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">QUICK DIARY</span><h3>Remember today</h3></div><span class="life-card-icon">✎</span></div>
 <div id="diaryExperienceHint" class="life-context-hint hidden" role="status"></div><form class="life-entry-form" data-life-diary-form="" id="lifeDiaryHome"><div class="life-fields"><label>Entry date<input name="date" required="" type="date"/></label><label>Title (optional)<input maxlength="120" name="title" placeholder="A day worth remembering"/></label></div><div class="quick-diary-inline-options"><label>Type<select name="entryType"><option value="PERSONAL">Personal</option><option value="LEARNING">Learning</option><option value="TARGET">Target</option><option value="IDEA">Idea</option><option value="GRATITUDE">Gratitude</option></select></label><label class="quick-important-toggle"><input name="important" type="checkbox"/>★ Important</label></div><label>Write directly here<textarea maxlength="5000" name="text" placeholder="Today I felt… / Things I did… / Something I learned…" required="" rows="5"></textarea></label>
@@ -605,6 +606,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <div class="life-prompt-row"><button data-life-prompt="gratitude" type="button">♡ Gratitude</button><button data-life-prompt="highlight" type="button">✧ Highlight</button><button data-life-prompt="tomorrow" type="button">◎ Tomorrow</button></div>
 <div class="life-form-foot"><span data-life-status="" role="status">Draft stays on this device until saved</span><button class="life-save" type="submit">Save diary</button></div>
 </form>
+<details class="sarni-recent-quick sarni-recent-quick-diary" id="sarniQuickRecentDiary"><summary>Last 3 diary entries <span>↻</span></summary><div id="sarniRecentQuickDiary" class="sarni-recent-quick-list" aria-live="polite">Your recent diary notes appear after sign-in.</div></details>
 </article>
 </div>
 </section>
@@ -1381,22 +1383,19 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <nav aria-label="SarNi mobile navigation" class="mobile-nav sarni-mobile-dock" id="sarniMobileDock">
 <button aria-label="Home" class="mobile-nav-item active" data-section="overview" type="button"><span class="sarni-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span><span class="sarni-dock-label">Home</span></button>
 <button aria-label="Plan and Calendar" class="mobile-nav-item" data-section="calendar" type="button"><span class="sarni-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 2v6M17 2v6M3 10h18"/></svg></span><span class="sarni-dock-label">Plan</span></button>
-<button aria-label="Add expense, diary, reminder or itinerary" aria-expanded="false" aria-controls="sarniMobileAddSheet" class="sarni-mobile-add-fab" id="sarniMobileQuickAdd" type="button"><span class="sarni-mobile-add-circle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 4v16M4 12h16"/></svg></span><span class="sr-only">Quick Add</span></button>
+<button aria-label="Quick add an expense or diary entry" aria-expanded="false" aria-controls="sarniMobileAddSheet" class="sarni-mobile-add-fab" id="sarniMobileQuickAdd" type="button"><span class="sarni-mobile-add-circle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 4v16M4 12h16"/></svg></span><span class="sr-only">Quick Add</span></button>
 <button aria-label="Money and expenses" class="mobile-nav-item" data-section="expenditure" type="button"><span class="sarni-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="15" rx="3"/><path d="M2 10h20M16 15h3"/></svg></span><span class="sarni-dock-label">Money</span></button>
 <button aria-controls="mobileMoreSheet" aria-expanded="false" aria-label="More features" class="mobile-nav-item mobile-more-button" id="mobileMoreBtn" type="button"><span class="sarni-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></span><span class="sarni-dock-label">More</span></button>
 </nav>
 <div class="sarni-mobile-add-backdrop hidden" id="sarniMobileAddBackdrop" aria-hidden="true"></div>
 <aside class="sarni-mobile-add-sheet hidden" id="sarniMobileAddSheet" aria-label="Quick Add" aria-modal="true" aria-labelledby="sarniMobileAddTitle" role="dialog" tabindex="-1">
  <div class="sarni-mobile-sheet-handle" aria-hidden="true"></div>
- <div class="sarni-mobile-sheet-head"><div><small>CAPTURE IT IN A MOMENT</small><h2 id="sarniMobileAddTitle">What would you like to add?</h2></div><button type="button" id="sarniMobileAddClose" aria-label="Close Quick Add">×</button></div>
- <div class="sarni-mobile-add-grid">
-  <button type="button" data-sarni-quick="expense"><span class="sarni-add-glyph mint">₹</span><strong>Expense</strong><small>Record spending</small></button>
-  <button type="button" id="quickDiaryMobileBtn" data-mobile-section="quickDiary"><span class="sarni-add-glyph lilac">✎</span><strong>Quick Diary</strong><small>Saves to Diary</small></button>
-  <button type="button" data-sarni-smartpaste-open><span class="sarni-add-glyph sky">✧</span><strong>Smart Paste</strong><small>Text to records</small></button>
-  <button type="button" data-sarni-quick="reminder"><span class="sarni-add-glyph amber">▦</span><strong>Reminder</strong><small>Plan a date</small></button>
-  <button type="button" data-sarni-quick="experience"><span class="sarni-add-glyph rose">✦</span><strong>Life Experience</strong><small>Save a lesson</small></button>
-  <button type="button" data-sarni-quick="task"><span class="sarni-add-glyph slate">✓</span><strong>Task / Target</strong><small>Remember to do</small></button>
+ <div class="sarni-mobile-sheet-head"><div><small>FAST DAILY ENTRY</small><h2 id="sarniMobileAddTitle">Quick Add</h2><p class="sarni-mobile-add-subtitle">Choose an entry, fill it in and save.</p></div><button type="button" id="sarniMobileAddClose" aria-label="Close Quick Add">×</button></div>
+ <div class="sarni-mobile-add-grid sarni-mobile-add-grid-simple">
+  <button type="button" class="sarni-add-primary sarni-add-expense" data-sarni-quick="expense"><span class="sarni-add-glyph mint">₹</span><strong>Quick Expense</strong><small>Amount · What for · Save</small></button>
+  <button type="button" class="sarni-add-primary sarni-add-diary" data-sarni-quick="diary"><span class="sarni-add-glyph lilac">✎</span><strong>Quick Diary</strong><small>Write today · Save</small></button>
  </div>
+ <button type="button" class="sarni-more-from-plus" id="sarniMoreFromQuick">More tools <span aria-hidden="true">•••</span><small>Reminders, Smart Paste, Life Experiences and more</small></button>
 </aside>
 <div class="mobile-more-backdrop hidden" id="mobileMoreBackdrop"></div>
 <aside aria-labelledby="mobileMoreTitle" aria-modal="true" class="mobile-more-sheet hidden" id="mobileMoreSheet" role="dialog" tabindex="-1">
@@ -1404,6 +1403,8 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <header class="mobile-more-title-row"><div><small>EXPLORE SARNI</small><h2 id="mobileMoreTitle">All your essentials</h2></div><button aria-label="Close menu" class="mobile-more-close" id="mobileMoreClose" type="button">×</button></header>
 <div class="mobile-more-grid">
 <button data-section="diary" type="button"><span class="mobile-more-glyph">▤</span><strong>Diary</strong><small>History · Monthly · Edit</small></button>
+<button type="button" data-sarni-quick="reminder"><span class="mobile-more-glyph">▦</span><strong>Add Reminder</strong><small>Birthdays · Plans · Important dates</small></button>
+<button type="button" data-sarni-smartpaste-open><span class="mobile-more-glyph">✧</span><strong>Smart Paste</strong><small>Turn pasted text into entries</small></button>
 <button data-section="creditCards" type="button"><span class="mobile-more-glyph">▣</span><strong>Credit Cards</strong><small>Major purchases · Bills</small></button>
 <button data-section="experiences" type="button"><span class="mobile-more-glyph">✦</span><strong>Life Experiences</strong><small>Lessons that remind you</small></button>
 <button data-section="books" type="button"><span class="mobile-more-glyph">▣</span><strong>Book Writing</strong><small>Your writing</small></button>
@@ -1414,7 +1415,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <button id="mobileMorePassword" type="button">⌁   Change password</button>
 <button id="mobileMoreLogout" type="button">↪   Sign out</button>
 </div>
-<div class="mobile-more-versions"><span id="moreFrontendVersion">FE v20.8.11</span><span id="moreBackendVersion">BE v3.17.30</span></div>
+<div class="mobile-more-versions"><span id="moreFrontendVersion">FE v20.8.12</span><span id="moreBackendVersion">BE v3.17.30</span></div>
 </aside>
 </div>
 <div aria-labelledby="commandPaletteTitle" aria-modal="true" class="command-palette-backdrop hidden" id="commandPalette" role="dialog">
@@ -1692,7 +1693,7 @@ ICICI" rows="6"></textarea><small class="field-help">These choices appear only w
     };
   </script>
 <script defer src="./sarni-life-format.js?v=20261018-20810" onerror="sarNiAssetFailed('life-format')"></script>
-<script defer="" onerror="sarNiAssetFailed('app')" onload="sarNiAssetLoaded('app')" src="./app-v20-8-11.js?v=20261018-20811-photo-check"></script>
+<script defer="" onerror="sarNiAssetFailed('app')" onload="sarNiAssetLoaded('app')" src="./app-v20-8-12.js?v=20261018-20812-quick-add"></script>
 <script>
 /* SarNi Odia Calendar v20.8.0 — optional companion to app-v20-7-0.js.
  * All festival and recurrence dates are calculated on the authenticated backend.
@@ -1846,8 +1847,17 @@ function goto(section){if(!isReady())return;
   const menu=el('sarniMoreMenu');if(menu)menu.hidden=true;
   const more=document.querySelector('#sarniSimplifiedNav>[data-sarni-nav="more"]');if(more)more.setAttribute('aria-expanded','false');
 }
-function showAdvanced(id){goto('home');const details=el('sarniAdvancedHome');if(details)details.open=true;
-  requestAnimationFrame(()=>{const target=el(id);if(target){target.scrollIntoView({behavior:'smooth',block:'center'});target.querySelector('input,textarea')?.focus({preventScroll:true});}});
+function showAdvanced(id){
+  goto('home');
+  const details=el('sarniAdvancedHome');if(details)details.open=true;
+  const focusSelector=id==='lifeExpenseHome'?'input[name="amount"]':id==='lifeDiaryHome'?'textarea[name="text"]':'input,textarea';
+  requestAnimationFrame(()=>{
+    const target=el(id);if(!target)return;
+    target.scrollIntoView({behavior:'smooth',block:'center'});
+    target.classList.add('sarni-quick-entry-active');
+    document.querySelectorAll('.sarni-quick-entry-active').forEach(node=>{if(node!==target)node.classList.remove('sarni-quick-entry-active');});
+    setTimeout(()=>{target.querySelector(focusSelector)?.focus({preventScroll:true});},160);
+  });
 }
 function quick(kind){if(kind==='expense')showAdvanced('lifeExpenseHome');else if(kind==='diary')showAdvanced('lifeDiaryHome');else if(kind==='reminder'){goto('calendar');requestAnimationFrame(()=>el('calendarEventForm')?.scrollIntoView({block:'start'}));}
 else if(kind==='experience'){goto('experiences');requestAnimationFrame(()=>el('lifeExperienceForm')?.scrollIntoView({block:'start'}));}
@@ -1914,7 +1924,7 @@ async function fetchFocus(force){if(!isReady()||fetching||(!force&&Date.now()-la
  finally{fetching=false;renderFocus();if(requestOwner!==String(state.username||'')&&isReady())void fetchFocus(true);}
 }
 function applyVersion(){
- const version=(typeof APP_VERSION==='string' && APP_VERSION)?APP_VERSION:'20.8.11';
+ const version=(typeof APP_VERSION==='string' && APP_VERSION)?APP_VERSION:'20.8.12';
  for(const id of ['loginVersion','dashboardVersion']){const x=el(id);if(x)x.textContent='Frontend · v'+version;}
  for(const id of ['dashboardVersionTop','mobileFrontendVersion','moreFrontendVersion']){const x=el(id);if(x)x.textContent='FE v'+version;}
 }
@@ -2093,6 +2103,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  }
  add.addEventListener('click',()=>setOpen(!isOpen()));
  close?.addEventListener('click',()=>setOpen(false));shade.addEventListener('click',()=>setOpen(false));
+ $('sarniMoreFromQuick')?.addEventListener('click',()=>{setOpen(false);more?.click();});
+ $('mobileMoreSheet')?.addEventListener('click',event=>{
+  if(event.target.closest('[data-sarni-quick],[data-sarni-smartpaste-open]'))$('mobileMoreClose')?.click();
+ },true);
  document.addEventListener('keydown',event=>{
   if(event.key==='Escape'&&isOpen()){event.preventDefault();setOpen(false);return;}
   if(event.key==='Tab'&&isOpen()){
@@ -2105,7 +2119,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  });
  // Close before the existing SarNi handlers perform the actual operation.
  sheet.addEventListener('click',event=>{
-  if(event.target.closest('button[data-sarni-quick],button[data-sarni-smartpaste-open],#quickDiaryMobileBtn'))setOpen(false);
+  if(event.target.closest('button[data-sarni-quick],button[data-sarni-smartpaste-open]'))setOpen(false);
  },true);
  more?.addEventListener('click',()=>{if(isOpen())setOpen(false);});
  function keyboardField(x){return x&&x.matches?.('input:not([type="checkbox"]):not([type="radio"]),textarea,select,[contenteditable="true"]');}
