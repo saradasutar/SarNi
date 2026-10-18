@@ -73,7 +73,7 @@
     const sticky=row._sticky===true;
     const kind=sticky?'Quick reminder':String(row.kind||'Important date').replace(/_/g,' ').toLowerCase();
     meta.append(el('strong','sfp-kind',kind));
-    meta.append(el('span','sfp-due',sticky?(row.dueDate?'Due '+readable(row.dueDate):'No due date'):readable(row.eventDate)));
+    meta.append(el('span','sfp-due',sticky?(row.dueDate?'Due '+readable(row.dueDate):'No due date'):(row.repeatYearly?'Original '+readable(row.eventDate):readable(row.eventDate))));
     card.append(meta,el('h4','',row.title||'Untitled reminder'));
     if(!sticky)card.append(el('small','sfp-reference',datesLabel(row)));
     if(row.text||row.notes)card.append(el('p','sfp-description',row.text||row.notes));
