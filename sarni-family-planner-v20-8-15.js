@@ -114,7 +114,7 @@
     const events=arr(focus?.events).filter(x=>escDate(x.date));
     if(!events.length)return;
     const group=el('section','sfp-upcoming');
-    group.append(el('h4','','Upcoming verified/backend-calculated occurrences'));
+    group.append(el('h4','','Upcoming backend-calculated occurrences'));
     const list=el('div','sfp-upcoming-list');
     events.slice(0,5).forEach(x=>{
       const row=el('div','sfp-upcoming-row');
@@ -176,11 +176,18 @@
     const f=$('calendarEventForm');if(!f)return;
     if(row){
       const input=$('calendarEventSearch');
-      if(input)input.value='';
+      // Search by the exact saved title first: the built-in calendar limits visible records.
+      // Trigger the ORIGINAL edit control so lunar recurrence and email fields are preserved.
+      if(input)input.value=String(row.title||'');
       if(typeof renderStandaloneCalendar==='function')renderStandaloneCalendar();
       const edit=[...document.querySelectorAll('#standaloneImportantList [data-cal-edit]')].find(b=>String(b.dataset.calEdit)===String(row.id));
-      if(edit)edit.click();
-      else {f.elements.id.value=row.id;f.elements.eventDate.value=row.eventDate;f.elements.title.value=row.title;f.elements.kind.value=row.kind;f.elements.notes.value=row.notes||'';}
+      if(!edit){
+        if(typeof toast==='function')toast('Could not open that date safely. Search it under Saved important dates.','error');
+        if(input)input.value='';
+        return;
+      }
+      edit.click();
+      if(input){input.value='';if(typeof renderStandaloneCalendar==='function')renderStandaloneCalendar();}
     } else {
       $('calendarEventClear')?.click();
       f.elements.kind.value='REMINDER';
