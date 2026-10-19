@@ -3074,9 +3074,10 @@ async function removeCollaboratorUI(username){
  * colour pickers. Store only safe HTML (no scripts, links, external assets).
  */
 let sarniChapterSelection=null;
-function sarniChapterRememberSelection(){
+let sarniChapterSelectionProtected=false;
+function sarniChapterRememberSelection(force=false){
   const editor=els.chapterContent,selection=window.getSelection?.();
-  if(!editor||!selection?.rangeCount)return;
+  if(!editor||!selection?.rangeCount||(sarniChapterSelectionProtected&&!force))return;
   const range=selection.getRangeAt(0);
   if(editor.contains(range.commonAncestorContainer))sarniChapterSelection=range.cloneRange();
 }
@@ -3144,7 +3145,7 @@ function sarniChapterFallbackFormat(command,value){
     range.insertNode(wrapper);
     range.selectNodeContents(wrapper);
     selection.removeAllRanges();selection.addRange(range);
-    sarniChapterRememberSelection();
+    sarniChapterRememberSelection(true);
     return true;
   }catch(e){return false;}
 }
@@ -3157,6 +3158,7 @@ function openChapterModal(chapter=null){
   if(els.chapterTitle)els.chapterTitle.value=chapter?.title||'';
   if(els.chapterStatus)els.chapterStatus.value=chapter?.status||'NOT_STARTED';
   sarniChapterSelection=null;
+  sarniChapterSelectionProtected=false;
   if(els.chapterContent)els.chapterContent.innerHTML=sarniChapterSafeHtml(chapter?.content||'');
   if(els.chapterNotes)els.chapterNotes.value=chapter?.notes||'';
   const d=state.activeBookDetail,collabOptions=d?[{username:d.book.ownerUsername}].concat(d.book.collaborators):[];
@@ -3190,7 +3192,7 @@ function runRteCommand(command,value=null){
   let ok=false;
   try{ok=Boolean(document.execCommand(command,false,value));}catch(e){}
   if(!ok)ok=sarniChapterFallbackFormat(command,value);
-  sarniChapterRememberSelection();
+  sarniChapterRememberSelection(true);
   updateChapterWordCountLive();
   if(!ok)toast('Select the words in your chapter first, then choose formatting.','info');
 }
@@ -3199,7 +3201,7 @@ function applyChapterHeading(tag){
   sarniChapterRestoreSelection();
   try{document.execCommand('formatBlock',false,['P','H2','H3'].includes(tag)?tag:'P');}
   catch(e){toast('Could not apply heading. Select a paragraph and try again.','info');}
-  sarniChapterRememberSelection();
+  sarniChapterRememberSelection(true);
   updateChapterWordCountLive();
 }
 async function saveChapterForm(event){
@@ -7527,12 +7529,16 @@ function bindEvents(){
   safeOn(els.addChapterBtn,'click',()=>openChapterModal());
   safeOn(els.chapterForm,'submit',saveChapterForm);
   safeOn(els.chapterContent,'input',()=>{updateChapterWordCountLive();sarniChapterRememberSelection();});
+  safeOn(els.chapterContent,'pointerdown',()=>{sarniChapterSelectionProtected=false;});
+  safeOn(els.chapterContent,'touchstart',()=>{sarniChapterSelectionProtected=false;});
+  safeOn(els.chapterContent,'keydown',()=>{sarniChapterSelectionProtected=false;});
   safeOn(els.chapterContent,'mouseup',sarniChapterRememberSelection);
   safeOn(els.chapterContent,'keyup',sarniChapterRememberSelection);
   safeOn(els.chapterContent,'touchend',sarniChapterRememberSelection);
   safeOn(document,'selectionchange',sarniChapterRememberSelection);
   safeOn(els.chapterRteToolbar,'pointerdown',event=>{
-    sarniChapterRememberSelection();
+    sarniChapterRememberSelection(true);
+    sarniChapterSelectionProtected=true;
     // Tapping a simple formatting button must not discard the Android
     // text selection; native colour selectors must retain their click.
     if(event.target.closest('button[data-rte-cmd]'))event.preventDefault();
