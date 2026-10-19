@@ -1,0 +1,38 @@
+/* Isolated Book Writing starter styles. No changes to SarNi global navigation. */
+.sfb-start{background:linear-gradient(115deg,#16675f,#247a72);color:#fff}
+.sfb-status{font-size:13px;min-height:18px;color:#375569;margin:5px 0 12px}
+.sfb-outline{border:1px solid #d9e6e7;border-radius:18px;padding:18px;margin:14px 0 20px;background:linear-gradient(180deg,#f7fbfb,#fff);color:#1c3448}
+.sfb-outline[hidden]{display:none!important}
+.sfb-outline-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.sfb-outline-head h3{font-size:21px;margin:3px 0 6px}
+.sfb-outline-head p{font-size:13px;line-height:1.5;margin:4px 0 6px}
+.sfb-summary{font-size:13px;color:#527078;margin:12px 0}
+.sfb-part{margin:9px 0;border:1px solid #e0e7ea;border-radius:13px;background:#fff;overflow:hidden}
+.sfb-part summary{padding:13px 15px;font-weight:750;cursor:pointer;line-height:1.5;color:#153f46;background:#f0f8f7}
+.sfb-chapter{display:flex;width:100%;background:#fff;border:0;border-top:1px solid #edf1f2;color:#1e3341;cursor:pointer;text-align:left;justify-content:space-between;align-items:center;gap:12px;padding:13px 15px;font:inherit}
+.sfb-chapter:hover,.sfb-chapter:focus-visible{background:#e8f5f3}
+.sfb-chapter:disabled{opacity:.5;cursor:not-allowed}
+.sfb-chapter span{font-weight:650}
+.sfb-chapter small{font-size:12px;color:#657b86;white-space:nowrap}
+.sfb-caution{font-size:12px;color:#607586;margin:12px 3px 0;line-height:1.55}
+@media(max-width:650px){.sfb-outline{padding:12px;border-radius:14px}.sfb-outline-head{flex-direction:column}.sfb-chapter{flex-direction:column;align-items:flex-start;gap:5px}.sfb-chapter small{white-space:normal}.sfb-start{width:100%}}
+
+/* Father memoir: mobile-readable chapters, guided research and export controls */
+.sfb-download-actions{display:flex;gap:8px;flex-wrap:wrap}
+.sfb-download-actions button{font-size:13px;font-weight:750;min-height:40px}
+.sfb-chapter-description{display:flex;flex-direction:column;align-items:flex-start;min-width:0;gap:5px}
+.sfb-chapter-description>span,.sfb-chapter-description{font-weight:800;font-size:15px;line-height:1.4}
+.sfb-chapter .sfb-chapter-prompt{white-space:normal;text-align:left;font-size:12px;font-weight:550;color:#697d86;line-height:1.5}
+.sfb-chapter>small{font-weight:750;font-size:12px;white-space:normal;text-align:right;min-width:110px;color:#2f6f67}
+.sfb-part[open]>summary{background:#eaf5ef}
+.sfb-outline .sfb-summary{font-weight:700;font-size:13px}
+.sfb-outline .sfb-caution{border-top:1px solid #dbe5e7;padding-top:12px}
+@media(max-width:650px){
+ .sfb-download-actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .sfb-download-actions button{font-size:12px;min-width:0}
+ .sfb-chapter{min-height:76px;align-items:flex-start}
+ .sfb-chapter>small{text-align:left;font-size:13px}
+ .sfb-chapter-description{font-size:16px}
+ .sfb-part summary{font-size:15px}
+}
+@media print{.sfb-start,.sfb-download-actions{display:none!important}}
