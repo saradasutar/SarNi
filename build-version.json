@@ -1,8 +1,8 @@
 {
-  "version": "20.8.14",
-  "frontend": "20.8.14",
+  "version": "20.8.16",
+  "frontend": "20.8.16",
   "backendExpected": "3.17.30",
-  "build": "20261018-20814-calendar-fest",
+  "build": "20261019-20816-calendar-plans",
   "hosting": "github-pages-direct-ui",
   "backendUpgradeRequiredForLargerPhotos": true
 }

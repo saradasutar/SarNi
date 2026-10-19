@@ -1,0 +1,66 @@
+/* MyFamily-inspired SarNi planning centre v20.8.16. Local to calendar. */
+#sarniFamilyPlanner{--sfp-ink:#172a52;--sfp-line:#dbe3f0;--sfp-muted:#667795;margin:18px 0 24px;padding:20px;border:1px solid #d7e4f6;border-radius:22px;background:linear-gradient(135deg,#f5f8ff 0%,#fff 47%,#f3fff9 100%);box-shadow:0 12px 32px rgba(20,54,92,.07);color:var(--sfp-ink)}
+#sarniFamilyPlanner *{box-sizing:border-box}
+#sarniFamilyPlanner .sfp-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}
+#sarniFamilyPlanner .sfp-header small{font-weight:850;letter-spacing:.1em;color:#4f70b1;font-size:10px}
+#sarniFamilyPlanner .sfp-header h3{font-size:22px;font-weight:850;margin:3px 0 4px;color:var(--sfp-ink)}
+#sarniFamilyPlanner .sfp-header p{margin:0;color:var(--sfp-muted);font-size:12px}
+#sarniFamilyPlanner #sfpCount{white-space:nowrap;background:#e5ecff;border:1px solid #d2dfff;border-radius:99px;padding:8px 12px;color:#264583;font-size:11px;font-weight:800}
+#sarniFamilyPlanner .sfp-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0 18px}
+#sarniFamilyPlanner .sfp-tabs{display:flex;gap:5px;padding:5px;border-radius:14px;background:#e7edfa}
+#sarniFamilyPlanner button{cursor:pointer;touch-action:manipulation}
+#sarniFamilyPlanner .sfp-tabs button{border:0;background:transparent;padding:10px 16px;border-radius:10px;color:#4d6185;font-weight:800;font-size:13px}
+#sarniFamilyPlanner .sfp-tabs button.active{background:#fff;color:#1c4384;box-shadow:0 2px 9px #29457222}
+#sarniFamilyPlanner #sfpSearch{flex:1;max-width:320px;min-width:120px;border:1px solid var(--sfp-line);background:white;border-radius:12px;padding:11px 12px;font:inherit;font-size:13px;color:var(--sfp-ink)}
+#sarniFamilyPlanner .sfp-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#sarniFamilyPlanner .sfp-stat{display:flex;flex-direction:column;gap:3px;padding:15px;background:#fff;border:1px solid var(--sfp-line);border-radius:15px;min-width:0}
+#sarniFamilyPlanner .sfp-stat strong{font-size:23px;color:#214c93;font-weight:900}
+#sarniFamilyPlanner .sfp-stat small{font-size:11px;color:var(--sfp-muted);font-weight:700;line-height:1.35}
+#sarniFamilyPlanner .sfp-help{color:var(--sfp-muted);font-size:11px;line-height:1.6;margin:10px 0 12px}
+#sarniFamilyPlanner .sfp-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:13px 0}
+#sarniFamilyPlanner .sfp-button{min-height:38px;border:1px solid #d6e2f4;background:#fff;border-radius:10px;padding:8px 12px;color:#2d4f81;font-size:12px;font-weight:750}
+#sarniFamilyPlanner .sfp-button:hover,#sarniFamilyPlanner .sfp-button.selected{background:#e4edff;border-color:#87a9e9}
+#sarniFamilyPlanner .sfp-button.primary{color:#fff;background:#284f99;border-color:#284f99}
+#sarniFamilyPlanner .sfp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,285px),1fr));gap:12px}
+#sarniFamilyPlanner .sfp-card{padding:15px;background:#fff;border:1px solid var(--sfp-line);border-radius:16px;box-shadow:0 4px 14px #1236580a;min-width:0}
+#sarniFamilyPlanner .sfp-card.sfp-complete{background:#f6fff9}
+#sarniFamilyPlanner .sfp-card-meta{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#sarniFamilyPlanner .sfp-kind{font-size:10px;font-weight:850;letter-spacing:.04em;text-transform:capitalize;color:#4474b0}
+#sarniFamilyPlanner .sfp-due{font-size:10px;color:#48735e;font-weight:800;background:#e8f8ef;padding:5px 8px;border-radius:9px}
+#sarniFamilyPlanner .sfp-due.urgent{color:#b64e32;background:#fff0e8}
+#sarniFamilyPlanner .sfp-card h4{font-size:16px;font-weight:850;line-height:1.35;margin:11px 0 6px;overflow-wrap:anywhere;color:var(--sfp-ink)}
+#sarniFamilyPlanner .sfp-description{font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;color:#4b5c76;max-height:125px;overflow:auto}
+#sarniFamilyPlanner .sfp-reference{display:block;color:#6a7891;font-size:11px;margin:4px 0}
+#sarniFamilyPlanner .sfp-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+#sarniFamilyPlanner .sfp-empty{grid-column:1/-1;padding:28px 15px;margin:0;border:1px dashed #b7cbea;border-radius:14px;text-align:center;color:#667795;background:#fff}
+#sarniFamilyPlanner .sfp-upcoming{border-radius:14px;background:#eef5ff;border:1px solid #d5e4f8;padding:13px;margin:12px 0}
+#sarniFamilyPlanner .sfp-upcoming h4{font-size:12px;font-weight:850;margin:0 0 9px;color:#294b84}
+#sarniFamilyPlanner .sfp-upcoming-row{display:grid;grid-template-columns:100px 1fr auto;gap:10px;padding:8px 0;border-top:1px solid #d9e6f6;align-items:center;font-size:11px}
+#sarniFamilyPlanner .sfp-upcoming-row strong{font-size:12px}
+#sarniFamilyPlanner .sfp-upcoming-row small{font-size:10px;color:#617393}
+@media(max-width:650px){#sarniFamilyPlanner{padding:13px;border-radius:17px;margin:14px 0 85px}#sarniFamilyPlanner .sfp-header{align-items:flex-start;flex-direction:column}#sarniFamilyPlanner .sfp-header h3{font-size:20px}#sarniFamilyPlanner .sfp-controls{flex-direction:column;align-items:stretch}#sarniFamilyPlanner .sfp-tabs{width:100%}#sarniFamilyPlanner .sfp-tabs button{flex:1}#sarniFamilyPlanner #sfpSearch{width:100%;max-width:none}#sarniFamilyPlanner .sfp-stats{gap:6px}#sarniFamilyPlanner .sfp-stat{padding:10px 7px;border-radius:11px}#sarniFamilyPlanner .sfp-stat strong{font-size:18px}#sarniFamilyPlanner .sfp-stat small{font-size:9px}#sarniFamilyPlanner .sfp-upcoming-row{grid-template-columns:86px 1fr;gap:5px}#sarniFamilyPlanner .sfp-upcoming-row small{grid-column:2}}
+/* v20.8.16: readable, mobile-first planning for any type of plan */
+#sarniFamilyPlanner .sfp-header p{font-size:14px;font-weight:650;line-height:1.5}
+#sarniFamilyPlanner .sfp-header small{font-size:11px}
+#sarniFamilyPlanner .sfp-tabs button{font-size:14px;min-height:43px}
+#sarniFamilyPlanner #sfpSearch{font-size:16px;font-weight:600}
+#sarniFamilyPlanner .sfp-button{font-size:14px;font-weight:800;min-height:44px}
+#sarniFamilyPlanner .sfp-help{font-size:13px;font-weight:650}
+#sarniFamilyPlanner .sfp-card h4{font-size:18px}
+#sarniFamilyPlanner .sfp-description{font-size:14px;font-weight:600;max-height:170px}
+#sarniFamilyPlanner .sfp-kind,#sarniFamilyPlanner .sfp-due{font-size:12px}
+#sarniFamilyPlanner .sfp-upcoming-row{font-size:13px}
+#sarniFamilyPlanner .sfp-upcoming-row strong{font-size:14px}
+#sarniFamilyPlanner .sfp-upcoming-row small{font-size:12px}
+#sarniFamilyPlanner .sfp-button:focus-visible{outline:3px solid #8da8e5;outline-offset:2px}
+#standaloneCalendarGrid .sarni-family-saka{display:none!important} /* Gregorian date numbers only; Odia rule determines occurrence */
+#sarniFestivalManager .sarni-festival-hint,#sarniFestivalManager .sarni-festival-caption{font-size:14px;font-weight:650;line-height:1.55}
+@media(max-width:650px){
+ #sarniFamilyPlanner .sfp-stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #sarniFamilyPlanner .sfp-stats small{font-size:11px}
+ #sarniFamilyPlanner .sfp-tabs button{font-size:13px;padding:10px 8px}
+ #sarniFamilyPlanner .sfp-header h3{font-size:22px}
+ #sarniFamilyPlanner .sfp-button{font-size:14px}
+ #sarniFamilyPlanner .sfp-card h4{font-size:18px}
+ #sarniFamilyPlanner .sfp-description{font-size:14px}
+}
