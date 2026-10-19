@@ -325,3 +325,72 @@ html.sarni-personal-only #chapterModal .rte-editor :is(s,strike,del){text-decora
  html.sarni-personal-only #chapterModal .rte-editor{min-height:230px;font-size:17px;max-height:50dvh}
 }
 @media(prefers-reduced-motion:reduce){html.sarni-personal-only #chapterModal .rte-btn{transition:none!important}}
+
+/* SarNi book-writing accessibility: make formatting touch friendly without
+   changing authentication, data model, chapter serialization or toolbar actions. */
+html.sarni-personal-only #chapterModal #chapterRteToolbar{
+ display:flex;flex-wrap:wrap;align-items:center;gap:7px;
+ padding:10px;border-radius:14px 14px 0 0;
+ background:linear-gradient(120deg,#f0f5ff,#f3fdf9);
+ border-color:#d3dff0;
+}
+html.sarni-personal-only #chapterModal #chapterRteToolbar button.rte-btn{
+ display:inline-flex;align-items:center;justify-content:center;gap:6px;
+ min-height:44px;min-width:51px;padding:8px 11px;
+ background:#fff;border:1px solid #d8dfeb;border-radius:11px;
+ color:#263c61;font-size:16px;font-weight:850;line-height:1.2;
+}
+html.sarni-personal-only #chapterModal #chapterRteToolbar button.rte-btn[aria-pressed="true"],
+html.sarni-personal-only #chapterModal #chapterRteToolbar button.rte-btn.is-active{
+ background:#e4ebff;border-color:#8798e0;color:#28468c;
+}
+html.sarni-personal-only #chapterModal .sarni-rte-tool-caption{
+ font-size:12.5px;font-weight:750;white-space:nowrap;
+}
+html.sarni-personal-only #chapterModal #chapterRteToolbar .rte-color-btn{
+ position:relative;display:inline-flex;align-items:center;gap:7px;
+ min-height:44px;padding:7px 13px;border:1px solid #d8dfeb;
+ border-radius:11px;background:#fff;color:#273c60;
+ font-size:15px;font-weight:850;cursor:pointer;
+}
+html.sarni-personal-only #chapterModal #chapterRteToolbar .rte-color-btn.highlight{
+ background:linear-gradient(180deg,#fff 54%,#fff2a0 54%);
+}
+html.sarni-personal-only #chapterModal #chapterRteToolbar .sarni-book-colour-caption{
+ font-size:13px;font-weight:800;
+}
+html.sarni-personal-only #chapterModal #chapterRteToolbar .rte-select{
+ min-height:44px;border-radius:11px;border:1px solid #d3dceb;
+ background:#fff;font-size:14px;font-weight:750;max-width:100%;
+}
+html.sarni-personal-only #chapterModal #chapterContent{
+ min-height:260px;max-height:min(55dvh,620px);
+ padding:17px;border-radius:0 0 15px 15px;
+ font-size:17px;font-weight:560;line-height:1.72;
+ color:#20364f;overflow-wrap:anywhere;
+}
+html.sarni-personal-only #chapterModal .sarni-book-format-tip{
+ font-size:13.5px;font-weight:650;line-height:1.55;
+ color:#53667d;margin:11px 0;
+}
+html.sarni-personal-only #chapterModal .rte-btn:focus-visible,
+html.sarni-personal-only #chapterModal .rte-select:focus-visible,
+html.sarni-personal-only #chapterModal .rte-color-btn:focus-within{
+ outline:3px solid #8181e0;outline-offset:2px;
+}
+@media(max-width:640px){
+ html.sarni-personal-only #chapterModal #chapterRteToolbar{gap:6px;padding:8px}
+ html.sarni-personal-only #chapterModal #chapterRteToolbar button.rte-btn{min-height:45px;padding:8px 9px}
+ html.sarni-personal-only #chapterModal #chapterRteToolbar .rte-color-btn{min-height:45px;padding:7px 10px}
+ html.sarni-personal-only #chapterModal #chapterContent{
+  min-height:220px;max-height:44dvh;font-size:17px;padding:14px;
+ }
+ html.sarni-personal-only #chapterModal .sarni-rte-tool-caption{font-size:12px}
+}
+@media(max-width:360px){
+ html.sarni-personal-only #chapterModal #chapterRteToolbar button.rte-btn{min-width:46px;padding:8px}
+ html.sarni-personal-only #chapterModal .sarni-rte-tool-caption{font-size:11px}
+}
+@media print{
+ html.sarni-personal-only #chapterModal #chapterRteToolbar{display:none!important}
+}

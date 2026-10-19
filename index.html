@@ -426,7 +426,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 }
 </style>
 <link rel="stylesheet" href="./sarni-delight.css?v=20261017" media="all">
-<link rel="stylesheet" href="./sarni-entry-polish.css?v=20261019-20818" media="all">
+<link rel="stylesheet" href="./sarni-entry-polish.css?v=20261019-book-controls-phone" media="all">
 <style id="sarniBackendDiagnosticHelp">
 .sarni-backend-help{display:block;margin:8px 0 14px;font-size:12px;line-height:1.5;font-weight:800;color:#2d5c95;text-decoration:underline;text-underline-offset:3px}
 #loginMessage:empty + .sarni-backend-help{display:none}
@@ -1519,10 +1519,10 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </div>
 <label>Content <span class="tiny muted" id="chapterWordCountLive"></span></label>
 <div class="rte-toolbar" id="chapterRteToolbar" role="toolbar" aria-label="Chapter text formatting">
-<button class="rte-btn" data-rte-cmd="bold" title="Bold (Ctrl+B)" aria-label="Bold selected words" aria-pressed="false" type="button"><b>B</b></button>
-<button class="rte-btn" data-rte-cmd="italic" title="Italic (Ctrl+I)" aria-label="Italic selected words" aria-pressed="false" type="button"><i>I</i></button>
-<button class="rte-btn" data-rte-cmd="underline" title="Underline (Ctrl+U)" aria-label="Underline selected words" aria-pressed="false" type="button"><u>U</u></button>
-<button class="rte-btn" data-rte-cmd="strikeThrough" title="Strikethrough" aria-label="Strike through selected words" aria-pressed="false" type="button"><s>S</s></button>
+<button class="rte-btn" data-rte-cmd="bold" title="Bold (Ctrl+B)" aria-label="Bold selected words" aria-pressed="false" type="button"><b>B</b><span class="sarni-rte-tool-caption">Bold</span></button>
+<button class="rte-btn" data-rte-cmd="italic" title="Italic (Ctrl+I)" aria-label="Italic selected words" aria-pressed="false" type="button"><i>I</i><span class="sarni-rte-tool-caption">Italic</span></button>
+<button class="rte-btn" data-rte-cmd="underline" title="Underline (Ctrl+U)" aria-label="Underline selected words" aria-pressed="false" type="button"><u>U</u><span class="sarni-rte-tool-caption">Underline</span></button>
+<button class="rte-btn" data-rte-cmd="strikeThrough" title="Strikethrough" aria-label="Strike through selected words" aria-pressed="false" type="button"><s>S</s><span class="sarni-rte-tool-caption">Strike</span></button>
 <span class="rte-sep"></span>
 <label class="rte-color-btn" title="Text colour"><span aria-hidden="true">A</span><span class="sarni-book-colour-caption">Text</span><input id="chapterTextColor" aria-label="Text colour for selected words" type="color" value="#17203b"/></label>
 <label class="rte-color-btn highlight" title="Highlight"><span aria-hidden="true">▰</span><span class="sarni-book-colour-caption">Mark</span><input id="chapterHighlightColor" aria-label="Highlight selected words" type="color" value="#fff176"/></label>
@@ -1536,7 +1536,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <option value="H3">Subheading</option>
 </select>
 </div>
-<p class="sarni-book-format-tip">Select words, then tap <strong>B</strong>, <em>I</em>, <s>S</s>, Text colour or Mark. Your formatting stays with the saved chapter.</p>
+<p class="sarni-book-format-tip">Select words, then tap <strong>Bold</strong>, <em>Italic</em>, <s>Strike</s>, Text colour or Mark. Tap Save chapter to keep your formatting.</p>
 <div class="rte-editor" contenteditable="true" role="textbox" aria-label="Chapter content" aria-multiline="true" data-placeholder="Write here…" id="chapterContent"></div>
 <label>Notes<textarea id="chapterNotes" maxlength="2000" rows="2"></textarea></label>
 <div class="form-actions">
