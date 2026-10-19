@@ -6,7 +6,7 @@ SarNi's frontend is hosted directly on GitHub Pages. Google Apps Script is the *
 
 ## Current GitHub Pages frontend
 
-- Frontend: **v20.8.14** (`index.html` loads `app-v20-8-14.js`)
+- Frontend: **v20.8.16** (`index.html` loads `app-v20-8-16.js`)
 - Expected backend: **v3.17.30** — upload and deploy separately for original photos above 2 MB (verify against your active Apps Script deployment)
 - User interface: `styles.css`, `sarni-delight.css`, `sarni-delight.js`, and `sarni-entry-polish.css`
 - App installation: `manifest.webmanifest`
@@ -77,3 +77,7 @@ Resolved the `Cannot access 'sariWords' before initialization` error: initial au
 - MyFamily's **shared-family email recipients, reminder photo attachments, and financial goal contributions** are not added here, because SarNi currently lacks matching backend storage and permissions. They need a separately reviewed backend migration if wanted.
 - Files: `sarni-family-planner-v20-8-15.js` and `sarni-family-planner-v20-8-15.css`; the existing FE app remains v20.8.14 until a full FE-version release.
 - Safety: source records are read only from the current authenticated state; the upcoming-occurrence cache is cleared when the signed-in username changes. Avoid storing private names/records in public GitHub source.
+
+## v20.8.16 Planning and Odia dates
+
+The calendar uses English date cells, with yearly Odia-lunar events displayed on their calculated English occurrence dates rather than the original saved English date. The original verified tithi is reused as the rule; a future year is calculated separately and not automatically certified. Per-year verified corrections can be entered in the calendar editor. Generic personal, family, work, travel, education and other plans use the existing secure targets/sticky-note workflow with due, overdue, completed and all filters. No backend project or Sheets changed.
