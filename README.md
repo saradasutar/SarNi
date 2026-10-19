@@ -6,7 +6,7 @@ SarNi's frontend is hosted directly on GitHub Pages. Google Apps Script is the *
 
 ## Current GitHub Pages frontend
 
-- Frontend: **v20.8.17** (`index.html` loads `app-v20-8-17.js`)
+- Frontend: **v20.8.18** (`index.html` loads `app-v20-8-18.js`)
 - Expected backend: **v3.17.30** — upload and deploy separately for original photos above 2 MB (verify against your active Apps Script deployment)
 - User interface: `styles.css`, `sarni-delight.css`, `sarni-delight.js`, and `sarni-entry-polish.css`
 - App installation: `manifest.webmanifest`
@@ -89,3 +89,7 @@ The calendar uses English date cells, with yearly Odia-lunar events displayed on
 - **Admin → Backups** on desktop or **More → Backup Now** on Android runs the existing authenticated `backupNow` action. It puts a JSON backup of SarNi personal sheets in the owner’s private Drive backup folder, not in this repository.
 - The existing backend `backupData` trigger can automate private backups daily. To verify/install it safely without rerunning `setupSystem()`, use the existing `runAll()` maintenance function in the live SarNi Apps Script editor and check `scheduledBackup: true` in the execution log. **No automated trigger has been installed or verified from GitHub.** Backups preserve the 30 newest files in the dedicated backup folder; the JSON sheet snapshots do **not** duplicate original Google Drive photo files. Keep that folder exclusively for SarNi backups.
 - [Phone-first security and backup verification instructions](./SARNI-SECURITY-AND-BACKUPS.md).
+
+## v20.8.18 Book Writing mobile formatting
+
+The Chapter editor retains bold, italic, underline, strikethrough, text colour, highlight, clear-format, list and heading controls. Mobile toolbar buttons are larger and labeled. A stored text selection is restored before formatting, so opening Android colour pickers does not move the formatting insertion point. The chapter's existing HTML-based save/reopen and viewer read-only permissions are preserved. No Apps Script deployment is required. Existing saved chapters remain unchanged until edited and saved normally.

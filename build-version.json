@@ -1,8 +1,8 @@
 {
-  "version": "20.8.17",
-  "frontend": "20.8.17",
+  "version": "20.8.18",
+  "frontend": "20.8.18",
   "backendExpected": "3.17.30",
-  "build": "20261019-20817-sarni-security",
+  "build": "20261019-20818-book-format",
   "hosting": "github-pages-direct-ui",
   "backendUpgradeRequiredForLargerPhotos": true
 }
