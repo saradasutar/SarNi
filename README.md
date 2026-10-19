@@ -6,7 +6,7 @@ SarNi's frontend is hosted directly on GitHub Pages. Google Apps Script is the *
 
 ## Current GitHub Pages frontend
 
-- Frontend: **v20.8.18** (`index.html` loads `app-v20-8-18.js`)
+- Frontend: **v20.8.19** (`index.html` loads `app-v20-8-19.js`)
 - Expected backend: **v3.17.30** — upload and deploy separately for original photos above 2 MB (verify against your active Apps Script deployment)
 - User interface: `styles.css`, `sarni-delight.css`, `sarni-delight.js`, and `sarni-entry-polish.css`
 - App installation: `manifest.webmanifest`
@@ -93,3 +93,6 @@ The calendar uses English date cells, with yearly Odia-lunar events displayed on
 ## v20.8.18 Book Writing mobile formatting
 
 The Chapter editor retains bold, italic, underline, strikethrough, text colour, highlight, clear-format, list and heading controls. Mobile toolbar buttons are larger and labeled. A stored text selection is restored before formatting, so opening Android colour pickers does not move the formatting insertion point. The chapter's existing HTML-based save/reopen and viewer read-only permissions are preserved. No Apps Script deployment is required. Existing saved chapters remain unchanged until edited and saved normally.
+
+### v20.8.19 Book Writing persistence and safety
+The existing bold/italic/underline/strikethrough and text/highlight picker toolbar now has stronger Android text-selection protection and a fallback for selected text styling when the native browser command fails. Both saved and reopened chapter HTML are filtered to preserve supported formatting, headings and lists while removing unsafe scripts, external media and event attributes. This is a frontend-only update and retains the existing backend and all stored books. Verify on your Android device by editing, saving, and reopening a sample paragraph.
