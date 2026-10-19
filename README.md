@@ -6,7 +6,7 @@ SarNi's frontend is hosted directly on GitHub Pages. Google Apps Script is the *
 
 ## Current GitHub Pages frontend
 
-- Frontend: **v20.8.16** (`index.html` loads `app-v20-8-16.js`)
+- Frontend: **v20.8.17** (`index.html` loads `app-v20-8-17.js`)
 - Expected backend: **v3.17.30** — upload and deploy separately for original photos above 2 MB (verify against your active Apps Script deployment)
 - User interface: `styles.css`, `sarni-delight.css`, `sarni-delight.js`, and `sarni-entry-polish.css`
 - App installation: `manifest.webmanifest`
@@ -81,3 +81,11 @@ Resolved the `Cannot access 'sariWords' before initialization` error: initial au
 ## v20.8.16 Planning and Odia dates
 
 The calendar uses English date cells, with yearly Odia-lunar events displayed on their calculated English occurrence dates rather than the original saved English date. The original verified tithi is reused as the rule; a future year is calculated separately and not automatically certified. Per-year verified corrections can be entered in the calendar editor. Generic personal, family, work, travel, education and other plans use the existing secure targets/sticky-note workflow with due, overdue, completed and all filters. No backend project or Sheets changed.
+
+## SarNi v20.8.17 security, startup and private backups
+
+- Login bearer tokens and session timestamps now live in **tab-scoped sessionStorage**, not persistent localStorage. Previously saved tokens are migrated to the current tab once then deleted from persistent storage. Username-only Remember Me remains unchanged. The backend still verifies authentication, roles and idle timeout.
+- Retired investment/watchlist initializers are no longer run at SarNi startup; Analysis owns those features. One unused legacy investment-cache migration function was removed. All personal functions (expenses, diary, calendars, Odia festivals, targets, Life Experiences, photos, books and credit cards) were preserved.
+- **Admin → Backups** on desktop or **More → Backup Now** on Android runs the existing authenticated `backupNow` action. It puts a JSON backup of SarNi personal sheets in the owner’s private Drive backup folder, not in this repository.
+- The existing backend `backupData` trigger can automate private backups daily. To verify/install it safely without rerunning `setupSystem()`, use the existing `runAll()` maintenance function in the live SarNi Apps Script editor and check `scheduledBackup: true` in the execution log. **No automated trigger has been installed or verified from GitHub.** Backups preserve the 30 newest files in the dedicated backup folder; the JSON sheet snapshots do **not** duplicate original Google Drive photo files. Keep that folder exclusively for SarNi backups.
+- [Phone-first security and backup verification instructions](./SARNI-SECURITY-AND-BACKUPS.md).
