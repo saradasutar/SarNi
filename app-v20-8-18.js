@@ -3124,7 +3124,17 @@ function sarniChapterSafeHtml(raw){
       const styles=[];
       if(fg)styles.push('color:'+fg);
       if(bg)styles.push('background-color:'+bg);
-      return styles.length?'<span style="'+styles.join(';')+'">'+inner+'</span>':inner;
+      let clean=styles.length?'<span style="'+styles.join(';')+'">'+inner+'</span>':inner;
+      // Android and other mobile browsers sometimes emit CSS-styled spans
+      // rather than <b>, <i> or <s> for native editing commands.
+      const weight=String(node.style.fontWeight||'').trim().toLowerCase();
+      const weightNumber=Number(weight);
+      if(weight==='bold'||weight==='bolder'||(Number.isFinite(weightNumber)&&weightNumber>=600))clean='<strong>'+clean+'</strong>';
+      if(node.style.fontStyle==='italic')clean='<em>'+clean+'</em>';
+      const decoration=String(node.style.textDecorationLine||node.style.textDecoration||'').toLowerCase();
+      if(decoration.includes('line-through'))clean='<s>'+clean+'</s>';
+      if(decoration.includes('underline'))clean='<u>'+clean+'</u>';
+      return clean;
     }
     return inner;
   }
