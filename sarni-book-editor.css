@@ -1,0 +1,18 @@
+/* SarNi v20.8.18 — touch-friendly chapter formatting with visible colour pickers. */
+#chapterModal .rte-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:11px;border:1px solid #d6e4ec;border-bottom:0;border-radius:15px 15px 0 0;background:linear-gradient(110deg,#ecf9f5,#f3f1ff)}
+#chapterModal .rte-toolbar .rte-btn{min-width:43px;min-height:43px;height:auto;padding:9px 12px;border:1px solid #d2d8ed;border-radius:11px;background:#fff;color:#2e4168;font-size:17px;font-weight:850;line-height:1.2}
+#chapterModal .rte-toolbar .rte-btn:hover,#chapterModal .rte-toolbar .rte-btn:focus-visible{background:#e9e8ff;border-color:#aea5e5}
+#chapterModal .rte-toolbar :is(.rte-btn,.rte-select,.rte-color-btn input):focus-visible{outline:3px solid #8d7ce2;outline-offset:2px}
+#chapterModal .rte-toolbar .rte-color-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:7px;min-height:43px;height:auto;min-width:98px;padding:7px 9px;border:1px solid #d2d8ed;border-radius:11px;background:#fff;color:#2e4168;font-size:14px;font-weight:800;white-space:nowrap;position:static}
+#chapterModal .rte-toolbar .rte-color-btn.highlight{background:#fffcdf}
+#chapterModal .rte-toolbar .rte-color-btn input[type="color"]{position:static;opacity:1;width:33px;height:30px;min-width:33px;max-width:33px;inset:auto;cursor:pointer;border:0;padding:0;border-radius:6px;background:transparent}
+#chapterModal .rte-toolbar .rte-select{height:43px;min-height:43px;font-size:14px;font-weight:700;border-radius:11px}
+#chapterModal .rte-toolbar .rte-sep{height:27px;margin:0 2px}
+#chapterModal .sarni-chapter-format-hint{font-size:13px;line-height:1.5;font-weight:700;color:#506783;background:#f7fafc;padding:10px 13px;margin:0;border:1px solid #e3e9f1}
+#chapterModal .rte-editor{min-height:270px;max-height:54vh;overflow:auto;overscroll-behavior:contain;overflow-wrap:anywhere;font-size:17px;font-weight:550;line-height:1.65;padding:15px;border-color:#d6e4ec;border-radius:0 0 14px 14px;white-space:pre-wrap;touch-action:auto;-webkit-user-select:text;user-select:text}
+#chapterModal .rte-editor :is(strong,b){font-weight:850}
+#chapterModal .rte-editor :is(s,strike,del){text-decoration:line-through}
+#chapterModal .rte-editor span[style*="background-color"]{padding:0 2px;border-radius:3px}
+@media(max-width:860px){#chapterModal .rte-toolbar{gap:7px;padding:9px}#chapterModal .rte-toolbar .rte-btn{min-width:45px;min-height:45px;font-size:18px}#chapterModal .rte-toolbar .rte-color-btn{min-height:45px;flex:1;max-width:calc(50% - 5px)}#chapterModal .rte-editor{min-height:240px;font-size:17px;max-height:50dvh}#chapterModal .sarni-chapter-format-hint{font-size:13.5px}}
+@media(max-width:380px){#chapterModal .rte-toolbar .rte-color-btn{font-size:12.5px;min-width:95px;padding:6px}#chapterModal .rte-toolbar .rte-color-btn input[type="color"]{width:29px;min-width:29px}}
+@media(prefers-reduced-motion:reduce){#chapterModal .rte-toolbar *{transition:none!important}}
