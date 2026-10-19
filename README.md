@@ -96,3 +96,15 @@ The Chapter editor retains bold, italic, underline, strikethrough, text colour, 
 
 ### v20.8.19 Book Writing persistence and safety
 The existing bold/italic/underline/strikethrough and text/highlight picker toolbar now has stronger Android text-selection protection and a fallback for selected text styling when the native browser command fails. Both saved and reopened chapter HTML are filtered to preserve supported formatting, headings and lists while removing unsafe scripts, external media and event attributes. This is a frontend-only update and retains the existing backend and all stored books. Verify on your Android device by editing, saving, and reopening a sample paragraph.
+
+## Father’s biography writing workspace (isolated add-on, October 2026)
+
+Open **Book Writing → Start / continue Father’s Book** after signing in. The app creates a private working book record under the editable working title **The Story Before Ours**, for **Dhruba Charan Sutar**. It has the 16 supplied English/Odia chapters in four parts, plus a prologue and epilogue. It does **not** generate a fictional biography or insert invented memories. The 16 core chapters start with blank body text and blank Notes. Chapter 1 is initially marked as Drafting in the existing backend status options and shown as **Collecting memories** in the dedicated outline. Other core chapters start Not started.
+
+Once created, open the book from the existing Book Writing page. The **Parts and chapters** outline lets you tap any chapter to edit it in the existing rich-text editor (bold, italic, strike, text colour, highlight, lists), update status, and save. Clickable research prompts in the outline help collect family recollections and confirm factual details. The standard chapter list remains available for reordering, extra chapters and collaborators.
+
+A **Download backup** button downloads a private **JSON** copy of the loaded book and chapters. **Export manuscript** downloads a formatted **HTML** manuscript which can be opened in a browser and printed/saved to PDF. Both operations are local downloads of authenticated in-memory data; no manuscript content is committed to public GitHub. Preserve backups securely.
+
+The starter is strictly **opt-in** (does not create the book on login). Retry after an interrupted creation safely skips chapters that already exist by normalized English chapter title, including older draft titles. The module is installed as separate `sarni-father-book-starter.js` and `sarni-father-book-starter.css` files without changing the backend, login, budget, reminders, diary, or existing saved books.
+
+**Verification**: JavaScript parse, all 16 bilingual chapter titles, simulated book creation and duplicate-safe retry passed. A real authenticated test in the user’s Google Apps Script account—create, reopen, edit/save chapter and download backup—is still required. Do not assume real data exists until **Start / continue Father’s Book** is pressed and saving completes.
