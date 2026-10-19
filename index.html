@@ -9,10 +9,10 @@
 <meta content="0" http-equiv="Expires"/>
 <!-- The single theme-color meta below follows the installed PWA theme. -->
 <meta content="Private family finance, expenses, diary and planning dashboard" name="description"/>
-<meta content="20261018-20814-calendar-fest" name="myfinance-build"/>
+<meta content="20261019-20816-calendar-plans" name="myfinance-build"/>
 <meta content="light dark" name="color-scheme"/>
 <script>
-    window.__MYFINANCE_PAGE_BUILD__='20261018-20814-calendar-fest';
+    window.__MYFINANCE_PAGE_BUILD__='20261019-20816-calendar-plans';
     window.__MYFINANCE_NATIVE__=false; // Frontend stays on GitHub Pages; authenticated backend runs separately.
     try { localStorage.setItem('portfolio_overview_default','PERSONAL'); } catch(e) {}
     window.__SAR_NI_ASSETS__={css:false,app:false};
@@ -26,12 +26,12 @@
       window.__SAR_NI_ASSETS__[kind]=false;
       document.documentElement.classList.add('sarni-asset-error');
       var box=document.getElementById('sarniAssetStatus');
-      if(box)box.innerHTML='<strong>Dashboard files could not be loaded.</strong><br>Check GitHub Pages assets for SarNi FE v20.8.14, then <a href="./?reload=1">retry here</a>. Keep using this website, not the Apps Script /exec link.';
+      if(box)box.innerHTML='<strong>Dashboard files could not be loaded.</strong><br>Check GitHub Pages assets for SarNi FE v20.8.16, then <a href="./?reload=1">retry here</a>. Keep using this website, not the Apps Script /exec link.';
     };
     setTimeout(function(){
       if(document.documentElement.classList.contains('sarni-assets-ready'))return;
       var box=document.getElementById('sarniAssetStatus');
-      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Check that styles.css and app-v20-8-14.js are published. <a href="./?reload=1">Reload SarNi</a> or open <a href="./health.html">Site check</a>.';
+      if(box)box.innerHTML='<strong>Still preparing SarNi…</strong><br>Check that styles.css and app-v20-8-16.js are published. <a href="./?reload=1">Reload SarNi</a> or open <a href="./health.html">Site check</a>.';
     },12000);
   </script>
 <title>SarNi · Personal Life Centre</title>
@@ -125,9 +125,9 @@ html.sarni-personal-only .gpf-empty{background:#f8fbff;border:1px dashed #9fb9d9
 </style>
 <link href="https://script.google.com" rel="preconnect" crossorigin="anonymous"/>
 <link href="https://script.google.com" rel="dns-prefetch"/>
-<link as="style" href="./styles.css?v=20261018-20814-calendar-fest" rel="preload"/>
-<link as="script" href="./app-v20-8-14.js?v=20261018-20814-calendar-fest" rel="preload"/>
-<link href="./styles.css?v=20261018-20814-calendar-fest" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
+<link as="style" href="./styles.css?v=20261019-20816-calendar-plans" rel="preload"/>
+<link as="script" href="./app-v20-8-16.js?v=20261019-20816-calendar-plans" rel="preload"/>
+<link href="./styles.css?v=20261019-20816-calendar-plans" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
 <style id="sarniOdiaStyles">
 .sarni-odia-settings{margin:12px 0 16px;border:1px solid #e8cae5;border-radius:15px;padding:15px;background:linear-gradient(140deg,#fff9ff,#fffdfb);min-width:0}
 .sarni-odia-settings legend{padding:0 8px;color:#743c78;font-weight:850;font-size:14px}
@@ -432,7 +432,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 #loginMessage:empty + .sarni-backend-help{display:none}
 .sarni-backend-help:focus-visible{outline:3px solid #7da2eb;outline-offset:3px}
 </style>
-<link rel="stylesheet" href="./sarni-family-planner-v20-8-15.css?v=20261018-20815"/>
+<link rel="stylesheet" href="./sarni-family-planner-v20-8-15.css?v=20261019-20816"/>
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
@@ -461,7 +461,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <a class="sarni-backend-help" href="./backend-check.html" target="_blank" rel="noopener noreferrer">Check backend connection without entering a password ↗</a>
 <div class="login-meta">
 <p class="tiny muted">Your password is never stored in the browser.</p>
-<div class="version-pair"><span class="version-badge" id="loginVersion">Frontend · v20.8.14</span><span class="version-badge backend-version" id="loginBackendVersion">Backend · v3.17.30</span></div>
+<div class="version-pair"><span class="version-badge" id="loginVersion">Frontend · v20.8.16</span><span class="version-badge backend-version" id="loginBackendVersion">Backend · v3.17.30</span></div>
 <button class="login-repair-button" id="repairBrowserBtn" type="button">↻ Repair browser cache/session</button>
 </div>
 </form>
@@ -503,14 +503,14 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <div class="sidebar-session-card">
 <span class="sidebar-session-label">SIGNED IN AS</span>
 <div class="sidebar-account-line"><span class="person-avatar" id="sidebarUserPhoto">👤</span><strong id="dashboardUsername">—</strong></div>
-<span id="dashboardVersion">Frontend · v20.8.14</span><span id="dashboardBackendVersion">Backend · v3.17.30</span>
+<span id="dashboardVersion">Frontend · v20.8.16</span><span id="dashboardBackendVersion">Backend · v3.17.30</span>
 </div>
 <div class="sidebar-foot"><button class="nav-item" id="changePasswordBtn"><span>⌁</span>Change password</button><button class="nav-item danger-text" id="logoutBtn"><span>↪</span>Log out</button></div>
 </aside>
 <button class="mobile-left-quick-diary" id="quickDiaryMobilePinned" title="Quick Diary — always available" type="button">✎ Quick Diary</button>
 <main class="main-content" id="mainDashboard" tabindex="-1">
 <header class="topbar"><span aria-hidden="true" class="mobile-top-brand">S</span>
-<div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Personal Life Centre</h1></div><div class="dashboard-version-pair"><span class="dashboard-version-chip" id="dashboardVersionTop">FE v20.8.14</span><span class="dashboard-version-chip backend-chip" id="dashboardBackendVersionTop">BE v3.17.30</span></div></div></div>
+<div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Personal Life Centre</h1></div><div class="dashboard-version-pair"><span class="dashboard-version-chip" id="dashboardVersionTop">FE v20.8.16</span><span class="dashboard-version-chip backend-chip" id="dashboardBackendVersionTop">BE v3.17.30</span></div></div></div>
 <div class="top-actions"><button aria-haspopup="dialog" class="command-palette-button" id="commandPaletteBtn" title="Search pages and actions (Ctrl/⌘ K)" type="button"><span>⌕</span><strong>Search</strong><kbd>⌘K</kbd></button><div class="display-preferences" title="Personalise dashboard appearance"><select aria-label="Dashboard density" id="displayDensitySelect"><option value="COMFORTABLE">Comfortable</option><option value="COMPACT">Compact</option></select><select aria-label="Dashboard theme" id="displayThemeSelect"><option selected="" value="LIGHT">Light</option><option value="AUTO">Auto theme</option><option value="DARK">Dark</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button aria-label="Refresh personal records" class="icon-button" id="refreshBtn" title="Refresh personal records">↻</button><button aria-label="Signed-in user" class="avatar-button" id="profileButton"><span id="avatarInitial">A</span><img alt="Your profile photo" class="header-user-photo hidden" id="headerUserPhoto"/></button><button aria-label="Sign out" class="header-logout-button" id="headerLogoutBtn" title="Sign out of SarNi" type="button"><span aria-hidden="true">↪</span><strong>Sign out</strong></button></div>
 </header>
 <nav class="sarni-simplified-nav" id="sarniSimplifiedNav" aria-label="Main sections">
@@ -523,7 +523,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </nav>
 <div aria-label="Mobile session controls" class="mobile-session-bar" id="mobileSessionBar">
 <div class="mobile-session-versions">
-<span class="mobile-version-chip" id="mobileFrontendVersion">FE v20.8.14</span>
+<span class="mobile-version-chip" id="mobileFrontendVersion">FE v20.8.16</span>
 <span class="mobile-version-chip backend" id="mobileBackendVersion">BE v3.17.30</span>
 </div>
 <div class="mobile-session-actions">
@@ -879,12 +879,12 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <nav class="sarni-calendar-actions" aria-label="Calendar, reminders, targets and festivals">
 <button type="button" data-sarni-calendar-shortcut="calendar"><span>▦</span> Calendar</button>
 <button type="button" data-sarni-calendar-shortcut="reminder"><span>◷</span> Reminder</button>
-<button type="button" data-sarni-calendar-shortcut="target"><span>◎</span> Target</button>
+<button type="button" data-sarni-calendar-shortcut="target"><span>◎</span> Plans / Targets</button>
 <button type="button" data-sarni-calendar-shortcut="festivals"><span>❀</span> Festivals</button>
 </nav>
 <div class="sarni-family-cal-intro">
-<div><p class="life-eyebrow">YOUR PERSONAL CALENDAR</p><h2>Family calendar</h2><p>One beautiful month view, with your important days, diary dates and reminders together.</p></div>
-<div class="sarni-family-cal-color-guide"><span><i class="blue-dot"></i>English date</span><span><i class="orange-dot"></i>Odia lunar day</span></div>
+<div><p class="life-eyebrow">ENGLISH-DATE CALENDAR WITH ODIA RECURRENCE</p><h2>Calendar &amp; yearly occasions</h2><p>See each event on its English calendar date. Verified Odia tithis generate new English dates for each year; the original day is not repeated automatically.</p></div>
+<div class="sarni-family-cal-color-guide"><span><i class="blue-dot"></i>English calendar</span><span><i class="orange-dot"></i>Odia lunar reference</span></div>
 </div>
 <article class="life-card sarni-family-calendar-card">
 <div class="sarni-family-cal-toolbar">
@@ -896,8 +896,8 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <button class="sarni-calendar-nav-button sarni-calendar-today" id="sarniCalToday" type="button">Today</button>
 </div>
 </div>
-<div class="sarni-calendar-legend"><span><i class="sarni-cal-dot reminder"></i>Reminder</span><span><i class="sarni-cal-dot anniversary"></i>Anniversary</span><span><i class="sarni-cal-dot target"></i>Target</span><span><i class="sarni-cal-dot diary"></i>Diary</span><span>★ Important date</span></div>
-<div aria-label="Month view: large English dates, orange Saka dates and saved events" class="life-calendar sarni-family-calendar-grid" id="standaloneCalendarGrid"></div><section class="sarni-odia-festival-panel" aria-label="Odia festivals and yearly lunar occasions"><div class="sarni-odia-head"><div><span class="life-eyebrow">ଓଡ଼ିଆ ପର୍ବପର୍ବାଣୀ · AUTOMATIC CALENDAR</span><h3>Odia festivals &amp; yearly birthdays</h3><p id="odiaFestivalStatus" role="status">Calculated tithi calendar will appear after sign-in.</p></div><button type="button" class="life-quiet" id="odiaFestivalRefresh">↻ Refresh</button></div>
+<div class="sarni-calendar-legend"><span><i class="sarni-cal-dot reminder"></i>Reminder</span><span><i class="sarni-cal-dot anniversary"></i>Anniversary</span><span><i class="sarni-cal-dot target"></i>Plan / Target</span><span><i class="sarni-cal-dot diary"></i>Diary</span><span>★ Important date</span></div>
+<div aria-label="English month calendar: annual Odia observances appear on their calculated English dates" class="life-calendar sarni-family-calendar-grid" id="standaloneCalendarGrid"></div><section class="sarni-odia-festival-panel" aria-label="Odia festivals and yearly lunar occasions"><div class="sarni-odia-head"><div><span class="life-eyebrow">ଓଡ଼ିଆ ପର୍ବପର୍ବାଣୀ · AUTOMATIC CALENDAR</span><h3>Odia festivals &amp; yearly birthdays</h3><p id="odiaFestivalStatus" role="status">Calculated tithi calendar will appear after sign-in.</p></div><button type="button" class="life-quiet" id="odiaFestivalRefresh">↻ Refresh</button></div>
 <div class="sarni-odia-panels"><div><h4>❀ Festivals this month</h4><div id="sarniOdiaFestivalItems">Loading…</div></div><div><h4>★ Personal occasions</h4><div id="sarniOdiaRecurringItems">Loading…</div></div></div>
 <small class="sarni-odia-source" id="odiaCalendarSource">Astronomical estimates only; check Kohinoor for official observance.</small></section>
 <p class="sarni-calendar-help">Select any date to add or edit an important occasion. English dates are shown with Odia tithis. Odia festival dates are astronomical estimates, not an official Kohinoor Panjika.</p>
@@ -911,15 +911,15 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <div class="sarni-date-pair" id="odiaDatePairPreview" role="status" aria-live="polite">Choose an English date to view its Odia tithi automatically.</div>
 <fieldset class="sarni-odia-settings" aria-label="Annual Odia Kohinoor lunar reminders"><legend>🌺 Odia Kohinoor-style annual reminder</legend>
 <div class="life-fields"><label>Repeat this occasion<select name="calendarBasis"><option value="GREGORIAN">English date every year</option><option value="ODIA">Odia lunar tithi every year</option><option value="BOTH">Both English and Odia dates</option></select></label><label class="sarni-odia-check"><input type="checkbox" name="repeatYearly"/> Repeat every year</label></div>
-<p id="odiaRepeatNote" class="sarni-odia-hint">Save once and get future occurrences automatically.</p>
+<p id="odiaRepeatNote" class="sarni-odia-hint">Keep the verified Odia tithi as your yearly rule. Its calculated occurrence will appear on the English calendar date for each year.</p>
 <div id="odiaTithiControls" hidden><p id="odiaBirthPreview" class="sarni-odia-preview">Enter a birthday (e.g. 20 October 1983) to calculate its original sunrise tithi.</p>
 <div class="life-fields sarni-odia-lunar-cols"><label>Odia month<select name="odiaMonth"><option value="0">Chaitra</option><option value="1">Baisakha</option><option value="2">Jyestha</option><option value="3">Asadha</option><option value="4">Srabana</option><option value="5">Bhadraba</option><option value="6">Aswina</option><option value="7">Kartika</option><option value="8">Margasira</option><option value="9">Pausa</option><option value="10">Magha</option><option value="11">Phalguna</option></select></label><label>Paksha<select name="odiaPaksha"><option value="SHUKLA">ଶୁକ୍ଳ · Shukla</option><option value="KRISHNA">କୃଷ୍ଣ · Krishna</option></select></label><label>Tithi<select name="odiaTithi"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option></select></label></div>
-<div class="life-fields"><label>Lunar-month rule<select name="odiaAdhika"><option value="REGULAR">Regular month (recommended)</option><option value="ADHIKA">Adhika month only</option><option value="EITHER">Either (when applicable)</option></select></label><label class="sarni-odia-check"><input name="odiaVerified" type="checkbox"/> Original tithi verified against Kohinoor</label></div>
+<div class="life-fields"><label>Lunar-month rule<select name="odiaAdhika"><option value="REGULAR">Regular month (recommended)</option><option value="ADHIKA">Adhika month only</option><option value="EITHER">Either (when applicable)</option></select></label><label class="sarni-odia-check"><input name="odiaVerified" type="checkbox"/> I verified the ORIGINAL Odia month, paksha and tithi against a trusted Panjika (future years are calculated separately)</label></div>
 <button type="button" id="odiaRecalculate" class="life-quiet">↻ Recalculate original tithi</button></div>
 <div class="life-fields"><label>Remind me<select name="reminderDays"><option value="7,1,0">7 days, 1 day and same day</option><option value="1,0">1 day before and same day</option><option value="0">On the day</option><option value="14,7,1,0">14, 7, 1 and same day</option></select></label><label>Email (optional)<input type="email" name="reminderEmail" maxlength="180" placeholder="For 8 AM email reminders" autocomplete="off"/></label></div>
 <details class="sarni-odia-correction"><summary>Verified Kohinoor date correction (optional)</summary><p id="odiaOverrideHelp" class="sarni-odia-hint">Save your occasion, then edit to correct a specific year's calculated date.</p>
 <div class="life-fields"><label>Year<input id="odiaOverrideYear" type="number" min="1900" max="2105" value="2026"/></label><label>Verified English date<input id="odiaOverrideDate" type="date"/></label></div><button type="button" id="odiaSaveVerifiedOverride" class="life-quiet">Save verified correction</button></details>
-<p class="sarni-odia-hint">Calculations use Bhubaneswar sunrise and Lahiri ayanamsa. They are not guaranteed to match printed Kohinoor observance. Verified corrections take priority.</p>
+<p class="sarni-odia-hint">Your verified original Odia tithi remains the recurrence rule. Each year SarNi calculates an English occurrence using Bhubaneswar sunrise and Lahiri ayanamsa; it is an estimate until that year is checked. A verified correction for a specific year takes priority.</p>
 <p id="odiaEventStatus" class="sarni-odia-status" role="status"></p></fieldset><p class="saka-inline-label" id="standaloneSelectedSaka">Saka date</p>
 <label>Event title<input maxlength="160" name="title" placeholder="Anniversary, reminder, learning goal…" required=""/></label>
 <label>Details (optional)<textarea maxlength="1200" name="notes" placeholder="Your reminder or notes" rows="3"></textarea></label>
@@ -930,7 +930,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </div>
 <section class="life-card sarni-festival-manager" id="sarniFestivalManager" aria-labelledby="sarniFestivalHeading">
  <div class="life-card-top"><div><span class="life-eyebrow">❀ FESTIVALS · YEARLY REPEAT</span><h3 id="sarniFestivalHeading">My saved festivals</h3></div></div>
- <p class="sarni-festival-caption">Festivals saved here appear each year according to the English date or Odia lunar tithi selected by the administrator. Calculated Odia observances may need Kohinoor verification.</p>
+ <p class="sarni-festival-caption">The administrator chooses a fixed English date or verified Odia lunar tithi. Each year the festival appears on its calculated English calendar date. Odia astronomical estimates should be checked against that year’s Kohinoor Panjika when accuracy is important.</p>
  <form id="sarniFestivalForm" class="life-entry-form admin-only hidden" aria-label="Administrator festival editor">
   <input type="hidden" name="id"/>
   <label>Festival name<input required name="title" maxlength="160" placeholder="e.g. Our village annual festival"/></label>
@@ -946,7 +946,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
    <label class="sarni-festival-lunar"><input type="checkbox" name="odiaVerified"/> Checked against a trusted Odia Panjika</label>
   </fieldset>
   <label>Notes (optional)<textarea name="notes" rows="2" maxlength="1050" placeholder="Tradition, arrangements, location..."></textarea></label>
-  <p class="sarni-festival-hint">Saves to your existing SarNi important dates. Odia yearly dates use Bhubaneswar sunrise estimates; they are not automatically certified Kohinoor dates.</p>
+  <p class="sarni-festival-hint">Saved privately to SarNi. An Odia recurrence retains its lunar month, paksha and tithi and appears on a newly calculated English date each year. The new English date is an estimate, not automatically Kohinoor-certified.</p>
   <div class="life-form-foot"><span id="sarniFestivalSaveStatus" role="status">Ready to save</span><div class="quick-action-pair"><button type="button" class="life-quiet" id="sarniFestivalNew">New</button><button type="submit" class="life-save" id="sarniFestivalSaveBtn">❀ Save festival</button></div></div>
  </form>
  <div class="sarni-festival-saved"><h4>Annual festivals saved in this account</h4><div id="sarniFestivalSavedList" class="sarni-festival-saved-list" aria-live="polite"><p>Sign in to see your saved festivals.</p></div></div>
@@ -1449,7 +1449,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 <button id="mobileMorePassword" type="button">⌁   Change password</button>
 <button id="mobileMoreLogout" type="button">↪   Sign out</button>
 </div>
-<div class="mobile-more-versions"><span id="moreFrontendVersion">FE v20.8.14</span><span id="moreBackendVersion">BE v3.17.30</span></div>
+<div class="mobile-more-versions"><span id="moreFrontendVersion">FE v20.8.16</span><span id="moreBackendVersion">BE v3.17.30</span></div>
 </aside>
 </div>
 <div aria-labelledby="commandPaletteTitle" aria-modal="true" class="command-palette-backdrop hidden" id="commandPalette" role="dialog">
@@ -1727,9 +1727,9 @@ ICICI" rows="6"></textarea><small class="field-help">These choices appear only w
     };
   </script>
 <script defer src="./sarni-life-format.js?v=20261018-20810" onerror="sarNiAssetFailed('life-format')"></script>
-<script defer="" onerror="sarNiAssetFailed('app')" onload="sarNiAssetLoaded('app')" src="./app-v20-8-14.js?v=20261018-20814-calendar-fest"></script>
+<script defer="" onerror="sarNiAssetFailed('app')" onload="sarNiAssetLoaded('app')" src="./app-v20-8-16.js?v=20261019-20816-calendar-plans"></script>
 <script defer src="./sarni-festivals-v20-8-14.js?v=20261018-20814" onerror="sarNiAssetFailed('festivals')"></script>
-<script defer src="./sarni-family-planner-v20-8-15.js?v=20261018-20815" onerror="console.warn('SarNi planning centre could not load')"></script>
+<script defer src="./sarni-family-planner-v20-8-16.js?v=20261019-20816" onerror="console.warn('SarNi planning centre could not load')"></script>
 <script>
 /* SarNi Odia Calendar v20.8.0 — optional companion to app-v20-7-0.js.
  * All festival and recurrence dates are calculated on the authenticated backend.
@@ -1750,7 +1750,7 @@ function label(day){return day?`${day.monthName} · ${day.paksha==='SHUKLA'?'ଶ
 function hasSession(){return typeof state!=='undefined'&&Boolean(state.token);}
 function recurring(){return ['ODIA','BOTH','GREGORIAN'].includes(getValue('calendarBasis'))&&getValue('repeatYearly');}
 function updateFields(){const show=getValue('calendarBasis')!=='GREGORIAN';const part=byId('odiaTithiControls');if(part)part.hidden=!show;
- const note=byId('odiaRepeatNote');if(note)note.textContent=getValue('repeatYearly')?'Yearly recurrence enabled — the original English date is preserved.':'A one-time date will be saved; enable yearly recurrence for annual birthdays.';
+ const note=byId('odiaRepeatNote');if(note)note.textContent=getValue('repeatYearly')?(getValue('calendarBasis')==='ODIA'?'Each year the Odia tithi is recalculated and the resulting English date is shown in the calendar.':'Yearly recurrence enabled; English dates are calculated according to the selected calendar rule.'):'This is a one-time English date. Enable yearly recurrence for annual occasions.';
 }
 async function lookupBirthday(force){const f=form();if(!f||!hasSession())return;const date=f.elements.eventDate.value;
  if(!date){const pair=byId('odiaDatePairPreview');if(pair)pair.textContent='Choose an English date to view its Odia tithi.';return;}lookupReadyFor='';const serial=++previewSerial;
@@ -1787,7 +1787,7 @@ async function saveEvent(ev){
  try{const r=await api('saveImportantDate',{event},{retry:false});if(!r?.ok)throw Error(r?.message||'Save failed');
  applyBootstrap(r.data);saveCache(r.data);cache.clear();
  f.reset();f.elements.id.value='';f.elements.eventDate.value=localIsoDate();fillExtra(null);
- message('✓ Saved to SarNi. Odia recurrence will calculate automatically every year.');
+ message('✓ Saved. Odia recurrence uses the saved tithi and displays an estimated English date separately for each year.');
  renderStandaloneCalendar();if(typeof toast==='function')toast('Important date and yearly reminder saved.','success');
  }catch(err){message(err.message||'Unable to save.',true);if(typeof toast==='function')toast(err.message||'Save failed','error');}
  finally{if(btn)btn.disabled=false;}
@@ -1815,9 +1815,15 @@ function applyMonth(data){
   const customFestivalIds=new Set((state.importantDates||[]).filter(x=>String(x.notes||'').startsWith('[SARNI_FESTIVAL_V1] ')).map(x=>String(x.id)));
   const entries=[...(data.festivals||[]).filter(x=>x.date===iso).map(x=>({...x,category:'festival'})),
      ...(data.occurrences||[]).filter(x=>x.date===iso).map(x=>({...x,category:customFestivalIds.has(String(x.id))?'festival':'occasion'}))];
-  entries.forEach(item=>{const span=document.createElement('span');span.className='sarni-cal-event sarni-odia-'+item.category;
-   span.textContent=(item.category==='festival'?'❀ ':'★ ')+item.title+(item.calendarKind==='ODIA'?' · ଓଡ଼ିଆ':'');
-   span.title=item.title+' · '+item.source;
+  // Show event names only on the selected English calendar day. Tithi is
+  // stored as the recurrence rule, not an additional displayed calendar.
+  const used=new Set();
+  entries.forEach(item=>{
+   const key=String(item.id||'')+'|'+String(item.title||'').toLowerCase()+'|'+iso;
+   if(used.has(key))return;used.add(key);
+   const span=document.createElement('span');span.className='sarni-cal-event sarni-odia-'+item.category;
+   span.textContent=(item.category==='festival'?'❀ ':'★ ')+item.title;
+   span.title=item.title+' · English date '+iso+' · '+String(item.source||'calculated occurrence');
    events.appendChild(span);
   });
  });
@@ -1827,9 +1833,9 @@ function applyMonth(data){
   list.innerHTML=festivals.length?festivals.map(x=>`<div class="sarni-odia-row"><span><strong>❀ ${escapeText(x.title)}</strong><small>${escapeText(x.source)}</small></span><b>${escapeText(x.date)}</b></div>`).join(''):'<p>No listed festivals for this month. Other regional festivals may still apply.</p>';
  }
  const recurring=byId('sarniOdiaRecurringItems');if(recurring){const arr=(data.occurrences||[]).filter(x=>!customIds.has(String(x.id))).sort((a,b)=>a.date.localeCompare(b.date));
- recurring.innerHTML=arr.length?arr.map(x=>`<div class="sarni-odia-row"><span><strong>★ ${escapeText(x.title)}</strong><small>${escapeText(x.calendarKind)} · ${x.verified?'Verified/English':'Calculated lunar date'}</small></span><b>${escapeText(x.date)}</b></div>`).join(''):'<p>No personal recurring dates for this month.</p>';
+ recurring.innerHTML=arr.length?arr.map(x=>`<div class="sarni-odia-row"><span><strong>★ ${escapeText(x.title)}</strong><small>${escapeText(x.calendarKind==='ODIA'?'English occurrence from Odia lunar rule · verify this year':'English calendar occurrence')} · ${escapeText(x.source||'Calculated')}</small></span><b>${escapeText(x.date)}</b></div>`).join(''):'<p>No personal recurring dates for this month.</p>';
  }
- const status=byId('odiaFestivalStatus');if(status)status.textContent='Automatic astronomical calendar loaded · '+(data.festivals||[]).length+' listed festivals this month';
+ const status=byId('odiaFestivalStatus');if(status)status.textContent='English dates loaded from the annual calendar · Odia observances are estimates until verified for this year · '+(data.festivals||[]).length+' listed festivals';
 }
 async function paintMonth(){if(!hasSession())return;const key=monthKey();if(!/^\d{4}-\d{2}$/.test(key))return;
  const serial=++monthSerial,status=byId('odiaFestivalStatus');if(status)status.textContent='Loading astronomical Odia dates…';
@@ -1963,7 +1969,7 @@ async function fetchFocus(force){if(!isReady()||fetching||(!force&&Date.now()-la
  finally{fetching=false;renderFocus();if(requestOwner!==String(state.username||'')&&isReady())void fetchFocus(true);}
 }
 function applyVersion(){
- const version=(typeof APP_VERSION==='string' && APP_VERSION)?APP_VERSION:'20.8.14';
+ const version=(typeof APP_VERSION==='string' && APP_VERSION)?APP_VERSION:'20.8.16';
  for(const id of ['loginVersion','dashboardVersion']){const x=el(id);if(x)x.textContent='Frontend · v'+version;}
  for(const id of ['dashboardVersionTop','mobileFrontendVersion','moreFrontendVersion']){const x=el(id);if(x)x.textContent='FE v'+version;}
 }
