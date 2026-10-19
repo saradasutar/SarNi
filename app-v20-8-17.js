@@ -8422,7 +8422,39 @@ function openSarNiMobileMore(){
   if(document.getElementById('moreBackendVersion'))document.getElementById('moreBackendVersion').textContent=back?.textContent||'BE v3.17.18';
   panel.focus({preventScroll:true});
 }
+/* SarNi private backup control. Backend v3.17.30 requires ADMIN and saves
+ * only to owner's private Drive backup folder, not to public GitHub.
+ * This button is MANUAL; scheduled backup runs via backend backupData trigger.
+ */
+let sarniPrivateBackupBusy=false;
+async function sarniBackupNow(){
+ if(!isSarNiAdmin()){toast('Admin permission required to create a backup.','error');return;}
+ if(sarniPrivateBackupBusy)return;
+ if(!window.confirm('Create a private SarNi data backup in your Google Drive now?'))return;
+ const buttons=[$('sarniMobileBackupNow'),$('sarniAdminBackupNow')].filter(Boolean);
+ const statuses=[$('sarniMobileBackupStatus'),$('sarniAdminBackupStatus')].filter(Boolean);
+ sarniPrivateBackupBusy=true;
+ buttons.forEach(btn=>{btn.disabled=true;});
+ statuses.forEach(el=>{el.textContent='Creating a private Google Drive backup…';});
+ try{
+  const response=await api('backupNow',{}, {retry:false,timeoutMs:120000});
+  if(!response?.ok)throw new Error(response?.message||'Backup could not be created.');
+  const filename=String(response.backup?.fileName||'Backup created').slice(0,160);
+  statuses.forEach(el=>{el.textContent='✓ Private backup created: '+filename;});
+  toast('SarNi private data backup created in Google Drive.','success');
+ }catch(error){
+  const message=String(error?.message||'Backup failed');
+  statuses.forEach(el=>{el.textContent='Backup failed: '+message;});
+  toast('Backup not confirmed: '+message,'error');
+ }finally{
+  sarniPrivateBackupBusy=false;
+  buttons.forEach(btn=>{btn.disabled=false;});
+ }
+}
+
 function initSarNiMobileFirst(){
+  $('sarniMobileBackupNow')?.addEventListener('click',sarniBackupNow);
+  $('sarniAdminBackupNow')?.addEventListener('click',sarniBackupNow);
   const more=document.getElementById('mobileMoreBtn');
   const sheet=document.getElementById('mobileMoreSheet');
   more?.addEventListener('click',()=>sheet?.classList.contains('hidden')?openSarNiMobileMore():closeSarNiMobileMore());
