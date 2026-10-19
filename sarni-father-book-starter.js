@@ -10,28 +10,28 @@
       ['Before the Story Begins · କାହାଣୀ ଆରମ୍ଭ ପୂର୍ବରୁ', 'Look for one verified, ordinary but revealing moment. Record whose memory it is and whether a conversation is reconstructed.']
     ]},
     { name:'Part I · The Village Years', odia:'ଗାଁର ଦିନଗୁଡ଼ିକ', items:[
-      ['The Village · ଗାଁ', 'Birthplace, surroundings, social and economic background. Find the place name, period and old photographs.'],
-      ['A Childhood Home · ପିଲାଦିନର ଘର', 'Parents, siblings and everyday household life. Separate eyewitness recollections from family stories.'],
-      ['When He Was Nine · ନଅ ବର୍ଷ ବୟସରେ', 'His mother died when he was nine. Document what is known, how the event was remembered and what remains uncertain.'],
-      ["The Days That Followed · ତା' ପରର ଦିନଗୁଡ଼ିକ", 'Who looked after him? What changed in the household and in his daily routine? Record actual incidents only.']
+      ['The Village (ଗାଁ)', 'Birthplace, surroundings, social and economic background. Find the place name, period and old photographs.'],
+      ['A Childhood Home (ପିଲାଦିନର ଘର)', 'Parents, siblings and everyday household life. Separate eyewitness recollections from family stories.'],
+      ['When He Was Nine (ନଅ ବର୍ଷ ବୟସରେ)', 'His mother died when he was nine. Document what is known, how the event was remembered and what remains uncertain.'],
+      ["The Days That Followed (ତା' ପରର ଦିନଗୁଡ଼ିକ)", 'Who looked after him? What changed in the household and in his daily routine? Record actual incidents only.']
     ]},
     { name:'Part II · The Years of Learning', odia:'ପଢ଼ା ଓ ସଂଘର୍ଷର ବର୍ଷ', items:[
-      ['The Road to School · ସ୍କୁଲକୁ ବାଟ', 'School names, distances, teachers, costs, dates, and his earliest experiences of education.'],
-      ['Between Work and Books · କାମ ଓ ପାଠ ଭିତରେ', 'He worked while studying. Identify the precise kind of work, schedule, and the people who remember it.'],
-      ['The Difficult Years · କଠିନ ବର୍ଷଗୁଡ଼ିକ', 'Confirmed setbacks, decisions, support and turning points. Do not invent hardships for dramatic effect.'],
-      ['The Road to Teaching · ଶିକ୍ଷକତାର ପଥେ', 'Qualifications, job applications, first teaching post and reasons for becoming a teacher.']
+      ['The Road to School (ସ୍କୁଲକୁ ବାଟ)', 'School names, distances, teachers, costs, dates, and his earliest experiences of education.'],
+      ['Between Work and Books (କାମ ଓ ପାଠ ଭିତରେ)', 'He worked while studying. Identify the precise kind of work, schedule, and the people who remember it.'],
+      ['The Difficult Years (କଠିନ ବର୍ଷଗୁଡ଼ିକ)', 'Confirmed setbacks, decisions, support and turning points. Do not invent hardships for dramatic effect.'],
+      ['The Road to Teaching (ଶିକ୍ଷକତାର ପଥେ)', 'Qualifications, job applications, first teaching post and reasons for becoming a teacher.']
     ]},
     { name:'Part III · A Life in the Town', odia:'ସହରରେ ଏକ ଜୀବନ', items:[
-      ['A Different World · ଏକ ଭିନ୍ନ ଦୁନିଆ', 'Life in the town where he worked as a teacher; what changed from his village upbringing?'],
-      ['Inside the Classroom · ଶ୍ରେଣୀକକ୍ଷ ଭିତରେ', 'Daily teaching, students, colleagues, school routines and specific remembered classroom events.'],
-      ['The Life at Home · ଘର ଭିତରର ଜୀବନ', 'Marriage, your mother, financial decisions, domestic life and differing family perspectives.'],
-      ['Growing Up as His Sons · ବାପାଙ୍କ ଛାଇରେ ଆମ ପିଲାଦିନ', 'Four sons, childhood memories, disagreements and education, without comparisons or boasting.']
+      ['A Different World (ଏକ ଭିନ୍ନ ଦୁନିଆ)', 'Life in the town where he worked as a teacher; what changed from his village upbringing?'],
+      ['Inside the Classroom (ଶ୍ରେଣୀକକ୍ଷ ଭିତରେ)', 'Daily teaching, students, colleagues, school routines and specific remembered classroom events.'],
+      ['The Life at Home (ଘର ଭିତରର ଜୀବନ)', 'Marriage, your mother, financial decisions, domestic life and differing family perspectives.'],
+      ['Growing Up as His Sons (ବାପାଙ୍କ ଛାଇରେ ଆମ ପିଲାଦିନ)', 'Four sons, childhood memories, disagreements and education, without comparisons or boasting.']
     ]},
     { name:'Part IV · The Passing Years', odia:'ବିତିଯାଇଥିବା ବର୍ଷଗୁଡ଼ିକ', items:[
-      ['The Headmaster · ପ୍ରଧାନଶିକ୍ଷକ', 'His appointment and daily responsibilities as a high-school headmaster; seek colleagues’ and students’ accounts.'],
-      ['After the Last School Bell · ଶେଷ ସ୍କୁଲ ଘଣ୍ଟି ପରେ', 'Retirement from a town high school, routines, interests and changes afterward, as applicable.'],
-      ['Four Different Roads · ଚାରିଟି ଭିନ୍ନ ବାଟ', 'How education shaped the four sons’ paths. Keep this about relationships and choices, not professional status.'],
-      ['The Man I Came to Know · ଯେଉଁ ମଣିଷକୁ ମୁଁ ଜାଣିଲି', 'A candid son’s perspective: character, ordinary habits, misunderstandings and insights over time.']
+      ['The Headmaster (ପ୍ରଧାନଶିକ୍ଷକ)', 'His appointment and daily responsibilities as a high-school headmaster; seek colleagues’ and students’ accounts.'],
+      ['After the Last School Bell (ଶେଷ ସ୍କୁଲ ଘଣ୍ଟି ପରେ)', 'Retirement from a town high school, routines, interests and changes afterward, as applicable.'],
+      ['Four Different Roads (ଚାରିଟି ଭିନ୍ନ ବାଟ)', 'How education shaped the four sons’ paths. Keep this about relationships and choices, not professional status.'],
+      ['The Man I Came to Know (ଯେଉଁ ମଣିଷକୁ ମୁଁ ଜାଣିଲି)', 'A candid son’s perspective: character, ordinary habits, misunderstandings and insights over time.']
     ]},
     { name:'Epilogue', odia:'ଶେଷ କଥା', items:[
       ['What Remains · ଯାହା ରହିଗଲା', 'What you know, what you cannot know, and why you wanted to tell his life honestly.']
@@ -41,7 +41,7 @@
   // Match by English chapter title rather than array position. A partially
   // created or manually reordered book must never open an unrelated chapter.
   function chapterKey(title) {
-    return String(title||'').split(/[·(]/)[0].trim().replace(/^Chapter\\s+\\d+:?\\s*/i,'').toLowerCase();
+    return String(title||'').split(/[·(]/)[0].trim().replace(/^Chapter\s+\d+:?\s*/i,'').toLowerCase();
   }
   function chapterDisplayStatus(chapter,key) {
     const words=Number(chapter?.wordCount)||0;
