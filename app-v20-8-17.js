@@ -577,6 +577,7 @@ function clearSession(){
   // Never leave recent private diary text in the DOM after sign-out.
   $('sarniRecentQuickExpense')?.replaceChildren();
   $('sarniRecentQuickDiary')?.replaceChildren();
+  ['sarniAdminBackupStatus','sarniMobileBackupStatus'].forEach(id=>{const el=$(id);if(el)el.textContent='';});
   // Remove cached personal records after sign-out; preserve only harmless UI preferences.
   try {
     for (const store of [localStorage, sessionStorage]) {
@@ -7592,21 +7593,18 @@ async function init(){
     }
 
     loadSavedUsername();
-    restoreHoldingsDefaultView(false);
-    restoreWatchDefaultView(false);
-    restoreHoldingsSummaryState();
+    // SarNi no longer runs investor watchlist/holdings page initialization.
+    // That module has moved to Analysis. This shortens mobile startup.
     state.overviewMode=overviewDefaultMode();
     document.body.classList.add('section-overview');
-    refreshOwnerControls();
     if(els.diaryText&&els.monthlyText)updateDiaryWritingMeta();
 
     setTimeout(()=>{
       try{
         if(els.diaryText)restoreDailyDraft();
         if(els.monthlyText)restoreMonthlyDraft();
-        installColumnResizers('holdings');
-        installColumnResizers('watchlist');
-        scheduleDashboardHScrollRefresh();
+        // Keep startup to personal-life modules; legacy investment resizers
+        // are unnecessary now that investment pages live in Analysis.
       }catch(e){console.warn('Deferred UI init:',e);}
     },80);
 
@@ -7632,12 +7630,10 @@ async function init(){
       if(saved)applyBootstrap(saved,true);
       else{
         setPortfolioStartupLoading(false);
-        refreshOwnerControls();
         renderAll();
         if(els.lastUpdatedText)els.lastUpdatedText.textContent='Session restored · holdings are updating quietly';
       }
       beginBackgroundHydration(state.token,{hasSaved:Boolean(saved)});
-      restoreHoldingsSummaryState();
       resetAutoRefreshClock();
     }
 
