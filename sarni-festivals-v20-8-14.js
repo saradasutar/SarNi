@@ -47,6 +47,23 @@ function reset(){
  const preview=$('sarniFestivalOdiaPreview');if(preview)preview.textContent='English '+form.elements.eventDate.value+' · Odia calculation available below';
  showFields();status('Ready to save');
 }
+function printGuide(id){
+ const row=selectedRecord(id);if(!row)return;
+ const g=guide(row.notes);if(!admin()&&!g.visible){status('This guide is private.',true);return;}
+ const win=window.open('','_blank');if(!win){status('Allow pop-ups to print the festival guide.',true);return;}
+ const doc=win.document;doc.open();doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Family Festival Guide</title><style>body{font-family:Arial,sans-serif;color:#20253b;margin:16mm;line-height:1.55}h1{margin-bottom:6px}pre{font:inherit;white-space:pre-wrap;overflow-wrap:anywhere}a{overflow-wrap:anywhere}@page{size:A4;margin:16mm}@media print{button{display:none}}</style></head><body></body></html>');doc.close();
+ const h=doc.createElement('h1');h.textContent=String(row.title||'Family Festival Guide');doc.body.append(h);
+ const date=doc.createElement('p');date.textContent='Original English date: '+String(row.eventDate||'')+' · Repeats annually by '+(String(row.calendarBasis||'').toUpperCase()==='ODIA'?'Odia lunar tithi':'English date')+'. Verify the observance with this year’s Kohinoor Panjika.';doc.body.append(date);
+ const heading=doc.createElement('h2');heading.textContent='Family traditions and instructions';doc.body.append(heading);
+ const description=doc.createElement('pre');description.textContent=g.text||'No instructions added yet.';doc.body.append(description);
+ if(g.photoUrl&&validPhoto(g.photoUrl)){const p=doc.createElement('p'),a=doc.createElement('a');a.href=g.photoUrl;a.textContent='Open family photo / album';a.target='_blank';a.rel='noopener noreferrer';p.append(a);doc.body.append(p);}
+ const foot=doc.createElement('p');foot.textContent='Family reference copy · Printed '+new Date().toLocaleDateString('en-IN');doc.body.append(foot);
+ const btn=doc.createElement('button');btn.textContent='Print / Save as PDF';btn.addEventListener('click',()=>win.print());doc.body.append(btn);win.focus();
+}
+function addPhotoPreview(container,url){
+ if(!validPhoto(url)||!/^https:\/\/[^\s?#]+\.(?:png|jpe?g|webp|gif)(?:[?#]|$)/i.test(url))return;
+ const img=document.createElement('img');img.src=url;img.loading='lazy';img.alt='Festival photograph thumbnail';img.referrerPolicy='no-referrer';img.style.cssText='display:block;max-width:180px;max-height:135px;object-fit:cover;border-radius:9px;margin:10px 0';img.addEventListener('error',()=>img.remove(),{once:true});container.append(img);
+}
 function render(){
  const list=$('sarniFestivalSavedList'),form=f();if(!list)return;
  if(form)form.classList.toggle('hidden',!admin());
@@ -70,11 +87,12 @@ function render(){
    const summary=document.createElement('summary');summary.textContent='📖 Family guide · instructions & photos';disclosure.append(summary);
    if(g.text){const content=document.createElement('p');content.style.whiteSpace='pre-wrap';content.textContent=g.text;disclosure.append(content);}
    if(g.photoUrl&&validPhoto(g.photoUrl)){
-    const a=document.createElement('a');a.href=g.photoUrl;a.target='_blank';a.rel='noopener noreferrer';a.textContent='↗ Open festival photo / family album';disclosure.append(a);
+    const a=document.createElement('a');a.href=g.photoUrl;a.target='_blank';a.rel='noopener noreferrer';a.textContent='↗ Open festival photo / family album';disclosure.append(a);addPhotoPreview(disclosure,g.photoUrl);
    }
    left.append(disclosure);
   }
   card.append(left);
+  if((admin()||g.visible)&&(g.text||g.photoUrl)){const controls=document.createElement('div');controls.className='sarni-festival-actions';const print=document.createElement('button');print.type='button';print.className='life-quiet';print.dataset.festivalAction='print';print.dataset.festivalId=String(row.id);print.textContent='⎙ Print guide';controls.append(print);card.append(controls);}
   if(admin()){
    const actions=document.createElement('div');actions.className='sarni-festival-actions';
    for(const [action,label] of [['edit','Edit'],['delete','Remove']]){
@@ -212,7 +230,8 @@ function install(){
  $('sarniFestivalSavedList')?.addEventListener('click',event=>{
   const button=event.target.closest('[data-festival-action]');
   if(!button)return;
-  if(button.dataset.festivalAction==='edit')edit(button.dataset.festivalId);
+  if(button.dataset.festivalAction==='print')printGuide(button.dataset.festivalId);
+  else if(button.dataset.festivalAction==='edit')edit(button.dataset.festivalId);
   else if(button.dataset.festivalAction==='delete')void remove(button.dataset.festivalId);
  });
  document.addEventListener('click',event=>{
