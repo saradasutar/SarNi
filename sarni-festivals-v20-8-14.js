@@ -18,13 +18,13 @@ function saved(){return current().filter(x=>String(x.kind||'').toUpperCase()==='
 const PHOTO_TAG='[FESTIVAL_PHOTO_URL] ',VISIBLE_TAG='[FESTIVAL_GUIDE_VISIBLE] ';
 function guide(value){
  const raw=String(value||'').startsWith(TAG)?String(value).slice(TAG.length):String(value||'');
- const lines=raw.split('\\n'),text=[],info={text:'',photoUrl:'',visible:true};
+ const lines=raw.split('\n'),text=[],info={text:'',photoUrl:'',visible:true};
  for(const line of lines){
   if(line.startsWith(PHOTO_TAG))info.photoUrl=line.slice(PHOTO_TAG.length).trim();
   else if(line.startsWith(VISIBLE_TAG))info.visible=line.slice(VISIBLE_TAG.length).trim()!=='NO';
   else text.push(line);
  }
- info.text=text.join('\\n').trim();return info;
+ info.text=text.join('\n').trim();return info;
 }
 function notes(value){return guide(value).text;}
 function validPhoto(url){if(!url)return true;try{const parsed=new URL(url);return parsed.protocol==='https:'&&Boolean(parsed.hostname);}catch{return false;}}
@@ -148,7 +148,7 @@ async function saveEvent(event){
  const btn=$('sarniFestivalSaveBtn');
  if(btn)btn.disabled=true;status('Saving yearly festival securely…');
  const data={
-  id,title,eventDate,kind:'OTHER',notes:TAG+originalNotes+(photoUrl?'\\n'+PHOTO_TAG+photoUrl:'')+'\\n'+VISIBLE_TAG+(guideVisible?'YES':'NO'),
+  id,title,eventDate,kind:'OTHER',notes:TAG+originalNotes+(photoUrl?'\\n'+PHOTO_TAG+photoUrl:'')+'\n'+VISIBLE_TAG+(guideVisible?'YES':'NO'),
   calendarBasis:basis,repeatYearly:true,odiaMonth:odia?lunar.month:'',
   odiaPaksha:odia?lunar.paksha:'',odiaTithi:odia?lunar.tithi:0,
   odiaAdhika:'REGULAR',odiaVerified:odia&&Boolean(form.elements.odiaVerified.checked),
