@@ -897,7 +897,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </div>
 </div>
 <div class="sarni-calendar-legend"><span><i class="sarni-cal-dot reminder"></i>Reminder</span><span><i class="sarni-cal-dot anniversary"></i>Anniversary</span><span><i class="sarni-cal-dot target"></i>Plan / Target</span><span><i class="sarni-cal-dot diary"></i>Diary</span><span>★ Important date</span></div>
-<div aria-label="English month calendar: annual Odia observances appear on their calculated English dates" class="life-calendar sarni-family-calendar-grid" id="standaloneCalendarGrid"></div><section class="sarni-odia-festival-panel" aria-label="Odia festivals and yearly lunar occasions"><div class="sarni-odia-head"><div><span class="life-eyebrow">ଓଡ଼ିଆ ପର୍ବପର୍ବାଣୀ · AUTOMATIC CALENDAR</span><h3>Odia festivals &amp; yearly birthdays</h3><p id="odiaFestivalStatus" role="status">Calculated tithi calendar will appear after sign-in.</p></div><button type="button" class="life-quiet" id="odiaFestivalRefresh">↻ Refresh</button><button type="button" class="life-quiet" id="odiaFestivalPrint" title="Print festival dates for the selected month">⎙ Print festivals</button></div>
+<div aria-label="English month calendar: annual Odia observances appear on their calculated English dates" class="life-calendar sarni-family-calendar-grid" id="standaloneCalendarGrid"></div><section class="sarni-odia-festival-panel" aria-label="Odia festivals and yearly lunar occasions"><div class="sarni-odia-head"><div><span class="life-eyebrow">ଓଡ଼ିଆ ପର୍ବପର୍ବାଣୀ · AUTOMATIC CALENDAR</span><h3>Odia festivals &amp; yearly birthdays</h3><p id="odiaFestivalStatus" role="status">Calculated tithi calendar will appear after sign-in.</p></div><button type="button" class="life-quiet" id="odiaFestivalRefresh">↻ Refresh</button><button type="button" class="life-quiet" id="odiaFestivalPrint" title="Print festival dates for the selected month">⎙ Print festivals</button><label class="sarni-yearbook-select">Year <input id="odiaYearbookYear" type="number" min="1900" max="2100" step="1" style="width:86px" aria-label="Festival yearbook year"></label><button type="button" class="life-quiet" id="odiaYearbookPrint">⎙ Print full year</button></div>
 <div class="sarni-odia-panels"><div><h4>❀ Festivals this month</h4><div id="sarniOdiaFestivalItems">Loading…</div></div><div><h4>★ Personal occasions</h4><div id="sarniOdiaRecurringItems">Loading…</div></div></div>
 <small class="sarni-odia-source" id="odiaCalendarSource">Astronomical estimates only; check Kohinoor for official observance.</small></section>
 <p class="sarni-calendar-help">Select any date to add or edit an important occasion. English dates are shown with Odia tithis. Odia festival dates are astronomical estimates, not an official Kohinoor Panjika.</p>
@@ -1871,6 +1871,49 @@ async function printOdiaFestivals(){
   popup.focus();
  }catch(e){popup.document.body.textContent='Could not fetch festival dates: '+String(e.message||e);if(status)status.textContent='Printing unavailable: '+String(e.message||e);}finally{if(btn)btn.disabled=false;}
 }
+
+async function printOdiaYearbook(){
+ if(!hasSession())return;
+ const year=Number(byId('odiaYearbookYear')?.value||new Date().getFullYear());
+ const status=byId('odiaFestivalStatus'),btn=byId('odiaYearbookPrint');
+ if(!Number.isInteger(year)||year<1900||year>2100){if(status)status.textContent='Select a valid year (1900–2100).';return;}
+ const win=window.open('','_blank');if(!win){if(status)status.textContent='Allow pop-ups to print the festival yearbook.';return;}
+ const doc=win.document;doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Festival Yearbook</title></head><body>Preparing 12 months of festival dates…</body></html>');doc.close();
+ if(btn)btn.disabled=true;
+ try{
+  const months=[];
+  for(let m=1;m<=12;m++){
+   const key=year+'-'+String(m).padStart(2,'0');
+   if(status)status.textContent='Preparing Odia festival yearbook: month '+m+' of 12…';
+   const r=await fetchMonth(key);
+   if(!r?.ok)throw Error('Calendar data unavailable for '+key);
+   const customIds=new Set((state.importantDates||[]).filter(x=>String(x.notes||'').startsWith('[SARNI_FESTIVAL_V1] ')).map(x=>String(x.id)));
+   const unique=new Map();
+   for(const x of [...(r.festivals||[]),...(r.occurrences||[]).filter(x=>customIds.has(String(x.id)))]){
+    const date=String(x.date||'');if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!date.startsWith(key))continue;
+    unique.set(date+'|'+String(x.title||'').toLowerCase(),x);
+   }
+   months.push({month:m,items:[...unique.values()].sort((a,b)=>String(a.date).localeCompare(String(b.date))),source:String(r.source||'Calculated Odia calendar')});
+  }
+  doc.open();doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festival Yearbook '+year+'</title><style>body{font-family:Arial,sans-serif;color:#1b2540;margin:18mm}h1{margin-bottom:3px;color:#56366f}h2{margin-top:25px;color:#56366f;border-bottom:1px solid #bbb}p{line-height:1.5}table{width:100%;border-collapse:collapse;margin-bottom:15px}th,td{border:1px solid #ccc;padding:7px;text-align:left;font-size:12px}th{background:#f3eef7}small{color:#666}.month{break-inside:avoid}button{padding:10px 16px}@page{size:A4;margin:14mm}@media print{button{display:none}.month{page-break-inside:avoid}}</style></head><body></body></html>');doc.close();
+  const h=doc.createElement('h1');h.textContent='ଓଡ଼ିଆ ପର୍ବପର୍ବାଣୀ · Odia Festival Yearbook '+year;doc.body.append(h);
+  const warn=doc.createElement('p');warn.textContent='Includes festivals supplied by SarNi’s calendar service and the signed-in account’s saved annual festivals. This is NOT an exhaustive or Kohinoor-certified list. Dates are calculated estimates unless independently verified with the '+year+' Kohinoor Panjika.';doc.body.append(warn);
+  const names=['January','February','March','April','May','June','July','August','September','October','November','December'];let total=0;
+  for(const month of months){
+   const section=doc.createElement('section');section.className='month';const heading=doc.createElement('h2');heading.textContent=names[month.month-1]+' '+year;section.append(heading);
+   const table=doc.createElement('table'),thead=doc.createElement('thead'),tr=doc.createElement('tr');
+   for(const name of ['Date (English)','Festival','Source / verification']){const th=doc.createElement('th');th.textContent=name;tr.append(th);}thead.append(tr);table.append(thead);
+   const tbody=doc.createElement('tbody');
+   if(!month.items.length){const row=doc.createElement('tr'),td=doc.createElement('td');td.colSpan=3;td.textContent='No festivals returned for this month.';row.append(td);tbody.append(row);}
+   for(const item of month.items){total++;const row=doc.createElement('tr');for(const val of [item.date,item.title,item.source||month.source+' · unverified']){const td=doc.createElement('td');td.textContent=String(val||'');row.append(td);}tbody.append(row);}
+   table.append(tbody);section.append(table);doc.body.append(section);
+  }
+  const foot=doc.createElement('p');foot.textContent='Total listed occurrences: '+total+' · Generated '+new Date().toLocaleDateString('en-IN')+'. Review festival dates before religious observance.';doc.body.append(foot);
+  const print=doc.createElement('button');print.textContent='Print / Save PDF';print.addEventListener('click',()=>win.print());doc.body.append(print);win.focus();
+  if(status)status.textContent='Yearbook ready for '+year+': '+total+' listed festival occurrences.';
+ }catch(e){doc.body.textContent='Unable to complete yearbook: '+String(e.message||e)+'. No incomplete festival calendar was printed.';if(status)status.textContent='Yearbook error: '+String(e.message||e);}
+ finally{if(btn)btn.disabled=false;}
+}
 function install(){const f=form();if(!f)return;
  // App JavaScript may be loaded separately. Never alter investment, diary or expense handlers.
  const prev=renderStandaloneCalendar;
@@ -1887,6 +1930,8 @@ function install(){const f=form();if(!f)return;
  byId('odiaSaveVerifiedOverride')?.addEventListener('click',saveOverride);
  byId('odiaFestivalRefresh')?.addEventListener('click',()=>{cache.delete(String(state.username||'')+':'+monthKey());void paintMonth();});
  byId('odiaFestivalPrint')?.addEventListener('click',()=>{void printOdiaFestivals();});
+ const yearbookYear=byId('odiaYearbookYear');if(yearbookYear&&!yearbookYear.value)yearbookYear.value=String(new Date().getFullYear());
+ byId('odiaYearbookPrint')?.addEventListener('click',()=>{void printOdiaYearbook();});
  byId('calendarEventClear')?.addEventListener('click',()=>setTimeout(()=>{fillExtra(null);void lookupBirthday(true);},0));
  byId('standaloneImportantList')?.addEventListener('click',event=>{
   const btn=event.target.closest('[data-cal-edit]');if(btn){const row=(state.importantDates||[]).find(x=>x.id===btn.dataset.calEdit);if(row)setTimeout(()=>{fillExtra(row);void lookupBirthday(false);},0);}
