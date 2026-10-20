@@ -135,6 +135,8 @@ async function saveEvent(event){
  const title=form.elements.title.value.trim(),eventDate=form.elements.eventDate.value,
        basis=form.elements.calendarBasis.value,originalNotes=form.elements.notes.value.trim(),photoUrl=form.elements.festivalPhotoUrl.value.trim(),guideVisible=form.elements.festivalGuideVisible.checked;
  if(!validPhoto(photoUrl)){status('Use a valid HTTPS link for the festival photo.',true);return;}
+ const encodedGuide=TAG+originalNotes+(photoUrl?'\n'+PHOTO_TAG+photoUrl:'')+'\n'+VISIBLE_TAG+(guideVisible?'YES':'NO');
+ if(encodedGuide.length>1050){status('Instructions and photo link exceed 1,050 characters. Shorten the guide or link.',true);return;}
  if(!title||!eventDate){status('Enter a festival name and English reference date.',true);return;}
  const odia=basis==='ODIA';
  const lunar={month:Number(form.elements.odiaMonth.value),tithi:Number(form.elements.odiaTithi.value),paksha:form.elements.odiaPaksha.value};
