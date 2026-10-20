@@ -15,7 +15,20 @@ function loggedIn(){try{return Boolean(state?.token);}catch{return false;}}
 function admin(){try{return loggedIn()&&typeof isSarNiAdmin==='function'&&isSarNiAdmin();}catch{return false;}}
 function current(){try{return Array.isArray(state.importantDates)?state.importantDates:[];}catch{return [];}}
 function saved(){return current().filter(x=>String(x.kind||'').toUpperCase()==='OTHER'&&String(x.notes||'').startsWith(TAG));}
-function notes(value){return String(value||'').startsWith(TAG)?String(value).slice(TAG.length):String(value||'');}
+const PHOTO_TAG='[FESTIVAL_PHOTO_URL] ',VISIBLE_TAG='[FESTIVAL_GUIDE_VISIBLE] ';
+function guide(value){
+ const raw=String(value||'').startsWith(TAG)?String(value).slice(TAG.length):String(value||'');
+ const lines=raw.split('\\n'),text=[],info={text:'',photoUrl:'',visible:true};
+ for(const line of lines){
+  if(line.startsWith(PHOTO_TAG))info.photoUrl=line.slice(PHOTO_TAG.length).trim();
+  else if(line.startsWith(VISIBLE_TAG))info.visible=line.slice(VISIBLE_TAG.length).trim()!=='NO';
+  else text.push(line);
+ }
+ info.text=text.join('\\n').trim();return info;
+}
+function notes(value){return guide(value).text;}
+function validPhoto(url){if(!url)return true;try{const parsed=new URL(url);return parsed.protocol==='https:'&&Boolean(parsed.hostname);}catch{return false;}}
+
 function status(message,error){const el=$('sarniFestivalSaveStatus');if(el){el.textContent=message;el.classList.toggle('error',Boolean(error));}}
 function dateLabel(d){
  if(!d)return 'Odia date unavailable';
@@ -50,8 +63,18 @@ function render(){
   const basis=String(row.calendarBasis||'GREGORIAN').toUpperCase();
   const lunar=basis==='ODIA'?'Odia · '+String(monthNames[Number(row.odiaMonth)]||'')+' · '+String(row.odiaPaksha||'')+' '+String(row.odiaTithi||''):'English date';
   detail.textContent=original+' · Every year by '+lunar;
-  const note=document.createElement('small');note.textContent=notes(row.notes).slice(0,180);
-  left.append(head,detail);if(note.textContent)left.append(note);card.append(left);
+  const g=guide(row.notes);
+  left.append(head,detail);
+  if((admin()||g.visible)&&(g.text||g.photoUrl)){
+   const disclosure=document.createElement('details');disclosure.className='sarni-festival-family-guide';
+   const summary=document.createElement('summary');summary.textContent='📖 Family guide · instructions & photos';disclosure.append(summary);
+   if(g.text){const content=document.createElement('p');content.style.whiteSpace='pre-wrap';content.textContent=g.text;disclosure.append(content);}
+   if(g.photoUrl&&validPhoto(g.photoUrl)){
+    const a=document.createElement('a');a.href=g.photoUrl;a.target='_blank';a.rel='noopener noreferrer';a.textContent='↗ Open festival photo / family album';disclosure.append(a);
+   }
+   left.append(disclosure);
+  }
+  card.append(left);
   if(admin()){
    const actions=document.createElement('div');actions.className='sarni-festival-actions';
    for(const [action,label] of [['edit','Edit'],['delete','Remove']]){
@@ -96,6 +119,7 @@ function edit(id){
  form.elements.eventDate.value=String(row.eventDate||'');
  form.elements.calendarBasis.value=String(row.calendarBasis||'GREGORIAN');
  form.elements.notes.value=notes(row.notes);
+ const existingGuide=guide(row.notes);form.elements.festivalPhotoUrl.value=existingGuide.photoUrl;form.elements.festivalGuideVisible.checked=existingGuide.visible;
  form.elements.odiaMonth.value=String(row.odiaMonth??0);
  form.elements.odiaPaksha.value=String(row.odiaPaksha||'SHUKLA');
  form.elements.odiaTithi.value=String(row.odiaTithi||1);
@@ -109,7 +133,8 @@ async function saveEvent(event){
  if(!admin()){status('Only the signed-in administrator can use this festival editor.',true);return;}
  const form=f();if(!form)return;
  const title=form.elements.title.value.trim(),eventDate=form.elements.eventDate.value,
-       basis=form.elements.calendarBasis.value,originalNotes=form.elements.notes.value.trim();
+       basis=form.elements.calendarBasis.value,originalNotes=form.elements.notes.value.trim(),photoUrl=form.elements.festivalPhotoUrl.value.trim(),guideVisible=form.elements.festivalGuideVisible.checked;
+ if(!validPhoto(photoUrl)){status('Use a valid HTTPS link for the festival photo.',true);return;}
  if(!title||!eventDate){status('Enter a festival name and English reference date.',true);return;}
  const odia=basis==='ODIA';
  const lunar={month:Number(form.elements.odiaMonth.value),tithi:Number(form.elements.odiaTithi.value),paksha:form.elements.odiaPaksha.value};
@@ -123,7 +148,7 @@ async function saveEvent(event){
  const btn=$('sarniFestivalSaveBtn');
  if(btn)btn.disabled=true;status('Saving yearly festival securely…');
  const data={
-  id,title,eventDate,kind:'OTHER',notes:TAG+originalNotes,
+  id,title,eventDate,kind:'OTHER',notes:TAG+originalNotes+(photoUrl?'\\n'+PHOTO_TAG+photoUrl:'')+'\\n'+VISIBLE_TAG+(guideVisible?'YES':'NO'),
   calendarBasis:basis,repeatYearly:true,odiaMonth:odia?lunar.month:'',
   odiaPaksha:odia?lunar.paksha:'',odiaTithi:odia?lunar.tithi:0,
   odiaAdhika:'REGULAR',odiaVerified:odia&&Boolean(form.elements.odiaVerified.checked),
