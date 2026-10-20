@@ -897,7 +897,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </div>
 </div>
 <div class="sarni-calendar-legend"><span><i class="sarni-cal-dot reminder"></i>Reminder</span><span><i class="sarni-cal-dot anniversary"></i>Anniversary</span><span><i class="sarni-cal-dot target"></i>Plan / Target</span><span><i class="sarni-cal-dot diary"></i>Diary</span><span>★ Important date</span></div>
-<div aria-label="English month calendar: annual Odia observances appear on their calculated English dates" class="life-calendar sarni-family-calendar-grid" id="standaloneCalendarGrid"></div><section class="sarni-odia-festival-panel" aria-label="Odia festivals and yearly lunar occasions"><div class="sarni-odia-head"><div><span class="life-eyebrow">ଓଡ଼ିଆ ପର୍ବପର୍ବାଣୀ · AUTOMATIC CALENDAR</span><h3>Odia festivals &amp; yearly birthdays</h3><p id="odiaFestivalStatus" role="status">Calculated tithi calendar will appear after sign-in.</p></div><button type="button" class="life-quiet" id="odiaFestivalRefresh">↻ Refresh</button></div>
+<div aria-label="English month calendar: annual Odia observances appear on their calculated English dates" class="life-calendar sarni-family-calendar-grid" id="standaloneCalendarGrid"></div><section class="sarni-odia-festival-panel" aria-label="Odia festivals and yearly lunar occasions"><div class="sarni-odia-head"><div><span class="life-eyebrow">ଓଡ଼ିଆ ପର୍ବପର୍ବାଣୀ · AUTOMATIC CALENDAR</span><h3>Odia festivals &amp; yearly birthdays</h3><p id="odiaFestivalStatus" role="status">Calculated tithi calendar will appear after sign-in.</p></div><button type="button" class="life-quiet" id="odiaFestivalRefresh">↻ Refresh</button><button type="button" class="life-quiet" id="odiaFestivalPrint" title="Print festival dates for the selected month">⎙ Print festivals</button></div>
 <div class="sarni-odia-panels"><div><h4>❀ Festivals this month</h4><div id="sarniOdiaFestivalItems">Loading…</div></div><div><h4>★ Personal occasions</h4><div id="sarniOdiaRecurringItems">Loading…</div></div></div>
 <small class="sarni-odia-source" id="odiaCalendarSource">Astronomical estimates only; check Kohinoor for official observance.</small></section>
 <p class="sarni-calendar-help">Select any date to add or edit an important occasion. English dates are shown with Odia tithis. Odia festival dates are astronomical estimates, not an official Kohinoor Panjika.</p>
@@ -1851,6 +1851,26 @@ async function paintMonth(){if(!hasSession())return;const key=monthKey();if(!/^\
  try{const result=await fetchMonth(key);if(serial!==monthSerial)return;applyMonth(result);}
  catch(e){if(serial!==monthSerial)return;if(status)status.textContent=e.message||'Calendar temporarily unavailable.';}
 }
+async function printOdiaFestivals(){
+ if(!hasSession())return;
+ const key=monthKey(),status=byId('odiaFestivalStatus'),btn=byId('odiaFestivalPrint');
+ if(!/^\\d{4}-\\d{2}$/.test(key))return;
+ const popup=window.open('','_blank');
+ if(!popup){if(status)status.textContent='Please allow pop-ups to print festivals.';return;}
+ popup.document.write('<!doctype html><html><head><title>Odia Festivals</title></head><body><p>Preparing printable festival list…</p></body></html>');popup.document.close();
+ if(btn)btn.disabled=true;
+ try{
+  const result=await fetchMonth(key);
+  const customIds=new Set((state.importantDates||[]).filter(x=>String(x.notes||'').startsWith('[SARNI_FESTIVAL_V1] ')).map(x=>String(x.id)));
+  const items=[...(result.festivals||[]),...(result.occurrences||[]).filter(x=>customIds.has(String(x.id)))];
+  const unique=new Map();
+  for(const x of items){const date=String(x.date||'');if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)||!date.startsWith(key))continue;unique.set(date+'|'+String(x.title||'').toLowerCase(),x);}
+  const list=[...unique.values()].sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  const rows=list.map((x,i)=>'<tr><td>'+(i+1)+'</td><td>'+escapeText(String(x.date||''))+'</td><td>'+escapeText(String(x.title||''))+'</td><td>'+escapeText(String(x.source||'Calculated estimate'))+'</td></tr>').join('');
+  popup.document.open();popup.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festivals '+escapeText(key)+'</title><style>body{font-family:Arial,sans-serif;margin:30px;color:#17203b}h1{margin-bottom:4px}p{line-height:1.5}table{width:100%;border-collapse:collapse}th,td{padding:9px;border:1px solid #aaa;text-align:left}th{background:#f0eef5}@page{size:A4;margin:16mm}@media print{button{display:none}}</style></head><body><h1>Odia Festivals · '+escapeText(key)+'</h1><p>Calculated festival dates in the selected English month. Verify religious observances with the corresponding year’s Kohinoor Panjika. Source: '+escapeText(String(result.source||'Calendar service'))+'</p><table><thead><tr><th>No.</th><th>English date</th><th>Festival</th><th>Calendar source</th></tr></thead><tbody>'+(rows||'<tr><td colspan="4">No festivals returned for this month.</td></tr>')+'</tbody></table><p><button onclick="window.print()">Print / Save PDF</button></p></body></html>');popup.document.close();
+  popup.focus();
+ }catch(e){popup.document.body.textContent='Could not fetch festival dates: '+String(e.message||e);if(status)status.textContent='Printing unavailable: '+String(e.message||e);}finally{if(btn)btn.disabled=false;}
+}
 function install(){const f=form();if(!f)return;
  // App JavaScript may be loaded separately. Never alter investment, diary or expense handlers.
  const prev=renderStandaloneCalendar;
@@ -1866,6 +1886,7 @@ function install(){const f=form();if(!f)return;
  byId('odiaRecalculate')?.addEventListener('click',()=>{setValue('odiaVerified',false);void lookupBirthday(true);});
  byId('odiaSaveVerifiedOverride')?.addEventListener('click',saveOverride);
  byId('odiaFestivalRefresh')?.addEventListener('click',()=>{cache.delete(String(state.username||'')+':'+monthKey());void paintMonth();});
+ byId('odiaFestivalPrint')?.addEventListener('click',()=>{void printOdiaFestivals();});
  byId('calendarEventClear')?.addEventListener('click',()=>setTimeout(()=>{fillExtra(null);void lookupBirthday(true);},0));
  byId('standaloneImportantList')?.addEventListener('click',event=>{
   const btn=event.target.closest('[data-cal-edit]');if(btn){const row=(state.importantDates||[]).find(x=>x.id===btn.dataset.calEdit);if(row)setTimeout(()=>{fillExtra(row);void lookupBirthday(false);},0);}
