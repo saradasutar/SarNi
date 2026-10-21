@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>SarNi · Quick Expense</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#162345;background:#f2f5fd}*{box-sizing:border-box}body{margin:0;min-height:100vh}.shell{max-width:560px;margin:auto;padding:14px 14px 110px}.top{background:linear-gradient(125deg,#142c70,#624bbd);padding:24px;border-radius:22px;color:white;box-shadow:0 12px 30px #24418c25;margin:4px 0 14px}.top small{letter-spacing:.12em;font-weight:800;opacity:.8}.top h1{margin:7px 0;font-size:29px;line-height:1.1}.top p{margin:0;opacity:.9;font-size:14px}.card{background:white;border:1px solid #e3e8f2;border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 4px 22px #132e5b0b}.card label{display:block;font-weight:750;margin:13px 0 7px;font-size:14px}input,select,textarea{width:100%;border:1px solid #cbd5e6;border-radius:12px;padding:13px;font:inherit;color:#17233d;background:white;min-height:48px}input:focus,select:focus,textarea:focus{outline:3px solid #aebfff;outline-offset:1px}input[type=number]#amount{font-size:35px;font-weight:800;min-height:78px;letter-spacing:.01em}textarea{resize:vertical;min-height:75px}details{border-top:1px solid #eef0f7;margin-top:15px;padding-top:13px}summary{font-size:14px;font-weight:750;cursor:pointer;color:#3f52a4}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.muted{font-size:13px;color:#64738d;line-height:1.45}.submitbar{position:sticky;bottom:0;z-index:4;padding:10px 0 5px;background:linear-gradient(transparent,#f2f5fd 20%)}button{font:inherit;cursor:pointer;border:0;border-radius:14px;font-weight:800;padding:15px;width:100%}.primary{background:#234eb3;color:white;box-shadow:0 7px 20px #2a4fbc44;font-size:17px}.primary:disabled{opacity:.55;cursor:wait}.secondary{background:#e9efff;color:#1c478b}#notice{color:#a33f34;font-weight:700;white-space:pre-wrap}#success{color:#146e56;font-weight:800}.recent{border-top:1px solid #edf0f5;margin-top:12px;padding-top:10px}.recent p{font-size:14px;border-bottom:1px dashed #ddd;padding:6px 0;margin:0}a{color:#2352ad}@media(max-width:360px){.grid{grid-template-columns:1fr}.shell{padding-inline:9px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+<script defer src="./config.js"></script><script defer src="./quick-expense.js?v=1"></script></head>
+<body><main class="shell">
+<header class="top"><small>SARNI • SECURE EXPENSE ENTRY</small><h1>Quick Expense</h1><p id="trip">One-tap entry · No sign-in needed</p></header>
+<div id="notice" role="alert">Checking the link…</div>
+<section id="entryArea" hidden><form id="qeForm" autocomplete="on">
+<div class="card">
+<label for="amount">Amount (₹)</label><input id="amount" name="amount" inputmode="decimal" type="number" min=".01" max="10000000" step=".01" placeholder="0.00" required>
+<label for="reason">What was paid for?</label><input id="reason" name="reason" maxlength="220" placeholder="e.g. Breakfast, taxi, tickets" required>
+<div class="grid"><div><label for="category">Category</label><select id="category" name="category" required><option value="">Loading categories…</option></select></div>
+<div><label for="paidBy">Paid by (anyone)</label><input id="paidBy" name="paidBy" list="payerOptions" maxlength="100" placeholder="Name / person" required><datalist id="payerOptions"></datalist></div></div>
+<label for="enteredBy">Entered by (optional)</label><input id="enteredBy" name="enteredBy" maxlength="100" placeholder="Your name">
+<details><summary>More details · date, subcategory, recipient, notes</summary>
+<div class="grid"><div><label for="dateSpent">Expense date</label><input type="date" id="dateSpent" name="dateSpent" required></div>
+<div><label for="subcategory">Subcategory</label><select id="subcategory" name="subcategory"><option value="">None</option></select></div></div>
+<label for="paidTo">Paid to (optional)</label><input id="paidTo" name="paidTo" maxlength="140" placeholder="Shop / vendor">
+<label for="notes">Notes (optional)</label><textarea id="notes" name="notes" maxlength="700" placeholder="Any useful detail"></textarea>
+</details></div>
+<p class="muted" id="expiry"></p>
+<div class="submitbar"><button class="primary" type="submit" id="save">✓ Save expense</button></div>
+</form><div id="success" role="status" aria-live="polite"></div><div id="recent" class="card" hidden><strong>Entered during this visit</strong><div id="recentList" class="recent"></div></div></section>
+<p class="muted">Only adding an expense is allowed through this link. The person paying can be different from the person entering it. Ask the administrator to disable the link if shared accidentally.</p>
+</main></body></html>
