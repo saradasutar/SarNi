@@ -62,7 +62,7 @@ async function initialize(){
  if(!apiUrl){setNotice('Backend address unavailable.');return;}
  try{
  const r=await request('qeInfo',{linkToken:secret});
- $('trip').textContent=r.label||'Quick Expense';$('expiry').textContent='Valid until '+new Date(r.expiresAt).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'})+'. Administrator can revoke the link earlier.';
+ $('trip').textContent=r.label||'Quick Expense';$('expiry').textContent=r.neverExpires?'Valid until the administrator disables this link.':'Valid until '+new Date(r.expiresAt).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'})+'. Administrator can revoke the link earlier.';
  fillCategory(r.categories);$('payerOptions').replaceChildren();
  for(const p of (r.payers||[]))$('payerOptions').append(new Option(p));
  $('category').addEventListener('change',fillSubcats);
