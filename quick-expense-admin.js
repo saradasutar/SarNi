@@ -22,7 +22,7 @@ async function refresh(){
   const line=node('div',undefined,'qe-admin-link-row');line.style.cssText='border-top:1px solid #e2e6ef;padding:10px 0;display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap';
   const meta=node('div');meta.append(node('strong',String(x.label||'Expense link')));
   const expired=Date.parse(x.expiresAt)<=Date.now(),active=!x.revoked&&!expired;
-  const info=node('small',(active?'Active':'Inactive')+' · Ends '+fmt(x.expiresAt)+' · '+(x.submissionCount||0)+' entries');
+  const info=node('small',(active?'Active':'Inactive')+' · '+(x.neverExpires?'Until disabled':'Ends '+fmt(x.expiresAt))+' · '+(x.submissionCount||0)+' entries');
   info.style.cssText='display:block;color:#62708a;margin-top:3px';meta.append(info);line.append(meta);
   if(active){const revoke=node('button','Revoke','life-quiet');revoke.type='button';revoke.onclick=async()=>{
    if(!confirm('Disable this link immediately? Previously saved expenses remain in the register.'))return;
@@ -43,6 +43,7 @@ function install(){
  const form=node('form');form.id='qeAdminForm';form.style.cssText='display:grid;gap:10px;max-width:580px';
  const label1=node('label','Link description (e.g., Odisha trip)');const in1=node('input');in1.name='label';in1.maxLength=100;in1.value='Travel expenses';in1.required=true;label1.append(in1);form.append(label1);
  const label2=node('label','Link valid until (administrator decides)');const in2=node('input');in2.type='datetime-local';in2.name='expiresAt';in2.required=true;in2.value=defaultExpiry();label2.append(in2);form.append(label2);
+ const neverLabel=node('label','');const never=document.createElement('input');never.type='checkbox';never.name='neverExpires';neverLabel.append(never,document.createTextNode(' Valid until administrator disables this link'));form.append(neverLabel);never.addEventListener('change',()=>{in2.disabled=never.checked;in2.required=!never.checked;});
  const label3=node('label','Suggested Paid by names (optional, separated by commas)');const in3=node('input');in3.name='payers';in3.maxLength=800;in3.placeholder='e.g. Sarada, Niharika, Brother, Friend';label3.append(in3);form.append(label3);
  const hint=node('p','The Paid by field always allows any name, not just the suggestions. The expense is saved under the administrator’s SarNi expense account.','life-hint');form.append(hint);
  const create=node('button','Generate secure link','life-save');create.type='submit';form.append(create);
@@ -54,9 +55,9 @@ function install(){
  const msg=node('p');msg.id='qeAdminStatus';msg.setAttribute('role','status');form.append(msg);
  form.onsubmit=async e=>{
   e.preventDefault();if(!hasAdmin())return;
-  const expiry=new Date(in2.value);if(!Number.isFinite(expiry.getTime())||expiry<=new Date()){status('Select a future expiry date and time.',true);return;}
+  const expiry=new Date(in2.value);if(!never.checked&&(!Number.isFinite(expiry.getTime())||expiry<=new Date())){status('Select a future expiry date and time.',true);return;}
   create.disabled=true;status('Creating link…');
-  try{const r=await api('qeCreateLink',{label:in1.value.trim(),expiresAt:expiry.toISOString(),payers:in3.value.split(',').map(x=>x.trim()).filter(Boolean)},{retry:false,timeoutMs:35000});
+  try{const r=await api('qeCreateLink',{label:in1.value.trim(),expiresAt:never.checked?'':expiry.toISOString(),neverExpires:never.checked,payers:in3.value.split(',').map(x=>x.trim()).filter(Boolean)},{retry:false,timeoutMs:35000});
    url.value=linkUrl(r.linkToken);output.hidden=false;status('Link created. You may now copy/share it.');await refresh();}
   catch(error){status(error.message||'Unable to create link. Confirm the new Apps Script backend is deployed.',true);}
   finally{create.disabled=false;}
