@@ -3,7 +3,7 @@
 (function(){
 'use strict';
 const $=id=>document.getElementById(id);
-const state={lcp:null,cls:0,inp:null,longTasks:0,errors:0,samples:0};
+const measure={lcp:null,cls:0,inp:null,longTasks:0,errors:0,samples:0};
 function observe(type,cb){
  try{
   if(!('PerformanceObserver' in window)||!PerformanceObserver.supportedEntryTypes?.includes(type))return;
@@ -11,12 +11,12 @@ function observe(type,cb){
   po.observe({type,buffered:true});
  }catch(e){}
 }
-observe('largest-contentful-paint',e=>{state.lcp=e.startTime});
-observe('layout-shift',e=>{if(!e.hadRecentInput)state.cls+=e.value});
-observe('event',e=>{if(e.duration>=(state.inp||0))state.inp=e.duration});
-observe('longtask',()=>{state.longTasks++});
-window.addEventListener('error',()=>{state.errors++},{passive:true});
-window.addEventListener('unhandledrejection',()=>{state.errors++},{passive:true});
+observe('largest-contentful-paint',e=>{measure.lcp=e.startTime});
+observe('layout-shift',e=>{if(!e.hadRecentInput)measure.cls+=e.value});
+observe('event',e=>{if(e.duration>=(measure.inp||0))measure.inp=e.duration});
+observe('longtask',()=>{measure.longTasks++});
+window.addEventListener('error',()=>{measure.errors++},{passive:true});
+window.addEventListener('unhandledrejection',()=>{measure.errors++},{passive:true});
 function e(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=text;if(cls)x.className=cls;return x}
 function estimatedBytes(){
  try{return performance.getEntriesByType('resource').filter(x=>x.initiatorType==='script'||x.initiatorType==='link').reduce((n,x)=>n+(x.transferSize||0),0)}catch{return 0}
@@ -51,19 +51,19 @@ function formatNum(x){return Number.isFinite(x)?x.toFixed(2):'Not measured'}
 function nav(){try{return performance.getEntriesByType('navigation')[0]||null}catch{return null}}
 function metrics(){
  const n=nav();
- const lcp=state.lcp,inp=state.inp,cls=state.cls;
+ const lcp=measure.lcp,inp=measure.inp,cls=measure.cls;
  return [
   {title:'Largest paint (LCP)',value:lcp==null?'Not measured':Math.round(lcp)+' ms',target:'Good ≤ 2,500 ms'},
   {title:'Responsiveness (INP)',value:inp==null?'Not measured':Math.round(inp)+' ms',target:'Good ≤ 200 ms'},
   {title:'Layout shift (CLS)',value:formatNum(cls),target:'Good ≤ 0.10'},
   {title:'Page load',value:n?Math.round(n.loadEventEnd||n.duration)+' ms':'Not measured',target:'Navigation event, not server sync'},
   {title:'Script & CSS transfer',value:estimatedBytes()?Math.round(estimatedBytes()/1024)+' KB':'Unavailable',target:'Network transfer size, if exposed'},
-  {title:'Long tasks',value:String(state.longTasks),target:'More suggests UI blocking'}
+  {title:'Long tasks',value:String(measure.longTasks),target:'More suggests UI blocking'}
  ];
 }
 function getSummary(){
  const m=metrics().map(x=>x.title+': '+x.value);
- return 'SarNi local diagnostics\n'+new Date().toISOString()+'\n'+m.join('\n')+'\nError/rejection count: '+state.errors+
+ return 'SarNi local diagnostics\n'+new Date().toISOString()+'\n'+m.join('\n')+'\nError/rejection count: '+measure.errors+
  '\nBrowser: '+navigator.userAgent.replace(/[^a-zA-Z0-9 .;()/_-]/g,'').slice(0,200)+
  '\nData is measured only on this device; thresholds are guidelines, not a site-wide score.';
 }
@@ -74,10 +74,10 @@ function paint(){
  for(const m of metrics()){
   const item=e('div',undefined,'sq-metric');item.append(e('small',m.title),e('strong',m.value),e('small',m.target));target.append(item);
  }
- const lcp=state.lcp,inp=state.inp,cls=state.cls;
+ const lcp=measure.lcp,inp=measure.inp,cls=measure.cls;
  const status=$('sqQualityInfo');
  if(status)status.textContent='Measured on this page only. '+(lcp==null||inp==null?'Some metrics require supported browser events and actual interaction. ':'')+
-  'JavaScript errors/rejections captured this visit: '+state.errors+'. No records, links, or credentials are collected.';
+  'JavaScript errors/rejections captured this visit: '+measure.errors+'. No records, links, or credentials are collected.';
 }
 function init(){ready();document.addEventListener('click',event=>{if(event.target.closest('[data-section="adminSettings"],[data-sarni-nav="adminSettings"]'))setTimeout(paint,150)},{passive:true});}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
