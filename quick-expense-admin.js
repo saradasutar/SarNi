@@ -68,7 +68,10 @@ function install(){
  panel.addEventListener('toggle',()=>{if(panel.open)refresh();});
  target.prepend(panel);
  panel.classList.toggle('hidden',!hasAdmin());
- setInterval(()=>{if(!panel)return;const visible=hasAdmin();panel.classList.toggle('hidden',!visible);if(!visible)panel.open=false;},5000);
+ const syncVisibility=()=>{if(!panel)return;const visible=hasAdmin();panel.classList.toggle('hidden',!visible);if(!visible)panel.open=false;};
+ new MutationObserver(syncVisibility).observe(document.body,{attributes:true,attributeFilter:['class']});
+ document.addEventListener('click',event=>{if(event.target.closest('[data-section],#logoutBtn,#loginButton'))queueMicrotask(syncVisibility);},{passive:true});
+ syncVisibility();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
