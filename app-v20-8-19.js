@@ -2,7 +2,7 @@
 
 const CONFIG = window.PORTFOLIO_CONFIG || {};
 const APP_VERSION = '20.8.19';
-const EXPECTED_BACKEND_VERSION = '3.17.30';
+const EXPECTED_BACKEND_VERSION = '3.17.35';
 // Background timeout follows the same administrator-chosen inactivity policy.
 // Inactive sessions are always checked by the backend as well.
 const SESSION_HEARTBEAT_MS = 2 * 60 * 1000;
@@ -395,7 +395,7 @@ function apiViaAsyncPost(action,payload={},options={}){
   if(!isConfigured())return Promise.reject(new Error('Backend is not configured. Check config.js.'));
   const timeoutMs=Number(options.timeoutMs)||CONFIG.REQUEST_TIMEOUT_MS||60000;
   const requestId=asyncRequestId();
-  const body={action,...payload,transport:'hybrid',requestId,clientOrigin:location.origin};
+  const body={action,...payload,transport:'hybrid',requestId,clientOrigin:location.origin,lastHumanActivityAt:Number(state.lastActivityAt)||0};
   if(state.token&&!body.token)body.token=state.token;
 
   return new Promise((resolve,reject)=>{
@@ -1676,7 +1676,7 @@ function showLoggedOutUi(){
 }
 
 function nowMs(){return Date.now();}
-function idleTimeoutMs(){const m=Number(state.securityIdleMinutes);return ([5,30,60,120].includes(m)?m:30)*60*1000;}
+function idleTimeoutMs(){const m=Number(state.securityIdleMinutes);return ([5,30,60,120,1440].includes(m)?m:30)*60*1000;}
 function backgroundTimeoutMs(){return idleTimeoutMs();}
 function idleWarningMs(){return Math.max(0,idleTimeoutMs()-60000);}
 function setLastActivity(ts=nowMs(),{forceWrite=false}={}){
@@ -5147,7 +5147,7 @@ function renderUsers(){
   }).join('');
 }
 
-function applySecuritySettings(settings){const minutes=Number(settings?.idleTimeoutMinutes);state.securityIdleMinutes=[5,30,60,120].includes(minutes)?minutes:30;renderSecuritySettings();}
+function applySecuritySettings(settings){const minutes=Number(settings?.idleTimeoutMinutes);state.securityIdleMinutes=[5,30,60,120,1440].includes(minutes)?minutes:30;renderSecuritySettings();}
 function renderSecuritySettings(){if(els.securityIdleTimeout)els.securityIdleTimeout.value=String(state.securityIdleMinutes||30);if(els.securityPolicyBadge)els.securityPolicyBadge.textContent=`${state.securityIdleMinutes||30}-minute policy`;if(els.securitySettingsStatus)els.securitySettingsStatus.textContent=`Current policy: sign out after ${state.securityIdleMinutes||30} minutes of inactivity · warning during final minute · background/closed tabs follow the selected inactivity limit.`;}
 async function saveSecuritySettings(event){event.preventDefault();const minutes=Number(els.securityIdleTimeout?.value);setBusy(els.saveSecuritySettingsBtn,true,'Saving…');try{const r=await api('saveSecuritySettings',{idleTimeoutMinutes:minutes});applySecuritySettings(r.securitySettings);setLastActivity(nowMs(),{forceWrite:true});toast(`Security policy updated to ${minutes} minutes for all users.`,'success');}catch(e){toast(e.message,'error');}finally{setBusy(els.saveSecuritySettingsBtn,false);}}
 function detailDate(value){

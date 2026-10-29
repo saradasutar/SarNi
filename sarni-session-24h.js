@@ -1,33 +1,59 @@
-/* SarNi session setting compatibility overlay.
- * Preserves older FE form behaviour while providing a dedicated 24-hour control.
- * A matching BE update is REQUIRED: the browser cannot extend sessions on its own.
+/* SarNi v20.8.19 24-hour inactivity selector compatibility fix.
+ * This script does not alter passwords, data or permissions.
+ * Requires backend v3.17.35+ with saveSecuritySettings accepting 1440.
  */
-(function(){'use strict';
- function add(){
-  const select=document.getElementById('securityIdleTimeout'),form=document.getElementById('securitySettingsForm');
-  if(!select||!form)return;
-  if(!Array.from(select.options).some(o=>Number(o.value)===1440))select.add(new Option('24 hours (maximum)','1440'));
-  if(document.getElementById('sarniApply24Hours'))return;
-  const button=document.createElement('button');button.type='button';button.id='sarniApply24Hours';
-  button.textContent='Set inactivity logout to 24 hours';
-  button.className='secondary-button';button.style.cssText='min-height:44px;padding:11px 15px;margin:8px 0';
-  const msg=document.createElement('p');msg.id='sarni24HourStatus';msg.setAttribute('role','status');
-  msg.style.cssText='font-size:13px;color:#41557d';
-  button.addEventListener('click',async()=>{
-   if(typeof window.api!=='function' && typeof api!=='function'){
-    msg.textContent='Cannot reach SarNi backend API from this page.';return;
-   }
-   button.disabled=true;msg.textContent='Saving 24-hour policy…';
-   try{
-    const result=await api('saveSecuritySettings',{idleTimeoutMinutes:1440},{retry:false});
-    if(!result?.ok)throw new Error(result?.message||'Update rejected by backend.');
-    select.value='1440';
-    const status=document.getElementById('securitySettingsStatus');if(status)status.textContent='Current policy: sign out after 24 hours of inactivity.';
-    msg.textContent='✓ 24-hour inactivity sign-out saved. Sign in again if your earlier session is already expired.';
-   }catch(err){msg.textContent='Could not save: '+(err.message||'Deploy the matching backend first.');}
-   finally{button.disabled=false;}
-  });
-  form.append(button,msg);
+(function(){
+ 'use strict';
+ const MINUTES=1440;
+ let saving=false;
+ const byId=id=>document.getElementById(id);
+ function message(text,error){
+   let el=byId('sarni24hFixStatus');
+   if(!el){el=document.createElement('p');el.id='sarni24hFixStatus';el.setAttribute('role','status');el.style.cssText='font-size:13px;font-weight:650;line-height:1.5;margin:9px 0';(byId('securitySettingsForm')||document.body).append(el);}
+   el.textContent=text;el.style.color=error?'#b62a40':'#146c55';
  }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',add,{once:true});else add();
+ function install(){
+   const form=byId('securitySettingsForm');
+   const select=byId('securityIdleTimeout');
+   if(!form||!select||form.dataset.sarni24hFix==='installed')return;
+   form.dataset.sarni24hFix='installed';
+   if(!Array.from(select.options).some(o=>Number(o.value)===MINUTES)){
+     select.add(new Option('24 hours (maximum)','1440'));
+   }
+   // Capture only the 24-hour choice before the older application's submit
+   // validator; allow all original shorter-duration settings to work unchanged.
+   form.addEventListener('submit',async function(event){
+     if(Number(select.value)!==MINUTES)return;
+     event.preventDefault();event.stopImmediatePropagation();
+     if(saving)return;
+     const save=byId('saveSecuritySettingsBtn')||form.querySelector('button[type="submit"]');
+     saving=true;if(save)save.disabled=true;
+     message('Saving 24-hour inactivity setting…');
+     try{
+       if(typeof api!=='function')throw new Error('Dashboard API not loaded. Reload SarNi and try again.');
+       const result=await api('saveSecuritySettings',{idleTimeoutMinutes:MINUTES},{retry:false});
+       if(!result?.ok)throw new Error(result?.message||'Backend rejected the new setting.');
+       // Existing SarNi classic script owns a top-level state object. Updating it
+       // lets its own idle checker use the newly selected duration this visit.
+       try{
+         if(typeof state!=='undefined'&&state&&typeof state==='object'){
+           state.securityIdleMinutes=MINUTES;
+           if(state.securitySettings&&typeof state.securitySettings==='object'){
+             state.securitySettings.idleTimeoutMinutes=MINUTES;
+             state.securitySettings.hiddenFallbackMinutes=MINUTES;
+           }
+         }
+       }catch(_ignored){}
+       select.value=String(MINUTES);
+       const badge=byId('securityPolicyBadge');if(badge)badge.textContent='24-hour policy';
+       const status=byId('securitySettingsStatus');if(status)status.textContent='Current policy: sign out after 24 hours of inactivity · warning during final minute.';
+       message('✓ 24-hour inactivity setting saved. The backend now enforces 1,440 minutes.');
+     }catch(err){
+       message('Could not save 24 hours: '+String(err?.message||err)+' Check your deployed Code.gs supports 1440 minutes.',true);
+     }finally{
+       saving=false;if(save)save.disabled=false;
+     }
+   },true);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
