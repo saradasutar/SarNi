@@ -1,77 +1,102 @@
-/* SarNi admin control for temporary submit-only Quick Expense links. */
+/* SarNi Quick Expense: admin-controlled links, including reversible disable/enable.
+ * Replaces only the previous quick-expense-admin.js. Existing expense registry is unchanged.
+ * No link secrets are saved in the browser or shown after initial creation.
+ */
 (function(){
 'use strict';
 const $=id=>document.getElementById(id);
-const hasAdmin=()=>{try{return Boolean(state?.token)&&typeof isSarNiAdmin==='function'&&isSarNiAdmin();}catch(e){return false;}};
-let panel=null;
-function node(tag,text,className){const x=document.createElement(tag);if(text!==undefined)x.textContent=text;if(className)x.className=className;return x;}
-function status(text,error){const n=$('qeAdminStatus');if(n){n.textContent=text||'';n.style.color=error?'#a63347':'#285e55';}}
-function fmt(iso){try{return new Date(iso).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});}catch{return iso;}}
-function defaultExpiry(){
- const now=new Date(Date.now()+86400000),local=new Date(now.getTime()-now.getTimezoneOffset()*60000);
- return local.toISOString().slice(0,16);
-}
-function linkUrl(token){const u=new URL('./quick-expense.html',location.href);u.hash='token='+token;return u.toString();}
+const node=(tag,txt,cls)=>{const e=document.createElement(tag);if(txt!==undefined)e.textContent=txt;if(cls)e.className=cls;return e;};
+let panel=null, latest=[];
+const isAdmin=()=>{try{return !!state?.token&&typeof isSarNiAdmin==='function'&&isSarNiAdmin();}catch{return false;}};
+const fmt=d=>{try{const v=new Date(d);return Number.isFinite(v.getTime())?v.toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}):'Not set';}catch{return 'Not set';}};
+function localDate(iso){const d=new Date(iso);if(!Number.isFinite(d.getTime()))return '';return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);}
+function nextDate(){return localDate(new Date(Date.now()+24*3600000));}
+function status(message,error){const t=$('qeAdminStatus');if(t){t.textContent=message||'';t.style.color=error?'#a32638':'#176955';}}
+function urlFromSecret(secret){const u=new URL('./quick-expense.html',location.href);u.hash='token='+secret;return u.toString();}
+function field(labelText,input){const lab=node('label');lab.style.cssText='display:block;font-weight:650;margin:9px 0 3px';lab.append(node('span',labelText),input);return lab;}
+function input(type,attrs){const x=node('input');x.type=type;x.style.cssText='display:block;width:100%;min-height:44px;border:1px solid #c4d2eb;padding:9px 10px;border-radius:9px;font:inherit;margin-top:5px';Object.entries(attrs||{}).forEach(([k,v])=>{if(k==='value')x.value=v;else x.setAttribute(k,v)});return x;}
+function btn(label,cls){const b=node('button',label,cls||'life-quiet');b.type='button';b.style.cssText='min-height:44px;cursor:pointer;margin:4px 7px 4px 0';return b;}
+function rowStatus(row){if(row.revoked)return 'Disabled by administrator';if(!row.neverExpires&&Date.parse(row.expiresAt)<=Date.now())return 'Expired';return 'Enabled';}
 async function refresh(){
- if(!hasAdmin())return;
- const list=$('qeAdminLinks');if(!list)return;list.replaceChildren(node('p','Loading active and expired links…'));
+ if(!isAdmin())return;
+ const list=$('qeAdminLinks');if(!list)return;list.replaceChildren(node('p','Loading your links…'));
+ try{const r=await api('qeListLinks',{},{retry:false,timeoutMs:30000});latest=Array.isArray(r.links)?r.links:[];renderLinks();}
+ catch(err){list.replaceChildren(node('p','Unable to load links. Deploy the updated SarNi backend first.'));status(String(err.message||err),true);}
+}
+async function mutate(row,enabled,expiresAt,neverExpires){
+ if(!isAdmin())return;
  try{
- const r=await api('qeListLinks',{}, {retry:false,timeoutMs:30000});list.replaceChildren();
- if(!(r.links||[]).length){list.append(node('p','No links created yet.'));return;}
- for(const x of (r.links||[])){
-  const line=node('div',undefined,'qe-admin-link-row');line.style.cssText='border-top:1px solid #e2e6ef;padding:10px 0;display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap';
-  const meta=node('div');meta.append(node('strong',String(x.label||'Expense link')));
-  const expired=Date.parse(x.expiresAt)<=Date.now(),active=!x.revoked&&!expired;
-  const info=node('small',(active?'Active':'Inactive')+' · '+(x.neverExpires?'Until disabled':'Ends '+fmt(x.expiresAt))+' · '+(x.submissionCount||0)+' entries');
-  info.style.cssText='display:block;color:#62708a;margin-top:3px';meta.append(info);line.append(meta);
-  if(active){const revoke=node('button','Revoke','life-quiet');revoke.type='button';revoke.onclick=async()=>{
-   if(!confirm('Disable this link immediately? Previously saved expenses remain in the register.'))return;
-   revoke.disabled=true;try{await api('qeRevokeLink',{id:x.id},{retry:false});status('Link disabled.');await refresh();}
-   catch(err){status(err.message,true);revoke.disabled=false;}
-  };line.append(revoke);}
-  list.append(line);
+  const result=await api('qeSetLinkEnabled',{id:row.id,enabled:!!enabled,
+    neverExpires:!!neverExpires,expiresAt:neverExpires?'':expiresAt},{retry:false,timeoutMs:35000});
+  status(result.message||'Link updated.');await refresh();
+ }catch(err){status(err.message||'Could not update link.',true);}
+}
+function renderLinks(){
+ const list=$('qeAdminLinks');if(!list)return;list.replaceChildren();
+ if(!latest.length){list.append(node('p','No shared links created yet.'));return;}
+ const header=node('p','Links are stored in your existing SarNi spreadsheet. Disabling blocks new entries; enabling restores the SAME previously shared URL. Copy each new URL when first generated.','life-hint');list.append(header);
+ for(const row of latest){
+  const box=node('section');box.style.cssText='padding:14px 0;border-top:1px solid #d8e2f1';
+  const title=node('strong',String(row.label||'Quick Expense Link'));box.append(title);
+  const active=rowStatus(row)==='Enabled';const summary=node('p',rowStatus(row)+' · '+(row.neverExpires?'Valid until disabled':'Expires '+fmt(row.expiresAt))+' · '+Number(row.submissionCount||0)+' submitted');summary.style.cssText='margin:4px 0 10px;color:#57637c;font-size:13px';box.append(summary);
+  const c=node('div');c.style.cssText='display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;align-items:end;max-width:580px';
+  const until=input('checkbox');until.checked=!!row.neverExpires;until.style.cssText='width:20px;height:20px;margin:0 7px 0 0;vertical-align:middle';
+  const neverLabel=node('label');neverLabel.style.cssText='display:flex;align-items:center;gap:5px;font-size:13px;min-height:46px';neverLabel.append(until,node('span','Valid until disabled'));
+  const exp=input('datetime-local',{value:row.neverExpires?nextDate():localDate(row.expiresAt)});exp.disabled=until.checked;
+  until.addEventListener('change',()=>{exp.disabled=until.checked;});
+  const expiryLabel=field('Expiry (when used)',exp);c.append(neverLabel,expiryLabel);box.append(c);
+  const line=node('div');line.style.cssText='display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:8px';
+  const toggle=btn(active?'Disable link':'Enable same link');toggle.disabled=false;
+  toggle.onclick=async()=>{
+   const enable=!active;
+   if(!enable&&!confirm('Pause this link? New expense submissions will be blocked, but existing records stay saved.'))return;
+   const expiry=exp.value?new Date(exp.value):null;
+   if(enable&&!until.checked&&(!expiry||expiry.getTime()<=Date.now()+60000)){status('Choose a future expiry time or select Valid until disabled.',true);return;}
+   toggle.disabled=true;await mutate(row,enable,until.checked?'':expiry?.toISOString(),until.checked);toggle.disabled=false;
+  };
+  const change=btn('Save validity');change.onclick=async()=>{
+   const date=exp.value?new Date(exp.value):null;
+   if(!until.checked&&(!date||date.getTime()<=Date.now()+60000)){status('Choose a future expiry time.',true);return;}
+   change.disabled=true;await mutate(row,active,until.checked?'':date?.toISOString(),until.checked);change.disabled=false;
+  };
+  line.append(toggle,change);box.append(line);list.append(box);
  }
- }catch(error){list.replaceChildren(node('p',error.message||'Unable to fetch links.'));status('Update and deploy SarNi Code.gs v3.17.31 to enable secure Quick Expense links.',true);}
 }
 function install(){
- if(panel)return;
- const target=$('lifeExpenseStudio');if(!target)return;
- panel=node('details',undefined,'life-card admin-only hidden');panel.id='qeAdminPanel';
- panel.style.cssText='padding:15px;margin:12px 0;border:1px solid #b8c9e8;border-radius:16px;background:linear-gradient(135deg,#fff,#f2f6ff)';
- const sum=node('summary','⚡ Quick Expense Link · No-login entry (Admin)');sum.style.cssText='font-weight:850;cursor:pointer;color:#244c91;padding:5px 0';panel.append(sum);
- const intro=node('p','Create a secure link for fast expense entries. Set exactly when it expires. Anyone with the link can submit an expense, including one paid by somebody else, but cannot view or edit other records.','life-hint');panel.append(intro);
- const form=node('form');form.id='qeAdminForm';form.style.cssText='display:grid;gap:10px;max-width:580px';
- const label1=node('label','Link description (e.g., Odisha trip)');const in1=node('input');in1.name='label';in1.maxLength=100;in1.value='Travel expenses';in1.required=true;label1.append(in1);form.append(label1);
- const label2=node('label','Link valid until (administrator decides)');const in2=node('input');in2.type='datetime-local';in2.name='expiresAt';in2.required=true;in2.value=defaultExpiry();label2.append(in2);form.append(label2);
- const neverLabel=node('label','');const never=document.createElement('input');never.type='checkbox';never.name='neverExpires';neverLabel.append(never,document.createTextNode(' Valid until administrator disables this link'));form.append(neverLabel);never.addEventListener('change',()=>{in2.disabled=never.checked;in2.required=!never.checked;});
- const label3=node('label','Suggested Paid by names (optional, separated by commas)');const in3=node('input');in3.name='payers';in3.maxLength=800;in3.placeholder='e.g. Sarada, Niharika, Brother, Friend';label3.append(in3);form.append(label3);
- const hint=node('p','The Paid by field always allows any name, not just the suggestions. The expense is saved under the administrator’s SarNi expense account.','life-hint');form.append(hint);
- const create=node('button','Generate secure link','life-save');create.type='submit';form.append(create);
- const output=node('div');output.id='qeNewLink';output.hidden=true;
- const url=node('input');url.id='qeNewUrl';url.readOnly=true;url.setAttribute('aria-label','New Quick Expense link');url.style.cssText='width:100%;padding:12px;border:1px solid #a5b8dc;border-radius:10px;margin:8px 0';
- const copy=node('button','Copy link','life-quiet');copy.type='button';copy.onclick=async()=>{try{await navigator.clipboard.writeText(url.value);status('Link copied. Share it privately.');}catch(e){url.focus();url.select();status('Select and copy the link.');}};
- const share=node('button','Share link','life-quiet');share.type='button';share.onclick=()=>{if(navigator.share)navigator.share({title:'SarNi Quick Expense',url:url.value}).catch(()=>{});else copy.click();};
- output.append(node('strong','Copy or share this link now — the secret is displayed only once.'),url,copy,share);form.append(output);
- const msg=node('p');msg.id='qeAdminStatus';msg.setAttribute('role','status');form.append(msg);
- form.onsubmit=async e=>{
-  e.preventDefault();if(!hasAdmin())return;
-  const expiry=new Date(in2.value);if(!never.checked&&(!Number.isFinite(expiry.getTime())||expiry<=new Date())){status('Select a future expiry date and time.',true);return;}
-  create.disabled=true;status('Creating link…');
-  try{const r=await api('qeCreateLink',{label:in1.value.trim(),expiresAt:never.checked?'':expiry.toISOString(),neverExpires:never.checked,payers:in3.value.split(',').map(x=>x.trim()).filter(Boolean)},{retry:false,timeoutMs:35000});
-   url.value=linkUrl(r.linkToken);output.hidden=false;status('Link created. You may now copy/share it.');await refresh();}
-  catch(error){status(error.message||'Unable to create link. Confirm the new Apps Script backend is deployed.',true);}
+ if(panel)return;const target=$('lifeExpenseStudio');if(!target)return;
+ panel=node('details',undefined,'life-card admin-only hidden');panel.id='qeAdminPanel';panel.style.cssText='padding:16px;margin:15px 0;background:#fafcff;border:1px solid #bac9e4;border-radius:16px';
+ const sum=node('summary','⚡ Daily Quick Expense Links · No login (Admin)');sum.style.cssText='font-weight:850;color:#21477e;cursor:pointer;padding:8px 0';panel.append(sum);
+ panel.append(node('p','Create one private link for all daily expenses: groceries, food, household bills, shopping, transport or trips. The user chooses the category and subcategory from your existing SarNi Category Manager, and can enter expenses paid by anyone. Choose a fixed expiry or valid until disabled.','life-hint'));
+ const form=node('form');form.id='qeAdminForm';form.style.cssText='display:grid;gap:9px;max-width:620px';
+ const label=input('text',{maxlength:'100',required:'required',value:'Daily expenses'}),expiration=input('datetime-local',{value:nextDate()});
+ const never=input('checkbox');never.checked=true;never.style.cssText='width:20px;height:20px;vertical-align:middle;margin:0 6px 0 0';expiration.disabled=true;
+ never.addEventListener('change',()=>{expiration.disabled=never.checked;expiration.required=!never.checked;});
+ const payers=input('text',{maxlength:'800',placeholder:'e.g. Sarada, Niharika, Friend'});
+ form.append(field('Link name (e.g., Daily expenses / Grocery / Trip)',label),field('Valid until (optional)',expiration));
+ const neverLab=node('label');neverLab.style.cssText='display:flex;align-items:center;gap:8px;font-weight:750';neverLab.append(never,node('span','Keep active until admin disables it'));form.append(neverLab);
+ form.append(field('Suggested Paid by names (optional; any name may be typed)',payers));
+ const create=btn('Generate private link','life-save');create.type='submit';form.append(create);
+ const generated=node('div');generated.hidden=true;const link=input('url',{readonly:'readonly'});
+ const copy=btn('Copy link'),share=btn('Share link');copy.onclick=async()=>{try{await navigator.clipboard.writeText(link.value);status('Link copied. Share privately.');}catch{link.focus();link.select();status('Select and copy this link.');}};
+ share.onclick=()=>{if(navigator.share)navigator.share({title:'SarNi Quick Expense',url:link.value}).catch(()=>{});else copy.click();};
+ generated.append(node('strong','Save this link now—its secret cannot be retrieved later.'),link,copy,share);form.append(generated);
+ const feedback=node('p');feedback.id='qeAdminStatus';feedback.setAttribute('role','status');form.append(feedback);
+ form.addEventListener('submit',async event=>{
+  event.preventDefault();if(!isAdmin())return;
+  let expiry; if(!never.checked){expiry=new Date(expiration.value);if(!Number.isFinite(expiry.getTime())||expiry<=new Date(Date.now()+60000)){status('Choose an expiry more than one minute from now.',true);return;}}
+  create.disabled=true;status('Generating link…');
+  try{const r=await api('qeCreateLink',{label:label.value.trim(),neverExpires:never.checked,
+    expiresAt:never.checked?'':expiry.toISOString(),payers:payers.value.split(',').map(x=>x.trim()).filter(Boolean)},{retry:false,timeoutMs:35000});
+    link.value=urlFromSecret(r.linkToken);generated.hidden=false;status('Link created. Copy or share it now.');await refresh();
+  }catch(err){status(err.message||'Could not create link. Deploy the backend first.',true);}
   finally{create.disabled=false;}
- };
+ });
  panel.append(form);
- const ref=node('button','Refresh link statuses','life-quiet');ref.type='button';ref.onclick=refresh;panel.append(ref);
- const links=node('div');links.id='qeAdminLinks';panel.append(links);
- panel.addEventListener('toggle',()=>{if(panel.open)refresh();});
- target.prepend(panel);
- panel.classList.toggle('hidden',!hasAdmin());
- const syncVisibility=()=>{if(!panel)return;const visible=hasAdmin();panel.classList.toggle('hidden',!visible);if(!visible)panel.open=false;};
- new MutationObserver(syncVisibility).observe(document.body,{attributes:true,attributeFilter:['class']});
- document.addEventListener('click',event=>{if(event.target.closest('[data-section],#logoutBtn,#loginButton'))queueMicrotask(syncVisibility);},{passive:true});
- syncVisibility();
+ const refreshButton=btn('Refresh link status');refreshButton.onclick=refresh;panel.append(refreshButton);
+ const all=node('div');all.id='qeAdminLinks';panel.append(all);panel.addEventListener('toggle',()=>{if(panel.open)refresh();});target.prepend(panel);
+ const sync=()=>{const yes=isAdmin();panel.classList.toggle('hidden',!yes);if(!yes)panel.open=false;};
+ new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});
+ document.addEventListener('click',e=>{if(e.target.closest('[data-section],#logoutBtn,#loginButton'))queueMicrotask(sync);},{passive:true});sync();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
