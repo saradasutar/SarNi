@@ -1,0 +1,63 @@
+/* SarNi 20.9.1 calmer interface. No records or APIs changed. */
+:root{--sarni-ux-accent:#087c70}
+html.sarni-ux-2091 #sarniSidebarPrimary{scrollbar-width:thin}
+html.sarni-ux-2091 #sarniSidebarPrimary .nav-item{min-height:38px!important;margin:2px 0!important;padding:9px 14px!important}
+html.sarni-ux-2091 #sarniSidebarPrimary button[data-section="creditCards"],
+html.sarni-ux-2091 #sarniSidebarPrimary button[data-section="stockDiary"],
+html.sarni-ux-2091 #sarniSidebarPrimary button[data-sd-only="wisdom"]{display:none!important}
+/* Keep the sole full-featured Calendar in the main navigation; date pickers remain in writing. */
+#quickDiarySection .quick-diary-calendar-card,
+#lifeDiaryInsights .diary-duo>article:first-child{display:none!important}
+#lifeDiaryInsights .diary-duo{display:block!important}
+#lifeDiaryInsights .diary-duo>article{max-width:none!important}
+/* Compact expenditure overview while retaining reports and filters on demand. */
+html.sarni-ux-2091 #lifeExpenseStudio .life-section-title{padding-block:15px!important;gap:12px!important;align-items:center}
+html.sarni-ux-2091 #lifeExpenseStudio .life-section-title h2{font-size:clamp(21px,2vw,29px)!important;line-height:1.2!important}
+.sarni-expense-fast{margin-left:auto;white-space:nowrap;align-self:center}
+/* MyTrip-style amount first without changing form field IDs or existing save behavior. */
+#expenseModal.sarni-quick-actual .modal-head{padding-bottom:10px}
+#expenseModal.sarni-quick-actual #expenseForm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 15px}
+#expenseModal.sarni-quick-actual #expenseForm > label:has(#expenseAmount){order:1;grid-column:1/-1}
+#expenseModal.sarni-quick-actual #expenseForm #expenseAmount{min-height:58px;font-size:26px;font-weight:750;border-color:#23ae9c;background:#f1fffb}
+#expenseModal.sarni-quick-actual #expenseForm > label:has(#expenseReason){order:2;grid-column:1/-1}
+#expenseModal.sarni-quick-actual #expenseForm > label:has(#expenseDebitedFrom){order:3}
+#expenseModal.sarni-quick-actual #expenseForm > label:has(#expensePaidTo){order:4}
+#expenseModal.sarni-quick-actual #expenseForm > label:has(#expenseCategory){order:5}
+#expenseModal.sarni-quick-actual #expenseDateGroup{order:6}
+#expenseModal.sarni-quick-actual #expenseForm > .sarni-expense-extra{order:10;grid-column:1/-1}
+#expenseModal.sarni-quick-actual #expenseForm > .form-actions{order:12;grid-column:1/-1}
+.sarni-expense-extra{border:1px solid #dce8e6;border-radius:13px;background:#f8fbfb;padding:10px 12px;grid-column:1/-1}
+.sarni-expense-extra summary{cursor:pointer;font-size:13px;font-weight:700;color:#285b59}
+.sarni-expense-extra summary span{font-weight:400;color:#71838b;padding-left:5px}
+.sarni-expense-extra>label{display:block;margin:11px 0!important}
+.sarni-expense-extra input,.sarni-expense-extra textarea,.sarni-expense-extra select{width:100%}
+.sarni-notice-wrap{position:relative;display:flex;align-items:center;z-index:50}
+.sarni-notice-button{min-width:37px;min-height:37px;border-radius:12px;border:1px solid #dce7e9;background:#fff;color:#154e58;cursor:pointer;font-size:21px;position:relative}
+.sarni-notice-count{position:absolute;top:-6px;right:-6px;border-radius:30px;background:#be303c;color:#fff;font-weight:700;font-size:10px;padding:2px 5px}
+.sarni-notice-panel{position:absolute;top:calc(100% + 10px);right:0;background:#fff;min-width:min(335px,90vw);max-width:min(375px,93vw);border:1px solid #dce7e9;border-radius:17px;box-shadow:0 18px 45px #102d3b36;padding:15px;z-index:700;color:#18344b}
+.sarni-notice-panel[hidden]{display:none!important}.sarni-notice-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sarni-notice-head button{border:none;background:#f0f4f5;border-radius:6px;cursor:pointer;padding:4px 10px;font-size:18px}
+#sarniNoticeItems{display:grid;gap:7px}#sarniNoticeItems button{border:1px solid #dae5e6;background:#f6faf9;text-align:left;border-radius:9px;padding:11px;cursor:pointer;font-size:12px;color:#21565c}
+.sarni-notice-empty,.sarni-notice-footer{color:#617782;font-size:12px;line-height:1.5}
+.sarni-notice-footer{margin-top:12px;border-top:1px solid #e7edef;padding-top:10px}
+@media(max-width:850px){.sarni-expense-fast{margin:10px 0 0;width:100%}.sarni-notice-panel{right:-75px}}
+@media(max-width:560px){#expenseModal.sarni-quick-actual #expenseForm{grid-template-columns:minmax(0,1fr)}#expenseModal.sarni-quick-actual #expenseForm>label,#expenseModal.sarni-quick-actual #expenseDateGroup{grid-column:1/-1}}
+@media(prefers-reduced-motion:reduce){html.sarni-ux-2091 *{scroll-behavior:auto!important}}
+
+/* v20.9.2 -- optional expense/register/chart panels collapse into clean summary headers. */
+.sarni-collapsible{overflow:visible}
+.sarni-collapse-head{padding:0 0 2px}
+.sarni-collapse-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;border:1px solid #cfe3e2;background:linear-gradient(100deg,#f5faf9,#fff);border-radius:13px;color:#143b4d;padding:14px 16px;text-align:left;cursor:pointer;min-height:56px;gap:12px}
+.sarni-collapse-toggle:hover,.sarni-collapse-toggle:focus-visible{background:#eaf7f4;outline-offset:3px}
+.sarni-collapse-heading{display:flex;flex-direction:column;gap:3px}
+.sarni-collapse-heading strong{font-size:15px;font-weight:800;line-height:1.2}
+.sarni-collapse-heading small{color:#657c88;font-size:12px;line-height:1.35;font-weight:500}
+.sarni-collapse-chevron{font-size:25px;line-height:1;transition:transform .15s ease;color:#1d7d72}
+.sarni-collapsed .sarni-collapse-chevron{transform:rotate(-90deg)}
+.sarni-collapse-body[hidden]{display:none!important}
+.sarni-collapse-body:not([hidden]){padding-top:12px}
+.sarni-reports-shortcut{border:1px solid #bcd6d2;background:#fff;color:#126b64;padding:10px 15px;border-radius:10px;font-weight:750;white-space:nowrap;cursor:pointer}
+.sarni-reports-shortcut:hover{background:#edfaf7}
+.sarni-collapsible#peopleExpenseModule{padding:13px!important}
+@media(max-width:850px){.sarni-reports-shortcut{width:100%}.sarni-collapse-toggle{padding:12px}}
+@media(prefers-reduced-motion:reduce){.sarni-collapse-chevron{transition:none}}

@@ -1,4 +1,4 @@
-/* SarNi Unified Diary & Knowledge v2.0 — additive private API integration.
+/* SarNi Unified Diary & Knowledge v2.2 (history + search) — additive private API integration.
    Existing personal diary, StockDiary and MonthlyDiary records are not migrated or duplicated. */
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
@@ -6,9 +6,9 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');};
 const monthNow=()=>today().slice(0,7);
 const plain=x=>String(x||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
-const state={tab:'write',kind:'personal',entry:null,dirty:false,busy:false,loaded:false,loading:false,showLegacy:false,q:'',month:monthNow(),data:{diary:[],notes:[],wisdom:[],companies:[],annotations:[],legacyMonthly:[]}};
+const state={tab:'write',kind:'personal',entry:null,dirty:false,busy:false,loaded:false,loading:false,showLegacy:false,q:'',month:monthNow(),period:'all',day:today(),year:today().slice(0,4),from:'',to:'',category:'all',flag:'all',company:'all',sort:'newest',limit:30,data:{diary:[],notes:[],wisdom:[],companies:[],annotations:[],legacyMonthly:[]}};
 const keys={personal:'Personal Diary',stock:'Stock Research',wisdom:'Investment Wisdom'};
-let editorSelection='',editorRange=null,draftMeta=null;
+let editorSelection='',editorRange=null,draftMeta=null,searchTimer=0;
 function bridge(){const b=window.SarniStockBridge;if(!b?.call||!b?.session)throw Error('SarNi is not ready. Sign in and verify the current Stock Diary frontend was installed.');if(!b.session().signedIn)throw Error('Sign in to SarNi first.');return b;}
 async function api(action,payload={}){const r=await bridge().call(action,payload);if(!r||r.ok!==true)throw Error(r?.message||'Unable to complete request');return r;}
 function toast(s,err=false){const el=$('dkMessage');if(el){el.textContent=s;el.classList.toggle('dk-error',err);}if(err)console.warn('SarNi Diary & Knowledge: '+s);}
@@ -18,11 +18,11 @@ function meta(kind,id){return state.data.annotations.find(m=>m.kind===kind&&m.re
 function allEntries(){return [
  ...state.data.diary.map(x=>({kind:'personal',id:x.id,date:x.entryDate,title:x.title||'Personal diary',text:x.text||'',category:x.entryType||'PERSONAL',original:x})),
  ...state.data.notes.map(x=>({kind:'stock',id:x.id,date:String(x.entryDate||'').slice(0,10),title:x.title||'Stock note',text:plain(x.content),category:'STOCK',original:x})),
- ...state.data.wisdom.map(x=>({kind:'wisdom',id:x.id,date:meta('wisdom',x.id).monthKey?meta('wisdom',x.id).monthKey+'-01':String(x.createdAt||'').slice(0,10),title:x.title||'Investment lesson',text:plain(x.content),category:'WISDOM',original:x}))].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+ ...state.data.wisdom.map(x=>({kind:'wisdom',id:x.id,date:String(x.createdAt||'').slice(0,10)||((meta('wisdom',x.id).monthKey||'')+'-01'),title:x.title||'Investment lesson',text:plain(x.content),category:'WISDOM',original:x}))].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
 }
 function skeleton(){const diary=$('diarySection'),sidebar=$('sarniSidebarPrimary')?.querySelector('[data-section="diary"]');if(!diary||!sidebar||!$('mainDashboard')||$('dkUnifiedSection'))return false;
  const ui=document.createElement('section');ui.id='dkUnifiedSection';ui.innerHTML=`<div class="dk-banner"><div><span class="dk-eyebrow">YOUR WRITING & KNOWLEDGE CENTRE</span><h2>Diary &amp; Knowledge</h2><p>Write once, mark monthly highlights and keep lessons connected. Calendar stays in the main menu.</p></div><div class="dk-banner-actions"><button type="button" data-dk-action="new">＋ New entry</button><button type="button" class="dk-quiet" data-dk-action="refresh">↻ Refresh</button></div></div>
- <div class="dk-nav" role="navigation" aria-label="Diary and Knowledge views"><button type="button" data-dk-tab="write">✎ Write</button><button type="button" data-dk-tab="all">▤ All entries</button><button type="button" data-dk-tab="monthly">★ Monthly highlights</button><button type="button" data-dk-tab="stock">▥ Stock Research</button><button type="button" data-dk-tab="wisdom">✦ Investment Wisdom</button></div>
+ <div class="dk-nav" role="navigation" aria-label="Diary and Knowledge views"><button type="button" data-dk-tab="write">✎ Write</button><button type="button" data-dk-tab="all">▤ Browse history</button><button type="button" data-dk-tab="monthly">★ Monthly highlights</button><button type="button" data-dk-tab="stock">▥ Stock Research</button><button type="button" data-dk-tab="wisdom">✦ Investment Wisdom</button></div>
  <p id="dkMessage" aria-live="polite" class="dk-message">Your existing diary records remain in SarNi.</p>
  <div id="dkContent"></div><div class="dk-footer"><button type="button" data-dk-action="legacy">Open existing monthly plans, targets &amp; old diary views</button><button type="button" data-dk-action="book">Open investment book &amp; advanced research</button></div>`;
  diary.prepend(ui);diary.classList.add('dk-compact');document.documentElement.classList.add('dk-installed');
@@ -30,7 +30,7 @@ function skeleton(){const diary=$('diarySection'),sidebar=$('sarniSidebarPrimary
  const ret=document.createElement('button');ret.type='button';ret.id='dkReturn';ret.textContent='← Return to Diary & Knowledge';ret.addEventListener('click',()=>setLegacy(false));diary.prepend(ret);
  sidebar.addEventListener('click',()=>{if(state.showLegacy)setLegacy(false);setTimeout(()=>{if(!state.loaded)load();},0);});
  const legacyNav=$('sarniSidebarPrimary');if(legacyNav)legacyNav.querySelectorAll('[data-section="stockDiary"],[data-sd-only="wisdom"]').forEach(b=>b.classList.add('dk-hide-nav'));
- ui.addEventListener('click',onClick);ui.addEventListener('submit',onSubmit);ui.addEventListener('change',onChange);
+ ui.addEventListener('click',onClick);ui.addEventListener('submit',onSubmit);ui.addEventListener('change',onChange);ui.addEventListener('input',onListInput);
  return true;
 }
 function setLegacy(yes){state.showLegacy=!!yes;const root=$('diarySection');root?.classList.toggle('dk-compact',!yes);root?.classList.toggle('dk-legacy',yes);if(!yes)draw();}
@@ -56,13 +56,84 @@ function writeView(){const r=state.entry||{},kind=state.kind,m=state.entry?.id?m
 }
 function captureSelection(){const s=window.getSelection();if(s?.rangeCount&&$('dkRich')?.contains(s.anchorNode)){editorSelection=s.toString().trim().slice(0,4500);editorRange=s.getRangeAt(0).cloneRange();}}
 function countWords(){const text=$('dkRich')?.innerText||'';$('dkWriteCount')&&($('dkWriteCount').textContent=(text.trim()?text.trim().split(/\s+/).length:0)+' words');}
-function rowHtml(x){const m=meta(x.kind,x.id);return `<article class="dk-item"><div><div class="dk-item-meta">${esc(x.date||'Undated')} · ${esc(keys[x.kind])} ${m.monthlyHighlight?' · ★ Monthly':''}</div><h4>${esc(x.title)}</h4><p>${esc((m.highlightExcerpt||x.text||'').slice(0,340))}</p>${m.tags?`<small>${esc(m.tags)}</small>`:''}</div><div class="dk-row-actions"><button type="button" data-dk-edit="${esc(x.kind+':'+x.id)}">Edit</button><button type="button" data-dk-mark="${esc(x.kind+':'+x.id)}">${m.monthlyHighlight?'★ Marked':'☆ Highlight'}</button>${x.kind==='stock'?`<button type="button" data-dk-wisdom="${esc(x.id)}">✦ To Wisdom</button>`:''}</div></article>`;}
-function listView(tab){const q=state.q.toLowerCase(),mon=state.month,items=allEntries().filter(x=>tab==='all'||tab==='monthly'&&(meta(x.kind,x.id).monthlyHighlight===true&&String(meta(x.kind,x.id).monthKey||x.date).startsWith(mon))||tab==='stock'&&x.kind==='stock'||tab==='wisdom'&&x.kind==='wisdom').filter(x=>!q||[x.title,x.text,meta(x.kind,x.id).tags].join(' ').toLowerCase().includes(q));
- const head={all:'All saved entries',monthly:'Monthly highlights',stock:'Company research and reviews',wisdom:'Investment Wisdom'}[tab];
- const legacy=tab==='monthly'?state.data.legacyMonthly.filter(x=>String(x.monthKey).startsWith(mon)):[];
- $('dkContent').innerHTML=`<div class="dk-list-head"><div><h3>${head}</h3><p>${tab==='monthly'?'Marked passages and entries appear here without duplication.':'Open any entry to edit it in the same writing screen.'}</p></div><button type="button" data-dk-action="new">＋ New entry</button></div><div class="dk-list-controls"><input id="dkSearch" type="search" placeholder="Search titles, notes, lessons and tags" value="${esc(state.q)}">${tab==='monthly'?`<input id="dkMonthFilter" type="month" value="${esc(state.month)}"><button type="button" data-dk-action="print">Print month</button>`:''}${tab==='stock'?'<button type="button" data-dk-action="company">＋ Company</button>':''}</div>
- <div class="dk-list-results">${items.length?items.map(rowHtml).join(''):'<div class="dk-empty">No matching entries. Write once and mark important ideas for later.</div>'}</div>${legacy.length?`<section class="dk-legacy-list"><h4>Older monthly diary entries (read-only)</h4><p>These historical records have not been moved or duplicated.</p>${legacy.map(x=>`<article class="dk-item"><div><strong>${esc(x.title||'Monthly Diary')}</strong><p>${esc(x.text)}</p></div><small>${esc(x.monthKey)}</small></article>`).join('')}</section>`:''}
- ${tab==='wisdom'?'<div class="dk-secondary-actions"><button type="button" data-dk-action="book">Open my Investment Book chapters and export</button></div>':''}`;
+// Search and date browsing use the existing authenticated dkList response. No data is duplicated.
+function normal(s){return String(s??'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase().replace(/\s+/g,' ').trim();}
+function queryWords(s){const matches=String(s||'').match(/"[^"]+"|\S+/g)||[];return matches.map(x=>normal(x.replace(/^"|"$/g,''))).filter(Boolean);}
+function companyName(id){const c=state.data.companies.find(x=>String(x.id)===String(id));return c?`${c.name||''} ${c.symbol||''} ${c.sector||''}`:'';}
+function recordDate(x){const s=String(x.date||'').slice(0,10);return /^\d{4}-\d{2}-\d{2}$/.test(s)?s:'';}
+function archiveEntries(){return state.data.legacyMonthly.map(x=>({kind:'archive',id:x.id||'',date:String(x.monthKey||'').slice(0,7)+'-01',monthOnly:true,title:x.title||'Old monthly diary',text:x.text||'',category:'ARCHIVE',original:x}));}
+function entryIndex(x){const m=meta(x.kind,x.id),r=x.original||{};return normal([x.title,x.text,m.highlightExcerpt,m.tags,r.tags,x.category,x.kind,r.decision,r.chapter,r.category,r.principle,r.application,r.sourceLinks,companyName(r.companyId||r.sourceCompanyId),x.monthOnly?'monthly diary archive':'',x.date].join(' '));}
+function periodMatch(x,tab){const date=recordDate(x);if(tab==='monthly')return (x.kind==='archive'||meta(x.kind,x.id).monthlyHighlight===true)&&String(x.monthOnly?x.original.monthKey:meta(x.kind,x.id).monthKey||date).startsWith(state.month);
+ if(state.period==='all')return true;
+ if(!date)return false;
+ if(state.period==='day')return !x.monthOnly&&date===state.day;
+ if(state.period==='month')return date.slice(0,7)===state.month;
+ if(state.period==='year')return date.slice(0,4)===state.year;
+ if(state.period==='range')return (!state.from||date>=state.from)&&(!state.to||date<=state.to)&&(!x.monthOnly||!state.from||state.from.slice(0,7)<=date.slice(0,7));
+ return true;
+}
+function filterEntries(tab){const terms=queryWords(state.q);let rows=allEntries();if(tab==='all'||tab==='monthly')rows=rows.concat(archiveEntries());
+ rows=rows.filter(x=>{
+  if(tab==='stock'&&x.kind!=='stock'||tab==='wisdom'&&x.kind!=='wisdom')return false;
+  if(!periodMatch(x,tab))return false;
+  if(state.category!=='all'){
+    const category=state.category;
+    if(category==='personal'&&x.kind!=='personal'||category==='stock'&&x.kind!=='stock'||category==='wisdom'&&x.kind!=='wisdom'||category==='archive'&&x.kind!=='archive')return false;
+    if(['learning','target','idea','gratitude'].includes(category)&&!(x.kind==='personal'&&String(x.category||'').toLowerCase()===category))return false;
+  }
+  const m=meta(x.kind,x.id),r=x.original||{};
+  if(state.flag==='important'&&!(r.important===true||String(r.important).toLowerCase()==='true'))return false;
+  if(state.flag==='monthly'&&!(m.monthlyHighlight===true||x.kind==='archive'))return false;
+  if(state.company!=='all'&&String(r.companyId||r.sourceCompanyId||'')!==state.company)return false;
+  if(terms.length&&!terms.every(t=>entryIndex(x).includes(t)))return false;
+  return true;
+ });
+ rows.sort((a,b)=>state.sort==='title'?String(a.title||'').localeCompare(String(b.title||'')):(state.sort==='oldest'?1:-1)*recordDate(a).localeCompare(recordDate(b)) || String(b.id||'').localeCompare(String(a.id||'')));
+ return rows;
+}
+function periodControls(){const p=state.period;return p==='day'?`<label>Choose day<input id="dkHistoryDay" aria-label="Choose day" type="date" value="${esc(state.day)}"></label>`
+ :p==='month'?`<label>Choose month<input id="dkHistoryMonth" aria-label="Choose month" type="month" value="${esc(state.month)}"></label>`
+ :p==='year'?`<label>Choose year<select id="dkHistoryYear" aria-label="Choose year">${yearOptions()}</select></label>`
+ :p==='range'?`<label>From<input id="dkHistoryFrom" type="date" value="${esc(state.from)}"></label><label>To<input id="dkHistoryTo" type="date" value="${esc(state.to)}"></label>`:'';}
+function yearOptions(){const years=new Set([today().slice(0,4),state.year]);allEntries().concat(archiveEntries()).forEach(x=>{const yr=recordDate(x).slice(0,4);if(/^\d{4}$/.test(yr))years.add(yr);});return [...years].sort((a,b)=>b.localeCompare(a)).map(y=>`<option value="${esc(y)}" ${y===state.year?'selected':''}>${esc(y)}</option>`).join('');}
+function rowHtml(x){const m=meta(x.kind,x.id),arch=x.kind==='archive',stamp=x.monthOnly?String(x.original.monthKey||'')+' · Archived monthly diary':(recordDate(x)||'Undated');const category=x.kind==='personal'&&String(x.category).toUpperCase()!=='PERSONAL'?' · '+x.category:'';
+ return `<article class="dk-item" data-dk-row="${esc(x.id)}"><div><div class="dk-item-meta">${esc(stamp)} · ${esc(keys[x.kind]||'Monthly Diary')}${esc(category)} ${m.monthlyHighlight?' · ★ Monthly':''}</div><h4>${esc(x.title)}</h4><p>${esc((m.highlightExcerpt||x.text||'').slice(0,380))}</p>${m.tags?`<small>Tags: ${esc(m.tags)}</small>`:''}${x.kind==='stock'||x.kind==='wisdom'?`<small>${esc(companyName(x.original.companyId||x.original.sourceCompanyId))}</small>`:''}</div><div class="dk-row-actions">${arch?'<span class="dk-archive-label">Read-only archive</span>':`<button type="button" data-dk-edit="${esc(x.kind+':'+x.id)}">Edit</button><button type="button" data-dk-mark="${esc(x.kind+':'+x.id)}">${m.monthlyHighlight?'★ Marked':'☆ Highlight'}</button>${x.kind==='stock'?`<button type="button" data-dk-wisdom="${esc(x.id)}">✦ To Wisdom</button>`:''}`}</div></article>`;}
+function drawResults(){const box=$('dkResultList');if(!box)return;const rows=filterEntries(state.tab),visible=rows.slice(0,state.limit);
+ const count=$('dkResultCount');if(count)count.textContent=`${rows.length} matching ${rows.length===1?'entry':'entries'}${rows.length>state.limit?' · Showing first '+visible.length:''}`;
+ box.innerHTML=visible.length?visible.map(rowHtml).join(''):'<div class="dk-empty">No matching entries. Change the date, category or search, or choose All dates.</div>';
+ const more=$('dkLoadMore');if(more){more.hidden=rows.length<=state.limit;more.textContent=`Show more (${rows.length-state.limit} remaining)`;}
+ const print=$('dkPrintResults');if(print)print.disabled=!rows.length;
+}
+function listView(tab){const head={all:'Browse your diary history',monthly:'Monthly highlights',stock:'Company research and reviews',wisdom:'Investment Wisdom'}[tab];
+ const help=tab==='monthly'?'Entries marked for the selected month, plus existing monthly diary archives.':'Find entries by day, month, year, keyword, category or company. No second calendar.';
+ const opts=[['all','All dates'],['day','Particular day'],['month','Particular month'],['year','Entire year'],['range','Date range']].map(([v,t])=>`<option value="${v}" ${state.period===v?'selected':''}>${t}</option>`).join('');
+ const categories=[['all','All types'],['personal','Personal Diary'],['learning','Learning'],['target','Targets'],['idea','Ideas'],['gratitude','Gratitude'],['stock','Stock Research'],['wisdom','Investment Wisdom'],['archive','Old monthly diary']].map(([v,t])=>`<option value="${v}" ${state.category===v?'selected':''}>${t}</option>`).join('');
+ const companies=state.data.companies.map(c=>`<option value="${esc(c.id)}" ${state.company===c.id?'selected':''}>${esc(c.name)}${c.symbol?' ('+esc(c.symbol)+')':''}</option>`).join('');
+ $('dkContent').innerHTML=`<div class="dk-list-head"><div><h3>${head}</h3><p>${help}</p></div><button type="button" data-dk-action="new">＋ New entry</button></div>
+ <section class="dk-history-search" aria-label="Diary search and history filters"><label class="dk-search-main">Search diary, research, wisdom or tags<input id="dkSearch" autocomplete="off" type="search" placeholder='Try: "loan growth", expenses, HDFC, lesson' value="${esc(state.q)}"></label>
+ <div class="dk-history-shortcuts" role="group" aria-label="Quick date selection"><button type="button" data-dk-shortcut="today">Today</button><button type="button" data-dk-shortcut="month">This month</button><button type="button" data-dk-shortcut="year">This year</button><button type="button" data-dk-shortcut="all">All dates</button></div>
+ <div class="dk-history-controls">${tab==='monthly'?`<label>Highlight month<input id="dkMonthFilter" type="month" value="${esc(state.month)}"></label>`:`<label>Browse by<select id="dkPeriod">${opts}</select></label><span id="dkPeriodControls" class="dk-period-controls">${periodControls()}</span>`}
+ ${tab==='all'?`<label>Entry type<select id="dkCategory">${categories}</select></label>`:''}
+ ${(tab==='all'||tab==='stock'||tab==='wisdom')?`<label>Company<select id="dkCompanyFilter"><option value="all">All companies</option>${companies}</select></label>`:''}
+ <label>Show<select id="dkFlag"><option value="all" ${state.flag==='all'?'selected':''}>All records</option><option value="important" ${state.flag==='important'?'selected':''}>★ Important</option><option value="monthly" ${state.flag==='monthly'?'selected':''}>Monthly highlights</option></select></label>
+ <label>Sort<select id="dkSort"><option value="newest" ${state.sort==='newest'?'selected':''}>Newest first</option><option value="oldest" ${state.sort==='oldest'?'selected':''}>Oldest first</option><option value="title" ${state.sort==='title'?'selected':''}>Title A–Z</option></select></label></div>
+ <div class="dk-search-bottom"><span id="dkResultCount" role="status" aria-live="polite"></span><div><button type="button" data-dk-action="clearfilters">Clear filters</button><button type="button" id="dkPrintResults" data-dk-action="print">Print results / PDF</button>${tab==='stock'?'<button type="button" data-dk-action="company">＋ Company</button>':''}</div></div></section>
+ <div id="dkResultList" class="dk-list-results"></div><button id="dkLoadMore" type="button" data-dk-action="more" class="dk-load-more" hidden>Show more</button>
+ ${tab==='wisdom'?'<div class="dk-secondary-actions"><button type="button" data-dk-action="book">Open Investment Book chapters and export</button></div>':''}`;
+ drawResults();
+}
+function onListInput(e){if(e.target?.id!=='dkSearch')return;state.q=e.target.value;state.limit=30;clearTimeout(searchTimer);searchTimer=setTimeout(drawResults,130);}
+function updateListFilter(e){const id=e.target.id,val=e.target.value;const match={dkPeriod:'period',dkHistoryDay:'day',dkHistoryMonth:'month',dkHistoryYear:'year',dkHistoryFrom:'from',dkHistoryTo:'to',dkMonthFilter:'month',dkCategory:'category',dkCompanyFilter:'company',dkFlag:'flag',dkSort:'sort'};if(!match[id])return false;
+ state[match[id]]=val;state.limit=30;
+ if(id==='dkPeriod'){$('dkPeriodControls').innerHTML=periodControls();}
+ if(id==='dkHistoryFrom'&&state.to&&state.from>state.to){state.to=state.from;const to=$('dkHistoryTo');if(to)to.value=state.to;}
+ if(id==='dkHistoryTo'&&state.from&&state.to<state.from){state.from=state.to;const from=$('dkHistoryFrom');if(from)from.value=state.from;}
+ drawResults();return true;
+}
+function printVisibleResults(){const rows=filterEntries(state.tab),label=state.tab==='monthly'?`Monthly highlights · ${state.month}`:'Diary & Knowledge — filtered results';
+ const content=rows.map(x=>`<article><small>${esc(x.monthOnly?x.original.monthKey:recordDate(x))} · ${esc(keys[x.kind]||'Old Monthly Diary')}</small><h2>${esc(x.title)}</h2><p>${esc(meta(x.kind,x.id).highlightExcerpt||x.text).replace(/\n/g,'<br>')}</p></article>`).join('');
+ const html=`<!doctype html><html><head><meta charset="utf-8"><title>${esc(label)}</title><style>body{font:16px/1.6 system-ui;max-width:850px;margin:36px auto;color:#23364a}article{page-break-inside:avoid;border-bottom:1px solid #dce5e9;padding:16px 0}h1{color:#165c54}h2{font-size:19px}small{color:#667b8b}p{white-space:normal}</style></head><body><h1>${esc(label)}</h1><p>${rows.length} entries · ${esc(state.q?'Search: '+state.q:'')}</p>${content||'<p>No records match the filters.</p>'}</body></html>`;
+ const w=window.open('','_blank');if(!w){toast('Allow pop-ups to print or save as PDF.',true);return;}w.document.open();w.document.write(html);w.document.close();w.focus();w.print();
 }
 function draw(){const sec=$('diarySection');if(!sec||state.showLegacy)return;const title=$('pageTitle');if(title&&(!sec.classList.contains('hidden')))title.textContent='Diary & Knowledge';document.querySelectorAll('#dkUnifiedSection [data-dk-tab]').forEach(x=>{let active=x.dataset.dkTab===state.tab;x.classList.toggle('active',active);x.setAttribute('aria-current',active?'page':'false');});if(state.tab==='write')writeView();else listView(state.tab);}
 async function load(){if(state.loading)return;state.loading=true;toast('Loading your private diary library…');try{const r=await api('dkList');for(const k of Object.keys(state.data))state.data[k]=r[k]||[];state.loaded=true;toast(`${state.data.diary.length} diary entries · ${state.data.notes.length} stock notes · ${state.data.wisdom.length} wisdom entries`);if(state.tab!=='write')draw();}catch(e){toast(e.message,true);}finally{state.loading=false;}}
@@ -72,6 +143,9 @@ function edit(kind,id){let source=kind==='personal'?state.data.diary:kind==='sto
 function promote(id){let note=state.data.notes.find(x=>x.id===id);if(!note)return;const r={title:'Lesson from: '+note.title,content:note.content||'',sourceNoteId:id,sourceCompanyId:note.companyId,chapter:'Uncategorised',category:'Investment Principle'};start('wisdom',r);}
 function companyAdd(){const name=prompt('Company name (as you want it in your Stock Library):');if(!name?.trim())return;const symbol=prompt('NSE / BSE symbol (optional):')||'';api('dkSaveCompany',{record:{name:name.trim(),symbol:symbol.trim()}}).then(()=>load()).then(()=>{state.kind='stock';state.tab='write';state.entry=null;draw();toast('Company added. You can now write the research note.');}).catch(e=>toast(e.message,true));}
 function onClick(e){const tab=e.target.closest('[data-dk-tab]');if(tab){if(state.dirty&&!confirm('Discard unsaved changes in your entry?'))return;state.dirty=false;state.tab=tab.dataset.dkTab;draw();return;}
+ const shortcut=e.target.closest('[data-dk-shortcut]');if(shortcut){const mode=shortcut.dataset.dkShortcut;if(mode==='today'){state.period='day';state.day=today();}else if(mode==='month'){state.period='month';state.month=monthNow();}else if(mode==='year'){state.period='year';state.year=today().slice(0,4);}else state.period='all';state.limit=30;draw();return;}
+ const more=e.target.closest('[data-dk-action="more"]');if(more){state.limit+=30;drawResults();return;}
+ const clear=e.target.closest('[data-dk-action="clearfilters"]');if(clear){state.q='';state.period='all';state.category='all';state.flag='all';state.company='all';state.sort='newest';state.limit=30;draw();return;}
  const fmt=e.target.closest('[data-dk-format]');if(fmt){e.preventDefault();$('dkRich')?.focus();document.execCommand(fmt.dataset.dkFormat,false,fmt.dataset.dkValue||null);countWords();return;}
  const editBtn=e.target.closest('[data-dk-edit]');if(editBtn){const [kind,id]=editBtn.dataset.dkEdit.split(':');edit(kind,id);return;}
  const mark=e.target.closest('[data-dk-mark]');if(mark){let [kind,id]=mark.dataset.dkMark.split(':'),m=meta(kind,id);api('dkHighlight',{kind,id,monthlyHighlight:!m.monthlyHighlight}).then(()=>load()).catch(e=>toast(e.message,true));return;}
@@ -84,12 +158,12 @@ function onClick(e){const tab=e.target.closest('[data-dk-tab]');if(tab){if(state
  if(act.dataset.dkAction==='company'){companyAdd();return;}
  if(act.dataset.dkAction==='legacy'){setLegacy(true);$('diarySection').scrollIntoView({block:'start'});return;}
  if(act.dataset.dkAction==='book'){if(!window.SarniStockDiary?.open){toast('Stock Diary frontend is missing.',true);return;}window.SarniStockDiary.open('book');return;}
- if(act.dataset.dkAction==='print'){const rows=allEntries().filter(x=>meta(x.kind,x.id).monthlyHighlight&&String(meta(x.kind,x.id).monthKey||x.date).startsWith(state.month));const html='<!doctype html><html><head><meta charset="UTF-8"><title>Monthly highlights</title><style>body{font:16px system-ui;max-width:800px;margin:36px auto;line-height:1.6}h1{color:#165c54}article{border-bottom:1px solid #ddd;margin:22px 0;padding-bottom:12px}</style></head><body><h1>Highlights — '+esc(state.month)+'</h1>'+rows.map(x=>'<article><small>'+esc(x.date+' · '+keys[x.kind])+'</small><h2>'+esc(x.title)+'</h2><p>'+esc(meta(x.kind,x.id).highlightExcerpt||x.text)+'</p></article>').join('')+'</body></html>';const w=window.open('','_blank');if(!w){toast('Allow pop-ups to print.',true);return;}w.document.write(html);w.document.close();w.focus();w.print();return;}
+ if(act.dataset.dkAction==='print'){printVisibleResults();return;}
 }
-function onChange(e){if(e.target.id==='dkKind'){if(state.entry?.id&&!confirm('Switch category? The existing entry remains unchanged, and your text will start a new entry.')){e.target.value=state.kind;return;}const form=$('dkForm');draftMeta={html:cleanHtml($('dkRich')?.innerHTML||''),tags:form?.elements.tags?.value||'',monthlyHighlight:!!form?.elements.monthlyHighlight?.checked,highlightExcerpt:form?.elements.highlightExcerpt?.value||''};state.entry={title:form?.elements.title?.value||'',entryDate:form?.elements.entryDate?.value||today(),text:$('dkRich')?.innerText||'',content:cleanHtml($('dkRich')?.innerHTML||''),important:!!form?.elements.important?.checked};state.kind=e.target.value;draw();return;}if(e.target.id==='dkColor'||e.target.id==='dkHighlight'){const action=e.target.id==='dkColor'?'foreColor':'hiliteColor';$('dkRich')?.focus();if(editorRange){const sel=window.getSelection();sel.removeAllRanges();sel.addRange(editorRange);}document.execCommand(action,false,e.target.value);return;}if(e.target.id==='dkMonthFilter'){state.month=e.target.value;draw();}}
+function onChange(e){if(e.target.id==='dkKind'){if(state.entry?.id&&!confirm('Switch category? The existing entry remains unchanged, and your text will start a new entry.')){e.target.value=state.kind;return;}const form=$('dkForm');draftMeta={html:cleanHtml($('dkRich')?.innerHTML||''),tags:form?.elements.tags?.value||'',monthlyHighlight:!!form?.elements.monthlyHighlight?.checked,highlightExcerpt:form?.elements.highlightExcerpt?.value||''};state.entry={title:form?.elements.title?.value||'',entryDate:form?.elements.entryDate?.value||today(),text:$('dkRich')?.innerText||'',content:cleanHtml($('dkRich')?.innerHTML||''),important:!!form?.elements.important?.checked};state.kind=e.target.value;draw();return;}if(e.target.id==='dkColor'||e.target.id==='dkHighlight'){const action=e.target.id==='dkColor'?'foreColor':'hiliteColor';$('dkRich')?.focus();if(editorRange){const sel=window.getSelection();sel.removeAllRanges();sel.addRange(editorRange);}document.execCommand(action,false,e.target.value);return;}if(updateListFilter(e))return;}
 async function onSubmit(e){if(e.target.id!=='dkForm')return;e.preventDefault();if(state.busy)return;const f=e.target,ed=$('dkRich'),html=cleanHtml(ed?.innerHTML||''),text=plain(html);if(!text){toast('Write something before saving.',true);return;}
  const data=Object.fromEntries(new FormData(f));let kind=state.kind;let entry={id:state.entry?.id||'',title:data.title||'',html,entryDate:data.entryDate||today(),tags:data.tags||'',important:!!f.elements.important?.checked,monthlyHighlight:!!f.elements.monthlyHighlight?.checked,highlightExcerpt:data.highlightExcerpt||'',entryType:data.entryType||'PERSONAL',visibility:data.visibility||'PRIVATE',companyId:data.companyId||'',decision:data.decision||'Research further',reviewDate:data.reviewDate||'',chapter:data.chapter||'',category:data.category||'',sourceNoteId:state.entry?.sourceNoteId||'',sourceCompanyId:state.entry?.sourceCompanyId||''};
  state.busy=true;f.querySelector('[type="submit"]').disabled=true;toast('Saving one original entry…');try{const r=await api('dkSave',{kind,record:entry});state.entry={...state.entry,id:r.record.id};state.dirty=false;toast('Saved successfully. Monthly Highlights will show this entry if selected.');await load();const saved=(kind==='personal'?state.data.diary:kind==='stock'?state.data.notes:state.data.wisdom).find(x=>x.id===r.record.id);state.kind=kind;state.entry=saved||state.entry;state.tab='write';draftMeta=null;draw();}catch(err){const msg=err.message||String(err);toast(msg,true);if(/Original record saved as/.test(msg)){toast(msg+' Do not press Save again. Refresh first.',true);}}finally{state.busy=false;f.querySelector('[type="submit"]').disabled=false;}}
-function init(){if(!skeleton()){console.warn('SarNi unified diary: missing required SarNi frontend containers.');return;}state.month=monthNow();draw();window.SarniUnifiedDiary={open:(tab='write',kind='personal')=>{const old=$('sarniSidebarPrimary')?.querySelector('[data-section="diary"]');old?.click();state.tab=tab;state.kind=kind;setTimeout(()=>{setLegacy(false);draw();if(!state.loaded)load();},50);},version:'2.0'};}
+function init(){if(!skeleton()){console.warn('SarNi unified diary: missing required SarNi frontend containers.');return;}state.month=monthNow();draw();window.SarniUnifiedDiary={open:(tab='write',kind='personal')=>{const old=$('sarniSidebarPrimary')?.querySelector('[data-section="diary"]');old?.click();state.tab=tab;state.kind=kind;setTimeout(()=>{setLegacy(false);draw();if(!state.loaded)load();},50);},version:'2.2'};}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

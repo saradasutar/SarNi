@@ -1,8 +1,8 @@
 {
-  "version": "20.9.1",
-  "frontend": "20.9.1",
+  "version": "20.9.2",
+  "frontend": "20.9.2",
   "backendExpected": "3.17.36",
-  "build": "20261030-2091-stable",
+  "build": "20261030-2092-history",
   "hosting": "github-pages-direct-ui",
   "backendUpgradeRequiredForLargerPhotos": false
 }

@@ -32,3 +32,17 @@ html.sarni-finance-grouped #mobileMoreSheet button[data-section="creditCards"]{d
 #sarniCardInsideExpense{white-space:normal!important;min-height:42px}
 #sarniReturnToExpenses{margin:0 0 14px;min-height:42px}
 @media(max-width:700px){#sarniCardInsideExpense{width:100%}#sarniReturnToExpenses{width:100%;text-align:center}}
+
+/* v2.2: date browsing and multi-field search; entry date pickers are NOT a second calendar. */
+.dk-history-search{border:1px solid #dce7eb;border-radius:17px;background:#f8fbfc;padding:16px;margin-bottom:14px}
+.dk-history-search label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:750;color:#3a5368}
+.dk-history-search input,.dk-history-search select{min-height:42px;width:100%;border:1px solid #cbdce4;border-radius:9px;background:#fff;color:#213e50;padding:9px 11px;font:inherit}
+.dk-search-main{display:block!important;font-size:13px!important}.dk-search-main input{margin-top:7px;font-size:15px!important}
+.dk-history-shortcuts{display:flex;gap:7px;flex-wrap:wrap;margin:11px 0}.dk-history-shortcuts button,.dk-search-bottom button{background:#fff;border:1px solid #c5d8df;color:#165b61;padding:8px 13px;border-radius:9px;font-weight:720}
+.dk-history-controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap}.dk-history-controls>label{flex:1 1 145px;min-width:140px;max-width:260px}
+.dk-period-controls{display:contents}.dk-period-controls>label{flex:1 1 145px;min-width:140px;max-width:260px}
+.dk-search-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px;color:#516f7f;font-size:13px;font-weight:680}.dk-search-bottom>div{display:flex;gap:8px;flex-wrap:wrap}
+.dk-search-bottom button:disabled{opacity:.5;cursor:not-allowed!important}.dk-search-bottom button:last-child{background:#0b726a;color:white;border-color:#0b726a}
+.dk-archive-label{font-size:12px;font-weight:700;color:#7d6754;padding:7px 9px;background:#fcf4e8;border-radius:8px}
+.dk-item small{display:block;margin-top:5px}.dk-load-more{display:block;margin:16px auto;padding:10px 22px;border:1px solid #adcfc9;border-radius:10px;background:white;color:#126a60;font-weight:760}.dk-load-more[hidden]{display:none}
+@media(max-width:760px){.dk-history-controls>label,.dk-period-controls>label{max-width:none;flex:1 1 100%}.dk-search-bottom{align-items:stretch}.dk-search-bottom>div{width:100%}.dk-search-bottom button{flex:1 1 auto}}
