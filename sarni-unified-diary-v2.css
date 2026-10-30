@@ -1,0 +1,34 @@
+/* Unified Diary & Knowledge 1.1 — contains only scoped layout and navigation. */
+html.dk-installed #sarniSidebarPrimary .dk-hide-nav,html.dk-installed #sarniSidebarPrimary [data-section="stockDiary"],html.dk-installed #sarniSidebarPrimary [data-sd-only="wisdom"]{display:none!important}
+#diarySection.dk-compact > :not(#dkUnifiedSection){display:none!important}
+#diarySection.dk-legacy #dkUnifiedSection{display:none!important}
+#dkReturn{display:none;width:max-content;margin:8px 0 16px;padding:10px 16px;border:1px solid #b7d2d1;border-radius:12px;background:#fff;color:#145f57;font-weight:750;cursor:pointer}
+#diarySection.dk-legacy #dkReturn{display:inline-flex}
+#dkUnifiedSection{color:#233b4e;display:block;max-width:1500px;margin:auto}
+#dkUnifiedSection *{box-sizing:border-box}
+#dkUnifiedSection button{cursor:pointer;font:inherit}
+#dkUnifiedSection h2,#dkUnifiedSection h3,#dkUnifiedSection h4{margin:0;color:#18344b}
+.dk-banner{background:linear-gradient(115deg,#eaf7f1,#f2f4ff);border:1px solid #d2e6df;border-radius:22px;display:flex;gap:20px;justify-content:space-between;align-items:center;padding:26px;margin:0 0 14px}
+.dk-banner h2{font-size:clamp(23px,2.8vw,33px);margin:5px 0!important}.dk-banner p,.dk-editor-top p,.dk-list-head p{margin:5px 0;color:#5b7184}.dk-eyebrow{font-size:11px;color:#087d70;font-weight:850;letter-spacing:.13em}.dk-banner-actions{display:flex;gap:9px;flex-wrap:wrap}.dk-banner-actions button,.dk-list-head button,.dk-primary{border:0;background:#08776c;color:white;padding:12px 15px;border-radius:11px;font-weight:780!important}.dk-banner-actions .dk-quiet{background:white;border:1px solid #bdd4cd;color:#195e56}
+.dk-nav{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0 14px}.dk-nav button{padding:10px 13px;border:1px solid #d7e0e5;border-radius:10px;background:white;color:#425a70;font-weight:740!important}.dk-nav button.active{background:#076e65;color:white;border-color:#076e65}.dk-message{min-height:26px;color:#147369;font-size:13px;font-weight:650;margin:2px 0 10px}.dk-message.dk-error{color:#b32637}
+.dk-editor-form,.dk-list-results,.dk-legacy-list{border:1px solid #dbe6e9;background:white;border-radius:20px;padding:clamp(16px,2vw,26px);box-shadow:0 8px 28px rgba(25,65,82,.04)}
+.dk-editor-top,.dk-list-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:19px}.dk-editor-top h3,.dk-list-head h3{font-size:22px}.dk-private{font-size:12px;border-radius:99px;color:#207b68;background:#e7f7ef;padding:8px 12px;white-space:nowrap}.dk-editor-form label{display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:740;color:#334d61;margin:12px 0}
+.dk-editor-form input:not([type=checkbox]):not([type=color]),.dk-editor-form select,.dk-editor-form textarea,.dk-list-controls input{width:100%;font:inherit;padding:11px 12px;border:1px solid #cfdde4;background:#fff;border-radius:10px;min-height:45px;color:#1a354c}
+.dk-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.dk-company-add{display:flex;align-items:end;padding:13px}.dk-company-add button,.dk-form-actions button:not(.dk-primary),.dk-footer button,.dk-highlight-box button,.dk-row-actions button,.dk-list-controls button,.dk-secondary-actions button{background:#fff;color:#11655d;border:1px solid #bbd9d3;padding:9px 13px;border-radius:10px;font-weight:730}
+.dk-editor-form .dk-check{display:flex;flex-direction:row;align-items:center;gap:10px}.dk-check input{width:18px;height:18px;accent-color:#08766b}
+.dk-toolbar{display:flex;flex-wrap:wrap;gap:5px;padding:8px;background:#f0f5f7;border:1px solid #d3e0e7;border-bottom:0;border-radius:12px 12px 0 0}.dk-toolbar button{min-width:33px;height:33px;border:1px solid #d4e0e5;border-radius:7px;background:white;color:#283f54}.dk-toolbar label{display:flex;flex-direction:row;align-items:center;gap:5px;margin:0 4px!important;font-size:11px}.dk-toolbar input[type=color]{width:28px;height:28px;padding:0;border:0;background:transparent}
+#dkRich{padding:16px;min-height:230px;border:1px solid #cbdbe1;border-radius:0 0 12px 12px;line-height:1.65;background:white;white-space:pre-wrap;overflow-wrap:anywhere;color:#203b4b;outline-offset:2px}#dkRich:empty:before{content:attr(data-placeholder);color:#91a0a9}#dkRich:focus{outline:2px solid #a2cbc3}
+.dk-highlight-box{border-radius:14px;background:#f5f9fa;padding:15px;margin-top:8px}.dk-highlight-box p{font-size:13px;color:#6c8291;margin:5px 0}.dk-highlight-box label{margin:8px 0!important}.dk-highlight-box textarea{resize:vertical}.dk-form-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}.dk-form-actions span{font-size:12px;color:#6a8190;margin-left:auto}
+.dk-list-controls{display:flex;gap:11px;flex-wrap:wrap;margin-bottom:14px}.dk-list-controls input[type=search]{flex:1;min-width:200px}.dk-list-controls input[type=month]{width:auto}.dk-list-results{display:grid;gap:10px}.dk-item{display:flex;justify-content:space-between;gap:15px;padding:16px;background:#f9fbfc;border:1px solid #e1ebef;border-radius:13px;align-items:center}.dk-item h4{font-size:16px;margin:5px 0!important}.dk-item p{margin:5px 0;color:#657988;font-size:13px;line-height:1.5;white-space:pre-wrap}.dk-item small,.dk-item-meta{font-size:11px;color:#678192}.dk-row-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:300px}.dk-row-actions button{font-size:12px!important}.dk-legacy-list{margin:12px 0}.dk-legacy-list p{color:#687d8b}.dk-footer{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}.dk-empty{padding:35px 12px;text-align:center;color:#718494}
+@media(max-width:760px){.dk-banner{display:block;padding:18px}.dk-banner-actions{margin-top:14px}.dk-two{grid-template-columns:1fr;gap:0}.dk-private{white-space:normal}.dk-editor-top,.dk-list-head{align-items:start;flex-direction:column}.dk-item{align-items:stretch;flex-direction:column}.dk-row-actions{max-width:none;justify-content:flex-start}.dk-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.dk-nav button{padding:10px 6px;font-size:12px!important}.dk-list-controls input[type=month]{width:100%}}
+
+/* 2026-10-30: Only one calendar module; existing entry dates/month filters remain. */
+html.dk-installed .quick-diary-calendar-card,html.dk-installed #quickDiaryCalendar,html.dk-installed #lifeDiaryCalendar{display:none!important}
+html.dk-installed #sarniSidebarPrimary .sarni-dk-switcher{display:none!important}
+
+/* Finance grouping: accessible from Expenditure without a separate sidebar item. */
+html.sarni-finance-grouped #sarniSidebarPrimary button[data-section="creditCards"],
+html.sarni-finance-grouped #mobileMoreSheet button[data-section="creditCards"]{display:none!important}
+#sarniCardInsideExpense{white-space:normal!important;min-height:42px}
+#sarniReturnToExpenses{margin:0 0 14px;min-height:42px}
+@media(max-width:700px){#sarniCardInsideExpense{width:100%}#sarniReturnToExpenses{width:100%;text-align:center}}
