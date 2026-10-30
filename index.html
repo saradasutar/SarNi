@@ -1861,8 +1861,7 @@ async function printOdiaFestivals(){
  if(!/^\\d{4}-\\d{2}$/.test(key))return;
  const popup=window.open('','_blank');
  if(!popup){if(status)status.textContent='Please allow pop-ups to print festivals.';return;}
- popup.document.write('<!doctype html><html><head><title>Odia Festivals</title></head><body><p>Preparing printable festival list…</p><script defer src="./sarni-stock-diary.js?v=20261030-stock1"></script>
-</body></html>');popup.document.close();
+ popup.document.write('<!doctype html><html><head><title>Odia Festivals</title></head><body><p>Preparing printable festival list…</p></body></html>');popup.document.close();
  if(btn)btn.disabled=true;
  try{
   const result=await fetchMonth(key);
@@ -2280,5 +2279,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   },true);
 })();
 </script>
-<script defer src="./sarni-security-storage.js?v=20261029-emailonly"></script><script defer src="./sarni-session-24h.js?v=20261029-24hfix2"></script></body>
+<script defer src="./sarni-security-storage.js?v=20261029-emailonly"></script><script defer src="./sarni-session-24h.js?v=20261029-24hfix2"></script><script defer src="./sarni-stock-diary.js?v=20261030-stock-repair2"></script>
+</body>
 </html>
