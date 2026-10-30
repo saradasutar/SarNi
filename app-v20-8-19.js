@@ -7199,6 +7199,7 @@ function openSarNiAdminSettings(){
   });
 }
 function switchSection(section){
+  if(window.sarniStockAfterNavigate)window.sarniStockAfterNavigate(section);
   if(['users','adminSettings'].includes(section)&&!isSarNiAdmin()){toast('Administrator access required.','error');return;}
   if(['holdings','transactions','sip','watchlist'].includes(section))section='overview';
   if($('holdingsReadingHeader'))$('holdingsReadingHeader').hidden=true;
@@ -9120,3 +9121,11 @@ initLifeExperiences();
 // Start authenticated SarNi only after all module declarations are initialized.
 // Previously init() ran before sariWords and other Life Experience consts.
 init();
+
+
+// SarNi Stock Diary interface: reuse authenticated API, no local token duplication.
+window.SarniStockBridge={
+  call:function(action,payload){return api(action,payload||{});},
+  session:function(){return {signedIn:!!state.token,username:state.username||''};},
+  navigate:function(section){return switchSection(section);}
+};

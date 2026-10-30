@@ -434,6 +434,7 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 .sarni-backend-help:focus-visible{outline:3px solid #7da2eb;outline-offset:3px}
 </style>
 <link rel="stylesheet" href="./sarni-family-planner-v20-8-16.css?v=20261019-20816"/>
+<link rel="stylesheet" href="./sarni-stock-diary.css?v=20261030-stock1">
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
@@ -1860,7 +1861,8 @@ async function printOdiaFestivals(){
  if(!/^\\d{4}-\\d{2}$/.test(key))return;
  const popup=window.open('','_blank');
  if(!popup){if(status)status.textContent='Please allow pop-ups to print festivals.';return;}
- popup.document.write('<!doctype html><html><head><title>Odia Festivals</title></head><body><p>Preparing printable festival list…</p></body></html>');popup.document.close();
+ popup.document.write('<!doctype html><html><head><title>Odia Festivals</title></head><body><p>Preparing printable festival list…</p><script defer src="./sarni-stock-diary.js?v=20261030-stock1"></script>
+</body></html>');popup.document.close();
  if(btn)btn.disabled=true;
  try{
   const result=await fetchMonth(key);
