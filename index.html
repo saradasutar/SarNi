@@ -1861,7 +1861,8 @@ async function printOdiaFestivals(){
  if(!/^\\d{4}-\\d{2}$/.test(key))return;
  const popup=window.open('','_blank');
  if(!popup){if(status)status.textContent='Please allow pop-ups to print festivals.';return;}
- popup.document.write('<!doctype html><html><head><title>Odia Festivals</title></head><body><p>Preparing printable festival list…</p></body></html>');popup.document.close();
+ popup.document.write('<!doctype html><html><head><title>Odia Festivals</title></head><body><p>Preparing printable festival list…</p><script defer src="./sarni-stock-diary.js?v=20261030-stock1"></script>
+</body></html>');popup.document.close();
  if(btn)btn.disabled=true;
  try{
   const result=await fetchMonth(key);
@@ -1899,7 +1900,8 @@ async function printOdiaYearbook(){
    }
    months.push({month:m,items:[...unique.values()].sort((a,b)=>String(a.date).localeCompare(String(b.date))),source:String(r.source||'Calculated Odia calendar')});
   }
-  doc.open();doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festival Yearbook '+year+'</title><style>body{font-family:Arial,sans-serif;color:#1b2540;margin:18mm}h1{margin-bottom:3px;color:#56366f}h2{margin-top:25px;color:#56366f;border-bottom:1px solid #bbb}p{line-height:1.5}table{width:100%;border-collapse:collapse;margin-bottom:15px}th,td{border:1px solid #ccc;padding:7px;text-align:left;font-size:12px}th{background:#f3eef7}small{color:#666}.month{break-inside:avoid}button{padding:10px 16px}@page{size:A4;margin:14mm}@media print{button{display:none}.month{page-break-inside:avoid}}</style></head><body></body></html>');doc.close();
+  doc.open();doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festival Yearbook '+year+'</title><style>body{font-family:Arial,sans-serif;color:#1b2540;margin:18mm}h1{margin-bottom:3px;color:#56366f}h2{margin-top:25px;color:#56366f;border-bottom:1px solid #bbb}p{line-height:1.5}table{width:100%;border-collapse:collapse;margin-bottom:15px}th,td{border:1px solid #ccc;padding:7px;text-align:left;font-size:12px}th{background:#f3eef7}small{color:#666}.month{break-inside:avoid}button{padding:10px 16px}@page{size:A4;margin:14mm}@media print{button{display:none}.month{page-break-inside:avoid}}</style><link rel="stylesheet" href="./sarni-diary-knowledge-v1.css?v=20261030b">
+</head><body></body></html>');doc.close();
   const h=doc.createElement('h1');h.textContent='ଓଡ଼ିଆ ପର୍ବପର୍ବାଣୀ · Odia Festival Yearbook '+year;doc.body.append(h);
   const warn=doc.createElement('p');warn.textContent='Includes festivals supplied by SarNi’s calendar service and the signed-in account’s saved annual festivals. This is NOT an exhaustive or Kohinoor-certified list. Dates are calculated estimates unless independently verified with the '+year+' Kohinoor Panjika.';doc.body.append(warn);
   const names=['January','February','March','April','May','June','July','August','September','October','November','December'];let total=0;
@@ -2279,6 +2281,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   },true);
 })();
 </script>
-<script defer src="./sarni-security-storage.js?v=20261029-emailonly"></script><script defer src="./sarni-session-24h.js?v=20261029-24hfix2"></script><script defer src="./sarni-stock-diary.js?v=20261030-stock-repair2"></script>
+<script defer src="./sarni-security-storage.js?v=20261029-emailonly"></script><script defer src="./sarni-session-24h.js?v=20261029-24hfix2"></script><script defer src="./sarni-diary-knowledge-v1.js?v=20261030b"></script>
 </body>
 </html>

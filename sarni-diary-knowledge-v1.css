@@ -1,0 +1,31 @@
+/* SarNi Diary & Knowledge v1 — additive display only. */
+html.sarni-dk-ready #sarniSidebarPrimary > [data-section="stockDiary"],
+html.sarni-dk-ready #sarniSidebarPrimary > [data-sd-only="wisdom"]{display:none!important}
+.sarni-dk-switcher{--dk-ink:#18334d;display:block;margin:0 0 19px;padding:16px;border:1px solid #d9e4eb;border-radius:20px;background:linear-gradient(120deg,#f0faf8,#f5f6ff 95%);box-shadow:0 7px 24px rgba(35,56,72,.05);color:var(--dk-ink)}
+.sarni-dk-heading{display:flex;gap:11px;align-items:center;margin:0 2px 13px}
+.sarni-dk-heading-icon{border-radius:13px;width:39px;height:39px;display:grid;place-items:center;color:#fff;background:linear-gradient(130deg,#0a827c,#6d58d5);font-size:21px;flex-shrink:0}
+.sarni-dk-heading strong{display:block;font-size:16px;font-weight:850;line-height:1.25;color:#173449}
+.sarni-dk-heading small{display:block;font-size:12px;color:#536e7f;line-height:1.5;margin-top:2px}
+.sarni-dk-build{margin-left:auto;letter-spacing:1.2px;font-weight:750;font-size:10px;color:#5c7891}
+.sarni-dk-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.sarni-dk-options button{appearance:none;cursor:pointer;border:1px solid #d9e5e7;border-radius:13px;padding:13px 14px;display:flex;align-items:center;gap:11px;text-align:left;background:rgba(255,255,255,.93);color:#26475c;box-shadow:0 2px 5px rgba(16,40,58,.035);transition:border-color .16s,background .16s,box-shadow .16s;min-width:0}
+.sarni-dk-options button>span:first-child{font-size:22px;flex-shrink:0;color:#277d83}
+.sarni-dk-options button>span:last-child{min-width:0}
+.sarni-dk-options strong{display:block;line-height:1.4;font-size:13.5px;letter-spacing:.05px;font-weight:800}
+.sarni-dk-options small{display:block;font-size:11px;color:#617b90;line-height:1.35;margin-top:2px}
+.sarni-dk-options button:hover{border-color:#53a9a0;background:#fff}
+.sarni-dk-options button.active{border-color:#087f70;background:#e7f6f2;box-shadow:0 0 0 1px #087f70 inset}
+.sarni-dk-options button.active>span:first-child,.sarni-dk-options button.active strong{color:#086a61}
+.sarni-dk-options button:focus-visible{outline:3px solid #927bed;outline-offset:2px}
+/* Each area keeps only its relevant second-level tools, avoiding duplicated Wisdom navigation. */
+html.sarni-dk-stock #sdTabs [data-tab="wisdom"],
+html.sarni-dk-stock #sdTabs [data-tab="book"],
+html.sarni-dk-wisdom #sdTabs [data-tab="companies"],
+html.sarni-dk-wisdom #sdTabs [data-tab="notes"],
+html.sarni-dk-wisdom #sdTabs [data-tab="reviews"]{display:none!important}
+/* The stock section's own heading is nested below the unified switcher. */
+html.sarni-dk-stock #stockDiarySection .sd-hero,
+html.sarni-dk-wisdom #stockDiarySection .sd-hero{margin-top:0}
+@media(max-width:950px){.sarni-dk-options button{padding:11px;gap:7px}.sarni-dk-options strong{font-size:12.5px}.sarni-dk-options small{font-size:10.5px}}
+@media(max-width:650px){.sarni-dk-switcher{padding:12px;margin-bottom:14px;border-radius:15px}.sarni-dk-heading{margin-bottom:9px}.sarni-dk-heading strong{font-size:14px}.sarni-dk-build{display:none}.sarni-dk-options{gap:6px}.sarni-dk-options button{padding:9px 5px;flex-direction:column;text-align:center;gap:3px;border-radius:10px;min-height:75px;justify-content:center}.sarni-dk-options button>span:first-child{font-size:19px}.sarni-dk-options strong{font-size:11px;line-height:1.2}.sarni-dk-options small{display:none}}
+@media(prefers-reduced-motion:reduce){.sarni-dk-options button{transition:none}}
