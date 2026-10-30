@@ -125,10 +125,10 @@ html.sarni-personal-only .gpf-empty{background:#f8fbff;border:1px dashed #9fb9d9
 </style>
 <link href="https://script.google.com" rel="preconnect" crossorigin="anonymous"/>
 <link href="https://script.google.com" rel="dns-prefetch"/>
-<link as="style" href="./styles.css?v=20261019-20819-book-safe" rel="preload"/>
+<link as="style" href="./styles.css?v=20261030-health-safe1" rel="preload"/>
 <link rel="stylesheet" href="./sarni-quality.css?v=20261025" media="all"/>
 <link as="script" href="./app-v20-8-19.js?v=20261019-20819-book-safe" rel="preload"/>
-<link href="./styles.css?v=20261019-20819-book-safe" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
+<link href="./styles.css?v=20261030-health-safe1" onerror="sarNiAssetFailed('css')" onload="sarNiAssetLoaded('css')" rel="stylesheet"/>
 <style id="sarniOdiaStyles">
 .sarni-odia-settings{margin:12px 0 16px;border:1px solid #e8cae5;border-radius:15px;padding:15px;background:linear-gradient(140deg,#fff9ff,#fffdfb);min-width:0}
 .sarni-odia-settings legend{padding:0 8px;color:#743c78;font-weight:850;font-size:14px}
@@ -435,6 +435,23 @@ body.sarni-premium-layout .sarni-sidebar-admin #adminSecurityShortcut.active{bac
 </style>
 <link rel="stylesheet" href="./sarni-family-planner-v20-8-16.css?v=20261019-20816"/>
 <link rel="stylesheet" href="./sarni-stock-diary.css?v=20261030-stock1">
+<link rel="stylesheet" href="./sarni-diary-knowledge-v1.css?v=20261030-health-safe1">
+<style id="sarniSafeHealthGuard20261030">
+/* SARNI_SAFE_HEALTH_REPAIR_20261030 */
+html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden,html body #loginView[hidden]{display:none!important;visibility:hidden!important;pointer-events:none!important}
+@supports selector(body:has(#loginView:not(.hidden))){body:has(#loginView:not(.hidden)) #appView{display:none!important;visibility:hidden!important;pointer-events:none!important}}
+#loginView .brand-panel h1{color:#f8f5ff!important;text-shadow:0 2px 14px rgba(0,0,0,.17)!important}
+#loginView .brand-panel .eyebrow{color:#aff1e7!important}
+#loginView #loginForm .ssec-forgot-password{position:static!important;inset:auto!important;right:auto!important;top:auto!important;transform:none!important;display:inline-flex!important;align-items:center!important;max-width:100%!important;width:auto!important;min-height:40px!important;margin:0!important;padding:7px 0!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#3d41b5!important;font:700 13px/1.45 system-ui,-apple-system,Segoe UI,sans-serif!important;text-decoration:underline!important;text-underline-offset:3px!important;white-space:normal!important;text-align:left!important;cursor:pointer!important}
+#loginView #loginForm .ssec-forgot-password:focus-visible{outline:2px solid #463ecb!important;outline-offset:3px!important}
+#loginView #loginForm .login-options{display:flex!important;gap:10px!important;flex-wrap:wrap!important;justify-content:space-between!important;align-items:center!important;min-width:0!important}
+#loginView #loginForm .remember-note,#loginView #loginForm .remember-user{white-space:normal!important;min-width:0!important}
+#loginView #loginForm .password-wrap [data-toggle-password]{position:absolute!important;right:10px!important;top:50%!important;transform:translateY(-50%)!important}
+#loginView #loginForm .password-wrap input{padding-right:72px!important}
+#loginView #loginForm input:focus-visible,#loginView #loginForm button:focus-visible{outline-offset:2px}
+@media(max-width:700px){#loginView #loginForm .login-options{flex-direction:column!important;align-items:flex-start!important}#loginView .brand-panel h1{font-size:clamp(30px,7.5vw,44px)!important}}
+/* END_SARNI_SAFE_HEALTH_REPAIR_20261030 */
+</style>
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
@@ -1861,8 +1878,7 @@ async function printOdiaFestivals(){
  if(!/^\\d{4}-\\d{2}$/.test(key))return;
  const popup=window.open('','_blank');
  if(!popup){if(status)status.textContent='Please allow pop-ups to print festivals.';return;}
- popup.document.write('<!doctype html><html><head><title>Odia Festivals</title></head><body><p>Preparing printable festival list…</p><script defer src="./sarni-stock-diary.js?v=20261030-stock1"></script>
-</body></html>');popup.document.close();
+ popup.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festivals</title></head><body><p>Preparing printable festival list...</p></body></html>');popup.document.close();
  if(btn)btn.disabled=true;
  try{
   const result=await fetchMonth(key);
@@ -1900,8 +1916,7 @@ async function printOdiaYearbook(){
    }
    months.push({month:m,items:[...unique.values()].sort((a,b)=>String(a.date).localeCompare(String(b.date))),source:String(r.source||'Calculated Odia calendar')});
   }
-  doc.open();doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festival Yearbook '+year+'</title><style>body{font-family:Arial,sans-serif;color:#1b2540;margin:18mm}h1{margin-bottom:3px;color:#56366f}h2{margin-top:25px;color:#56366f;border-bottom:1px solid #bbb}p{line-height:1.5}table{width:100%;border-collapse:collapse;margin-bottom:15px}th,td{border:1px solid #ccc;padding:7px;text-align:left;font-size:12px}th{background:#f3eef7}small{color:#666}.month{break-inside:avoid}button{padding:10px 16px}@page{size:A4;margin:14mm}@media print{button{display:none}.month{page-break-inside:avoid}}</style><link rel="stylesheet" href="./sarni-diary-knowledge-v1.css?v=20261030b">
-</head><body></body></html>');doc.close();
+  doc.open();doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festival Yearbook '+year+'</title><style>body{font-family:Arial,sans-serif;color:#1b2540;margin:18mm}h1{margin-bottom:3px;color:#56366f}h2{margin-top:25px;color:#56366f;border-bottom:1px solid #bbb}p{line-height:1.5}table{width:100%;border-collapse:collapse;margin-bottom:15px}th,td{border:1px solid #ccc;padding:7px;text-align:left;font-size:12px}th{background:#f3eef7}small{color:#666}.month{break-inside:avoid}button{padding:10px 16px}@page{size:A4;margin:14mm}@media print{button{display:none}.month{page-break-inside:avoid}}</style></head><body></body></html>');doc.close();
   const h=doc.createElement('h1');h.textContent='ଓଡ଼ିଆ ପର୍ବପର୍ବାଣୀ · Odia Festival Yearbook '+year;doc.body.append(h);
   const warn=doc.createElement('p');warn.textContent='Includes festivals supplied by SarNi’s calendar service and the signed-in account’s saved annual festivals. This is NOT an exhaustive or Kohinoor-certified list. Dates are calculated estimates unless independently verified with the '+year+' Kohinoor Panjika.';doc.body.append(warn);
   const names=['January','February','March','April','May','June','July','August','September','October','November','December'];let total=0;
@@ -2281,6 +2296,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   },true);
 })();
 </script>
-<script defer src="./sarni-security-storage.js?v=20261029-emailonly"></script><script defer src="./sarni-session-24h.js?v=20261029-24hfix2"></script><script defer src="./sarni-diary-knowledge-v1.js?v=20261030b"></script>
+<script defer src="./sarni-security-storage.js?v=20261030-health-safe1"></script><script defer src="./sarni-session-24h.js?v=20261029-24hfix2"></script><script defer src="./sarni-diary-knowledge-v1.js?v=20261030b"></script>
+<script defer src="./sarni-stock-diary.js?v=20261030-health-safe1"></script>
 </body>
 </html>

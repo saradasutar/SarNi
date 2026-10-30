@@ -11185,3 +11185,18 @@ html.sarni-personal-only #investmentOverviewContent,html.sarni-personal-only #gp
 .sarni-recent-row div{display:grid;gap:4px;min-width:0}.sarni-recent-row strong{font-size:.92rem;overflow-wrap:anywhere}.sarni-recent-row small{color:#687b95;font-size:.74rem}.sarni-recent-row b{white-space:nowrap;color:#333b7c}
 .sarni-shared-author{font-size:.76rem;color:#516386;font-weight:700}
 @media(max-width:860px){.sarni-home-recent-grid{grid-template-columns:1fr;gap:12px}.sarni-recent-card{padding:14px}}
+
+/* SARNI_SAFE_HEALTH_REPAIR_20261030 */
+html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden,html body #loginView[hidden]{display:none!important;visibility:hidden!important;pointer-events:none!important}
+@supports selector(body:has(#loginView:not(.hidden))){body:has(#loginView:not(.hidden)) #appView{display:none!important;visibility:hidden!important;pointer-events:none!important}}
+#loginView .brand-panel h1{color:#f8f5ff!important;text-shadow:0 2px 14px rgba(0,0,0,.17)!important}
+#loginView .brand-panel .eyebrow{color:#aff1e7!important}
+#loginView #loginForm .ssec-forgot-password{position:static!important;inset:auto!important;right:auto!important;top:auto!important;transform:none!important;display:inline-flex!important;align-items:center!important;max-width:100%!important;width:auto!important;min-height:40px!important;margin:0!important;padding:7px 0!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#3d41b5!important;font:700 13px/1.45 system-ui,-apple-system,Segoe UI,sans-serif!important;text-decoration:underline!important;text-underline-offset:3px!important;white-space:normal!important;text-align:left!important;cursor:pointer!important}
+#loginView #loginForm .ssec-forgot-password:focus-visible{outline:2px solid #463ecb!important;outline-offset:3px!important}
+#loginView #loginForm .login-options{display:flex!important;gap:10px!important;flex-wrap:wrap!important;justify-content:space-between!important;align-items:center!important;min-width:0!important}
+#loginView #loginForm .remember-note,#loginView #loginForm .remember-user{white-space:normal!important;min-width:0!important}
+#loginView #loginForm .password-wrap [data-toggle-password]{position:absolute!important;right:10px!important;top:50%!important;transform:translateY(-50%)!important}
+#loginView #loginForm .password-wrap input{padding-right:72px!important}
+#loginView #loginForm input:focus-visible,#loginView #loginForm button:focus-visible{outline-offset:2px}
+@media(max-width:700px){#loginView #loginForm .login-options{flex-direction:column!important;align-items:flex-start!important}#loginView .brand-panel h1{font-size:clamp(30px,7.5vw,44px)!important}}
+/* END_SARNI_SAFE_HEALTH_REPAIR_20261030 */
