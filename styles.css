@@ -11200,3 +11200,123 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 #loginView #loginForm input:focus-visible,#loginView #loginForm button:focus-visible{outline-offset:2px}
 @media(max-width:700px){#loginView #loginForm .login-options{flex-direction:column!important;align-items:flex-start!important}#loginView .brand-panel h1{font-size:clamp(30px,7.5vw,44px)!important}}
 /* END_SARNI_SAFE_HEALTH_REPAIR_20261030 */
+
+/* BEGIN SARNI_SINGLE_SCROLL_SIDEBAR_20261030
+   Purpose: eliminate the nested (menu-within-sidebar) scroll pane.
+   All existing buttons, permissions, forms and backend calls are retained.
+   At short screen heights, ONE scrollbar on the full sidebar remains as a fallback.
+*/
+@media screen and (min-width: 861px) {
+  .app-view aside.sidebar {
+    box-sizing: border-box !important;
+    position: sticky !important;
+    top: 0 !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 12px 12px 10px !important;
+    gap: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important; /* the ONE permitted fallback scroll */
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(196,212,228,.5) transparent;
+  }
+  .app-view aside.sidebar::-webkit-scrollbar{width:5px}
+  .app-view aside.sidebar::-webkit-scrollbar-thumb{background:rgba(196,212,228,.5);border-radius:8px}
+  .app-view aside.sidebar .side-nav,
+  .app-view aside.sidebar #sarniSidebarPrimary {
+    box-sizing: border-box !important;
+    flex: 0 0 auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    height: auto !important;
+    display: grid;
+    gap: 3px !important;
+    padding-top: 6px !important;
+    padding-bottom: 3px !important;
+    overflow: visible !important; /* remove nested rolling navigation pane */
+    scrollbar-width: none !important;
+    overscroll-behavior: auto !important;
+  }
+  .app-view aside.sidebar .side-brand {
+    min-height: 54px !important;
+    padding: 0 3px 9px !important;
+    flex: 0 0 auto !important;
+  }
+  .app-view aside.sidebar .sarni-sidebar-label {
+    margin: 0 0 4px !important;
+    font-size: 10px !important;
+    letter-spacing: .11em;
+  }
+  .app-view aside.sidebar .side-nav .nav-item,
+  .app-view aside.sidebar .diary-left-shortcuts .nav-item {
+    box-sizing: border-box !important;
+    min-height: 38px !important;
+    height: auto !important;
+    padding: 7px 10px !important;
+    line-height: 1.3 !important;
+    font-size: 13px !important;
+    font-weight: 750 !important;
+    white-space: normal !important;
+    text-align: left !important;
+  }
+  .app-view aside.sidebar .sarni-sidebar-note {
+    flex: 0 0 auto !important;
+    min-height: 0 !important;
+    margin: 5px 0 !important;
+  }
+  .app-view aside.sidebar .sarni-sidebar-compose-toggle {
+    min-height: 38px !important;
+    padding: 7px 10px !important;
+  }
+  .app-view aside.sidebar .sarni-sidebar-admin,
+  .app-view aside.sidebar .sidebar-session-card,
+  .app-view aside.sidebar .sidebar-foot {
+    flex: 0 0 auto !important;
+  }
+  .app-view aside.sidebar .admin-security-shortcut {
+    box-sizing: border-box !important;
+    min-height: 43px !important;
+    margin: 4px 0 !important;
+    padding: 7px 10px !important;
+  }
+  .app-view aside.sidebar .sidebar-session-card {
+    margin: 5px 3px !important;
+    padding: 8px 9px !important;
+    gap: 3px !important;
+  }
+  .app-view aside.sidebar .sidebar-foot {
+    margin-top: auto !important;
+    gap: 1px !important;
+    padding-bottom: 3px !important;
+  }
+  .app-view aside.sidebar .sidebar-foot .nav-item {
+    min-height: 32px !important;
+    padding: 5px 10px !important;
+  }
+  /* Keep expanded sidebar labels; existing user-controlled collapse stays supported. */
+  body.sidebar-compact .app-view aside.sidebar .side-nav .nav-item {
+    font-size: 0 !important;
+    justify-content: center !important;
+  }
+  body.sidebar-compact .app-view aside.sidebar .side-nav .nav-item > span {
+    font-size: 16px !important;
+  }
+}
+@media screen and (min-width:861px) and (max-height:800px) {
+  .app-view aside.sidebar {padding: 8px 10px !important}
+  .app-view aside.sidebar .side-brand{min-height:45px!important;padding-bottom:5px!important}
+  .app-view aside.sidebar .side-nav,
+  .app-view aside.sidebar #sarniSidebarPrimary{gap:1px!important;padding-top:2px!important}
+  .app-view aside.sidebar .side-nav .nav-item,
+  .app-view aside.sidebar .diary-left-shortcuts .nav-item {min-height:33px!important;padding:5px 8px!important;font-size:12.5px!important}
+  .app-view aside.sidebar .sarni-sidebar-compose-toggle{min-height:34px!important;padding:5px 8px!important}
+  .app-view aside.sidebar .admin-security-shortcut{min-height:37px!important;margin:2px 0!important;padding:4px 8px!important}
+  .app-view aside.sidebar .sidebar-session-card{padding:5px 7px!important;margin:3px 2px!important}
+  .app-view aside.sidebar .sidebar-foot .nav-item{min-height:29px!important}
+}
+/* Mobile: retain SarNi's existing drawer/bottom-tab design untouched. */
+/* END SARNI_SINGLE_SCROLL_SIDEBAR_20261030 */
