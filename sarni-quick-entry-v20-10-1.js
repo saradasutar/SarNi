@@ -12,13 +12,13 @@ function focus(id,selector){const pane=$(id);if(!pane)return false;for(let p=pan
 function closeMore(){if(typeof closeSarNiMobileMore==='function')closeSarNiMobileMore();const open=$('sarniMobileAddSheet');if(open&&!open.classList.contains('hidden'))$('sarniMobileAddClose')?.click();}
 function openPanel(k){if(!signedIn())return;
  kind=['expense','diary','stock'].includes(k)?k:'expense';closeMore();
- $('sarniQcTitle').textContent=kind==='expense'?'Quick Expense':kind==='stock'?'Quick Stock Note':'Quick Diary';
+ $('sarniQcTitle').textContent=kind==='expense'?'Add expense':kind==='stock'?'Add stock note':'Add diary';$('sarniQcCardTitle').textContent=kind==='expense'?'Quick expense':kind==='stock'?'Quick stock note':'Quick diary';
  $('sarniQcExpense').hidden=kind!=='expense';$('sarniQcNote').hidden=kind==='expense';$('sarniQcCompanyWrap').hidden=kind!=='stock';
- [...f.elements].forEach(x=>{if(!x.name)return; if(['amount','category','reason'].includes(x.name))x.required=kind==='expense';if(x.name==='body')x.required=kind!=='expense';if(x.name==='companyId')x.required=kind==='stock';});
+ [...f.elements].forEach(x=>{if(!x.name)return; if(['amount','category','reason'].includes(x.name))x.required=kind==='expense';if(x.name==='body')x.required=kind!=='expense';if(x.name==='companyId')x.required=kind==='stock';if(x.name==='entryDate')x.required=kind==='expense';if(x.name==='noteDate')x.required=kind!=='expense';});
  document.querySelectorAll('[data-qc-tab]').forEach(b=>{const yes=b.dataset.qcTab===kind;b.setAttribute('aria-pressed',String(yes));b.classList.toggle('active',yes);});
- if(!f.elements.entryDate.value)f.elements.entryDate.value=stamp();
+ if(!f.elements.entryDate.value)f.elements.entryDate.value=stamp();if(!f.elements.noteDate.value)f.elements.noteDate.value=stamp();
  if(kind==='expense')loadCategories();if(kind==='stock')void loadCompanies();
- notice('');dialog.showModal?.();if(!dialog.open)dialog.setAttribute('open','');
+ notice('');if(!dialog.open){if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');}
  setTimeout(()=>{(kind==='expense'?f.elements.amount:kind==='stock'&&loadedCompanies?$('sarniQcCompany'):f.elements.body)?.focus();},35);
 }
 function closePanel(){if(busy)return;if(dialog.open&&dialog.close)dialog.close();else dialog.removeAttribute('open');}
@@ -48,7 +48,7 @@ async function save(e){e.preventDefault();if(busy||!signedIn())return;
  if(navigator.onLine===false){notice('Offline: this quick form cannot confirm saving. Use Full Entry to save a local draft.',true);return;}
  busy=true;$('sarniQcSave').disabled=true;notice('Saving securely…');
  const owner=String(state.username||state.user?.username||'');
- try{let r;const date=f.elements.entryDate.value||stamp();
+ try{let r;const date=(kind==='expense'?f.elements.entryDate.value:f.elements.noteDate.value)||stamp();
  if(kind==='expense'){
   r=await api('saveExpense',{record:{dateSpent:date,amount:Number(f.elements.amount.value),category:f.elements.category.value,subcategory:f.elements.subcategory.value,reason:f.elements.reason.value.trim(),debitedFrom:f.elements.debitedFrom.value.trim(),paidTo:f.elements.paidTo.value.trim(),notes:f.elements.expenseNotes.value.trim()}},{retry:false});
   if(r?.ok&&r.data){if(typeof applyBootstrap==='function')applyBootstrap(r.data);}

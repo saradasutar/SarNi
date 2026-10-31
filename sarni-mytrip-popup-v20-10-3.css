@@ -1,0 +1,59 @@
+/* SarNi 20.10.3 — MyTrip-inspired compact Quick Entry. Presentation only: existing authenticated API saves. */
+.sarni-trip-inspired.sarni-qc-dialog{
+ --qc-zoom:1;box-sizing:border-box;width:min(540px,calc(100vw - 24px));max-width:540px;
+ max-height:min(91dvh,940px);padding:0;border:1px solid rgba(215,225,234,.8);
+ border-radius:25px;background:#fff;color:#152238;overflow:auto;overscroll-behavior:contain;
+ box-shadow:0 24px 90px rgba(10,30,52,.29);font-family:inherit;
+}
+.sarni-trip-inspired.sarni-qc-dialog::backdrop{background:rgba(20,35,56,.54);backdrop-filter:blur(4px)}
+.sarni-trip-inspired *, .sarni-trip-inspired *::before,.sarni-trip-inspired *::after{box-sizing:border-box}
+.sarni-trip-inspired .sarni-qc-form{display:block;padding:22px 23px 12px;margin:0}
+.sarni-trip-inspired .sarni-qc-form>.sarni-qc-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:10px 0 18px;border-bottom:1px solid #edf0f2;margin-bottom:20px}
+.sarni-trip-inspired .sarni-qc-header-titles small{display:block;color:#087c72;font-size:calc(11px * var(--qc-zoom));font-weight:850;letter-spacing:.075em}
+.sarni-trip-inspired .sarni-qc-header-titles h2{font-size:calc(23px * var(--qc-zoom));color:#142239;font-weight:820;line-height:1.17;margin:5px 0 0}
+.sarni-trip-inspired .sarni-qc-header-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sarni-trip-inspired .sarni-qc-scale{display:flex;align-items:center;justify-content:center;gap:3px;padding:4px;border:1px solid #e3e8ec;border-radius:12px;background:#fff}
+.sarni-trip-inspired .sarni-qc-scale button{padding:3px 5px!important;min-width:28px;min-height:30px;border:0!important;border-radius:7px;font-size:17px!important;font-weight:800;color:#217b74;background:transparent;cursor:pointer;line-height:1}
+.sarni-trip-inspired .sarni-qc-scale button:hover{background:#e7f5f0}
+.sarni-trip-inspired #sarniQcScaleDisplay{font-size:11px;color:#455265;font-weight:800;min-width:29px;text-align:center}
+.sarni-trip-inspired #sarniQcClose{height:40px;width:40px;background:#f2f3f3;color:#101e30;border-radius:50%;border:0;font-size:23px;line-height:1;cursor:pointer}
+.sarni-trip-inspired .sarni-qc-card{border:1px solid #dce6e6;border-radius:22px;padding:19px 20px 14px;box-shadow:0 2px 13px rgba(9,39,68,.035);background:#fff}
+.sarni-trip-inspired .sarni-qc-card-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:3px 1px 12px}
+.sarni-trip-inspired .sarni-qc-card-heading small{font-size:calc(10px * var(--qc-zoom));font-weight:840;letter-spacing:.075em;color:#6b51d5}
+.sarni-trip-inspired .sarni-qc-card-heading h3{font-size:calc(27px * var(--qc-zoom));letter-spacing:-.035em;font-weight:850;margin:4px 0;color:#172238;line-height:1.14}
+.sarni-trip-inspired .sarni-qc-private{border:1px solid #d7e4e3;background:#f3f9f7;border-radius:10px;padding:7px;color:#18746b;font-size:10px;font-weight:850;letter-spacing:.04em}
+.sarni-trip-inspired .sarni-qc-tabs{margin:0 0 15px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:#f3f6f5;border-radius:12px;padding:4px;gap:5px}
+.sarni-trip-inspired .sarni-qc-tabs button{border-radius:9px;font-size:calc(12px * var(--qc-zoom));font-weight:750;min-height:41px;line-height:1.1;padding:8px 2px;color:#526373;white-space:normal}
+.sarni-trip-inspired .sarni-qc-tabs button.active{color:#087b70;background:#fff;box-shadow:0 1px 6px rgba(14,38,49,.12)}
+.sarni-trip-inspired .sarni-qc-fields{gap:13px}
+.sarni-trip-inspired .sarni-qc-fields label{font-size:calc(13px * var(--qc-zoom));font-weight:770;line-height:1.2;color:#29475a;gap:6px}
+.sarni-trip-inspired .sarni-qc-fields input:not([type=checkbox]),.sarni-trip-inspired .sarni-qc-fields select,.sarni-trip-inspired .sarni-qc-fields textarea{min-height:50px;border:1.5px solid #c5d8da;border-radius:12px;background:#fbfdfc;color:#1c3346;padding:10px 13px;box-shadow:none;font-size:calc(16px * var(--qc-zoom));max-width:100%;width:100%}
+.sarni-trip-inspired .sarni-qc-fields input:focus,.sarni-trip-inspired .sarni-qc-fields select:focus,.sarni-trip-inspired .sarni-qc-fields textarea:focus{border-color:#21b5a6;outline:2px solid rgba(33,181,166,.16);outline-offset:1px}
+.sarni-trip-inspired .sarni-qc-fields input::placeholder,.sarni-trip-inspired .sarni-qc-fields textarea::placeholder{color:#84939d;opacity:1}
+.sarni-trip-inspired .sarni-qc-amount-label{margin:0!important}
+.sarni-trip-inspired .sarni-qc-amount-wrap{display:flex;align-items:center;border:2px solid #31b9aa;border-radius:16px;background:#f2fbf9;padding:7px 12px;gap:11px;min-height:74px}
+.sarni-trip-inspired .sarni-qc-amount-wrap>span{font-size:31px;font-weight:900;color:#078776;line-height:1}
+.sarni-trip-inspired .sarni-qc-amount-wrap input.sarni-qc-amount{border:1.5px solid #ccdade!important;border-radius:10px!important;min-height:50px!important;height:50px;background:#fff!important;font-size:calc(27px * var(--qc-zoom))!important;font-weight:780;padding:6px 11px!important;flex:1}
+.sarni-trip-inspired .sarni-qc-grid-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:end}
+.sarni-trip-inspired .sarni-qc-advanced{display:block;border:1px solid #dfebe6;border-radius:13px;padding:0;background:#fbfdfc;margin:0}
+.sarni-trip-inspired .sarni-qc-advanced summary{display:flex;justify-content:space-between;align-items:center;min-height:41px;padding:8px 12px;color:#24685d;font-size:calc(13px * var(--qc-zoom));font-weight:800;cursor:pointer;list-style:none}
+.sarni-trip-inspired .sarni-qc-advanced summary::-webkit-details-marker{display:none}
+.sarni-trip-inspired .sarni-qc-advanced[open] summary span{transform:rotate(180deg)}
+.sarni-trip-inspired .sarni-qc-advanced-body{display:grid;gap:12px;padding:3px 12px 12px}
+.sarni-trip-inspired #sarniQcNote textarea{min-height:132px;resize:vertical}
+.sarni-trip-inspired .sarni-qc-check{display:flex!important;align-items:center;min-height:50px;gap:8px!important;font-size:calc(12px * var(--qc-zoom))!important;padding:4px 0}
+.sarni-trip-inspired .sarni-qc-check input{height:20px;width:20px;flex-shrink:0;accent-color:#14897b}
+.sarni-trip-inspired .sarni-qc-note-date{align-items:center}
+.sarni-trip-inspired #sarniQcStatus{display:block;min-height:18px;font-size:calc(12px * var(--qc-zoom));margin:7px 0 0;line-height:1.4}
+.sarni-trip-inspired .sarni-qc-footer{display:flex;gap:10px;position:sticky;bottom:-12px;background:#fff;padding:14px 0 12px;border-top:0;box-shadow:0 -8px 15px rgba(255,255,255,.96);align-items:center;z-index:1}
+.sarni-trip-inspired .sarni-qc-footer button{min-height:49px;border-radius:12px;font-size:calc(13px * var(--qc-zoom));font-weight:790;cursor:pointer}
+.sarni-trip-inspired .sarni-qc-secondary{flex:0 1 auto;padding:9px 12px;background:#fff;color:#235e62;border:1.5px solid #c6dbd9}
+.sarni-trip-inspired .sarni-qc-save{flex:1;min-width:0;padding:9px 12px;color:#fff;background:#087b70;border:1.5px solid #087b70;box-shadow:0 4px 10px rgba(8,123,112,.16)}
+.sarni-trip-inspired .sarni-qc-save:hover{background:#075f56}
+.sarni-trip-inspired [hidden]{display:none!important}
+.sarni-trip-inspired :focus-visible{outline:3px solid #23aeb0;outline-offset:2px}
+@media(max-width:550px){.sarni-trip-inspired.sarni-qc-dialog{width:calc(100vw - 16px);max-height:calc(100dvh - 26px);border-radius:20px}.sarni-trip-inspired .sarni-qc-form{padding:13px 13px 6px}.sarni-trip-inspired .sarni-qc-form>.sarni-qc-hero{margin-bottom:12px;padding:6px 0 12px}.sarni-trip-inspired .sarni-qc-card{padding:13px 12px;border-radius:16px}.sarni-trip-inspired .sarni-qc-header-actions{gap:4px}.sarni-trip-inspired .sarni-qc-private{padding:5px;font-size:9px}.sarni-trip-inspired .sarni-qc-footer{bottom:-6px;padding:11px 0}.sarni-trip-inspired .sarni-qc-grid-two{gap:8px}.sarni-trip-inspired .sarni-qc-secondary{padding:9px 7px}}
+@media(max-width:340px){.sarni-trip-inspired .sarni-qc-grid-two{grid-template-columns:1fr}.sarni-trip-inspired .sarni-qc-scale{display:none}.sarni-trip-inspired .sarni-qc-footer button{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.sarni-trip-inspired.sarni-qc-dialog::backdrop{backdrop-filter:none}}
+/* A mobile date control needs its own full-width row to avoid native picker overlap. */
+@media(max-width:420px){.sarni-trip-inspired .sarni-qc-grid-two{grid-template-columns:minmax(0,1fr)}.sarni-trip-inspired .sarni-qc-note-date{grid-template-columns:minmax(0,1fr)}.sarni-trip-inspired .sarni-qc-fields input[type=date]{padding-right:12px!important}}
