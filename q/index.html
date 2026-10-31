@@ -46,7 +46,7 @@ function render(){
  if(mode==='expense'){
  $('fields').innerHTML='<label for="qeAmount">Amount</label><div class="amountbox"><span aria-hidden="true">₹</span><input id="qeAmount" name="amount" type="number" inputmode="decimal" min="0.01" max="10000000" step=".01" required placeholder="0"></div>'+
  '<label for="qeReason">What was it for?</label><input id="qeReason" name="reason" maxlength="220" required placeholder="e.g. Lunch, groceries, taxi">'+
- '<label for="qePaidBy">Paid by / from</label><input id="qePaidBy" name="paidBy" maxlength="100" placeholder="Cash, UPI, card or name (optional)">'+
+ '<label for="qePaidBy">Paid by / from</label><input id="qePaidBy" name="paidBy" maxlength="100" required placeholder="Cash, UPI, card or name">'+
  '<div class="grid"><div><label for="qeCategory">Category</label><select id="qeCategory" name="category" required><option value="">Choose category</option>'+opts+'</select></div><div><label for="qeDate">Date</label><input id="qeDate" name="dateSpent" type="date" value="'+today()+'" required></div></div>'+
  '<details class="advanced"><summary>More expense details <span>⌄</span></summary><div class="advanced-body">'+
  '<label for="qeSub">Subcategory</label><select id="qeSub" name="subcategory"><option value="">None</option></select>'+
@@ -57,7 +57,7 @@ function render(){
  const category=$('qeCategory'),sub=$('qeSub');category.onchange=()=>{const found=cats.find(v=>v.name===category.value),subs=found?.subcategories||[];sub.innerHTML='<option value="">None</option>'+subs.map(v=>'<option>'+safe(typeof v==='string'?v:v.name)+'</option>').join('');};
  if(access.allowNewHead){$('newHeadToggle').hidden=false;$('newHeadBtn').onclick=()=>{const box=$('newHeadBox');box.hidden=!box.hidden;category.required=box.hidden;category.disabled=!box.hidden;$('newHeadBtn').textContent=box.hidden?'＋ New expense head':'Use existing category';};}
  }else{
- $('fields').innerHTML=(mode==='stock'?'<label>Stock / company (optional)<input name="companyName" maxlength="120" placeholder="e.g. Company or ticker"></label>':'')+
+ $('fields').innerHTML=(mode==='stock'?'<label>Stock / company (reference only)<input name="companyName" maxlength="120" placeholder="e.g. Company or ticker"></label>':'')+
  '<label>Title (optional)<input name="title" maxlength="120" placeholder="Short heading"></label>'+
  '<label>What would you like to record?</label><textarea name="text" rows="5" maxlength="4500" required placeholder="Write your observation, reflection or lesson…"></textarea>'+
  '<div class="grid note-grid"><div><label>Date<input name="entryDate" type="date" value="'+today()+'" required></label></div><div><label class="inline-check"><input name="monthlyHighlight" type="checkbox"> Monthly highlight</label></div></div>'+
