@@ -1,110 +1,26 @@
-# SarNi — Personal Life Dashboard
+# SarNi — Personal Life Centre
 
-**Open the website:** https://saradasutar.github.io/SarNi/
+**Frontend:** v20.10.3 — MyTrip-style Quick Add popup and direct feature navigation.
 
-SarNi's frontend is hosted directly on GitHub Pages. Google Apps Script is the **backend service only**. Use the GitHub Pages address to sign in and navigate; do not open the Apps Script `/exec?app=1` link as the dashboard.
+**Live dashboard:** https://saradasutar.github.io/SarNi/
 
-## Current GitHub Pages frontend
+## Hosting and architecture
+- This public GitHub repository contains only **frontend** assets. `index.html` loads `app-v20-10-3.js`.
+- Google Apps Script provides authenticated backend API and private Google Sheets/Drive data.
+- The installed no-login Quick Expense app uses `quick-expense.html`, its supporting JavaScript, manifest, icons and service worker; these files must remain deployed.
+- Keep `config.js` and the existing Apps Script endpoint when updating; it is not bundled with every frontend release.
 
-- Frontend: **v20.8.19** (`index.html` loads `app-v20-8-19.js`)
-- Expected backend: **v3.17.30** — upload and deploy separately for original photos above 2 MB (verify against your active Apps Script deployment)
-- User interface: `styles.css`, `sarni-delight.css`, `sarni-delight.js`, and `sarni-entry-polish.css`
-- App installation: `manifest.webmanifest`
-- Frontend checks: [Site Check](./health.html)
-- Deployment notes and rollback: [Direct-hosting guide](./DIRECT-HOSTING-20261017.md)
+## Updating
+1. Backup the GitHub repository and existing Apps Script project.
+2. Copy all **clean frontend files** to the repository root, replacing matching files.
+3. Remove obsolete legacy files from GitHub **in the same commit** using the accompanying cleanup checklist, if applicable.
+4. Commit and publish. Check `health.html`, sign-in, Expense, Diary, Stock Notes, Calendar, Book Writing and no-login Quick Expense.
+5. Keep the previous Git commit as a rollback point.
 
-The existing dashboard includes personal expenses, GPF, diary, calendar/reminders, life experiences, smart paste, user management and mobile quick actions. Investments in stocks/MF/ETF are intended to be managed in the separate Analysis dashboard.
+## Backend safety
+- A frontend cleanup does **not** require changing `Code.gs` or recreating the spreadsheet.
+- Never run `setupSystem()` on an existing SarNi database.
+- Never commit private records, passwords, API secrets, photo originals, spreadsheets or Drive backups to this public repository.
+- Deleted repository files remain recoverable from Git history; deleting a file is not a security-erasure procedure.
 
-## Safety
-
-Do not run `setupSystem()` against the existing Google Sheet. Do not overwrite `Code.gs` from an old ZIP without verifying backend action compatibility. Back up the Apps Script project and Sheet before backend deployment. Never commit personal records, passwords, tokens or private Drive content to this public repository.
-
-Legacy `IndexApp.html` and earlier versioned assets have been retained for compatibility/rollback; the live GitHub Pages site is served from **`index.html`**.
-
-## 20.8.8 photo and entry upgrade
-
-- Original JPG, PNG and WebP photos in Life Experiences and admin profile photos are stored **unchanged** in private Google Drive; only a small JPEG thumbnail is shown in the dashboard.
-- The old 2 MB cap has been replaced by a **20 MB per-image transfer ceiling**, to avoid overwhelming Apps Script. Files larger than that need an alternative resumable upload mechanism; this release does not claim unlimited uploads.
-- More colourful, keyboard-friendly entry forms, with quick reuse of previous expense descriptions and categories; expense save semantics and duplicate protection remain unchanged.
-- 13 completely unreferenced obsolete frontend release files removed (~7.5 MB of GitHub repository files), but active scripts and rollback-linked files remain. Git history retains older releases.
-- **Before large-image uploads** update the EXISTING Google Apps Script project's Code.gs from the matching v3.17.30 text file after backing up, then publish a NEW VERSION of the existing Web app deployment. Do not create an extra duplicate .gs file or run `setupSystem()`. Until then, uploads above 2 MB can still fail on the old backend.
-
-See [Deployment/verification details](./SARNI-20.8.8-RELEASE.md).
-
-## v20.8.9 photo decoder and text clarity
-
-The frontend now reuses the selected photograph's thumbnail when saving, rather than attempting a second full-size image decode. If a browser cannot use `createImageBitmap`, it falls back to the standard image-element decoder. The preview explicitly says the original is **not yet saved** until Save Experience succeeds. Form text, buttons, table entries, and headings have been enlarged and made bolder on desktop and mobile while retaining accessible focus and responsive layouts. The existing backend v3.17.30 is unchanged.
-
-## v20.8.10 Life Experience editor
-
-You can format selected experience text as bold, italic, coloured or highlighted. Formatting is stored as restricted markup inside the existing authenticated Lesson field—no new Sheet columns or backend deployments are required. Older unformatted entries remain editable. Reminder text, search, and export use the readable plain text. Pasted material is converted to plain text, and unknown HTML tags/attributes are discarded before display. The editor uses browser rich-text commands (compatibility may differ across mobile keyboards), so test saving and reopening a short sample entry.
-
-**Photo upload note:** A remaining error `Choose an image of at most 2 MB` is returned by a still-outdated production Apps Script deployment, not the GitHub frontend. Confirm the production `/exec` JSON reports backend version `3.17.30`, and verify the deployment is running the updated `Code.gs` from the same project. The FE's expected version badge does not verify live backend version.
-
-## v20.8.11: accurate photo validation and backend status
-- SarNi now checks the real configured Apps Script backend version from within Life Experiences. Use the new **Check backend version** button, with no need to open the Apps Script editor.
-- Previous SarNi incorrectly interpreted `The original image or thumbnail is too large` as proof of the older 2 MB limit. That message also exists in backend 3.17.30, which can reject thumbnails over **14,500 decoded bytes**. Now the original error and actual version are differentiated.
-- Automatically generate an 84–100px JPEG thumbnail under **12,500 decoded bytes** before sending unchanged original bytes to Drive. The original remains untouched.
-- If confirmed backend 3.17.29 is connected and the original exceeds 2 MB, stop before transferring the large file and show the exact expected deployment fix.
-- Backend Code.gs is not modified by this frontend release. The actual live backend version must be checked from the app and an original above 2 MB test saved successfully before upload support is considered verified.
-
-## Mobile + button (v20.8.12)
-
-The centre **+** shows only **Quick Expense** and **Quick Diary**. Each opens the existing secure inline form, focuses the essential amount/diary text input, and preserves current save, duplicate alerts, visibility and sharing settings. **More tools** opens the existing **More** menu, which now additionally includes **Add Reminder** and **Smart Paste**. Life Experiences, Credit Cards, complete Diary history, Notes & Targets, writing and settings remain there.
-
-Under Quick Expense is a small **Last 3 expenses** collapsible list. Quick Diary has a collapsible **Last 3 diary entries** list (closed by default for privacy). Both use only the current user's authenticated records already in memory; no new API, storage or save operations. They refresh after an entry is saved and are cleared on sign-out. Read-only recent cards cannot accidentally edit, overwrite or duplicate a record. Complete records are still available in Money / Diary.
-
-## v20.8.13 startup fix
-
-Resolved the `Cannot access 'sariWords' before initialization` error: initial authenticated application startup (`init()`) now runs only after the Life Experience module and all other top-level declarations have been initialized. The v20.8.12 + button, recent quick entries, rich editor and backend connection remain unchanged. No sheet, account, photos or Apps Script deployment was changed.
-
-## v20.8.14 · MyFamily-style English/Odia calendar and festivals
-
-- The Calendar page now has prominent Calendar, Reminder, Target and Festivals shortcuts, including from the mobile More menu. The centre + button remains intentionally limited to Quick Expense and Quick Diary.
-- Selecting an English date shows its Odia month, paksha and lunar tithi using the existing authenticated Bhubaneswar-sunrise calculation. The displayed lunar conversion is an **estimate**, not an official Kohinoor publication.
-- Existing reminder and target saving continues through SarNi's private Google Sheet and Apps Script v3.17.30. Existing recurring occasions can repeat by English date, Odia lunar tithi, or both.
-- Admin-visible Festival editor uses existing `saveImportantDate` and `deleteImportantDate` operations, saving a private record of type `OTHER` with the `[SARNI_FESTIVAL_V1]` notes marker, and `repeatYearly=true`. The admin may select English-date or Odia-lunar-tithi recurrence. The year-by-year occurrence is calculated by the existing backend as the calendar is browsed.
-- **Data scope:** Custom festival records are stored in the *signed-in administrator's account*. They do not automatically propagate to other users. The administrator restriction is frontend-only; centrally shared and backend-enforced admin-managed festivals require a separately deployed Apps Script backend change. No additional `Code.gs` replacement is needed for the current personal-account version.
-- Built-in official/published dates are limited; other computed festival dates require checking against the printed Kohinoor Panjika. Backend per-year verified overrides for recurring occasions continue to work.
-- No Google Sheet structures, accounts, passwords, security settings or remote backend links were changed by this frontend release.
-
-## MyFamily-inspired Planning Centre (additive module v20.8.15)
-
-- Available in **Calendar → Targets / Reminders**, including the existing mobile More-menu shortcuts. The existing English/Odia calendar and yearly Festival editor are retained unchanged.
-- **Targets:** dedicated mobile-friendly cards for existing authenticated SarNi sticky-note targets, with due/overdue indicators, search, edit, mark completed, active/completed filters and completion history. The percentage is **completed tasks / all saved tasks**. It is **not** MyFamily's monetary target / contribution progress.
-- **Reminders:** searchable cards displaying the existing private important dates and quick sticky reminders. Displays annual English/Odia/both recurrence as saved, opens the original editor to preserve Odia verification and reminder settings, and shows upcoming occurrences returned by the existing authenticated backend.
-- Saving, editing and completing actions continue using the original Apps Script operations and original Google Sheet. This release does **not** create another database or alter the Apps Script backend, login flow, photos, finance ledger or notification trigger.
-- MyFamily's **shared-family email recipients, reminder photo attachments, and financial goal contributions** are not added here, because SarNi currently lacks matching backend storage and permissions. They need a separately reviewed backend migration if wanted.
-- Files: `sarni-family-planner-v20-8-15.js` and `sarni-family-planner-v20-8-15.css`; the existing FE app remains v20.8.14 until a full FE-version release.
-- Safety: source records are read only from the current authenticated state; the upcoming-occurrence cache is cleared when the signed-in username changes. Avoid storing private names/records in public GitHub source.
-
-## v20.8.16 Planning and Odia dates
-
-The calendar uses English date cells, with yearly Odia-lunar events displayed on their calculated English occurrence dates rather than the original saved English date. The original verified tithi is reused as the rule; a future year is calculated separately and not automatically certified. Per-year verified corrections can be entered in the calendar editor. Generic personal, family, work, travel, education and other plans use the existing secure targets/sticky-note workflow with due, overdue, completed and all filters. No backend project or Sheets changed.
-
-## SarNi v20.8.17 security, startup and private backups
-
-- Login bearer tokens and session timestamps now live in **tab-scoped sessionStorage**, not persistent localStorage. Previously saved tokens are migrated to the current tab once then deleted from persistent storage. Username-only Remember Me remains unchanged. The backend still verifies authentication, roles and idle timeout.
-- Retired investment/watchlist initializers are no longer run at SarNi startup; Analysis owns those features. One unused legacy investment-cache migration function was removed. All personal functions (expenses, diary, calendars, Odia festivals, targets, Life Experiences, photos, books and credit cards) were preserved.
-- **Admin → Backups** on desktop or **More → Backup Now** on Android runs the existing authenticated `backupNow` action. It puts a JSON backup of SarNi personal sheets in the owner’s private Drive backup folder, not in this repository.
-- The existing backend `backupData` trigger can automate private backups daily. To verify/install it safely without rerunning `setupSystem()`, use the existing `runAll()` maintenance function in the live SarNi Apps Script editor and check `scheduledBackup: true` in the execution log. **No automated trigger has been installed or verified from GitHub.** Backups preserve the 30 newest files in the dedicated backup folder; the JSON sheet snapshots do **not** duplicate original Google Drive photo files. Keep that folder exclusively for SarNi backups.
-- [Phone-first security and backup verification instructions](./SARNI-SECURITY-AND-BACKUPS.md).
-
-## v20.8.18 Book Writing mobile formatting
-
-The Chapter editor retains bold, italic, underline, strikethrough, text colour, highlight, clear-format, list and heading controls. Mobile toolbar buttons are larger and labeled. A stored text selection is restored before formatting, so opening Android colour pickers does not move the formatting insertion point. The chapter's existing HTML-based save/reopen and viewer read-only permissions are preserved. No Apps Script deployment is required. Existing saved chapters remain unchanged until edited and saved normally.
-
-### v20.8.19 Book Writing persistence and safety
-The existing bold/italic/underline/strikethrough and text/highlight picker toolbar now has stronger Android text-selection protection and a fallback for selected text styling when the native browser command fails. Both saved and reopened chapter HTML are filtered to preserve supported formatting, headings and lists while removing unsafe scripts, external media and event attributes. This is a frontend-only update and retains the existing backend and all stored books. Verify on your Android device by editing, saving, and reopening a sample paragraph.
-
-## Father’s biography writing workspace (isolated add-on, October 2026)
-
-Open **Book Writing → Start / continue Father’s Book** after signing in. The app creates a private working book record under the editable working title **The Story Before Ours**, for **Dhruba Charan Sutar**. It has the 16 supplied English/Odia chapters in four parts, plus a prologue and epilogue. It does **not** generate a fictional biography or insert invented memories. The 16 core chapters start with blank body text and blank Notes. Chapter 1 is initially marked as Drafting in the existing backend status options and shown as **Collecting memories** in the dedicated outline. Other core chapters start Not started.
-
-Once created, open the book from the existing Book Writing page. The **Parts and chapters** outline lets you tap any chapter to edit it in the existing rich-text editor (bold, italic, strike, text colour, highlight, lists), update status, and save. Clickable research prompts in the outline help collect family recollections and confirm factual details. The standard chapter list remains available for reordering, extra chapters and collaborators.
-
-A **Download backup** button downloads a private **JSON** copy of the loaded book and chapters. **Export manuscript** downloads a formatted **HTML** manuscript which can be opened in a browser and printed/saved to PDF. Both operations are local downloads of authenticated in-memory data; no manuscript content is committed to public GitHub. Preserve backups securely.
-
-The starter is strictly **opt-in** (does not create the book on login). Retry after an interrupted creation safely skips chapters that already exist by normalized English chapter title, including older draft titles. The module is installed as separate `sarni-father-book-starter.js` and `sarni-father-book-starter.css` files without changing the backend, login, budget, reminders, diary, or existing saved books.
-
-**Verification**: JavaScript parse, all 16 bilingual chapter titles, simulated book creation and duplicate-safe retry passed. A real authenticated test in the user’s Google Apps Script account—create, reopen, edit/save chapter and download backup—is still required. Do not assume real data exists until **Start / continue Father’s Book** is pressed and saving completes.
+See `SARNI-SECURITY-AND-BACKUPS.md` for additional historical notes. Keep GitHub `.github/workflows/` and `quality/` until their current use is independently reviewed; the frontend ZIP does not include them.
