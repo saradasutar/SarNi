@@ -22,8 +22,14 @@ function resetFeature(){
  const message=mk('p',undefined,'ssec-msg');dia.body.append(message);const actions=mk('div',undefined,'ssec-actions');dia.body.append(actions);
  addBtn(actions,'Send email OTP',async()=>{try{username.value=username.value.trim();const r=await api('ssecRequestReset',{username:username.value,channel:'EMAIL'},{retry:false});status(message,r.message||'Request received.');}catch(e){status(message,e.message,true);}},'primary');
  addBtn(actions,'Reset password',async()=>{try{const r=await api('ssecConfirmReset',{username:username.value.trim(),channel:'EMAIL',code:code.value.trim(),newPassword:password.value},{retry:false});status(message,r.message||'Password changed.');password.value='';}catch(e){status(message,e.message,true);}},'primary');
- const b=mk('button','Forgot password? Reset by verified email');b.type='button';b.className='text-button';b.style.cssText='display:block;max-width:100%;white-space:normal;margin:8px 0';b.onclick=()=>{username.value=$('loginUsername')?.value||'';dia.open();};
- form.append(b);
+ // Password recovery must be a separate form row. The shared .text-button
+ // class is absolutely positioned for the 'Show password' button only.
+ const b=mk('button','Forgot password? Reset by verified email','ssec-forgot-password');
+ b.type='button';
+ b.setAttribute('aria-label','Reset password using your verified email address');
+ b.onclick=()=>{username.value=$('loginUsername')?.value||'';dia.open();};
+ const options=form.querySelector('.login-options');
+ if(options)form.insertBefore(b,options);else form.insertBefore(b,$('loginButton')||null);
 }
 function profileFeature(){
  const target=$('changePasswordBtn')?.parentElement;if(!target)return;

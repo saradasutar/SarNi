@@ -1,8 +1,8 @@
 {
-  "version": "20.10.0",
-  "frontend": "20.10.0",
-  "backendExpected": "3.17.36",
-  "build": "20261030-20100-productivity",
+  "version": "20.10.2",
+  "frontend": "20.10.2",
+  "backendExpected": "3.17.37",
+  "build": "20261031-20102-login-alignment",
   "hosting": "github-pages-direct-ui",
   "backendUpgradeRequiredForLargerPhotos": false
 }

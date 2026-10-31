@@ -196,5 +196,6 @@ $('forgetLink').addEventListener('click',()=>{if(!confirm('Forget this device’
   try{localStorage.removeItem(savedTokenKey)}catch{}
   location.replace(location.pathname+location.search);
 });
+window.SarNiQeBridge={callApi,token};
 $('qeForm').addEventListener('submit',save);initialize();
 })();

@@ -11320,3 +11320,22 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 }
 /* Mobile: retain SarNi's existing drawer/bottom-tab design untouched. */
 /* END SARNI_SINGLE_SCROLL_SIDEBAR_20261030 */
+
+/* SarNi v20.10.2: recovery link is a standalone row, never over the password. */
+#loginView #loginForm > .ssec-forgot-password {
+  position:static!important;top:auto!important;right:auto!important;left:auto!important;
+  bottom:auto!important;transform:none!important;align-self:flex-start!important;
+  display:inline-flex!important;max-width:100%!important;width:auto!important;
+  min-height:30px!important;margin:-12px 0 -6px!important;padding:3px 0!important;
+  border:0!important;background:transparent!important;box-shadow:none!important;
+  color:#5046cc!important;font:700 12px/1.4 system-ui,-apple-system,'Segoe UI',sans-serif!important;
+  text-align:left!important;text-decoration:underline!important;text-underline-offset:3px!important;
+  white-space:normal!important;cursor:pointer!important;
+}
+#loginView #loginForm .password-wrap > [data-toggle-password] {
+  position:absolute!important;top:50%!important;right:10px!important;bottom:auto!important;
+  transform:translateY(-50%)!important;margin:0!important;
+}
+@media (max-width:620px) {
+  #loginView #loginForm > .ssec-forgot-password{margin:-4px 0 -2px!important;min-height:35px!important;font-size:12px!important}
+}

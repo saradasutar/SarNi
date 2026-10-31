@@ -57,7 +57,7 @@ function installBookFocus(){const modal=$('chapterModal');if(!modal||$('spBookFo
  const ob=new MutationObserver(()=>{if(modal.classList.contains('hidden')&&modal.classList.contains('sp-book-focus')){modal.classList.remove('sp-book-focus');btn.setAttribute('aria-pressed','false');btn.textContent='☷ Focus writing';}});ob.observe(modal,{attributes:true,attributeFilter:['class']});
 }
 function installDraftGuard(){document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'&&visible()){const diary=$('dkForm');if(diary&&diary.getClientRects().length&&document.activeElement?.closest?.('#dkForm')){e.preventDefault();diary.requestSubmit();}else if(!($('chapterModal')?.classList.contains('hidden'))){e.preventDefault();$('chapterForm')?.requestSubmit();}}});}
-function installBuild(){const version='20.10.0';const label=$('loginVersion');if(label)label.title='Frontend build '+version+'; backend version is reported separately by Apps Script.';
+function installBuild(){const version='20.10.1';const label=$('loginVersion');if(label)label.title='Frontend build '+version+'; backend version is reported separately by Apps Script.';
  const b=$('dashboardVersion');if(b)b.title='Frontend build '+version+' (GitHub Pages)';
 }
 function init(){installSearch();installBookFocus();installDraftGuard();installBuild();}

@@ -1,0 +1,34 @@
+/* SarNi v20.10.1 mobile shortcuts and compact editor */
+.sarni-mobile-add-grid-simple{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+.sarni-mobile-add-grid-simple button{min-width:0;word-wrap:break-word;padding:10px 6px!important}
+.sarni-mobile-add-grid-simple strong{font-size:13px!important}
+.sarni-mobile-add-grid-simple small{font-size:10px!important;line-height:1.3}
+.sarni-qc-dialog{position:fixed;max-width:min(520px,calc(100vw - 20px));width:100%;max-height:min(88dvh,840px);margin:auto;border:0;border-radius:21px;padding:0;color:#223049;background:#fff;box-shadow:0 18px 70px #0f245875;overflow:auto;overscroll-behavior:contain}
+.sarni-qc-dialog::backdrop{background:rgba(17,29,55,.64)}
+.sarni-qc-form{padding:18px;display:grid;gap:12px}
+.sarni-qc-form>header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sarni-qc-form header small{font-size:10px;font-weight:800;letter-spacing:.1em;color:#66738b}
+.sarni-qc-form header h2{font-size:22px;line-height:1.2;margin:2px 0}
+#sarniQcClose{width:42px;height:42px;border:0;background:#edf3fb;border-radius:12px;font-size:28px;color:#23416b;cursor:pointer}
+.sarni-qc-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:4px;background:#f1f5fb;border-radius:13px}
+.sarni-qc-tabs button{border:0;background:transparent;border-radius:9px;font-size:13px;padding:11px 4px;font-weight:750;color:#445572;min-height:43px;cursor:pointer}
+.sarni-qc-tabs button.active{background:#fff;box-shadow:0 2px 8px #152d4a20;color:#163d7e}
+.sarni-qc-fields{display:grid;gap:10px}
+.sarni-qc-form label{display:grid;gap:4px;font-size:13px;font-weight:750}
+.sarni-qc-form input:not([type=checkbox]),.sarni-qc-form select,.sarni-qc-form textarea{width:100%;min-width:0;border:1px solid #c9d3e4;border-radius:11px;min-height:45px;padding:9px 11px;font-size:16px;color:#243148;background:#fff}
+.sarni-qc-form textarea{min-height:110px;resize:vertical}
+.sarni-qc-form .sarni-qc-amount{font-size:28px!important;min-height:62px!important;font-weight:850}
+.sarni-qc-form details{border-top:1px solid #e2e7f0;padding:6px 0;display:grid;gap:9px}
+.sarni-qc-form details summary{cursor:pointer;color:#315581;font-weight:700;font-size:13px;min-height:30px}
+.sarni-qc-form details[open]>label{margin-top:8px}
+.sarni-qc-form .sarni-qc-check{display:flex;align-items:center;gap:9px}
+.sarni-qc-form input[type=checkbox]{width:19px;height:19px}
+.sarni-qc-form footer{display:flex;gap:9px;align-items:center;position:sticky;bottom:-18px;background:#fff;padding:11px 0 15px;border-top:1px solid #eef0f5}
+.sarni-qc-form footer button{min-height:48px;border-radius:11px;cursor:pointer;font-weight:750}
+.sarni-qc-secondary{background:#edf3ff;color:#254979;border:1px solid #d9e5f7;padding:8px 12px}
+.sarni-qc-save{background:#1d518e;color:#fff;border:0;padding:9px 17px;flex:1}
+.sarni-qc-save:disabled{opacity:.5}
+#sarniQcStatus{font-size:12px;min-height:16px;margin:0}
+.sarni-qc-form [hidden]{display:none!important}
+.sarni-qc-form :focus-visible{outline:3px solid #6c9fe9;outline-offset:2px}
+@media(max-width:420px){.sarni-qc-dialog{max-height:92dvh;max-width:calc(100vw - 14px)}.sarni-qc-form{padding:12px}.sarni-qc-form footer{bottom:-12px}.sarni-qc-secondary{font-size:12px}}

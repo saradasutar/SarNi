@@ -59,7 +59,18 @@ function renderLinks(){
    if(!until.checked&&(!date||date.getTime()<=Date.now()+60000)){status('Choose a future expiry time.',true);return;}
    change.disabled=true;await mutate(row,active,until.checked?'':date?.toISOString(),until.checked);change.disabled=false;
   };
-  line.append(toggle,change);box.append(line);list.append(box);
+  line.append(toggle,change);box.append(line);
+  const acl=node('div');acl.style.cssText='border:1px solid #d9e5f6;border-radius:12px;padding:12px;margin-top:12px;background:#f8fbff';
+  acl.append(node('strong','No-login Quick Entry permissions'));
+  const settings=row.quickAccess||{};
+  const makeFlag=(name,text,checked)=>{const label=node('label');label.style.cssText='display:flex;align-items:center;gap:8px;margin:8px 0;font-size:13px';const input=node('input');input.type='checkbox';input.checked=!!checked;input.style.cssText='width:20px;height:20px';label.append(input,node('span',text));acl.append(label);return input;};
+  const diary=makeFlag('diary','Allow Diary entries (saved privately to link owner)',settings.allowDiary);
+  const stock=makeFlag('stock','Allow Stock Notes (saved privately to link owner)',settings.allowStock);
+  const recent=makeFlag('recent','Allow view of recent entries written through this specific link',settings.allowRecentView);
+  const saveAcl=btn('Save Quick Entry permissions');
+  saveAcl.onclick=async()=>{if(!isAdmin())return;saveAcl.disabled=true;try{const result=await api('qeConfigureAccess',{id:row.id,allowDiary:diary.checked,allowStock:stock.checked,allowRecentView:recent.checked},{retry:false});if(!result?.ok)throw Error(result?.message||'Permission update failed');status('Quick Entry permissions saved. The existing link continues to work.');await refresh();}catch(e){status(e.message||'Could not update permissions.',true);}finally{saveAcl.disabled=false;}};
+  acl.append(saveAcl);box.append(acl);
+  list.append(box);
  }
 }
 function install(){
