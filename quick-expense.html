@@ -5,7 +5,7 @@
 <link rel="manifest" href="./quick-expense.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="SarNi Expense"><link rel="apple-touch-icon" href="./quick-expense-192.png">
 <title>SarNi · Daily Quick Expense</title>
 <style>
-.qe-mode-bar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:5px;border-radius:16px;margin-top:12px;background:#e8eef9}
+.qe-mode-bar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:5px;border-radius:16px;margin-top:12px;background:#e8eef9}
 .qe-mode-bar button{min-height:45px;border-radius:11px;border:0;background:transparent;font-size:13px;font-weight:800;color:#3d5375}
 .qe-mode-bar button.active{color:#123c7b;background:#fff;box-shadow:0 2px 8px #17365e24}
 .qe-mode-bar button[hidden]{display:none}.qe-mode-bar:has(button[hidden]:nth-child(3)){grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -40,7 +40,7 @@ summary{cursor:pointer;font-weight:700;font-size:14px;color:#234a88;padding:12px
 <p id="notice" role="alert">Checking the expense link…</p>
 <section id="linkRecovery" hidden><strong>Connect your personal Quick Expense shortcut</strong><p class="small">Paste the private expense link created by the SarNi administrator. No username or password is needed. This is usually necessary only once after installing the app.</p><form id="restoreLinkForm"><label class="field" for="restoreLinkInput">Private Quick Expense link</label><input id="restoreLinkInput" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="Paste your full shared link"><button type="submit">Activate link</button></form></section>
 <nav id="qeModeBar" class="qe-mode-bar" aria-label="Quick entry type" hidden>
-<button type="button" data-qe-mode="expense" class="active">₹ Expense</button><button type="button" data-qe-mode="diary" hidden>✎ Diary</button><button type="button" data-qe-mode="stock" hidden>▥ Stock Note</button></nav>
+<button type="button" data-qe-mode="expense" class="active">₹ Expense</button><button type="button" data-qe-mode="diary" hidden>✎ Diary</button><button type="button" data-qe-mode="stock" hidden>▥ Stock Diary</button><button type="button" data-qe-mode="wisdom" hidden>✦ Investment Wisdom</button></nav>
 <section id="qeNoteArea" hidden class="card"><form id="qeNoteForm"><h2 id="qeNoteHeading">Quick Diary</h2>
 <label class="field" id="qeStockCompanyWrap" hidden>Company name<input id="qeStockCompany" maxlength="130" placeholder="Company full name"></label>
 <label class="field" id="qeStockSymbolWrap" hidden>Stock symbol (optional)<input id="qeStockSymbol" maxlength="32" placeholder="Ticker"></label>
@@ -79,5 +79,5 @@ summary{cursor:pointer;font-weight:700;font-size:14px;color:#234a88;padding:12px
 </section>
 <details id="qeRecentShared" class="card" hidden><summary>Recent entries from this link</summary><p class="small">Only entries submitted through this specific link are shown. Existing private records are never exposed.</p><div id="qeRecentSharedList"></div><button type="button" id="qeRecentReload" class="pill">↻ Refresh</button></details>
 <section id="installPanel" hidden><strong>Install SarNi Quick Expense on your phone</strong><p class="small">Separate home-screen icon · opens directly to this form · no SarNi login required.</p><button id="installAppButton" type="button">＋ Install Quick Expense</button><button id="forgetLink" type="button">Forget link on this device</button><p id="installInstruction" role="status">Android: use your browser menu → Install app / Add to Home screen. iPhone: Safari Share → Add to Home Screen. Keep the private shared link in case your phone requires it again.</p><p class="small">This shortcut saves the private link on this device for convenience. Anyone using your unlocked phone can enter expenses through it while the link remains active. The administrator can disable it immediately.</p></section>
-<p class="foot">Each link starts as Expense-only. Admin can separately allow Diary, Stock Note, or a recent-entry preview; it never opens your other private records or account settings. The administrator can disable or re-enable the same link.</p>
+<p class="foot">Each link starts as Expense-only. Admin can separately allow Diary, Stock Diary, Investment Wisdom, or a recent-entry preview; it never opens your other private records or account settings. The administrator can disable or re-enable the same link.</p>
 </main></body></html>
