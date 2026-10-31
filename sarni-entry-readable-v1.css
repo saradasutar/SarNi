@@ -1,0 +1,31 @@
+/* SarNi comfortable entry typography — desktop, mobile, and quick modal. */
+:root{--sarni-entry-ink:#203e36;--sarni-entry-border:#b9d4c8;--sarni-entry-focus:#17765e}
+.sarni-qc-form input:not([type=checkbox]),.sarni-qc-form select,.sarni-qc-form textarea,
+#dkForm input:not([type=checkbox]),#dkForm select,#dkForm textarea,
+#dkRich,
+#sarniStockDiaryPanel input:not([type=checkbox]),#sarniStockDiaryPanel textarea,
+.sd-modal input:not([type=checkbox]),.sd-modal textarea{
+ color:var(--sarni-entry-ink)!important;
+ background:#fff!important;
+ border-color:var(--sarni-entry-border)!important;
+ font-size:17px!important;
+ font-weight:550!important;
+ line-height:1.52!important;
+ letter-spacing:.005em;
+}
+.sarni-qc-form input::placeholder,.sarni-qc-form textarea::placeholder,
+#dkForm input::placeholder,#dkForm textarea::placeholder,
+.sd-modal input::placeholder,.sd-modal textarea::placeholder{color:#748d80!important;opacity:1}
+.sarni-qc-form label,#dkForm label,.sd-modal label{font-size:13px!important;font-weight:750!important;color:#345a4d!important}
+.sarni-qc-form{gap:9px!important}
+.sarni-qc-fields{gap:8px!important}
+.sarni-qc-form textarea,#dkExcerpt,.sd-modal textarea{min-height:145px!important;padding:12px 13px!important}
+#dkRich{min-height:230px!important;padding:15px 16px!important;line-height:1.65!important;white-space:pre-wrap;overflow-wrap:anywhere;border:1.5px solid var(--sarni-entry-border)!important;border-radius:12px!important}
+#dkRich:focus,.sarni-qc-form input:focus,.sarni-qc-form textarea:focus,#dkForm input:focus,#dkForm textarea:focus,.sd-modal textarea:focus{outline:2px solid var(--sarni-entry-focus)!important;outline-offset:1px}
+.sarni-qc-form .sarni-qc-amount{font-size:32px!important;font-weight:800!important;color:#135c4c!important}
+.sarni-qc-form input:not([type=checkbox]),.sarni-qc-form select{min-height:46px!important}
+@media(max-width:600px){
+.sarni-qc-form input:not([type=checkbox]),.sarni-qc-form select,.sarni-qc-form textarea,#dkRich,#dkForm input:not([type=checkbox]),#dkForm textarea,.sd-modal input,.sd-modal textarea{font-size:17px!important}
+.sarni-qc-form textarea{min-height:150px!important}
+#dkRich{min-height:245px!important}
+}
