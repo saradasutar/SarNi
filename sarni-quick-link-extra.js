@@ -3,10 +3,10 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id);const bridge=window.SarNiQeBridge;if(!bridge)return;
 const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');};
-let permissions={allowDiary:false,allowStock:false,allowWisdom:false,allowRecentView:false},mode='expense',busy=false,entryId='';
+let permissions={allowDiary:false,allowStock:false,allowRecentView:false},mode='expense',busy=false,entryId='';
 function uniqueId(){const bytes=new Uint8Array(20);crypto.getRandomValues(bytes);return [...bytes].map(x=>x.toString(16).padStart(2,'0')).join('');}
 function status(message,error=false){const x=$('qeNoteStatus');x.textContent=message||'';x.style.color=error?'#ad253b':'#116c4b';}
-function setMode(next){mode=next;$('entryArea').hidden=next!=='expense';$('qeNoteArea').hidden=next==='expense';
+function setMode(next){if(next==='diary'&&!permissions.allowDiary)return;if(next==='wisdom'&&!permissions.allowDiary)return;if(next==='stock'&&!permissions.allowStock)return;mode=next;$('entryArea').hidden=next!=='expense';$('qeNoteArea').hidden=next==='expense';
  $('qeStockCompanyWrap').hidden=next!=='stock';$('qeStockSymbolWrap').hidden=next!=='stock';$('qeNoteHeading').textContent=next==='diary'?'Quick Diary':next==='wisdom'?'Investment Wisdom':'Quick Stock Diary';
  document.querySelectorAll('[data-qe-mode]').forEach(b=>b.classList.toggle('active',b.dataset.qeMode===mode));
  if(next!=='expense'){$('qeNoteText').focus();status('');}
@@ -17,11 +17,11 @@ async function refreshRecent(){if(!permissions.allowRecentView)return;
  if(!(r.items||[]).length){const p=document.createElement('p');p.textContent='No entries from this particular link yet.';list.append(p);}
  }catch(e){const p=document.createElement('p');p.textContent='Recent entries not available: '+e.message;$('qeRecentSharedList').replaceChildren(p);}}
 async function init(){if(!bridge.token)return;$('qeNoteDate').value=today();entryId=uniqueId();
- try{const r=await bridge.callApi('qeInfo',{linkToken:bridge.token});permissions=r.quickAccess||permissions;
+ try{const r=await bridge.callApi('qeInfo',{linkToken:bridge.token});permissions=r.quickAccess||permissions;if(!r?.ok)throw Error(r?.message||'Link unavailable');
  const bar=$('qeModeBar');bar.hidden=false;
  const bDiary=document.querySelector('[data-qe-mode="diary"]'),bStock=document.querySelector('[data-qe-mode="stock"]'),bWisdom=document.querySelector('[data-qe-mode="wisdom"]');
- bDiary.hidden=!permissions.allowDiary;bStock.hidden=!permissions.allowStock;bWisdom.hidden=!(permissions.allowWisdom||permissions.allowDiary);
- if(!permissions.allowDiary&&!permissions.allowStock&&!permissions.allowWisdom){bar.hidden=true;}
+ bDiary.hidden=!permissions.allowDiary;bStock.hidden=!permissions.allowStock;bWisdom.hidden=!(permissions.allowDiary);
+ if(!permissions.allowDiary&&!permissions.allowStock){bar.hidden=true;}
  $('qeRecentShared').hidden=!permissions.allowRecentView;
  if(permissions.allowRecentView)await refreshRecent();
  }catch(e){console.warn('SarNi Quick Entry permission discovery unavailable:',e.message);}
