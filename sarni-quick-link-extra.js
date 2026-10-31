@@ -3,6 +3,7 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id);const bridge=window.SarNiQeBridge;if(!bridge)return;
 const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');};
+function updateMonthlyLabel(){const value=$('qeNoteDate')?.value||today();const match=/^(\d{4})-(\d{2})-\d{2}$/.exec(value);const y=match?Number(match[1]):new Date().getFullYear(),m=match?Number(match[2]):new Date().getMonth()+1;const month=(m>=1&&m<=12)?new Intl.DateTimeFormat('en-IN',{month:'long',year:'numeric'}).format(new Date(y,m-1,1)):'selected month';if($('qeMonthlyMonth'))$('qeMonthlyMonth').textContent=month;}
 let permissions={allowDiary:false,allowStock:false,allowRecentView:false},mode='expense',busy=false,entryId='';
 function uniqueId(){const bytes=new Uint8Array(20);crypto.getRandomValues(bytes);return [...bytes].map(x=>x.toString(16).padStart(2,'0')).join('');}
 function status(message,error=false){const x=$('qeNoteStatus');x.textContent=message||'';x.style.color=error?'#ad253b':'#116c4b';}
@@ -16,7 +17,7 @@ async function refreshRecent(){if(!permissions.allowRecentView)return;
  const list=$('qeRecentSharedList');list.replaceChildren();(r.items||[]).forEach(item=>{const row=document.createElement('p');row.textContent=[item.entryDate,item.kind==='expense'?'₹'+Number(item.amount||0).toLocaleString('en-IN'):item.kind.toUpperCase(),item.title||'',item.text||''].filter(Boolean).join(' · ').slice(0,520);list.append(row);});
  if(!(r.items||[]).length){const p=document.createElement('p');p.textContent='No entries from this particular link yet.';list.append(p);}
  }catch(e){const p=document.createElement('p');p.textContent='Recent entries not available: '+e.message;$('qeRecentSharedList').replaceChildren(p);}}
-async function init(){if(!bridge.token)return;$('qeNoteDate').value=today();entryId=uniqueId();
+async function init(){if(!bridge.token)return;$('qeNoteDate').value=today();updateMonthlyLabel();$('qeNoteDate').addEventListener('change',updateMonthlyLabel);entryId=uniqueId();
  try{const r=await bridge.callApi('qeInfo',{linkToken:bridge.token});permissions=r.quickAccess||permissions;if(!r?.ok)throw Error(r?.message||'Link unavailable');
  const bar=$('qeModeBar');bar.hidden=false;
  const bDiary=document.querySelector('[data-qe-mode="diary"]'),bStock=document.querySelector('[data-qe-mode="stock"]'),bWisdom=document.querySelector('[data-qe-mode="wisdom"]');
@@ -26,8 +27,8 @@ async function init(){if(!bridge.token)return;$('qeNoteDate').value=today();entr
  if(permissions.allowRecentView)await refreshRecent();
  }catch(e){console.warn('SarNi Quick Entry permission discovery unavailable:',e.message);}
 }
-async function save(event){event.preventDefault();if(busy||mode==='expense')return;if(mode==='wisdom'&&!(permissions.allowWisdom||permissions.allowDiary)){status('Investment Wisdom is not enabled for this link.',true);return;}
- if(navigator.onLine===false){status('Connect to the internet to save Diary or Stock Note; no entry was sent.',true);return;}
+async function save(event){event.preventDefault();if(busy||mode==='expense')return;if(mode==='wisdom'&&!permissions.allowDiary){status('Investment Wisdom is not enabled for this link.',true);return;}
+ if(navigator.onLine===false){status('Connect to the internet to save this note; no entry was sent.',true);return;}
  const text=$('qeNoteText').value.trim();if(!text){status('Please write a note.',true);return;}
  if(mode==='stock'&&!$('qeStockCompany').value.trim()){status('Enter company name.',true);return;}
  busy=true;$('qeNoteSave').disabled=true;status('Saving…');try{
