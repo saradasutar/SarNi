@@ -35,7 +35,7 @@ async function create(e){
  const access={allowExpense:form.elements.allowExpense.checked,allowDiary:form.elements.allowDiary.checked,allowStock:form.elements.allowStock.checked,allowRecent:false,recentLimit:5};
  try{await run('qeConfigureAccess',{id:result.link.id,access});}catch(permissionError){status('Link created, but permissions did not save: '+permissionError.message,true);}
  const base=backend();if(!base)throw Error('Backend URL missing from config.js');
- const url=base+'?quick=1&key='+encodeURIComponent(result.linkToken);
+ const url=new URL('./q/?key='+encodeURIComponent(result.linkToken),location.href).href;
  $('sarniQelNewLink').value=url;$('sarniQelSecret').hidden=false;
  status('Private link created. Copy it now; SarNi cannot retrieve its secret later.');
  }catch(e){status('Could not complete creation: '+e.message,true);}finally{working=false;await refresh();}
@@ -43,8 +43,33 @@ async function create(e){
 function init(){
  const section=$('adminSettingsSection');if(!section||$('sarniQuickLinkPanel'))return;
  const panel=document.createElement('article');panel.id='sarniQuickLinkPanel';panel.className='panel sarni-qel-panel';
- panel.innerHTML='<h3>Login-free Quick Entry Links</h3><p>Create private mobile links for quick expenses, diary entries and stock notes. Only administrators can manage access.</p><form id="sarniQelForm"><label>Link name<input name="label" value="SarNi Daily Quick Entry" maxlength="100" required></label><label><input type="checkbox" name="neverExpires" checked> Valid until I disable it</label><label>Expiry (if applicable)<input name="expiresAt" type="datetime-local"></label><fieldset><legend>Allowed entries</legend><label><input name="allowExpense" type="checkbox" checked> Expenses</label><label><input name="allowDiary" type="checkbox" checked> Diary</label><label><input name="allowStock" type="checkbox" checked> Stock notes</label></fieldset><button class="primary-button" type="submit">Create private link</button></form><div id="sarniQelSecret" hidden><p><strong>Copy this secret link now; it is shown only once.</strong></p><input id="sarniQelNewLink" readonly aria-label="New private link"><button type="button" id="sarniQelCopy">Copy link</button></div><p id="sarniQelStatus" role="status" aria-live="polite"></p><h4>Existing links</h4><div id="sarniQelList"></div><button type="button" id="sarniQelRefresh">Refresh links</button><p><small>Secret links grant access without login. Do not share publicly. The mobile page requires QuickEntry.html and QuickCapture.gs deployed in Apps Script.</small></p>';
+ panel.innerHTML='<h3>Login-free Quick Entry Links</h3><p>Create private mobile links for quick expenses, diary entries and stock notes. Only administrators can manage access.</p><form id="sarniQelForm"><label>Link name<input name="label" value="SarNi Daily Quick Entry" maxlength="100" required></label><label><input type="checkbox" name="neverExpires" checked> Valid until I disable it</label><label>Expiry (if applicable)<input name="expiresAt" type="datetime-local"></label><fieldset><legend>Allowed entries</legend><label><input name="allowExpense" type="checkbox" checked> Expenses</label><label><input name="allowDiary" type="checkbox" checked> Diary</label><label><input name="allowStock" type="checkbox" checked> Stock notes</label></fieldset><button class="primary-button" type="submit">Create private link</button></form><div id="sarniQelSecret" hidden><p><strong>Copy this secret link now; it is shown only once.</strong></p><input id="sarniQelNewLink" readonly aria-label="New private link"><button type="button" id="sarniQelCopy">Copy link</button></div><p id="sarniQelStatus" role="status" aria-live="polite"></p><h4>Existing links</h4><div id="sarniQelList"></div><button type="button" id="sarniQelRefresh">Refresh links</button><p><small>Secret links grant access without login. Do not share publicly. The mobile page runs at the short SarNi /q/ address; QuickCapture.gs must be deployed in Apps Script.</small></p>';
  section.insertBefore(panel,section.querySelector('#sarniBackupPanel')||null);
+ const style=document.createElement('style');style.textContent=`
+ #sarniQuickLinkPanel{max-width:880px;margin:16px auto;padding:20px!important;border-radius:18px}
+ #sarniQuickLinkPanel h3{font-size:20px;margin:0 0 7px}
+ #sarniQuickLinkPanel p{line-height:1.5}
+ #sarniQelForm{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;align-items:end}
+ #sarniQelForm>label:first-child{grid-column:1/-1}
+ #sarniQelForm>label{display:flex!important;flex-direction:column;gap:5px;margin:0!important;font-size:13px;font-weight:650}
+ #sarniQelForm>label:has(input[type=checkbox]){flex-direction:row;align-items:center;gap:9px}
+ #sarniQuickLinkPanel input[type=checkbox]{appearance:auto!important;-webkit-appearance:checkbox!important;width:17px!important;height:17px!important;min-width:17px!important;min-height:17px!important;max-width:17px!important;max-height:17px!important;position:static!important;display:inline-block!important;padding:0!important;margin:0!important;transform:none!important;box-shadow:none!important;vertical-align:middle;accent-color:#176a55}
+ #sarniQuickLinkPanel input:not([type=checkbox]){width:100%;max-width:100%;height:auto;min-height:40px;padding:9px 11px;border:1px solid #cad8d2;border-radius:9px;font-size:14px}
+ #sarniQelForm fieldset{grid-column:1/-1;margin:0;padding:10px 12px;border:1px solid #d7e2dc;border-radius:12px;display:flex;align-items:center;flex-wrap:wrap;gap:12px 22px;min-width:0}
+ #sarniQelForm legend{font-size:12px;font-weight:750;padding:0 6px}
+ #sarniQelForm fieldset label,#sarniQelForm fieldset label:has(input[type=checkbox]){display:inline-flex!important;flex-direction:row!important;align-items:center;gap:7px;margin:0!important;font-size:13px}
+ #sarniQelForm>button{grid-column:1/-1;justify-self:start}
+ #sarniQelSecret{margin-top:14px;padding:12px;border-radius:12px;background:#eef8f3}
+ #sarniQelSecret button{margin-top:8px}
+ #sarniQelList{display:grid;gap:10px}
+ #sarniQelList .sarni-qel-item{padding:12px;border:1px solid #dae6df;border-radius:12px}
+ .sarni-qel-head,.sarni-qel-actions,.sarni-qel-permissions{display:flex;align-items:center;flex-wrap:wrap;gap:8px 15px}
+ .sarni-qel-head{justify-content:space-between;margin-bottom:5px}
+ .sarni-qel-permissions{margin:10px 0}
+ .sarni-qel-permissions label{display:inline-flex!important;flex-direction:row!important;align-items:center;gap:6px;font-size:12px}
+ .sarni-qel-actions button{padding:8px 11px;border:1px solid #ceded6;border-radius:9px;font-size:12px}
+ @media(max-width:600px){#sarniQuickLinkPanel{padding:14px!important}#sarniQelForm{grid-template-columns:1fr}#sarniQelForm>label:first-child{grid-column:1}#sarniQelForm fieldset{grid-column:1}}
+ `;document.head.appendChild(style);
  $('sarniQelForm').addEventListener('submit',create);
  $('sarniQelCopy').addEventListener('click',()=>{const text=$('sarniQelNewLink').value;navigator.clipboard?.writeText(text).then(()=>status('Link copied.')).catch(()=>{ $('sarniQelNewLink').select();status('Select and copy the link.');});});
  $('sarniQelRefresh').addEventListener('click',refresh);
