@@ -65,10 +65,11 @@ function renderLinks(){
   const settings=row.quickAccess||{};
   const makeFlag=(name,text,checked)=>{const label=node('label');label.style.cssText='display:flex;align-items:center;gap:8px;margin:8px 0;font-size:13px';const input=node('input');input.type='checkbox';input.checked=!!checked;input.style.cssText='width:20px;height:20px';label.append(input,node('span',text));acl.append(label);return input;};
   const diary=makeFlag('diary','Allow Diary entries (saved privately to link owner)',settings.allowDiary);
-  const stock=makeFlag('stock','Allow Stock Notes (saved privately to link owner)',settings.allowStock);
+  const stock=makeFlag('stock','Allow Stock Diary (saved privately to link owner)',settings.allowStock);
+  const wisdom=makeFlag('wisdom','Allow Investment Wisdom (saved as a tagged Diary entry)',settings.allowWisdom||settings.allowDiary);
   const recent=makeFlag('recent','Allow view of recent entries written through this specific link',settings.allowRecentView);
   const saveAcl=btn('Save Quick Entry permissions');
-  saveAcl.onclick=async()=>{if(!isAdmin())return;saveAcl.disabled=true;try{const result=await api('qeConfigureAccess',{id:row.id,allowDiary:diary.checked,allowStock:stock.checked,allowRecentView:recent.checked},{retry:false});if(!result?.ok)throw Error(result?.message||'Permission update failed');status('Quick Entry permissions saved. The existing link continues to work.');await refresh();}catch(e){status(e.message||'Could not update permissions.',true);}finally{saveAcl.disabled=false;}};
+  saveAcl.onclick=async()=>{if(!isAdmin())return;saveAcl.disabled=true;try{const result=await api('qeConfigureAccess',{id:row.id,allowDiary:diary.checked,allowStock:stock.checked,allowWisdom:wisdom.checked,allowRecentView:recent.checked},{retry:false});if(!result?.ok)throw Error(result?.message||'Permission update failed');status('Quick Entry permissions saved. The existing link continues to work.');await refresh();}catch(e){status(e.message||'Could not update permissions.',true);}finally{saveAcl.disabled=false;}};
   acl.append(saveAcl);box.append(acl);
   list.append(box);
  }
