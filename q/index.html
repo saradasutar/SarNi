@@ -1,5 +1,34 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#174e44"><title>SarNi · Quick Entry</title><link rel="icon" href="../sarni-life-icon.svg"><style>
-*{box-sizing:border-box}body{margin:0;background:#f0f5f3;color:#213c35;font:15px system-ui,-apple-system,"Segoe UI",sans-serif;padding:16px}main{max-width:520px;margin:16px auto;background:white;border-radius:20px;box-shadow:0 8px 30px #152f2415;padding:22px}header{display:flex;align-items:center;gap:10px}header img{width:36px;height:36px}h1{font-size:21px;margin:0}p{color:#597269;font-size:13px}nav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:18px 0}button{border:1px solid #d3e0da;background:#f3f8f5;border-radius:10px;padding:11px 9px;color:#214d40;font-weight:700;cursor:pointer}button.selected,.save{background:#14725a;color:white;border-color:#14725a}label{display:block;font-weight:650;margin:12px 0 6px;font-size:13px}input,select,textarea{width:100%;border:1px solid #c4d4cc;border-radius:10px;padding:11px;font:inherit;background:white;color:#213c35}input[type=checkbox]{width:auto;margin-right:7px}textarea{min-height:105px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid>div{min-width:0}.actions{display:flex;gap:10px;margin:16px 0 0}.actions button{flex:1}.error{color:#ab2935!important}.success{color:#167054!important}#status{min-height:20px;margin-top:12px}.hint{font-size:12px} [hidden]{display:none!important}@media(max-width:420px){main{padding:16px;margin:0}body{padding:8px}.grid{grid-template-columns:1fr}} </style><script src="../config.js"></script></head><body>
+:root{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color-scheme:light;--ink:#203d37;--muted:#61766e;--primary:#176b54;--line:#d7e4dd;--surface:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(145deg,#edf5f1,#f5f7fa);color:var(--ink);font-size:15px;line-height:1.45;padding:clamp(8px,2vw,22px);min-height:100vh}
+main{max-width:560px;margin:12px auto;background:var(--surface);border:1px solid #e0eae4;border-radius:19px;box-shadow:0 10px 32px #1b453518;padding:clamp(16px,3vw,25px)}
+header{display:flex;align-items:center;gap:11px;padding-bottom:12px;border-bottom:1px solid #edf1ee}
+header img{width:39px;height:39px;flex:none}
+h1{font-size:21px;font-weight:800;line-height:1.2;letter-spacing:-.3px;margin:0}
+p{color:var(--muted);font-size:12.5px;line-height:1.45;margin:7px 0}
+nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:15px 0}
+button{border:1px solid #d6e4dc;background:#f5f9f6;border-radius:10px;padding:10px;color:#285847;font-weight:700;font-size:13px;line-height:1.3;min-height:42px;cursor:pointer;transition:background .15s,border-color .15s}
+button.selected,.save{background:var(--primary);color:#fff;border-color:var(--primary)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid #258b70;outline-offset:2px}
+button:disabled{opacity:.55;cursor:wait}
+label{display:block;font-weight:650;margin:10px 0 4px;font-size:12.5px;color:#34574c}
+input,select,textarea{width:100%;min-height:42px;border:1px solid #cfddd5;border-radius:9px;padding:9px 11px;font:inherit;font-size:15px;background:#fff;color:#213b33}
+input::placeholder,textarea::placeholder{color:#84988d}
+input[type=checkbox]{appearance:checkbox!important;-webkit-appearance:checkbox!important;min-height:16px;width:16px;height:16px;vertical-align:middle;margin:0 7px 0 0;accent-color:var(--primary)}
+textarea{min-height:105px;resize:vertical;line-height:1.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid>div{min-width:0}
+.actions{display:flex;gap:8px;margin:15px 0 0}.actions button{flex:1}
+#newHeadToggle{margin:7px 0}#newHeadBtn{min-height:34px;padding:7px 11px;background:#eef6f0;color:#235e47;font-size:12px}
+#newHeadBox{padding:8px 10px 12px;background:#f5faf6;border:1px solid var(--line);border-radius:10px}
+#status{min-height:19px;margin-top:12px;font-size:13px;font-weight:600}
+.error{color:#ae3138!important}.success{color:#167151!important}
+.hint{font-size:12px;color:#75877e}
+[hidden]{display:none!important}
+@media(max-width:420px){body{padding:7px}main{margin:0;border-radius:15px;padding:14px}h1{font-size:19px}nav{gap:5px;margin:12px 0}nav button{font-size:12px;padding:9px 4px}label{margin-top:9px}.grid{gap:8px}input,select,textarea{font-size:16px}}
+@media(max-width:350px){.grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){button{transition:none}}
+</style><script src="../config.js"></script></head><body>
 <main><header><img src="../sarni-life-icon.svg" alt=""><div><h1>SarNi · Quick Entry</h1><p style="margin:3px 0">Expense · Diary · Stock Note</p></div></header><p class="hint">Private shared link. No sign-in required.</p><nav id="tabs" hidden></nav><form id="entry" hidden><div id="fields"></div><div class="actions"><button type="submit" class="save" id="save">Save entry</button><button type="button" id="reset">Add another</button></div></form><p id="status" role="status">Verifying private link…</p><p class="hint">Only share this link with people you trust. The administrator may disable it at any time.</p></main>
 <script>
 (()=>{'use strict';const $=id=>document.getElementById(id);const key=new URLSearchParams(location.search).get('key')||'';const base=String(window.PORTFOLIO_CONFIG?.API_URL||'');let info=null,mode='expense',busy=false;const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};const safe=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));function status(msg,error=false){$('status').textContent=msg;$('status').className=error?'error':'';}
