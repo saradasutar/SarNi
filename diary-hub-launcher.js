@@ -53,6 +53,20 @@
    btn.style.setProperty('opacity','1','important');
    btn.style.setProperty('pointer-events','auto','important');
  }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',placeButton,{once:true});
- else placeButton();
+ if(scope==='all'){
+   // SarNi: stable navigation entry instead of a floating overlay.
+   function placeSarNiNav(){
+     const nav=document.getElementById('sarniSidebarPrimary');
+     if(!nav)return;
+     const diary=nav.querySelector('[data-section="diary"]');
+     btn.className='nav-item sarni-hub-nav-button';
+     btn.style.cssText='display:flex!important;align-items:center!important;gap:8px!important;width:100%!important;position:static!important;text-align:left!important;margin:4px 0!important;padding:12px 14px!important;color:#ecfff3!important;background:#176c4f!important;border-radius:10px!important;border:0!important;font-weight:750!important;cursor:pointer!important;';
+     btn.textContent='📖 Diary Centre';
+     if(diary)diary.after(btn); else nav.appendChild(btn);
+   }
+   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',placeSarNiNav,{once:true});else placeSarNiNav();
+ }else{
+   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',placeButton,{once:true});
+   else placeButton();
+ }
 })();
