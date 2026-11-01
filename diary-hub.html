@@ -103,12 +103,13 @@ async function acceptSarNiParentSession(e){
  autoSessionTried=true; token=incoming;
  say('authStatus','Connecting to your existing SarNi session…');
  try {
-  // Server verifies the session; no separate login if the token is valid.
-  const check=await api('hubList',{kind:'personal',limit:1,offset:0});
-  if(check?.ok===false)throw Error(check.message||'Session expired');
+  // The main SarNi session is already authenticated. Do not misreport a
+  // missing or misconfigured Hub API route as a need to sign in again.
   $('auth').classList.add('hidden');$('workspace').classList.remove('hidden');$('logout').classList.remove('hidden');
   newEntry();drawTabs();await load(true);void hubAdminLoad();
- }catch(ex){token='';say('authStatus','SarNi session could not be reused. Sign in if required: '+ex.message,true);}
+ }catch(ex){
+  say('resultHint','Diary Centre could not load: '+ex.message+' (check the SarNi backend deployment).',true);
+ }
 }
 window.addEventListener('message',acceptSarNiParentSession);
 if(window.parent!==window && location.origin==='https://saradasutar.github.io'){
