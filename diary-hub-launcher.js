@@ -24,7 +24,7 @@
   close.onclick=done;layer.onclick=e=>{if(e.target===layer)done();};document.addEventListener('keydown',onKey);
   actions.append(external,close);head.append(label,actions);box.append(head,frame);layer.append(box);document.body.appendChild(layer);close.focus();
  }
- const btn=document.createElement('button');btn.type='button';btn.id='sarniHubLaunch';btn.textContent=scope==='office'?'📖 Shared Office Diary':scope==='analysis'?'📖 Stock & Wisdom Diary':'📖 Diary Centre';btn.setAttribute('aria-label','Open connected SarNi Diary Centre');
+ const btn=document.createElement('button');btn.type='button';btn.id='sarniHubLaunch';btn.textContent=scope==='office'?'📖 Shared Office Diary':scope==='analysis'?'📖 Stock & Wisdom Diary':'📖 Diary Centre';btn.title='Open SarNi shared Diary Centre — Personal, Office, Stock and Investment Wisdom';btn.setAttribute('aria-label','Open connected SarNi Diary Centre');
  btn.style.cssText='background:#176c4f!important;color:white!important;border:0!important;min-height:40px!important;padding:9px 12px!important;cursor:pointer!important;font:700 13px system-ui!important;border-radius:12px!important;box-shadow:0 4px 15px #0f3b2650!important;';btn.onclick=modal;btn.title='Open the shared Diary Centre';btn.setAttribute('aria-haspopup','dialog');btn.title='Open the shared Diary Centre';
 
  // Keep the launcher accessible even when the HR sidebar is collapsed.
