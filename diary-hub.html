@@ -93,6 +93,27 @@ async function load(reset){
   if(kind==='stock'){$('company').innerHTML='<option value="">Choose company</option>'+companies.map(c=>'<option value="'+escapeHtml(c.id)+'">'+escapeHtml(c.symbol+' · '+c.name)+'</option>').join('');if(selected)$('company').value=selected.companyId||'';}
  }catch(e){if(seq===loadSeq)say('resultHint',e.message,true);}finally{if(seq===loadSeq)loading=false;}
 }
+// Reuse only a currently authenticated session from the SAME-ORIGIN SarNi parent.
+// Never accept tokens from HR, Analysis, other origins, or URL parameters.
+let autoSessionTried=false;
+async function acceptSarNiParentSession(e){
+ if(autoSessionTried || window.parent===window || e.source!==window.parent || e.origin!==location.origin || e.data?.type!=='sarni-hub-session')return;
+ const incoming=String(e.data.token||'');
+ if(!incoming || incoming.length>2048)return;
+ autoSessionTried=true; token=incoming;
+ say('authStatus','Connecting to your existing SarNi session…');
+ try {
+  // Server verifies the session; no separate login if the token is valid.
+  const check=await api('hubList',{kind:'personal',limit:1,offset:0});
+  if(check?.ok===false)throw Error(check.message||'Session expired');
+  $('auth').classList.add('hidden');$('workspace').classList.remove('hidden');$('logout').classList.remove('hidden');
+  newEntry();drawTabs();await load(true);void hubAdminLoad();
+ }catch(ex){token='';say('authStatus','SarNi session could not be reused. Sign in if required: '+ex.message,true);}
+}
+window.addEventListener('message',acceptSarNiParentSession);
+if(window.parent!==window && location.origin==='https://saradasutar.github.io'){
+ window.parent.postMessage({type:'sarni-hub-request-session'},location.origin);
+}
 $('loginForm').onsubmit=async e=>{e.preventDefault();const btn=e.target.querySelector('button');btn.disabled=true;say('authStatus','Signing in…');try{const r=await api('login',{username:e.target.elements.username.value,password:e.target.elements.password.value,fastLogin:true});token=r.token;e.target.elements.password.value='';$('auth').classList.add('hidden');$('workspace').classList.remove('hidden');$('logout').classList.remove('hidden');newEntry();drawTabs();await load(true);void hubAdminLoad();}catch(err){say('authStatus',err.message,true);}finally{btn.disabled=false;}};
 $('logout').onclick=async()=>{if(!checkDiscard())return;try{await api('logout')}catch(_){ }token='';selected=null;entries=[];$('workspace').classList.add('hidden');$('auth').classList.remove('hidden');$('logout').classList.add('hidden');};
 $('entryForm').onsubmit=async e=>{e.preventDefault();if(!token)return;if(selected?.rich && $('details').value!==selected.text && !confirm('This simple editor will replace the entry’s existing rich formatting with plain text. Continue?'))return;const btn=$('saveBtn');btn.disabled=true;say('saveStatus','Saving…');try{const entry={kind,id:selected?.id||'',clientKey,date:$('entryDate').value,title:$('entryTitle').value,body:$('details').value,tags:$('tags').value,important:$('important').checked,companyId:$('company').value,category:$('wisdomCategory').value,status:$('workStatus').value,revision:selected?.revision,updatedAt:selected?.updatedAt};const r=await api(kind==='office'?'hubSaveOffice':'hubSaveExisting',{entry});newEntry();say('saveStatus',r.message||'Saved successfully.');await load(true);}catch(err){say('saveStatus',err.message,true);}finally{btn.disabled=false;}};
