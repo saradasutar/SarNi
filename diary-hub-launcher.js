@@ -17,7 +17,7 @@
   const actions=document.createElement('div');actions.style.cssText='display:flex;gap:7px;';
   const external=document.createElement('a');external.href=root+'?scope='+scope+'&kind='+entryScope;external.target='_blank';external.rel='noopener noreferrer';external.textContent='Open in new tab';external.style.cssText='padding:8px;text-decoration:none;color:#155a47;font-size:12px;';
   const close=document.createElement('button');close.type='button';close.textContent='✕ Close';close.style.cssText='border:0;background:#e7f3eb;color:#285b44;border-radius:8px;padding:9px;font-size:13px;font-weight:700;cursor:pointer;';
-  const frame=document.createElement('iframe');frame.src=root+'?scope='+encodeURIComponent(scope)+'&kind='+encodeURIComponent(entryScope);frame.title='SarNi shared diary';frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups allow-downloads allow-same-origin');frame.referrerPolicy='strict-origin-when-cross-origin';frame.style.cssText='border:0;flex:1;width:100%;min-height:0;';
+  const frame=document.createElement('iframe');frame.src=root+'?v=20261101-sso2&scope='+encodeURIComponent(scope)+'&kind='+encodeURIComponent(entryScope);frame.title='SarNi shared diary';frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups allow-downloads allow-same-origin');frame.referrerPolicy='strict-origin-when-cross-origin';frame.style.cssText='border:0;flex:1;width:100%;min-height:0;';
   let oldFocus=document.activeElement;
   function done(){layer.dispatchEvent(new Event('sarni-hub-close'));layer.remove();document.removeEventListener('keydown',onKey);oldFocus?.focus?.();}
   function onKey(e){if(e.key==='Escape')done();}
@@ -27,6 +27,7 @@
     if(e.origin!==location.origin || e.source!==frame.contentWindow || e.data?.type!=='sarni-hub-request-session')return;
     let activeToken='';
     try{activeToken=(typeof state!=='undefined' && state && state.token)||'';}catch(_){}
+    if(!activeToken){try{activeToken=sessionStorage.getItem('portfolio_token')||'';}catch(_){}}
     if(activeToken)frame.contentWindow.postMessage({type:'sarni-hub-session',token:activeToken},location.origin);
    };
    window.addEventListener('message',onHubMessage);
