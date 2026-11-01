@@ -19,9 +19,19 @@
   const close=document.createElement('button');close.type='button';close.textContent='✕ Close';close.style.cssText='border:0;background:#e7f3eb;color:#285b44;border-radius:8px;padding:9px;font-size:13px;font-weight:700;cursor:pointer;';
   const frame=document.createElement('iframe');frame.src=root+'?scope='+encodeURIComponent(scope)+'&kind='+encodeURIComponent(entryScope);frame.title='SarNi shared diary';frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups allow-downloads allow-same-origin');frame.referrerPolicy='strict-origin-when-cross-origin';frame.style.cssText='border:0;flex:1;width:100%;min-height:0;';
   let oldFocus=document.activeElement;
-  function done(){layer.remove();document.removeEventListener('keydown',onKey);oldFocus?.focus?.();}
+  function done(){layer.dispatchEvent(new Event('sarni-hub-close'));layer.remove();document.removeEventListener('keydown',onKey);oldFocus?.focus?.();}
   function onKey(e){if(e.key==='Escape')done();}
   close.onclick=done;layer.onclick=e=>{if(e.target===layer)done();};document.addEventListener('keydown',onKey);
+  if(scope==='all' && location.origin==='https://saradasutar.github.io'){
+   const onHubMessage=e=>{
+    if(e.origin!==location.origin || e.source!==frame.contentWindow || e.data?.type!=='sarni-hub-request-session')return;
+    let activeToken='';
+    try{activeToken=(typeof state!=='undefined' && state && state.token)||'';}catch(_){}
+    if(activeToken)frame.contentWindow.postMessage({type:'sarni-hub-session',token:activeToken},location.origin);
+   };
+   window.addEventListener('message',onHubMessage);
+   layer.addEventListener('sarni-hub-close',()=>window.removeEventListener('message',onHubMessage),{once:true});
+  }
   actions.append(external,close);head.append(label,actions);box.append(head,frame);layer.append(box);document.body.appendChild(layer);close.focus();
  }
  const btn=document.createElement('button');btn.type='button';btn.id='sarniHubLaunch';btn.textContent=scope==='office'?'📖 Shared Office Diary':scope==='analysis'?'📖 Stock & Wisdom Diary':'📖 Diary Centre';btn.title='Open SarNi shared Diary Centre — Personal, Office, Stock and Investment Wisdom';btn.setAttribute('aria-label','Open connected SarNi Diary Centre');
