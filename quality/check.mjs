@@ -8,7 +8,7 @@ const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const errors=[],warnings=[];
 const check=(condition,description)=>{if(!condition)errors.push(description)};
 const warn=(condition,description)=>{if(!condition)warnings.push(description)};
-const html=read('index.html'),main=read('app-v20-8-19.js');
+const html=read('index.html'),main=read('app-v20-10-3.js');
 const css=read('styles.css');
 const bodyRefs=[...html.matchAll(/\b(?:src|href)="(\.\/[^"]+)"/gi)].map(m=>m[1].replace(/^\.\//,'').split('?')[0]);
 for(const f of new Set(bodyRefs)){
@@ -33,7 +33,7 @@ check(read('quick-expense.html').includes('type="number"')&&read('quick-expense.
 check(read('quick-expense.js').includes('crypto.getRandomValues'),'Quick Expense request IDs must use secure randomness');
 warn(!/mobile\s+otp\s+verification/i.test(html),'Unexpected mobile OTP verification copy detected');
 let total=0;
-for(const asset of ['index.html','styles.css','app-v20-8-19.js']){
+for(const asset of ['index.html','styles.css','app-v20-10-3.js']){
  const bytes=Buffer.byteLength(read(asset));total+=bytes;
  warn(bytes<1024*1024,asset+' exceeded 1 MiB source budget');
 }
