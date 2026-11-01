@@ -33,6 +33,17 @@
    window.addEventListener('message',onHubMessage);
    layer.addEventListener('sarni-hub-close',()=>window.removeEventListener('message',onHubMessage),{once:true});
   }
+  if(scope==='all'){
+    const manage=document.createElement('button');manage.type='button';manage.textContent='Manage Quick Links';manage.style.cssText='border:1px solid #bad9c7;border-radius:8px;padding:8px;color:#17634d;background:#edf8f1;font-weight:700;cursor:pointer;font-size:12px';
+    manage.onclick=()=>{
+      done();
+      if(typeof openSarNiAdminSettings==='function'){
+        openSarNiAdminSettings();
+        setTimeout(()=>document.getElementById('sarniQuickLinkPanel')?.scrollIntoView({behavior:'smooth',block:'start'}),150);
+      }else alert('Open SarNi Admin Settings → Login-free Quick Entry to manage saved links.');
+    };
+    actions.prepend(manage);
+  }
   actions.append(external,close);head.append(label,actions);box.append(head,frame);layer.append(box);document.body.appendChild(layer);close.focus();
  }
  const btn=document.createElement('button');btn.type='button';btn.id='sarniHubLaunch';btn.textContent=scope==='office'?'📖 Shared Office Diary':scope==='analysis'?'📖 Stock & Wisdom Diary':'📖 Diary Centre';btn.title='Open SarNi shared Diary Centre — Personal, Office, Stock and Investment Wisdom';btn.setAttribute('aria-label','Open connected SarNi Diary Centre');
