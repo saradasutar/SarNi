@@ -81,6 +81,10 @@ main[data-entry-mode="expense"] #entry #qeReason{font-weight:620!important}
 #recentSection strong{font-size:14px!important;font-weight:750!important}
 #recentSection small{font-size:12px!important;line-height:1.55!important}
 @media(max-width:420px){#tabs button{font-size:11.5px!important}#entry label{font-size:13px!important}#entry textarea{font-size:16.5px!important;min-height:180px!important}main[data-entry-mode="diary"] #entry textarea,main[data-entry-mode="stock"] #entry textarea,main[data-entry-mode="office"] #entry textarea{min-height:210px!important}}
+
+/* Expense head refresh: explicit, compact and touch-friendly */
+#qeRefreshHeads{display:inline-flex;align-items:center;justify-content:center;margin:8px 0 2px;padding:7px 10px!important;min-height:34px!important;font-size:12px!important;font-weight:750!important;border:1px solid #b9dccc!important;background:#ecf7ef!important;color:#1a614a!important}
+.qe-head-hint{display:block;color:#5e7668;font-size:11.5px;line-height:1.4;margin-top:3px}
 </style><script src="../config.js"></script></head><body>
 <main><header><img src="../sarni-life-icon.svg" alt=""><div><h1>SarNi · Quick Entry</h1><p style="margin:3px 0">Expense · Diary · Stock Note · Office Diary · Investment</p></div></header><p class="hint">Private shared link. No sign-in required.</p><div class="entry-heading"><small id="subtitle">ADD TO YOUR SARNI REGISTER</small><h2 id="heading">Quick expense</h2></div><nav id="tabs" hidden></nav><form id="entry" hidden><div id="fields"></div><div class="actions"><button type="button" id="reset">Clear</button><button type="submit" class="save" id="save">Save &amp; Add Another</button></div></form><p id="status" role="status">Verifying private link…</p><p id="restrictedEntry" hidden style="margin:12px 0"><a id="restrictedEntryLink" href="#" style="display:inline-block;padding:11px 14px;border:1px solid #9dc7b1;border-radius:12px;background:#f0f8f3;color:#125a40;font-weight:750;text-decoration:none">Office Diary / Investment entry (admin permission required)</a><small style="display:block;margin-top:5px;color:#63776e">Available only when enabled for this private link. Stock Diary and Investment Wisdom sharing require separate backend permissions.</small></p><section id="recentSection" hidden><div class="recent-head"><strong>Recent entries</strong><button type="button" id="refreshRecent">Refresh</button></div><p class="hint">Only entries saved using this shared link are displayed.</p><div id="recentList"></div></section><p class="hint">Only share this link with people you trust. The administrator may disable it at any time.</p></main>
 <script>
@@ -101,14 +105,32 @@ function render(){
  $('fields').innerHTML='<label for="qeAmount">Amount</label><div class="amountbox"><span aria-hidden="true">₹</span><input id="qeAmount" name="amount" type="number" inputmode="decimal" min="0.01" max="10000000" step=".01" required placeholder="0"></div>'+
  '<label for="qeReason">What was it for?</label><input id="qeReason" name="reason" maxlength="220" required placeholder="e.g. Lunch, groceries, taxi">'+
  '<label for="qePaidBy">Paid by / from</label><input id="qePaidBy" name="paidBy" maxlength="100" required placeholder="Cash, UPI, card or name">'+
- '<div class="grid"><div><label for="qeCategory">Category</label><select id="qeCategory" name="category" required><option value="">Choose category</option>'+opts+'</select></div><div><label for="qeDate">Date</label><input id="qeDate" name="dateSpent" type="date" value="'+today()+'" required></div></div>'+
+ '<div class="grid"><div><label for="qeCategory">Category / Expense Head</label><select id="qeCategory" name="category" required><option value="">Choose category</option>'+opts+'</select><button type="button" id="qeRefreshHeads" class="qe-refresh-heads">↻ Refresh Heads</button><small id="qeHeadHint" class="qe-head-hint">Missing a new head? Refresh this list.</small></div><div><label for="qeDate">Date</label><input id="qeDate" name="dateSpent" type="date" value="'+today()+'" required></div></div>'+
  '<details class="advanced"><summary>More expense details <span>⌄</span></summary><div class="advanced-body">'+
  '<label for="qeSub">Subcategory</label><select id="qeSub" name="subcategory"><option value="">None</option></select>'+
  '<div id="newHeadToggle" hidden><button type="button" id="newHeadBtn">＋ New expense head</button></div><div id="newHeadBox" hidden><label>New expense head<input id="newHeadName" maxlength="79" placeholder="e.g. Bhubaneswar Visit"></label></div>'+
  '<label for="qePaidTo">Paid to</label><input id="qePaidTo" name="paidTo" maxlength="140">'+
  '<label for="qeDebited">Debited from (optional)</label><input id="qeDebited" name="debitedFrom" maxlength="100">'+
  '<label for="qeNotes">Notes</label><textarea id="qeNotes" name="notes" rows="2" maxlength="700"></textarea></div></details>';
- const category=$('qeCategory'),sub=$('qeSub');category.onchange=()=>{const found=cats.find(v=>v.name===category.value),subs=found?.subcategories||[];sub.innerHTML='<option value="">None</option>'+subs.map(v=>'<option>'+safe(typeof v==='string'?v:v.name)+'</option>').join('');};
+ const category=$('qeCategory'),sub=$('qeSub');
+ const reloadHeads=$('qeRefreshHeads');
+ reloadHeads.onclick=async()=>{
+  if(reloadHeads.disabled)return;
+  reloadHeads.disabled=true;reloadHeads.textContent='Refreshing…';
+  try{
+   const updated=await api('qeInfo');
+   const nextCats=(updated.categories||[]).filter(x=>x&&x.active!==false&&x.enabled!==false);
+   const previous=category.value;info={...info,...updated};
+   category.innerHTML='<option value="">Choose category</option>'+nextCats.map(v=>'<option value="'+safe(v.name)+'">'+safe(v.name)+'</option>').join('');
+   if(nextCats.some(v=>v.name===previous))category.value=previous;
+   category.dispatchEvent(new Event('change'));
+   const message='Expense Heads refreshed: '+nextCats.length+' available.'+(nextCats.length===0?' Check whether heads are enabled in SarNi.':'');
+   $('qeHeadHint').textContent=message;
+   status(message);
+  }catch(err){$('qeHeadHint').textContent='Refresh failed: '+err.message;status('Could not refresh Expense Heads: '+err.message,true);}
+  finally{reloadHeads.disabled=false;reloadHeads.textContent='↻ Refresh Heads';}
+ };
+ category.onchange=()=>{const found=cats.find(v=>v.name===category.value),subs=found?.subcategories||[];sub.innerHTML='<option value="">None</option>'+subs.map(v=>'<option>'+safe(typeof v==='string'?v:v.name)+'</option>').join('');};
  if(access.allowNewHead){$('newHeadToggle').hidden=false;$('newHeadBtn').onclick=()=>{const box=$('newHeadBox');box.hidden=!box.hidden;category.required=box.hidden;category.disabled=!box.hidden;$('newHeadBtn').textContent=box.hidden?'＋ New expense head':'Use existing category';};}
  }else if(mode==='office'){
  $('fields').innerHTML='<label>Subject / title<input name="title" maxlength="160" required placeholder="Office follow-up or work note"></label>'+
