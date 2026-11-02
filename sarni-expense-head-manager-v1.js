@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id);
 function init(){
  const section=$('expenditureSection');if(!section||$('sarniHeadManager'))return;
  const el=document.createElement('article');el.className='panel';el.id='sarniHeadManager';
- el.innerHTML='<details id="sarniHeadDetails"><summary>Manage expense heads & subheads <small> · Enable / Archive / Restore</small></summary><p class="eh-note">Archived heads disappear from new expense entries, but all previous expenses and reports are retained. You can restore them anytime.</p><div class="eh-controls"><button type="button" id="ehReload">Refresh heads</button><label><input type="checkbox" id="ehShowArchived" checked> Show archived</label></div><div id="ehStatus" role="status"></div><div id="ehList"></div></details>';
+ el.innerHTML='<details id="sarniHeadDetails"><summary>Manage categories & subcategories <small> · Enable / Archive / Restore</small></summary><p class="eh-note">Archived categories disappear from new expense entries, but all previous expenses and reports are retained. You can restore them anytime.</p><div class="eh-controls"><button type="button" id="ehReload">Refresh heads</button><label><input type="checkbox" id="ehShowArchived" checked> Show archived</label></div><div id="ehStatus" role="status"></div><div id="ehList"></div></details>';
  section.insertBefore(el,section.firstElementChild);
  const css=document.createElement('style');css.textContent=`
  #sarniHeadManager{margin:12px 0;padding:15px!important}#sarniHeadManager summary{cursor:pointer;font-size:16px;font-weight:750}
@@ -36,7 +36,7 @@ function init(){
   controls.append(temp,dlabel,save);details.append(controls);wrap.append(details);return wrap;
  }
  function draw(){const root=$('ehList');root.replaceChildren();let visible=0;items.forEach(c=>{if(!$('ehShowArchived').checked&&!c.enabled)return;const card=row(c.name,'',c);(c.subheads||[]).forEach(s=>{if($('ehShowArchived').checked||s.enabled)card.append(row(c.name,s.name,s,true));});root.append(card);visible++;});if(!visible)root.textContent='No heads match the current filter.';}
- async function load(){try{msg('');const r=await api('ehList',{}, {retry:false});if(!r?.ok)throw Error(r?.message||'Unable to load heads');items=r.items||[];draw();}catch(e){msg('Expense Head Manager needs the SarNi 5 backend update (ehList, ehSet): '+e.message);}}
+ async function load(){try{msg('');const r=await api('ehList',{}, {retry:false});if(!r?.ok)throw Error(r?.message||'Unable to load heads');items=r.items||[];draw();}catch(e){msg('Category Manager needs the SarNi 5 backend update (ehList, ehSet): '+e.message);}}
  $('ehShowArchived').onchange=draw;$('ehReload').onclick=load;
  $('sarniHeadDetails').addEventListener('toggle',()=>{if($('sarniHeadDetails').open)load();});
 }
