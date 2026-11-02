@@ -29,3 +29,27 @@
 .sarni-qc-form textarea{min-height:150px!important}
 #dkRich{min-height:245px!important}
 }
+
+/* SarNi 2026-11: consistent, readable Expense + Diary forms */
+html.sarni-personal-only :is(.life-entry-form,#expenseForm,#diaryForm,#dkForm,.sarni-qc-form) :is(input:not([type="checkbox"]),select,textarea){
+  font-size:clamp(16px,1.15vw,18px)!important;
+  line-height:1.5!important;
+  min-height:46px;
+  padding:11px 13px;
+  color:#183b35!important;
+  border:1.5px solid #a9c9bd!important;
+  background:#fff!important;
+  border-radius:11px;
+  max-width:100%;
+}
+html.sarni-personal-only :is(.life-entry-form,#expenseForm,#diaryForm,#dkForm,.sarni-qc-form) textarea{min-height:124px;line-height:1.65!important;resize:vertical}
+html.sarni-personal-only :is(.life-entry-form,#expenseForm,#diaryForm,#dkForm,.sarni-qc-form) label{font-size:14px!important;line-height:1.4;font-weight:750!important;color:#254b43!important}
+html.sarni-personal-only :is(.life-entry-form,#expenseForm,#diaryForm,#dkForm,.sarni-qc-form) :is(input,select,textarea):focus-visible{outline:3px solid #388b76!important;outline-offset:2px;box-shadow:0 0 0 4px rgba(49,145,114,.12)}
+html.sarni-personal-only :is(.life-entry-form,#expenseForm,#diaryForm,#dkForm,.sarni-qc-form) :is(input,textarea)::placeholder{color:#687e76!important;opacity:1}
+html.sarni-personal-only :is(.life-entry-form,#expenseForm,.sarni-qc-form) input[type="number"]{font-variant-numeric:tabular-nums;font-weight:750!important;font-size:clamp(20px,2vw,27px)!important;text-align:left}
+html.sarni-personal-only :is(.life-entry-form,#expenseForm,.sarni-qc-form) :is(input[type="date"],select){font-variant-numeric:tabular-nums}
+html.sarni-personal-only :is(.life-entry-form,#expenseForm,#diaryForm,#dkForm,.sarni-qc-form) input[type="checkbox"]{width:19px;min-width:19px;height:19px;accent-color:#16806b}
+@media(max-width:600px){
+ html.sarni-personal-only :is(.life-entry-form,#expenseForm,#diaryForm,#dkForm,.sarni-qc-form) :is(input:not([type="checkbox"]),select,textarea){font-size:16px!important;min-height:48px;padding:11px 12px}
+ html.sarni-personal-only :is(.life-entry-form,#expenseForm,.sarni-qc-form) input[type="number"]{font-size:25px!important}
+}
