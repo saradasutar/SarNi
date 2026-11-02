@@ -619,7 +619,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <div id="expenseExperienceHint" class="life-context-hint hidden" role="status"></div><form class="life-entry-form" data-life-expense-form="" id="lifeExpenseHome">
 <div class="life-fields"><label>Date<input name="date" required="" type="date"/></label><label>Amount ₹<input inputmode="decimal" min="0.01" name="amount" placeholder="0.00" required="" step="0.01" type="number"/></label></div>
 <label>What was it for?<input maxlength="220" name="reason" placeholder="Lunch, petrol, building material…" required=""/></label>
-<div class="life-fields"><label>Category<select name="category" required=""></select></label><label>Trip / work / major head<select name="head"><option value="">General expense</option></select></label></div>
+<div class="life-fields"><label>Category<select name="category" required=""></select></label><label>Expense Group / Project<select name="head"><option value="">No group (regular expense)</option></select></label></div>
 <details class="life-extra"><summary>Payment details &amp; notes</summary><div class="life-fields"><label>Paid to<input maxlength="140" name="paidTo" placeholder="Shop / person"/></label><label>Paid from<input maxlength="120" name="account" placeholder="Cash / UPI / Card"/></label></div><label>Notes<input maxlength="1000" name="notes" placeholder="Optional details"/></label></details>
 <div class="life-form-foot"><span data-life-status="" role="status">Ready to save</span><button class="life-save" type="submit">✓ Save &amp; Next</button></div>
 </form>
@@ -713,7 +713,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <div class="sarni-trip-metrics">
 <article><span>This month</span><strong id="sarniSpendMonthTotal">₹0</strong><small id="sarniSpendMonthCount">0 expenses</small></article>
 <article><span>Selected year</span><strong id="sarniSpendYearTotal">₹0</strong><small>Actual expenditure</small></article>
-<article><span>Major heads · month</span><strong id="sarniSpendMajorTotal">₹0</strong><small>Already included in total</small></article>
+<article><span>Expense groups · month</span><strong id="sarniSpendMajorTotal">₹0</strong><small>Already included in total</small></article>
 <article><span>Regular due · next 30 days</span><strong id="sarniSpendDueTotal">₹0</strong><small>Upcoming, not counted as spent</small></article>
 </div>
 <div class="sarni-trip-visual-grid">
@@ -738,20 +738,20 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <div class="life-stat-grid life-three">
 <div class="life-stat"><span>Selected month</span><strong id="lifeMonthTotal">₹0</strong><small id="lifeMonthCount">0 expenses</small></div>
 <div class="life-stat"><span>Year-to-date</span><strong id="lifeYearTotal">₹0</strong><small>Actual payments</small></div>
-<div class="life-stat"><span>Selected head total</span><strong id="lifeHeadTotal">₹0</strong><small id="lifeHeadCount">All major heads</small></div>
+<div class="life-stat"><span>Selected head total</span><strong id="lifeHeadTotal">₹0</strong><small id="lifeHeadCount">All expense groups</small></div>
 </div>
 <div class="life-duo">
 <article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">NO POPUP</span><h3>Quick add expense</h3></div><span class="life-card-icon">＋</span></div>
 <form class="life-entry-form" data-life-expense-form="" id="lifeExpenseMain">
 <div class="life-fields"><label>Date<input name="date" required="" type="date"/></label><label>Amount ₹<input inputmode="decimal" min="0.01" name="amount" required="" step="0.01" type="number"/></label></div>
 <label>Description<input maxlength="220" name="reason" placeholder="What did you pay for?" required=""/></label>
-<div class="life-fields"><label>Category<select name="category" required=""></select></label><label>Trip / work / major head<select name="head"><option value="">General expense</option></select></label></div>
+<div class="life-fields"><label>Category<select name="category" required=""></select></label><label>Expense Group / Project<select name="head"><option value="">No group (regular expense)</option></select></label></div>
 <details class="life-extra"><summary>Payment details &amp; notes</summary><div class="life-fields"><label>Paid to<input maxlength="140" name="paidTo"/></label><label>Paid from<input maxlength="120" name="account"/></label></div><label>Notes<input maxlength="1000" name="notes"/></label></details>
 <div class="life-form-foot"><span data-life-status="" role="status">Ready to save</span><button class="life-save" type="submit">✓ Save &amp; Next</button></div>
 </form>
 </article>
-<article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">OPTIONAL BUDGET</span><h3>Create a new expense head</h3></div><span class="life-card-icon">▤</span></div>
-<form class="life-entry-form" id="lifeHeadForm"><label>Head name<input maxlength="140" name="name" placeholder="Bhubaneswar Trip / House Repair / Medical" required=""/></label>
+<article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">OPTIONAL BUDGET</span><h3>Create a new Expense Group / Project</h3></div><span class="life-card-icon">▤</span></div>
+<form class="life-entry-form" id="lifeHeadForm"><label>Group / Project name<input maxlength="140" name="name" placeholder="BBSR Trip / House Repair / Family Function" required=""/></label>
 <div class="life-fields"><label>Budget ₹ (optional)<input min="0" name="budget" placeholder="Leave blank" step="0.01" type="number"/></label><label>Purpose / note<input maxlength="1200" name="notes" placeholder="What is this for?"/></label></div>
 <div class="life-form-foot"><span data-life-status="" role="status">No budget required</span><button class="life-save" type="submit">+ Create head</button></div>
 </form>
@@ -775,7 +775,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <div class="sarni-insight-full-grid">
 <div class="sarni-insight-plot"><h4>Monthly spending trend</h4><p>January to December · selected year</p><div aria-live="polite" class="sarni-monthly-bars" id="sarniYearTrendChart"></div></div>
 <div class="sarni-insight-plot"><h4>Spending by category</h4><p>Selected month · tap a category to see entries</p><div aria-live="polite" class="sarni-donut-region" id="sarniMonthCategoryChart"></div></div>
-<div class="sarni-insight-plot"><h4>Trips, works &amp; major heads</h4><p>Selected year · budget not required</p><div aria-live="polite" class="sarni-breakdown" id="sarniHeadChart"></div></div>
+<div class="sarni-insight-plot"><h4>Expense Groups / Projects</h4><p>Selected year · budget not required</p><div aria-live="polite" class="sarni-breakdown" id="sarniHeadChart"></div></div>
 <div class="sarni-insight-plot"><h4>Last month comparison</h4><p>At a glance · compared with previous month</p><div aria-live="polite" class="sarni-compare" id="sarniComparisonChart"></div></div>
 </div>
 <p class="sarni-insight-note">The charts use your authenticated expense records. Admin user-wise totals remain in the separate Expenses by User section.</p>
@@ -1624,7 +1624,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <label class="span-2">Reason<input id="expenseReason" maxlength="220" placeholder="What was this payment for?" required=""/></label>
 <label>Category of expense<select id="expenseCategory" required=""></select></label>
 <label>Subcategory <small>(optional)</small><select id="expenseSubcategory"><option value="">No subcategory</option></select><small class="field-help" id="expenseSubcategoryHelp">Add subcategories in Category Manager whenever needed.</small></label>
-<label class="span-2" id="expenseMajorProjectGroup">Expense Group / Trip <small>(optional)</small><select id="expenseMajorProject"><option value="">Not linked to a major project</option></select><small class="field-help">Enter the expense only once. Linking it makes the same row appear in the selected project report.</small></label>
+<label class="span-2" id="expenseMajorProjectGroup">Expense Group / Trip <small>(optional)</small><select id="expenseMajorProject"><option value="">No group (regular expense)</option></select><small class="field-help">Enter the expense only once. Linking it makes the same row appear in the selected project report.</small></label>
 <label class="hidden" id="expenseFrequencyGroup">Frequency<select id="expenseFrequency"><option value="MONTHLY">Monthly</option><option value="QUARTERLY">Quarterly</option><option value="HALF_YEARLY">Half-yearly</option><option value="YEARLY">Yearly</option></select></label>
 <label class="hidden" id="expenseEndDateGroup">End date <small>(optional)</small><input id="expenseEndDate" type="date"/></label>
 <label class="hidden" id="expenseStatusGroup">Status<select id="expenseStatus"><option value="ACTIVE">Active</option><option value="PAUSED">Paused</option><option value="STOPPED">Stopped</option></select></label>
