@@ -2338,6 +2338,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <label>Title (optional)<input name="title" maxlength="160" placeholder="A short heading"></label>
     <label>What would you like to record?<textarea name="body" rows="5" maxlength="5000" placeholder="Write your observation, reflection or lesson…"></textarea></label>
     <div class="sarni-qc-grid-two sarni-qc-note-date"><label>Date<input name="noteDate" type="date"></label><label class="sarni-qc-check"><input type="checkbox" name="monthlyHighlight">★ Monthly highlight</label></div>
+    <label>Diary Type<select name="diaryType"><option value="Daily">Daily / General</option><option value="Planning">Planning</option><option value="Learning">Learning / Knowledge</option><option value="Idea">Idea / Future Reference</option><option value="Experience">Experience / Observation</option></select></label><label class="sarni-qc-check"><input name="needsFollowup" type="checkbox"> Needs follow-up</label>
     <details class="sarni-qc-advanced"><summary>More note options <span aria-hidden="true">⌄</span></summary><div class="sarni-qc-advanced-body"><label>Tags<input name="tags" maxlength="450" placeholder="learning, research, personal"></label><label class="sarni-qc-check"><input name="important" type="checkbox">★ Mark important</label></div></details>
    </div>
    <p id="sarniQcStatus" role="status" aria-live="polite"></p>
