@@ -795,7 +795,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <button class="expense-view-tab active" data-expense-view="ACTUAL" type="button">Actual Expenses</button>
 <button class="expense-view-tab" data-expense-view="PLANNED" type="button">Preplanned</button>
 <button class="expense-view-tab" data-expense-view="REGULAR" type="button">Regular Payments</button>
-<button class="expense-view-tab" data-expense-view="PROJECTS" type="button">Major Projects</button>
+<button class="expense-view-tab" data-expense-view="PROJECTS" type="button">Expense Groups / Projects</button>
 <button class="expense-view-tab" data-expense-view="CATEGORIES" type="button">Categories</button>
 </div>
 <article class="panel expense-panel" id="expenseDataPanel">
@@ -1624,7 +1624,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <label class="span-2">Reason<input id="expenseReason" maxlength="220" placeholder="What was this payment for?" required=""/></label>
 <label>Category of expense<select id="expenseCategory" required=""></select></label>
 <label>Subcategory <small>(optional)</small><select id="expenseSubcategory"><option value="">No subcategory</option></select><small class="field-help" id="expenseSubcategoryHelp">Add subcategories in Category Manager whenever needed.</small></label>
-<label class="span-2" id="expenseMajorProjectGroup">Major expenditure project <small>(optional)</small><select id="expenseMajorProject"><option value="">Not linked to a major project</option></select><small class="field-help">Enter the expense only once. Linking it makes the same row appear in the selected project report.</small></label>
+<label class="span-2" id="expenseMajorProjectGroup">Expense Group / Trip <small>(optional)</small><select id="expenseMajorProject"><option value="">Not linked to a major project</option></select><small class="field-help">Enter the expense only once. Linking it makes the same row appear in the selected project report.</small></label>
 <label class="hidden" id="expenseFrequencyGroup">Frequency<select id="expenseFrequency"><option value="MONTHLY">Monthly</option><option value="QUARTERLY">Quarterly</option><option value="HALF_YEARLY">Half-yearly</option><option value="YEARLY">Yearly</option></select></label>
 <label class="hidden" id="expenseEndDateGroup">End date <small>(optional)</small><input id="expenseEndDate" type="date"/></label>
 <label class="hidden" id="expenseStatusGroup">Status<select id="expenseStatus"><option value="ACTIVE">Active</option><option value="PAUSED">Paused</option><option value="STOPPED">Stopped</option></select></label>
