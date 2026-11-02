@@ -17,7 +17,7 @@ function openPanel(k){if(!signedIn())return;
  [...f.elements].forEach(x=>{if(!x.name)return; if(['amount','category','reason'].includes(x.name))x.required=kind==='expense';if(x.name==='body')x.required=kind!=='expense';if(x.name==='companyId')x.required=kind==='stock';if(x.name==='entryDate')x.required=kind==='expense';if(x.name==='noteDate')x.required=kind!=='expense';});
  document.querySelectorAll('[data-qc-tab]').forEach(b=>{const yes=b.dataset.qcTab===kind;b.setAttribute('aria-pressed',String(yes));b.classList.toggle('active',yes);});
  if(!f.elements.entryDate.value)f.elements.entryDate.value=stamp();if(!f.elements.noteDate.value)f.elements.noteDate.value=stamp();
- if(kind==='expense')loadCategories();if(kind==='stock')void loadCompanies();
+ if(kind==='expense'){loadCategories();loadExpenseGroups();}if(kind==='stock')void loadCompanies();
  notice('');if(!dialog.open){if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');}
  setTimeout(()=>{(kind==='expense'?f.elements.amount:kind==='stock'&&loadedCompanies?$('sarniQcCompany'):f.elements.body)?.focus();},35);
 }
@@ -29,6 +29,7 @@ function loadCategories(){const select=$('sarniQcCategory'),old=select.value;
  else if(cats.length===1)select.selectedIndex=1;
  loadSubcategories();
 }
+function loadExpenseGroups(){const sel=$('sarniQcProject');if(!sel)return;const old=sel.value;const projects=(Array.isArray(state.majorExpenseProjects)?state.majorExpenseProjects:[]).filter(x=>['ACTIVE','PLANNED'].includes(String(x.status||'ACTIVE').toUpperCase()));sel.replaceChildren(new Option('No expense group',''));projects.forEach(x=>sel.add(new Option(x.name,x.id)));if(projects.some(x=>String(x.id)===old))sel.value=old;}
 function loadSubcategories(){const sel=$('sarniQcSubcategory'),name=$('sarniQcCategory').value;
  const cats=Array.isArray(state.expenseCategories)?state.expenseCategories:[];
  const cat=cats.find(c=>String(c.name||c.Name)===name);let subs=cat?.subcategories||[];
@@ -50,7 +51,7 @@ async function save(e){e.preventDefault();if(busy||!signedIn())return;
  const owner=String(state.username||state.user?.username||'');
  try{let r;const date=(kind==='expense'?f.elements.entryDate.value:f.elements.noteDate.value)||stamp();
  if(kind==='expense'){
-  r=await api('saveExpense',{record:{dateSpent:date,amount:Number(f.elements.amount.value),category:f.elements.category.value,subcategory:f.elements.subcategory.value,reason:f.elements.reason.value.trim(),debitedFrom:f.elements.debitedFrom.value.trim(),paidTo:f.elements.paidTo.value.trim(),notes:f.elements.expenseNotes.value.trim()}},{retry:false});
+  r=await api('saveExpense',{record:{dateSpent:date,amount:Number(f.elements.amount.value),category:f.elements.category.value,subcategory:f.elements.subcategory.value,reason:f.elements.reason.value.trim(),debitedFrom:f.elements.debitedFrom.value.trim(),paidTo:f.elements.paidTo.value.trim(),notes:f.elements.expenseNotes.value.trim(),majorProjectId:($('sarniQcProject')?.value||'')}},{retry:false});
   if(r?.ok&&r.data){if(typeof applyBootstrap==='function')applyBootstrap(r.data);}
  }else{
   const body=f.elements.body.value.trim();if(!body)throw Error('Write a note first.');
