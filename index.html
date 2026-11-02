@@ -879,9 +879,9 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <div class="empty-state" id="expenseCategoryEmpty">No expense categories yet.</div>
 </article>
 <article class="panel major-project-panel hidden" id="majorExpenseProjectsView">
-<div class="panel-head responsive-head"><div><p class="eyebrow">MAJOR EXPENDITURE</p><h3>Projects without double entry</h3><p class="muted">House building, renovation, education or another large project. Totals come from the same Actual Expense rows.</p></div><button class="primary-button" id="addMajorExpenseProjectBtn" type="button">+ New project</button></div>
+<div class="panel-head responsive-head"><div><p class="eyebrow">EXPENSE GROUPS</p><h3>Trips, events & projects</h3><p class="muted">Track BBSR trips, functions, repairs or major work. Close completed groups; reports and old expenses remain safe.</p></div><button class="primary-button" id="addMajorExpenseProjectBtn" type="button">+ New Expense Group</button></div>
 <div class="major-project-grid" id="majorExpenseProjectGrid"></div>
-<div class="empty-state" id="majorExpenseProjectEmpty">No major expenditure project yet. Create “House Building”, then link expenses to it.</div>
+<div class="empty-state" id="majorExpenseProjectEmpty">No expense group yet. Create “BBSR Trip”, then link transactions to it.</div>
 </article>
 </section>
 <section aria-label="Credit card centre" class="page-section hidden" id="creditCardsSection">
@@ -1633,12 +1633,12 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 </form>
 </div>
 <div aria-labelledby="majorExpenseProjectModalTitle" aria-modal="true" class="modal compact-modal hidden" id="majorExpenseProjectModal" role="dialog">
-<div class="modal-head"><div><p class="eyebrow">MAJOR EXPENDITURE PROJECT</p><h2 id="majorExpenseProjectModalTitle">New project</h2></div><button aria-label="Close" class="modal-close" data-close-modal="">×</button></div>
+<div class="modal-head"><div><p class="eyebrow">EXPENSE GROUP / PROJECT</p><h2 id="majorExpenseProjectModalTitle">New project</h2></div><button aria-label="Close" class="modal-close" data-close-modal="">×</button></div>
 <form class="form-grid" id="majorExpenseProjectForm">
 <input id="majorExpenseProjectId" type="hidden"/>
-<label class="span-2">Project name<input id="majorExpenseProjectName" maxlength="140" placeholder="e.g. House Building" required=""/></label>
+<label class="span-2">Project name<input id="majorExpenseProjectName" maxlength="140" placeholder="e.g. BBSR Trip" required=""/></label>
 <label>Proposed budget (optional)<input id="majorExpenseProjectBudget" min="0" placeholder="Optional — leave blank" step="0.01" type="number"/></label>
-<label>Status<select id="majorExpenseProjectStatus"><option value="PLANNED">Planned</option><option selected="" value="ACTIVE">Active</option><option value="ON_HOLD">On hold</option><option value="COMPLETED">Completed</option><option value="ARCHIVED">Archived</option></select></label>
+<label>Status<select id="majorExpenseProjectStatus"><option value="PLANNED">Planned</option><option selected="" value="ACTIVE">Active</option><option value="ON_HOLD">On hold</option><option value="COMPLETED">Closed / Completed</option><option value="ARCHIVED">Archived</option></select></label>
 <label>Start date<input id="majorExpenseProjectStart" type="date"/></label><label>Target completion<input id="majorExpenseProjectTarget" type="date"/></label>
 <label>Colour<select id="majorExpenseProjectColor"><option value="PURPLE">Purple</option><option value="BLUE">Blue</option><option value="TEAL">Teal</option><option value="GREEN">Green</option><option value="ORANGE">Orange</option><option value="PINK">Pink</option><option value="GOLD">Gold</option></select></label>
 <label class="span-2">Notes<textarea id="majorExpenseProjectNotes" maxlength="1200" placeholder="Contractor, approvals, milestones or anything useful…" rows="4"></textarea></label>
@@ -2326,6 +2326,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <label>What was it for?<input name="reason" required maxlength="220" placeholder="e.g. Lunch, groceries, taxi" autocomplete="off"></label>
     <label>Paid by / from<input name="debitedFrom" maxlength="120" placeholder="Cash, UPI, card or name (optional)" autocomplete="off"></label>
     <div class="sarni-qc-grid-two"><label>Category<select name="category" id="sarniQcCategory" required></select></label><label>Date<input name="entryDate" type="date" required></label></div>
+    <label>Expense Group / Trip<select id="sarniQcProject" name="majorProjectId"><option value="">No group</option></select></label>
     <details class="sarni-qc-advanced"><summary>More expense details <span aria-hidden="true">⌄</span></summary><div class="sarni-qc-advanced-body">
      <label>Subcategory<select name="subcategory" id="sarniQcSubcategory"><option value="">None</option></select></label>
      <label>Paid to<input name="paidTo" maxlength="140" placeholder="Shop or person (optional)"></label>
