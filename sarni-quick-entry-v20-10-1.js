@@ -56,7 +56,7 @@ async function save(e){e.preventDefault();if(busy||!signedIn())return;
  }else{
   const body=f.elements.body.value.trim();if(!body)throw Error('Write a note first.');
   const title=f.elements.title.value.trim()||(kind==='diary'?'Diary entry':'Stock observation');
-  r=await api('dkSave',{kind:kind==='stock'?'stock':'personal',record:{title,html:body.split('\n').map(s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')).join('<br>'),entryDate:date,companyId:kind==='stock'?f.elements.companyId.value:'',important:f.elements.important.checked,monthlyHighlight:f.elements.monthlyHighlight.checked,tags:f.elements.tags.value,visibility:'PRIVATE',entryType:'PERSONAL'}},{retry:false});
+  r=await api('dkSave',{kind:kind==='stock'?'stock':'personal',record:{title,html:body.split('\n').map(s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')).join('<br>'),entryDate:date,companyId:kind==='stock'?f.elements.companyId.value:'',important:f.elements.important.checked,monthlyHighlight:f.elements.monthlyHighlight.checked,tags:[f.elements.diaryType?.value||'Daily',...(String(f.elements.tags.value||'').split(',').map(x=>x.trim()).filter(Boolean)),...(f.elements.needsFollowup?.checked?['follow-up']:[])].filter((x,i,a)=>a.findIndex(y=>y.toLowerCase()===x.toLowerCase())===i).join(', ').slice(0,450),visibility:'PRIVATE',entryType:'PERSONAL'}},{retry:false});
  }
  if(!r?.ok)throw Error(r?.message||'Could not confirm save.');
  if(owner!==String(state.username||state.user?.username||''))throw Error('Account changed during saving. Refresh the dashboard.');if(kind==='expense'&&typeof sarniRememberGroup==='function')sarniRememberGroup($('sarniQcProject')?.value||'');
