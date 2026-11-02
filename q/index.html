@@ -113,6 +113,11 @@ main[data-entry-mode="family"]{--mode-bg:#f6f2ff;--mode-border:#d9cff0;--mode-ac
 #entry .note-options{margin-top:13px}
 #entry .note-help{font-size:12px;color:#667c72;margin:6px 0 0}
 @media(min-width:480px){#entry .note-markings{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Mobile-first compact three-in-one markings. */
+#entry .note-markings{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;margin:9px 0 4px!important}
+#entry .note-markings .inline-check{min-width:0!important;min-height:42px!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:4px!important;padding:7px 3px!important;line-height:1.12!important;font-size:11px!important;font-weight:730!important;text-align:center!important;overflow-wrap:anywhere}
+#entry .note-markings input[type="checkbox"]{width:16px!important;height:16px!important;min-width:16px!important;min-height:16px!important;flex:0 0 16px!important}
+@media(max-width:360px){#entry .note-markings .inline-check{font-size:10px!important;padding:6px 2px!important;gap:3px!important}}
 </style><script src="../config.js"></script></head><body>
 <main><header><img src="../sarni-life-icon.svg" alt=""><div><h1>SarNi · Quick Entry</h1><p style="margin:3px 0">Expense · Diary · Stock Note · Office Diary · Investment</p></div></header><p class="hint">Private shared link. No sign-in required.</p><div class="entry-heading"><small id="subtitle">ADD TO YOUR SARNI REGISTER</small><h2 id="heading">Quick expense</h2></div><nav id="tabs" hidden></nav><form id="entry" hidden><div id="fields"></div><div class="actions"><button type="button" id="reset">Clear</button><button type="submit" class="save" id="save">Save &amp; Add Another</button></div></form><p id="status" role="status">Verifying private link…</p><p id="restrictedEntry" hidden style="margin:12px 0"><a id="restrictedEntryLink" href="#" style="display:inline-block;padding:11px 14px;border:1px solid #9dc7b1;border-radius:12px;background:#f0f8f3;color:#125a40;font-weight:750;text-decoration:none">Office Diary / Investment entry (admin permission required)</a><small style="display:block;margin-top:5px;color:#63776e">Available only when enabled for this private link. Stock Diary and Investment Wisdom sharing require separate backend permissions.</small></p><section id="recentSection" hidden><div class="recent-head"><strong>Recent entries</strong><button type="button" id="refreshRecent">Refresh</button></div><p class="hint">Only entries saved using this shared link are displayed.</p><div id="recentList"></div></section><p class="hint">Only share this link with people you trust. The administrator may disable it at any time.</p></main>
 <script>
@@ -124,9 +129,9 @@ function saveLastGroup(id){try{localStorage.setItem(lastGroupKey(),String(id||''
 /* Shared mobile-first form. Keep API field names compatible with existing records. */
 function noteMarkings(){
  return '<div class="note-markings" role="group" aria-label="Additional note markings">'+
-  '<label class="inline-check"><input type="checkbox" name="important"> ★ Mark important</label>'+
-  '<label class="inline-check"><input type="checkbox" name="monthlyHighlight"> Monthly highlight</label>'+
-  '<label class="inline-check"><input type="checkbox" name="needsFollowup"> Needs follow-up</label></div>';
+  '<label class="inline-check"><input type="checkbox" name="important"> ★ Important</label>'+
+  '<label class="inline-check"><input type="checkbox" name="monthlyHighlight"> Monthly</label>'+
+  '<label class="inline-check"><input type="checkbox" name="needsFollowup"> Follow-up</label></div>';
 }
 function noteMoreOptions(office){
  return '<details class="advanced note-options"><summary>More note options <span aria-hidden="true">⌄</span></summary>'+
@@ -137,7 +142,7 @@ function commonNoteFields(office,stock){
  const title=office?'Title / Subject':'Title (optional)';
  const typeName=office?'officeNoteType':'diaryType';
  const choices=office?
-  '<option value="General">General Work</option><option value="Planning">Planning</option><option value="Learning">Learning / Knowledge</option><option value="Idea">Idea / Future Reference</option><option value="Experience">Experience / Observation</option><option value="Follow-up">Follow-up / Action</option><option value="Decision">Decision / Instruction</option><option value="Meeting">Meeting / Discussion</option><option value="Reference">Reference / Procedure</option>':
+  '<option value="General">General Work</option><option value="Planning">Planning</option><option value="Learning">Learning / Knowledge</option><option value="Meeting">Meeting / Discussion</option><option value="Decision">Decision / Instruction</option>':
   '<option value="Daily">Daily / General</option><option value="Planning">Planning</option><option value="Learning">Learning / Knowledge</option><option value="Idea">Idea / Future Reference</option><option value="Experience">Experience / Observation</option>';
  const dateName=office?'date':'entryDate';
  const contentName=office?'body':'text';
