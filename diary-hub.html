@@ -13,6 +13,16 @@
 .historyitem{border-top:1px solid #e0e9e4;padding:9px 0}.historyitem pre{white-space:pre-wrap;overflow-wrap:anywhere;font:500 14px/1.6 system-ui;max-height:210px;overflow:auto}
 #investmentPanel .two{max-width:900px}#investmentPanel form textarea{min-height:95px}#invItems .entry{border-left:4px solid #277a5b}#hubGuestLinks .entry{display:flex;flex-wrap:wrap;align-items:center;gap:8px}#hubGuestLinks button{min-height:38px}.mainhint{padding:11px;background:#f3faf5;border-radius:10px;font-size:13px;color:#335c46}
 @media(max-width:740px){.filterbox{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.filterbox label{font-size:12px}.filterbox input{padding:8px!important}.actions button{flex:1}#entryForm textarea{min-height:230px}#editorPanel{order:1}#browsePanel{order:2}}
+
+/* Consistent comfortable input typography for Shared Diary Centre */
+#entryForm :is(input:not([type="checkbox"]),select,textarea),#hubFamilyForm :is(input:not([type="checkbox"]),select,textarea){font-size:17px!important;line-height:1.55!important;min-height:48px;padding:11px 13px!important;color:#193b34!important;border:1.5px solid #abc9bb!important;border-radius:11px}
+#entryForm textarea{min-height:180px;line-height:1.65!important;resize:vertical}
+#entryForm label,#hubFamilyForm label{font-size:14px!important;font-weight:750!important;line-height:1.45}
+#entryForm :is(input,select,textarea):focus-visible,#hubFamilyForm :is(input,select,textarea):focus-visible{outline:3px solid #398970!important;outline-offset:2px}
+#hubFamilyForm input[type="number"]{font-size:28px!important;font-weight:800!important;font-variant-numeric:tabular-nums}
+#entryForm input[type="checkbox"]{width:19px;height:19px;min-height:19px;accent-color:#16745e}
+@media(max-width:600px){#entryForm :is(input:not([type="checkbox"]),select,textarea),#hubFamilyForm :is(input:not([type="checkbox"]),select,textarea){font-size:16px!important;min-height:48px}}
+
 </style></head>
 <body><main class="shell"><header class="head"><div><h1>📖 SarNi · Diary Centre</h1><p class="sub">Write from SarNi, HR or Analysis. Save to one private master record.</p></div><button id="logout" class="alt hidden">Sign out</button></header>
 <section id="auth" class="panel auth"><h2>Sign in to the SarNi master diary</h2><p class="muted">Use your existing SarNi username and password. HR and Analysis passwords are not accepted here. No password is stored by this page.</p><form id="loginForm" class="loginbox"><label>Username<input name="username" autocomplete="username" required></label><label>Password<input name="password" type="password" autocomplete="current-password" required></label><button type="submit">Sign in securely</button></form><p id="authStatus" class="status" role="status"></p></section>
