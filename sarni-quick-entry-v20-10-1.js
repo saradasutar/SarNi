@@ -29,7 +29,7 @@ function loadCategories(){const select=$('sarniQcCategory'),old=select.value;
  else if(cats.length===1)select.selectedIndex=1;
  loadSubcategories();
 }
-function loadExpenseGroups(){const sel=$('sarniQcProject');if(!sel)return;const old=sel.value;const projects=(Array.isArray(state.majorExpenseProjects)?state.majorExpenseProjects:[]).filter(x=>['ACTIVE','PLANNED'].includes(String(x.status||'ACTIVE').toUpperCase()));sel.replaceChildren(new Option('No group (regular expense)',''));projects.forEach(x=>sel.add(new Option(x.name,x.id)));if(projects.some(x=>String(x.id)===old))sel.value=old;}
+function loadExpenseGroups(){const sel=$('sarniQcProject');if(!sel)return;const old=sel.value;const projects=(Array.isArray(state.majorExpenseProjects)?state.majorExpenseProjects:[]).filter(x=>['ACTIVE','PLANNED'].includes(String(x.status||'ACTIVE').toUpperCase()));sel.replaceChildren(new Option('No group (regular expense)',''));projects.forEach(x=>sel.add(new Option(x.name,x.id)));const preferred=old||((typeof sarniLastGroup==='function')?sarniLastGroup():'');if(projects.some(x=>String(x.id)===preferred))sel.value=preferred;}
 function loadSubcategories(){const sel=$('sarniQcSubcategory'),name=$('sarniQcCategory').value;
  const cats=Array.isArray(state.expenseCategories)?state.expenseCategories:[];
  const cat=cats.find(c=>String(c.name||c.Name)===name);let subs=cat?.subcategories||[];
@@ -59,7 +59,7 @@ async function save(e){e.preventDefault();if(busy||!signedIn())return;
   r=await api('dkSave',{kind:kind==='stock'?'stock':'personal',record:{title,html:body.split('\n').map(s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')).join('<br>'),entryDate:date,companyId:kind==='stock'?f.elements.companyId.value:'',important:f.elements.important.checked,monthlyHighlight:f.elements.monthlyHighlight.checked,tags:f.elements.tags.value,visibility:'PRIVATE',entryType:'PERSONAL'}},{retry:false});
  }
  if(!r?.ok)throw Error(r?.message||'Could not confirm save.');
- if(owner!==String(state.username||state.user?.username||''))throw Error('Account changed during saving. Refresh the dashboard.');
+ if(owner!==String(state.username||state.user?.username||''))throw Error('Account changed during saving. Refresh the dashboard.');if(kind==='expense'&&typeof sarniRememberGroup==='function')sarniRememberGroup($('sarniQcProject')?.value||'');
  notice('✓ Saved '+(kind==='expense'?'expense':kind==='diary'?'diary':'stock note')+' successfully.');
  if(kind==='expense'){f.elements.amount.value='';f.elements.reason.value='';f.elements.expenseNotes.value='';}
  else{f.elements.title.value='';f.elements.body.value='';f.elements.important.checked=false;f.elements.monthlyHighlight.checked=false;}
