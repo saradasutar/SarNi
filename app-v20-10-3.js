@@ -2451,7 +2451,7 @@ function renderExpenseCategories(){
     <div class="expense-category-actions"><button class="small-button expense-edit-button" data-edit-expense-category="${escapeHtml(c.id)}">✎ Edit category &amp; subcategories</button><button class="small-button danger" data-delete-expense-category="${escapeHtml(c.id)}">Delete</button></div>
   </article>`;}).join('');
 }
-function populateMajorProjectSelect(selected=''){if(!els.expenseMajorProject)return;const rows=state.majorExpenseProjects.filter(p=>['ACTIVE','PLANNED'].includes(p.status));els.expenseMajorProject.innerHTML='<option value="">No expense group (regular expense)</option>'+rows.map(p=>`<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('');els.expenseMajorProject.value=rows.some(p=>String(p.id)===String(selected))?String(selected):'';}
+function populateMajorProjectSelect(selected=''){if(!els.expenseMajorProject)return;const rows=sarniActiveExpenseGroups();els.expenseMajorProject.innerHTML='<option value="">No expense group (regular expense)</option>'+rows.map(p=>`<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('');const preferred=selected||sarniLastGroup();els.expenseMajorProject.value=rows.some(p=>String(p.id)===String(preferred))?String(preferred):'';}
 function majorProjectExpenses(id){return state.expenses.filter(x=>String(x.majorProjectId||'')===String(id));}
 function majorProjectName(id){return state.majorExpenseProjects.find(p=>String(p.id)===String(id))?.name||'';}
 function majorProjectStatusLabel(value){return String(value||'ACTIVE').replace('_',' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());}
@@ -2526,7 +2526,7 @@ function openExpenseEditor(mode='ACTUAL',item=null){
 async function saveExpenseForm(event){
   event.preventDefault();const mode=els.expenseRecordMode.value;const base={id:els.expenseRecordId.value.trim(),amount:Number(els.expenseAmount.value),paidTo:els.expensePaidTo.value.trim(),debitedFrom:els.expenseDebitedFrom.value.trim(),reason:els.expenseReason.value.trim(),category:els.expenseCategory.value,subcategory:els.expenseSubcategory.value,majorProjectId:els.expenseMajorProject?.value||'',notes:els.expenseNotes.value.trim()};
   let action,payload;if(mode==='REGULAR'){action='saveRecurringExpense';payload={record:{...base,name:els.expenseRegularName.value.trim(),frequency:els.expenseFrequency.value,nextDueDate:els.expenseDate.value,endDate:els.expenseEndDate.value,status:els.expenseStatus.value}};}else if(mode==='PLANNED'){action='saveExpensePlan';payload={record:{...base,plannedDate:els.expenseDate.value}};}else{action='saveExpense';payload={record:{...base,dateSpent:els.expenseDate.value}};}
-  setBusy(els.saveExpenseBtn,true,'Saving…');try{const r=await api(action,payload);applyBootstrap(r.data);saveCache(r.data);closeModals();switchSection('expenditure');setExpenseView(mode);toast(mode==='REGULAR'?'Regular payment saved.':mode==='PLANNED'?'Preplanned expense saved.':'Expense saved.','success');}catch(e){toast(e.message,'error');}finally{setBusy(els.saveExpenseBtn,false);}
+  setBusy(els.saveExpenseBtn,true,'Saving…');try{const r=await api(action,payload);applyBootstrap(r.data);saveCache(r.data);if(mode==='ACTUAL')sarniRememberGroup(base.majorProjectId);closeModals();switchSection('expenditure');setExpenseView(mode);toast(mode==='REGULAR'?'Regular payment saved.':mode==='PLANNED'?'Preplanned expense saved.':'Expense saved.','success');}catch(e){toast(e.message,'error');}finally{setBusy(els.saveExpenseBtn,false);}
 }
 async function deleteExpenseRecord(kind,id){
   const map={ACTUAL:['deleteExpense','expense'],PLANNED:['deleteExpensePlan','preplanned expense'],REGULAR:['deleteRecurringExpense','regular payment']};const [action,label]=map[kind];if(!confirm(`Delete this ${label}?`))return;try{const r=await api(action,{id});applyBootstrap(r.data);saveCache(r.data);toast(`${label.charAt(0).toUpperCase()+label.slice(1)} deleted.`,'success');}catch(e){toast(e.message,'error');}
@@ -7848,6 +7848,10 @@ const lifeRupees = n=>'₹'+(Number(n)||0).toLocaleString('en-IN',{maximumFracti
 const lifeDate = value=>String(value||'').slice(0,10);
 const lifeMonth = ()=>localIsoMonth();
 function lifeRows(){return Array.isArray(state.expenses)?state.expenses:[];}
+function sarniLastGroupKey(){return 'sarni_last_expense_group_v1_'+encodeURIComponent(String(state.user?.username||state.username||'').trim().toLowerCase()||'anonymous');}
+function sarniLastGroup(){try{return localStorage.getItem(sarniLastGroupKey())||'';}catch(_){return '';}}
+function sarniRememberGroup(id){try{localStorage.setItem(sarniLastGroupKey(),String(id||''));}catch(_){}}
+function sarniActiveExpenseGroups(){return (state.majorExpenseProjects||[]).filter(x=>['ACTIVE','PLANNED'].includes(String(x.status||'ACTIVE').toUpperCase()));}
 function lifeHeads(){return (state.majorExpenseProjects||[]).filter(x=>String(x.status||'').toUpperCase()!=='ARCHIVED');}
 function lifeDaysWritten(){return new Set((state.diary||[]).map(d=>lifeDate(d.entryDate)).filter(Boolean));}
 function lifeStreak(){
@@ -7869,10 +7873,10 @@ function lifeSafeCategories(){
   return [...new Set(values)].sort((a,b)=>a.localeCompare(b));
 }
 function lifeUpdateOptions(){
-  const cats=lifeSafeCategories(); const heads=lifeHeads();
+  const cats=lifeSafeCategories(); const heads=sarniActiveExpenseGroups();
   document.querySelectorAll('[data-life-expense-form]').forEach(form=>{
     lifeSelectOptions(form.elements.category,cats.map(x=>({value:x,label:x})),cats.length?null:['Other','Other']);
-    lifeSelectOptions(form.elements.head,heads.map(x=>({value:x.id,label:x.name})),['','No group (regular expense)']);
+    lifeSelectOptions(form.elements.head,heads.map(x=>({value:x.id,label:x.name})),['','No group (regular expense)']);if(!form.dataset.sarniGroupSelected){const preferred=sarniLastGroup();if(heads.some(x=>String(x.id)===preferred))form.elements.head.value=preferred;form.dataset.sarniGroupSelected='1';}
   });
   const picker=$('lifeHeadFilter');if(picker)lifeSelectOptions(picker,heads.map(x=>({value:x.id,label:x.name})),['ALL','All expenses']);
 }
@@ -8030,7 +8034,7 @@ async function lifeSaveExpense(form){
   if(maybeDuplicate&&!window.confirm('A similar expense is already recorded for this date and amount. Save another entry?')){lifeStatus(form,'Possible duplicate — entry was not saved.');return;}
   const button=form.querySelector('[type="submit"]');button.disabled=true;lifeStatus(form,'Saving to your private SarNi database…');
   const record={dateSpent:form.elements.date.value,amount,reason,category,majorProjectId:form.elements.head.value,paidTo:form.elements.paidTo.value.trim(),debitedFrom:form.elements.account.value.trim(),notes:form.elements.notes.value.trim(),subcategory:''};
-  try{const r=await api('saveExpense',{record});if(!r?.ok)throw new Error(r?.message||'Save failed');applyBootstrap(r.data);saveCache(r.data);sarniRenderRecentQuickEntries();
+  try{const r=await api('saveExpense',{record});if(!r?.ok)throw new Error(r?.message||'Save failed');applyBootstrap(r.data);saveCache(r.data);sarniRememberGroup(record.majorProjectId);sarniRenderRecentQuickEntries();
     // Save & Next: keep contextual fields and date; clear only the changing fields.
     const saved={date:record.dateSpent,category:record.category,head:record.majorProjectId,account:record.debitedFrom,paidTo:record.paidTo};
     form.reset();form.elements.date.value=saved.date;form.elements.category.value=saved.category;form.elements.head.value=saved.head;
