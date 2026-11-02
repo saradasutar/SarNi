@@ -29,7 +29,7 @@ function loadCategories(){const select=$('sarniQcCategory'),old=select.value;
  else if(cats.length===1)select.selectedIndex=1;
  loadSubcategories();
 }
-function loadExpenseGroups(){const sel=$('sarniQcProject');if(!sel)return;const old=sel.value;const projects=(Array.isArray(state.majorExpenseProjects)?state.majorExpenseProjects:[]).filter(x=>['ACTIVE','PLANNED'].includes(String(x.status||'ACTIVE').toUpperCase()));sel.replaceChildren(new Option('No expense group',''));projects.forEach(x=>sel.add(new Option(x.name,x.id)));if(projects.some(x=>String(x.id)===old))sel.value=old;}
+function loadExpenseGroups(){const sel=$('sarniQcProject');if(!sel)return;const old=sel.value;const projects=(Array.isArray(state.majorExpenseProjects)?state.majorExpenseProjects:[]).filter(x=>['ACTIVE','PLANNED'].includes(String(x.status||'ACTIVE').toUpperCase()));sel.replaceChildren(new Option('No group (regular expense)',''));projects.forEach(x=>sel.add(new Option(x.name,x.id)));if(projects.some(x=>String(x.id)===old))sel.value=old;}
 function loadSubcategories(){const sel=$('sarniQcSubcategory'),name=$('sarniQcCategory').value;
  const cats=Array.isArray(state.expenseCategories)?state.expenseCategories:[];
  const cat=cats.find(c=>String(c.name||c.Name)===name);let subs=cat?.subcategories||[];
