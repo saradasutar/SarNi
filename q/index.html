@@ -257,6 +257,17 @@ header p{font-size:12px!important;margin-top:5px!important;line-height:1.5}
 .qe-save-state.unverified{background:#f0f2f4;color:#5c6870}
 #lastSavedEntry .qe-destination-caption{display:block;font-weight:800;color:#285d45;margin-top:9px}
 #lastSavedEntry .qe-save-note{display:block;font-size:10.5px;color:#65786e;margin-top:7px}
+
+/* Destination synchronization badges; never infer success without backend evidence */
+.recent-sync-badge{display:inline-flex;padding:4px 8px;font-size:11px;font-weight:830;line-height:1.25;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+.recent-sync-badge.is-synced,.recent-sync-badge.is-linked{color:#226444;background:#e4f5e9;border-color:#b7dfc3}
+.recent-sync-badge.is-pending{color:#81520b;background:#fff2d9;border-color:#eed29a}
+.recent-sync-badge.is-failed{color:#9b3438;background:#ffebec;border-color:#f0c1c1}
+.recent-sync-badge.is-archived,.recent-sync-badge.is-unverified{color:#58666b;background:#eff2f4;border-color:#d8dfe2}
+.recent-sync-detail{margin-top:5px;font-size:11px}
+.recent-sync-detail summary{font-size:11px!important}
+.recent-sync-detail small{display:block;color:#62776c;font-size:11px!important;line-height:1.5;margin-top:5px;min-width:120px;max-width:230px}
+.recent-sync-retry{font-size:11px!important;min-height:31px!important;padding:5px 8px!important;margin-top:6px}
 </style><script src="../config.js"></script></head><body>
 <main><header><img src="../sarni-life-icon.svg" alt=""><div><h1>SarNi · Quick Entry</h1><p style="margin:3px 0">Expense · Diary · Stock Note · Office Diary · Investment</p></div></header><p class="hint" style="margin:10px 0 0;padding:8px 11px;background:#eff7f2;border:1px solid #d9e9de;border-radius:9px;color:#456c59;font-weight:650">Quick entry · No dashboard login required · Recent entries below</p><div class="entry-heading"><small id="subtitle">ADD TO YOUR SARNI REGISTER</small><h2 id="heading">Quick expense</h2></div><nav id="tabs" hidden></nav><form id="entry" hidden><div id="fields"></div><div class="actions"><button type="button" id="reset">Clear</button><button type="submit" class="save" id="save">Save &amp; Add Another</button></div></form><p id="status" role="status">Verifying private link…</p><section id="lastSavedEntry" hidden aria-live="polite"></section><p id="restrictedEntry" hidden style="margin:12px 0"><a id="restrictedEntryLink" href="#" style="display:inline-block;padding:11px 14px;border:1px solid #9dc7b1;border-radius:12px;background:#f0f8f3;color:#125a40;font-weight:750;text-decoration:none">Office Diary / Investment entry (admin permission required)</a><small style="display:block;margin-top:5px;color:#63776e">Available only when enabled for this private link. Stock Diary and Investment Wisdom sharing require separate backend permissions.</small></p><section id="sipSavedSection" class="sip-saved-section" hidden><div class="recent-head"><strong>Saved SIP plans (not invested)</strong><button type="button" id="sipRefresh">Refresh plans</button></div><p class="hint">Plans are separate from completed transactions and holdings. Only plans created with this private link are shown.</p><div id="sipSavedList" aria-live="polite"></div></section><section id="recentSection" hidden><div class="recent-head"><strong>Recent entries</strong><div class="recent-head-actions"><button type="button" id="refreshRecent">Refresh</button><button type="button" id="toggleRecent" aria-controls="recentBody" aria-expanded="true">Hide</button></div></div><div id="recentBody"><label class="recent-search-label" for="recentSearch">Search loaded transactions<input id="recentSearch" type="search" placeholder="Search date, amount, title or category…" autocomplete="off"></label><small id="recentSearchInfo" class="hint">Searches records loaded in this tab</small><div id="recentSummary" class="recent-summary" aria-live="polite" hidden></div><div id="pinGate" hidden style="border:1px solid #cfdfd6;background:#f4faf7;padding:12px;border-radius:11px;margin:10px 0"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong>Manage older entries</strong><button type="button" id="pinManageToggle">Edit / Trash / Restore (PIN)</button><button type="button" id="pinLock" hidden>Lock</button></div><p class="hint" id="pinHint">Admin-enabled PIN protects viewing and changing older records.</p><form id="pinUnlockForm" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" required autocomplete="off" placeholder="4-digit PIN" aria-label="Administrator-assigned management PIN" style="max-width:170px"><button type="submit" id="pinUnlock">Unlock</button></form></div><label id="pinTrashRow" hidden style="display:flex;gap:7px;align-items:center;margin:8px 0"><input id="pinShowTrash" type="checkbox"> Show archived / Trash records</label><p class="hint" id="recentExplanation">Only entries saved using this private link are displayed. Some connected registers require separate permission for managing past entries.</p><div id="recentList"></div></div></section><p class="hint">Only share this link with people you trust. The administrator may disable it at any time.</p></main>
 <script>
@@ -451,9 +462,9 @@ $('reset').onclick=()=>{pendingQuickEntryId='';pendingQuickEntryMode='';delete $
    expense:[['date','Date'],['category','Category'],['subject','Reason / Purpose'],['amount','Amount'],['party','Paid by'],['details','Details']],
    diary:[['date','Date'],['subject','Title / Note'],['type','Type'],['details','Details']],
    stock:[['date','Date'],['subject','Company / Note'],['type','Type'],['details','Details']],
-   office:[['date','Date'],['subject','Office note'],['type','Type'],['details','Details']],
-   investment:[['date','Date'],['subject','Investment'],['type','Action'],['amount','Amount'],['details','Details']],
-   family:[['date','Date'],['category','Category'],['subject','Reason'],['amount','Amount'],['party','Paid by'],['details','Details']]
+   office:[['date','Date'],['subject','Office note'],['type','Type'],['sync','Sync'],['details','Details']],
+   investment:[['date','Date'],['subject','Investment'],['type','Action'],['amount','Amount'],['sync','Sync'],['details','Details']],
+   family:[['date','Date'],['category','Category'],['subject','Reason'],['amount','Amount'],['party','Paid by'],['sync','Sync'],['details','Details']]
   };
   const columns=columnsByType[requestedMode]||columnsByType.diary;
   let wrap=host.querySelector('.recent-table-scroll'),table=wrap?.querySelector('table'),tbody=table?.querySelector('tbody');
@@ -489,6 +500,31 @@ $('reset').onclick=()=>{pendingQuickEntryId='';pendingQuickEntryMode='';delete $
     else if(field==='type')td.textContent=get('diaryType','officeNoteType','noteType','side','assetType')||'—';
     else if(field==='party')td.textContent=get('paidBy','paidByName','payer','fromAccount')||'—';
     else if(field==='amount')td.textContent=asMoney(get('amount'));
+    else if(field==='sync'){
+     const rawState=String(record.syncState||'').toUpperCase(),badge=document.createElement('span');
+     badge.className='recent-sync-badge';
+     let state='unverified',label='Not verified',explanation='This record does not include a verified destination synchronization response.';
+     if(requestedMode==='investment'){
+      if(rawState==='SYNCED'){state='synced';label='Synced';explanation='SarNi records Analysis as synchronized. This is the stored backend status.';}
+      else if(rawState==='PENDING'){state='pending';label='Pending';explanation='SarNi is awaiting an Analysis bridge confirmation.';}
+      else if(rawState==='FAILED'||rawState==='ERROR'){state='failed';label='Failed';explanation='The investment bridge reported a problem.';}
+      else if(rawState){explanation='Backend state: '+rawState;}
+     }else if(requestedMode==='family'){
+      if(rawState==='TRASHED'){state='archived';label='Archived';explanation='This Family Expense entry is in Trash, not a synchronization status.';}
+      else{state='linked';label='Linked';explanation='The recent-entry backend found both the MyFamily source record and the SarNi mirror. This is a record-link check, not a delivery receipt.';}
+     }else if(requestedMode==='office'){explanation='Office Diary is recorded in SarNi; HR delivery confirmation is not available in this recent-entry response.';}
+     badge.classList.add('is-'+state);badge.textContent=label;td.append(badge);
+     const details=document.createElement('details');details.className='recent-sync-detail';const trigger=document.createElement('summary');trigger.textContent='Details';const desc=document.createElement('small');desc.textContent=explanation;details.append(trigger,desc);
+     if(requestedMode==='investment'&&state!=='synced'&&pinGrant&&record.id&&!record.trashed){
+      const retry=document.createElement('button');retry.type='button';retry.className='recent-sync-retry';retry.textContent='Retry sync (PIN)';retry.title='Use only after checking for an existing copy in Analysis. This backend route prevents duplicate IDs.';retry.onclick=async()=>{
+       if(!confirm('Retry Analysis synchronization for this investment? It uses the original stable transaction ID.'))return;
+       retry.disabled=true;try{const answer=await api('qpinSyncRetry',{grant:pinGrant,kind:'investment',id:record.id});status(answer.message||'Analysis retry completed.');await loadRecent(false);}
+       catch(error){status('Sync retry: '+(error.message||'Backend support not installed. Retry from SarNi admin.'),true);}
+       finally{retry.disabled=false;}
+      };details.append(retry);
+     }
+     td.append(details);
+    }
     else if(field==='details'){
      const disclosure=document.createElement('details');const summary=document.createElement('summary');summary.textContent='View';
      const content=document.createElement('div');content.className='recent-cell-detail';content.textContent=(detailValues||description||record.text||'No additional details returned').slice(0,2500);
