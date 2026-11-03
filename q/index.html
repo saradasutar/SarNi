@@ -308,7 +308,7 @@ $('reset').onclick=()=>{pendingQuickEntryId='';pendingQuickEntryMode='';render()
   const filtered=entries.filter(e=>String(e.kind||'').toLowerCase()===requestedMode);
   if(!append)host.replaceChildren();
   host.querySelector('[data-load-more]')?.remove();
-  if(!filtered.length&&!append){host.textContent='No recent '+label+' entries returned for this link.';return;}
+  if(!filtered.length&&!append){host.textContent='No '+label+' entries in the latest records returned by this link. Older entries may exist in the signed-in register.';return;}
   filtered.forEach(e=>{
    const card=document.createElement('div');card.className='recent-item';
    const details=document.createElement('div');
