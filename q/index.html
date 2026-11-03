@@ -291,7 +291,12 @@ $('reset').onclick=()=>{pendingQuickEntryId='';pendingQuickEntryMode='';render()
   ?'This tab saves to a separate linked register. Recent records cannot be managed here until its permission-checked listing and edit/delete API is enabled.'
   :'Entries made using this private link are displayed here when permitted. Edit is offered only for records the backend explicitly allows.';
  if(['office','investment','family'].includes(mode)){
-  host.textContent='To view or manage existing '+label+' records, open the corresponding signed-in dashboard. Cross-dashboard quick-link management is not yet enabled.';
+  host.replaceChildren();
+  const msg=document.createElement('p');msg.textContent='This link currently cannot list or edit '+label+' records. Use the signed-in register to manage them.';
+  const link=document.createElement('a');link.target='_blank';link.rel='noopener noreferrer';link.textContent='Open '+label+' register';
+  link.href=requestedMode==='family'?'https://saradasutar.github.io/MyFamily/':requestedMode==='investment'?'https://saradasutar.github.io/Analysis/':'https://saradasutar.github.io/SarNi/diary-hub.html?scope=office&kind=office';
+  link.style.cssText='display:inline-block;margin-top:8px;color:#11664a;font-weight:750;text-decoration:underline';
+  host.append(msg,link);
   return;
  }
  const requestedMode=mode;
