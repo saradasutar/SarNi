@@ -9,6 +9,43 @@ const status=(msg,bad=false)=>{const t=$('sarniQelStatus');t.textContent=msg;t.s
 const panel=document.createElement('article');panel.id='sarniQuickLinkPanel';panel.className='panel';
 panel.innerHTML='<div class="qel-head"><div><h3>Login-free Quick Entry</h3><p>Manage private mobile entry links for Expense, Diary and Stock Notes.</p></div><button type="button" id="sarniQelRefresh">↻ Refresh</button></div><div class="qel-top-actions"><button type="button" id="sarniQelShowCreate" class="secondary-button">＋ Create New Link</button></div><div id="sarniQelList">Loading links…</div><form id="sarniQelForm" hidden><label class="qel-text">Link name<input name="label" maxlength="100" value="SarNi Daily Quick Entry" required></label><label class="qel-check"><input type="checkbox" name="neverExpires" checked><span>Keep active until disabled</span></label><label class="qel-text" id="sarniQelExpiry">Expiry date and time<input name="expiresAt" type="datetime-local"></label><fieldset><legend>Allow entries</legend><label class="qel-check"><input type="checkbox" name="allowExpense" checked><span>Expense</span></label><label class="qel-check"><input type="checkbox" name="allowDiary" checked><span>Diary</span></label><label class="qel-check"><input type="checkbox" name="allowStock" checked><span>Stock Notes</span></label><label class="qel-check"><input type="checkbox" name="allowOffice"><span>Office Diary (HR shared register)</span></label><label class="qel-check"><input type="checkbox" name="allowInvestment"><span>Investment transactions (Analysis)</span></label><label class="qel-check"><input type="checkbox" name="allowFamily"><span>Family Expense (MyFamily)</span></label><p class="qel-hint" style="margin:4px 0;grid-column:1/-1">Office Diary is disabled by default. It requires the SarNi Office Diary backend and HR connection. Do not use this for confidential office documents.</p></fieldset><button class="primary-button" type="submit">Generate private link</button></form><div id="sarniQelSecret" hidden><strong>New private link — copy now</strong><p>The secret is only displayed when the link is created.</p><input id="sarniQelNewLink" readonly><button type="button" id="sarniQelCopy">Copy link</button></div><p id="sarniQelStatus" role="status" aria-live="polite"></p><p class="qel-hint">Copy link works for newly generated links after the backend update. Older links whose secrets were not retained must be replaced; existing expenses are preserved.</p>';
 section.insertBefore(panel,section.querySelector('#sarniBackupPanel')||null);
+// Admin-only MyFamily bridge identity selector. Uses authenticated SarNi API; never runs in the public /q/ page.
+const familyIdentity=document.createElement('details');
+familyIdentity.id='sarniFamilyBridgeIdentity';
+familyIdentity.style.cssText='border:1px solid #d7e4db;border-radius:12px;padding:10px 12px;margin:12px 0;background:#f8fbf9';
+const familyHeading=document.createElement('summary');familyHeading.textContent='MyFamily connection · Choose active default member';familyHeading.style.cssText='font-weight:800;cursor:pointer;color:#285947';
+const familyDescription=document.createElement('p');familyDescription.style.cssText='font-size:12px;color:#586d61';familyDescription.textContent='Choose which registered MyFamily member receives SarNi-imported expenses. This does not change the Paid by text. Requires the SarNi Family Member Admin backend add-on.';
+const familyStatus=document.createElement('p');familyStatus.setAttribute('role','status');familyStatus.style.cssText='font-size:12px;color:#44645a';
+const familySelect=document.createElement('select');familySelect.style.cssText='width:100%;max-width:440px;min-height:40px;padding:8px;border-radius:8px';
+familySelect.setAttribute('aria-label','Active MyFamily default member');
+const familyReload=document.createElement('button');familyReload.type='button';familyReload.textContent='Refresh active members';familyReload.style.margin='8px 8px 0 0';
+const familySave=document.createElement('button');familySave.type='button';familySave.textContent='Save selected member';familySave.style.margin='8px 0';familySave.disabled=true;
+familyIdentity.append(familyHeading,familyDescription,familyStatus,familySelect,familyReload,familySave);
+panel.insertBefore(familyIdentity,$('sarniQelList'));
+async function familyLoadMembers(){
+ familySave.disabled=true;familyReload.disabled=true;familyStatus.textContent='Checking MyFamily member connection…';
+ try{
+  const result=await call('sfnMemberAdminList');
+  familySelect.replaceChildren();
+  const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Select an active MyFamily member';familySelect.append(placeholder);
+  (result.members||[]).forEach(m=>{const opt=document.createElement('option');opt.value=m.id;opt.textContent=m.name+' ('+m.id+')';familySelect.append(opt);});
+  if(result.configuredValid)familySelect.value=result.configuredMemberId;
+  familyStatus.textContent=result.configuredValid?'MyFamily member mapping is configured.':'Choose an active member and save to unblock Family Expense.';
+  familySave.disabled=!(result.members||[]).length;
+ }catch(error){familySelect.replaceChildren();familyStatus.textContent='Configuration unavailable: '+error.message+'. Install the SarNi member add-on and two API router cases.';}
+ finally{familyReload.disabled=false;}
+}
+familyIdentity.addEventListener('toggle',()=>{if(familyIdentity.open)void familyLoadMembers();});
+familyReload.onclick=()=>void familyLoadMembers();
+familySave.onclick=async()=>{
+ if(!familySelect.value){familyStatus.textContent='Choose an active member first.';return;}
+ if(!confirm('Use the selected registered member for SarNi-imported MyFamily expenses? This does not edit older expenses.'))return;
+ familySave.disabled=true;
+ try{const x=await call('sfnMemberAdminSet',{memberId:familySelect.value});familyStatus.textContent=x.message||'Saved.';}
+ catch(error){familyStatus.textContent='Could not save: '+error.message;}
+ finally{familySave.disabled=false;}
+};
+
 const styles=document.createElement('style');styles.textContent=`
 #sarniQuickLinkPanel .qel-top-actions{display:flex;gap:8px;margin:10px 0 14px}
 #sarniQuickLinkPanel .qel-latest-title{font-size:13px;font-weight:800;color:#166b51;margin:12px 0 4px}
