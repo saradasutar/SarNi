@@ -599,6 +599,7 @@ const qeRecentVerificationKinds=[{kind:'investment',name:'Investment → Analysi
 function qeVerifyCancel(){
  ++qeVerifyRecentSequence;
  qeVerifyAuditReport=null;qeVerifyAuditTargets=[];
+ $('qeVerifyRecheckUnresolved').disabled=false;
  $('qeVerifyRecheckUnresolved').hidden=true;
  $('qeVerifyCopyReport').hidden=true;
  $('qeVerifyRecentCancel').hidden=true;
