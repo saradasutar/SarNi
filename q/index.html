@@ -409,11 +409,11 @@ async function manageRecent(record,action){
  catch(e){status('Unable to '+action+' entry: '+e.message,true);}
 }
 function editRecent(record){
- if(!pinGrant||!record?.editable||!record.id||!record.fields||!['expense','diary','office','stock'].includes(record.kind))return;
+ if(!pinGrant||!record?.editable||!record.id||!record.fields||!['expense','diary','office','stock','family'].includes(record.kind))return;
  mode=record.kind;render();updatePinGate();pendingQuickEntryId='';pendingQuickEntryMode='';
  const inputs=$('entry').elements;
  Object.entries(record.fields||{}).forEach(([k,v])=>{const input=inputs.namedItem(k);if(!input||input.type==='file')return;if(input.type==='checkbox')input.checked=!!v;else input.value=v??'';});
- if(record.kind==='expense'){const category=inputs.namedItem('category');if(category){category.value=record.fields.category||'';category.dispatchEvent(new Event('change'));}const sub=inputs.namedItem('subcategory');if(sub)sub.value=record.fields.subcategory||'';}
+ if(record.kind==='family'){const category=inputs.namedItem('category');if(category){category.value=record.fields.category||'';category.dispatchEvent(new Event('change'));}const sub=inputs.namedItem('subcategory');if(sub)sub.value=record.fields.subcategory||'';}if(record.kind==='expense'){const category=inputs.namedItem('category');if(category){category.value=record.fields.category||'';category.dispatchEvent(new Event('change'));}const sub=inputs.namedItem('subcategory');if(sub)sub.value=record.fields.subcategory||'';}
  $('entry').dataset.editId=record.id;$('entry').dataset.pinRevision=String(record.revision||'');
  $('save').textContent='Save correction';$('entry').scrollIntoView({behavior:'smooth',block:'start'});
  status('Editing an existing '+record.kind+' entry. Save correction or press Clear to cancel.');
