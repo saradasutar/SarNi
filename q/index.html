@@ -172,7 +172,7 @@ function commonNoteFields(office,stock){
   '<option value="Daily">Daily / General</option><option value="Planning">Planning</option><option value="Learning">Learning / Knowledge</option><option value="Idea">Idea / Future Reference</option><option value="Experience">Experience / Observation</option>';
  const dateName=office?'date':'entryDate';
  const contentName=office?'body':'text';
- const stockField=stock?'<label>Stock / company (reference only)<input name="companyName" maxlength="120" placeholder="e.g. Company or ticker"></label>':'';
+ const stockField=stock?'<label>Stock / company<input name="companyName" maxlength="120" required placeholder="Company name"></label>':'';
 
  return stockField+
   '<label>'+title+'<input name="title" maxlength="'+(office?'160':'120')+'" '+(office?'required ':'')+'placeholder="'+(office?'Office follow-up or work note':'Short heading')+'"></label>'+
