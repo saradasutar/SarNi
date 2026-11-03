@@ -409,7 +409,7 @@ async function manageRecent(record,action){
  catch(e){status('Unable to '+action+' entry: '+e.message,true);}
 }
 function editRecent(record){
- if(!pinGrant||!record?.editable||!record.id||!record.fields||!['expense','diary','office','stock','family'].includes(record.kind))return;
+ if(!pinGrant||!record?.editable||!record.id||!record.fields||!['expense','diary','office','stock','family','investment'].includes(record.kind))return;
  mode=record.kind;render();updatePinGate();pendingQuickEntryId='';pendingQuickEntryMode='';
  const inputs=$('entry').elements;
  Object.entries(record.fields||{}).forEach(([k,v])=>{const input=inputs.namedItem(k);if(!input||input.type==='file')return;if(input.type==='checkbox')input.checked=!!v;else input.value=v??'';});
