@@ -628,7 +628,7 @@ async function qeLoadGlobalSync(){
    }else if(c.kind==='office'){
     el.textContent=items.length+' recent SarNi office records · HR delivery not verified';
    }else{
-    el.textContent=items.length+' recent linked records · live MyFamily delivery not independently verified';
+    el.textContent=items.length+' recent Family Expense records · SarNi mirror and live MyFamily delivery not independently verified';
    }
   }catch(e){if(current===globalSyncRequest&&!$('qeGlobalSyncPanel').hidden)el.textContent='Status unavailable · '+String(e?.message||e);}
  }));
@@ -659,8 +659,8 @@ async function loadQuickSyncSummary(){
    make('SarNi office records',entries.length,'linked');make('HR verified',0,'unverified');
    note.textContent='HR delivery confirmation is not available in this response. Zero verified does not mean delivery failed. Review HR before assuming synchronization.';
   }else{
-   make('Linked records',entries.length,'linked');
-   note.textContent='Link-scoped records found by the backend. This is not a separate live verification of MyFamily delivery; open Recent Entries for record details.';
+   make('Recent records',entries.length,'unverified');
+   note.textContent='These records were returned for this link. SarNi mirror and MyFamily delivery are not independently verified; open Recent Entries for record details.';
   }
  }catch(error){
   if(seq!==quickSyncSequence||mode!==kind)return;
@@ -742,7 +742,7 @@ async function loadRecent(append=false){
       else if(rawState){explanation='Backend state: '+rawState;}
      }else if(requestedMode==='family'){
       if(rawState==='TRASHED'){state='archived';label='Archived';explanation='This Family Expense entry is in Trash, not a synchronization status.';}
-      else{state='linked';label='Linked';explanation='The recent-entry backend found both the MyFamily source record and the SarNi mirror. This is a record-link check, not a delivery receipt.';}
+      else{state='unverified';label='Not verified';explanation='This is a Family Expense record returned by the link. The response does not independently prove both MyFamily and SarNi copies exist.';}
      }else if(requestedMode==='office'){explanation='Office Diary is recorded in SarNi; HR delivery confirmation is not available in this recent-entry response.';}
      badge.classList.add('is-'+state);badge.textContent=label;td.append(badge);
      const details=document.createElement('details');details.className='recent-sync-detail';const trigger=document.createElement('summary');trigger.textContent='Details';const desc=document.createElement('small');desc.textContent=explanation;details.append(trigger,desc);
@@ -891,13 +891,28 @@ function qeOfferPhotoRetry(file,kind,recordId,progress){
  qePhotoRetry={file,kind,recordId};
  const box=$('lastSavedEntry');
  const btn=document.createElement('button');
- btn.type='button';btn.className='qe-photo-retry-button';btn.textContent='↻ Retry photo only (do not save entry again)';btn.title='First check Photos in Recent Entries: the original may have saved even if the completion response timed out.';
+ btn.type='button';btn.className='qe-photo-retry-button';btn.textContent='↻ Check saved photos before retry';
+ btn.title='Read the saved photo list first; a timeout does not necessarily mean upload failed.';
  btn.onclick=async()=>{
-  if(!confirm('Check the Photos section of this saved record first. If the original is already present, cancel to avoid a duplicate photo. Retry the photo upload now?'))return;
-  btn.disabled=true;
-  try{await qeUploadPhoto(file,kind,recordId,progress);btn.remove();qePhotoRetry=null;}
-  catch(error){progress.textContent='Photo upload result not confirmed: '+String(error.message||error)+'. Check saved Photos before trying again.';}
-  finally{btn.disabled=false;}
+  btn.disabled=true;progress.textContent='Checking saved photos for this entry…';
+  try{
+   const r=await api('qePhotoList',{kind,recordId,limit:20});
+   const photos=Array.isArray(r.photos)?r.photos:[];
+   const same=photos.filter(p=>String(p.title||p.fileName||'').trim().toLowerCase()===file.name.trim().toLowerCase());
+   if(same.length){
+    progress.textContent='A saved photo with this filename already exists ('+same.length+'). Open Photos in Recent Entries to confirm it. No duplicate upload was started.';
+    btn.textContent='Photo found · Review saved entry';return;
+   }
+   if(photos.length){
+    progress.textContent=photos.length+' photo(s) already attached. Verify the list before adding another.';
+    if(!confirm('This record already contains photos. Do you want to upload a different photo named '+file.name+'?'))return;
+   }else if(!confirm('The backend returned no photos for this entry. Retry uploading the original now?'))return;
+   btn.textContent='Uploading photo…';await qeUploadPhoto(file,kind,recordId,progress);
+   btn.remove();qePhotoRetry=null;
+  }catch(error){
+   progress.textContent='Photo verification/upload result is uncertain: '+String(error.message||error)+'. Do not resubmit the entry. Check the saved record before another photo attempt.';
+   btn.textContent='↻ Check saved photos before retry';
+  }finally{btn.disabled=false;}
  };
  box.append(btn);
 }
