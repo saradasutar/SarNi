@@ -61,6 +61,8 @@ textarea{min-height:105px;resize:vertical;line-height:1.5}
 .sip-plan p{font-size:12px;color:#53683d}
 .sip-plan small{display:block;margin-top:9px;font-size:12px}
 .sip-plan[hidden],#sipDates[hidden],#sipCount[hidden]{display:none!important}
+#sipShortcut{display:block;width:100%;margin:10px 0 4px;background:#e8f2d3;color:#486821;border:1px solid #b9d38d;font-weight:850}
+#sipShortcut:hover{background:#d9ebba}
 main[data-entry-mode] #recentSection .recent-head{border-left:4px solid var(--mode-accent);padding-left:10px}
 #entry{border:1px solid var(--mode-border,#dbeae2);background:var(--mode-bg,#f8fbf9);border-radius:15px;padding:12px;margin-top:12px;transition:background .18s,border-color .18s}
 main[data-entry-mode="expense"]{--mode-bg:#f5fbf7;--mode-border:#c8e6d4;--mode-accent:#176b54}
@@ -328,6 +330,7 @@ function render(){
  '<label>Stock / fund name<input name="title" maxlength="160" required placeholder="Company or mutual fund"></label>'+
  '<div class="grid"><div><label>Investor<input name="investor" maxlength="100" required placeholder="Registered investor"></label></div><div><label>Symbol / scheme code<input name="code" maxlength="80" placeholder="NSE symbol or MF code"></label></div></div>'+
  '<div class="grid"><div><label>Amount (₹)<input name="amount" type="number" min="0.01" step="any" required></label></div><div><label>Units<input name="units" type="number" min="0.000001" step="any"></label></div><div><label>Price / NAV<input name="price" type="number" min="0.000001" step="any"></label></div><div><label>Date<input name="date" type="date" value="'+today()+'" required></label></div></div>'+
+ '<button type="button" id="sipShortcut" class="sip-shortcut">＋ Set up recurring SIP (frequency and installments)</button>'+ 
  '<section id="sipPlan" class="sip-plan" hidden><strong>Recurring SIP plan</strong><p>Specify frequency and duration. This records a plan, not executed future investments.</p><div class="grid"><label>Frequency<select name="sipFrequency"><option value="MONTHLY">Monthly</option><option value="QUARTERLY">Quarterly</option><option value="WEEKLY">Weekly</option><option value="HALF_YEARLY">Half-yearly</option><option value="YEARLY">Yearly</option></select></label><label>Duration<select name="sipDurationMode"><option value="DATES">Start and end dates</option><option value="COUNT">Number of installments</option></select></label></div><div id="sipDates" class="grid"><label>SIP start date<input name="sipStartDate" type="date"></label><label>SIP end date<input name="sipEndDate" type="date"></label></div><div id="sipCount" hidden><label>Number of installments<input name="sipInstallments" type="number" min="1" max="1200" step="1" placeholder="e.g. 36"></label></div><small id="sipSummary" aria-live="polite"></small></section>'+ 
  '<details class="advanced"><summary>Additional investment details</summary><div class="advanced-body"><label>Broker<input name="broker" maxlength="120"></label><label>AMC (mutual fund)<input name="amc" maxlength="120"></label><label>Notes<textarea name="notes" rows="3"></textarea></label></div></details>';
  }else{
@@ -337,7 +340,7 @@ function render(){
  if(mode==='investment'){
  const side=$('fields').querySelector('[name="side"]'),plan=$('sipPlan'),duration=$('fields').querySelector('[name="sipDurationMode"]');
  const updateSip=()=>{const active=side.value==='SIP',byCount=duration.value==='COUNT';plan.hidden=!active;$('sipDates').hidden=!active||byCount;$('sipCount').hidden=!active||!byCount;plan.querySelector('[name="sipStartDate"]').required=active&&!byCount;plan.querySelector('[name="sipEndDate"]').required=active&&!byCount;plan.querySelector('[name="sipInstallments"]').required=active&&byCount;const amount=$('fields').querySelector('[name="amount"]');amount.closest('label').firstChild.textContent=active?'Amount per installment (₹)':'Amount (₹)';$('sipSummary').textContent=active?'This records SIP instructions; future installments will not be automatically executed.':'';};
- side.addEventListener('change',updateSip);duration.addEventListener('change',updateSip);updateSip();
+ side.addEventListener('change',updateSip);side.addEventListener('input',updateSip);duration.addEventListener('change',updateSip);$('sipShortcut').onclick=()=>{side.value='SIP';updateSip();plan.scrollIntoView({behavior:'smooth',block:'nearest'});};updateSip();
 }
 if(mode==='diary'||mode==='office'||mode==='stock'){const typeSelect=$('fields').querySelector('select[name="diaryType"],select[name="officeNoteType"]');if(typeSelect){typeSelect.addEventListener('change',updateNoteTypeTone);updateNoteTypeTone();}}
  $('save').textContent='Save & Add Another';status('');
