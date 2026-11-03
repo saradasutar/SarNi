@@ -215,7 +215,7 @@ async function initializePinAccess(){
 let pinManageOpen=false;
 function updatePinGate(){
  const enabled=!!pinConfig?.enabled;
- const pinSize=pinConfig?.pinLength===2?2:4;const pinEntry=$('pinInput');pinEntry.maxLength=pinSize;pinEntry.minLength=pinSize;pinEntry.pattern='[0-9]{'+pinSize+'}';pinEntry.placeholder=pinSize+'-digit PIN';
+ const pinSize=pinConfig?.pinLength===2?2:4;const pinEntry=$('pinInput');pinEntry.minLength=0;pinEntry.maxLength=pinSize;pinEntry.minLength=pinSize;pinEntry.pattern='[0-9]{'+pinSize+'}';pinEntry.placeholder=pinSize+'-digit PIN';
  $('pinGate').hidden=!enabled;
  $('pinManageToggle').hidden=!enabled||!!pinGrant;
  $('pinUnlockForm').hidden=!enabled||!!pinGrant||!pinManageOpen;
