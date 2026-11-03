@@ -382,6 +382,10 @@ main{padding-top:13px!important}
 .qe-check-row.bad{background:#fff1f0;color:#a14040}
 .qe-check-row.neutral{background:#f5f7f9;color:#58676e}
 .qe-global-sync-head>div{flex-wrap:wrap;justify-content:flex-end}
+
+.recent-sync-verify{display:block;min-height:31px!important;font-size:11px!important;padding:6px 8px!important;margin-top:7px;background:#edf6fb!important;border-color:#c8dfec!important;color:#245b73!important}
+.recent-sync-verification{display:block;max-width:260px;font-size:11px!important;line-height:1.45;overflow-wrap:anywhere;margin-top:6px;color:#566b65}
+.recent-sync-retry[hidden]{display:none!important}
 </style><script src="../config.js"></script></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-controls="qeGlobalSyncPanel" aria-expanded="false">↻ Sync Status</button></div></header><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeGlobalSyncPanel" class="qe-global-sync-panel" hidden aria-label="Cross-dashboard synchronization overview"><div class="qe-global-sync-head"><strong>Cross-dashboard Sync Status</strong><div><button type="button" id="qeReadinessButton" aria-expanded="false" aria-controls="qeReadinessPanel">✓ Diagnostics</button><button type="button" id="qeGlobalSyncRefresh">↻ Refresh</button><button type="button" id="qeGlobalSyncClose" aria-label="Close synchronization overview">✕</button></div></div><div class="qe-global-sync-rows"><div class="qe-global-sync-row" data-kind="investment"><div class="qe-global-sync-row-title">Investment <small>→ Analysis</small></div><p id="qeGlobalInvestmentStatus">Select Sync Status to check.</p><button type="button" data-switch-sync="investment">Open tab</button></div><div class="qe-global-sync-row" data-kind="office"><div class="qe-global-sync-row-title">Office Diary <small>→ HR</small></div><p id="qeGlobalOfficeStatus">Select Sync Status to check.</p><button type="button" data-switch-sync="office">Open tab</button></div><div class="qe-global-sync-row" data-kind="family"><div class="qe-global-sync-row-title">Family Expense <small>MyFamily ↔ SarNi</small></div><p id="qeGlobalFamilyStatus">Select Sync Status to check.</p><button type="button" data-switch-sync="family">Open tab</button></div></div><div id="qeReadinessPanel" class="qe-readiness-panel" hidden><strong>Readiness &amp; Diagnostics</strong><small>Read-only checks. No test transactions, photos or spreadsheet changes.</small><div id="qeReadinessResults" role="status">Select Run checks.</div><button type="button" id="qeReadinessRun">Run checks</button></div><small class="qe-global-sync-disclaimer">Link-scoped recent records only. A record count does not independently prove cross-dashboard delivery. Detailed statuses and authorized Retry are inside the relevant tab’s Recent Entries.</small></section><nav id="tabs" hidden></nav><div class="entry-heading"><small id="subtitle">ADD TO YOUR SARNI REGISTER</small><h2 id="heading">Quick expense</h2></div><form id="entry" hidden><div id="fields"></div><details class="qe-photo-picker" id="qePhotoPicker"><summary>📷 Attach photo / receipt <small>Optional · Upload or camera</small></summary><div class="qe-photo-choices"><label class="qe-photo-action">＋ Upload from device<input id="qePhotoFile" type="file" accept="image/jpeg,image/png,image/webp" hidden></label><label class="qe-photo-action">📷 Take photo<input id="qePhotoCamera" type="file" accept="image/*" capture="environment" hidden></label></div><div id="qePhotoPreview" class="qe-photo-preview" hidden></div><small id="qePhotoNotice">Original up to 20 MB goes to private Drive after the record is saved. No photo is loaded until selected.</small></details><div class="actions"><button type="button" id="reset">Clear</button><button type="submit" class="save" id="save">Save &amp; Add Another</button></div></form><p id="status" role="status">Verifying private link…</p><div id="qeUncertainSaveNotice" class="qe-uncertain-notice" hidden><strong>Save result not confirmed</strong><p>Connection was interrupted. This entry might already exist in its destination. Check Recent Entries or the destination register before retrying. The same submission ID will be reused unless you change the entry.</p><button type="button" id="qeCheckUncertainSave">Check Recent Entries</button></div><section id="lastSavedEntry" hidden aria-live="polite"></section><p id="restrictedEntry" hidden style="margin:12px 0"><a id="restrictedEntryLink" href="#" style="display:inline-block;padding:11px 14px;border:1px solid #9dc7b1;border-radius:12px;background:#f0f8f3;color:#125a40;font-weight:750;text-decoration:none">Office Diary / Investment entry (admin permission required)</a><small style="display:block;margin-top:5px;color:#63776e">Available only when enabled for this private link. Stock Diary and Investment Wisdom sharing require separate backend permissions.</small></p><section id="sipSavedSection" class="sip-saved-section" hidden><div class="recent-head"><strong>Saved SIP plans (not invested)</strong><button type="button" id="sipRefresh">Refresh plans</button></div><p class="hint">Plans are separate from completed transactions and holdings. Only plans created with this private link are shown.</p><div id="sipSavedList" aria-live="polite"></div></section><section id="quickSyncSummary" class="qe-sync-overview" hidden aria-live="polite"><div class="qe-sync-overview-head"><strong id="quickSyncTitle">Sync status</strong><button id="quickSyncRefresh" type="button">↻ Refresh</button></div><div id="quickSyncMetrics" class="qe-sync-metrics"><span>Checking status…</span></div><small id="quickSyncNote">Based on recent records from this private link; see details in Recent Entries.</small></section><section id="recentSection" hidden><div class="recent-head"><button type="button" id="toggleRecent" class="recent-disclosure" aria-controls="recentBody" aria-expanded="false"><span>▸ Recent entries</span><small>Tap to view recent transactions</small></button><div class="recent-head-actions"><button type="button" id="refreshRecent" hidden>Refresh</button></div></div><div id="recentBody" hidden><label class="recent-search-label" for="recentSearch">Search loaded transactions<input id="recentSearch" type="search" placeholder="Search date, amount, title or category…" autocomplete="off"></label><small id="recentSearchInfo" class="hint">Searches records loaded in this tab</small><div id="recentSummary" class="recent-summary" aria-live="polite" hidden></div><div id="pinGate" hidden style="border:1px solid #cfdfd6;background:#f4faf7;padding:12px;border-radius:11px;margin:10px 0"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong>Manage older entries</strong><button type="button" id="pinManageToggle">Edit / Trash / Restore (PIN)</button><button type="button" id="pinLock" hidden>Lock</button></div><p class="hint" id="pinHint">Admin-enabled PIN protects viewing and changing older records.</p><form id="pinUnlockForm" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" required autocomplete="off" placeholder="4-digit PIN" aria-label="Administrator-assigned management PIN" style="max-width:170px"><button type="submit" id="pinUnlock">Unlock</button></form></div><label id="pinTrashRow" hidden style="display:flex;gap:7px;align-items:center;margin:8px 0"><input id="pinShowTrash" type="checkbox"> Show archived / Trash records</label><p class="hint" id="recentExplanation">Only entries saved using this private link are displayed. Some connected registers require separate permission for managing past entries.</p><div id="recentList"></div></div></section><p class="hint">Only share this link with people you trust. The administrator may disable it at any time.</p></main>
 <script>
@@ -624,7 +628,7 @@ async function qeLoadGlobalSync(){
    if(c.kind==='investment'){
     const counts={synced:0,pending:0,failed:0,unverified:0};
     items.forEach(x=>{const state=String(x.syncState||'').toUpperCase();if(state==='SYNCED')counts.synced++;else if(state==='PENDING')counts.pending++;else if(state==='FAILED'||state==='ERROR')counts.failed++;else counts.unverified++;});
-    el.textContent=counts.synced+' synced · '+counts.pending+' pending · '+counts.failed+' failed · '+counts.unverified+' unverified ('+items.length+' recent)';
+    el.textContent=counts.synced+' reported synced · '+counts.pending+' pending · '+counts.failed+' failed · '+counts.unverified+' unverified ('+items.length+' recent)';
    }else if(c.kind==='office'){
     el.textContent=items.length+' recent SarNi office records · HR delivery not verified';
    }else{
@@ -653,7 +657,7 @@ async function loadQuickSyncSummary(){
    const pending=entries.filter(x=>String(x.syncState||'').toUpperCase()==='PENDING').length;
    const failed=entries.filter(x=>['FAILED','ERROR'].includes(String(x.syncState||'').toUpperCase())).length;
    const other=entries.length-synced-pending-failed;
-   make('Synced',synced,'synced');make('Pending',pending,'pending');make('Failed',failed,'failed');make('Unverified',other,'unverified');
+   make('Reported synced',synced,'linked');make('Pending',pending,'pending');make('Failed',failed,'failed');make('Unverified',other,'unverified');
    note.textContent='Showing statuses for '+entries.length+' of the latest returned Investment records, not the complete Analysis ledger. Open Recent Entries for details and authorized Retry.';
   }else if(kind==='office'){
    make('SarNi office records',entries.length,'linked');make('HR verified',0,'unverified');
@@ -734,26 +738,58 @@ async function loadRecent(append=false){
     else if(field==='sync'){
      const rawState=String(record.syncState||'').toUpperCase(),badge=document.createElement('span');
      badge.className='recent-sync-badge';
-     let state='unverified',label='Not verified',explanation='This record does not include a verified destination synchronization response.';
+     let state='unverified',label='Not verified',explanation='No independent destination verification has been performed.';
      if(requestedMode==='investment'){
-      if(rawState==='SYNCED'){state='synced';label='Synced';explanation='SarNi records Analysis as synchronized. This is the stored backend status.';}
-      else if(rawState==='PENDING'){state='pending';label='Pending';explanation='SarNi is awaiting an Analysis bridge confirmation.';}
-      else if(rawState==='FAILED'||rawState==='ERROR'){state='failed';label='Failed';explanation='The investment bridge reported a problem.';}
-      else if(rawState){explanation='Backend state: '+rawState;}
+      if(rawState==='SYNCED'){state='linked';label='Reported synced';explanation='SarNi reports Analysis was synchronized. This is a stored source state, not an independent destination lookup.';}
+      else if(rawState==='PENDING'){state='pending';label='Pending';explanation='SarNi reports that Analysis synchronization is pending.';}
+      else if(rawState==='FAILED'||rawState==='ERROR'){state='failed';label='Failed';explanation='SarNi reports an Analysis synchronization error.';}
+      else if(rawState){explanation='Stored source state: '+rawState+'. Independent destination lookup not performed.';}
      }else if(requestedMode==='family'){
-      if(rawState==='TRASHED'){state='archived';label='Archived';explanation='This Family Expense entry is in Trash, not a synchronization status.';}
-      else{state='unverified';label='Not verified';explanation='This is a Family Expense record returned by the link. The response does not independently prove both MyFamily and SarNi copies exist.';}
-     }else if(requestedMode==='office'){explanation='Office Diary is recorded in SarNi; HR delivery confirmation is not available in this recent-entry response.';}
+      if(rawState==='TRASHED'){state='archived';label='Archived';explanation='This Family Expense entry is in Trash, not a destination synchronization status.';}
+      else{explanation='This record is listed by SarNi. Both MyFamily and the SarNi mirror must be checked independently.';}
+     }else if(requestedMode==='office'){explanation='SarNi saved this Office Diary entry. HR delivery has not been independently checked.';}
      badge.classList.add('is-'+state);badge.textContent=label;td.append(badge);
-     const details=document.createElement('details');details.className='recent-sync-detail';const trigger=document.createElement('summary');trigger.textContent='Details';const desc=document.createElement('small');desc.textContent=explanation;details.append(trigger,desc);
-     if(requestedMode==='investment'&&state!=='synced'&&pinGrant&&record.id&&!record.trashed){
-      const retry=document.createElement('button');retry.type='button';retry.className='recent-sync-retry';retry.textContent='Retry sync (PIN)';retry.title='Use only after checking for an existing copy in Analysis. This backend route prevents duplicate IDs.';retry.onclick=async()=>{
-       if(!confirm('Retry Analysis synchronization for this investment? It uses the original stable transaction ID.'))return;
-       retry.disabled=true;try{const answer=await api('qpinSyncRetry',{grant:pinGrant,kind:'investment',id:record.id});status(answer.message||'Analysis retry completed.');await loadRecent(false);}
-       catch(error){status('Sync retry: '+(error.message||'Backend support not installed. Retry from SarNi admin.'),true);}
-       finally{retry.disabled=false;}
-      };details.append(retry);
-     }
+     const details=document.createElement('details');details.className='recent-sync-detail';
+     const trigger=document.createElement('summary');trigger.textContent='Verify / Details';
+     const desc=document.createElement('small');desc.textContent=explanation;details.append(trigger,desc);
+     const feedback=document.createElement('small');feedback.className='recent-sync-verification';feedback.setAttribute('role','status');details.append(feedback);
+     if(record.id&&!record.trashed){
+      const verify=document.createElement('button');verify.type='button';verify.className='recent-sync-verify';verify.textContent='🔍 Verify destination';details.append(verify);
+      let verifiedResult=null;
+      const retry=document.createElement('button');retry.type='button';retry.className='recent-sync-retry';retry.textContent='Retry sync (PIN)';retry.hidden=true;
+      verify.onclick=async()=>{
+       verify.disabled=true;feedback.textContent='Checking destination for this specific record ID…';retry.hidden=true;verifiedResult=null;
+       try{
+        const proof=await api('qeSyncVerify',{kind:requestedMode,sourceRecordId:String(record.id),grant:pinGrant||''});
+        const same=String(proof.sourceRecordId||'')===String(record.id)&&String(proof.kind||'').toLowerCase()===requestedMode;
+        const at=String(proof.checkedAt||'').trim(),destination=String(proof.destinationRecordId||'').trim();
+        const verified=same&&proof.verified===true&&!!at&&!!destination;
+        const absent=same&&proof.verified===false&&proof.destinationFound===false&&!!at;
+        if(verified){
+         badge.className='recent-sync-badge is-synced';badge.textContent='Verified';
+         feedback.textContent='Verified at '+at+' · Destination record '+destination+'. '+(proof.message||'');
+        }else if(absent){
+         badge.className='recent-sync-badge is-failed';badge.textContent='Not found';
+         feedback.textContent='Destination lookup found no matching record as of '+at+'. This is not a guarantee that a previous delivery will not complete later.';
+         verifiedResult=proof;
+         if(requestedMode==='investment'&&pinGrant&&proof.canRetry===true&&proof.idempotentGuaranteed===true)retry.hidden=false;
+        }else{
+         feedback.textContent='Not verified. Backend did not provide a matching source ID, destination ID and check timestamp. No success assumed.';
+        }
+       }catch(error){feedback.textContent='Destination verification unavailable: '+String(error.message||error)+'. Install the read-only verification backend before using this feature.';}
+       finally{verify.disabled=false;}
+      };
+      if(requestedMode==='investment'&&pinGrant){
+       retry.onclick=async()=>{
+        if(!verifiedResult||verifiedResult.canRetry!==true||verifiedResult.idempotentGuaranteed!==true)return;
+        if(!confirm('The destination lookup did not find this investment. Retry using the original stable ID? Backend idempotency must prevent duplicate delivery.'))return;
+        retry.disabled=true;
+        try{const answer=await api('qpinSyncRetry',{grant:pinGrant,kind:'investment',id:record.id});feedback.textContent='Retry requested: '+(answer.message||'Check again to confirm destination delivery.');retry.hidden=true;verifiedResult=null;}
+        catch(error){feedback.textContent='Retry unavailable: '+String(error.message||error)+'. No new entry was created here.';}
+        finally{retry.disabled=false;}
+       };details.append(retry);
+      }
+     }else feedback.textContent='No saved record ID available for independent verification.';
      td.append(details);
     }
     else if(field==='details'){
