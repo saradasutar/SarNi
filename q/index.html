@@ -258,9 +258,9 @@ function render(){
     if(mode!=='family'||!cat.isConnected)return;
     const cats=(data.categories||[]).filter(x=>x&&x.name);
     const previous=cat.value;cat.innerHTML='<option value="">Choose category</option>'+cats.map(x=>'<option value="'+safe(x.name)+'">'+safe(x.name)+'</option>').join('');
-    if(cats.some(x=>x.name===previous))cat.value=previous;
+    const pendingCategory=form.dataset.pendingCategory||previous;if(cats.some(x=>x.name===pendingCategory))cat.value=pendingCategory;
     cat.onchange=()=>{const selected=cats.find(x=>x.name===cat.value);const before=sub.value;sub.innerHTML='<option value="">Choose subcategory</option>'+(selected?.subcategories||[]).map(v=>{const name=typeof v==='string'?v:v.name;return '<option value="'+safe(name)+'">'+safe(name)+'</option>';}).join('');if([...sub.options].some(x=>x.value===before))sub.value=before;};
-    cat.onchange();hint.textContent=cats.length?'MyFamily expense heads ready.':'No active MyFamily expense heads returned.';
+    cat.onchange();if(form.dataset.pendingSubcategory){const requested=form.dataset.pendingSubcategory;if([...sub.options].some(x=>x.value===requested))sub.value=requested;}delete form.dataset.pendingCategory;delete form.dataset.pendingSubcategory;hint.textContent=cats.length?'MyFamily expense heads ready.':'No active MyFamily expense heads returned.';
   }
   if(familyInfo){applyCategories(familyInfo);}
   else{
@@ -339,7 +339,7 @@ $('reset').onclick=()=>{pendingQuickEntryId='';pendingQuickEntryMode='';delete $
   const raw=Array.isArray(result.entries)?result.entries:Array.isArray(result.items)?result.items:[];
   const entries=raw.filter(x=>String(x.kind||'').toLowerCase()===requestedMode);
   if(!append)host.replaceChildren();
-  host.querySelector('[data-load-more]')?.remove();
+  host.querySelector('[data-load-more]')?.remove();host.querySelector('[data-load-more="1"]')?.remove();
   if(!entries.length&&!append){host.textContent='No '+label+' records returned for this link.';return;}
   const columnsByType={
    expense:[['date','Date'],['category','Category'],['subject','Reason / Purpose'],['amount','Amount'],['party','Paid by'],['details','Details']],
@@ -410,10 +410,10 @@ async function manageRecent(record,action){
 }
 function editRecent(record){
  if(!pinGrant||!record?.editable||!record.id||!record.fields||!['expense','diary','office','stock','family','investment'].includes(record.kind))return;
- mode=record.kind;render();updatePinGate();pendingQuickEntryId='';pendingQuickEntryMode='';
+ if(record.kind==='family'){ $('entry').dataset.pendingCategory=String(record.fields.category||'');$('entry').dataset.pendingSubcategory=String(record.fields.subcategory||''); }mode=record.kind;render();updatePinGate();pendingQuickEntryId='';pendingQuickEntryMode='';
  const inputs=$('entry').elements;
  Object.entries(record.fields||{}).forEach(([k,v])=>{const input=inputs.namedItem(k);if(!input||input.type==='file')return;if(input.type==='checkbox')input.checked=!!v;else input.value=v??'';});
- if(record.kind==='family'){const category=inputs.namedItem('category');if(category){category.value=record.fields.category||'';category.dispatchEvent(new Event('change'));}const sub=inputs.namedItem('subcategory');if(sub)sub.value=record.fields.subcategory||'';}if(record.kind==='expense'){const category=inputs.namedItem('category');if(category){category.value=record.fields.category||'';category.dispatchEvent(new Event('change'));}const sub=inputs.namedItem('subcategory');if(sub)sub.value=record.fields.subcategory||'';}
+ if(record.kind==='investment'){const titleInput=inputs.namedItem('title');if(titleInput)titleInput.value=record.fields.title||record.fields.assetName||record.title||'';}if(record.kind==='family'){const category=inputs.namedItem('category');if(category){category.value=record.fields.category||'';category.dispatchEvent(new Event('change'));}const sub=inputs.namedItem('subcategory');if(sub)sub.value=record.fields.subcategory||'';}if(record.kind==='expense'){const category=inputs.namedItem('category');if(category){category.value=record.fields.category||'';category.dispatchEvent(new Event('change'));}const sub=inputs.namedItem('subcategory');if(sub)sub.value=record.fields.subcategory||'';}
  $('entry').dataset.editId=record.id;$('entry').dataset.pinRevision=String(record.revision||'');
  $('save').textContent='Save correction';$('entry').scrollIntoView({behavior:'smooth',block:'start'});
  status('Editing an existing '+record.kind+' entry. Save correction or press Clear to cancel.');
