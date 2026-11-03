@@ -144,6 +144,25 @@ main[data-entry-mode="family"]{--mode-bg:#f6f2ff;--mode-border:#d9cff0;--mode-ac
 #recentList .recent-item details{margin-top:6px;font-size:12px;color:#466357}
 #recentList .recent-item details summary{cursor:pointer;font-weight:750;color:#155e4d}
 #recentList .recent-item details p{white-space:pre-wrap;overflow-wrap:anywhere;margin:6px 0 0;line-height:1.5}
+
+/* Recent Entries — compact tabular view, scrolls horizontally only on narrow screens. */
+#recentList .recent-table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;border:1px solid #dce7e2;border-radius:12px;margin-top:10px;background:#fff}
+#recentList .recent-table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.4;min-width:570px}
+#recentList .recent-table thead{background:#eaf3ee}
+#recentList .recent-table th{position:sticky;top:0;text-align:left;color:#285848;font-size:12px;font-weight:800;white-space:nowrap;padding:10px 9px;border-bottom:1px solid #c7ded1}
+#recentList .recent-table td{padding:9px;border-bottom:1px solid #e5eee9;vertical-align:top;color:#28493d;max-width:275px;overflow-wrap:anywhere}
+#recentList .recent-table tbody tr:nth-child(even){background:#f8fbf9}
+#recentList .recent-table tbody tr:hover{background:#eff8f3}
+#recentList .recent-table tr:last-child td{border-bottom:0}
+#recentList .recent-table td strong{font-size:13px;font-weight:750}
+#recentList .recent-table th.amount,#recentList .recent-table td.amount{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+#recentList .recent-table td:first-child{white-space:nowrap;font-variant-numeric:tabular-nums;color:#526b60}
+#recentList .recent-table details summary{cursor:pointer;color:#176a53;font-weight:750;white-space:nowrap}
+#recentList .recent-cell-detail{white-space:pre-wrap;min-width:170px;max-width:300px;margin-top:6px;color:#476458;font-size:12px}
+#recentList .recent-actions{white-space:nowrap}
+#recentList .recent-actions button{display:inline-block;min-height:30px;margin:0 4px 4px 0;padding:4px 8px;font-size:12px;border-radius:7px}
+#recentList .recent-trashed{opacity:.65}
+@media(max-width:700px){#recentList .recent-table{font-size:12px;min-width:550px}#recentList .recent-table th,#recentList .recent-table td{padding:8px 7px}#recentList .recent-table th{font-size:11px}}
 </style><script src="../config.js"></script></head><body>
 <main><header><img src="../sarni-life-icon.svg" alt=""><div><h1>SarNi · Quick Entry</h1><p style="margin:3px 0">Expense · Diary · Stock Note · Office Diary · Investment</p></div></header><p class="hint">Private shared link. No sign-in required.</p><div class="entry-heading"><small id="subtitle">ADD TO YOUR SARNI REGISTER</small><h2 id="heading">Quick expense</h2></div><nav id="tabs" hidden></nav><form id="entry" hidden><div id="fields"></div><div class="actions"><button type="button" id="reset">Clear</button><button type="submit" class="save" id="save">Save &amp; Add Another</button></div></form><p id="status" role="status">Verifying private link…</p><section id="lastSavedEntry" hidden aria-live="polite"></section><p id="restrictedEntry" hidden style="margin:12px 0"><a id="restrictedEntryLink" href="#" style="display:inline-block;padding:11px 14px;border:1px solid #9dc7b1;border-radius:12px;background:#f0f8f3;color:#125a40;font-weight:750;text-decoration:none">Office Diary / Investment entry (admin permission required)</a><small style="display:block;margin-top:5px;color:#63776e">Available only when enabled for this private link. Stock Diary and Investment Wisdom sharing require separate backend permissions.</small></p><section id="recentSection" hidden><div class="recent-head"><strong>Recent entries</strong><button type="button" id="refreshRecent">Refresh</button></div><div id="pinGate" hidden style="border:1px solid #cfdfd6;background:#f4faf7;padding:12px;border-radius:11px;margin:10px 0"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong>🔐 PIN-protected records</strong><button type="button" id="pinLock" hidden>Lock</button></div><p class="hint" id="pinHint">Admin-enabled PIN protects viewing and changing older records.</p><form id="pinUnlockForm" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" required autocomplete="off" placeholder="4-digit PIN" aria-label="Six-digit administrator-assigned PIN" style="max-width:170px"><button type="submit" id="pinUnlock">Unlock</button></form></div><label id="pinTrashRow" hidden style="display:flex;gap:7px;align-items:center;margin:8px 0"><input id="pinShowTrash" type="checkbox"> Show archived / Trash records</label><p class="hint" id="recentExplanation">Only entries saved using this private link are displayed. Some connected registers require separate permission for managing past entries.</p><div id="recentList"></div></section><p class="hint">Only share this link with people you trust. The administrator may disable it at any time.</p></main>
 <script>
@@ -322,25 +341,61 @@ $('reset').onclick=()=>{pendingQuickEntryId='';pendingQuickEntryMode='';delete $
   if(!append)host.replaceChildren();
   host.querySelector('[data-load-more]')?.remove();
   if(!entries.length&&!append){host.textContent='No '+label+' records returned for this link.';return;}
+  const columnsByType={
+   expense:[['date','Date'],['category','Category'],['subject','Reason / Purpose'],['amount','Amount'],['party','Paid by'],['details','Details']],
+   diary:[['date','Date'],['subject','Title / Note'],['type','Type'],['details','Details']],
+   stock:[['date','Date'],['subject','Company / Note'],['type','Type'],['details','Details']],
+   office:[['date','Date'],['subject','Office note'],['type','Type'],['details','Details']],
+   investment:[['date','Date'],['subject','Investment'],['type','Action'],['amount','Amount'],['details','Details']],
+   family:[['date','Date'],['category','Category'],['subject','Reason'],['amount','Amount'],['party','Paid by'],['details','Details']]
+  };
+  const columns=columnsByType[requestedMode]||columnsByType.diary;
+  let wrap=host.querySelector('.recent-table-scroll'),table=wrap?.querySelector('table'),tbody=table?.querySelector('tbody');
+  if(!wrap||!table||!tbody||!append){
+   host.replaceChildren();
+   wrap=document.createElement('div');wrap.className='recent-table-scroll';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label','Recent '+label+' records; scroll horizontally for more columns');
+   table=document.createElement('table');table.className='recent-table';
+   const thead=document.createElement('thead'),heading=document.createElement('tr');
+   columns.forEach(([field,title])=>{const th=document.createElement('th');th.scope='col';th.textContent=title;if(field==='amount')th.className='amount';heading.append(th);});
+   const controls=document.createElement('th');controls.scope='col';controls.textContent='Actions';heading.append(controls);
+   thead.append(heading);tbody=document.createElement('tbody');table.append(thead,tbody);wrap.append(table);host.append(wrap);
+  }
+  const shortDate=value=>{
+   if(value==null||value==='')return '—';
+   const raw=String(value);
+   const iso=raw.match(/^\d{4}-\d{2}-\d{2}/);
+   const d=iso?new Date(iso[0]+'T12:00:00'):new Date(raw);
+   return Number.isNaN(d.getTime())?raw.slice(0,16):d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  };
+  const asMoney=value=>value==null||value===''?'—':('₹'+Number(value).toLocaleString('en-IN',{maximumFractionDigits:2}));
   entries.forEach(record=>{
-   const card=document.createElement('div');card.className='recent-item';
-   const info=document.createElement('div');const title=document.createElement('strong');title.textContent=record.title||record.reason||record.kind||'Entry';
-   const meta=document.createElement('small');meta.textContent=[record.kind,record.date||record.entryDate,record.amount!==undefined?'₹'+Number(record.amount).toLocaleString('en-IN'):null,record.syncState||null,record.trashed?'In Trash':null].filter(Boolean).join(' · ');
-   info.append(title,meta);
-   const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='View details';
-   const content=document.createElement('p');content.style.cssText='white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0';
-   const value=record.fields&&typeof record.fields==='object'?Object.entries(record.fields).filter(x=>x[1]!==''&&x[1]!==null&&x[1]!==undefined).map(([k,v])=>k+': '+String(v)).join('\n'):(record.text||record.category||'No additional detail returned');
-   content.textContent=value.slice(0,2500);details.append(summary,content);info.append(details);card.append(info);
-   if(isPin&&record.editable===true&&record.id){
-    const edit=document.createElement('button');edit.type='button';edit.textContent='✎ Edit';edit.onclick=()=>editRecent(record);card.append(edit);
-   }
-   if(isPin&&record.deletable===true&&record.id){
-    const move=document.createElement('button');move.type='button';move.textContent='Move to Trash';move.onclick=()=>manageRecent(record,'trash');card.append(move);
-   }
-   if(isPin&&record.restorable===true&&record.id){
-    const restore=document.createElement('button');restore.type='button';restore.textContent='Restore';restore.onclick=()=>manageRecent(record,'restore');card.append(restore);
-   }
-   host.append(card);
+   const f=record.fields&&typeof record.fields==='object'?record.fields:{};
+   const get=(...names)=>{for(const name of names){const v=f[name]??record[name];if(v!==undefined&&v!==null&&String(v).trim()!=='')return String(v);}return '';};
+   const row=document.createElement('tr');if(record.trashed)row.classList.add('recent-trashed');
+   const subject=get('title','reason','companyName')||record.kind||'Entry';
+   const description=get('text','body','description','notes','reason');
+   const detailValues=Object.entries(f).filter(([k,v])=>v!==''&&v!==null&&v!==undefined&&!['title','date','entryDate','dateSpent','amount'].includes(k)).map(([k,v])=>k+': '+String(v)).join('\n');
+   columns.forEach(([field])=>{
+    const td=document.createElement('td');if(field==='amount')td.className='amount';
+    if(field==='date')td.textContent=shortDate(get('date','entryDate','dateSpent'));
+    else if(field==='category')td.textContent=get('category','subcategory')||'—';
+    else if(field==='subject'){const strong=document.createElement('strong');strong.textContent=subject;td.append(strong);}
+    else if(field==='type')td.textContent=get('diaryType','officeNoteType','noteType','side','assetType')||'—';
+    else if(field==='party')td.textContent=get('paidBy','paidByName','payer','fromAccount')||'—';
+    else if(field==='amount')td.textContent=asMoney(get('amount'));
+    else if(field==='details'){
+     const disclosure=document.createElement('details');const summary=document.createElement('summary');summary.textContent='View';
+     const content=document.createElement('div');content.className='recent-cell-detail';content.textContent=(detailValues||description||record.text||'No additional details returned').slice(0,2500);
+     disclosure.append(summary,content);td.append(disclosure);
+    }
+    row.append(td);
+   });
+   const action=document.createElement('td');action.className='recent-actions';
+   if(isPin&&record.editable===true&&record.id){const btn=document.createElement('button');btn.type='button';btn.textContent='Edit';btn.onclick=()=>editRecent(record);action.append(btn);}
+   if(isPin&&record.deletable===true&&record.id){const btn=document.createElement('button');btn.type='button';btn.textContent='Trash';btn.onclick=()=>manageRecent(record,'trash');action.append(btn);}
+   if(isPin&&record.restorable===true&&record.id){const btn=document.createElement('button');btn.type='button';btn.textContent='Restore';btn.onclick=()=>manageRecent(record,'restore');action.append(btn);}
+   if(!action.children.length)action.textContent=record.trashed?'In Trash':'—';
+   row.append(action);tbody.append(row);
   });
   recentOffset=result.nextOffset??recentOffset+raw.length;
   if(result.hasMore){const more=document.createElement('button');more.type='button';more.dataset.loadMore='1';more.textContent='Show more';more.onclick=()=>loadRecent(true);host.append(more);}
