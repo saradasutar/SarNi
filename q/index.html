@@ -457,6 +457,16 @@ main{padding-top:13px!important}
 .qe-offline-item-actions button{font-size:10px;padding:6px 8px;min-height:32px}
 #qeOfflineReview{display:block;background:#fff5e4;border:1px solid #e9d1a2;padding:9px;border-radius:8px;font-size:11px;color:#82601c;margin:9px 0}
 #qeOfflineReview[hidden]{display:none!important}
+
+/* Date + blank Tags on first row; four marks on second row (all note kinds). */
+#entry .note-date-tags{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:9px!important;align-items:end}
+#entry .note-date-tags>label{display:block!important;min-width:0!important;margin:0!important}
+#entry .note-date-tags input{display:block!important;box-sizing:border-box!important;width:100%!important;min-width:0!important;margin-top:4px!important}
+#entry .note-markings{display:grid!important;grid-template-columns:38px repeat(4,minmax(0,1fr))!important;align-items:center!important;gap:4px!important;flex-wrap:nowrap!important;width:100%!important;margin:9px 0 4px!important}
+#entry .note-markings>strong{white-space:nowrap;font-size:12px!important}
+#entry .note-markings .inline-check{display:flex!important;align-items:center!important;justify-content:center!important;flex-direction:row!important;min-width:0!important;min-height:34px!important;margin:0!important;padding:5px 1px!important;gap:3px!important;white-space:nowrap!important;font-size:clamp(9px,2.2vw,12px)!important;line-height:1.1!important}
+#entry .note-markings input[type=checkbox]{width:14px!important;height:14px!important;min-width:14px!important;min-height:14px!important;flex:0 0 14px!important;margin:0!important}
+@media(max-width:360px){#entry .note-markings{grid-template-columns:34px repeat(4,minmax(0,1fr))!important;gap:2px!important}#entry .note-markings .inline-check{font-size:9px!important;gap:2px!important}#entry .note-markings input[type=checkbox]{width:12px!important;height:12px!important;min-width:12px!important;min-height:12px!important;flex-basis:12px!important}}
 </style><script src="../config.js"></script></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-controls="qeOfflinePanel" aria-expanded="false">◷ Offline Queue <span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-controls="qeGlobalSyncPanel" aria-expanded="false">↻ Sync Status</button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
@@ -788,7 +798,7 @@ function noteMarkings(office,stock){
 }
 function noteMoreOptions(office){
  return '<details class="advanced note-options"><summary>More note options <span aria-hidden="true">⌄</span></summary>'+
-  '<div class="advanced-body"><label>Tags<input name="tags" maxlength="300" placeholder="'+(office?'project, review':'learning, personal, research')+'"></label>'+
+  '<div class="advanced-body"><p class="note-help">Enter tags in the Tags box beside Date. Tags are saved with your entry.</p>'+
   '<p class="note-help">Tags and selected markings are searchable later.</p></div></details>';
 }
 function commonNoteFields(office,stock){
@@ -804,8 +814,7 @@ function commonNoteFields(office,stock){
  return stockField+
   '<label>'+title+'<input name="title" maxlength="'+(office?'140':'120')+'" '+(office?'required ':'')+'placeholder="'+(office?'Office follow-up or work note':'Short heading')+'"></label>'+
   '<label>What would you like to record?<textarea name="'+contentName+'" rows="5" maxlength="'+(office?'10000':'4500')+'" required placeholder="'+(office?'Enter authorised non-confidential work notes only':'Write your observation, reflection or lesson…')+'"></textarea></label>'+
-  '<div class="grid note-core"><div><label>Date<input name="'+dateName+'" type="date" value="'+today()+'" required></label></div>'+
-  '</div>'+
+  '<div class="note-date-tags"><label>Date<input name="'+dateName+'" type="date" value="'+today()+'" required></label><label>Tags<input name="tags" maxlength="300" value="" placeholder=""></label></div>'+
   noteMarkings(office,stock)+noteMoreOptions(office);
 }
 function updateNoteTypeTone(){
