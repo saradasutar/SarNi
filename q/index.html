@@ -1395,8 +1395,8 @@ function editRecent(record){
   const tags=String(record.fields.tags||record.tags||'').toLowerCase().split(',').map(x=>x.trim());
   const set=(name,on)=>{const el=inputs.namedItem(name);if(el)el.checked=!!on;};
   set('monthlyHighlight',record.fields.monthlyHighlight||tags.includes('monthly-highlight'));
-  set('needsLearning',record.fields.needsLearning||tags.includes('mark-learning')||tags.includes('learning')||tags.includes('office:learning/knowledge'));
-  set('needsFollowup',record.fields.needsFollowup||tags.includes('needs-follow-up'));
+  set('needsLearning',record.fields.needsLearning||tags.includes('mark-learning')||tags.includes('learning')||tags.includes('office:learning')||tags.includes('office:learning/knowledge'));
+  set('needsFollowup',record.fields.needsFollowup||tags.includes('needs-follow-up')||tags.includes('office:planning'));
   set('needsPlanning',record.fields.needsPlanning||tags.includes('needs-planning')||tags.includes('planning'));
   set('needsReview',record.fields.needsReview||tags.includes('needs-review')||tags.includes('review'));
  }if(record.kind==='investment'){inputs.namedItem('side')?.dispatchEvent(new Event('change'));inputs.namedItem('sipDurationMode')?.dispatchEvent(new Event('change'));}
@@ -1524,7 +1524,7 @@ function qeRecentPhotos(record){
 
 $('entry').onsubmit=async e=>{e.preventDefault();if(busy)return;if(pinConfig?.enabled&&pinConfig.policies?.[mode]?.requirePinAdd&&!pinGrant){pinManageOpen=true;updatePinGate();status('PIN Add is enabled for '+mode+' in SarNi Admin Settings. To allow entries without PIN, uncheck PIN Add for this tab and save. For this entry you may unlock below.',true);$('pinGate').scrollIntoView({behavior:'smooth',block:'center'});$('pinInput').focus();return;}busy=true;$('save').disabled=true;status('Saving…');try{const data=Object.fromEntries(new FormData(e.target));const fingerprint=qePayloadFingerprint(mode,data);if(qePendingUncertain&&qePendingPayloadFingerprint&&fingerprint!==qePendingPayloadFingerprint){if(!confirm('You changed the entry after an unconfirmed save. This may create a different transaction. Check Recent Entries or the destination first. Continue with a new submission ID?')){status('Save cancelled. Confirm the earlier entry first.',true);return;}qeResetSubmissionIdentity();}const entryId=(pendingQuickEntryMode===mode&&pendingQuickEntryId)||Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');pendingQuickEntryId=entryId;pendingQuickEntryMode=mode;qePendingPayloadFingerprint=fingerprint;qePendingUncertain=false;qeConfirmUncertainResubmission();if(mode==='family'&&!pendingFamilyId)pendingFamilyId=entryId;if(['diary','stock','office'].includes(mode)){
  const flags=new Set(['monthly-highlight','needs-follow-up','needs-review','needs-planning','mark-learning']);
- const tags=String(data.tags||'').split(',').map(x=>x.trim()).filter(Boolean).filter(x=>!flags.has(x.toLowerCase())&&!/^office:/i.test(x));
+ const tags=String(data.tags||'').split(',').map(x=>x.trim()).filter(Boolean).flatMap(x=>{if(flags.has(x.toLowerCase()))return [];if(/^office:/i.test(x))return /^office:(?:General(?: Work)?|Learning(?:\/Knowledge)?|Planning)$/i.test(x)?[]:['legacy-'+x];return [x];});
  if(data.monthlyHighlight)tags.push('monthly-highlight');
  if(data.needsLearning)tags.push('mark-learning');
  if(mode==='office'){if(data.needsFollowup)tags.push('needs-follow-up');tags.push('office:'+(data.needsLearning?'Learning/Knowledge':'General Work'));data.status=data.needsFollowup?'Follow-up':'Open';}
