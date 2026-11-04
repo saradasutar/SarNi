@@ -792,7 +792,7 @@ function commonNoteFields(office,stock){
  const title=office?'Title / Subject':'Title (optional)';
  const typeName=office?'officeNoteType':'diaryType';
  const choices=office?
-  '<option value="General">General Work</option><option value="Planning">Planning</option><option value="Learning">Learning / Knowledge</option><option value="Meeting">Meeting / Discussion</option><option value="Decision">Decision / Instruction</option>':
+  '<option value="Work">Work</option><option value="Planning">Planning</option><option value="Meeting">Meeting</option><option value="Follow-up">Follow-up</option><option value="Decision">Decision</option><option value="Learning">Learning</option><option value="Personal note">Personal note</option>':
   '<option value="Daily">Daily / General</option><option value="Planning">Planning</option><option value="Learning">Learning / Knowledge</option><option value="Idea">Idea / Future Reference</option><option value="Experience">Experience / Observation</option>';
  const dateName=office?'date':'entryDate';
  const contentName=office?'body':'text';
@@ -1500,7 +1500,7 @@ const r=plannedSip?await api('sipPlanGuestSave',{grant:pinGrant,entry:{...data,c
  else if(mode==='expense'){mark('SarNi · Expenditure','confirmed');}
  else if(mode==='diary'){mark('SarNi · Diary','confirmed');}
  else if(mode==='stock'){mark('SarNi · Stock Diary','confirmed');}
- else if(mode==='office'){mark('SarNi · Office Diary','confirmed');mark('HR Dashboard','unverified','No HR delivery confirmation returned by this save.');}
+ else if(mode==='office'){mark('SarNi · Office Diary','confirmed');{const h=r?.hrSync;const synced=h?.verified===true&&!!h?.hrId;const pending=h?.state==='PENDING';mark('HR Dashboard',synced?'confirmed':pending?'pending':'unverified',synced?'HR backend acknowledged record '+String(h.hrId).slice(0,48):pending?'Saved in SarNi; HR delivery pending. Use Verify destination later.':'HR delivery not yet confirmed.');}}
  else if(mode==='investment'){
   mark('SarNi · Investment','confirmed');
   const sync=String(r?.entry?.syncState||r?.syncState||'').toUpperCase();
