@@ -1248,7 +1248,18 @@ async function loadRecent(append=false){
     if(field==='date')td.textContent=shortDate(get('date','entryDate','dateSpent'));
     else if(field==='category')td.textContent=get('category','subcategory')||'—';
     else if(field==='subject'){const strong=document.createElement('strong');strong.textContent=subject;td.append(strong);}
-    else if(field==='type')td.textContent=get('diaryType','officeNoteType','noteType','side','assetType')||'—';
+    else if(field==='type'){
+     if(['diary','office','stock'].includes(requestedMode)){
+      const tags=String(get('tags')||'').toLowerCase().split(',').map(v=>v.trim()),flags=[];
+      if(record.important===true||get('important')==='true')flags.push('Imp.');
+      if(tags.includes('monthly-highlight')||get('monthlyHighlight')==='true')flags.push('Monthly');
+      if(tags.includes('mark-learning')||tags.includes('office:learning/knowledge')||tags.includes('learning'))flags.push('Learn');
+      if(requestedMode==='office'&&tags.includes('needs-follow-up'))flags.push('Follow-up');
+      if(requestedMode==='stock'&&tags.includes('needs-review'))flags.push('Review');
+      if(requestedMode==='diary'&&tags.includes('needs-planning'))flags.push('Plan');
+      td.textContent=flags.join(' · ')||(requestedMode==='office'?'General Work':requestedMode==='stock'?'General Stock Note':'Daily Diary');
+     }else td.textContent=get('diaryType','officeNoteType','noteType','side','assetType')||'—';
+    }
     else if(field==='party')td.textContent=get('paidBy','paidByName','payer','fromAccount')||'—';
     else if(field==='amount')td.textContent=asMoney(get('amount'));
     else if(field==='sync'){
