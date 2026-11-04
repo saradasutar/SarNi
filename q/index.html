@@ -522,14 +522,17 @@ async function qeOfflineUnlock(){
    const clear=await crypto.subtle.decrypt({name:'AES-GCM',iv:qe64ToBytes(env.iv)},secret,qe64ToBytes(env.payload));
    payload=JSON.parse(new TextDecoder().decode(clear));
    if(!Array.isArray(payload.items))throw Error('Invalid queue format.');
+   // A page closed during a send cannot establish whether delivery completed.
+   // Never replay an interrupted request without independent confirmation.
+   payload.items.forEach(item=>{if(item.status==='sending')item.status='uncertain';});
   }
   qeOfflineKey=secret;qeOfflineSalt=salt;qeOfflineData=payload;
   if(!env)await qeOfflinePersist();
   $('qeOfflinePassphrase').value='';
   $('qeOfflineLock').hidden=false;$('qeOfflineUnlock').hidden=true;$('qeOfflineControls').hidden=false;
-  qeOfflineRender();qeOfflineStatus('Queue unlocked on this page. Automatic delivery will attempt ready entries once when online.');
+  qeOfflineRender();qeOfflineStatus('Queue unlocked on this page. Ready entries will send once when online; interrupted/uncertain entries are held for review.');
   if(navigator.onLine)void qeOfflineSendReady();
- }catch(e){qeOfflineStatus('Queue could not be unlocked. Check the passphrase: '+String(e.message||e));qeOfflineLock();}
+ }catch(e){qeOfflineLock();qeOfflineStatus('Queue could not be unlocked. Check the passphrase, browser storage and private-link scope: '+String(e.message||e));}
 }
 function qeOfflineToggle(open){
  $('qeOfflinePanel').hidden=!open;$('qeOfflineButton').setAttribute('aria-expanded',String(open));
