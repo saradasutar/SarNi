@@ -799,8 +799,8 @@ function commonNoteFields(office,stock){
  const stockField=stock?'<label>Stock / company<input name="companyName" maxlength="120" required placeholder="Company name"></label>':'';
 
  return stockField+
-  '<label>'+title+'<input name="title" maxlength="'+(office?'160':'120')+'" '+(office?'required ':'')+'placeholder="'+(office?'Office follow-up or work note':'Short heading')+'"></label>'+
-  '<label>What would you like to record?<textarea name="'+contentName+'" rows="5" maxlength="'+(office?'12000':'4500')+'" required placeholder="'+(office?'Enter authorised non-confidential work notes only':'Write your observation, reflection or lesson…')+'"></textarea></label>'+
+  '<label>'+title+'<input name="title" maxlength="'+(office?'140':'120')+'" '+(office?'required ':'')+'placeholder="'+(office?'Office follow-up or work note':'Short heading')+'"></label>'+
+  '<label>What would you like to record?<textarea name="'+contentName+'" rows="5" maxlength="'+(office?'10000':'4500')+'" required placeholder="'+(office?'Enter authorised non-confidential work notes only':'Write your observation, reflection or lesson…')+'"></textarea></label>'+
   '<div class="grid note-core"><div><label>Date<input name="'+dateName+'" type="date" value="'+today()+'" required></label></div>'+
   '<div><label>Note type<select name="'+typeName+'">'+choices+'</select></label></div></div>'+
   noteMarkings()+noteMoreOptions(office);
