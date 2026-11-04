@@ -534,8 +534,15 @@ async function qeOfflineUnlock(){
   qeOfflineKey=secret;qeOfflineSalt=salt;qeOfflineData=payload;
   if(!env||!localStorage.getItem(qeOfflineStorageName()))await qeOfflinePersist();
   // Existing legacy queue is retained until a scoped encrypted copy has been written.
-  if(info)void qeOfflineCaptureBootstrap();
-  else if(payload.bootstrap){qeOfflineUseBootstrap(payload.bootstrap);}
+  if(info){
+   qeOfflineCaptureBootstrap();
+   // Fetch optional MyFamily heads on explicit queue unlock so that tab can be used offline later.
+   if(navigator.onLine&&!familyInfo&&hubAccess&&key){
+    void api('familyExpenseInfo').then(data=>{
+     if(data&&Array.isArray(data.categories)){familyInfo=data;qeOfflineCaptureBootstrap();}
+    }).catch(()=>{});
+   }
+  }else if(payload.bootstrap){qeOfflineUseBootstrap(payload.bootstrap);}
   $('qeOfflinePassphrase').value='';
   $('qeOfflineLock').hidden=false;$('qeOfflineUnlock').hidden=true;$('qeOfflineControls').hidden=false;
   qeOfflineRender();qeOfflineStatus('Queue unlocked on this page. Ready entries will send once when online; interrupted/uncertain entries are held for review.');
