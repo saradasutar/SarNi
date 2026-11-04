@@ -4,10 +4,10 @@
  */
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
-const modes=['personal','stock','wisdom'];
+const modes=['personal','stock'];
 let mode='personal',ready=false,started=false,pending=false,retryCount=0;
-const captions={personal:'Personal Diary',stock:'Stock Research',wisdom:'Investment Wisdom'};
-const titleText={personal:'Your diary, learning and monthly reflections',stock:'Company research, dated notes and reviews',wisdom:'Important lessons and investment book chapters'};
+const captions={personal:'Personal Diary',stock:'Stock Note',wisdom:'Earlier Learning'};
+const titleText={personal:'Your diary, learning and monthly reflections',stock:'Company research, dated notes and learning',wisdom:'Earlier investment learning records'};
 const isShown=el=>!!(el && !el.hidden && !el.classList.contains('hidden') && getComputedStyle(el).display!=='none');
 function navButton(){return $('sarniSidebarPrimary')?.querySelector('button[data-section="diary"]');}
 function switcher(){
