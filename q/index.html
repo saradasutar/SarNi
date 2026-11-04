@@ -1260,7 +1260,7 @@ async function loadRecent(append=false){
      }else if(requestedMode==='family'){
       if(rawState==='TRASHED'){state='archived';label='Archived';explanation='This Family Expense entry is in Trash, not a destination synchronization status.';}
       else{explanation='This record is listed by SarNi. Both MyFamily and the SarNi mirror must be checked independently.';}
-     }else if(requestedMode==='office'){explanation='SarNi saved this Office Diary entry. HR delivery has not been independently checked.';}
+     }else if(requestedMode==='office'){explanation='Checking stored HR sync status; use Verify destination for a fresh independent lookup.';if(record.id)badge.dataset.officeSyncId=String(record.id);}
      badge.classList.add('is-'+state);badge.textContent=label;td.append(badge);
      const details=document.createElement('details');details.className='recent-sync-detail';
      const trigger=document.createElement('summary');trigger.textContent='Verify / Details';
@@ -1319,6 +1319,23 @@ async function loadRecent(append=false){
    if(!action.children.length)action.textContent=record.trashed?'In Trash':'—';
    row.append(action);if(record.id){const photos=document.createElement('td');photos.dataset.label='Photo';photos.className='qe-recent-photo-cell';photos.append(qeRecentPhotos(record));row.append(photos);}tbody.append(row);
   });
+  if(requestedMode==='office'){
+   const ids=[...new Set(entries.filter(x=>x.id&&!x.trashed).map(x=>String(x.id)))].slice(0,20);
+   if(ids.length){
+    try{
+     const statuses=await api('hubGuestOfficeStatuses',{ids:ids,grant:pinGrant||''});
+     if(mode===requestedMode&&Array.isArray(statuses.results)){
+      for(const item of statuses.results){
+       const badge=[...host.querySelectorAll('.recent-sync-badge[data-office-sync-id]')].find(x=>x.dataset.officeSyncId===String(item.id));
+       if(!badge)continue;
+       if(item.state==='SYNCED'&&item.hrId){badge.className='recent-sync-badge is-synced';badge.textContent='Synced (stored)';}
+       else if(item.state==='PENDING'){badge.className='recent-sync-badge is-pending';badge.textContent='Pending';}
+       else if(item.state==='CONFLICT'){badge.className='recent-sync-badge is-failed';badge.textContent='Conflict';}
+      }
+     }
+    }catch(ignore){/* Older backend: retain manual Verify destination action. */}
+   }
+  }
   recentOffset=result.nextOffset??recentOffset+raw.length;
   if(result.hasMore){const more=document.createElement('button');more.type='button';more.dataset.loadMore='1';more.textContent='Show more';more.onclick=()=>loadRecent(true);host.append(more);}applyRecentSearch();
  }catch(error){if(mode!==requestedMode)return;if(!append)host.replaceChildren();const p=document.createElement('p');p.className='error';p.textContent='Recent '+label+' error: '+(error.message||'Server unavailable');host.append(p);if(isPin&&/pin session expired|unlock again|access changed/i.test(error.message||'')){pinGrant='';updatePinGate();}}
