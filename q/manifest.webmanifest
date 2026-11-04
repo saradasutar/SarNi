@@ -1,0 +1,25 @@
+{
+  "name": "SarNi Quick Entry",
+  "short_name": "SarNi Quick",
+  "description": "Private quick entry for SarNi. Open your private link to use authorized forms.",
+  "id": "/SarNi/q/",
+  "start_url": "/SarNi/q/",
+  "scope": "/SarNi/q/",
+  "display": "standalone",
+  "background_color": "#f5faf7",
+  "theme_color": "#174e44",
+  "icons": [
+    {
+      "src": "../quick-expense-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../quick-expense-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
