@@ -1,6 +1,6 @@
 /* SarNi Quick Entry app shell only. No personal data, API responses or private URLs are cached. */
 'use strict';
-const CACHE_NAME='sarni-q-private-shell-v1';
+const CACHE_NAME='sarni-q-private-shell-v2';
 const SCOPE=new URL(self.registration.scope);
 const SHELL=new URL('./index.html',SCOPE).href;
 const STATIC=[SHELL,new URL('./manifest.webmanifest',SCOPE).href,new URL('../config.js',SCOPE).href,new URL('../sarni-life-icon.svg',SCOPE).href,new URL('../quick-expense-192.png',SCOPE).href,new URL('../quick-expense-512.png',SCOPE).href];
@@ -39,6 +39,11 @@ self.addEventListener('fetch',event=>{
  event.respondWith((async()=>{
   const cache=await caches.open(CACHE_NAME);
   const cached=await cache.match(url.pathname);
+  // Always prefer the latest public config.js when online; its backend URL may rotate.
+  if(url.pathname===new URL('../config.js',SCOPE).pathname){
+   try{const fresh=await fetch(request);if(fresh.ok)return fresh;}catch(_){}
+   return cached||Response.error();
+  }
   if(cached)return cached;
   return fetch(request);
  })());
