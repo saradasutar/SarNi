@@ -777,16 +777,19 @@ function lastGroupKey(){return 'sarni_last_group_link_v1_'+encodeURIComponent(ke
 function readLastGroup(){try{return localStorage.getItem(lastGroupKey())||'';}catch(_){return '';}}
 function saveLastGroup(id){try{localStorage.setItem(lastGroupKey(),String(id||''));}catch(_){}}
 /* Shared mobile-first form. Keep API field names compatible with existing records. */
-function noteMarkings(){
- return '<div class="note-markings" role="group" aria-label="Additional note markings">'+
-  '<label class="inline-check"><input type="checkbox" name="important"> ★ Important</label>'+
-  '<label class="inline-check"><input type="checkbox" name="monthlyHighlight"> Monthly</label>'+
-  '<label class="inline-check"><input type="checkbox" name="needsFollowup"> Follow-up</label></div>';
+function noteMarkings(office,stock){
+ const last=office?['needsFollowup','Follow-up']:stock?['needsReview','Review']:['needsPlanning','Plan'];
+ return '<div class="note-markings" role="group" aria-label="Mark this entry" style="display:flex;align-items:center;flex-wrap:wrap;gap:7px">'+
+ '<strong>Mark:</strong>'+
+ '<label class="inline-check"><input type="checkbox" name="important"> Imp.</label>'+
+ '<label class="inline-check"><input type="checkbox" name="monthlyHighlight"> Monthly</label>'+
+ '<label class="inline-check"><input type="checkbox" name="needsLearning"> Learn</label>'+
+ '<label class="inline-check"><input type="checkbox" name="'+last[0]+'"> '+last[1]+'</label></div>';
 }
 function noteMoreOptions(office){
  return '<details class="advanced note-options"><summary>More note options <span aria-hidden="true">⌄</span></summary>'+
   '<div class="advanced-body"><label>Tags<input name="tags" maxlength="300" placeholder="'+(office?'project, review':'learning, personal, research')+'"></label>'+
-  '<p class="note-help">Separate tags with commas. Note type and follow-up are also saved as tags for searching.</p></div></details>';
+  '<p class="note-help">Tags and selected markings are searchable later.</p></div></details>';
 }
 function commonNoteFields(office,stock){
  const title=office?'Title / Subject':'Title (optional)';
@@ -796,14 +799,14 @@ function commonNoteFields(office,stock){
   '<option value="Daily">Daily / General</option><option value="Planning">Planning</option><option value="Learning">Learning / Knowledge</option><option value="Idea">Idea / Future Reference</option><option value="Experience">Experience / Observation</option>';
  const dateName=office?'date':'entryDate';
  const contentName=office?'body':'text';
- const stockField=stock?'<label>Stock / company<input name="companyName" maxlength="120" required placeholder="Company name"></label>':'';
+ const stockField=stock?'<label>Stock / company (optional)<input name="companyName" maxlength="120" placeholder="Company name, or blank for general investing lessons"></label>':'';
 
  return stockField+
   '<label>'+title+'<input name="title" maxlength="'+(office?'140':'120')+'" '+(office?'required ':'')+'placeholder="'+(office?'Office follow-up or work note':'Short heading')+'"></label>'+
   '<label>What would you like to record?<textarea name="'+contentName+'" rows="5" maxlength="'+(office?'10000':'4500')+'" required placeholder="'+(office?'Enter authorised non-confidential work notes only':'Write your observation, reflection or lesson…')+'"></textarea></label>'+
   '<div class="grid note-core"><div><label>Date<input name="'+dateName+'" type="date" value="'+today()+'" required></label></div>'+
-  '<div><label>Note type<select name="'+typeName+'">'+choices+'</select></label></div></div>'+
-  noteMarkings()+noteMoreOptions(office);
+  '</div>'+
+  noteMarkings(office,stock)+noteMoreOptions(office);
 }
 function updateNoteTypeTone(){
  const select=$('fields')?.querySelector('select[name="diaryType"],select[name="officeNoteType"]');
@@ -1376,7 +1379,16 @@ function editRecent(record){
  if(!pinGrant||!record?.editable||!record.id||!record.fields||!['expense','diary','office','stock','family','investment'].includes(record.kind))return;
  if(record.kind==='family'){ $('entry').dataset.pendingCategory=String(record.fields.category||'');$('entry').dataset.pendingSubcategory=String(record.fields.subcategory||''); }mode=record.kind;render();updatePinGate();pendingQuickEntryId='';pendingQuickEntryMode='';
  const inputs=$('entry').elements;
- Object.entries(record.fields||{}).forEach(([k,v])=>{const input=inputs.namedItem(k);if(!input||input.type==='file')return;if(input.type==='checkbox')input.checked=!!v;else input.value=v??'';});if(record.kind==='investment'){inputs.namedItem('side')?.dispatchEvent(new Event('change'));inputs.namedItem('sipDurationMode')?.dispatchEvent(new Event('change'));}
+ Object.entries(record.fields||{}).forEach(([k,v])=>{const input=inputs.namedItem(k);if(!input||input.type==='file')return;if(input.type==='checkbox')input.checked=!!v;else input.value=v??'';});
+ if(['diary','stock','office'].includes(record.kind)){
+  const tags=String(record.fields.tags||record.tags||'').toLowerCase().split(',').map(x=>x.trim());
+  const set=(name,on)=>{const el=inputs.namedItem(name);if(el)el.checked=!!on;};
+  set('monthlyHighlight',record.fields.monthlyHighlight||tags.includes('monthly-highlight'));
+  set('needsLearning',record.fields.needsLearning||tags.includes('mark-learning')||tags.includes('learning')||tags.includes('office:learning/knowledge'));
+  set('needsFollowup',record.fields.needsFollowup||tags.includes('needs-follow-up'));
+  set('needsPlanning',record.fields.needsPlanning||tags.includes('needs-planning')||tags.includes('planning'));
+  set('needsReview',record.fields.needsReview||tags.includes('needs-review')||tags.includes('review'));
+ }if(record.kind==='investment'){inputs.namedItem('side')?.dispatchEvent(new Event('change'));inputs.namedItem('sipDurationMode')?.dispatchEvent(new Event('change'));}
  if(record.kind==='investment'){const titleInput=inputs.namedItem('title');if(titleInput)titleInput.value=record.fields.title||record.fields.assetName||record.title||'';}if(record.kind==='family'){const category=inputs.namedItem('category');if(category){category.value=record.fields.category||'';category.dispatchEvent(new Event('change'));}const sub=inputs.namedItem('subcategory');if(sub)sub.value=record.fields.subcategory||'';}if(record.kind==='expense'){const category=inputs.namedItem('category');if(category){category.value=record.fields.category||'';category.dispatchEvent(new Event('change'));}const sub=inputs.namedItem('subcategory');if(sub)sub.value=record.fields.subcategory||'';}
  $('entry').dataset.editId=record.id;$('entry').dataset.pinRevision=String(record.revision||'');
  $('save').textContent='Save correction';$('entry').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1499,7 +1511,17 @@ function qeRecentPhotos(record){
  return details;
 }
 
-$('entry').onsubmit=async e=>{e.preventDefault();if(busy)return;if(pinConfig?.enabled&&pinConfig.policies?.[mode]?.requirePinAdd&&!pinGrant){pinManageOpen=true;updatePinGate();status('PIN Add is enabled for '+mode+' in SarNi Admin Settings. To allow entries without PIN, uncheck PIN Add for this tab and save. For this entry you may unlock below.',true);$('pinGate').scrollIntoView({behavior:'smooth',block:'center'});$('pinInput').focus();return;}busy=true;$('save').disabled=true;status('Saving…');try{const data=Object.fromEntries(new FormData(e.target));const fingerprint=qePayloadFingerprint(mode,data);if(qePendingUncertain&&qePendingPayloadFingerprint&&fingerprint!==qePendingPayloadFingerprint){if(!confirm('You changed the entry after an unconfirmed save. This may create a different transaction. Check Recent Entries or the destination first. Continue with a new submission ID?')){status('Save cancelled. Confirm the earlier entry first.',true);return;}qeResetSubmissionIdentity();}const entryId=(pendingQuickEntryMode===mode&&pendingQuickEntryId)||Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');pendingQuickEntryId=entryId;pendingQuickEntryMode=mode;qePendingPayloadFingerprint=fingerprint;qePendingUncertain=false;qeConfirmUncertainResubmission();if(mode==='family'&&!pendingFamilyId)pendingFamilyId=entryId;if((mode==='diary'||mode==='stock')&&data.diaryType){const tags=String(data.tags||'').split(',').map(x=>x.trim()).filter(Boolean);if(!tags.some(x=>x.toLowerCase()===data.diaryType.toLowerCase()))tags.unshift(data.diaryType);if(data.needsFollowup&&!tags.some(x=>x.toLowerCase()==='follow-up'))tags.push('follow-up');data.tags=tags.join(', ').slice(0,300);delete data.needsFollowup;}if(mode==='office'){data.status=data.needsFollowup?'Follow-up':'Open';const tags=String(data.tags||'').split(',').map(x=>x.trim()).filter(Boolean);tags.push('office:'+(data.officeNoteType||'General'));if(data.needsFollowup)tags.push('needs-follow-up');if(data.monthlyHighlight)tags.push('monthly-highlight');data.tags=[...new Set(tags)].join(', ').slice(0,300);data.important=!!data.important;delete data.needsFollowup;delete data.officeNoteType;data.monthlyHighlight=!!data.monthlyHighlight;}const plannedSip=mode==='investment'&&data.side==='SIP'&&data.sipEntryPurpose==='PLAN';if(plannedSip){if(data.assetType!=='MF')throw Error('For this phase, saved SIP plans support Mutual Funds (MF).');if(!data.sipStartDate)throw Error('Choose the first SIP date.');if(data.sipDurationMode==='DATES'&&(!data.sipEndDate||data.sipEndDate<data.sipStartDate))throw Error('Choose an end date on or after the first installment.');if(data.sipDurationMode==='COUNT'&&!(Number.isInteger(Number(data.sipInstallments))&&Number(data.sipInstallments)>=1&&Number(data.sipInstallments)<=1200))throw Error('Enter 1–1200 installments.');}else if(mode==='investment'){delete data.sipPlanOnly;delete data.sipEntryPurpose;delete data.sipFrequency;delete data.sipDurationMode;delete data.sipStartDate;delete data.sipEndDate;delete data.sipInstallments;}
+$('entry').onsubmit=async e=>{e.preventDefault();if(busy)return;if(pinConfig?.enabled&&pinConfig.policies?.[mode]?.requirePinAdd&&!pinGrant){pinManageOpen=true;updatePinGate();status('PIN Add is enabled for '+mode+' in SarNi Admin Settings. To allow entries without PIN, uncheck PIN Add for this tab and save. For this entry you may unlock below.',true);$('pinGate').scrollIntoView({behavior:'smooth',block:'center'});$('pinInput').focus();return;}busy=true;$('save').disabled=true;status('Saving…');try{const data=Object.fromEntries(new FormData(e.target));const fingerprint=qePayloadFingerprint(mode,data);if(qePendingUncertain&&qePendingPayloadFingerprint&&fingerprint!==qePendingPayloadFingerprint){if(!confirm('You changed the entry after an unconfirmed save. This may create a different transaction. Check Recent Entries or the destination first. Continue with a new submission ID?')){status('Save cancelled. Confirm the earlier entry first.',true);return;}qeResetSubmissionIdentity();}const entryId=(pendingQuickEntryMode===mode&&pendingQuickEntryId)||Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');pendingQuickEntryId=entryId;pendingQuickEntryMode=mode;qePendingPayloadFingerprint=fingerprint;qePendingUncertain=false;qeConfirmUncertainResubmission();if(mode==='family'&&!pendingFamilyId)pendingFamilyId=entryId;if(['diary','stock','office'].includes(mode)){
+ const flags=new Set(['monthly-highlight','needs-follow-up','needs-review','needs-planning','mark-learning']);
+ const tags=String(data.tags||'').split(',').map(x=>x.trim()).filter(Boolean).filter(x=>!flags.has(x.toLowerCase())&&!/^office:/i.test(x));
+ if(data.monthlyHighlight)tags.push('monthly-highlight');
+ if(data.needsLearning)tags.push('mark-learning');
+ if(mode==='office'){if(data.needsFollowup)tags.push('needs-follow-up');tags.push('office:'+(data.needsLearning?'Learning/Knowledge':'General Work'));data.status=data.needsFollowup?'Follow-up':'Open';}
+ if(mode==='stock'&&data.needsReview)tags.push('needs-review');
+ if(mode==='diary'&&data.needsPlanning)tags.push('needs-planning');
+ data.tags=[...new Set(tags)].join(', ').slice(0,300);data.important=!!data.important;
+ delete data.needsFollowup;delete data.needsReview;delete data.needsPlanning;delete data.needsLearning;delete data.diaryType;delete data.officeNoteType;
+}const plannedSip=mode==='investment'&&data.side==='SIP'&&data.sipEntryPurpose==='PLAN';if(plannedSip){if(data.assetType!=='MF')throw Error('For this phase, saved SIP plans support Mutual Funds (MF).');if(!data.sipStartDate)throw Error('Choose the first SIP date.');if(data.sipDurationMode==='DATES'&&(!data.sipEndDate||data.sipEndDate<data.sipStartDate))throw Error('Choose an end date on or after the first installment.');if(data.sipDurationMode==='COUNT'&&!(Number.isInteger(Number(data.sipInstallments))&&Number(data.sipInstallments)>=1&&Number(data.sipInstallments)<=1200))throw Error('Enter 1–1200 installments.');}else if(mode==='investment'){delete data.sipPlanOnly;delete data.sipEntryPurpose;delete data.sipFrequency;delete data.sipDurationMode;delete data.sipStartDate;delete data.sipEndDate;delete data.sipInstallments;}
 const creatingHead=mode==='expense'&&$('newHeadBox')&&!$('newHeadBox').hidden; if(creatingHead){const h=$('newHeadName').value.trim();if(h.length<2)throw Error('Enter a new category name.');data.category=h;data.subcategory='';data.createNewHead=true;}if(!navigator.onLine&&!e.target.dataset.editId&&!e.target.dataset.sipPlanEditId){
  if(pinConfig?.enabled&&pinConfig.policies?.[mode]?.requirePinAdd)throw Error('This category requires PIN for Add and cannot be saved to the offline queue.');
  if(creatingHead)throw Error('New expense categories require online confirmation. Save this entry when connected.');
