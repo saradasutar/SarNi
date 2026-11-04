@@ -796,11 +796,7 @@ function noteMarkings(office,stock){
  '<label class="inline-check"><input type="checkbox" name="needsLearning"> Learn</label>'+
  '<label class="inline-check"><input type="checkbox" name="'+last[0]+'"> '+last[1]+'</label></div>';
 }
-function noteMoreOptions(office){
- return '<details class="advanced note-options"><summary>More note options <span aria-hidden="true">⌄</span></summary>'+
-  '<div class="advanced-body"><p class="note-help">Enter tags in the Tags box beside Date. Tags are saved with your entry.</p>'+
-  '<p class="note-help">Tags and selected markings are searchable later.</p></div></details>';
-}
+function noteMoreOptions(office){return '';}
 function commonNoteFields(office,stock){
  const title=office?'Title / Subject':'Title (optional)';
  const typeName=office?'officeNoteType':'diaryType';
