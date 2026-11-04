@@ -464,7 +464,7 @@ function qeConfirmUncertainResubmission(){
 /* Offline queue: AES-GCM encrypted localStorage, PBKDF2 passphrase held in RAM only. */
 const qeOfflineStorageKey='sarni-quick-offline-v1';
 let qeOfflineKey=null,qeOfflineData=null,qeOfflineSalt=null,qeOfflineBusy=false;
-const qeByteTo64=bytes=>btoa(String.fromCharCode(...bytes));
+const qeByteTo64=bytes=>{let text='';for(let i=0;i<bytes.length;i+=8192)text+=String.fromCharCode(...bytes.subarray(i,i+8192));return btoa(text);};
 const qe64ToBytes=str=>Uint8Array.from(atob(str),c=>c.charCodeAt(0));
 function qeOfflineStatus(message){$('qeOfflineMessage').textContent=message;}
 function qeOfflineReadEnvelope(){
