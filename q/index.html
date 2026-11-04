@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#174e44"><title>SarNi · Quick Entry</title><link rel="icon" href="../sarni-life-icon.svg"><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#174e44"><title>SarNi · Quick Entry</title><link rel="icon" href="../sarni-life-icon.svg"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="../quick-expense-192.png"><style>
 :root{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color-scheme:light;--ink:#203d37;--muted:#61766e;--primary:#176b54;--line:#d7e4dd;--surface:#fff}
 *{box-sizing:border-box}
 body{margin:0;background:linear-gradient(145deg,#edf5f1,#f5f7fa);color:var(--ink);font-size:15px;line-height:1.45;padding:clamp(8px,2vw,22px);min-height:100vh}
@@ -439,8 +439,11 @@ main{padding-top:13px!important}
 .qe-offline-item{display:flex;align-items:center;justify-content:space-between;gap:8px;background:white;padding:8px;margin:7px 0;border:1px solid #d9e7df;border-radius:9px}
 .qe-offline-item span{font-size:11px;font-weight:700;overflow-wrap:anywhere}
 .qe-offline-item button{font-size:11px;min-height:30px;padding:5px 8px}
+
+.qe-connectivity-notice{margin:7px 0;padding:7px 10px;border-radius:9px;background:#fff5db;color:#785112;border:1px solid #ead8a6;font-size:11px;font-weight:800}
+.qe-connectivity-notice[hidden]{display:none!important}
 </style><script src="../config.js"></script></head><body>
-<main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-controls="qeOfflinePanel" aria-expanded="false">◷ Offline Queue <span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-controls="qeGlobalSyncPanel" aria-expanded="false">↻ Sync Status</button></div></header><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
+<main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-controls="qeOfflinePanel" aria-expanded="false">◷ Offline Queue <span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-controls="qeGlobalSyncPanel" aria-expanded="false">↻ Sync Status</button></div></header><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
 <p>Entries are encrypted on this device. Choose an unlock passphrase (at least 10 characters). The passphrase is never saved or sent to SarNi. If forgotten, queued entries cannot be recovered.</p>
 <div class="qe-offline-unlock"><label for="qeOfflinePassphrase">Queue passphrase</label><input type="password" id="qeOfflinePassphrase" autocomplete="off" minlength="10" placeholder="10+ characters" /><button id="qeOfflineUnlock" type="button">Create / Unlock queue</button><button id="qeOfflineLock" type="button" hidden>Lock</button></div>
@@ -463,12 +466,13 @@ function qeConfirmUncertainResubmission(){
 }
 /* Offline queue: AES-GCM encrypted localStorage, PBKDF2 passphrase held in RAM only. */
 const qeOfflineStorageKey='sarni-quick-offline-v1';
+const qeOfflineStorageName=()=>qeOfflineStorageKey+'-'+qeOfflineScope();
 let qeOfflineKey=null,qeOfflineData=null,qeOfflineSalt=null,qeOfflineBusy=false;
 const qeByteTo64=bytes=>{let text='';for(let i=0;i<bytes.length;i+=8192)text+=String.fromCharCode(...bytes.subarray(i,i+8192));return btoa(text);};
 const qe64ToBytes=str=>Uint8Array.from(atob(str),c=>c.charCodeAt(0));
 function qeOfflineStatus(message){$('qeOfflineMessage').textContent=message;}
 function qeOfflineReadEnvelope(){
- try{const raw=localStorage.getItem(qeOfflineStorageKey);return raw?JSON.parse(raw):null;}catch(_){return null;}
+ try{const scoped=localStorage.getItem(qeOfflineStorageName());if(scoped)return JSON.parse(scoped);const prior=localStorage.getItem(qeOfflineStorageKey);if(!prior)return null;const legacy=JSON.parse(prior);return legacy.scope===qeOfflineScope()?legacy:null;}catch(_){return null;}
 }
 function qeOfflineScope(){return qeDraftScope;}
 async function qeOfflineDerive(pass,salt){
@@ -481,7 +485,7 @@ async function qeOfflinePersist(){
  const bytes=new TextEncoder().encode(JSON.stringify(qeOfflineData));
  const encrypted=await crypto.subtle.encrypt({name:'AES-GCM',iv},qeOfflineKey,bytes);
  const envelope={v:1,scope:qeOfflineScope(),salt:qeByteTo64(qeOfflineSalt),iv:qeByteTo64(iv),payload:qeByteTo64(new Uint8Array(encrypted))};
- localStorage.setItem(qeOfflineStorageKey,JSON.stringify(envelope));
+ localStorage.setItem(qeOfflineStorageName(),JSON.stringify(envelope));
 }
 function qeOfflineLock(){
  qeOfflineKey=null;qeOfflineData=null;qeOfflineSalt=null;
@@ -509,6 +513,7 @@ function qeOfflineRender(){
  }
 }
 async function qeOfflineUnlock(){
+ if(!key){qeOfflineStatus('Open your current private Quick Entry link to unlock its encrypted queue. The installed app never stores that link token.');return;}
  const pass=$('qeOfflinePassphrase').value;
  if(pass.length<10){qeOfflineStatus('Passphrase must be at least 10 characters.');return;}
  if(!crypto?.subtle||!qeOfflineScope()){qeOfflineStatus('Secure browser cryptography is unavailable.');return;}
@@ -527,7 +532,10 @@ async function qeOfflineUnlock(){
    payload.items.forEach(item=>{if(item.status==='sending')item.status='uncertain';});
   }
   qeOfflineKey=secret;qeOfflineSalt=salt;qeOfflineData=payload;
-  if(!env)await qeOfflinePersist();
+  if(!env||!localStorage.getItem(qeOfflineStorageName()))await qeOfflinePersist();
+  // Existing legacy queue is retained until a scoped encrypted copy has been written.
+  if(info)void qeOfflineCaptureBootstrap();
+  else if(payload.bootstrap){qeOfflineUseBootstrap(payload.bootstrap);}
   $('qeOfflinePassphrase').value='';
   $('qeOfflineLock').hidden=false;$('qeOfflineUnlock').hidden=true;$('qeOfflineControls').hidden=false;
   qeOfflineRender();qeOfflineStatus('Queue unlocked on this page. Ready entries will send once when online; interrupted/uncertain entries are held for review.');
@@ -544,6 +552,33 @@ $('qeOfflineUnlock').onclick=()=>void qeOfflineUnlock();
 $('qeOfflineLock').onclick=qeOfflineLock;
 $('qeOfflineCheck').onclick=qeOfflineRender;
 $('qeOfflineSend').onclick=()=>void qeOfflineSendReady();
+function qeOfflineCaptureBootstrap(){
+ if(!qeOfflineKey||!qeOfflineData||!info)return;
+ const minimal={
+  capturedAt:Date.now(),
+  info:{
+   categories:Array.isArray(info.categories)?info.categories:[],
+   expenseGroups:Array.isArray(info.expenseGroups)?info.expenseGroups:[],
+   quickAccess:info.quickAccess||{}
+  },
+  hubAccess:{allowOffice:!!hubAccess.allowOffice,allowInvestment:!!hubAccess.allowInvestment},
+  pinRequired:!!pinConfig?.enabled,
+  pinPolicies:pinConfig?.enabled?Object.fromEntries(['expense','diary','stock','office','investment','family'].map(k=>[k,!!pinConfig.policies?.[k]?.requirePinAdd])):{},
+  familyInfo:familyInfo&&Array.isArray(familyInfo.categories)?{categories:familyInfo.categories}:null
+ };
+ qeOfflineData.bootstrap=minimal;
+ void qeOfflinePersist().catch(()=>{qeOfflineStatus('Could not cache form options for offline startup. Current queued entries are unchanged.');});
+}
+function qeOfflineUseBootstrap(snapshot){
+ if(!snapshot?.info||!qeOfflineKey||!key)return false;
+ if(Date.now()-Number(snapshot.capturedAt||0)>30*24*60*60*1000){qeOfflineStatus('Cached form information is too old. Reconnect to refresh it.');return false;}
+ info=snapshot.info;hubAccess=snapshot.hubAccess||{allowOffice:false,allowInvestment:false};
+ pinConfig=snapshot.pinRequired?{enabled:true,policies:Object.fromEntries(Object.entries(snapshot.pinPolicies||{}).map(([k,v])=>[k,{requirePinAdd:!!v,edit:false,trash:false,view:true}]))}:null;
+ familyInfo=snapshot.familyInfo||null;
+ render();$('restrictedEntry').hidden=true;void loadRecent();void loadSipPlans();void loadQuickSyncSummary();
+ qeOfflineStatus('Offline form options restored from encrypted storage. Server permissions cannot be checked until online; queued entries may later be rejected.');
+ return true;
+}
 function qeOfflineRequest(kind,data,id,plannedSip){
  if(plannedSip)return {action:'sipPlanGuestSave',payload:{entry:{...data,clientKey:id,id:'',revision:''}}};
  if(kind==='family')return {action:'familyExpenseQuickSave',payload:{entryId:id,expense:{...data,amount:Number(data.amount)}}};
@@ -586,8 +621,17 @@ async function qeOfflineSendReady(){
  }catch(e){qeOfflineStatus('Queue could not be updated securely: '+String(e.message||e));}
  finally{qeOfflineBusy=false;$('qeOfflineSend').disabled=false;qeOfflineRender();}
 }
-window.addEventListener('online',()=>{if(qeOfflineKey)void qeOfflineSendReady();});
-window.addEventListener('offline',()=>{if(qeOfflineKey)qeOfflineStatus('Offline: new entries can be saved to the encrypted queue.');});
+function qeUpdateConnectivity(){
+ const notice=$('qeConnectivityNotice');notice.hidden=navigator.onLine;
+ if(!navigator.onLine)notice.textContent='Offline · Entries are saved only to your encrypted device queue when unlocked.';
+}
+window.addEventListener('online',()=>{qeUpdateConnectivity();if(qeOfflineKey)void qeOfflineSendReady();});
+window.addEventListener('offline',()=>{qeUpdateConnectivity();if(qeOfflineKey)qeOfflineStatus('Offline: new entries can be saved to the encrypted queue.');});
+qeUpdateConnectivity();
+if('serviceWorker' in navigator){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{}),{once:true});
+}
+
 
 /* Session-only draft recovery. Never persist the link token, PIN, files, or photos. */
 let qeDraftScope='',qeDraftTimer=null,qeDrafts={},qeDraftApplying=false;
@@ -753,6 +797,7 @@ function render(){
   const form=$('entry'),cat=form.elements.namedItem('category'),sub=form.elements.namedItem('subcategory'),hint=$('familyCategoryHint');
   function applyCategories(data){
     if(mode!=='family'||!cat.isConnected)return;
+    if(qeOfflineKey)qeOfflineCaptureBootstrap();
     const cats=(data.categories||[]).filter(x=>x&&x.name);
     const previous=cat.value;cat.innerHTML='<option value="">Choose category</option>'+cats.map(x=>'<option value="'+safe(x.name)+'">'+safe(x.name)+'</option>').join('');
     const pendingCategory=form.dataset.pendingCategory||previous;if(cats.some(x=>x.name===pendingCategory))cat.value=pendingCategory;
@@ -1404,6 +1449,6 @@ const r=plannedSip?await api('sipPlanGuestSave',{grant:pinGrant,entry:{...data,c
  const destLabel=document.createElement('small');destLabel.className='qe-destination-caption';destLabel.textContent='Where this entry was saved';lastBox.append(destLabel,destination);
  const infoNote=document.createElement('small');infoNote.className='qe-save-note';infoNote.textContent='These statuses reflect the current save response, not a separate live destination check.';lastBox.append(infoNote);
  status(r.message||'✓ Saved successfully.');if(qeDraftTimer){clearTimeout(qeDraftTimer);qeDraftTimer=null;}qeClearDraft(mode);qeConfirmUncertainResubmission();if(qePhotoPending){const picture=qePhotoPending,photoStatus=document.createElement('small');photoStatus.className='qe-photo-save-progress';photoStatus.textContent='Photo queued for private Drive upload…';lastBox.append(photoStatus);const photoId=String(r?.entry?.id||r?.id||'');if(photoId){void qeUploadPhoto(picture,mode,photoId,photoStatus).catch(error=>{photoStatus.textContent='Entry saved. Photo upload result unconfirmed: '+error.message+'. Check Photos in Recent Entries before retrying to avoid duplicate attachments.';qeOfferPhotoRetry(picture,mode,photoId,photoStatus);});}else{photoStatus.textContent='Entry saved. Use Photos in Recent entries to attach the selected photo.';}}qeResetSubmissionIdentity();delete $('entry').dataset.editId;delete $('entry').dataset.pinRevision;delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;void loadRecent();void loadSipPlans();void loadQuickSyncSummary();HTMLFormElement.prototype.reset.call($('entry'));const dateField=$('fields').querySelector('[type=date]');if(dateField)dateField.value=today();if(mode==='expense'&&$('qeProject')){const remembered=readLastGroup();if([...$('qeProject').options].some(x=>x.value===remembered))$('qeProject').value=remembered;}}catch(err){const msg=String(err?.message||err||'Save was not confirmed.');const familySetup=mode==='family'&&(/MYFAMILY_DEFAULT_MEMBER_ID|active MyFamily member ID|configured MyFamily member/i.test(msg));const uncertain=/timed out|too long|network|connection reset|server could not complete/i.test(msg);qePendingUncertain=uncertain;qeConfirmUncertainResubmission();status(familySetup?'Family Expense needs a registered member: sign in to SarNi → Admin Settings → Quick Entry Links → MyFamily connection → select an active member → Save. Your entered details are retained.':msg+(uncertain?' The result is unconfirmed. Check destination before retrying; unchanged entries reuse the same submission ID.':''),true);}finally{busy=false;$('save').disabled=false;}};
-(async()=>{try{if(!key)throw Error('Open the private link generated in SarNi Admin Settings.');if(!base)throw Error('Backend is not configured.');const [mainResult,permissionResult]=await Promise.allSettled([api('qeInfo'),api('hubGuestInfo')]);if(mainResult.status!=='fulfilled')throw mainResult.reason;info=mainResult.value;try{const last=localStorage.getItem('sarni_q_last_tab_v1');if(['expense','diary','stock','office','investment','family'].includes(last))mode=last;}catch(_){}if(permissionResult.status==='fulfilled'){const perms=permissionResult.value;hubAccess={allowOffice:!!perms.allowOffice,allowInvestment:!!perms.allowInvestment};}/* Display the tabs only after both permission checks finish: one stable, authorised layout. */await initializePinAccess();await qeInitializeDrafts();render();$('restrictedEntry').hidden=true;void loadRecent();void loadSipPlans();void loadQuickSyncSummary();}catch(e){status(e.message,true);}})();
+(async()=>{try{await qeInitializeDrafts();if(!key)throw Error('Open your private Quick Entry link. The installed app intentionally does not store its secret token.');if(!base)throw Error('Backend is not configured.');if(!navigator.onLine){status('Offline. Unlock Offline Queue to restore encrypted form options. Nothing will be sent until connected.');qeOfflineToggle(true);return;}const [mainResult,permissionResult]=await Promise.allSettled([api('qeInfo'),api('hubGuestInfo')]);if(mainResult.status!=='fulfilled')throw mainResult.reason;info=mainResult.value;try{const last=localStorage.getItem('sarni_q_last_tab_v1');if(['expense','diary','stock','office','investment','family'].includes(last))mode=last;}catch(_){}if(permissionResult.status==='fulfilled'){const perms=permissionResult.value;hubAccess={allowOffice:!!perms.allowOffice,allowInvestment:!!perms.allowInvestment};}/* Display the tabs only after both permission checks finish: one stable, authorised layout. */await initializePinAccess();render();if(qeOfflineKey)qeOfflineCaptureBootstrap();$('restrictedEntry').hidden=true;void loadRecent();void loadSipPlans();void loadQuickSyncSummary();}catch(e){status(e.message,true);}})();
 })();
 </script></body></html>
