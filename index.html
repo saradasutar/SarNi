@@ -456,6 +456,12 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <link rel="stylesheet" href="./sarni-ux-v20-9-2.css?v=20261031-20103">
 <link rel="stylesheet" href="./sarni-productivity-v20-10.css?v=20103">
 <link rel="stylesheet" href="./sarni-entry-photos-v1.css?v=20261031-photo1">
+<style id="sarni-qc-mark-alignment-v1">
+#sarniQcDialog .sarni-qc-note-marks{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#sarniQcDialog .sarni-qc-note-marks .sarni-qc-check{padding:7px 11px;border:1px solid #d8e5e3;border-radius:9px;background:#f8fbfa}
+#sarniQcDialog .sarni-qc-monthly{background:#fff7e4!important;border:1px solid #ebce8b!important;border-radius:9px;padding:8px!important;color:#805712;font-weight:800}
+#sarniQcDialog #sarniQcMarkDateWrap[hidden],#sarniQcDialog .sarni-qc-note-marks label[hidden]{display:none!important}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
@@ -2342,9 +2348,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     <label id="sarniQcCompanyWrap" hidden>Company<select id="sarniQcCompany" name="companyId"><option value="">Choose company</option></select></label>
     <label>Title (optional)<input name="title" maxlength="160" placeholder="A short heading"></label>
     <label>What would you like to record?<textarea name="body" rows="5" maxlength="5000" placeholder="Write your observation, reflection or lesson…"></textarea></label>
-    <div class="sarni-qc-grid-two sarni-qc-note-date"><label>Date<input name="noteDate" type="date"></label><label class="sarni-qc-check"><input type="checkbox" name="monthlyHighlight">★ Monthly highlight</label></div>
-    <label>Diary Type<select name="diaryType"><option value="Daily">Daily / General</option><option value="Planning">Planning</option><option value="Learning">Learning / Knowledge</option><option value="Idea">Idea / Future Reference</option><option value="Experience">Experience / Observation</option></select></label><label class="sarni-qc-check"><input name="needsFollowup" type="checkbox"> Needs follow-up</label>
-    <details class="sarni-qc-advanced"><summary>More note options <span aria-hidden="true">⌄</span></summary><div class="sarni-qc-advanced-body"><label>Tags<input name="tags" maxlength="450" placeholder="learning, research, personal"></label><label class="sarni-qc-check"><input name="important" type="checkbox">★ Mark important</label></div></details>
+    <div class="sarni-qc-grid-two sarni-qc-note-date"><label>Date<input name="noteDate" type="date"></label><label class="sarni-qc-check sarni-qc-monthly"><input type="checkbox" name="monthlyHighlight">★ Monthly</label></div>
+    <label id="sarniQcDiaryTypeWrap">Diary Type<select name="diaryType"><option value="Daily">Daily / General</option><option value="Planning">Planning</option><option value="Learning">Learning / Knowledge</option><option value="Idea">Idea / Future Reference</option><option value="Experience">Experience / Observation</option></select></label>
+    <div class="sarni-qc-note-marks"><label class="sarni-qc-check"><input name="important" type="checkbox"> Imp.</label><label class="sarni-qc-check"><input name="needsLearning" type="checkbox"> Learn</label><label class="sarni-qc-check"><input name="needsPlanning" type="checkbox"> Plan</label><label class="sarni-qc-check"><input name="needsReview" type="checkbox"> Review</label></div>
+    <label id="sarniQcMarkDateWrap" hidden><span id="sarniQcMarkDateLabel">Optional date</span><input type="date" name="markDueDate" disabled></label>
+    <details class="sarni-qc-advanced"><summary>More note options <span aria-hidden="true">⌄</span></summary><div class="sarni-qc-advanced-body"><label>Tags<input name="tags" maxlength="450" placeholder="learning, research, personal"></label></div></details>
    </div>
    <p id="sarniQcStatus" role="status" aria-live="polite"></p>
   </div>
@@ -2356,7 +2364,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script defer src="./sarni-expense-head-manager-v1.js?v=20261031"></script>
 <script defer src="./sarni-quick-links-admin-stage4.js?v=20261103-easy-entry"></script>
 <script defer src="./sarni-quick-mark-manager.js?v=20261104-owner-sarni-v2"></script>
-<script defer src="./sarni-quick-entry-v20-10-1.js?v=20103-popup"></script>
+<script defer src="./sarni-quick-entry-v20-10-1.js?v=20261105-mark-consistency"></script>
 
 <link rel="stylesheet" href="./sarni-mytrip-popup-v20-10-3.css?v=20103">
 <script defer src="./sarni-mytrip-popup-v20-10-3.js?v=20103"></script>
