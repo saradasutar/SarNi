@@ -5,9 +5,9 @@
 'use strict';
 const tabs=[['expense','Expense'],['diary','Personal Diary'],['stock','Stock Note'],['office','Office Diary'],['investment','Investment'],['family','Family Expense']];
 const cores={
- expense:[],diary:[['important','Imp.'],['monthlyHighlight','Monthly'],['needsLearning','Learn'],['needsPlanning','Plan']],
- stock:[['important','Imp.'],['monthlyHighlight','Monthly'],['needsLearning','Learn'],['needsReview','Review']],
- office:[['important','Imp.'],['monthlyHighlight','Monthly'],['needsLearning','Learn'],['needsFollowup','Follow-up']],
+ expense:[],diary:[['important','Imp.'],['needsLearning','Learn'],['needsPlanning','Plan'],['monthlyHighlight','★ Monthly']],
+ stock:[['important','Imp.'],['needsLearning','Learn'],['needsReview','Review'],['monthlyHighlight','★ Monthly']],
+ office:[['important','Imp.'],['needsLearning','Learn'],['needsFollowup','Follow-up'],['monthlyHighlight','★ Monthly']],
  investment:[],family:[]
 };
 const $=id=>document.getElementById(id);
@@ -15,7 +15,7 @@ const node=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefi
 const wrap=$('adminSettingsSection');if(!wrap||$('sarniQuickMarkManager'))return;
 const panel=node('article',undefined,'panel');panel.id='sarniQuickMarkManager';panel.style.cssText='margin-top:16px;padding:14px;border:1px solid #dbe5f4;border-radius:15px;background:#fff';
 const details=node('details');const summary=node('summary','Category & Mark Manager · Optional');summary.style.cssText='cursor:pointer;font-size:16px;font-weight:850;color:#1d4663;padding:4px';details.append(summary);
-const body=node('div');body.style.cssText='padding:12px 0 2px';const desc=node('p','SarNi is master for Personal Diary and Stock Note categories. Expense heads stay in SarNi Expenditure; Office Diary in HR; Investment in Analysis; Family Expense in MyFamily. Keep four core marks unchanged; up to four optional markings can be configured per SarNi diary. The Quick Entry forms will not use new labels until the compatibility stage is complete.');desc.style.cssText='font-size:13px;color:#516579;line-height:1.5';body.append(desc);
+const body=node('div');body.style.cssText='padding:12px 0 2px';const desc=node('p','SarNi is master for Personal Diary and Stock Note categories. Expense heads stay in SarNi Expenditure; Office Diary in HR; Investment in Analysis; Family Expense in MyFamily. Keep the established core marks: Imp., Learn, and one action (Plan for Diary, Review for Stock Note, Follow-up for Office Diary). Monthly is a separate highlight. Optional marks can be configured without changing historical entries. The Quick Entry forms will not use new labels until the compatibility stage is complete.');desc.style.cssText='font-size:13px;color:#516579;line-height:1.5';body.append(desc);
 const toolbar=node('div');toolbar.style.cssText='display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:9px 0';
 const select=node('select');select.setAttribute('aria-label','Quick Entry tab to configure');select.style.cssText='padding:9px 12px;border:1px solid #a8bfce;border-radius:9px;font-size:14px;max-width:100%';tabs.forEach(([id,label])=>{const o=node('option',label);o.value=id;select.append(o)});
 const load=node('button','Load settings'),save=node('button','Save changes');load.type=save.type='button';load.style.cssText=save.style.cssText='padding:9px 12px;border:1px solid #8db5bd;border-radius:9px;background:#edf8f5;color:#115b56;cursor:pointer;font-weight:750';save.disabled=true;toolbar.append(select,load,save);body.append(toolbar);
