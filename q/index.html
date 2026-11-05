@@ -521,6 +521,47 @@ main{padding-top:13px!important}
 #qeDiaryProgress .qe-progress-card:nth-child(7n+5){background:#fff0e9;color:#a94f29}#qeDiaryProgress .qe-progress-card:nth-child(7n+6){background:#eaf8f8;color:#126c73}
 #qeDiaryProgress .qe-progress-card:nth-child(7n){background:#fff7df;color:#8c641c}#qeDiaryProgress .qe-progress-note{display:block;margin-top:8px;line-height:1.5}
 @media(max-width:670px){#qeDiaryProgress .qe-progress-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style><style id="qe-mobile-tabular-recent-20261105">
+/* Keep Recent Entries a genuine table on narrow phones rather than tall per-record cards. */
+@media(max-width:700px){
+ #recentList .recent-table-scroll{
+  overflow-x:auto!important;overflow-y:visible!important;max-width:100%!important;
+  border:1px solid #dce7e2!important;border-radius:12px!important;background:#fff!important;
+  -webkit-overflow-scrolling:touch;scrollbar-width:thin;
+ }
+ #recentList .recent-table{
+  display:table!important;width:max-content!important;min-width:100%!important;
+  border-collapse:collapse!important;table-layout:auto!important;font-size:12px!important;
+ }
+ #recentList .recent-table thead{display:table-header-group!important}
+ #recentList .recent-table tbody{display:table-row-group!important}
+ #recentList .recent-table tbody tr{
+  display:table-row!important;background:#fff!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important;
+ }
+ #recentList .recent-table tbody tr:nth-child(even){background:#f6faf8!important}
+ #recentList .recent-table th,#recentList .recent-table td,
+ #recentList .recent-table td:first-child{
+  display:table-cell!important;grid-template-columns:none!important;
+  width:auto!important;min-width:0!important;max-width:210px!important;
+  padding:9px 10px!important;border:0!important;border-bottom:1px solid #e3ece7!important;
+  text-align:left!important;vertical-align:middle!important;white-space:normal!important;
+  font-size:12px!important;line-height:1.4!important;overflow-wrap:anywhere!important;
+ }
+ #recentList .recent-table th{
+  white-space:nowrap!important;position:sticky!important;top:0!important;
+  z-index:1!important;background:#eaf3ee!important;color:#245747!important;font-weight:800!important;
+ }
+ #recentList .recent-table td::before{display:none!important;content:none!important}
+ #recentList .recent-table td:first-child{white-space:nowrap!important;color:#4c6d5e!important}
+ #recentList .recent-table td:nth-child(2){min-width:115px!important;font-weight:700!important}
+ #recentList .recent-table td.recent-actions{white-space:nowrap!important}
+ #recentList .recent-table td.recent-actions button{min-height:30px!important;padding:5px 8px!important;margin:0 3px 3px 0!important}
+ #recentList .recent-table td.qe-recent-photo-cell{min-width:80px!important}
+ #recentList .recent-table details summary{font-size:12px!important}
+ #recentList .recent-table td.amount{text-align:right!important;white-space:nowrap!important}
+ #recentList .recent-table tr.recent-trashed{opacity:.65}
+}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-controls="qeOfflinePanel" aria-expanded="false">◷ Offline Queue <span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-controls="qeGlobalSyncPanel" aria-expanded="false">↻ Sync Status</button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
