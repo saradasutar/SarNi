@@ -1586,7 +1586,26 @@ async function login(event){
     // and full details hydrate sequentially after the dashboard is usable.
     beginBackgroundHydration(state.token,{hasSaved:Boolean(saved||isUsableDashboardData(result.data))});
   }
-  catch(error){if(els.loginMessage)els.loginMessage.textContent=error.message;}
+  catch(error){
+    if(els.loginMessage){
+      const raw=String(error?.message||'Sign-in failed.');
+      const code=String(error?.code||'').toUpperCase();
+      const invalid=code==='INVALID_LOGIN'||/incorrect username or password|invalid credentials|invalid username or password/i.test(raw);
+      if(invalid){
+        els.loginMessage.textContent='Sign-in was rejected by the configured SarNi backend. If you have not changed your password, verify that this deployment uses the correct Users database before resetting anything. Recheck the username (including capitalization/spacing).';
+      }else{
+        els.loginMessage.textContent=raw;
+      }
+      const help=document.getElementById('sarniLoginTroubleshooting');
+      if(help){
+        help.hidden=false;
+        const note=document.getElementById('sarniLoginTroubleshootingText');
+        if(note)note.textContent=invalid?
+          'Incognito also fails? Browser cache is unlikely to be the cause. Run the password-free backend check and verify the SarNi Apps Script deployment and account database. Do not repeatedly reset or retry.' :
+          'Run the backend connection check to distinguish a network/deployment problem from an account problem.';
+      }
+    }
+  }
   finally{setBusy(els.loginButton,false);}
 }
 
