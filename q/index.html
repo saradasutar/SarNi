@@ -642,6 +642,106 @@ main{padding-top:13px!important}
  .qe-compact-header .qe-brand-text h1{font-size:15px!important;letter-spacing:-.55px!important}
  .qe-compact-header .qe-brand-text p{font-size:9px!important;letter-spacing:-.25px!important}
 }
+</style><style id="qe-ultra-compact-v1">
+/* Ultra Compact: visual-only changes, preserve the original six-tab navigation and its handlers. */
+#tabs:not([hidden]) {
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:6px!important;
+  padding:5px!important;
+  margin:5px 0 9px!important;
+  border:0!important;
+  border-radius:13px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+#tabs button.qe-premium-tab {
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  min-height:43px!important;
+  height:43px!important;
+  padding:5px 5px!important;
+  border:1px solid var(--tab-edge)!important;
+  border-radius:11px!important;
+  background:var(--tab-pastel)!important;
+  color:var(--tab-color)!important;
+  box-shadow:0 2px 5px #123d2a0a!important;
+  font-size:clamp(10px,2.8vw,12px)!important;
+  font-weight:800!important;
+  letter-spacing:-.2px!important;
+  line-height:1.1!important;
+  transform:none!important;
+}
+#tabs .qe-premium-tab .qe-tab-icon {
+  flex:none!important;
+  display:grid!important;
+  place-items:center!important;
+  width:21px!important;
+  height:21px!important;
+  border:0!important;
+  border-radius:6px!important;
+  background:transparent!important;
+}
+#tabs .qe-premium-tab .qe-tab-icon svg {width:19px!important;height:19px!important}
+#tabs .qe-premium-tab .qe-tab-name {
+  display:block!important;
+  flex:0 1 auto!important;
+  min-width:0!important;
+  font-size:inherit!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  word-break:normal!important;
+  text-wrap:nowrap!important;
+}
+#tabs button.qe-premium-tab.selected {
+  border-color:var(--tab-color)!important;
+  box-shadow:inset 0 0 0 1px var(--tab-color),0 3px 8px #23493519!important;
+  background:linear-gradient(130deg,#fff,var(--tab-pastel))!important;
+}
+#tabs button.qe-premium-tab.selected:after {
+  top:-5px!important;right:-4px!important;
+  width:15px!important;height:15px!important;
+  font-size:9px!important;border-width:1px!important;
+}
+#tabs .qe-premium-tab .qe-tab-chevron {display:none!important}
+.qe-mini-info{display:none!important}
+.entry-heading{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  margin:3px 0 0!important;
+  padding:8px 11px!important;
+  border-radius:12px 12px 0 0!important;
+  background:linear-gradient(100deg,var(--mode-bg,#eef8f1),#edf8ef)!important;
+  border:1px solid var(--mode-border,#d8e6db)!important;
+  border-bottom:0!important;
+}
+.entry-heading #subtitle{display:none!important}
+.entry-heading #heading{
+  margin:0!important;
+  color:var(--mode-accent,#216747)!important;
+  font-size:17px!important;
+  line-height:1.15!important;
+  letter-spacing:-.25px!important;
+  font-weight:850!important;
+}
+#entry{margin-top:0!important;border-radius:0 0 12px 12px!important}
+@media(max-width:400px){
+  #tabs:not([hidden]){grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;padding:4px!important}
+  #tabs button.qe-premium-tab{min-height:41px!important;height:41px!important;padding:4px 3px!important;gap:3px!important;font-size:10.5px!important}
+  #tabs .qe-premium-tab .qe-tab-icon{width:18px!important;height:18px!important}
+  #tabs .qe-premium-tab .qe-tab-icon svg{width:16px!important;height:16px!important}
+}
+@media(max-width:330px){
+  #tabs button.qe-premium-tab{font-size:9.5px!important;gap:2px!important}
+  #tabs .qe-premium-tab .qe-tab-icon{width:16px!important;height:16px!important}
+  #tabs .qe-premium-tab .qe-tab-icon svg{width:14px!important;height:14px!important}
+}
+@media(prefers-reduced-motion:reduce){#tabs button.qe-premium-tab{transition:none!important}}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">◷</span><span class="qe-action-label">Offline Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">↻</span><span class="qe-action-label">Sync Status</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
