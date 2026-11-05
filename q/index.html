@@ -823,6 +823,46 @@ main{padding-top:13px!important}
 #sipSavedSection.qe-collapsed-sip{margin:8px 0;padding:0;background:transparent;border:0;box-shadow:none;}
 #qeSipDetails .qe-sip-detail .hint{font-size:11px;line-height:1.4;margin:8px 0;}
 @media(max-width:400px){#qeSyncDetails summary,#qeSipDetails summary{min-height:40px;padding:8px 10px;font-size:12px;}}
+</style><style id="qe-header-actions-refined-v1">
+/* Two distinct, compact header actions with accessible labels and persistent icons. */
+.qe-compact-header .qe-header-controls{display:flex!important;align-items:center!important;flex-wrap:nowrap!important;gap:6px!important;min-width:0!important;}
+.qe-compact-header #qeOfflineButton,
+.qe-compact-header #qeGlobalSyncButton{
+ position:relative;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ flex:none!important;gap:5px!important;min-height:34px!important;
+ padding:5px 9px!important;border-radius:11px!important;
+ border:1px solid #b8d4c3!important;
+ box-shadow:none!important;color:#246248!important;
+ background:#edf7f0!important;font-size:11px!important;font-weight:800!important;
+ line-height:1.05!important;
+}
+.qe-compact-header #qeOfflineButton{color:#8b5d19!important;background:#fff5e5!important;border-color:#efd9b4!important;}
+.qe-compact-header #qeGlobalSyncButton{color:#216d56!important;background:#e6f5ef!important;border-color:#b5decd!important;}
+.qe-compact-header #qeOfflineButton[aria-expanded="true"]{border-color:#ae751d!important;background:#ffedcc!important;}
+.qe-compact-header #qeGlobalSyncButton[aria-expanded="true"]{border-color:#277f62!important;background:#d7f1e4!important;}
+.qe-compact-header #qeOfflineButton:focus-visible,
+.qe-compact-header #qeGlobalSyncButton:focus-visible{outline:2px solid #277b60!important;outline-offset:2px!important;}
+.qe-compact-header .qe-action-glyph{font-size:17px!important;line-height:1!important;display:inline-grid;place-items:center;}
+.qe-compact-header #qeOfflineCount:not(:empty){font-size:10px!important;font-weight:850!important;white-space:nowrap!important;}
+@media(max-width:540px){
+ .qe-compact-header .qe-header-controls{gap:5px!important;}
+ .qe-compact-header #qeOfflineButton,
+ .qe-compact-header #qeGlobalSyncButton{width:35px!important;min-width:35px!important;height:35px!important;min-height:35px!important;padding:4px!important;border-radius:10px!important;}
+ .qe-compact-header #qeOfflineCount:not(:empty){
+  position:absolute!important;top:-7px!important;right:-7px!important;transform:none!important;
+  display:block!important;min-width:15px!important;max-width:30px!important;
+  padding:2px 3px!important;text-align:center!important;border-radius:8px!important;
+  background:#f8dca3!important;color:#724d14!important;border:1px solid #fff!important;
+  overflow:hidden!important;text-overflow:clip!important;line-height:1.1!important;
+ }
+ .qe-compact-header .qe-private-chip{display:none!important;}
+}
+@media(max-width:360px){
+ .qe-compact-header .qe-header-controls{gap:4px!important;}
+ .qe-compact-header #qeOfflineButton,
+ .qe-compact-header #qeGlobalSyncButton{width:32px!important;min-width:32px!important;height:32px!important;min-height:32px!important;}
+ .qe-compact-header .qe-brand-text h1{font-size:15px!important;}
+}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">◷</span><span class="qe-action-label">Offline Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">↻</span><span class="qe-action-label">Sync Status</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
@@ -1460,7 +1500,7 @@ async function qeVerifyRecentRecords(){
 function qeSetGlobalSyncOpen(open){
  const panel=$('qeGlobalSyncPanel'),button=$('qeGlobalSyncButton');
  panel.hidden=!open;button.setAttribute('aria-expanded',String(open));
- button.textContent=open?'✕ Close Sync':'↻ Sync Status';
+ const glyph=button.querySelector('.qe-action-glyph'),label=button.querySelector('.qe-action-label');if(glyph)glyph.textContent=open?'✕':'↻';if(label)label.textContent=open?'Close Sync':'Sync Status';button.title=open?'Close Sync Status':'Sync Status';button.setAttribute('aria-label',button.title);
  if(open)void qeLoadGlobalSync();else{qeVerifyCancel();$('qeVerifyRecentPanel').hidden=true;$('qeVerifyRecentButton').setAttribute('aria-expanded','false');}
 }
 $('qeGlobalSyncButton').onclick=()=>qeSetGlobalSyncOpen($('qeGlobalSyncPanel').hidden);
