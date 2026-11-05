@@ -14,6 +14,15 @@ function openPanel(k){if(!signedIn())return;
  kind=['expense','diary','stock'].includes(k)?k:'expense';closeMore();
  $('sarniQcTitle').textContent=kind==='expense'?'Add expense':kind==='stock'?'Add stock note':'Add diary';$('sarniQcCardTitle').textContent=kind==='expense'?'Quick expense':kind==='stock'?'Quick stock note':'Quick diary';
  $('sarniQcExpense').hidden=kind!=='expense';$('sarniQcNote').hidden=kind==='expense';$('sarniQcCompanyWrap').hidden=kind!=='stock';
+ const noteMode=kind==='stock'?'review':'plan';
+ const typeWrap=$('sarniQcDiaryTypeWrap');if(typeWrap)typeWrap.hidden=kind!=='diary';
+ for(const name of ['needsPlanning','needsReview']){
+  const input=f.elements.namedItem(name);if(!input)continue;
+  const visible=(name==='needsPlanning'&&noteMode==='plan')||(name==='needsReview'&&noteMode==='review');
+  input.closest('label').hidden=!visible;if(!visible)input.checked=false;
+ }
+ updateNoteDate();
+
  [...f.elements].forEach(x=>{if(!x.name)return; if(['amount','category','reason'].includes(x.name))x.required=kind==='expense';if(x.name==='body')x.required=kind!=='expense';if(x.name==='companyId')x.required=kind==='stock';if(x.name==='entryDate')x.required=kind==='expense';if(x.name==='noteDate')x.required=kind!=='expense';});
  document.querySelectorAll('[data-qc-tab]').forEach(b=>{const yes=b.dataset.qcTab===kind;b.setAttribute('aria-pressed',String(yes));b.classList.toggle('active',yes);});
  if(!f.elements.entryDate.value)f.elements.entryDate.value=stamp();if(!f.elements.noteDate.value)f.elements.noteDate.value=stamp();
@@ -21,6 +30,17 @@ function openPanel(k){if(!signedIn())return;
  notice('');if(!dialog.open){if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');}
  setTimeout(()=>{(kind==='expense'?f.elements.amount:kind==='stock'&&loadedCompanies?$('sarniQcCompany'):f.elements.body)?.focus();},35);
 }
+function updateNoteDate(){
+ const mark=kind==='stock'?'needsReview':'needsPlanning';
+ const on=kind!=='expense'&&!!f.elements.namedItem(mark)?.checked;
+ const wrap=$('sarniQcMarkDateWrap'),date=f.elements.namedItem('markDueDate');
+ if(wrap)wrap.hidden=!on;
+ if(date){date.disabled=!on;if(!on)date.value='';}
+ const label=$('sarniQcMarkDateLabel');
+ if(label)label.textContent=(kind==='stock'?'Review on':'Planned for')+' (optional)';
+}
+f.elements.namedItem('needsPlanning')?.addEventListener('change',updateNoteDate);
+f.elements.namedItem('needsReview')?.addEventListener('change',updateNoteDate);
 function closePanel(){if(busy)return;if(dialog.open&&dialog.close)dialog.close();else dialog.removeAttribute('open');}
 function loadCategories(){const select=$('sarniQcCategory'),old=select.value;
  let cats=[];try{cats=Array.isArray(state.expenseCategories)?state.expenseCategories:[];}catch{}
@@ -56,13 +76,13 @@ async function save(e){e.preventDefault();if(busy||!signedIn())return;
  }else{
   const body=f.elements.body.value.trim();if(!body)throw Error('Write a note first.');
   const title=f.elements.title.value.trim()||(kind==='diary'?'Diary entry':'Stock observation');
-  r=await api('dkSave',{kind:kind==='stock'?'stock':'personal',record:{title,html:body.split('\n').map(s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')).join('<br>'),entryDate:date,companyId:kind==='stock'?f.elements.companyId.value:'',important:f.elements.important.checked,monthlyHighlight:f.elements.monthlyHighlight.checked,tags:[f.elements.diaryType?.value||'Daily',...(String(f.elements.tags.value||'').split(',').map(x=>x.trim()).filter(Boolean)),...(f.elements.needsFollowup?.checked?['follow-up']:[])].filter((x,i,a)=>a.findIndex(y=>y.toLowerCase()===x.toLowerCase())===i).join(', ').slice(0,450),visibility:'PRIVATE',entryType:'PERSONAL'}},{retry:false});
+  r=await api('dkSave',{kind:kind==='stock'?'stock':'personal',record:{title,html:body.split('\n').map(s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')).join('<br>'),entryDate:date,companyId:kind==='stock'?f.elements.companyId.value:'',important:f.elements.important.checked,monthlyHighlight:f.elements.monthlyHighlight.checked,tags:[...(kind==='diary'?[f.elements.diaryType?.value||'Daily']:[]),...(String(f.elements.tags.value||'').split(',').map(x=>x.trim()).filter(Boolean)),...(f.elements.needsLearning.checked?['mark-learning']:[]),...(kind==='diary'&&f.elements.needsPlanning.checked?['needs-planning']:[]),...(kind==='stock'&&f.elements.needsReview.checked?['needs-review']:[]),...((kind==='diary'&&f.elements.needsPlanning.checked)||(kind==='stock'&&f.elements.needsReview.checked))&&f.elements.markDueDate.value?[(kind==='stock'?'review-on:':'planned-for:')+f.elements.markDueDate.value]:[]].filter((x,i,a)=>a.findIndex(y=>y.toLowerCase()===x.toLowerCase())===i).join(', ').slice(0,450),visibility:'PRIVATE',entryType:'PERSONAL'}},{retry:false});
  }
  if(!r?.ok)throw Error(r?.message||'Could not confirm save.');
  if(owner!==String(state.username||state.user?.username||''))throw Error('Account changed during saving. Refresh the dashboard.');if(kind==='expense'&&typeof sarniRememberGroup==='function')sarniRememberGroup($('sarniQcProject')?.value||'');
  notice('✓ Saved '+(kind==='expense'?'expense':kind==='diary'?'diary':'stock note')+' successfully.');
  if(kind==='expense'){f.elements.amount.value='';f.elements.reason.value='';f.elements.expenseNotes.value='';}
- else{f.elements.title.value='';f.elements.body.value='';f.elements.important.checked=false;f.elements.monthlyHighlight.checked=false;}
+ else{f.elements.title.value='';f.elements.body.value='';f.elements.important.checked=false;f.elements.monthlyHighlight.checked=false;f.elements.needsLearning.checked=false;f.elements.needsPlanning.checked=false;f.elements.needsReview.checked=false;updateNoteDate();}
  (kind==='expense'?f.elements.amount:f.elements.body).focus();
  }catch(err){notice('Not confirmed: '+String(err.message||err)+'. Check the register before retrying.',true);}
  finally{busy=false;$('sarniQcSave').disabled=false;}
