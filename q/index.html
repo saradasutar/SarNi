@@ -1047,7 +1047,7 @@ function render(){
  $('heading').textContent=({expense:'Quick expense',diary:'Quick diary',stock:'Quick stock note',office:'Office Diary',investment:'Investment entry',family:'Family Expense'})[mode];
  $('subtitle').textContent=mode==='office'?'SARNI OFFICE DIARY · HR SYNC STATUS AFTER SAVING':mode==='investment'?'SARNI INVESTMENT · SEE SYNC STATUS AFTER SAVING':mode==='family'?'MYFAMILY EXPENSE · SARNI COPY':mode==='expense'?'ADD TO YOUR SARNI REGISTER':'ADD TO YOUR PRIVATE NOTES';
  if(mode==='family'){
-  $('fields').innerHTML='<div class="family-expense-help family-expense-intro"><strong>⌂ Sutar Family · Quick Expense</strong><p>Fast entry to MyFamily, with a linked SarNi copy. Fill the essentials first; extra details are below.</p></div>'+
+  $('fields').innerHTML=
   '<label for="familyAmount">Amount (₹)</label><div class="amountbox family-amountbox"><span aria-hidden="true">₹</span><input id="familyAmount" name="amount" type="number" inputmode="decimal" min="0.01" max="100000" step=".01" required autofocus placeholder="0.00"></div>'+
   '<label for="familyReason">What was it for?</label><input id="familyReason" name="reason" maxlength="500" required placeholder="e.g. Groceries, medicine, transport">'+
   '<label for="familyPaidBy">Paid by / from</label><input id="familyPaidBy" name="paidByName" maxlength="80" required placeholder="Name of person who paid">'+
