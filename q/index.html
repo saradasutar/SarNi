@@ -742,6 +742,41 @@ main{padding-top:13px!important}
   #tabs .qe-premium-tab .qe-tab-icon svg{width:14px!important;height:14px!important}
 }
 @media(prefers-reduced-motion:reduce){#tabs button.qe-premium-tab{transition:none!important}}
+</style><style id="qe-entry-focus-v1">
+/* Mobile writing-first refinement: presentation only; no form values, actions or routes changed. */
+#entry{scroll-margin-top:12px!important;}
+#entry #fields{min-width:0;}
+#entry #fields .grid{gap:9px!important;}
+#entry #fields label{display:block;line-height:1.28!important;margin:10px 0 4px!important;font-weight:750!important;}
+#entry #fields :is(input:not([type="checkbox"]),select,textarea){
+ box-sizing:border-box;max-width:100%;min-width:0;
+ border-radius:10px!important;
+}
+#entry #fields :is(input:not([type="checkbox"]),select,textarea):focus-visible{
+ outline:2px solid var(--mode-accent,#176b54)!important;
+ outline-offset:2px!important;
+}
+#entry #fields textarea{line-height:1.55!important;resize:vertical;}
+#entry .actions{gap:9px!important;}
+#entry .actions .save{font-weight:850!important;letter-spacing:-.15px!important;}
+@media(max-width:600px){
+ #entry{padding:11px 12px!important;scroll-padding-bottom:88px;}
+ #entry #fields .grid{gap:8px!important;}
+ #entry #fields label{font-size:13px!important;line-height:1.25!important;margin:9px 0 4px!important;}
+ #entry #fields :is(input:not([type="checkbox"]),select,textarea){font-size:16px!important;min-height:43px!important;padding:9px 11px!important;}
+ #entry #fields textarea{min-height:142px!important;padding:11px 12px!important;font-size:16px!important;line-height:1.52!important;}
+ main[data-entry-mode="diary"] #entry #fields textarea,
+ main[data-entry-mode="stock"] #entry #fields textarea,
+ main[data-entry-mode="office"] #entry #fields textarea{min-height:190px!important;}
+ #entry .actions{position:sticky!important;bottom:max(6px,env(safe-area-inset-bottom))!important;z-index:15!important;gap:8px!important;margin:13px -3px 0!important;padding:7px!important;background:rgba(250,252,251,.96)!important;border:1px solid #d7e6db!important;border-radius:12px!important;box-shadow:0 4px 15px #173c2b20!important;}
+ #entry .actions button{min-height:45px!important;font-size:14px!important;border-radius:9px!important;}
+ #entry .actions .save{min-height:47px!important;}
+}
+@media(max-width:350px){
+ #entry{padding:9px!important;}
+ #entry .actions button{font-size:12px!important;}
+}
+@media(prefers-reduced-motion:reduce){#entry #fields *{scroll-behavior:auto!important;}}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">◷</span><span class="qe-action-label">Offline Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">↻</span><span class="qe-action-label">Sync Status</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
