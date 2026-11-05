@@ -576,7 +576,7 @@ main{padding-top:13px!important}
  #qeDiaryProgress .qe-progress-card span{font-size:8px!important;line-height:1.15!important;overflow-wrap:anywhere!important}
  #qeDiaryProgress .qe-progress-note{font-size:9px!important;line-height:1.3!important;margin-top:6px!important}
 }
-@media(max-width:370px){
+@media(max-width:285px){
  #qeDiaryProgress .qe-progress-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
  #qeDiaryProgress .qe-progress-card{min-height:53px!important;padding:7px 9px!important}
 }
@@ -1349,7 +1349,7 @@ function qeRenderDiaryProgress(kind){
   if(flagged('monthlyHighlight','monthly-highlight'))monthly++;
   if((kind==='diary'&&flagged('needsPlanning','needs-planning'))||(kind==='office'&&flagged('needsFollowup','needs-follow-up'))||(kind==='stock'&&flagged('needsReview','needs-review')))action++;
  }
- const cards=[['This week',dates.filter(d=>d>=weekStart).length,'Entries'],['This month',dates.filter(d=>d>=monthStart).length,new Set(active).size+' active days'],['This year',dates.filter(d=>d>=yearStart).length,'Entries'],['Loaded total',dates.length,'Not all-time'],['Important',imp,'Marked entries'],['Learning',learn,'Marked entries'],[kind==='diary'?'Plan':kind==='office'?'Follow-up':'Review',action,'Action marks'],['★ Monthly',monthly,'Highlights']];
+ const cards=[['Week',dates.filter(d=>d>=weekStart).length,'Entries'],['Month',dates.filter(d=>d>=monthStart).length,new Set(active).size+' days'],['Year',dates.filter(d=>d>=yearStart).length,'Entries'],['Loaded',dates.length,'Records'],['Imp.',imp,'Marked'],['Learn',learn,'Marked'],[kind==='diary'?'Plan':kind==='office'?'Follow-up':'Review',action,'Marked'],['★ Monthly',monthly,'Highlights']];
  const grid=document.createElement('div');grid.className='qe-progress-grid';
  for(const [label,value,description] of cards){const card=document.createElement('div');card.className='qe-progress-card';const small=document.createElement('small');small.textContent=label;const big=document.createElement('strong');big.textContent=String(value);const sub=document.createElement('span');sub.textContent=description;card.append(small,big,sub);grid.append(card);}
  panel.append(grid);const caveat=document.createElement('small');caveat.className='qe-progress-note';caveat.textContent='Loaded entries only · Show more for older records · Not all-time totals.';panel.append(caveat);
@@ -1362,8 +1362,27 @@ async function loadRecent(append=false){
  $('toggleRecent').querySelector('span').textContent=($('recentBody').hidden?'▸ ':'▾ ')+'Recent '+label+' entries';
  $('recentExplanation').textContent=isPin?'Only this link’s records are shown. Viewing is allowed when admin enables View; PIN unlock is required for Edit, Trash and Restore.':'Only records saved using this link are shown; editing requires a PIN-enabled backend.';
  const requestedMode=mode;
- if(!append){qeProgressRecords=[];qeProgressKind=requestedMode;qeRenderDiaryProgress(requestedMode);}
- if($('recentBody').hidden)return;
+ if(!append){qeProgressRecords=[];qeProgressKind=requestedMode;qeRenderDiaryProgress(requestedMode);$('qeDiaryProgress')?.querySelectorAll('.qe-progress-card strong').forEach(node=>node.textContent='—');}
+ if($('recentBody').hidden){
+  // Stats must not remain fake zero just because the recent table is collapsed.
+  // Obtain a read-only page using exactly the permissions of this existing link.
+  if(['diary','office','stock'].includes(requestedMode)){
+   try{
+    const response=isPin?await api('qpinRecent',{grant:pinGrant,kind:requestedMode,includeTrash:false,offset:0,pageSize:50}):await api('qeRecent',{offset:0,pageSize:50,kind:requestedMode});
+    if(mode!==requestedMode)return;
+    const raw=Array.isArray(response.entries)?response.entries:Array.isArray(response.items)?response.items:[];
+    qeProgressRecords=raw.filter(x=>String(x.kind||'').toLowerCase()===requestedMode);
+    qeRenderDiaryProgress(requestedMode);
+   }catch(error){
+    if(mode===requestedMode){
+     const note=$('qeDiaryProgress')?.querySelector('.qe-progress-note');
+     if(note)note.textContent='Statistics unavailable: '+String(error.message||'Unable to load entries')+'. Open Recent Entries to retry.';
+     $('qeDiaryProgress')?.querySelectorAll('.qe-progress-card strong').forEach(node=>node.textContent='—');
+    }
+   }
+  }
+  return;
+ }
  if(!isPin&&['office','investment','family'].includes(mode)){
   host.replaceChildren();const p=document.createElement('p');p.textContent='This tab needs PIN-enabled backend listing to view records here.';host.append(p);return;
  }
