@@ -822,25 +822,23 @@ function readLastGroup(){try{return localStorage.getItem(lastGroupKey())||'';}ca
 function saveLastGroup(id){try{localStorage.setItem(lastGroupKey(),String(id||''));}catch(_){}}
 /* Shared mobile-first form. Keep API field names compatible with existing records. */
 function noteMarkings(office,stock){
+ const last=office?['needsFollowup','Follow-up']:stock?['needsReview','Review']:['needsPlanning','Plan'];
  return '<div class="note-markings" role="group" aria-label="Mark this entry" style="display:flex;align-items:center;flex-wrap:wrap;gap:7px">'+
  '<strong>Mark:</strong>'+
  '<label class="inline-check"><input type="checkbox" name="important"> Imp.</label>'+
- '<label class="inline-check"><input type="checkbox" name="needsPlanning"> Planning</label>'+
- '<label class="inline-check"><input type="checkbox" name="needsLearning"> Learning</label>'+
- '<label class="inline-check"><input type="checkbox" name="needsFollowup"> Follow up</label>'+
- (stock?'<label class="inline-check"><input type="checkbox" name="needsReview"> Review</label>':'')+
- '<label class="inline-check"><input type="checkbox" name="monthlyHighlight"> Monthly</label></div>'+
- '<div class="note-due-row" id="noteDueRow" hidden><label><span id="noteDueCaption">Due date (optional)</span><input id="noteDueDate" name="markDueDate" type="date" disabled aria-label="Optional due date"></label></div>';
+ '<label class="inline-check"><input type="checkbox" name="monthlyHighlight"> Monthly</label>'+
+ '<label class="inline-check"><input type="checkbox" name="needsLearning"> Learn</label>'+
+ '<label class="inline-check"><input type="checkbox" name="'+last[0]+'"> '+last[1]+'</label></div>'+
+ '<div class="note-due-row" id="noteDueRow" hidden><label><span id="noteDueCaption">'+(office?'Follow-up due':stock?'Review on':'Planned for')+' (optional)</span><input id="noteDueDate" name="markDueDate" type="date" disabled aria-label="Optional '+last[1]+' date"></label></div>';
 }
 function noteMoreOptions(office){return '';}
 function qeUpdateOptionalMarkDate(){
  const row=$('noteDueRow'),date=$('noteDueDate');if(!row||!date)return;
- const pick=name=>!!$('fields').querySelector('[name="'+name+'"]')?.checked;
- const follow=pick('needsFollowup'),planning=pick('needsPlanning'),review=pick('needsReview');
- const on=follow||planning||review;
+ const field=mode==='office'?'needsFollowup':mode==='stock'?'needsReview':'needsPlanning';
+ const on=!!$('fields').querySelector('[name="'+field+'"]')?.checked;
  row.hidden=!on;date.disabled=!on;
- const caption=$('noteDueCaption');
- if(caption)caption.textContent=(follow?'Follow-up due':planning?'Planning due':'Review on')+' (optional)';
+ const label=$('noteDueCaption');
+ if(label)label.textContent=(mode==='office'?'Follow-up due':mode==='stock'?'Review on':'Planned for')+' (optional)';
  if(!on)date.value='';
 }
 $('fields').addEventListener('change',e=>{
@@ -1451,10 +1449,11 @@ function editRecent(record){
   set('important',record.fields.important||tags.includes('mark-important'));
   set('monthlyHighlight',record.fields.monthlyHighlight||tags.includes('monthly-highlight'));
   set('needsLearning',record.fields.needsLearning||tags.includes('mark-learning')||tags.includes('learning')||tags.includes('office:learning')||tags.includes('office:learning/knowledge'));
-  set('needsFollowup',record.fields.needsFollowup||tags.includes('needs-follow-up')||tags.includes('office:planning'));
-  set('needsPlanning',record.fields.needsPlanning||tags.includes('needs-planning')||tags.includes('planning'));
-  set('needsReview',record.fields.needsReview||tags.includes('needs-review')||tags.includes('review'));
-  const dateTag=tags.find(t=>/^(follow-up-due|planned-for|review-on):\d{4}-\d{2}-\d{2}$/.test(t));
+  set('needsFollowup',record.kind==='office'&&(record.fields.needsFollowup||tags.includes('needs-follow-up')||tags.includes('office:planning')));
+  set('needsPlanning',record.kind==='diary'&&(record.fields.needsPlanning||tags.includes('needs-planning')||tags.includes('planning')));
+  set('needsReview',record.kind==='stock'&&(record.fields.needsReview||tags.includes('needs-review')||tags.includes('review')));
+  const modeDateKey=record.kind==='office'?'follow-up-due':record.kind==='stock'?'review-on':'planned-for';
+  const dateTag=tags.find(t=>t.startsWith(modeDateKey+':')&&/^\d{4}-\d{2}-\d{2}$/.test(t.slice(modeDateKey.length+1)));
   const picker=inputs.namedItem('markDueDate');
   if(picker)picker.value=dateTag?dateTag.slice(dateTag.indexOf(':')+1):String(record.fields.markDueDate||'');
   qeUpdateOptionalMarkDate();
@@ -1583,16 +1582,16 @@ function qeRecentPhotos(record){
 
 $('entry').onsubmit=async e=>{e.preventDefault();if(busy)return;if(pinConfig?.enabled&&pinConfig.policies?.[mode]?.requirePinAdd&&!pinGrant){pinManageOpen=true;updatePinGate();status('PIN Add is enabled for '+mode+' in SarNi Admin Settings. To allow entries without PIN, uncheck PIN Add for this tab and save. For this entry you may unlock below.',true);$('pinGate').scrollIntoView({behavior:'smooth',block:'center'});$('pinInput').focus();return;}busy=true;$('save').disabled=true;status('Saving…');try{const data=Object.fromEntries(new FormData(e.target));const fingerprint=qePayloadFingerprint(mode,data);if(qePendingUncertain&&qePendingPayloadFingerprint&&fingerprint!==qePendingPayloadFingerprint){if(!confirm('You changed the entry after an unconfirmed save. This may create a different transaction. Check Recent Entries or the destination first. Continue with a new submission ID?')){status('Save cancelled. Confirm the earlier entry first.',true);return;}qeResetSubmissionIdentity();}const entryId=(pendingQuickEntryMode===mode&&pendingQuickEntryId)||Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');pendingQuickEntryId=entryId;pendingQuickEntryMode=mode;qePendingPayloadFingerprint=fingerprint;qePendingUncertain=false;qeConfirmUncertainResubmission();if(mode==='family'&&!pendingFamilyId)pendingFamilyId=entryId;if(['diary','stock','office'].includes(mode)){
  const flags=new Set(['monthly-highlight','needs-follow-up','needs-review','needs-planning','mark-learning','mark-important']);
- const dateKey=data.needsFollowup?'follow-up-due':data.needsPlanning?'planned-for':'review-on';
+ const dateKey=mode==='office'?'follow-up-due':mode==='stock'?'review-on':'planned-for';
  const selectedDate=String(data.markDueDate||'');
- const dateMarked=!!(data.needsFollowup||data.needsPlanning||data.needsReview);
+ const dateMarked=mode==='office'?!!data.needsFollowup:mode==='stock'?!!data.needsReview:!!data.needsPlanning;
  if(selectedDate&&dateMarked&&!/^\d{4}-\d{2}-\d{2}$/.test(selectedDate))throw Error('Choose a valid optional date.');
  const tags=String(data.tags||'').split(',').map(x=>x.trim()).filter(Boolean).flatMap(x=>{if(flags.has(x.toLowerCase())||/^(follow-up-due|review-on|planned-for):\d{4}-\d{2}-\d{2}$/i.test(x))return [];if(/^office:/i.test(x))return /^office:(?:General(?: Work)?|Learning(?:\/Knowledge)?|Planning)$/i.test(x)?[]:['legacy-'+x];return [x];});
  if(data.monthlyHighlight)tags.push('monthly-highlight');
  if(data.needsLearning)tags.push('mark-learning');
  if(data.important)tags.push('mark-important');
- if(data.needsFollowup)tags.push('needs-follow-up');
- if(data.needsPlanning)tags.push('needs-planning');
+ if(mode==='office'&&data.needsFollowup)tags.push('needs-follow-up');
+ if(mode==='diary'&&data.needsPlanning)tags.push('needs-planning');
  if(mode==='stock'&&data.needsReview)tags.push('needs-review');
  if(mode==='office'){tags.push('office:'+(data.needsLearning?'Learning/Knowledge':'General Work'));data.status=data.needsFollowup?'Follow-up':'Open';}
  if(dateMarked&&selectedDate)tags.push(dateKey+':'+selectedDate);
