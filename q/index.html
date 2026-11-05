@@ -648,8 +648,8 @@ main{padding-top:13px!important}
   display:grid!important;
   grid-template-columns:repeat(3,minmax(0,1fr))!important;
   gap:6px!important;
-  padding:5px!important;
-  margin:5px 0 9px!important;
+  padding:4px!important;
+  margin:4px 0 8px!important;
   border:0!important;
   border-radius:13px!important;
   background:transparent!important;
@@ -660,16 +660,16 @@ main{padding-top:13px!important}
   flex-direction:row!important;
   align-items:center!important;
   justify-content:center!important;
-  gap:5px!important;
-  min-height:43px!important;
-  height:43px!important;
-  padding:5px 5px!important;
-  border:1px solid var(--tab-edge)!important;
+  gap:4px!important;
+  min-height:45px!important;
+  height:45px!important;
+  padding:5px 4px!important;
+  border:1.5px solid var(--tab-edge)!important;
   border-radius:11px!important;
-  background:linear-gradient(145deg,#fff 0%,var(--tab-pastel) 90%)!important;
+  background:linear-gradient(145deg,color-mix(in srgb,#fff 34%,var(--tab-pastel)) 0%,var(--tab-pastel) 100%)!important;
   color:var(--tab-color)!important;
-  box-shadow:0 2px 5px #123d2a0a!important;
-  font-size:clamp(10px,2.8vw,12px)!important;
+  box-shadow:0 2px 5px #123d2a10!important;
+  font-size:clamp(10.5px,2.9vw,12px)!important;
   font-weight:800!important;
   letter-spacing:-.2px!important;
   line-height:1.1!important;
@@ -679,31 +679,31 @@ main{padding-top:13px!important}
   flex:none!important;
   display:grid!important;
   place-items:center!important;
-  width:21px!important;
-  height:21px!important;
+  width:19px!important;
+  height:19px!important;
   border:0!important;
   border-radius:6px!important;
   background:transparent!important;
 }
-#tabs .qe-premium-tab .qe-tab-icon svg {width:19px!important;height:19px!important}
+#tabs .qe-premium-tab .qe-tab-icon svg {width:17px!important;height:17px!important}
 #tabs .qe-premium-tab .qe-tab-name {
   display:block!important;
   flex:0 1 auto!important;
   min-width:0!important;
   font-size:inherit!important;
   white-space:nowrap!important;
-  overflow:visible!important;
+  overflow:hidden!important;
   text-overflow:clip!important;
   word-break:normal!important;
   text-wrap:nowrap!important;
 }
 #tabs button.qe-premium-tab.selected {
   border-color:var(--tab-color)!important;
-  box-shadow:inset 0 0 0 1px var(--tab-color),0 3px 8px #23493519!important;
-  background:linear-gradient(130deg,#fff,var(--tab-pastel))!important;
+  box-shadow:inset 0 0 0 1.2px var(--tab-color),0 3px 8px #23493519!important;
+  background:linear-gradient(130deg,color-mix(in srgb,#fff 35%,var(--tab-pastel)),var(--tab-pastel))!important;
 }
 #tabs button.qe-premium-tab.selected:after {
-  top:-5px!important;right:-4px!important;
+  top:-4px!important;right:-3px!important;
   width:15px!important;height:15px!important;
   font-size:9px!important;border-width:1px!important;
 }
@@ -732,7 +732,7 @@ main{padding-top:13px!important}
 #entry{margin-top:0!important;border-radius:0 0 12px 12px!important}
 @media(max-width:400px){
   #tabs:not([hidden]){grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;padding:4px!important}
-  #tabs button.qe-premium-tab{min-height:41px!important;height:41px!important;padding:4px 3px!important;gap:3px!important;font-size:10.5px!important}
+  #tabs button.qe-premium-tab{min-height:43px!important;height:43px!important;padding:4px 3px!important;gap:3px!important;font-size:10.5px!important}
   #tabs .qe-premium-tab .qe-tab-icon{width:18px!important;height:18px!important}
   #tabs .qe-premium-tab .qe-tab-icon svg{width:16px!important;height:16px!important}
 }
