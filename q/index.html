@@ -587,12 +587,12 @@ main{padding-top:13px!important}
 #qeTabHeader .qe-tab-header-mark{display:grid;place-items:center;flex:none;width:29px;height:29px;border-radius:9px;background:#e5f6ed;color:#137750;font-size:18px}
 #qeTabHeader strong{display:block;font-size:15px;font-weight:850;line-height:1.15;letter-spacing:-.25px}
 #qeTabHeader small{display:block;color:#708278;font-size:10.5px;margin-top:2px}
-#tabs:not([hidden]){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;padding:10px!important;margin:0 0 11px!important;background:#fbfdfb!important;border:1px solid #e5ece7!important;border-radius:18px!important;box-shadow:0 4px 15px rgba(19,73,52,.055)}
+#tabs:not([hidden]){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;padding:8px!important;margin:0 0 9px!important;background:#fbfdfb!important;border:1px solid #e5ece7!important;border-radius:18px!important;box-shadow:0 4px 15px rgba(19,73,52,.055)}
 #tabs button.qe-premium-tab{
  --tab-color:#136449;--tab-edge:#bee3cf;--tab-pastel:#eaf8ef;
- position:relative;display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;min-width:0!important;min-height:65px!important;height:auto!important;padding:10px 8px!important;text-align:left!important;
+ position:relative;display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:6px!important;min-width:0!important;min-height:54px!important;height:auto!important;padding:7px 8px!important;text-align:left!important;
  border:1.5px solid var(--tab-edge)!important;border-left:4px solid var(--tab-color)!important;border-radius:15px!important;color:var(--tab-color)!important;background:linear-gradient(150deg,#fff 0%,var(--tab-pastel) 100%)!important;
- box-shadow:0 3px 8px #2445370d!important;font-size:13px!important;font-weight:820!important;line-height:1.18!important;transition:transform .15s,box-shadow .15s!important;
+ box-shadow:0 3px 8px #2445370d!important;font-size:12.5px!important;font-weight:820!important;line-height:1.17!important;transition:transform .15s,box-shadow .15s!important;
 }
 #tabs button.qe-premium-tab[data-mode="expense"]{--tab-color:#126e4a;--tab-edge:#bee7d2;--tab-pastel:#e5f8ec}
 #tabs button.qe-premium-tab[data-mode="diary"]{--tab-color:#a32a59;--tab-edge:#f1bfd0;--tab-pastel:#ffedf4}
@@ -600,20 +600,20 @@ main{padding-top:13px!important}
 #tabs button.qe-premium-tab[data-mode="office"]{--tab-color:#935d12;--tab-edge:#f0dbb9;--tab-pastel:#fff2e0}
 #tabs button.qe-premium-tab[data-mode="investment"]{--tab-color:#486d26;--tab-edge:#d4e6b6;--tab-pastel:#f0f8e5}
 #tabs button.qe-premium-tab[data-mode="family"]{--tab-color:#653c9c;--tab-edge:#dfcbf5;--tab-pastel:#f2eafd}
-#tabs .qe-premium-tab .qe-tab-icon{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:11px;color:var(--tab-color);background:color-mix(in srgb,var(--tab-pastel) 80%,#fff);border:1px solid var(--tab-edge)}
-#tabs .qe-premium-tab .qe-tab-icon svg{display:block;width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#tabs .qe-premium-tab .qe-tab-icon{display:grid;place-items:center;flex:none;width:28px;height:28px;border-radius:9px;color:var(--tab-color);background:color-mix(in srgb,var(--tab-pastel) 80%,#fff);border:1px solid var(--tab-edge)}
+#tabs .qe-premium-tab .qe-tab-icon svg{display:block;width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #tabs .qe-premium-tab .qe-tab-name{display:block;flex:1;min-width:0;overflow-wrap:normal;word-break:normal;text-wrap:balance}
-#tabs .qe-premium-tab .qe-tab-chevron{flex:none;width:12px;height:12px;opacity:.7;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+#tabs .qe-premium-tab .qe-tab-chevron{flex:none;width:10px;height:10px;opacity:.7;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 #tabs button.qe-premium-tab.selected{box-shadow:0 0 0 1.3px var(--tab-color),0 6px 13px #264d3020!important;filter:none!important;transform:none!important;background:linear-gradient(135deg,#fff 0%,var(--tab-pastel) 85%)!important}
 #tabs button.qe-premium-tab.selected:after{content:'✓';position:absolute;top:-7px;right:-6px;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--tab-color);color:#fff;border:2px solid #fff;font-size:11px;font-weight:900;box-shadow:0 2px 6px #0002}
 #tabs button.qe-premium-tab:focus-visible{outline:3px solid var(--tab-color)!important;outline-offset:3px}
 #tabs button.qe-premium-tab:active{transform:scale(.985)!important}
 @media(max-width:400px){
- #tabs:not([hidden]){gap:7px!important;padding:8px!important}
- #tabs button.qe-premium-tab{min-height:61px!important;padding:9px 6px!important;gap:6px!important;font-size:12px!important}
- #tabs .qe-premium-tab .qe-tab-icon{width:29px;height:29px;border-radius:9px}
- #tabs .qe-premium-tab .qe-tab-icon svg{width:18px;height:18px}
- #tabs .qe-premium-tab .qe-tab-chevron{width:10px;height:10px}
+ #tabs:not([hidden]){gap:6px!important;padding:7px!important}
+ #tabs button.qe-premium-tab{min-height:50px!important;padding:6px 7px!important;gap:5px!important;font-size:12px!important}
+ #tabs .qe-premium-tab .qe-tab-icon{width:25px;height:25px;border-radius:8px}
+ #tabs .qe-premium-tab .qe-tab-icon svg{width:15px;height:15px}
+ #tabs .qe-premium-tab .qe-tab-chevron{width:9px;height:9px}
 }
 @media(prefers-reduced-motion:reduce){#tabs button.qe-premium-tab{transition:none!important}}
 </style><style id="qe-header-two-line-20261105">
