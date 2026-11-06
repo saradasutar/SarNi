@@ -5,6 +5,8 @@ on:
   push:
     paths:
       - "index.html"
+      - "sarni10-main-upgrades.js"
+      - "sarni10-main-upgrades.css"
       - "sarni-main-batch10.js"
       - "sarni-main-batch10.css"
       - "sarni-main-batch10.js"
@@ -15,6 +17,7 @@ on:
       - "sarni-health-bridge-v1.js"
       - "sarni-health-history-v1.js"
       - "quality/quick-entry-regression.mjs"
+      - "quality/main-dashboard-batch10-regression.cjs"
       - "quality/smart-refresh-regression.cjs"
       - "quality/quick-entry-browser.spec.cjs"
       - "quality/main-dashboard-health.spec.cjs"
@@ -37,6 +40,8 @@ jobs:
           node-version: '22'
       - name: Source regression checks (no backend calls)
         run: node quality/quick-entry-regression.mjs
+      - name: SarNi 10 main dashboard regression (read-only)
+        run: node quality/main-dashboard-batch10-regression.cjs
       - name: Smart Refresh behavioral regression (fake backend only)
         run: node quality/smart-refresh-regression.cjs
       - name: Install browser test runtime (isolated)
