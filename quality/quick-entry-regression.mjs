@@ -9,8 +9,8 @@ import { exit } from 'node:process';
 
 const source = readFileSync(new URL('../q/index.html', import.meta.url), 'utf8');
 const mainDashboard = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
-const mainBatchJs = readFileSync(new URL('../sarni10-main-workspace.js', import.meta.url), 'utf8');
-const mainBatchCss = readFileSync(new URL('../sarni10-main-workspace.css', import.meta.url), 'utf8');
+const mainBatchJs = readFileSync(new URL('../sarni-main-batch10.js', import.meta.url), 'utf8');
+const mainBatchCss = readFileSync(new URL('../sarni-main-batch10.css', import.meta.url), 'utf8');
 const bridge = readFileSync(new URL('../sarni-health-bridge-v1.js', import.meta.url), 'utf8');
 const history = readFileSync(new URL('../sarni-health-history-v1.js', import.meta.url), 'utf8');
 const batch10Js = readFileSync(new URL('../q/sarni9-batch10.js', import.meta.url), 'utf8');
@@ -67,7 +67,7 @@ check('Keyboard tab navigation and shortcut respect existing buttons', batch10Js
 check('Character counter excludes short fields', batch10Js.includes("qeActiveFieldCount") && batch10Js.includes("input.maxLength<50"));
 check('Responsive accessibility finishes and Back to Top present', batch10Css.includes('prefers-reduced-motion:reduce') && batch10Css.includes('focus-visible') && batch10Css.includes('min-height:46px') && batch10Css.includes('overflow-wrap:anywhere') && batch10Js.includes("id='qeBackToTop'"));
 check('Ten-upgrade helper contains no network or storage operations', !/(?:fetch|localStorage|sessionStorage|XMLHttpRequest)\s*\(/.test(batch10Js));
-check('SarNi main uses only the validated batch asset pair', (mainDashboard.match(/sarni-main-batch10\\.js/g)||[]).length===1 && (mainDashboard.match(/sarni-main-batch10\\.css/g)||[]).length===1 && !/sarni10-main-(?:workspace|polish|upgrades|batch)\\.js/.test(mainDashboard));
+check('SarNi main uses only the validated batch asset pair', (mainDashboard.match(/sarni-main-batch10\.js/g)||[]).length===1 && (mainDashboard.match(/sarni-main-batch10\.css/g)||[]).length===1 && !/sarni10-main-(?:workspace|polish|upgrades|batch)\\.js/.test(mainDashboard));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
