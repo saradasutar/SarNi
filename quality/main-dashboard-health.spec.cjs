@@ -24,6 +24,13 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:320
    for(const id of ['diarySection','calendarSection','expenditureSection','adminPhotoManager']){
     await expect(page.locator('#'+id)).toHaveCount(1);
    }
+   // New additive main-dashboard enhancements exist even before sign-in.
+   await expect(page.locator('#sarni10Nav')).toHaveCount(1);
+   await expect(page.locator('#sarni10Nav button[data-sarni10-section]')).toHaveCount(4);
+   await expect(page.locator('#sarni10ScrollProgress')).toHaveCount(1);
+   await expect(page.locator('#sarni10BackTop')).toHaveCount(1);
+   await expect(page.locator('.sarni10-keyboard-help')).toHaveCount(1);
+   await expect(page.locator('#sarni10ActiveStatus')).toHaveAttribute('aria-live','polite');
    // Tests run on the public login shell: never log in, change credentials, or save records.
    // All off-origin requests (including any backend POSTs) were intercepted and aborted.
    expect(blocked.every(x=>x.origin!=='http://127.0.0.1:8765')).toBe(true);
