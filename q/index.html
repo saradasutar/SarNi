@@ -2175,6 +2175,19 @@ function api(action,payload={}){
  request.then(discard,discard);
  return request;
 }
+/* SarNi 9: central read-only refresh dispatcher. Every reader retains its
+ * own stale-response guard. No saves, retries or personal-data storage here. */
+function qeRefreshPanels(options={}){
+ const {recent=true,sip=true,sync=true,global=false}=options;
+ const jobs=[];
+ if(recent)jobs.push(['recent',()=>loadRecent(false)]);
+ if(sip)jobs.push(['sip',()=>loadSipPlans()]);
+ if(sync)jobs.push(['sync',()=>loadQuickSyncSummary()]);
+ if(global&&!$('qeGlobalSyncPanel').hidden)jobs.push(['global',()=>qeLoadGlobalSync()]);
+ return Promise.allSettled(jobs.map(async ([name,run])=>{
+  try{await run();}catch(error){console.warn('SarNi '+name+' refresh:',error);throw error;}
+ }));
+}
 function qePayloadFingerprint(kind,entry){
  const normalized=Object.keys(entry||{}).sort().map(k=>[k,String(entry[k]??'')]);
  return JSON.stringify([kind,normalized]);
@@ -2355,7 +2368,7 @@ function qeOfflineUseBootstrap(snapshot){
  info=snapshot.info;hubAccess=snapshot.hubAccess||{allowOffice:false,allowInvestment:false};
  pinConfig=snapshot.pinRequired?{enabled:true,policies:Object.fromEntries(Object.entries(snapshot.pinPolicies||{}).map(([k,v])=>[k,{requirePinAdd:!!v,edit:false,trash:false,view:true}]))}:null;
  familyInfo=snapshot.familyInfo||null;
- render();$('restrictedEntry').hidden=true;void loadRecent();void loadSipPlans();void loadQuickSyncSummary();
+ render();$('restrictedEntry').hidden=true;void qeRefreshPanels();
  qeOfflineStatus('Offline form options restored from encrypted storage. Server permissions cannot be checked until online; queued entries may later be rejected.');
  return true;
 }
@@ -2590,12 +2603,12 @@ function updatePinGate(){
 $('pinManageToggle').onclick=()=>{pinManageOpen=!pinManageOpen;updatePinGate();if(pinManageOpen)$('pinInput').focus();};
 $('pinUnlockForm').onsubmit=async e=>{
  e.preventDefault();const input=$('pinInput'),b=$('pinUnlock');b.disabled=true;
- try{const result=await api('qpinUnlock',{pin:input.value});pinGrant=result.grant;pinManageOpen=false;input.value='';updatePinGate();status('PIN verified. Edit / Trash / Restore unlocked.');await loadRecent(false);await loadSipPlans();void loadQuickSyncSummary();if(!$('qeGlobalSyncPanel').hidden)void qeLoadGlobalSync();}
+ try{const result=await api('qpinUnlock',{pin:input.value});pinGrant=result.grant;pinManageOpen=false;input.value='';updatePinGate();status('PIN verified. Edit / Trash / Restore unlocked.');await qeRefreshPanels({global:true});}
  catch(error){status('PIN unlock failed: '+error.message,true);}
  finally{b.disabled=false;}
 };
-$('pinLock').onclick=()=>{pinManageOpen=false;pinGrant='';$('pinShowTrash').checked=false;updatePinGate();void loadRecent(false);void loadSipPlans();void loadQuickSyncSummary();if(!$('qeGlobalSyncPanel').hidden)void qeLoadGlobalSync();};
-$('pinShowTrash').onchange=()=>{void loadRecent(false);void loadSipPlans();};
+$('pinLock').onclick=()=>{pinManageOpen=false;pinGrant='';$('pinShowTrash').checked=false;updatePinGate();void qeRefreshPanels({global:true});};
+$('pinShowTrash').onchange=()=>{void qeRefreshPanels({sync:false});};
 const qePremiumIcons={"expense":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"6\" width=\"18\" height=\"15\" rx=\"2\"/><path d=\"M3 9V5a2 2 0 0 1 2-2h13\"/><path d=\"M16 13h5v5h-5a2.5 2.5 0 0 1 0-5Z\"/></svg>","diary":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 7c-2.5-2-5.6-2.3-9-1.5v14c3.4-.8 6.5-.5 9 1.5 2.5-2 5.6-2.3 9-1.5v-14c-3.4-.8-6.5-.5-9 1.5Z\"/><path d=\"M12 7v14\"/></svg>","stock":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 20V12h4v8M10 20V8h4v12M16 20V4h4v16\"/></svg>","office":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"7\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12c5 3 13 3 18 0M12 13v3\"/></svg>","investment":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><ellipse cx=\"8\" cy=\"6\" rx=\"5\" ry=\"2.5\"/><path d=\"M3 6v5c0 3 10 3 10 0V6M3 11v5c0 3 10 3 10 0v-5\"/><ellipse cx=\"17\" cy=\"13\" rx=\"4\" ry=\"2\"/><path d=\"M13 13v5c0 3 8 3 8 0v-5\"/></svg>","family":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"8\" cy=\"8\" r=\"3\"/><circle cx=\"17\" cy=\"9\" r=\"2.5\"/><path d=\"M2 21v-2a6 6 0 0 1 12 0v2M15 16c4 0 7 2 7 5\"/></svg>"};
 function qeAssertRenderedForm(kind){
  const required={
@@ -2673,9 +2686,7 @@ function render(){
   // Failure to refresh an optional panel must not prevent the actual form change.
   try{qeSetCompletionFilter('all');}catch(error){console.warn('Recent filter refresh:',error);}
   try{updatePinGate();}catch(error){console.warn('PIN gate refresh:',error);}
-  void loadRecent(false).catch(error=>console.warn('Recent entries:',error));
-  void loadSipPlans().catch(error=>console.warn('SIP plans:',error));
-  void loadQuickSyncSummary().catch(error=>console.warn('Sync summary:',error));
+  void qeRefreshPanels();
  });
  const cats=(info.categories||[]).filter(x=>x&&x.active!==false&&x.enabled!==false),opts=cats.map(v=>'<option value="'+safe(v.name)+'">'+safe(v.name)+'</option>').join('');
  $('heading').textContent=({expense:'Quick expense',diary:'Quick diary',stock:'Quick stock note',office:'Office Diary',investment:'Investment entry',family:'Family Expense'})[mode];
@@ -3078,7 +3089,7 @@ async function loadQuickSyncSummary(){
   metrics.textContent='Status unavailable';note.textContent='Could not read recent sync status: '+(error.message||'Backend unavailable')+'. Check View permission or the deployed backend.';
  }
 }
-$('quickSyncRefresh').onclick=()=>loadQuickSyncSummary();
+$('quickSyncRefresh').onclick=()=>qeRefreshPanels({recent:false,sip:false});
 let qeProgressRecords=[],qeProgressKind='';
 function qeRenderDiaryProgress(kind){
  const panel=$('qeDiaryProgress');if(!panel)return;
@@ -3377,7 +3388,7 @@ function applyRecentSearch(){
 }
 $('recentSearch').addEventListener('input',applyRecentSearch);
 $('toggleRecent').onclick=()=>{const panel=$('recentBody'),open=panel.hidden;panel.hidden=!open;$('refreshRecent').hidden=!open;$('toggleRecent').setAttribute('aria-expanded',String(open));const label=({expense:'Expense',diary:'Diary',stock:'Stock Note',office:'Office Diary',investment:'Investment',family:'Family Expense'})[mode]||mode;$('toggleRecent').querySelector('span').textContent=(open?'▾ ':'▸ ')+'Recent '+label+' entries';$('toggleRecent').querySelector('small').textContent=open?'Tap to close recent transactions':'Tap to view recent transactions';if(open)void loadRecent(false);};
-$('refreshRecent').onclick=()=>loadRecent(false);
+$('refreshRecent').onclick=()=>qeRefreshPanels({sip:false,sync:false});
 async function manageRecent(record,action){
  if(!pinGrant||!record.id)return;
  if(action==='trash'&&!confirm('Move this entry to Trash? You can restore it later while authorized.'))return;
@@ -3637,7 +3648,7 @@ const r=plannedSip?await api('sipPlanGuestSave',{grant:pinGrant,entry:{...data,c
   detail.append(verify);
  }
  status(r.message||'✓ Saved successfully.');
- $('status').classList.add('qe-save-status-compact');if(qeDraftTimer){clearTimeout(qeDraftTimer);qeDraftTimer=null;}qeClearDraft(mode);qeConfirmUncertainResubmission();if(qePhotoPending){const picture=qePhotoPending;qeClearPhotoSelection();const photoStatus=document.createElement('small');photoStatus.className='qe-photo-save-progress';photoStatus.textContent='Photo queued for private Drive upload…';lastBox.append(photoStatus);const photoId=String(r?.entry?.id||r?.id||'');if(photoId){void qeUploadPhoto(picture,mode,photoId,photoStatus).catch(error=>{photoStatus.textContent='Entry saved. Photo upload result unconfirmed: '+error.message+'. Check Photos in Recent Entries before retrying to avoid duplicate attachments.';qeOfferPhotoRetry(picture,mode,photoId,photoStatus);});}else{photoStatus.textContent='Entry saved. Use Photos in Recent entries to attach the selected photo.';}}qeResetSubmissionIdentity();delete $('entry').dataset.editId;delete $('entry').dataset.originallyCompleted;delete $('entry').dataset.reopenIntent;delete $('entry').dataset.pinRevision;delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;void loadRecent();void loadSipPlans();void loadQuickSyncSummary();HTMLFormElement.prototype.reset.call($('entry'));const dateField=$('fields').querySelector('[type=date]');if(dateField)dateField.value=today();if(mode==='family'){const familyCategory=$('fields').querySelector('#familyCategory'),familySubcategory=$('fields').querySelector('#familySubcategory');if(familyCategory){familyCategory.value='';familyCategory.dispatchEvent(new Event('change'));}if(familySubcategory)familySubcategory.value='';}if(mode==='expense'&&$('qeProject')){const remembered=readLastGroup();if([...$('qeProject').options].some(x=>x.value===remembered))$('qeProject').value=remembered;}}catch(err){const msg=String(err?.message||err||'Save was not confirmed.');const familySetup=mode==='family'&&(/MYFAMILY_DEFAULT_MEMBER_ID|active MyFamily member ID|configured MyFamily member/i.test(msg));const uncertain=/timed out|too long|network|connection reset|server could not complete/i.test(msg);qePendingUncertain=uncertain;qeConfirmUncertainResubmission();status(familySetup?'Family Expense needs a registered member: sign in to SarNi → Admin Settings → Quick Entry Links → MyFamily connection → select an active member → Save. Your entered details are retained.':msg+(uncertain?' The result is unconfirmed. Check destination before retrying; unchanged entries reuse the same submission ID.':''),true);}finally{busy=false;$('save').disabled=false;}};
-(async()=>{try{await qeInitializeDrafts();if(!key){$('qePrivateLinkHelp').hidden=false;throw Error('Open your private link above to use SarNi Quick Entry. The installed app never embeds your secret token.');}if(!base)throw Error('Backend is not configured.');if(!navigator.onLine){status('Offline. Unlock Offline Queue to restore encrypted form options. Nothing will be sent until connected.');qeOfflineToggle(true);return;}const [mainResult,permissionResult]=await Promise.allSettled([api('qeInfo'),api('hubGuestInfo')]);if(mainResult.status!=='fulfilled')throw mainResult.reason;info=mainResult.value;try{const last=localStorage.getItem('sarni_q_last_tab_v1');if(['expense','diary','stock','office','investment','family'].includes(last))mode=last;}catch(_){}try{const requested=String(location.hash||'').replace(/^#/,'').toLowerCase();if(['expense','diary','stock','office','investment','family'].includes(requested))mode=requested;}catch(_){}if(permissionResult.status==='fulfilled'){const perms=permissionResult.value;hubAccess={allowOffice:!!perms.allowOffice,allowInvestment:!!perms.allowInvestment};}/* Display the tabs only after both permission checks finish: one stable, authorised layout. */await initializePinAccess();render();if(qeOfflineKey)qeOfflineCaptureBootstrap();$('restrictedEntry').hidden=true;void loadRecent();void loadSipPlans();void loadQuickSyncSummary();}catch(e){status(e.message,true);}})();
+ $('status').classList.add('qe-save-status-compact');if(qeDraftTimer){clearTimeout(qeDraftTimer);qeDraftTimer=null;}qeClearDraft(mode);qeConfirmUncertainResubmission();if(qePhotoPending){const picture=qePhotoPending;qeClearPhotoSelection();const photoStatus=document.createElement('small');photoStatus.className='qe-photo-save-progress';photoStatus.textContent='Photo queued for private Drive upload…';lastBox.append(photoStatus);const photoId=String(r?.entry?.id||r?.id||'');if(photoId){void qeUploadPhoto(picture,mode,photoId,photoStatus).catch(error=>{photoStatus.textContent='Entry saved. Photo upload result unconfirmed: '+error.message+'. Check Photos in Recent Entries before retrying to avoid duplicate attachments.';qeOfferPhotoRetry(picture,mode,photoId,photoStatus);});}else{photoStatus.textContent='Entry saved. Use Photos in Recent entries to attach the selected photo.';}}qeResetSubmissionIdentity();delete $('entry').dataset.editId;delete $('entry').dataset.originallyCompleted;delete $('entry').dataset.reopenIntent;delete $('entry').dataset.pinRevision;delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;void qeRefreshPanels();HTMLFormElement.prototype.reset.call($('entry'));const dateField=$('fields').querySelector('[type=date]');if(dateField)dateField.value=today();if(mode==='family'){const familyCategory=$('fields').querySelector('#familyCategory'),familySubcategory=$('fields').querySelector('#familySubcategory');if(familyCategory){familyCategory.value='';familyCategory.dispatchEvent(new Event('change'));}if(familySubcategory)familySubcategory.value='';}if(mode==='expense'&&$('qeProject')){const remembered=readLastGroup();if([...$('qeProject').options].some(x=>x.value===remembered))$('qeProject').value=remembered;}}catch(err){const msg=String(err?.message||err||'Save was not confirmed.');const familySetup=mode==='family'&&(/MYFAMILY_DEFAULT_MEMBER_ID|active MyFamily member ID|configured MyFamily member/i.test(msg));const uncertain=/timed out|too long|network|connection reset|server could not complete/i.test(msg);qePendingUncertain=uncertain;qeConfirmUncertainResubmission();status(familySetup?'Family Expense needs a registered member: sign in to SarNi → Admin Settings → Quick Entry Links → MyFamily connection → select an active member → Save. Your entered details are retained.':msg+(uncertain?' The result is unconfirmed. Check destination before retrying; unchanged entries reuse the same submission ID.':''),true);}finally{busy=false;$('save').disabled=false;}};
+(async()=>{try{await qeInitializeDrafts();if(!key){$('qePrivateLinkHelp').hidden=false;throw Error('Open your private link above to use SarNi Quick Entry. The installed app never embeds your secret token.');}if(!base)throw Error('Backend is not configured.');if(!navigator.onLine){status('Offline. Unlock Offline Queue to restore encrypted form options. Nothing will be sent until connected.');qeOfflineToggle(true);return;}const [mainResult,permissionResult]=await Promise.allSettled([api('qeInfo'),api('hubGuestInfo')]);if(mainResult.status!=='fulfilled')throw mainResult.reason;info=mainResult.value;try{const last=localStorage.getItem('sarni_q_last_tab_v1');if(['expense','diary','stock','office','investment','family'].includes(last))mode=last;}catch(_){}try{const requested=String(location.hash||'').replace(/^#/,'').toLowerCase();if(['expense','diary','stock','office','investment','family'].includes(requested))mode=requested;}catch(_){}if(permissionResult.status==='fulfilled'){const perms=permissionResult.value;hubAccess={allowOffice:!!perms.allowOffice,allowInvestment:!!perms.allowInvestment};}/* Display the tabs only after both permission checks finish: one stable, authorised layout. */await initializePinAccess();render();if(qeOfflineKey)qeOfflineCaptureBootstrap();$('restrictedEntry').hidden=true;void qeRefreshPanels();}catch(e){status(e.message,true);}})();
 })();
 </script></body></html>
