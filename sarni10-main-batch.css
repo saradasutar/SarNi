@@ -1,0 +1,39 @@
+/* SarNi 10 main-dashboard usability batch; scoped to added controls and focus states. */
+/* 1-3. compact section jump, location, and existing-nav shortcuts */
+#sarni10Tools.sarni10-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 14px 12px;padding:8px 11px;border:1px solid #d6e5de;border-radius:13px;background:color-mix(in srgb,var(--surface,#fff) 92%,#ddf2e7);color:var(--ink,#16382b);box-shadow:0 2px 10px #193a2910}
+#sarni10Tools .sarni10-current{font-size:12px;font-weight:800;min-width:90px;overflow-wrap:anywhere}
+#sarni10Jump{border:1px solid #c8dcd0;border-radius:9px;padding:7px 9px;min-height:38px;background:var(--surface,#fff);color:var(--ink,#263a2c);font-size:12px;max-width:180px}
+#sarni10Tools .sarni10-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+#sarni10Tools .sarni10-action{border:1px solid #d1e1d9;border-radius:9px;background:var(--surface,#fff);color:var(--ink,#273b31);padding:7px 10px;min-height:38px;font-weight:750;font-size:11px;cursor:pointer}
+#sarni10Tools .sarni10-action.is-active{border-color:#88bda4;background:#e7f6ed;color:#175d3d}
+/* 5. reading progress without interception of clicks */
+#sarni10Progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:1000;pointer-events:none;background:transparent}
+#sarni10Progress .sarni10-progress-fill{height:100%;width:100%;transform-origin:left center;transform:scaleX(0);background:#25966b;transition:transform .12s linear}
+#sarni10Progress[hidden]{display:none!important}
+/* 6. Top button */
+#sarni10Top:not([hidden]){position:fixed;bottom:max(14px,env(safe-area-inset-bottom));right:max(12px,env(safe-area-inset-right));z-index:40;min-width:58px;min-height:44px;padding:8px 12px;border:1px solid #b9d6c7;border-radius:999px;background:#eaf6ee;color:#145c3c;box-shadow:0 4px 14px #163d2424;font-size:12px;font-weight:850;cursor:pointer}
+#sarni10Top[hidden]{display:none!important}
+/* 7. keyboard visibility on existing interactive surfaces */
+#appView :is(.nav-item,.primary-button,.secondary-button,.icon-button,.command-palette-button,button,select,input,textarea,a,summary):focus-visible,
+#sarni10Tools :is(button,select):focus-visible,#sarni10Top:focus-visible{
+ outline:3px solid #16815c!important;outline-offset:2px!important;
+}
+/* 8. larger tap areas on compact devices */
+@media(max-width:650px){
+ #sarni10Tools{margin:7px 7px 10px!important;padding:8px!important;gap:7px!important}
+ #sarni10Jump{flex:1 1 130px;max-width:none;min-height:44px}
+ #sarni10Tools .sarni10-actions{flex:1 1 100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+ #sarni10Tools .sarni10-action{padding:7px 3px;min-height:44px;white-space:normal;line-height:1.25}
+ #appView .sidebar .nav-item{min-height:42px}
+}
+/* 9. prevent verbose heading and chip overflow on mobile */
+#mainDashboard :is(.topbar-title-line,.dashboard-version-pair,.top-actions){min-width:0;max-width:100%}
+#mainDashboard :is(h1,h2,h3,.dashboard-version-chip,.sarni-main-health-metric span){overflow-wrap:anywhere}
+#sarni10Tools :is(.sarni10-current,.sarni10-action){min-width:0}
+@media(max-width:350px){#sarni10Tools .sarni10-action{font-size:10px}}
+/* 10. respect reduced-motion preferences */
+@media(prefers-reduced-motion:reduce){
+ #sarni10Progress .sarni10-progress-fill{transition:none!important}
+ #sarni10Tools *,#sarni10Top{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+@media print{#sarni10Tools,#sarni10Progress,#sarni10Top{display:none!important}}
