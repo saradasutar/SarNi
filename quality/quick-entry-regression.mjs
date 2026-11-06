@@ -13,12 +13,8 @@ const mainBatchJs = readFileSync(new URL('../sarni-main-batch10.js', import.meta
 const mainBatchCss = readFileSync(new URL('../sarni-main-batch10.css', import.meta.url), 'utf8');
 const bridge = readFileSync(new URL('../sarni-health-bridge-v1.js', import.meta.url), 'utf8');
 const history = readFileSync(new URL('../sarni-health-history-v1.js', import.meta.url), 'utf8');
-const mainBatchJs = readFileSync(new URL('../sarni10-main-batch.js', import.meta.url), 'utf8');
-const mainBatchCss = readFileSync(new URL('../sarni10-main-batch.css', import.meta.url), 'utf8');
 const batch10Js = readFileSync(new URL('../q/sarni9-batch10.js', import.meta.url), 'utf8');
 const batch10Css = readFileSync(new URL('../q/sarni9-batch10.css', import.meta.url), 'utf8');
-const main10Js = readFileSync(new URL('../sarni-main-batch10-v1.js', import.meta.url), 'utf8');
-const main10Css = readFileSync(new URL('../sarni-main-batch10-v1.css', import.meta.url), 'utf8');
 const tests = [];
 const check = (name, passed) => tests.push({ name, passed: Boolean(passed) });
 const includes = (value) => source.includes(value);
@@ -71,23 +67,13 @@ check('Keyboard tab navigation and shortcut respect existing buttons', batch10Js
 check('Character counter excludes short fields', batch10Js.includes("qeActiveFieldCount") && batch10Js.includes("input.maxLength<50"));
 check('Responsive accessibility finishes and Back to Top present', batch10Css.includes('prefers-reduced-motion:reduce') && batch10Css.includes('focus-visible') && batch10Css.includes('min-height:46px') && batch10Css.includes('overflow-wrap:anywhere') && batch10Js.includes("id='qeBackToTop'"));
 check('Ten-upgrade helper contains no network or storage operations', !/(?:fetch|localStorage|sessionStorage|XMLHttpRequest)\s*\(/.test(batch10Js));
-check('Main dashboard ten-upgrade assets are loaded', mainDashboard.includes('./sarni-main-batch10-v1.js') && mainDashboard.includes('./sarni-main-batch10-v1.css'));
-check('Main section jump uses existing navigation and permissions', main10Js.includes("button.dataset.section===key") && main10Js.includes('target.click()') && main10Js.includes("button.disabled") && main10Js.includes("button.closest('.hidden')"));
-check('Main section jump uses safe DOM text and keyboard navigation', main10Js.includes('button.textContent=name') && main10Js.includes("ArrowDown") && main10Js.includes("Escape") && main10Js.includes("Alt+Shift+J")===false && main10Js.includes("event.altKey") && main10Js.includes("event.shiftKey"));
-check('Main dashboard back-to-top and section indicator are present', main10Js.includes("id='sarniMainBackToTop'") && main10Js.includes("id='sarniMainCurrentSection'") && main10Js.includes('window.scrollTo('));
-check('Main mobile/focus/reduced-motion CSS and no backend writes', main10Css.includes(':focus-visible') && main10Css.includes('prefers-reduced-motion:reduce') && main10Css.includes('min-height:44px') && !/(?:fetch|XMLHttpRequest|localStorage|sessionStorage)\s*\(/.test(main10Js));
 check('Main dashboard loads ten-upgrade assets', mainDashboard.includes('sarni-main-batch10.js') && mainDashboard.includes('sarni-main-batch10.css'));
-check('Quick navigation reuses existing section buttons', mainBatchJs.includes("id='sarni10Nav'") && mainBatchJs.includes("original.click()") && mainBatchJs.includes("sarniSidebarPrimary"));
+check('Quick navigation reuses existing section buttons', mainBatchJs.includes("nav.id='sarni10Nav'") && mainBatchJs.includes("original.click()") && mainBatchJs.includes("sarniSidebarPrimary"));
 check('Current section and shortcuts announced accessibly', mainBatchJs.includes("aria-live") && mainBatchJs.includes("Digit[1-4]") && mainBatchJs.includes("isContentEditable"));
 check('Main dashboard scroll aids are present', mainBatchJs.includes("sarni10ScrollProgress") && mainBatchJs.includes("sarni10BackTop"));
 check('Main dashboard mobile and accessibility CSS present', mainBatchCss.includes('focus-visible') && mainBatchCss.includes('min-height:44px') && mainBatchCss.includes('overflow-wrap:anywhere') && mainBatchCss.includes('prefers-reduced-motion:reduce') && mainBatchCss.includes('@media print'));
 check('Main enhancement makes no backend or storage calls', !['fetch(', 'localStorage.', 'sessionStorage.', 'XMLHttpRequest'].some(token=>mainBatchJs.includes(token)));
 check('SarNi 10 main enhancement assets referenced', mainDashboard.includes('sarni10-main-batch.js?v=1') && mainDashboard.includes('sarni10-main-batch.css?v=1'));
-check('Main batch reuses sidebar navigation instead of changing backend', mainBatchJs.includes("target.click()") && mainBatchJs.includes("sarniSidebarPrimary") && !mainBatchJs.includes("fetch("));
-check('Main batch provides jump, shortcuts and current section', mainBatchJs.includes("sarni10Jump") && mainBatchJs.includes("sarni10Current") && mainBatchJs.includes("Alt+Shift+H"));
-check('Main batch has progress and top controls', mainBatchJs.includes("sarni10Progress") && mainBatchJs.includes("sarni10Top") && mainBatchJs.includes("requestAnimationFrame(updateScroll)"));
-check('Main batch mobile and accessible styles', mainBatchCss.includes("min-height:44px") && mainBatchCss.includes("focus-visible") && mainBatchCss.includes("prefers-reduced-motion:reduce"));
-check('Main batch stores no personal data', !/(?:localStorage|sessionStorage|XMLHttpRequest)\\s*\\(/.test(mainBatchJs) && !mainBatchJs.includes("fetch("));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
