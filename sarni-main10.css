@@ -1,0 +1,33 @@
+/* SarNi 10 — additive main-dashboard visual and accessibility finish. */
+/* 1. Collapsible utility strip, low-visual-noise by default. */
+#sarni10Tools{margin:7px 12px 9px;border:1px solid #cbded5;border-radius:12px;background:linear-gradient(135deg,#f8fcfa,#eef6f2);color:#275947;overflow:visible}
+#sarni10Tools>summary{padding:9px 12px;cursor:pointer;list-style-position:inside;font-size:12px;font-weight:800;line-height:1.5}
+#sarni10Tools[open]>summary{border-bottom:1px solid #dbe9e1}
+#sarni10Tools .sarni10-body{padding:9px 11px;display:grid;gap:9px}
+#sarni10Tools .sarni10-shortcuts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+#sarni10Tools .sarni10-shortcut{min-width:0;min-height:41px;display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid #d1e0d7;border-radius:9px;background:#fff;color:#315f49;font-size:12px;font-weight:750;padding:7px 6px;cursor:pointer}
+#sarni10Tools .sarni10-shortcut[hidden],#sarni10BackTop[hidden]{display:none!important}
+#sarni10Tools .sarni10-shortcut.is-active{border-color:#2c936a;background:#e3f4e9;color:#136641;box-shadow:inset 0 0 0 1px #84c4a0}
+#sarni10Tools kbd{font:600 10px/1.2 system-ui,sans-serif;border:1px solid #dce7dd;padding:2px 4px;border-radius:4px;background:#f8fbf8}
+#sarni10Tools .sarni10-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px;color:#426d59;font-size:11px;font-weight:700}
+#sarni10Tools .sarni10-help{font-size:10px;color:#60776a;line-height:1.5}
+#sarni10BackTop{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:40;min-width:62px;min-height:44px;padding:7px 12px;border:1px solid #a7cfb7;background:#eaf8ef;color:#165d3f;border-radius:999px;box-shadow:0 3px 12px #153b2524;font-weight:850;font-size:12px;cursor:pointer}
+/* 9. Keyboard focus, mobile targets and readable wrapping. */
+#sarni10Tools :is(summary,button):focus-visible,#sarni10BackTop:focus-visible,
+#mainDashboard .top-actions :is(button,select):focus-visible{
+ outline:3px solid #197d60!important;outline-offset:2px!important;
+}
+#mainDashboard :is(.life-card,.page-section,.topbar) :is(h1,h2,h3,p,small){overflow-wrap:anywhere}
+@media(max-width:720px){
+ #sarni10Tools{margin:6px 5px 9px}
+ #sarni10Tools .sarni10-shortcuts{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #sarni10Tools .sarni10-shortcut{min-height:45px;touch-action:manipulation}
+ #sarni10Tools .sarni10-shortcut kbd{display:none}
+ #sarni10BackTop{right:10px;bottom:max(10px,env(safe-area-inset-bottom))}
+}
+@media(max-width:350px){#sarni10Tools .sarni10-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* 10. Reduced-motion and print-friendly presentation. */
+@media(prefers-reduced-motion:reduce){
+ #sarni10Tools *,#sarni10BackTop{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+@media print{#sarni10Tools,#sarni10BackTop{display:none!important}}
