@@ -64,7 +64,7 @@ check('Recent search can be cleared and counts announced', batch10Js.includes("i
 check('Keyboard tab navigation and shortcut respect existing buttons', batch10Js.includes("ArrowRight") && batch10Js.includes("Digit[1-6]") && batch10Js.includes("button.click()"));
 check('Character counter excludes short fields', batch10Js.includes("qeActiveFieldCount") && batch10Js.includes("input.maxLength<50"));
 check('Responsive accessibility finishes and Back to Top present', batch10Css.includes('prefers-reduced-motion:reduce') && batch10Css.includes('focus-visible') && batch10Css.includes('min-height:46px') && batch10Css.includes('overflow-wrap:anywhere') && batch10Js.includes("id='qeBackToTop'"));
-check('Ten-upgrade helper contains no network or storage operations', !/(?:fetch|localStorage|sessionStorage|XMLHttpRequest)\\s*\\(/.test(batch10Js));
+check('Ten-upgrade helper contains no network or storage operations', !/(?:fetch|localStorage|sessionStorage|XMLHttpRequest)\s*\(/.test(batch10Js));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
