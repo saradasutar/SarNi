@@ -45,6 +45,7 @@ check('Main and Quick Entry Health panels have peer indicators', mainDashboard.i
 check('Health History is available in both dashboards', includes('id="qeHealthHistory"') && mainDashboard.includes('id="sarniMainHealthHistory"') && includes('../sarni-health-history-v1.js') && mainDashboard.includes('./sarni-health-history-v1.js'));
 check('Health History accepts only status categories, never raw errors', history.includes("const statuses=new Set(") && history.includes("const kinds=new Set(") && history.includes("sessionStorage.setItem(key,JSON.stringify(items))") && !/(?:fetch|localStorage|BroadcastChannel)\s*\(/.test(history));
 check('Health History and troubleshooting controls present', includes('id="qeHealthHistoryClear"') && mainDashboard.includes('id="sarniMainHealthClear"') && includes('Troubleshooting guide') && mainDashboard.includes('Troubleshooting guide'));
+check('SIP-plan requests ignore stale tab responses', includes('let qeSipListRequestVersion=0') && includes('const requestVersion=++qeSipListRequestVersion') && count(/mode!=='investment'\\|\\|requestVersion!==qeSipListRequestVersion/g)===2);
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
