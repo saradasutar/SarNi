@@ -2882,7 +2882,7 @@ async function loadRecent(append=false){
     if(isCompleted&&!record.trashed&&['diary','office','stock'].includes(requestedMode)){
      const reopen=document.createElement('button');reopen.type='button';reopen.className='qe-reopen-action';reopen.textContent='↶ Reopen';
      reopen.title='Edit this completed note and remove its completion status after Save correction';
-     reopen.onclick=()=>{editRecent(record);$('entry').dataset.reopenIntent='1';const done=$('qeMarkCompleted');if(!done||$('entry').dataset.editId!==String(record.id))return;done.checked=false;qeUpdateOptionalMarkDate();$('save').textContent='Save reopening';status('Reopen '+(requestedMode==='office'?'Follow-up':requestedMode==='stock'?'Review':'Plan')+': completion is unchecked. Save reopening to update this same record, or Clear to cancel.');};
+     reopen.onclick=()=>{editRecent(record);const done=$('qeMarkCompleted');if(!done||$('entry').dataset.editId!==String(record.id)||$('entry').dataset.originallyCompleted!=='1')return;$('entry').dataset.reopenIntent='1';done.checked=false;const finished=$('qeCompletedDate'),remark=$('qeCompletionRemark');if(finished)finished.value='';if(remark)remark.value='';qeUpdateOptionalMarkDate();$('save').textContent='Save reopening';status('Reopen '+(requestedMode==='office'?'Follow-up':requestedMode==='stock'?'Review':'Plan')+': completion is unchecked. Save reopening to update this same record, or Clear to cancel.');};
      action.append(reopen);
     }
    }
