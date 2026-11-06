@@ -31,6 +31,16 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:320
    await expect(page.locator('#sarni10BackTop')).toHaveCount(1);
    await expect(page.locator('.sarni10-keyboard-help')).toHaveCount(1);
    await expect(page.locator('#sarni10ActiveStatus')).toHaveAttribute('aria-live','polite');
+   // SarNi 10: verify progressive main-dashboard controls without logging in.
+   await expect(page.locator('#sarni10JumpBar')).toHaveCount(1);
+   await expect(page.locator('#sarni10JumpBar button[data-sarni10-jump]')).toHaveCount(4);
+   await expect(page.locator('#sarni10ShortcutHelp')).toHaveCount(1);
+   await expect(page.locator('#sarni10ActiveSection')).toHaveCount(1);
+   await expect(page.locator('#sarni10ScrollProgress')).toHaveCount(1);
+   await expect(page.locator('#sarni10BackTop')).toHaveCount(1);
+   await expect(page.locator('#sarni10HelpPanel')).toHaveCount(1);
+   await expect(page.locator('link[href="./sarni10-main-polish.css"]')).toHaveCount(1);
+   // Both assets are local; smoke checks do not open protected sections.
    // Tests run on the public login shell: never log in, change credentials, or save records.
    // All off-origin requests (including any backend POSTs) were intercepted and aborted.
    expect(blocked.every(x=>x.origin!=='http://127.0.0.1:8765')).toBe(true);
