@@ -19,8 +19,8 @@
    if(button.closest('.hidden,[hidden]'))return false;
    // Do not expose administrator-only modules when their access gate is hidden.
    if(button.classList.contains('admin-only')&&button.classList.contains('hidden'))return false;
-   const style=getComputedStyle(button);
-   if(style.display==='none'||style.visibility==='hidden'||!button.getClientRects().length)return false;
+   // Responsive layout can hide the desktop sidebar while its authorized
+   // navigation handlers remain valid. Check permission gates, not screen geometry.
    return true;
   };
   const label=button=>(button.textContent||'').replace(/[⌂₹▣▦✎✧▤♙]/g,'').replace(/\s+/g,' ').trim();
