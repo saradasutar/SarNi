@@ -25,9 +25,9 @@ function setup(){
  context.className='sarni10-context';context.textContent='Current section: Home';
  const first=main.querySelector('.topbar');if(first)first.insertAdjacentElement('afterend',bar);else main.prepend(bar);
  bar.insertAdjacentElement('afterend',panel);panel.insertAdjacentElement('afterend',context);
- document.body.append(progress);
+ main.append(progress);
  const back=document.createElement('button');back.id='sarni10BackTop';back.type='button';back.className='sarni10-back-top';
- back.textContent='↑ Top';back.title='Return to top';back.setAttribute('aria-label','Back to top');back.hidden=true;document.body.append(back);
+ back.textContent='↑ Top';back.title='Return to top';back.setAttribute('aria-label','Back to top');back.hidden=true;main.append(back);
  function permitted(section){
   const b=document.querySelector('.side-nav button[data-section="'+section+'"]');
   if(!b||b.disabled||b.hidden||b.classList.contains('hidden'))return null;
@@ -61,7 +61,7 @@ function setup(){
  const shortcuts={KeyH:'overview',KeyD:'diary',KeyC:'calendar',KeyE:'expenditure'};
  document.addEventListener('keydown',event=>{
   if(event.key==='Escape'&&!panel.hidden){helpToggle(false);help.focus();return;}
-  if(!event.altKey||!event.shiftKey||event.ctrlKey||event.metaKey||event.repeat)return;
+  if(!event.altKey||!event.shiftKey||event.ctrlKey||event.metaKey||event.repeat||document.getElementById('appView')?.classList.contains('hidden'))return;
   if(event.target?.closest('input,textarea,select,[contenteditable],dialog,[role="dialog"]'))return;
   const section=shortcuts[event.code];if(section&&permitted(section)){event.preventDefault();navigate(section);}
  });
