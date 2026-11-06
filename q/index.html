@@ -2017,7 +2017,7 @@ function render(){
 if(mode==='diary'||mode==='office'||mode==='stock'){const typeSelect=$('fields').querySelector('select[name="diaryType"],select[name="officeNoteType"]');if(typeSelect){typeSelect.addEventListener('change',updateNoteTypeTone);updateNoteTypeTone();}qeUpdateOptionalMarkDate();}
  $('save').textContent='Save & Add Another';status('');qeRefreshDraftBanner();
 }
-$('reset').onclick=()=>{if(busy){status('Save in progress. Please wait for confirmation before clearing the form.',true);return;}if(qeDraftTimer){clearTimeout(qeDraftTimer);qeDraftTimer=null;}qeClearDraft(mode);pendingQuickEntryId='';pendingQuickEntryMode='';delete $('entry').dataset.editId;delete $('entry').dataset.pinRevision;delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;render();};let recentOffset=0;let globalSyncRequest=0,qeVerifyRecentSequence=0,qeVerifyAuditReport=null,qeVerifyAuditTargets=[];
+$('reset').onclick=()=>{if(busy){status('Save in progress. Please wait for confirmation before clearing the form.',true);return;}if(qeDraftTimer){clearTimeout(qeDraftTimer);qeDraftTimer=null;}qeClearDraft(mode);qeResetSubmissionIdentity();qeConfirmUncertainResubmission();delete $('entry').dataset.editId;delete $('entry').dataset.pinRevision;delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;render();};let recentOffset=0;let globalSyncRequest=0,qeVerifyRecentSequence=0,qeVerifyAuditReport=null,qeVerifyAuditTargets=[];
 const qeRecentVerificationKinds=[{kind:'investment',name:'Investment → Analysis'},{kind:'office',name:'Office Diary → HR'},{kind:'family',name:'Family Expense → MyFamily'}];
 function qeVerifyCancel(){
  ++qeVerifyRecentSequence;
@@ -2720,8 +2720,8 @@ const r=plannedSip?await api('sipPlanGuestSave',{grant:pinGrant,entry:{...data,c
  lastBox.append(detail);
  if(mode==='family'){
   const verify=document.createElement('button');verify.type='button';verify.className='qe-family-verify-shortcut';
-  verify.textContent='🔍 Verify Family Expense destinations';
-  verify.title='Open read-only Sync Status verification; this does not submit another transaction';
+  verify.textContent='🔍 Verify recent destination records';
+  verify.title='Read-only check of up to 3 recent records per linked destination; this may not include the entry just saved and does not submit transactions';
   verify.addEventListener('click',()=>{
    qeSetGlobalSyncOpen(true);
    const panel=$('qeVerifyRecentPanel');
