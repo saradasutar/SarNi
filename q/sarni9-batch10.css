@@ -1,0 +1,41 @@
+/* SarNi 9: ten-upgrade batch, accessibility and mobile finishing layer. */
+/* 1. Search clear control */
+#qeSearchClear.qe9-search-clear:not([hidden]){display:inline-flex;align-items:center;justify-content:center;min-height:34px;margin:6px 0 3px;padding:5px 12px;border:1px solid #c8dcd1;border-radius:8px;background:#f0f7f3;color:#28654c;font-size:12px;font-weight:750;cursor:pointer}
+#qeSearchClear[hidden]{display:none!important}
+/* 5. Active field character count */
+#qeActiveFieldCount.qe9-character-count:not([hidden]){display:block;margin:3px 0 7px;color:#526c5e;font-size:11px;line-height:1.4}
+#qeActiveFieldCount[hidden]{display:none!important}
+/* 6. Clear keyboard focus rings */
+#tabs button:focus-visible,#entry :is(input,textarea,select,button,summary):focus-visible,
+#recentSection :is(button,input,summary):focus-visible,
+#qeDashboardHealth :is(button,summary):focus-visible,
+#qeOfflinePanel :is(button,input,summary):focus-visible,
+#qeGlobalSyncPanel :is(button,summary):focus-visible,
+#qeBackToTop:focus-visible,#qeSearchClear:focus-visible{
+ outline:3px solid #17815f!important;outline-offset:2px!important;
+}
+/* 7. Mobile touch targets */
+@media(max-width:600px){
+ #tabs button[data-mode]{min-height:46px!important}
+ #recentSection .recent-head-actions button,#qeSearchClear,
+ #qeGlobalSyncPanel button,#qeDashboardHealth .qe-health-actions button{
+ min-height:42px!important;touch-action:manipulation;
+ }
+}
+/* 8. Long text stays readable without forcing page-wide horizontal scrolling */
+#recentSection .recent-table td,#recentSection .recent-table td :is(span,div,small),
+#qeGlobalSyncPanel :is(.qe-sync-detail,.qe-global-sync-status),
+#lastSavedEntry :is(div,small){
+ overflow-wrap:anywhere;
+}
+#recentSection .recent-table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain}
+/* 9. Honour reduced-motion preferences for transitions/scrolling */
+@media(prefers-reduced-motion:reduce){
+ html:focus-within{scroll-behavior:auto!important}
+ #tabs *,#qeDashboardHealth *,#recentSection *,
+ #qeGlobalSyncPanel *,#qeBackToTop{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+/* 10. Back to top: compact, unobtrusive, and never shown unnecessarily */
+#qeBackToTop.qe9-back-to-top:not([hidden]){position:fixed;right:max(13px,env(safe-area-inset-right));bottom:max(15px,env(safe-area-inset-bottom));z-index:35;display:inline-flex;align-items:center;justify-content:center;min-width:58px;min-height:44px;padding:8px 12px;border:1px solid #bbd8c9;border-radius:999px;background:#ecf7f0;color:#185d3d;font-size:12px;font-weight:850;box-shadow:0 3px 12px #133c2525;cursor:pointer}
+#qeBackToTop[hidden]{display:none!important}
+@media(max-width:480px){#qeBackToTop.qe9-back-to-top:not([hidden]){right:10px;bottom:max(10px,env(safe-area-inset-bottom))}}
