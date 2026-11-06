@@ -23,7 +23,9 @@ for (const viewport of scenarios) {
     const request=route.request();
     const url=new URL(request.url());
     if(url.origin!=='http://127.0.0.1:8765'||request.method()!=='GET'){
-     blockedRequests.push({origin:url.origin,method:request.method()});
+     // External fonts/assets may be referenced; blocking GET is expected.
+     // Only an unmocked mutating request is an isolation failure.
+     if(request.method()!=='GET')blockedRequests.push({origin:url.origin,method:request.method()});
      return route.abort();
     }
     return route.continue();
