@@ -497,7 +497,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 @media(max-width:350px){.sarni-main-health-grid{grid-template-columns:1fr}}
 </style>
 
-<link rel="stylesheet" href="./sarni10-main-workspace.css?v=20261107-2">
+<link rel="stylesheet" href="./sarni-main-batch10.css?v=2"/>
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
@@ -602,21 +602,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <button class="mobile-session-button danger" id="mobileLogoutBtn" type="button">Log out</button>
 </div>
 </div>
-<!-- SarNi 10: compact workspace enhancement (existing modules remain authoritative) -->
-<section id="sarni10Workspace" aria-label="Workspace shortcuts and module finder">
- <div class="sarni10-topline"><h2>My Workspace</h2><span id="sarni10Breadcrumb" role="status">Current section: Home</span></div>
- <div class="sarni10-toolbar">
-  <input id="sarni10ModuleSearch" class="sarni10-search" type="search" autocomplete="off" aria-label="Find a dashboard section" placeholder="Find a section… (press /)">
-  <div class="sarni10-actions"><button type="button" id="sarni10ClearSearch" class="sarni10-control" hidden>Clear</button><button type="button" id="sarni10Density" class="sarni10-control" aria-pressed="false">Compact spacing</button></div>
- </div>
- <div class="sarni10-results-label"><span>Sections available to you</span><span id="sarni10ModuleCount" role="status" aria-live="polite"></span></div>
- <div id="sarni10ModuleResults" class="sarni10-chips" aria-label="Permitted dashboard sections"></div>
- <div class="sarni10-collections">
-  <div class="sarni10-collection"><strong>★ Pinned for this page</strong><div id="sarni10Favorites" class="sarni10-chips"></div></div>
-  <div class="sarni10-collection"><strong>Recently opened</strong><div id="sarni10Recent" class="sarni10-chips"></div></div>
- </div>
-</section>
-<button type="button" id="sarni10Top" hidden aria-label="Back to top">↑ Top</button>
+<!-- SarNi 10: one consolidated main dashboard UX layer, loaded once below. -->
 <!-- SarNi Main Dashboard Health v1 -->
 <details id="sarniMainHealth" class="sarni-main-health">
  <summary><span>♡ Dashboard Health</span><small id="sarniMainHealthBrief">Select to inspect</small></summary>
@@ -2438,7 +2424,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script defer src="./diary-hub-launcher.js?v=20261101-admincollapse2"></script>
 
 
-<script defer src="./sarni10-main-workspace.js?v=20261107-2"></script>
 <script src="./sarni-health-bridge-v1.js"></script><script src="./sarni-health-history-v1.js"></script>
 <script id="sarni-main-health-script">
 /* Read-only: never calls private APIs, performs writes, or stores results. */
@@ -2496,5 +2481,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
+<script defer src="./sarni-main-batch10.js?v=2"></script>
 </body>
 </html>
