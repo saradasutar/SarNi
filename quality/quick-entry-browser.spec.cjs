@@ -11,7 +11,7 @@ const scenarios = [
 
 for (const viewport of scenarios) {
  test.describe(viewport.name, () => {
-  test.use({ viewport: { width:viewport.width, height:viewport.height }, serviceWorkers:'block' });
+  test.use({ viewport: { width:viewport.width, height:viewport.height }, serviceWorkers:'block', screenshot:'only-on-failure', trace:'retain-on-failure' });
   test('six tabs, form layout and safe navigation', async ({ page }) => {
    const errors=[];
    page.on('pageerror',error => errors.push(error.message));
