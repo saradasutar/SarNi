@@ -1501,6 +1501,64 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summar
 #lastSavedEntry .qe-family-verify-shortcut:focus-visible{
  outline:2px solid #267955!important;outline-offset:2px!important;
 }
+</style><style id="qe-save-mobile-condensed-v1">
+/* Post-save: one visible acknowledgement, full details when requested. */
+#status.qe-save-status-compact{
+ position:absolute!important;width:1px!important;height:1px!important;
+ padding:0!important;margin:-1px!important;overflow:hidden!important;
+ clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;
+}
+#lastSavedEntry:not([hidden]){
+ margin:8px 0!important;padding:9px 11px!important;
+ border-radius:10px!important;
+}
+#lastSavedEntry>strong{font-size:13px!important;line-height:1.3!important}
+#lastSavedEntry>small{font-size:11px!important;margin-top:2px!important}
+#lastSavedEntry .qe-save-breakdown{
+ margin-top:7px!important;
+ border-radius:9px!important;
+}
+#lastSavedEntry .qe-save-breakdown-toggle{
+ padding:8px 9px!important;min-height:37px!important;
+ font-size:11.5px!important;line-height:1.3!important;gap:5px!important;
+}
+#lastSavedEntry .qe-save-breakdown .qe-save-destinations{
+ padding:5px 8px 2px!important;gap:4px!important;
+}
+#lastSavedEntry .qe-save-breakdown .qe-save-destination{
+ flex-wrap:nowrap!important;gap:6px!important;
+ padding:7px 8px!important;align-items:center!important;
+ border-radius:8px!important;
+}
+#lastSavedEntry .qe-save-breakdown .qe-save-destination>strong{
+ flex:1 1 auto!important;min-width:0!important;
+ font-size:11.5px!important;overflow-wrap:anywhere!important;
+}
+#lastSavedEntry .qe-save-breakdown .qe-save-destination>small{
+ flex:0 0 100%!important;
+}
+#lastSavedEntry .qe-save-breakdown .qe-save-destination:has(>small){
+ flex-wrap:wrap!important;
+}
+#lastSavedEntry .qe-save-breakdown .qe-save-state{
+ flex:none!important;font-size:10px!important;padding:3px 7px!important;
+}
+#lastSavedEntry .qe-save-breakdown .qe-save-note{
+ padding:5px 9px 7px!important;font-size:10px!important;
+}
+#lastSavedEntry .qe-save-breakdown .qe-destination-caption{
+ padding:6px 9px 0!important;font-size:10.5px!important;
+}
+#lastSavedEntry .qe-save-breakdown .qe-family-verify-shortcut{
+ display:flex!important;margin:6px 8px 9px!important;
+ min-height:34px!important;padding:7px 9px!important;
+ font-size:11px!important;
+}
+@media(max-width:400px){
+ #lastSavedEntry:not([hidden]){padding:8px 9px!important}
+ #lastSavedEntry .qe-save-breakdown-toggle{font-size:11px!important;padding:7px 8px!important}
+ #lastSavedEntry .qe-save-breakdown .qe-save-destination>strong{font-size:11px!important}
+}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">📥</span><span class="qe-action-label">Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">🔄</span><span class="qe-action-label">Sync</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
@@ -2705,15 +2763,15 @@ const r=plannedSip?await api('sipPlanGuestSave',{grant:pinGrant,entry:{...data,c
  }
  else if(mode==='family'){
   const both=/saved to myfamily and sarni family expenses/i.test(responseMsg);
-  mark('MyFamily · Expenditure',both?'confirmed':'unverified',both?'MyFamily saving was confirmed by the backend response.':'The response did not independently confirm a MyFamily record. Use Sync → Verify recent.');
-  mark('SarNi · Family Expense copy',both?'confirmed':'unverified',both?'Both registers confirmed by the backend response.':'The response did not independently confirm the SarNi copy. Use Sync → Verify recent.');
+  mark('MyFamily · Expenditure',both?'confirmed':'unverified',both?'':'MyFamily delivery not confirmed by response. Use Verify recent.');
+  mark('SarNi · Family Expense copy',both?'confirmed':'unverified',both?'':'SarNi copy not confirmed by response. Use Verify recent.');
  }
  const detail=document.createElement('details');detail.className='qe-save-breakdown';
  const detailSummary=document.createElement('summary');detailSummary.className='qe-save-breakdown-toggle';
  const pendingDest=destination.querySelectorAll('.qe-save-state.pending').length;
  const unverifiedDest=destination.querySelectorAll('.qe-save-state.unverified').length;
  const destinationCount=destination.querySelectorAll('.qe-save-destination').length;
- detailSummary.textContent=destinationCount===1?'✓ Saved · View destination':pendingDest?'✓ Entry saved · '+pendingDest+' linked destination pending':unverifiedDest?'✓ Entry saved · '+unverifiedDest+' linked destination not verified':'✓ Save confirmed · View destinations';
+ detailSummary.textContent=mode==='family'&&destinationCount===2&&!pendingDest&&!unverifiedDest?'✓ MyFamily + SarNi confirmed · Details':destinationCount===1?'✓ Saved · Details':pendingDest?'✓ Saved · '+pendingDest+' sync pending · Details':unverifiedDest?'✓ Saved · '+unverifiedDest+' not verified · Details':'✓ Save confirmed · Details';
  detail.append(detailSummary);
  const destLabel=document.createElement('small');destLabel.className='qe-destination-caption';destLabel.textContent='Destination details';detail.append(destLabel,destination);
  const infoNote=document.createElement('small');infoNote.className='qe-save-note';infoNote.textContent='Statuses are based on the save response, not an independent live destination check.';detail.append(infoNote);
@@ -2728,9 +2786,10 @@ const r=plannedSip?await api('sipPlanGuestSave',{grant:pinGrant,entry:{...data,c
    if(panel.hidden)$('qeVerifyRecentButton').click();
    $('qeGlobalSyncPanel').scrollIntoView({behavior:'smooth',block:'start'});
   });
-  lastBox.append(verify);
+  detail.append(verify);
  }
- status(r.message||'✓ Saved successfully.');if(qeDraftTimer){clearTimeout(qeDraftTimer);qeDraftTimer=null;}qeClearDraft(mode);qeConfirmUncertainResubmission();if(qePhotoPending){const picture=qePhotoPending,photoStatus=document.createElement('small');photoStatus.className='qe-photo-save-progress';photoStatus.textContent='Photo queued for private Drive upload…';lastBox.append(photoStatus);const photoId=String(r?.entry?.id||r?.id||'');if(photoId){void qeUploadPhoto(picture,mode,photoId,photoStatus).catch(error=>{photoStatus.textContent='Entry saved. Photo upload result unconfirmed: '+error.message+'. Check Photos in Recent Entries before retrying to avoid duplicate attachments.';qeOfferPhotoRetry(picture,mode,photoId,photoStatus);});}else{photoStatus.textContent='Entry saved. Use Photos in Recent entries to attach the selected photo.';}}qeResetSubmissionIdentity();delete $('entry').dataset.editId;delete $('entry').dataset.pinRevision;delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;void loadRecent();void loadSipPlans();void loadQuickSyncSummary();HTMLFormElement.prototype.reset.call($('entry'));const dateField=$('fields').querySelector('[type=date]');if(dateField)dateField.value=today();if(mode==='family'){const familyCategory=$('fields').querySelector('#familyCategory'),familySubcategory=$('fields').querySelector('#familySubcategory');if(familyCategory){familyCategory.value='';familyCategory.dispatchEvent(new Event('change'));}if(familySubcategory)familySubcategory.value='';}if(mode==='expense'&&$('qeProject')){const remembered=readLastGroup();if([...$('qeProject').options].some(x=>x.value===remembered))$('qeProject').value=remembered;}}catch(err){const msg=String(err?.message||err||'Save was not confirmed.');const familySetup=mode==='family'&&(/MYFAMILY_DEFAULT_MEMBER_ID|active MyFamily member ID|configured MyFamily member/i.test(msg));const uncertain=/timed out|too long|network|connection reset|server could not complete/i.test(msg);qePendingUncertain=uncertain;qeConfirmUncertainResubmission();status(familySetup?'Family Expense needs a registered member: sign in to SarNi → Admin Settings → Quick Entry Links → MyFamily connection → select an active member → Save. Your entered details are retained.':msg+(uncertain?' The result is unconfirmed. Check destination before retrying; unchanged entries reuse the same submission ID.':''),true);}finally{busy=false;$('save').disabled=false;}};
+ status(r.message||'✓ Saved successfully.');
+ $('status').classList.add('qe-save-status-compact');if(qeDraftTimer){clearTimeout(qeDraftTimer);qeDraftTimer=null;}qeClearDraft(mode);qeConfirmUncertainResubmission();if(qePhotoPending){const picture=qePhotoPending,photoStatus=document.createElement('small');photoStatus.className='qe-photo-save-progress';photoStatus.textContent='Photo queued for private Drive upload…';lastBox.append(photoStatus);const photoId=String(r?.entry?.id||r?.id||'');if(photoId){void qeUploadPhoto(picture,mode,photoId,photoStatus).catch(error=>{photoStatus.textContent='Entry saved. Photo upload result unconfirmed: '+error.message+'. Check Photos in Recent Entries before retrying to avoid duplicate attachments.';qeOfferPhotoRetry(picture,mode,photoId,photoStatus);});}else{photoStatus.textContent='Entry saved. Use Photos in Recent entries to attach the selected photo.';}}qeResetSubmissionIdentity();delete $('entry').dataset.editId;delete $('entry').dataset.pinRevision;delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;void loadRecent();void loadSipPlans();void loadQuickSyncSummary();HTMLFormElement.prototype.reset.call($('entry'));const dateField=$('fields').querySelector('[type=date]');if(dateField)dateField.value=today();if(mode==='family'){const familyCategory=$('fields').querySelector('#familyCategory'),familySubcategory=$('fields').querySelector('#familySubcategory');if(familyCategory){familyCategory.value='';familyCategory.dispatchEvent(new Event('change'));}if(familySubcategory)familySubcategory.value='';}if(mode==='expense'&&$('qeProject')){const remembered=readLastGroup();if([...$('qeProject').options].some(x=>x.value===remembered))$('qeProject').value=remembered;}}catch(err){const msg=String(err?.message||err||'Save was not confirmed.');const familySetup=mode==='family'&&(/MYFAMILY_DEFAULT_MEMBER_ID|active MyFamily member ID|configured MyFamily member/i.test(msg));const uncertain=/timed out|too long|network|connection reset|server could not complete/i.test(msg);qePendingUncertain=uncertain;qeConfirmUncertainResubmission();status(familySetup?'Family Expense needs a registered member: sign in to SarNi → Admin Settings → Quick Entry Links → MyFamily connection → select an active member → Save. Your entered details are retained.':msg+(uncertain?' The result is unconfirmed. Check destination before retrying; unchanged entries reuse the same submission ID.':''),true);}finally{busy=false;$('save').disabled=false;}};
 (async()=>{try{await qeInitializeDrafts();if(!key){$('qePrivateLinkHelp').hidden=false;throw Error('Open your private link above to use SarNi Quick Entry. The installed app never embeds your secret token.');}if(!base)throw Error('Backend is not configured.');if(!navigator.onLine){status('Offline. Unlock Offline Queue to restore encrypted form options. Nothing will be sent until connected.');qeOfflineToggle(true);return;}const [mainResult,permissionResult]=await Promise.allSettled([api('qeInfo'),api('hubGuestInfo')]);if(mainResult.status!=='fulfilled')throw mainResult.reason;info=mainResult.value;try{const last=localStorage.getItem('sarni_q_last_tab_v1');if(['expense','diary','stock','office','investment','family'].includes(last))mode=last;}catch(_){}try{const requested=String(location.hash||'').replace(/^#/,'').toLowerCase();if(['expense','diary','stock','office','investment','family'].includes(requested))mode=requested;}catch(_){}if(permissionResult.status==='fulfilled'){const perms=permissionResult.value;hubAccess={allowOffice:!!perms.allowOffice,allowInvestment:!!perms.allowInvestment};}/* Display the tabs only after both permission checks finish: one stable, authorised layout. */await initializePinAccess();render();if(qeOfflineKey)qeOfflineCaptureBootstrap();$('restrictedEntry').hidden=true;void loadRecent();void loadSipPlans();void loadQuickSyncSummary();}catch(e){status(e.message,true);}})();
 })();
 </script></body></html>
