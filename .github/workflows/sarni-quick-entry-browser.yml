@@ -4,7 +4,11 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - "index.html"
       - "q/index.html"
+      - "sarni-health-bridge-v1.js"
+      - "sarni-health-history-v1.js"
+      - "quality/quick-entry-regression.mjs"
       - "quality/quick-entry-browser.spec.cjs"
       - ".github/workflows/sarni-quick-entry-browser.yml"
 
