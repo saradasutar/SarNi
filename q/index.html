@@ -2079,6 +2079,53 @@ main[data-entry-mode="family"]{
 #recentList .recent-sync-badge.is-failed{background:#fff0ed!important;color:#963f36!important;border:1px solid #edb8ad!important}
 #recentList .recent-sync-detail summary{cursor:pointer!important;font-size:11px!important;font-weight:750!important}
 #recentList .recent-sync-verification{display:block!important;overflow-wrap:anywhere!important;margin:7px 0!important;line-height:1.45!important}
+
+/* SarNi 9: family expense three-row field alignment v2 */
+/* Preserve form fields and backend names. Three compact paired rows. */
+main[data-entry-mode="family"] #entry #fields>.family-paired-row{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:8px!important;align-items:start!important;margin:5px 0!important;
+ padding:0!important;width:100%!important;max-width:100%!important;min-width:0!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-paired-row>div{
+ display:flex!important;flex-direction:column!important;min-width:0!important;max-width:100%!important;
+ gap:3px!important;margin:0!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-paired-row label{
+ display:block!important;font-size:12px!important;line-height:1.2!important;
+ font-weight:750!important;margin:0!important;white-space:nowrap!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-paired-row :is(input,select){
+ box-sizing:border-box!important;width:100%!important;max-width:100%!important;
+ min-width:0!important;min-height:40px!important;height:40px!important;
+ padding:6px 8px!important;border-radius:9px!important;
+ font-size:14px!important;line-height:1.25!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-paired-row input[type="date"]{
+ padding:5px!important;font-size:13px!important;
+}
+main[data-entry-mode="family"] #entry #familyCategoryHint{
+ margin:3px 0!important;font-size:11px!important;line-height:1.4!important;
+}
+main[data-entry-mode="family"] #qeFamilyPhotoActionsRow{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ align-items:start!important;gap:7px!important;min-width:0!important;
+}
+main[data-entry-mode="family"] #qeFamilyPhotoActionsRow>*,main[data-entry-mode="family"] #qeFamilyDetailsSlot{
+ min-width:0!important;max-width:100%!important;
+}
+main[data-entry-mode="family"] #qeFamilyPhotoActionsRow .qe-photo-disclosure,
+main[data-entry-mode="family"] #qeFamilyDetailsSlot summary{
+ min-height:38px!important;line-height:1.2!important;font-size:12px!important;
+}
+@media(max-width:400px){
+ main[data-entry-mode="family"] #entry #fields>.family-paired-row{gap:6px!important}
+ main[data-entry-mode="family"] #entry #fields>.family-paired-row :is(input,select){
+  min-height:38px!important;height:38px!important;font-size:13px!important;padding:5px 6px!important;
+ }
+ main[data-entry-mode="family"] #entry #fields>.family-paired-row label{font-size:11.5px!important}
+ main[data-entry-mode="family"] #qeFamilyPhotoActionsRow{gap:5px!important}
+}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">📥</span><span class="qe-action-label">Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">🔄</span><span class="qe-action-label">Sync</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
