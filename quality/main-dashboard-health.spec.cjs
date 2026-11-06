@@ -24,14 +24,18 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:320
    for(const id of ['diarySection','calendarSection','expenditureSection','adminPhotoManager']){
     await expect(page.locator('#'+id)).toHaveCount(1);
    }
-   // New additive main-dashboard enhancements exist even before sign-in.
-   await expect(page.locator('#sarni10Nav')).toHaveCount(1);
-   await expect(page.locator('#sarni10Nav button[data-sarni10-section]')).toHaveCount(4);
-   await expect(page.locator('#sarni10ScrollProgress')).toHaveCount(1);
-   await expect(page.locator('#sarni10BackTop')).toHaveCount(1);
-   await expect(page.locator('.sarni10-keyboard-help')).toHaveCount(1);
-   await expect(page.locator('#sarni10ActiveStatus')).toHaveAttribute('aria-live','polite');
-   // Both assets are local; smoke checks do not open protected sections.
+   // SarNi 10: one consolidated dashboard module finder, without authentication.
+   await expect(page.locator('#sarni10Workspace')).toHaveCount(1);
+   await expect(page.locator('#sarni10ModuleSearch')).toHaveCount(1);
+   await expect(page.locator('#sarni10ModuleResults')).toHaveCount(1);
+   await expect(page.locator('#sarni10Favorites')).toHaveCount(1);
+   await expect(page.locator('#sarni10Recent')).toHaveCount(1);
+   await expect(page.locator('#sarni10Breadcrumb')).toHaveCount(1);
+   await expect(page.locator('#sarni10Density')).toHaveCount(1);
+   await expect(page.locator('#sarni10Top')).toHaveCount(1);
+   await expect(page.locator('link[href^="./sarni10-main-workspace.css"]')).toHaveCount(1);
+   // No duplicate dynamic navigation should appear on the unauthenticated shell.
+   await expect(page.locator('#sarni10Nav,#sarni10JumpBar,#sarni10Tools')).toHaveCount(0);
    // Tests run on the public login shell: never log in, change credentials, or save records.
    // All off-origin requests (including any backend POSTs) were intercepted and aborted.
    expect(blocked.every(x=>x.origin!=='http://127.0.0.1:8765')).toBe(true);
