@@ -1911,20 +1911,7 @@ main[data-entry-mode="expense"] #qeFamilyDetailsSlot #qeDebited{
 #tabs button.qe-premium-tab.selected[aria-pressed="false"]::after{
  content:none!important;display:none!important;
 }
-#tabs button.qe-premium-tab[aria-pressed="true"]{
- border-color:var(--tab-color)!important;
- box-shadow:inset 0 0 0 1.2px var(--tab-color),0 3px 8px #23493519!important;
-}
-#tabs button.qe-premium-tab[aria-pressed="true"]::after{
- content:'✓'!important;position:absolute!important;
- top:-4px!important;right:-3px!important;
- display:grid!important;place-items:center!important;
- width:15px!important;height:15px!important;
- border-radius:50%!important;border:1px solid #fff!important;
- background:var(--tab-color)!important;color:#fff!important;
- font-size:9px!important;font-weight:900!important;line-height:1!important;
- box-shadow:0 2px 5px #0002!important;
-}
+/* Active checkmark geometry lives in SarNi 9's final aria-pressed rules below. */
 #tabs button.qe-premium-tab[aria-pressed="false"]{
  box-shadow:0 2px 5px #123d2a10!important;
 }
@@ -1975,8 +1962,7 @@ main[data-entry-mode="family"]{
 /* Section 39: qe-compact-paired-rows-repair-v1 */
 /* Reaffirm compact two-column fields without depending on stale tab theme state. */
 #entry #fields>.qe-expense-paid-row,
-#entry #fields>.qe-expense-main-details,
-#entry #fields>.family-paired-row{
+#entry #fields>.qe-expense-main-details{
  display:grid!important;
  grid-template-columns:repeat(2,minmax(0,1fr))!important;
  width:100%!important;min-width:0!important;
@@ -1984,14 +1970,12 @@ main[data-entry-mode="family"]{
  align-items:start!important;
 }
 #entry #fields>.qe-expense-paid-row>div,
-#entry #fields>.qe-expense-main-details>div,
-#entry #fields>.family-paired-row>div{
+#entry #fields>.qe-expense-main-details>div{
  box-sizing:border-box!important;
  min-width:0!important;max-width:100%!important;
 }
 #entry #fields>.qe-expense-paid-row :is(input,select),
-#entry #fields>.qe-expense-main-details :is(input,select),
-#entry #fields>.family-paired-row :is(input,select){
+#entry #fields>.qe-expense-main-details :is(input,select){
  box-sizing:border-box!important;
  min-width:0!important;max-width:100%!important;width:100%!important;
 }
@@ -2006,11 +1990,9 @@ main[data-entry-mode="family"]{
 @media(max-width:420px){
  #entry #fields>.qe-expense-paid-row,
  #entry #fields>.qe-expense-main-details,
- #entry #fields>.family-paired-row,
  #entry #fields>.grid{column-gap:6px!important;row-gap:8px!important;}
  #entry #fields>.qe-expense-paid-row label,
- #entry #fields>.qe-expense-main-details label,
- #entry #fields>.family-paired-row label{font-size:12px!important}
+ #entry #fields>.qe-expense-main-details label{font-size:12px!important}
 }
 
 /* SarNi 9: accessible compact tab selection repair (2026-11-06) */
