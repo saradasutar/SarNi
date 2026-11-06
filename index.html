@@ -497,6 +497,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 @media(max-width:350px){.sarni-main-health-grid{grid-template-columns:1fr}}
 </style>
 
+<link rel="stylesheet" href="./sarni10-main-workspace.css?v=20261107-2">
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
@@ -616,14 +617,6 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
  </div>
 </section>
 <button type="button" id="sarni10Top" hidden aria-label="Back to top">↑ Top</button>
-<!-- SarNi 10: responsive, read-only workspace controls -->
-<div id="sarni10ScrollProgress" aria-hidden="true"><div id="sarni10Progress" role="progressbar" aria-label="Page scroll progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>
-<section id="sarni10WorkspaceBar" aria-label="Quick workspace navigation">
- <div class="sarni10-bar-top"><strong id="sarni10CurrentSection" class="sarni10-current">Viewing: Home</strong><div class="sarni10-meta"><span id="sarni10NetworkStatus" title="Browser status only">Checking network</span><button id="sarni10HelpToggle" type="button" aria-controls="sarni10ShortcutHelp" aria-expanded="false">⌨ Shortcuts</button></div></div>
- <nav id="sarni10Jump" class="sarni10-jump" aria-label="Jump to dashboard sections"></nav>
- <div id="sarni10ShortcutHelp" class="sarni10-shortcuts" hidden>Navigate: <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd> Home · <kbd>D</kbd> Diary · <kbd>E</kbd> Expense · <kbd>C</kbd> Calendar. Press Esc to close.</div>
-</section>
-<button type="button" id="sarni10BackTop" aria-label="Back to page top" hidden>↑ Top</button>
 <!-- SarNi Main Dashboard Health v1 -->
 <details id="sarniMainHealth" class="sarni-main-health">
  <summary><span>♡ Dashboard Health</span><small id="sarniMainHealthBrief">Select to inspect</small></summary>
@@ -2443,8 +2436,9 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script defer src="./sarni-mytrip-popup-v20-10-3.js?v=20103"></script>
 <script defer src="./sarni-entry-photos-v1.js?v=20261103-quick-entry-photo"></script>
 <script defer src="./diary-hub-launcher.js?v=20261101-admincollapse2"></script>
-<link rel="stylesheet" href="./sarni-main-batch10.css?v=20261107-2"/>
-<script defer src="./sarni-main-batch10.js?v=20261107-2"></script>
+
+
+<script defer src="./sarni10-main-workspace.js?v=20261107-2"></script>
 <script src="./sarni-health-bridge-v1.js"></script><script src="./sarni-health-history-v1.js"></script>
 <script id="sarni-main-health-script">
 /* Read-only: never calls private APIs, performs writes, or stores results. */
