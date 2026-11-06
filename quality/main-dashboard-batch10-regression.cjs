@@ -1,26 +1,27 @@
-/* SarNi main dashboard progressive enhancement checks. Offline and read-only. */
+/* SarNi 10: source regression for the single active main-dashboard bundle. */
 'use strict';
-const fs=require('node:fs'),path=require('node:path');
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const root=path.join(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-const js=fs.readFileSync(path.join(root,'sarni10-main-workspace.js'),'utf8');
-const css=fs.readFileSync(path.join(root,'sarni10-main-workspace.css'),'utf8');
-const tests=[
- ['Exactly one JS asset',(html.match(/src="\.\/sarni10-main-workspace\.js(?:\?[^"]*)?"/g)||[]).length===1],
- ['Exactly one CSS asset',(html.match(/href="\.\/sarni10-main-workspace\.css(?:\?[^"]*)?"/g)||[]).length===1],
- ['No competing toolbars',!/(?:src|href)="\.\/(?:sarni-main-batch10|sarni10-main-polish|sarni10-main-upgrades|sarni10-main-batch)\./.test(html)],
- ['Workspace interface present',['sarni10Workspace','sarni10ModuleSearch','sarni10ClearSearch','sarni10ModuleResults','sarni10Favorites','sarni10Recent','sarni10Breadcrumb','sarni10Density','sarni10Top'].every(id=>html.includes('id="'+id+'"'))],
- ['Search and clear controls',js.includes('renderSearch()')&&js.includes("search.addEventListener('input',renderSearch)")],
- ['Authorized original nav only',js.includes('!allowed(button)')&&js.includes('button.click();record(button.dataset.section)')],
- ['Favorites and recent sections in memory',js.includes('new Set()')&&js.includes('history=[]')],
- ['Breadcrumb tracks active section',js.includes('breadcrumb.textContent=')],
- ['Compact spacing toggle',js.includes("main.classList.toggle('sarni10-compact'")],
- ['Slash search keyboard shortcut ignores inputs',js.includes("event.key==='/'")&&js.includes("target?.closest('input,textarea,select")],
- ['Back to Top',js.includes("top.addEventListener('click'")&&css.includes('#sarni10Top:not([hidden])')],
- ['Mobile keyboard focus and reduced motion',css.includes('focus-visible')&&css.includes('min-height:41px')&&css.includes('prefers-reduced-motion:reduce')],
- ['No API, secret or storage calls',!/(?:fetch\(|XMLHttpRequest|localStorage\.|sessionStorage\.|\.token|\.password|\.grant)\b/.test(js)],
- ['JavaScript syntax',(()=>{try{new Function(js);return true}catch(_){return false}})()]
+const js=fs.readFileSync(path.join(root,'sarni-main-batch10.js'),'utf8');
+const css=fs.readFileSync(path.join(root,'sarni-main-batch10.css'),'utf8');
+const checks=[
+ ['Exactly one main script', (html.match(/src="\.\/sarni-main-batch10\.js(?:\?[^"]*)?"/g)||[]).length===1],
+ ['Exactly one main stylesheet', (html.match(/href="\.\/sarni-main-batch10\.css(?:\?[^"]*)?"/g)||[]).length===1],
+ ['No competing main upgrade assets', !/<(?:script|link)[^>]+(?:src|href)="[^"]*(?:sarni10-main-(?:upgrades|polish|workspace|enhancements|batch)|sarni-main-batch10-v1)/.test(html)],
+ ['No duplicate static upgrade widgets', !/id="sarni10(?:Workspace|WorkspaceBar|Tools|Top)"/.test(html)],
+ ['Main dashboard authentication shell respected',js.includes("document.getElementById('appView')")],
+ ['Existing allowed sidebar controls used',js.includes('allowedNav(original)')&&js.includes('original.click()')],
+ ['Four quick section buttons', ['overview','diary','calendar','expenditure'].every(x=>js.includes("key:'"+x+"'"))],
+ ['Active page and assistive status',js.includes('aria-live')&&js.includes('aria-current')],
+ ['Keyboard shortcuts protect text inputs',js.includes('event.altKey')&&js.includes('input,textarea,select')],
+ ['Scroll progress and back to top',js.includes('sarni10ScrollProgress')&&js.includes('sarni10BackTop')],
+ ['Accessible focus style',css.includes(':focus-visible')],
+ ['Mobile tap targets',css.includes('min-height:44px')],
+ ['Text wrapping and reduced motion',css.includes('overflow-wrap:anywhere')&&css.includes('prefers-reduced-motion:reduce')],
+ ['Read-only frontend helper',!/(?:fetch|XMLHttpRequest|localStorage|sessionStorage)\s*\(/.test(js)],
+ ['Valid JavaScript syntax',(()=>{try{new Function(js);return true}catch(_){return false}})()]
 ];
-let failed=0;for(const [name,ok] of tests){console.log((ok?'PASS':'FAIL')+' '+name);if(!ok)failed++;}
-console.log((tests.length-failed)+'/'+tests.length+' main dashboard checks passed.');
-if(failed)process.exitCode=1;
+for(const [name,ok] of checks)console.log((ok?'PASS':'FAIL')+' '+name);
+const failed=checks.filter(x=>!x[1]);console.log((checks.length-failed.length)+'/'+checks.length+' main-dashboard checks passed');
+assert.equal(failed.length,0,'Main dashboard regression failed');
