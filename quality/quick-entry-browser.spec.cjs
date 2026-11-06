@@ -14,6 +14,7 @@ for (const viewport of scenarios) {
   test.use({ viewport: { width:viewport.width, height:viewport.height }, serviceWorkers:'block', screenshot:'only-on-failure', trace:'retain-on-failure' });
   test('six tabs, form layout and safe navigation', async ({ page }) => {
    const errors=[];
+   const attemptedWrites=[];
    page.on('pageerror',error => errors.push(error.message));
    await page.route('**/config.js', route => route.fulfill({
     status:200, contentType:'application/javascript',
@@ -32,7 +33,10 @@ for (const viewport of scenarios) {
      qpinRecent: {entries:[],hasMore:false},
      sipPlanGuestList: {plans:[]}
     };
-    const response={ok:true,...(responses[request.action]||{})};
+    // Fail closed: unknown actions must never be silently treated as successful.
+    const isRead=Object.prototype.hasOwnProperty.call(responses,request.action);
+    if(!isRead) attemptedWrites.push(request.action||'(missing action)');
+    const response=isRead?{ok:true,...responses[request.action]}:{ok:false,message:'Unmocked or write action blocked by browser regression fixture'};
     // Simulate the deployed Apps Script iframe message protocol.
     const markup='<html><body><script>parent.postMessage('+JSON.stringify({
      __myfinanceDirectResult:true,requestId:request.requestId,payload:response
@@ -57,7 +61,7 @@ for (const viewport of scenarios) {
     }));
     expect(layout.scroll).toBeLessThanOrEqual(layout.viewport+2);
     expect(layout.visible).toBe(6);
-    if (viewport.width>=340) expect(layout.tabs).toBe(3);
+    expect(layout.tabs).toBe(3);
     if (mode==='family') {
      await expect(page.locator('#fields .family-paired-row')).toHaveCount(3);
      const cols=await page.locator('#fields .family-paired-row').first().evaluate(x=>getComputedStyle(x).gridTemplateColumns.split(' ').length);
@@ -68,6 +72,7 @@ for (const viewport of scenarios) {
      await expect(page.locator('#qeCompletionRemark')).toHaveCount(1);
     }
    }
+   expect(attemptedWrites).toEqual([]);
    expect(errors).toEqual([]);
   });
  });
