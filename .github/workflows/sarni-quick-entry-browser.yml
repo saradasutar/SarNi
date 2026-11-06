@@ -10,6 +10,7 @@ on:
       - "sarni-health-history-v1.js"
       - "quality/quick-entry-regression.mjs"
       - "quality/quick-entry-browser.spec.cjs"
+      - "quality/main-dashboard-health.spec.cjs"
       - ".github/workflows/sarni-quick-entry-browser.yml"
 
 permissions:
@@ -41,7 +42,7 @@ jobs:
           done
           exit 1
       - name: Run six-tab browser regression (mock backend; no real submissions)
-        run: npx playwright test quality/quick-entry-browser.spec.cjs --workers=1 --reporter=line
+        run: npx playwright test quality/quick-entry-browser.spec.cjs quality/main-dashboard-health.spec.cjs --workers=1 --reporter=line
         env:
           CI: 'true'
       - name: Record results
