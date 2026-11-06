@@ -1,0 +1,40 @@
+/* SarNi Main Dashboard: additive UX batch (10 improvements) */
+#sarni10Nav.sarni10-nav{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:9px 12px;margin:7px 10px 5px;border:1px solid #d6e6df;border-radius:13px;background:linear-gradient(115deg,#f6fbf8,#f6f9fd);max-width:calc(100% - 20px);min-width:0}
+#sarni10Nav .sarni10-nav-title{font-size:10px;font-weight:850;letter-spacing:.07em;color:#648070;margin-right:3px}
+#sarni10Nav .sarni10-nav-button{min-height:38px;padding:8px 12px;border-radius:10px;border:1px solid #cfdfd6;background:#fff;color:#315c48;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+#sarni10Nav .sarni10-nav-button.is-current{background:#e4f3ea;color:#155639;border-color:#8bc6a5;box-shadow:inset 0 0 0 1px #90c7a9}
+#sarni10Nav .sarni10-nav-button:hover{background:#e8f6ef}
+.sarni10-screen-reader{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.sarni10-keyboard-help{margin:0 12px 9px;color:#667c71;font-size:11px}
+.sarni10-keyboard-help summary{cursor:pointer;font-size:11px;font-weight:750;width:max-content;max-width:100%;padding:4px 5px}
+.sarni10-keyboard-help p{margin:4px 0 8px;padding:8px 10px;max-width:620px;border-radius:8px;background:#f6faf8;line-height:1.55}
+/* 4. Read-only section progress */
+#sarni10ScrollProgress{position:sticky;top:0;height:3px;width:100%;z-index:18;pointer-events:none;background:transparent}
+#sarni10ScrollProgress .sarni10-scroll-progress-fill{width:0;height:100%;background:#279764;transition:width .12s linear;border-radius:0 3px 3px 0}
+/* 5. Return to start of long dashboards */
+#sarni10BackTop:not([hidden]){position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(15px,env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;justify-content:center;min-width:66px;min-height:44px;padding:9px 12px;border:1px solid #a8cfb8;border-radius:999px;background:#eff9f1;color:#19593c;font-size:12px;font-weight:850;box-shadow:0 5px 16px #163c2926;cursor:pointer}
+#sarni10BackTop[hidden]{display:none!important}
+/* 7. Strong keyboard focus indicators for existing navigation and form controls */
+#appView .side-nav .nav-item:focus-visible,#appView .topbar button:focus-visible,
+#appView .page-section :is(button,select,input,textarea,summary):focus-visible,
+#sarni10Nav button:focus-visible,.sarni10-keyboard-help summary:focus-visible,
+#sarni10BackTop:focus-visible{outline:3px solid #158358!important;outline-offset:2px!important}
+/* 8. Touch-friendly mobile navigation and essential actions */
+@media(max-width:640px){
+ #sarni10Nav.sarni10-nav{margin:5px 5px;padding:8px;gap:6px;max-width:calc(100% - 10px)}
+ #sarni10Nav .sarni10-nav-title{flex-basis:100%;font-size:10px}
+ #sarni10Nav .sarni10-nav-button{min-height:44px;padding:9px 11px;flex:1 1 calc(50% - 7px);font-size:12px;touch-action:manipulation}
+ #appView .page-section .primary-button,#appView .page-section .secondary-button{min-height:42px;touch-action:manipulation}
+ #sarni10BackTop:not([hidden]){right:10px;bottom:max(12px,env(safe-area-inset-bottom))}
+}
+/* 9. Protect dashboard text and cards against overflow at narrow widths */
+#appView .page-section :is(.life-card,.expense-hero,.diary-hero,.sarni-focus-shell){min-width:0;max-width:100%;overflow-wrap:anywhere}
+#sarni10Nav{overflow-wrap:anywhere}
+/* 10. Reduced motion and cleaner browser printing */
+@media(prefers-reduced-motion:reduce){
+ #sarni10ScrollProgress .sarni10-scroll-progress-fill{transition:none!important}
+ #sarni10Nav *,#sarni10BackTop{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+@media print{
+ #sarni10Nav,.sarni10-keyboard-help,#sarni10ScrollProgress,#sarni10BackTop{display:none!important}
+}
