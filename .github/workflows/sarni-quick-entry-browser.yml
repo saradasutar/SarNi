@@ -22,6 +22,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Source regression checks (no backend calls)
+        run: node quality/quick-entry-regression.mjs
       - name: Install browser test runtime (isolated)
         run: |
           npm install --no-save --no-package-lock @playwright/test@1.56.1
