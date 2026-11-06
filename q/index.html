@@ -1598,6 +1598,54 @@ main[data-entry-mode="family"] #qeFamilyPayExpanded small{
 main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summary{
  min-height:39px!important;white-space:nowrap!important;
 }
+</style><style id="qe-expense-compact-more-v1">
+/* Expense tab only: compact 2x2 details fields with optional separate notes. */
+main[data-entry-mode="expense"] #fields>.qe-expense-more>.advanced-body{padding:10px!important}
+main[data-entry-mode="expense"] #fields .qe-expense-paired-grid{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ column-gap:10px!important;row-gap:10px!important;align-items:start!important;
+}
+main[data-entry-mode="expense"] #fields .qe-expense-cell{min-width:0!important;max-width:100%!important}
+main[data-entry-mode="expense"] #fields .qe-expense-cell label{
+ display:block!important;min-height:0!important;margin:0 0 5px!important;
+ font-size:12px!important;font-weight:750!important;line-height:1.3!important;
+ white-space:normal!important;
+}
+main[data-entry-mode="expense"] #fields .qe-expense-cell :is(select,input){
+ display:block!important;box-sizing:border-box!important;
+ width:100%!important;min-width:0!important;max-width:100%!important;
+ height:44px!important;min-height:44px!important;margin:0!important;
+ padding:7px 8px!important;border-radius:9px!important;font-size:15px!important;
+}
+main[data-entry-mode="expense"] #fields .qe-expense-group-hint{
+ display:block!important;margin:7px 0 0!important;
+ color:#74837b!important;font-size:10.5px!important;line-height:1.4!important;
+}
+main[data-entry-mode="expense"] #fields .qe-expense-notes-details{
+ display:block!important;margin:10px 0 0!important;
+ border:1px solid #cde2d4!important;border-radius:10px!important;
+ background:#f8fcf9!important;
+}
+main[data-entry-mode="expense"] #fields .qe-expense-notes-details>summary{
+ display:flex!important;align-items:center!important;min-height:39px!important;
+ padding:7px 10px!important;cursor:pointer!important;
+ font-size:12px!important;font-weight:750!important;
+}
+main[data-entry-mode="expense"] #fields .qe-expense-notes-body{padding:0 10px 10px!important}
+main[data-entry-mode="expense"] #fields .qe-expense-notes-body label{
+ display:block!important;margin:0 0 5px!important;
+ font-size:12px!important;font-weight:700!important;
+}
+main[data-entry-mode="expense"] #fields .qe-expense-notes-body textarea{
+ display:block!important;width:100%!important;min-height:64px!important;
+ box-sizing:border-box!important;font-size:15px!important;line-height:1.4!important;
+}
+@media(max-width:390px){
+ main[data-entry-mode="expense"] #fields>.qe-expense-more>.advanced-body{padding:8px!important}
+ main[data-entry-mode="expense"] #fields .qe-expense-paired-grid{column-gap:6px!important;row-gap:9px!important}
+ main[data-entry-mode="expense"] #fields .qe-expense-cell label{font-size:11px!important;line-height:1.3!important}
+ main[data-entry-mode="expense"] #fields .qe-expense-cell :is(select,input){font-size:14px!important;padding:6px!important}
+}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">📥</span><span class="qe-action-label">Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">🔄</span><span class="qe-action-label">Sync</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
@@ -2100,12 +2148,17 @@ function render(){
  '<label for="qeReason">What was it for?</label><input id="qeReason" name="reason" maxlength="220" required placeholder="e.g. Lunch, groceries, taxi">'+
  '<label for="qePaidBy">Paid by / from</label><input id="qePaidBy" name="paidBy" maxlength="100" required placeholder="Cash, UPI, card or name">'+
  '<div class="grid"><div><label for="qeCategory">Category</label><select id="qeCategory" name="category" required><option value="">Choose category</option>'+opts+'</select><button type="button" id="qeRefreshHeads" class="qe-refresh-heads">↻ Refresh Heads</button><small id="qeHeadHint" class="qe-head-hint">Missing a category? Refresh this list.</small></div><div><label for="qeDate">Date</label><input id="qeDate" name="dateSpent" type="date" value="'+today()+'" required></div></div>'+
- '<details class="advanced"><summary>More expense details <span>⌄</span></summary><div class="advanced-body">'+
- '<label for="qeSub">Subcategory</label><select id="qeSub" name="subcategory"><option value="">None</option></select>'+
+ '<details class="advanced qe-expense-more"><summary>More expense details <span>⌄</span></summary><div class="advanced-body">'+
+ '<div class="qe-expense-paired-grid">'+
+   '<div class="qe-expense-cell"><label for="qeSub">Subcategory</label><select id="qeSub" name="subcategory"><option value="">None</option></select></div>'+
+   '<div class="qe-expense-cell"><label for="qeProject">Expense Group / Project</label><select id="qeProject" name="majorProjectId"><option value="">No group</option></select></div>'+
+   '<div class="qe-expense-cell"><label for="qePaidTo">Paid to</label><input id="qePaidTo" name="paidTo" maxlength="140" placeholder="Shop / person"></div>'+
+   '<div class="qe-expense-cell"><label for="qeDebited">Debited from (optional)</label><input id="qeDebited" name="debitedFrom" maxlength="100" placeholder="Bank / wallet"></div>'+
+ '</div>'+
  '<div id="newHeadToggle" hidden><button type="button" id="newHeadBtn">＋ New category</button></div><div id="newHeadBox" hidden><label>New category<input id="newHeadName" maxlength="79" placeholder="e.g. Transport"></label></div>'+
- '<label for="qeProject">Expense Group / Project</label><select id="qeProject" name="majorProjectId"><option value="">No group</option></select><small>Only active groups are selectable. Closed groups remain available in reports.</small>'+ '<label for="qePaidTo">Paid to</label><input id="qePaidTo" name="paidTo" maxlength="140">'+
- '<label for="qeDebited">Debited from (optional)</label><input id="qeDebited" name="debitedFrom" maxlength="100">'+
- '<label for="qeNotes">Notes</label><textarea id="qeNotes" name="notes" rows="2" maxlength="700"></textarea></div></details>';
+ '<small class="qe-expense-group-hint">Only active groups can be selected.</small>'+
+ '<details class="qe-expense-notes-details"><summary>＋ Notes (optional)</summary><div class="qe-expense-notes-body"><label for="qeNotes">Additional notes</label><textarea id="qeNotes" name="notes" rows="2" maxlength="700" placeholder="Only if you need extra information"></textarea></div></details>'+
+ '</div></details>';
  const category=$('qeCategory'),sub=$('qeSub');const groupSelect=$('qeProject');const activeGroups=(info.expenseGroups||[]).filter(x=>['ACTIVE','PLANNED'].includes(String(x.status||'ACTIVE').toUpperCase()));activeGroups.forEach(x=>groupSelect.add(new Option(x.name,x.id)));const lastGroup=readLastGroup();if(activeGroups.some(x=>String(x.id)===lastGroup))groupSelect.value=lastGroup;
  const reloadHeads=$('qeRefreshHeads');
  reloadHeads.onclick=async()=>{
