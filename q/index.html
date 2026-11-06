@@ -1249,6 +1249,72 @@ main[data-entry-mode="family"] #entry .actions .save{
  main[data-entry-mode="family"] #entry #fields>.family-amountbox{min-height:55px!important}
  main[data-entry-mode="family"] #entry .actions .save{font-size:13px!important}
 }
+</style><style id="qe-family-three-paired-rows-v1">
+/* Family Expense paired fields stay in three rows on mobile. Only this tab is affected. */
+main[data-entry-mode="family"] #entry #fields>.family-paired-row{
+ box-sizing:border-box!important;
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:9px!important;
+ width:100%!important;min-width:0!important;
+ margin:9px 0 0!important;align-items:end!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-paired-row>div{
+ min-width:0!important;width:100%!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-paired-row label{
+ display:block!important;
+ margin:0 0 5px!important;
+ font-size:12.5px!important;
+ line-height:1.25!important;
+ font-weight:750!important;
+ white-space:nowrap!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-paired-row :is(input,select){
+ display:block!important;box-sizing:border-box!important;
+ width:100%!important;min-width:0!important;max-width:100%!important;
+ height:44px!important;min-height:44px!important;
+ padding:8px 9px!important;margin:0!important;
+ border-radius:10px!important;
+ font-size:16px!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-paired-row :is(input,select):focus-visible{
+ outline:2px solid var(--mode-accent,#67449e)!important;outline-offset:2px!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-date-details-row{align-items:end!important;}
+main[data-entry-mode="family"] #entry #fields>.family-date-details-row .family-more-details{
+ box-sizing:border-box!important;
+ display:block!important;margin:0!important;width:100%!important;
+ min-width:0!important;border-radius:10px!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-date-details-row .family-more-details summary{
+ box-sizing:border-box!important;min-height:44px!important;
+ padding:9px 7px!important;display:flex!important;
+ align-items:center!important;justify-content:space-between!important;
+ gap:3px!important;font-size:11.5px!important;
+ font-weight:750!important;line-height:1.1!important;
+ white-space:nowrap!important;letter-spacing:-.2px!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-date-details-row .family-more-details summary span{
+ flex:none!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-date-details-row .family-more-details .advanced-body{
+ padding:8px!important;min-width:0!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-date-details-row .family-more-details .advanced-body small{
+ display:block!important;font-size:11px!important;line-height:1.45!important;
+ white-space:normal!important;overflow-wrap:anywhere!important;
+}
+@media(max-width:390px){
+ main[data-entry-mode="family"] #entry #fields>.family-paired-row{gap:6px!important;}
+ main[data-entry-mode="family"] #entry #fields>.family-paired-row label{font-size:12px!important;}
+ main[data-entry-mode="family"] #entry #fields>.family-paired-row :is(input,select){
+  padding:7px 5px!important;font-size:15px!important;
+ }
+ main[data-entry-mode="family"] #entry #fields>.family-date-details-row .family-more-details summary{
+  font-size:10.5px!important;padding:7px 5px!important;
+ }
+}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">◷</span><span class="qe-action-label">Offline Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">↻</span><span class="qe-action-label">Sync Status</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
@@ -1671,11 +1737,20 @@ function render(){
   $('fields').innerHTML=
   '<label for="familyAmount">Amount (₹)</label><div class="amountbox family-amountbox"><span aria-hidden="true">₹</span><input id="familyAmount" name="amount" type="number" inputmode="decimal" min="0.01" max="100000" step=".01" required placeholder="0.00"></div>'+
   '<label for="familyReason">What was it for?</label><input id="familyReason" name="reason" maxlength="500" required placeholder="e.g. Groceries, medicine, transport">'+
-  '<label for="familyPaidBy">Paid by / from</label><input id="familyPaidBy" name="paidByName" maxlength="80" required placeholder="Name of person who paid">'+
-  '<div class="grid family-core-grid"><div><label for="familyCategory">Category</label><select id="familyCategory" name="category" required><option value="">Loading MyFamily categories…</option></select></div><div><label for="familyDate">Date</label><input id="familyDate" name="date" type="date" value="'+today()+'" required></div></div>'+
-  '<div class="grid family-secondary-grid"><div><label for="familySubcategory">Subcategory</label><select id="familySubcategory" name="subcategory" required><option value="">Choose category first</option></select></div><div><label for="familySentTo">Paid to</label><input id="familySentTo" name="sentTo" maxlength="100" required placeholder="Shop / person"></div></div>'+
-  '<p id="familyCategoryHint" class="family-expense-hint" aria-live="polite">Loading your MyFamily expense heads…</p>'+
-  '<details class="advanced family-more-details"><summary>More payment details <span aria-hidden="true">⌄</span></summary><div class="advanced-body"><label for="familyFromAccount">Payment method</label><input id="familyFromAccount" name="fromAccount" maxlength="100" value="Cash / UPI" placeholder="Cash, UPI, card or account"><small>Optional. Default remains Cash / UPI.</small></div></details>';
+  '<label for="familySentTo">Paid to</label><input id="familySentTo" name="sentTo" maxlength="100" required placeholder="Shop / person">'+
+  '<div class="family-paired-row family-payment-row">'+
+    '<div><label for="familyPaidBy">Paid by</label><input id="familyPaidBy" name="paidByName" maxlength="80" required placeholder="Person who paid"></div>'+
+    '<div><label for="familyFromAccount">Paid from</label><input id="familyFromAccount" name="fromAccount" maxlength="100" value="Cash / UPI" placeholder="Cash, UPI, card or account"></div>'+
+  '</div>'+
+  '<div class="family-paired-row family-category-row">'+
+    '<div><label for="familyCategory">Category</label><select id="familyCategory" name="category" required><option value="">Loading MyFamily categories…</option></select></div>'+
+    '<div><label for="familySubcategory">Subcategory</label><select id="familySubcategory" name="subcategory" required><option value="">Choose category first</option></select></div>'+
+  '</div>'+
+  '<div class="family-paired-row family-date-details-row">'+
+    '<div><label for="familyDate">Date</label><input id="familyDate" name="date" type="date" value="'+today()+'" required></div>'+
+    '<div class="family-extra-col"><details class="advanced family-more-details"><summary>More payment details <span aria-hidden="true">⌄</span></summary><div class="advanced-body"><small>Paid by, Paid from and Paid to are shown above. Enter the payment source in Paid from (Cash, UPI, card or account).</small></div></details></div>'+
+  '</div>'+
+  '<p id="familyCategoryHint" class="family-expense-hint" aria-live="polite">Loading your MyFamily expense heads…</p>';
   $('save').hidden=false;$('reset').hidden=false;$('save').textContent='Save & Add Another';
   status('');
   const form=$('entry'),cat=form.elements.namedItem('category'),sub=form.elements.namedItem('subcategory'),hint=$('familyCategoryHint');
