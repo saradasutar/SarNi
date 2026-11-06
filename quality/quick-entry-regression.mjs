@@ -9,8 +9,8 @@ import { exit } from 'node:process';
 
 const source = readFileSync(new URL('../q/index.html', import.meta.url), 'utf8');
 const mainDashboard = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
-const mainBatchJs = readFileSync(new URL('../sarni-main-batch10.js', import.meta.url), 'utf8');
-const mainBatchCss = readFileSync(new URL('../sarni-main-batch10.css', import.meta.url), 'utf8');
+const mainBatchJs = readFileSync(new URL('../sarni10-main-workspace.js', import.meta.url), 'utf8');
+const mainBatchCss = readFileSync(new URL('../sarni10-main-workspace.css', import.meta.url), 'utf8');
 const bridge = readFileSync(new URL('../sarni-health-bridge-v1.js', import.meta.url), 'utf8');
 const history = readFileSync(new URL('../sarni-health-history-v1.js', import.meta.url), 'utf8');
 const batch10Js = readFileSync(new URL('../q/sarni9-batch10.js', import.meta.url), 'utf8');
@@ -68,6 +68,9 @@ check('Character counter excludes short fields', batch10Js.includes("qeActiveFie
 check('Responsive accessibility finishes and Back to Top present', batch10Css.includes('prefers-reduced-motion:reduce') && batch10Css.includes('focus-visible') && batch10Css.includes('min-height:46px') && batch10Css.includes('overflow-wrap:anywhere') && batch10Js.includes("id='qeBackToTop'"));
 check('Ten-upgrade helper contains no network or storage operations', !/(?:fetch|localStorage|sessionStorage|XMLHttpRequest)\s*\(/.test(batch10Js));
 check('SarNi main uses exactly one approved enhancement pair', (()=>{const names=['sarni-main-batch10','sarni10-main-polish','sarni10-main-upgrades','sarni10-main-batch','sarni10-main-workspace'];const js=names.filter(name=>mainDashboard.includes('./'+name+'.js'));const css=names.filter(name=>mainDashboard.includes('./'+name+'.css'));return js.length===1&&css.length===1&&js[0]===css[0];})());
+check('SarNi 10 main workspace assets activated', mainDashboard.includes('sarni10-main-workspace.js') && mainDashboard.includes('sarni10-main-workspace.css') && !mainDashboard.includes('src="./sarni-main-batch10.js'));
+check('Main workspace uses existing navigation and avoids persistence', mainBatchJs.includes('sarniSidebarPrimary') && !['fetch(', 'localStorage.', 'sessionStorage.'].some(x=>mainBatchJs.includes(x)));
+check('Main workspace accessibility and responsive layout', mainBatchCss.includes('focus-visible') && mainBatchCss.includes('prefers-reduced-motion:reduce') && mainBatchCss.includes('min-height:44px'));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
