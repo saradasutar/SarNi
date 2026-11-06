@@ -484,6 +484,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 .sarni-main-health-actions :is(button,a){border:1px solid #bad4c6;background:#eaf5ee;color:#275b46;border-radius:8px;padding:7px 10px;font-size:12px;font-weight:700;text-decoration:none;min-height:34px}
 .sarni-main-health-actions :is(button,a):focus-visible,.sarni-main-health>summary:focus-visible{outline:2px solid #218567;outline-offset:2px}
 .sarni-main-health-foot{font-size:11px;color:#657970;line-height:1.5;margin:0}
+.sarni-main-health-peer{margin:0;padding:8px 10px;border-radius:9px;border:1px dashed #cbded3;font-size:11px;color:#526a5d;line-height:1.5;overflow-wrap:anywhere}
 @media(max-width:700px){.sarni-main-health{margin:7px 5px 10px}.sarni-main-health-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sarni-main-health>summary{padding:9px 10px}}
 @media(max-width:350px){.sarni-main-health-grid{grid-template-columns:1fr}}
 </style>
@@ -595,7 +596,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <details id="sarniMainHealth" class="sarni-main-health">
  <summary><span>♡ Dashboard Health</span><small id="sarniMainHealthBrief">Select to inspect</small></summary>
  <div class="sarni-main-health-body">
-  <div id="sarniMainHealthGrid" class="sarni-main-health-grid" aria-live="polite"><p>Open this section to inspect dashboard readiness.</p></div>
+  <div id="sarniMainHealthGrid" class="sarni-main-health-grid" aria-live="polite"><p>Open this section to inspect dashboard readiness.</p></div><p id="sarniMainHealthPeer" class="sarni-main-health-peer" role="status">Quick Entry: no report received from another open tab.</p>
   <div class="sarni-main-health-actions">
    <button id="sarniMainHealthRefresh" type="button">↻ Check health</button>
    <a href="./health.html" target="_blank" rel="noopener noreferrer">Site file check</a>
@@ -2408,6 +2409,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script defer src="./sarni-mytrip-popup-v20-10-3.js?v=20103"></script>
 <script defer src="./sarni-entry-photos-v1.js?v=20261103-quick-entry-photo"></script>
 <script defer src="./diary-hub-launcher.js?v=20261101-admincollapse2"></script>
+<script src="./sarni-health-bridge-v1.js"></script>
 <script id="sarni-main-health-script">
 /* Read-only: never calls private APIs, performs writes, or stores results. */
 (function(){
@@ -2415,6 +2417,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  const $=id=>document.getElementById(id);
  const root=$('sarniMainHealth');
  if(!root)return;
+ const healthBridge=window.SarNiHealthBridge?.create('main',value=>{
+  const peer=$('sarniMainHealthPeer');if(!peer)return;
+  const r=value.report;
+  peer.textContent='Quick Entry · last reported '+new Date(value.at).toLocaleTimeString()+' · frontend '+r.frontend+' · backend '+r.backend+' · forms '+r.modules+' · destination sync '+(r.sync==='some-verified'?'some independently verified records':'not verified by this report')+'. Status is a summary from another open tab, not a fresh check.';
+ });
  let checks=0;
  const metric=(label,value,tone)=>{
   const node=document.createElement('div');node.className='sarni-main-health-metric '+(tone||'warn');
@@ -2443,8 +2450,9 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   metric('Cross-dashboard sync','Not independently verified here','warn');
   const available=!!$('mainDashboard')&&!$('mainDashboard').classList.contains('hidden');
   $('sarniMainHealthBrief').textContent=available?'Checked '+new Date().toLocaleTimeString():'Dashboard not yet visible';
+  healthBridge?.publish({frontend:available?'ready':'unknown',backend:backendKnown?'reported':'unknown',modules:modules.every(([,id])=>!!$(id))?'present':'needs-check',sync:'unverified'});
  }
- root.addEventListener('toggle',()=>{if(root.open)inspect()});
+ root.addEventListener('toggle',()=>{if(root.open){inspect();healthBridge?.request();}});
  $('sarniMainHealthRefresh').addEventListener('click',inspect);
 })();
 </script>
