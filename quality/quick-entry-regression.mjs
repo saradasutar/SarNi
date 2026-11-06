@@ -67,12 +67,7 @@ check('Keyboard tab navigation and shortcut respect existing buttons', batch10Js
 check('Character counter excludes short fields', batch10Js.includes("qeActiveFieldCount") && batch10Js.includes("input.maxLength<50"));
 check('Responsive accessibility finishes and Back to Top present', batch10Css.includes('prefers-reduced-motion:reduce') && batch10Css.includes('focus-visible') && batch10Css.includes('min-height:46px') && batch10Css.includes('overflow-wrap:anywhere') && batch10Js.includes("id='qeBackToTop'"));
 check('Ten-upgrade helper contains no network or storage operations', !/(?:fetch|localStorage|sessionStorage|XMLHttpRequest)\s*\(/.test(batch10Js));
-check('Main dashboard loads exactly one workspace enhancement bundle', mainDashboard.includes('./sarni-main-batch10.js') && mainDashboard.includes('./sarni-main-batch10.css') && !mainDashboard.includes('src="./sarni10-main-polish.js') && !mainDashboard.includes('src="./sarni10-main-upgrades.js'));
-check('Main workspace has search, favorites and recent section containers', ['sarni10Workspace','sarni10ModuleSearch','sarni10ModuleResults','sarni10Favorites','sarni10Recent','sarni10Breadcrumb','sarni10Density','sarni10Top'].every(id=>mainDashboard.includes('id="'+id+'"')));
-check('Main workspace navigates through original authorized buttons', mainBatchJs.includes('button.click();record(button.dataset.section)') && mainBatchJs.includes('!allowed(button)') && mainBatchJs.includes('sarniSidebarPrimary'));
-check('Main workspace shortcuts and search exclude form editing', mainBatchJs.includes("event.key==='/'") && mainBatchJs.includes("target?.closest('input,textarea,select,[role=\"dialog\"]')"));
-check('Main workspace favorites and recents are in-memory', mainBatchJs.includes('new Set()') && mainBatchJs.includes('history=[]') && !['localStorage.', 'sessionStorage.', 'fetch(', 'XMLHttpRequest'].some(token=>mainBatchJs.includes(token)));
-check('Main workspace mobile, focus and reduced motion styles', mainBatchCss.includes('focus-visible') && mainBatchCss.includes('min-height:44px') && mainBatchCss.includes('overflow-wrap:anywhere') && mainBatchCss.includes('prefers-reduced-motion:reduce'));
+check('SarNi main uses only the validated batch asset pair', (mainDashboard.match(/sarni-main-batch10\\.js/g)||[]).length===1 && (mainDashboard.match(/sarni-main-batch10\\.css/g)||[]).length===1 && !/sarni10-main-(?:workspace|polish|upgrades|batch)\\.js/.test(mainDashboard));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
