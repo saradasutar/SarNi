@@ -27,8 +27,7 @@
    button.setAttribute('aria-label','Open '+item.title);
    button.addEventListener('click',()=>{
     const original=navigation.querySelector('[data-section="'+item.key+'"]');
-    if(original&&original.getClientRects().length)original.click();
-    else if(original)original.click();
+    if(original&&!original.disabled&&!original.hidden&&!original.closest('[hidden]'))original.click();
    });
    items.set(item.key,button);nav.append(button);
   }
@@ -42,7 +41,7 @@
   live.setAttribute('aria-live','polite');nav.append(live);
   let activeKey='';
   function sync(){
-   if(app.classList.contains('hidden'))return;
+   if(app.hidden||app.classList.contains('hidden'))return;
    const active=navigation.querySelector('.nav-item.active[data-section]')?.dataset.section||'';
    for(const [key,button] of items){
     const selected=key===active;
@@ -68,7 +67,7 @@
    if(!/^Digit[1-4]$/.test(event.code))return;
    const el=document.activeElement;
    if(el?.isContentEditable||el?.matches?.('input,textarea,select,[role="textbox"]'))return;
-   if(app.classList.contains('hidden'))return;
+   if(app.hidden||app.classList.contains('hidden'))return;
    const button=[...items.values()][Number(event.code.slice(-1))-1];
    if(!button)return;
    event.preventDefault();button.click();button.focus();
@@ -102,7 +101,7 @@
   // 6. Discoverable, collapsible keyboard help; no account settings.
   const help=document.createElement('details');help.className='sarni10-keyboard-help';
   const summary=document.createElement('summary');summary.textContent='Keyboard shortcuts';
-  const desc=document.createElement('p');desc.textContent='Alt + Shift + 1–4: Home, Diary, Calendar, Expense. Ctrl/⌘ + K: existing dashboard search. Shortcuts are ignored when typing in a field.';
+  const desc=document.createElement('p');desc.textContent='Alt + Shift + 1–4: Home, Diary, Calendar, Expense. Shortcuts are ignored when typing in a field.';
   help.append(summary,desc);nav.insertAdjacentElement('afterend',help);
  };
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
