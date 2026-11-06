@@ -5,16 +5,8 @@ on:
   push:
     paths:
       - "index.html"
-      - "sarni-main-batch10.js"
-      - "sarni-main-batch10.css"
-      - "quality/main-batch10-regression.cjs"
-      - "quality/main-dashboard-polish-regression.cjs"
-      - "sarni10-main-polish.css"
-      - "sarni10-main-polish.js"
-      - "sarni10-main-upgrades.js"
-      - "sarni10-main-upgrades.css"
-      - "sarni-main-batch10.js"
-      - "sarni-main-batch10.css"
+      - "sarni10-main-workspace.js"
+      - "sarni10-main-workspace.css"
       - "q/index.html"
       - "q/sarni9-batch10.js"
       - "q/sarni9-batch10.css"
