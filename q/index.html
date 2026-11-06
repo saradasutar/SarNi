@@ -2265,6 +2265,10 @@ function qeScheduleDraftSave(){
  if(qeDraftTimer)clearTimeout(qeDraftTimer);
  qeDraftTimer=setTimeout(()=>{qeDraftTimer=null;qeSaveDraft();},350);
 }
+function qeFlushPendingDraft(){
+ if(qeDraftTimer){clearTimeout(qeDraftTimer);qeDraftTimer=null;}
+ qeSaveDraft();
+}
 function qeClearDraft(kind){
  delete qeDrafts[kind];qePersistDrafts();qeRefreshDraftBanner();
 }
@@ -2278,6 +2282,7 @@ function qeRefreshDraftBanner(){
 }
 $('entry').addEventListener('input',e=>{if(e.target.closest('#fields'))qeScheduleDraftSave()});
 $('entry').addEventListener('change',e=>{if(e.target.closest('#fields'))qeScheduleDraftSave()});
+window.addEventListener('pagehide',()=>{qeFlushPendingDraft();});
 $('qeDraftRestore').onclick=()=>{
  const draft=qeDrafts[mode];if(!draft)return;
  if(!confirm('Restore the unsaved '+mode+' draft? This will replace the values currently visible in this form.'))return;
@@ -2451,6 +2456,9 @@ function render(){
   if(qePendingUncertain){status('The last save has an uncertain result. Check Recent Entries before switching tabs, or choose Clear only after confirming whether it saved.',true);return;}
   const next=b.dataset.mode,previous=mode;
   if(next===previous)return;
+  // Save the current tab's text immediately before its form controls are replaced.
+  // The existing session draft excludes credentials, PINs, files and photographs.
+  qeFlushPendingDraft();
   try{
    qeClearPhotoSelection();qeResetSubmissionIdentity();
    mode=next;
