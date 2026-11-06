@@ -32,6 +32,9 @@ check('Retry remains guarded by idempotency guarantee', includes('verifiedResult
 check('No automatic retry for uncertain save', includes('qePendingUncertain') && includes('Continue using the SAME original submission ID?'));
 check('Duplicate click prevented during save', includes("busy=true;$('save').disabled=true"));
 check('Read coalescing restricted to read-only calls', includes("new Set(['qeRecent','qpinRecent'])"));
+check('Smart Refresh cache is memory-only, brief and bounded', includes("const qeRecentCacheTTL=2500,qeRecentCacheMax=18") && includes("qeRecentMemoryCache=new Map()") && includes("Date.now()-cached.at<qeRecentCacheTTL"));
+check('Smart Refresh invalidates on writes and explicit refresh', includes("if(qeMutationActions.has(action))qeInvalidateReadSnapshots()") && includes("qeReadEpoch===epoch") && includes("qeInvalidateReadSnapshots();return qeRefreshPanels({sip:false,sync:false})") && includes("qeInvalidateReadSnapshots();return qeLoadGlobalSync()"));
+check('PIN changes invalidate Smart Refresh snapshots', includes("qeInvalidateReadSnapshots();pinGrant=result.grant") && includes("qeInvalidateReadSnapshots();pinManageOpen=false;pinGrant=''"));
 check('Photo formats and size remain limited', includes('image/jpeg') && includes('20*1024*1024'));
 check('Offline queue uses encryption', includes('AES-GCM') && includes('PBKDF2'));
 check('Styles have matching tags', count(/<style\b/g) === count(/<\/style>/g));
