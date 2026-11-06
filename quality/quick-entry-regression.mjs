@@ -33,6 +33,9 @@ check('Photo formats and size remain limited', includes('image/jpeg') && include
 check('Offline queue uses encryption', includes('AES-GCM') && includes('PBKDF2'));
 check('Styles have matching tags', count(/<style\b/g) === count(/<\/style>/g));
 check('Scripts have matching tags', count(/<script\b/g) === count(/<\/script>/g));
+check('Dashboard Health is read-only and available in Quick Entry', includes('id="qeDashboardHealth"') && includes('id="qeHealthCheck"') && includes("Promise.allSettled([api('qeInfo'),api('hubGuestInfo')])"));
+check('Health does not report destination verification without audit', includes('qeVerifyAuditReport?.tally') && includes('Not independently verified here'));
+check('Health errors stay session-only and token-redacted', includes('const qeHealthErrors=[]') && includes('qeHealthRecordError') && includes("'[private]'"));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
