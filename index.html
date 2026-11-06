@@ -2429,12 +2429,12 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   const backend=$('dashboardBackendVersionTop')?.textContent?.trim()||'Not displayed';
   const backendKnown=backend!=='Not displayed'&&!/after sign-in|unknown|not available|checking|connecting/i.test(backend);
   metric('Frontend',frontend,frontend==='Not displayed'?'warn':'good');
-  metric('Backend version',backend,backendKnown?'good':'warn');
+  metric('Backend version',backend+(backendKnown?' · reported by dashboard':' · not yet available'),'warn');
   metric('Browser network',navigator.onLine?'Online (not a backend check)':'Offline',navigator.onLine?'good':'warn');
   const sync=$('syncStatus')?.textContent?.trim()||'Not reported';
   metric('Connection indicator',sync+' · UI-reported only','warn');
   const modules=[
-   ['Diary','diarySection'],['Calendar','calendarSection'],['Expense','expenditureSection'],['Photos','adminPhotoManager']
+   ['Diary','diarySection'],['Calendar','calendarSection'],['Expense','expenditureSection'],['Photo management','adminPhotoManager']
   ];
   for(const [name,id] of modules){
    const found=!!$(id);
