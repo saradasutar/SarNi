@@ -500,7 +500,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 
 
 
-<link rel="stylesheet" href="./sarni10-main-polish.css?v=10.2"/>
+<link rel="stylesheet" href="./sarni10-main-workspace.css?v=1"/>
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
@@ -583,6 +583,15 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 </aside>
 <button class="mobile-left-quick-diary" id="quickDiaryMobilePinned" title="Quick Diary — always available" type="button">✎ Quick Diary</button>
 <main class="main-content" id="mainDashboard" tabindex="-1">
+<section id="sarni10Workspace" class="sarni10-workspace" aria-label="Main dashboard quick workspace">
+ <div class="sarni10-workspace-head"><strong>Quick workspace</strong><span id="sarni10Breadcrumb" aria-live="polite">Current section: Home</span></div>
+ <div class="sarni10-search-row"><input id="sarni10ModuleSearch" type="search" autocomplete="off" placeholder="Find a section…  /" aria-label="Search permitted dashboard sections"><button id="sarni10ClearSearch" type="button" hidden>Clear</button><button id="sarni10Density" type="button" aria-pressed="false">Compact spacing</button></div>
+ <small id="sarni10ModuleCount" aria-live="polite"></small>
+ <div id="sarni10ModuleResults" class="sarni10-chips" aria-label="Search results"></div>
+ <div class="sarni10-collections"><div><strong>Favorites</strong><div id="sarni10Favorites" class="sarni10-chips"></div></div><div><strong>Recently opened</strong><div id="sarni10Recent" class="sarni10-chips"></div></div></div>
+ <button id="sarni10Top" type="button" hidden aria-label="Back to top">↑ Top</button>
+</section>
+
 <header class="topbar"><span aria-hidden="true" class="mobile-top-brand">S</span>
 <div><div class="topbar-title-line"><div><p class="eyebrow" id="todayLabel"></p><h1 id="pageTitle">Personal Life Centre</h1></div><div class="dashboard-version-pair"><span class="dashboard-version-chip" id="dashboardVersionTop">FE v20.10.3</span><span class="dashboard-version-chip backend-chip" id="dashboardBackendVersionTop">BE after sign-in</span></div></div></div>
 <div class="top-actions"><button aria-haspopup="dialog" class="command-palette-button" id="commandPaletteBtn" title="Search pages and actions (Ctrl/⌘ K)" type="button"><span>⌕</span><strong>Search</strong><kbd>⌘K</kbd></button><div class="display-preferences" title="Personalise dashboard appearance"><select aria-label="Dashboard density" id="displayDensitySelect"><option value="COMFORTABLE">Comfortable</option><option value="COMPACT">Compact</option></select><select aria-label="Dashboard theme" id="displayThemeSelect"><option selected="" value="LIGHT">Light</option><option value="AUTO">Auto theme</option><option value="DARK">Dark</option></select></div><div class="sync-status" id="syncStatus"><span class="status-dot"></span><span>Ready</span></div><button aria-label="Refresh personal records" class="icon-button" id="refreshBtn" title="Refresh personal records">↻</button><button aria-label="Signed-in user" class="avatar-button" id="profileButton"><span id="avatarInitial">A</span><img alt="Your profile photo" class="header-user-photo hidden" id="headerUserPhoto"/></button><button aria-label="Sign out" class="header-logout-button" id="headerLogoutBtn" title="Sign out of SarNi" type="button"><span aria-hidden="true">↪</span><strong>Sign out</strong></button></div>
@@ -1953,8 +1962,7 @@ async function printOdiaFestivals(){
  if(!/^\\d{4}-\\d{2}$/.test(key))return;
  const popup=window.open('','_blank');
  if(!popup){if(status)status.textContent='Please allow pop-ups to print festivals.';return;}
- popup.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festivals</title></head><body><p>Preparing printable festival list...</p><script src="./sarni10-main-polish.js?v=10.2" defer></script>
-</body></html>');popup.document.close();
+ popup.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festivals</title></head><body><p>Preparing printable festival list...</p></body></html>');popup.document.close();
  if(btn)btn.disabled=true;
  try{
   const result=await fetchMonth(key);
@@ -2487,5 +2495,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 
 
+<script src="./sarni10-main-workspace.js?v=1" defer></script>
 </body>
 </html>
