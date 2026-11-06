@@ -2157,20 +2157,44 @@ function qeHealthRecordError(msg){
 function status(msg,error=false){const el=$('status');el.textContent=msg;el.className=error?'error':'';if(error)qeHealthRecordError(msg);}
 $('qePrivateLinkOpen').onclick=()=>{const message=$('qePrivateLinkError');try{const raw=$('qePrivateLinkInput').value.trim();const url=new URL(raw);if(url.origin!==location.origin||!/^\/SarNi\/q\/?(?:index\.html)?$/.test(url.pathname)||!url.searchParams.get('k'))throw Error('Paste the complete SarNi private Quick Entry URL containing ?k=.');location.assign(url.href);}catch(e){message.textContent=String(e.message||e);}};
 function qeApiTransport(action,payload={}){return new Promise((resolve,reject)=>{const id='mfreq_'+Array.from(crypto.getRandomValues(new Uint8Array(20)),b=>b.toString(16).padStart(2,'0')).join('');const frame=document.createElement('iframe');frame.name=id;frame.style.display='none';const form=document.createElement('form');form.method='POST';form.action=base;form.target=id;form.style.display='none';const input=document.createElement('input');input.name='payload';input.value=JSON.stringify({action,...payload,linkToken:key,transport:'hybrid',requestId:id,clientOrigin:location.origin});form.append(input);document.body.append(frame,form);let done=false;const cleanup=()=>{window.removeEventListener('message',receive);clearTimeout(timer);form.remove();frame.remove();};const finish=(value,err)=>{if(done)return;done=true;cleanup();err?reject(err):value?.ok?resolve(value):reject(Error(value?.message||'Request failed'));};const receive=e=>{if(!/^(https:\/\/script\.google\.com|https:\/\/([^.]+\.)*googleusercontent\.com)$/.test(e.origin))return;const m=e.data;if(m?.__myfinanceDirectResult===true&&m.requestId===id)finish(m.payload);};window.addEventListener('message',receive);const timer=setTimeout(()=>finish(null,Error('Request timed out. Check whether the entry was saved before trying again.')),55000);try{form.submit();}catch(e){finish(null,e);}});}
-/* SarNi 9: in-flight read request coalescing.
-   Only identical, simultaneous, read-only LIST queries share one transport.
-   No response is cached; credentials stay in memory and entries are never persisted.
-   Any confirmed write increments the epoch, preventing reuse of an older read. */
-const qeReadInFlight=new Map();
+/* SarNi 9 Smart Refresh:
+ * Identical read-only Recent Entries calls reuse memory for at most 2.5 seconds.
+ * No browser storage or cross-tab sharing. Writes and user refresh invalidate.
+ * Responses from before an invalidation cannot repopulate the memory cache. */
+const qeReadInFlight=new Map(),qeRecentMemoryCache=new Map();
+const qeRecentCacheTTL=2500,qeRecentCacheMax=18;
 let qeReadEpoch=0;
 const qeReadOnlyListActions=new Set(['qeRecent','qpinRecent']);
-function api(action,payload={}){
- if(!qeReadOnlyListActions.has(action))return qeApiTransport(action,payload);
- const signature=JSON.stringify([qeReadEpoch,action,Object.keys(payload||{}).sort().map(k=>[k,payload[k]])]);
- const existing=qeReadInFlight.get(signature);
- if(existing)return existing;
+const qeMutationActions=new Set(['qpinManage','qpinSyncRetry','sipPlanGuestManage','sipPlanGuestSave','familyExpenseQuickSave','hubGuestSave','qeEditRecent','qeQuickNote','qePhotoFinish']);
+function qeInvalidateReadSnapshots(){
+ ++qeReadEpoch;qeRecentMemoryCache.clear();
+}
+function qeReadSignature(action,payload={}){
+ return JSON.stringify([qeReadEpoch,action,Object.keys(payload||{}).sort().map(k=>[k,payload[k]])]);
+}
+async function api(action,payload={}){
+ if(!qeReadOnlyListActions.has(action)){
+  const result=await qeApiTransport(action,payload);
+  if(qeMutationActions.has(action))qeInvalidateReadSnapshots();
+  return result;
+ }
+ const signature=qeReadSignature(action,payload);
+ const pending=qeReadInFlight.get(signature);
+ if(pending)return pending;
+ const cached=qeRecentMemoryCache.get(signature);
+ if(cached){
+  if(Date.now()-cached.at<qeRecentCacheTTL)return cached.result;
+  qeRecentMemoryCache.delete(signature);
+ }
+ const epoch=qeReadEpoch;
  const request=qeApiTransport(action,payload);
  qeReadInFlight.set(signature,request);
+ request.then(result=>{
+  if(qeReadEpoch===epoch){
+   qeRecentMemoryCache.set(signature,{at:Date.now(),result});
+   while(qeRecentMemoryCache.size>qeRecentCacheMax)qeRecentMemoryCache.delete(qeRecentMemoryCache.keys().next().value);
+  }
+ },()=>{});
  const discard=()=>{if(qeReadInFlight.get(signature)===request)qeReadInFlight.delete(signature);};
  request.then(discard,discard);
  return request;
@@ -2603,11 +2627,11 @@ function updatePinGate(){
 $('pinManageToggle').onclick=()=>{pinManageOpen=!pinManageOpen;updatePinGate();if(pinManageOpen)$('pinInput').focus();};
 $('pinUnlockForm').onsubmit=async e=>{
  e.preventDefault();const input=$('pinInput'),b=$('pinUnlock');b.disabled=true;
- try{const result=await api('qpinUnlock',{pin:input.value});pinGrant=result.grant;pinManageOpen=false;input.value='';updatePinGate();status('PIN verified. Edit / Trash / Restore unlocked.');await qeRefreshPanels({global:true});}
+ try{const result=await api('qpinUnlock',{pin:input.value});qeInvalidateReadSnapshots();pinGrant=result.grant;pinManageOpen=false;input.value='';updatePinGate();status('PIN verified. Edit / Trash / Restore unlocked.');await qeRefreshPanels({global:true});}
  catch(error){status('PIN unlock failed: '+error.message,true);}
  finally{b.disabled=false;}
 };
-$('pinLock').onclick=()=>{pinManageOpen=false;pinGrant='';$('pinShowTrash').checked=false;updatePinGate();void qeRefreshPanels({global:true});};
+$('pinLock').onclick=()=>{qeInvalidateReadSnapshots();pinManageOpen=false;pinGrant='';$('pinShowTrash').checked=false;updatePinGate();void qeRefreshPanels({global:true});};
 $('pinShowTrash').onchange=()=>{void qeRefreshPanels({sync:false});};
 const qePremiumIcons={"expense":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"6\" width=\"18\" height=\"15\" rx=\"2\"/><path d=\"M3 9V5a2 2 0 0 1 2-2h13\"/><path d=\"M16 13h5v5h-5a2.5 2.5 0 0 1 0-5Z\"/></svg>","diary":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 7c-2.5-2-5.6-2.3-9-1.5v14c3.4-.8 6.5-.5 9 1.5 2.5-2 5.6-2.3 9-1.5v-14c-3.4-.8-6.5-.5-9 1.5Z\"/><path d=\"M12 7v14\"/></svg>","stock":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 20V12h4v8M10 20V8h4v12M16 20V4h4v16\"/></svg>","office":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"7\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12c5 3 13 3 18 0M12 13v3\"/></svg>","investment":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><ellipse cx=\"8\" cy=\"6\" rx=\"5\" ry=\"2.5\"/><path d=\"M3 6v5c0 3 10 3 10 0V6M3 11v5c0 3 10 3 10 0v-5\"/><ellipse cx=\"17\" cy=\"13\" rx=\"4\" ry=\"2\"/><path d=\"M13 13v5c0 3 8 3 8 0v-5\"/></svg>","family":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"8\" cy=\"8\" r=\"3\"/><circle cx=\"17\" cy=\"9\" r=\"2.5\"/><path d=\"M2 21v-2a6 6 0 0 1 12 0v2M15 16c4 0 7 2 7 5\"/></svg>"};
 function qeAssertRenderedForm(kind){
@@ -2940,7 +2964,7 @@ function qeSetGlobalSyncOpen(open){
 }
 $('qeGlobalSyncButton').onclick=()=>qeSetGlobalSyncOpen($('qeGlobalSyncPanel').hidden);
 $('qeGlobalSyncClose').onclick=()=>qeSetGlobalSyncOpen(false);
-$('qeGlobalSyncRefresh').onclick=()=>qeLoadGlobalSync();
+$('qeGlobalSyncRefresh').onclick=()=>{qeInvalidateReadSnapshots();return qeLoadGlobalSync();};
 $('qeReadinessButton').onclick=()=>{
  const panel=$('qeReadinessPanel'),open=panel.hidden;
  panel.hidden=!open;$('qeReadinessButton').setAttribute('aria-expanded',String(open));
@@ -3089,7 +3113,7 @@ async function loadQuickSyncSummary(){
   metrics.textContent='Status unavailable';note.textContent='Could not read recent sync status: '+(error.message||'Backend unavailable')+'. Check View permission or the deployed backend.';
  }
 }
-$('quickSyncRefresh').onclick=()=>qeRefreshPanels({recent:false,sip:false});
+$('quickSyncRefresh').onclick=()=>{qeInvalidateReadSnapshots();return qeRefreshPanels({recent:false,sip:false});};
 let qeProgressRecords=[],qeProgressKind='';
 function qeRenderDiaryProgress(kind){
  const panel=$('qeDiaryProgress');if(!panel)return;
@@ -3388,7 +3412,7 @@ function applyRecentSearch(){
 }
 $('recentSearch').addEventListener('input',applyRecentSearch);
 $('toggleRecent').onclick=()=>{const panel=$('recentBody'),open=panel.hidden;panel.hidden=!open;$('refreshRecent').hidden=!open;$('toggleRecent').setAttribute('aria-expanded',String(open));const label=({expense:'Expense',diary:'Diary',stock:'Stock Note',office:'Office Diary',investment:'Investment',family:'Family Expense'})[mode]||mode;$('toggleRecent').querySelector('span').textContent=(open?'▾ ':'▸ ')+'Recent '+label+' entries';$('toggleRecent').querySelector('small').textContent=open?'Tap to close recent transactions':'Tap to view recent transactions';if(open)void loadRecent(false);};
-$('refreshRecent').onclick=()=>qeRefreshPanels({sip:false,sync:false});
+$('refreshRecent').onclick=()=>{qeInvalidateReadSnapshots();return qeRefreshPanels({sip:false,sync:false});};
 async function manageRecent(record,action){
  if(!pinGrant||!record.id)return;
  if(action==='trash'&&!confirm('Move this entry to Trash? You can restore it later while authorized.'))return;
@@ -3605,7 +3629,7 @@ const creatingHead=mode==='expense'&&$('newHeadBox')&&!$('newHeadBox').hidden; i
  status('Saved to encrypted device queue only · Not yet sent to SarNi.');
  return;
 }
-const r=plannedSip?await api('sipPlanGuestSave',{grant:pinGrant,entry:{...data,clientKey:entryId,id:e.target.dataset.sipPlanEditId||'',revision:e.target.dataset.sipPlanRevision||''}}):e.target.dataset.editId&&pinGrant?await api('qpinManage',{grant:pinGrant,kind:mode,id:e.target.dataset.editId,revision:e.target.dataset.pinRevision||'',operation:'edit',fields:data}):mode==='family'?await api('familyExpenseQuickSave',{grant:pinGrant,entryId:pendingFamilyId,expense:{...data,amount:Number(data.amount)}}):(mode==='office'||mode==='investment')?await api('hubGuestSave',{grant:pinGrant,type:mode.toUpperCase(),entry:{...data,assetName:data.title,clientKey:entryId}}):e.target.dataset.editId?await api('qeEditRecent',{id:e.target.dataset.editId,kind:mode,entry:data}):mode==='expense'?await api(data.majorProjectId?'qeSubmitGroup':'qeSubmit',{grant:pinGrant,entryId,expense:{...data,amount:Number(data.amount)}}):await api('qeQuickNote',{grant:pinGrant,entryId,entry:{...data,kind:mode,important:!!data.important,monthlyHighlight:!!data.monthlyHighlight}});qeReadEpoch++;if(mode==='expense')saveLastGroup(data.majorProjectId||'');const lastBox=$('lastSavedEntry');lastBox.hidden=false;lastBox.replaceChildren();const lastTitle=document.createElement('strong');lastTitle.textContent='✓ '+(r.duplicate?'Already saved — no duplicate':'Saved successfully')+': '+(data.title||data.reason||({diary:'Diary note',stock:'Stock Note',office:'Office Diary',investment:'Investment entry',expense:'Expense',family:'Family Expense'}[mode]||'Entry'));const lastMeta=document.createElement('small');lastMeta.textContent=[mode==='diary'?'Personal Diary':mode==='office'?'Office Diary':mode==='stock'?'Stock Note':mode==='investment'?'Investment':mode==='expense'?'Expense':'Family Expense',data.entryDate||data.date||data.dateSpent||''].filter(Boolean).join(' · ');lastBox.append(lastTitle,lastMeta);
+const r=plannedSip?await api('sipPlanGuestSave',{grant:pinGrant,entry:{...data,clientKey:entryId,id:e.target.dataset.sipPlanEditId||'',revision:e.target.dataset.sipPlanRevision||''}}):e.target.dataset.editId&&pinGrant?await api('qpinManage',{grant:pinGrant,kind:mode,id:e.target.dataset.editId,revision:e.target.dataset.pinRevision||'',operation:'edit',fields:data}):mode==='family'?await api('familyExpenseQuickSave',{grant:pinGrant,entryId:pendingFamilyId,expense:{...data,amount:Number(data.amount)}}):(mode==='office'||mode==='investment')?await api('hubGuestSave',{grant:pinGrant,type:mode.toUpperCase(),entry:{...data,assetName:data.title,clientKey:entryId}}):e.target.dataset.editId?await api('qeEditRecent',{id:e.target.dataset.editId,kind:mode,entry:data}):mode==='expense'?await api(data.majorProjectId?'qeSubmitGroup':'qeSubmit',{grant:pinGrant,entryId,expense:{...data,amount:Number(data.amount)}}):await api('qeQuickNote',{grant:pinGrant,entryId,entry:{...data,kind:mode,important:!!data.important,monthlyHighlight:!!data.monthlyHighlight}});qeInvalidateReadSnapshots();if(mode==='expense')saveLastGroup(data.majorProjectId||'');const lastBox=$('lastSavedEntry');lastBox.hidden=false;lastBox.replaceChildren();const lastTitle=document.createElement('strong');lastTitle.textContent='✓ '+(r.duplicate?'Already saved — no duplicate':'Saved successfully')+': '+(data.title||data.reason||({diary:'Diary note',stock:'Stock Note',office:'Office Diary',investment:'Investment entry',expense:'Expense',family:'Family Expense'}[mode]||'Entry'));const lastMeta=document.createElement('small');lastMeta.textContent=[mode==='diary'?'Personal Diary':mode==='office'?'Office Diary':mode==='stock'?'Stock Note':mode==='investment'?'Investment':mode==='expense'?'Expense':'Family Expense',data.entryDate||data.date||data.dateSpent||''].filter(Boolean).join(' · ');lastBox.append(lastTitle,lastMeta);
  const destination=document.createElement('div');destination.className='qe-save-destinations';
  const mark=(label,state,detail)=>{const line=document.createElement('div');line.className='qe-save-destination';const name=document.createElement('strong');name.textContent=label;const pill=document.createElement('span');pill.className='qe-save-state '+(state==='confirmed'?'confirmed':state==='pending'?'pending':'unverified');pill.textContent=state==='confirmed'?'Saved':state==='pending'?'Pending':'Not verified';line.append(name,pill);if(detail){const note=document.createElement('small');note.textContent=detail;line.append(note);}destination.append(line);};
  const responseMsg=String(r?.message||'');
