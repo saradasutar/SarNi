@@ -485,6 +485,14 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 .sarni-main-health-actions :is(button,a):focus-visible,.sarni-main-health>summary:focus-visible{outline:2px solid #218567;outline-offset:2px}
 .sarni-main-health-foot{font-size:11px;color:#657970;line-height:1.5;margin:0}
 .sarni-main-health-peer{margin:0;padding:8px 10px;border-radius:9px;border:1px dashed #cbded3;font-size:11px;color:#526a5d;line-height:1.5;overflow-wrap:anywhere}
+.sarni-main-health .sarni-health-history-section{border:1px solid #d9e8dc;border-radius:10px;padding:8px 10px;font-size:12px}
+.sarni-main-health .sarni-health-history-section summary{cursor:pointer;font-weight:800}
+.sarni-main-health .sarni-health-history-section button{margin-top:7px;padding:6px 10px;border:1px solid #c9dcd0;border-radius:7px;background:#f4f8f5;color:#315c48}
+.sarni-main-health .sarni-health-history-list{list-style:none;padding:0;margin:7px 0;display:grid;gap:5px}
+.sarni-main-health .sarni-health-history-list li{display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:5px 0;border-bottom:1px solid #e6eee8}
+.sarni-main-health .sarni-health-history-list time{font-size:10px;color:#678072}
+.sarni-main-health .sarni-health-history-list span{font-size:11px;font-weight:750;text-transform:capitalize}
+.sarni-main-health .sarni-health-guide p{margin:7px 0;line-height:1.5}
 @media(max-width:700px){.sarni-main-health{margin:7px 5px 10px}.sarni-main-health-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sarni-main-health>summary{padding:9px 10px}}
 @media(max-width:350px){.sarni-main-health-grid{grid-template-columns:1fr}}
 </style>
@@ -597,6 +605,8 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
  <summary><span>♡ Dashboard Health</span><small id="sarniMainHealthBrief">Select to inspect</small></summary>
  <div class="sarni-main-health-body">
   <div id="sarniMainHealthGrid" class="sarni-main-health-grid" aria-live="polite"><p>Open this section to inspect dashboard readiness.</p></div><p id="sarniMainHealthPeer" class="sarni-main-health-peer" role="status">Quick Entry: no report received from another open tab.</p>
+  <details class="sarni-health-history-section"><summary>Recent health history</summary><div id="sarniMainHealthHistory"></div><button id="sarniMainHealthClear" type="button">Clear history</button></details>
+  <details class="sarni-health-history-section"><summary>Troubleshooting guide</summary><div class="sarni-health-guide"><p><strong>Connection unavailable:</strong> Check your internet connection, then use Site file check. Do not repeatedly submit entries after timeouts.</p><p><strong>Diary, Expense, Calendar or Photos:</strong> Interface presence does not prove saving works. Open the relevant section and check existing records before attempting a new entry.</p><p><strong>Sync unverified:</strong> Use Quick Entry’s Verify destination option and look for a matching record in the receiving dashboard.</p><p><strong>Session expired:</strong> Sign in again; avoid storing your password or private link in diagnostic reports.</p></div></details>
   <div class="sarni-main-health-actions">
    <button id="sarniMainHealthRefresh" type="button">↻ Check health</button>
    <a href="./health.html" target="_blank" rel="noopener noreferrer">Site file check</a>
@@ -2409,7 +2419,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script defer src="./sarni-mytrip-popup-v20-10-3.js?v=20103"></script>
 <script defer src="./sarni-entry-photos-v1.js?v=20261103-quick-entry-photo"></script>
 <script defer src="./diary-hub-launcher.js?v=20261101-admincollapse2"></script>
-<script src="./sarni-health-bridge-v1.js"></script>
+<script src="./sarni-health-bridge-v1.js"></script><script src="./sarni-health-history-v1.js"></script>
 <script id="sarni-main-health-script">
 /* Read-only: never calls private APIs, performs writes, or stores results. */
 (function(){
@@ -2417,6 +2427,9 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
  const $=id=>document.getElementById(id);
  const root=$('sarniMainHealth');
  if(!root)return;
+ const history=window.SarNiHealthHistory?.create('main');
+ const showHistory=()=>history?.render($('sarniMainHealthHistory'));
+ $('sarniMainHealthClear').addEventListener('click',()=>{history?.clear();showHistory();});
  const healthBridge=window.SarNiHealthBridge?.create('main',value=>{
   const peer=$('sarniMainHealthPeer');if(!peer)return;
   const r=value.report;
@@ -2450,6 +2463,12 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   metric('Cross-dashboard sync','Not independently verified here','warn');
   const available=!!$('mainDashboard')&&!$('mainDashboard').classList.contains('hidden');
   $('sarniMainHealthBrief').textContent=available?'Checked '+new Date().toLocaleTimeString():'Dashboard not yet visible';
+  history?.add('frontend',available?'ready':'attention');
+  history?.add('backend',backendKnown?'unverified':'attention');
+  history?.add('modules',modules.every(([,id])=>!!$(id))?'ready':'attention');
+  history?.add('sync','unverified');
+  if(!navigator.onLine)history?.add('network','unavailable');
+  showHistory();
   healthBridge?.publish({frontend:available?'ready':'unknown',backend:backendKnown?'reported':'unknown',modules:modules.every(([,id])=>!!$(id))?'present':'needs-check',sync:'unverified'});
  }
  root.addEventListener('toggle',()=>{if(root.open){inspect();healthBridge?.request();}});
