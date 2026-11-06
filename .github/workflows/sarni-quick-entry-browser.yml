@@ -9,6 +9,7 @@ on:
       - "sarni-health-bridge-v1.js"
       - "sarni-health-history-v1.js"
       - "quality/quick-entry-regression.mjs"
+      - "quality/smart-refresh-regression.cjs"
       - "quality/quick-entry-browser.spec.cjs"
       - "quality/main-dashboard-health.spec.cjs"
       - ".github/workflows/sarni-quick-entry-browser.yml"
@@ -29,6 +30,8 @@ jobs:
           node-version: '22'
       - name: Source regression checks (no backend calls)
         run: node quality/quick-entry-regression.mjs
+      - name: Smart Refresh behavioral regression (fake backend only)
+        run: node quality/smart-refresh-regression.cjs
       - name: Install browser test runtime (isolated)
         run: |
           npm install --no-save --no-package-lock @playwright/test@1.56.1
