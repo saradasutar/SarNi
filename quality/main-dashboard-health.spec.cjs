@@ -15,6 +15,13 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:320
    });
    await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
    await expect(page.locator('#sarniMainHealth')).toHaveCount(1);
+   // Ten-upgrade main dashboard is added without requiring a login or data writes.
+   await expect(page.locator('#sarni10Nav')).toHaveCount(1);
+   await expect(page.locator('#sarni10Nav button[data-sarni10-section]')).toHaveCount(4);
+   await expect(page.locator('#sarni10ScrollProgress')).toHaveCount(1);
+   await expect(page.locator('#sarni10BackTop')).toHaveCount(1);
+   await expect(page.locator('.sarni10-keyboard-help')).toHaveCount(1);
+
    await expect(page.locator('#sarniMainHealthRefresh')).toHaveCount(1);
    await expect(page.locator('#sarniMainHealthHistory')).toHaveCount(1);
    await expect(page.locator('#sarniMainHealthClear')).toHaveCount(1);
