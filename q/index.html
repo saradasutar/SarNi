@@ -1767,6 +1767,46 @@ main[data-entry-mode="expense"] #entry #fields>.qe-expense-paid-row input{
  main[data-entry-mode="expense"] #entry #fields>.qe-expense-paid-row{margin-top:6px!important;}
  main[data-entry-mode="expense"] #entry #fields>.qe-expense-main-details{margin-top:6px!important;row-gap:7px!important;}
 }
+</style><style id="qe-pay-inline-right-column-v1">
+/* Both expense forms: expanded payment details remain under the right-hand button. */
+main[data-entry-mode="family"] #qeFamilyPhotoActionsRow,
+main[data-entry-mode="expense"] #qeFamilyPhotoActionsRow{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ align-items:start!important;gap:8px!important;
+}
+main[data-entry-mode="family"] #qeFamilyDetailsSlot,
+main[data-entry-mode="expense"] #qeFamilyDetailsSlot{
+ display:flex!important;flex-direction:column!important;
+ width:100%!important;min-width:0!important;max-width:100%!important;
+ box-sizing:border-box!important;gap:5px!important;
+}
+main[data-entry-mode="family"] #qeFamilyDetailsSlot #qeFamilyPayExpanded[hidden],
+main[data-entry-mode="expense"] #qeFamilyDetailsSlot #qeFamilyPayExpanded[hidden]{
+ display:none!important;
+}
+main[data-entry-mode="family"] #qeFamilyDetailsSlot #qeFamilyPayExpanded:not([hidden]),
+main[data-entry-mode="expense"] #qeFamilyDetailsSlot #qeFamilyPayExpanded:not([hidden]){
+ display:block!important;position:static!important;grid-column:auto!important;
+ box-sizing:border-box!important;width:100%!important;max-width:100%!important;
+ min-width:0!important;margin:0!important;padding:8px!important;
+ border-radius:9px!important;overflow-wrap:anywhere!important;
+}
+main[data-entry-mode="family"] #qeFamilyDetailsSlot #qeFamilyPayExpanded small{
+ font-size:10.5px!important;line-height:1.45!important;
+}
+main[data-entry-mode="expense"] #qeFamilyDetailsSlot .qe-expense-pay-extra{
+ min-width:0!important;width:100%!important;
+}
+main[data-entry-mode="expense"] #qeFamilyDetailsSlot #qeDebited{
+ width:100%!important;min-width:0!important;max-width:100%!important;
+ font-size:15px!important;padding:7px!important;
+}
+@media(max-width:390px){
+ main[data-entry-mode="family"] #qeFamilyDetailsSlot,
+ main[data-entry-mode="expense"] #qeFamilyDetailsSlot{gap:4px!important;}
+ main[data-entry-mode="family"] #qeFamilyDetailsSlot #qeFamilyPayExpanded:not([hidden]),
+ main[data-entry-mode="expense"] #qeFamilyDetailsSlot #qeFamilyPayExpanded:not([hidden]){padding:6px!important;}
+}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">📥</span><span class="qe-action-label">Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">🔄</span><span class="qe-action-label">Sync</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
@@ -2233,6 +2273,7 @@ function render(){
   $('qeFamilyDetailsSlot').innerHTML='<details class="advanced family-more-details family-extra-details"><summary title="Payment details" aria-label="Payment details" aria-controls="qeFamilyPayExpanded">Pay details <span aria-hidden="true">⌄</span></summary></details>';
   const payDetail=$('qeFamilyDetailsSlot').querySelector('details');
   const payPanel=$('qeFamilyPayExpanded');
+  $('qeFamilyDetailsSlot').append(payPanel);
   const paySummary=document.createElement('div');paySummary.className='qe-family-pay-summary';
   const payText=document.createElement('small');
   payText.textContent='Payment method, payer and recipient are recorded in the fields above. Use Paid from for Cash, UPI, card or account.';
@@ -2279,6 +2320,7 @@ function render(){
  $('qeFamilyDetailsSlot').innerHTML='<details class="advanced family-more-details family-extra-details"><summary title="Additional payment details" aria-label="Additional payment details" aria-controls="qeFamilyPayExpanded">Pay details <span aria-hidden="true">⌄</span></summary></details>';
  const expensePayToggle=$('qeFamilyDetailsSlot').querySelector('details');
  const expensePayPanel=$('qeFamilyPayExpanded');
+ $('qeFamilyDetailsSlot').append(expensePayPanel);
  expensePayPanel.innerHTML='<div class="qe-expense-pay-extra"><label for="qeDebited">Debited from (optional)</label><input id="qeDebited" name="debitedFrom" maxlength="100" placeholder="Bank / wallet"></div>';
  const updateExpensePayPanel=()=>{expensePayPanel.hidden=!expensePayToggle.open;expensePayToggle.querySelector('summary').setAttribute('aria-expanded',String(expensePayToggle.open));};
  expensePayToggle.addEventListener('toggle',updateExpensePayPanel);
