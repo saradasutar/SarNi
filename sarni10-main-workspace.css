@@ -26,3 +26,14 @@
 #sarni10Top:focus-visible{outline:3px solid #167c5f;outline-offset:2px}
 @media(max-width:720px){#sarni10Workspace{margin:7px 5px 10px;padding:10px}#sarni10Workspace .sarni10-collections{grid-template-columns:1fr}#sarni10Workspace .sarni10-go{min-height:41px}#sarni10Workspace .sarni10-star{min-height:41px}#sarni10Workspace .sarni10-control{min-height:42px}}
 @media(prefers-reduced-motion:reduce){#sarni10Workspace *,#sarni10Top{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* SarNi 10: matching selectors for the consolidated workspace markup */
+#sarni10Workspace .sarni10-workspace-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+#sarni10Workspace .sarni10-workspace-head>strong{font-size:15px;font-weight:850;color:#194735}
+#sarni10Workspace .sarni10-search-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:8px 0 6px}
+#sarni10ModuleSearch{flex:1 1 190px;min-width:0;max-width:480px;box-sizing:border-box;border:1px solid #bfd8cb;background:#fff;border-radius:9px;font-size:13px;padding:9px 11px;min-height:42px;color:#233f34}
+#sarni10Workspace :is(#sarni10ClearSearch,#sarni10Density){min-height:42px;padding:8px 11px;border:1px solid #c6d9cd;border-radius:9px;background:#fff;font-size:12px;font-weight:750;color:#275540;cursor:pointer}
+#sarni10ModuleCount{display:block;margin:5px 0 7px;color:#526b5f;font-size:11px}
+#sarni10Workspace .sarni10-collections>div{min-width:0;padding:8px 10px;border:1px dashed #cbded3;border-radius:10px;background:#ffffffa8}
+#sarni10Workspace .sarni10-collections>div>strong{display:block;font-size:11px;margin-bottom:6px}
+@media(max-width:400px){#sarni10Workspace .sarni10-search-row{gap:5px}#sarni10Workspace :is(#sarni10ClearSearch,#sarni10Density){flex:1 1 auto}}
