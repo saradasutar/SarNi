@@ -2472,7 +2472,7 @@ async function loadRecent(append=false){
    const row=document.createElement('tr');if(record.trashed)row.classList.add('recent-trashed');
    const subject=get('title','reason','companyName')||record.kind||'Entry';
    const description=get('text','body','description','notes','reason');
-   const detailValues=Object.entries(f).filter(([k,v])=>v!==''&&v!==null&&v!==undefined&&!['title','date','entryDate','dateSpent','amount'].includes(k)).map(([k,v])=>k+': '+String(v)).join('\n');
+   const detailValues=Object.entries(f).filter(([k,v])=>v!==''&&v!==null&&v!==undefined&&!['title','date','entryDate','dateSpent','amount'].includes(k)).map(([k,v])=>k+': '+(['body','text'].includes(k)?qeExtractCompletion(v).body:String(v))).join('\n');
    columns.forEach(([field,headingLabel])=>{
     const td=document.createElement('td');td.dataset.label=headingLabel;if(field==='amount')td.className='amount';
     if(field==='date')td.textContent=shortDate(get('date','entryDate','dateSpent'));
@@ -2552,7 +2552,7 @@ async function loadRecent(append=false){
     }
     else if(field==='details'){
      const disclosure=document.createElement('details');const summary=document.createElement('summary');summary.textContent='View';
-     const content=document.createElement('div');content.className='recent-cell-detail';content.textContent=(detailValues||description||record.text||'No additional details returned').slice(0,2500);
+     const content=document.createElement('div');content.className='recent-cell-detail';content.textContent=(detailValues||qeExtractCompletion(description||record.text).body||'No additional details returned').slice(0,2500);
      const completion=qeExtractCompletion(get('body','text'));
      if(completion.date){
       const finished=document.createElement('div');finished.className='qe-completion-recent';
