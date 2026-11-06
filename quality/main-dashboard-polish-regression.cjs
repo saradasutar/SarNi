@@ -19,7 +19,7 @@ const tests=[
  ['Long-text safety',css.includes('overflow-wrap:anywhere')],
  ['Reduced motion and print',css.includes('prefers-reduced-motion:reduce')&&css.includes('@media print')],
  ['Permission controls preserved',js.includes('b.disabled||b.hidden||b.classList.contains(\'hidden\')')],
- ['No storage, backend calls or user records',!/(?:fetch|XMLHttpRequest|localStorage|sessionStorage|indexedDB)\\s*\\(/.test(js)]
+ ['No storage, backend calls or user records',!/(?:fetch|XMLHttpRequest|localStorage|sessionStorage|indexedDB)\s*\(/.test(js)]
 ];
 for(const [name,passed] of tests)console.log((passed?'PASS':'FAIL')+'  '+name);
 const failed=tests.filter(([,passed])=>!passed);
