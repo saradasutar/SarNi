@@ -3422,12 +3422,14 @@ function editRecent(record){
  status('Editing an existing '+record.kind+' entry. Save correction or press Clear to cancel.');
 }
 
+let qeSipListRequestVersion=0;
 async function loadSipPlans(){
+ const requestVersion=++qeSipListRequestVersion;
  const section=$('sipSavedSection'),host=$('sipSavedList');section.hidden=mode!=='investment';if(section.hidden)return;
  host.textContent='Loading SIP plans…';
  try{
   const response=await api('sipPlanGuestList',{grant:pinGrant||'',includeTrash:!!pinGrant&&$('pinShowTrash').checked});
-  if(mode!=='investment')return;host.replaceChildren();
+  if(mode!=='investment'||requestVersion!==qeSipListRequestVersion)return;host.replaceChildren();
   const rows=Array.isArray(response.plans)?response.plans:[];
   if(!rows.length){host.textContent='No SIP plans saved through this link yet.';return;}
   rows.forEach(record=>{
@@ -3443,7 +3445,7 @@ async function loadSipPlans(){
    };wrap.append(b);}
    host.append(wrap);
   });
- }catch(e){if(mode!=='investment')return;host.textContent=/UNKNOWN_ACTION|Unknown action|not found/i.test(e.message||'')?'SIP Plan backend is not deployed yet. Install the Stage 5 private Apps Script module first.':'SIP plan listing: '+(e.message||'Unavailable');}
+ }catch(e){if(mode!=='investment'||requestVersion!==qeSipListRequestVersion)return;host.textContent=/UNKNOWN_ACTION|Unknown action|not found/i.test(e.message||'')?'SIP Plan backend is not deployed yet. Install the Stage 5 private Apps Script module first.':'SIP plan listing: '+(e.message||'Unavailable');}
 }
 function editSipPlan(record){
  if(!pinGrant||!record.editable)return;mode='investment';render();updatePinGate();
