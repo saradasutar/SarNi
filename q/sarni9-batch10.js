@@ -70,7 +70,7 @@
   top.hidden=true;document.body.append(top);
   const syncTop=()=>{top.hidden=window.scrollY<450;};
   window.addEventListener('scroll',syncTop,{passive:true});syncTop();
-  top.addEventListener('click',()=>window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}));
+  top.addEventListener('click',()=>window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));
  };
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});
  else boot();
