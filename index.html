@@ -499,7 +499,8 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 
 
 
-<link rel="stylesheet" href="./sarni-main-batch10.css?v=stable-10">
+
+<link rel="stylesheet" href="./sarni10-main-polish.css?v=10.2"/>
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
@@ -604,7 +605,6 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <button class="mobile-session-button danger" id="mobileLogoutBtn" type="button">Log out</button>
 </div>
 </div>
-<!-- SarNi 10: one consolidated main dashboard UX layer, loaded once below. -->
 <!-- SarNi Main Dashboard Health v1 -->
 <details id="sarniMainHealth" class="sarni-main-health">
  <summary><span>♡ Dashboard Health</span><small id="sarniMainHealthBrief">Select to inspect</small></summary>
@@ -1953,7 +1953,8 @@ async function printOdiaFestivals(){
  if(!/^\\d{4}-\\d{2}$/.test(key))return;
  const popup=window.open('','_blank');
  if(!popup){if(status)status.textContent='Please allow pop-ups to print festivals.';return;}
- popup.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festivals</title></head><body><p>Preparing printable festival list...</p></body></html>');popup.document.close();
+ popup.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festivals</title></head><body><p>Preparing printable festival list...</p><script src="./sarni10-main-polish.js?v=10.2" defer></script>
+</body></html>');popup.document.close();
  if(btn)btn.disabled=true;
  try{
   const result=await fetchMonth(key);
@@ -2485,6 +2486,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 
 
-<script defer src="./sarni-main-batch10.js?v=stable-10"></script>
+
 </body>
 </html>
