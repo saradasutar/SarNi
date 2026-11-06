@@ -2763,10 +2763,12 @@ async function loadRecent(append=false){
       if(record.important===true||get('important')==='true')flags.push('Imp.');
       if(tags.includes('monthly-highlight')||get('monthlyHighlight')==='true')flags.push('Monthly');
       if(tags.includes('mark-learning')||tags.includes('office:learning/knowledge')||tags.includes('learning'))flags.push('Learn');
-      if(tags.includes('action-completed')||qeExtractCompletion(get('body','text')).date)flags.push('✓ Completed');
-      if(requestedMode==='office'&&tags.includes('needs-follow-up'))flags.push('Follow-up');
-      if(requestedMode==='stock'&&tags.includes('needs-review'))flags.push('Review');
-      if(requestedMode==='diary'&&tags.includes('needs-planning'))flags.push('Plan');
+      if(isCompleted)flags.push('✓ Completed');
+      // The original action mark may remain for history, but a completed task
+      // should not simultaneously appear as an outstanding action in Recent.
+      if(!isCompleted&&requestedMode==='office'&&tags.includes('needs-follow-up'))flags.push('Follow-up');
+      if(!isCompleted&&requestedMode==='stock'&&tags.includes('needs-review'))flags.push('Review');
+      if(!isCompleted&&requestedMode==='diary'&&tags.includes('needs-planning'))flags.push('Plan');
       td.textContent=flags.join(' · ')||(requestedMode==='office'?'General Work':requestedMode==='stock'?'General Stock Note':'Daily Diary');
      }else td.textContent=get('diaryType','officeNoteType','noteType','side','assetType')||'—';
     }
