@@ -1,28 +1,30 @@
-/* SarNi 10 main dashboard: source regression for the active Workspace bundle.
- * Never connects to Google Apps Script or uses private records. */
+/* SarNi 10 active workspace regression — source-only, no API or user data. */
 'use strict';
-const assert=require('node:assert/strict');
-const fs=require('node:fs');
-const path=require('node:path');
+const fs=require('node:fs'),path=require('node:path');
 const root=path.join(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const js=fs.readFileSync(path.join(root,'sarni10-main-workspace.js'),'utf8');
 const css=fs.readFileSync(path.join(root,'sarni10-main-workspace.css'),'utf8');
-const activeAssets=[...html.matchAll(/(?:src|href)="\.\/([^"?]*(?:sarni10|sarni-main-batch10)[^"?]*)/g)].map(m=>m[1]);
+const count=t=>html.split(t).length-1;
 const checks=[
- ['Single matching active bundle',activeAssets.length===2 && activeAssets.includes('sarni10-main-workspace.js') && activeAssets.includes('sarni10-main-workspace.css')],
- ['Dashboard host',html.includes('id="mainDashboard"') && html.includes('id="sarniSidebarPrimary"')],
- ['Workspace controls', ['sarni10Workspace','sarni10ModuleSearch','sarni10ClearSearch','sarni10ModuleResults','sarni10ModuleCount'].every(id=>js.includes(id))],
- ['Favorites and recent sections', ['sarni10Favorites','sarni10Recent','favoriteSet','renderFavorites','renderRecent'].every(id=>js.includes(id))],
- ['Active page breadcrumb',js.includes('sarni10Breadcrumb') && js.includes('Current section:')],
- ['Existing authorized nav reused',js.includes("button.click()") && js.includes('button[data-section]') && js.includes('disabled')],
- ['Input-safe keyboard search',js.includes("event.key==='/'") && js.includes('isContentEditable') && js.includes("event.key==='Escape'")],
- ['Density and back-to-top',js.includes('sarni10Density') && js.includes('sarni10Top') && js.includes('sarni10-compact')],
- ['No backend or stored secrets', !/(?:fetch\s*\(|XMLHttpRequest|localStorage|sessionStorage|\.password|\.grant)/.test(js)],
- ['Responsive focus and reduced-motion CSS', css.includes('focus-visible') && css.includes('prefers-reduced-motion:reduce')],
- ['Syntax',(()=>{try{new Function(js);return true}catch(_){return false}})()]
+ ['Exactly one active workspace JS',count('./sarni10-main-workspace.js')===1],
+ ['Exactly one active workspace CSS',count('./sarni10-main-workspace.css')===1],
+ ['Retired bundles not active',!/(?:src|href)="\.\/[^"]*(?:sarni-main-batch10(?:-v1)?|sarni10-main-(?:polish|upgrades|batch))\.(?:js|css)/.test(html)],
+ ['Workspace belongs to dashboard',html.includes('id="sarni10Workspace"')&&html.includes('id="mainDashboard"')],
+ ['Search and clear',js.includes("sarni10ModuleSearch")&&js.includes("sarni10ClearSearch")],
+ ['Permission-aware module filter',js.includes('valid().filter(allowed)')||js.includes('all().filter(allowed)')],
+ ['Accessible results counts',js.includes("sarni10ModuleCount")&&html.includes('id="sarni10ModuleCount"')],
+ ['Favorites and recent modules',js.includes('favoriteSet=new Set()')&&js.includes('renderFavorites()')&&js.includes('renderRecent()')],
+ ['Breadcrumb updated',js.includes('sarni10Breadcrumb')&&js.includes("Current section: ")],
+ ['Compact density toggle',js.includes("sarni10-compact")&&js.includes("aria-pressed")],
+ ['Slash keyboard shortcut respects editing',js.includes("event.key==='/'")&&js.includes('isContentEditable')],
+ ['Escape resets search',js.includes("event.key==='Escape'")],
+ ['Back to top and reduced motion',js.includes('sarni10Top')&&js.includes('prefers-reduced-motion: reduce')],
+ ['No personal data or backend operations',!/(?:fetch\s*\(|XMLHttpRequest|localStorage|sessionStorage|\.password|\.grant)/.test(js)],
+ ['JavaScript syntax',(()=>{try{new Function(js);return true}catch(_){return false}})()],
+ ['Mobile styling',css.includes('@media')&&css.includes('focus-visible')]
 ];
-let failed=0;
-for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' '+name);if(!ok)failed++;}
-console.log((checks.length-failed)+'/'+checks.length+' main-dashboard checks passed.');
-if(failed)process.exitCode=1;
+const failed=checks.filter(x=>!x[1]);
+checks.forEach(([name,ok])=>console.log((ok?'PASS':'FAIL')+' '+name));
+console.log((checks.length-failed.length)+'/'+checks.length+' checks passed');
+if(failed.length)process.exitCode=1;
