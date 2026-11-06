@@ -13,6 +13,8 @@ const mainBatchJs = readFileSync(new URL('../sarni-main-batch10.js', import.meta
 const mainBatchCss = readFileSync(new URL('../sarni-main-batch10.css', import.meta.url), 'utf8');
 const bridge = readFileSync(new URL('../sarni-health-bridge-v1.js', import.meta.url), 'utf8');
 const history = readFileSync(new URL('../sarni-health-history-v1.js', import.meta.url), 'utf8');
+const mainBatchJs = readFileSync(new URL('../sarni10-main-batch.js', import.meta.url), 'utf8');
+const mainBatchCss = readFileSync(new URL('../sarni10-main-batch.css', import.meta.url), 'utf8');
 const batch10Js = readFileSync(new URL('../q/sarni9-batch10.js', import.meta.url), 'utf8');
 const batch10Css = readFileSync(new URL('../q/sarni9-batch10.css', import.meta.url), 'utf8');
 const main10Js = readFileSync(new URL('../sarni-main-batch10-v1.js', import.meta.url), 'utf8');
@@ -80,6 +82,12 @@ check('Current section and shortcuts announced accessibly', mainBatchJs.includes
 check('Main dashboard scroll aids are present', mainBatchJs.includes("sarni10ScrollProgress") && mainBatchJs.includes("sarni10BackTop"));
 check('Main dashboard mobile and accessibility CSS present', mainBatchCss.includes('focus-visible') && mainBatchCss.includes('min-height:44px') && mainBatchCss.includes('overflow-wrap:anywhere') && mainBatchCss.includes('prefers-reduced-motion:reduce') && mainBatchCss.includes('@media print'));
 check('Main enhancement makes no backend or storage calls', !['fetch(', 'localStorage.', 'sessionStorage.', 'XMLHttpRequest'].some(token=>mainBatchJs.includes(token)));
+check('SarNi 10 main enhancement assets referenced', mainDashboard.includes('sarni10-main-batch.js?v=1') && mainDashboard.includes('sarni10-main-batch.css?v=1'));
+check('Main batch reuses sidebar navigation instead of changing backend', mainBatchJs.includes("target.click()") && mainBatchJs.includes("sarniSidebarPrimary") && !mainBatchJs.includes("fetch("));
+check('Main batch provides jump, shortcuts and current section', mainBatchJs.includes("sarni10Jump") && mainBatchJs.includes("sarni10Current") && mainBatchJs.includes("Alt+Shift+H"));
+check('Main batch has progress and top controls', mainBatchJs.includes("sarni10Progress") && mainBatchJs.includes("sarni10Top") && mainBatchJs.includes("requestAnimationFrame(updateScroll)"));
+check('Main batch mobile and accessible styles', mainBatchCss.includes("min-height:44px") && mainBatchCss.includes("focus-visible") && mainBatchCss.includes("prefers-reduced-motion:reduce"));
+check('Main batch stores no personal data', !/(?:localStorage|sessionStorage|XMLHttpRequest)\\s*\\(/.test(mainBatchJs) && !mainBatchJs.includes("fetch("));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
