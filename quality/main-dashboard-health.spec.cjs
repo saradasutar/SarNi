@@ -2,7 +2,7 @@
 const {test,expect}=require('@playwright/test');
 for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:320,height:700}]){
  test.describe('Main dashboard Health '+viewport.width+'px',()=>{
-  test.use({viewport,serviceWorkers:'block',screenshot:'only-on-failure',trace:'retain-on-failure'});
+  test.use({viewport,serviceWorkers:'block'});
   test('health panel exists with safe controls and main module references',async({page})=>{
    const blocked=[];
    await page.route('**/*',route=>{
