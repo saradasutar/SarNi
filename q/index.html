@@ -1166,6 +1166,89 @@ main{padding-top:13px!important}
 @media(prefers-reduced-motion:reduce){
  #entry #fields textarea.qe-writing-expanded{scroll-behavior:auto!important;}
 }
+</style><style id="qe-family-expense-consistent-v1">
+/* Align Family Expense with the rest of Quick Entry without changing MyFamily data fields. */
+main[data-entry-mode="family"] #entry{
+ padding:12px!important;
+ border-radius:0 0 12px 12px!important;
+}
+main[data-entry-mode="family"] #entry #fields>label{
+ display:block!important;
+ margin:10px 0 5px!important;
+ font-size:13px!important;
+ font-weight:700!important;
+ line-height:1.3!important;
+ color:#443657!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-amountbox{
+ box-sizing:border-box!important;
+ display:flex!important;
+ align-items:center!important;
+ gap:8px!important;
+ width:100%!important;max-width:100%!important;
+ min-height:58px!important;
+ margin:0 0 8px!important;
+ padding:6px 11px!important;
+ background:#f7f1ff!important;
+ border:1.5px solid #c6b1e0!important;
+ border-radius:11px!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-amountbox>span{
+ flex:none!important;font-size:25px!important;line-height:1!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-amountbox>input{
+ display:block!important;flex:1 1 auto!important;
+ min-width:0!important;width:100%!important;
+ height:44px!important;min-height:44px!important;
+ padding:3px 1px!important;margin:0!important;
+ font-size:29px!important;font-weight:750!important;
+ line-height:1.1!important;background:transparent!important;border:0!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-core-grid,
+main[data-entry-mode="family"] #entry #fields>.family-secondary-grid{
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:9px!important;
+ align-items:start!important;
+ margin:7px 0 0!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-core-grid>div,
+main[data-entry-mode="family"] #entry #fields>.family-secondary-grid>div{
+ min-width:0!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-core-grid label,
+main[data-entry-mode="family"] #entry #fields>.family-secondary-grid label{
+ display:block!important;margin:6px 0 4px!important;
+ font-size:13px!important;font-weight:700!important;line-height:1.25!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-core-grid :is(input,select),
+main[data-entry-mode="family"] #entry #fields>.family-secondary-grid :is(input,select){
+ box-sizing:border-box!important;display:block!important;
+ width:100%!important;min-width:0!important;
+ min-height:44px!important;padding:8px 9px!important;
+ font-size:16px!important;border-radius:10px!important;
+}
+main[data-entry-mode="family"] #entry #fields #familyCategoryHint{
+ font-size:11px!important;line-height:1.35!important;margin:8px 0 6px!important;
+}
+main[data-entry-mode="family"] #entry #fields>.family-more-details{
+ margin-top:10px!important;border-radius:10px!important;
+}
+main[data-entry-mode="family"] #entry .actions{
+ display:flex!important;align-items:stretch!important;gap:8px!important;
+}
+main[data-entry-mode="family"] #entry .actions .save{
+ min-width:0!important;white-space:nowrap!important;
+ font-size:14px!important;font-weight:800!important;
+}
+@media(max-width:440px){
+ main[data-entry-mode="family"] #entry #fields>.family-core-grid,
+ main[data-entry-mode="family"] #entry #fields>.family-secondary-grid{
+  grid-template-columns:minmax(0,1fr)!important;gap:5px!important;
+ }
+ main[data-entry-mode="family"] #entry #fields>.family-amountbox{min-height:55px!important}
+ main[data-entry-mode="family"] #entry .actions .save{font-size:13px!important}
+}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">◷</span><span class="qe-action-label">Offline Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">↻</span><span class="qe-action-label">Sync Status</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
@@ -1586,7 +1669,7 @@ function render(){
  $('subtitle').textContent=mode==='office'?'SARNI OFFICE DIARY · HR SYNC STATUS AFTER SAVING':mode==='investment'?'SARNI INVESTMENT · SEE SYNC STATUS AFTER SAVING':mode==='family'?'MYFAMILY EXPENSE · SARNI COPY':mode==='expense'?'ADD TO YOUR SARNI REGISTER':'ADD TO YOUR PRIVATE NOTES';
  if(mode==='family'){
   $('fields').innerHTML=
-  '<label for="familyAmount">Amount (₹)</label><div class="amountbox family-amountbox"><span aria-hidden="true">₹</span><input id="familyAmount" name="amount" type="number" inputmode="decimal" min="0.01" max="100000" step=".01" required autofocus placeholder="0.00"></div>'+
+  '<label for="familyAmount">Amount (₹)</label><div class="amountbox family-amountbox"><span aria-hidden="true">₹</span><input id="familyAmount" name="amount" type="number" inputmode="decimal" min="0.01" max="100000" step=".01" required placeholder="0.00"></div>'+
   '<label for="familyReason">What was it for?</label><input id="familyReason" name="reason" maxlength="500" required placeholder="e.g. Groceries, medicine, transport">'+
   '<label for="familyPaidBy">Paid by / from</label><input id="familyPaidBy" name="paidByName" maxlength="80" required placeholder="Name of person who paid">'+
   '<div class="grid family-core-grid"><div><label for="familyCategory">Category</label><select id="familyCategory" name="category" required><option value="">Loading MyFamily categories…</option></select></div><div><label for="familyDate">Date</label><input id="familyDate" name="date" type="date" value="'+today()+'" required></div></div>'+
