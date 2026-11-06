@@ -19,6 +19,8 @@
    if(button.closest('.hidden,[hidden]'))return false;
    // Do not expose administrator-only modules when their access gate is hidden.
    if(button.classList.contains('admin-only')&&button.classList.contains('hidden'))return false;
+   const style=getComputedStyle(button);
+   if(style.display==='none'||style.visibility==='hidden'||!button.getClientRects().length)return false;
    return true;
   };
   const label=button=>(button.textContent||'').replace(/[⌂₹▣▦✎✧▤♙]/g,'').replace(/\s+/g,' ').trim();
@@ -28,7 +30,10 @@
    const item=document.createElement('span');item.className='sarni10-chip';
    const go=document.createElement('button');go.type='button';go.className='sarni10-go';
    go.textContent=label(button);go.title='Open '+label(button);
-   go.addEventListener('click',()=>{button.click();record(button.dataset.section);});
+   go.addEventListener('click',()=>{
+    if(document.getElementById('appView')?.classList.contains('hidden')||!allowed(button))return;
+    button.click();record(button.dataset.section);
+   });
    item.append(go);
    if(withStar){
     const star=document.createElement('button');star.type='button';star.className='sarni10-star';
