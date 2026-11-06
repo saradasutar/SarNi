@@ -9,8 +9,8 @@ import { exit } from 'node:process';
 
 const source = readFileSync(new URL('../q/index.html', import.meta.url), 'utf8');
 const mainDashboard = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
-const mainBatchJs = readFileSync(new URL('../sarni-main-batch10.js', import.meta.url), 'utf8');
-const mainBatchCss = readFileSync(new URL('../sarni-main-batch10.css', import.meta.url), 'utf8');
+const mainBatchJs = readFileSync(new URL('../sarni10-main-workspace.js', import.meta.url), 'utf8');
+const mainBatchCss = readFileSync(new URL('../sarni10-main-workspace.css', import.meta.url), 'utf8');
 const bridge = readFileSync(new URL('../sarni-health-bridge-v1.js', import.meta.url), 'utf8');
 const history = readFileSync(new URL('../sarni-health-history-v1.js', import.meta.url), 'utf8');
 const batch10Js = readFileSync(new URL('../q/sarni9-batch10.js', import.meta.url), 'utf8');
@@ -67,12 +67,12 @@ check('Keyboard tab navigation and shortcut respect existing buttons', batch10Js
 check('Character counter excludes short fields', batch10Js.includes("qeActiveFieldCount") && batch10Js.includes("input.maxLength<50"));
 check('Responsive accessibility finishes and Back to Top present', batch10Css.includes('prefers-reduced-motion:reduce') && batch10Css.includes('focus-visible') && batch10Css.includes('min-height:46px') && batch10Css.includes('overflow-wrap:anywhere') && batch10Js.includes("id='qeBackToTop'"));
 check('Ten-upgrade helper contains no network or storage operations', !/(?:fetch|localStorage|sessionStorage|XMLHttpRequest)\s*\(/.test(batch10Js));
-check('Main dashboard loads ten-upgrade assets', mainDashboard.includes('sarni-main-batch10.js') && mainDashboard.includes('sarni-main-batch10.css'));
-check('Quick navigation reuses existing section buttons', mainBatchJs.includes("nav.id='sarni10Nav'") && mainBatchJs.includes("original.click()") && mainBatchJs.includes("sarniSidebarPrimary"));
-check('Current section and shortcuts announced accessibly', mainBatchJs.includes("aria-live") && mainBatchJs.includes("Digit[1-4]") && mainBatchJs.includes("isContentEditable"));
-check('Main dashboard scroll aids are present', mainBatchJs.includes("sarni10ScrollProgress") && mainBatchJs.includes("sarni10BackTop"));
-check('Main dashboard mobile and accessibility CSS present', mainBatchCss.includes('focus-visible') && mainBatchCss.includes('min-height:44px') && mainBatchCss.includes('overflow-wrap:anywhere') && mainBatchCss.includes('prefers-reduced-motion:reduce') && mainBatchCss.includes('@media print'));
-check('Main enhancement makes no backend or storage calls', !['fetch(', 'localStorage.', 'sessionStorage.', 'XMLHttpRequest'].some(token=>mainBatchJs.includes(token)));
+check('Main dashboard loads exactly one workspace enhancement bundle', mainDashboard.includes('./sarni10-main-workspace.js') && mainDashboard.includes('./sarni10-main-workspace.css') && !mainDashboard.includes('src="./sarni10-main-polish.js') && !mainDashboard.includes('src="./sarni-main-batch10.js'));
+check('Main workspace has search, favorites and recent section containers', ['sarni10Workspace','sarni10ModuleSearch','sarni10ModuleResults','sarni10Favorites','sarni10Recent','sarni10Breadcrumb','sarni10Density','sarni10Top'].every(id=>mainDashboard.includes('id="'+id+'"')));
+check('Main workspace navigates through original authorized buttons', mainBatchJs.includes('button.click();record(button.dataset.section)') && mainBatchJs.includes('!allowed(button)') && mainBatchJs.includes('sarniSidebarPrimary'));
+check('Main workspace shortcuts and search exclude form editing', mainBatchJs.includes("event.key==='/'") && mainBatchJs.includes("target?.closest('input,textarea,select,[role=\"dialog\"]')"));
+check('Main workspace favorites and recents are in-memory', mainBatchJs.includes('new Set()') && mainBatchJs.includes('history=[]') && !['localStorage.', 'sessionStorage.', 'fetch(', 'XMLHttpRequest'].some(token=>mainBatchJs.includes(token)));
+check('Main workspace mobile, focus and reduced motion styles', mainBatchCss.includes('focus-visible') && mainBatchCss.includes('min-height:44px') && mainBatchCss.includes('overflow-wrap:anywhere') && mainBatchCss.includes('prefers-reduced-motion:reduce'));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
