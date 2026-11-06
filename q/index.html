@@ -2428,7 +2428,38 @@ function render(){
   });
  };
  qeSyncActiveTab();
- $('tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(busy||qePhotoBusy){status('Save or photo upload is in progress. Wait for confirmation before switching tabs.',true);return;}if(qePendingUncertain){status('The last save has an uncertain result. Check Recent Entries before switching tabs, or choose Clear only after confirming whether it saved.',true);return;}qeClearPhotoSelection();qeResetSubmissionIdentity();mode=b.dataset.mode;qeSyncActiveTab();try{localStorage.setItem('sarni_q_last_tab_v1',mode);}catch(_){}$('recentSearch').value='';qeSetCompletionFilter('all');$('recentBody').hidden=true;if($('qeSyncDetails'))$('qeSyncDetails').open=false;if($('qeSipDetails'))$('qeSipDetails').open=false;$('refreshRecent').hidden=true;$('toggleRecent').setAttribute('aria-expanded','false');delete $('entry').dataset.pinRevision;delete $('entry').dataset.editId;delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;render();updatePinGate();void loadRecent(false);void loadSipPlans();void loadQuickSyncSummary();});
+ $('tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  if(busy||qePhotoBusy){status('Save or photo upload is in progress. Wait for confirmation before switching tabs.',true);return;}
+  if(qePendingUncertain){status('The last save has an uncertain result. Check Recent Entries before switching tabs, or choose Clear only after confirming whether it saved.',true);return;}
+  const next=b.dataset.mode,previous=mode;
+  if(next===previous)return;
+  try{
+   qeClearPhotoSelection();qeResetSubmissionIdentity();
+   mode=next;
+   delete $('entry').dataset.pinRevision;delete $('entry').dataset.editId;
+   delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;
+   // Render the NEW form before optional recent-entry, search and sync work.
+   render();
+   if($('heading').textContent!==({expense:'Quick expense',diary:'Quick diary',stock:'Quick stock note',office:'Office Diary',investment:'Investment entry',family:'Family Expense'})[next])throw Error('The requested form was not rendered.');
+  }catch(error){
+   mode=previous;
+   try{render();}catch(_){/* Display the error rather than claiming the form switched. */}
+   status('Unable to switch to '+next+': '+String(error?.message||error)+'. Refresh the page and try again.',true);
+   return;
+  }
+  try{localStorage.setItem('sarni_q_last_tab_v1',mode);}catch(_){}
+  $('recentSearch').value='';$('recentBody').hidden=true;
+  if($('qeSyncDetails'))$('qeSyncDetails').open=false;
+  if($('qeSipDetails'))$('qeSipDetails').open=false;
+  $('refreshRecent').hidden=true;
+  $('toggleRecent').setAttribute('aria-expanded','false');
+  // Failure to refresh an optional panel must not prevent the actual form change.
+  try{qeSetCompletionFilter('all');}catch(error){console.warn('Recent filter refresh:',error);}
+  try{updatePinGate();}catch(error){console.warn('PIN gate refresh:',error);}
+  void loadRecent(false).catch(error=>console.warn('Recent entries:',error));
+  void loadSipPlans().catch(error=>console.warn('SIP plans:',error));
+  void loadQuickSyncSummary().catch(error=>console.warn('Sync summary:',error));
+ });
  const cats=(info.categories||[]).filter(x=>x&&x.active!==false&&x.enabled!==false),opts=cats.map(v=>'<option value="'+safe(v.name)+'">'+safe(v.name)+'</option>').join('');
  $('heading').textContent=({expense:'Quick expense',diary:'Quick diary',stock:'Quick stock note',office:'Office Diary',investment:'Investment entry',family:'Family Expense'})[mode];
  $('subtitle').textContent=mode==='office'?'SARNI OFFICE DIARY · HR SYNC STATUS AFTER SAVING':mode==='investment'?'SARNI INVESTMENT · SEE SYNC STATUS AFTER SAVING':mode==='family'?'MYFAMILY EXPENSE · SARNI COPY':mode==='expense'?'ADD TO YOUR SARNI REGISTER':'ADD TO YOUR PRIVATE NOTES';
