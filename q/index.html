@@ -2590,11 +2590,11 @@ function updatePinGate(){
 $('pinManageToggle').onclick=()=>{pinManageOpen=!pinManageOpen;updatePinGate();if(pinManageOpen)$('pinInput').focus();};
 $('pinUnlockForm').onsubmit=async e=>{
  e.preventDefault();const input=$('pinInput'),b=$('pinUnlock');b.disabled=true;
- try{const result=await api('qpinUnlock',{pin:input.value});pinGrant=result.grant;pinManageOpen=false;input.value='';updatePinGate();status('PIN verified. Edit / Trash / Restore unlocked.');await loadRecent(false);await loadSipPlans();}
+ try{const result=await api('qpinUnlock',{pin:input.value});pinGrant=result.grant;pinManageOpen=false;input.value='';updatePinGate();status('PIN verified. Edit / Trash / Restore unlocked.');await loadRecent(false);await loadSipPlans();void loadQuickSyncSummary();if(!$('qeGlobalSyncPanel').hidden)void qeLoadGlobalSync();}
  catch(error){status('PIN unlock failed: '+error.message,true);}
  finally{b.disabled=false;}
 };
-$('pinLock').onclick=()=>{pinManageOpen=false;pinGrant='';$('pinShowTrash').checked=false;updatePinGate();void loadRecent(false);void loadSipPlans();};
+$('pinLock').onclick=()=>{pinManageOpen=false;pinGrant='';$('pinShowTrash').checked=false;updatePinGate();void loadRecent(false);void loadSipPlans();void loadQuickSyncSummary();if(!$('qeGlobalSyncPanel').hidden)void qeLoadGlobalSync();};
 $('pinShowTrash').onchange=()=>{void loadRecent(false);void loadSipPlans();};
 const qePremiumIcons={"expense":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"6\" width=\"18\" height=\"15\" rx=\"2\"/><path d=\"M3 9V5a2 2 0 0 1 2-2h13\"/><path d=\"M16 13h5v5h-5a2.5 2.5 0 0 1 0-5Z\"/></svg>","diary":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 7c-2.5-2-5.6-2.3-9-1.5v14c3.4-.8 6.5-.5 9 1.5 2.5-2 5.6-2.3 9-1.5v-14c-3.4-.8-6.5-.5-9 1.5Z\"/><path d=\"M12 7v14\"/></svg>","stock":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 20V12h4v8M10 20V8h4v12M16 20V4h4v16\"/></svg>","office":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"7\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12c5 3 13 3 18 0M12 13v3\"/></svg>","investment":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><ellipse cx=\"8\" cy=\"6\" rx=\"5\" ry=\"2.5\"/><path d=\"M3 6v5c0 3 10 3 10 0V6M3 11v5c0 3 10 3 10 0v-5\"/><ellipse cx=\"17\" cy=\"13\" rx=\"4\" ry=\"2\"/><path d=\"M13 13v5c0 3 8 3 8 0v-5\"/></svg>","family":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"8\" cy=\"8\" r=\"3\"/><circle cx=\"17\" cy=\"9\" r=\"2.5\"/><path d=\"M2 21v-2a6 6 0 0 1 12 0v2M15 16c4 0 7 2 7 5\"/></svg>"};
 function qeAssertRenderedForm(kind){
@@ -2925,7 +2925,7 @@ function qeSetGlobalSyncOpen(open){
  const panel=$('qeGlobalSyncPanel'),button=$('qeGlobalSyncButton');
  panel.hidden=!open;button.setAttribute('aria-expanded',String(open));
  const glyph=button.querySelector('.qe-action-glyph'),label=button.querySelector('.qe-action-label');if(glyph)glyph.textContent=open?'✕':'🔄';if(label)label.textContent='Sync';button.title=open?'Close Sync Status':'Sync Status';button.setAttribute('aria-label',button.title);
- if(open)void qeLoadGlobalSync();else{qeVerifyCancel();$('qeVerifyRecentPanel').hidden=true;$('qeVerifyRecentButton').setAttribute('aria-expanded','false');}
+ if(open)void qeLoadGlobalSync();else{++globalSyncRequest;qeVerifyCancel();$('qeVerifyRecentPanel').hidden=true;$('qeVerifyRecentButton').setAttribute('aria-expanded','false');}
 }
 $('qeGlobalSyncButton').onclick=()=>qeSetGlobalSyncOpen($('qeGlobalSyncPanel').hidden);
 $('qeGlobalSyncClose').onclick=()=>qeSetGlobalSyncOpen(false);
@@ -3028,7 +3028,7 @@ async function qeLoadGlobalSync(){
   const el=$(c.id);
   try{
    const pin=!!pinConfig?.enabled;
-   if(!pin&&!info?.quickAccess?.allowRecent){el.textContent='Recent viewing is not enabled for this link.';return;}
+   if(!pin&&!info?.quickAccess?.allowRecent){if(current===globalSyncRequest&&!$('qeGlobalSyncPanel').hidden)el.textContent='Recent viewing is not enabled for this link.';return;}
    const response=await api(pin?'qpinRecent':'qeRecent',pin?{grant:pinGrant||'',kind:c.kind,offset:0,pageSize:20,includeTrash:false}:{kind:c.kind,offset:0,pageSize:20});
    if(current!==globalSyncRequest||$('qeGlobalSyncPanel').hidden)return;
    const items=(Array.isArray(response.entries)?response.entries:Array.isArray(response.items)?response.items:[]).filter(x=>String(x.kind||'').toLowerCase()===c.kind&&!x.trashed);
