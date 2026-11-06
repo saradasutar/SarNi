@@ -462,6 +462,31 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 #sarniQcDialog .sarni-qc-monthly{background:#fff7e4!important;border:1px solid #ebce8b!important;border-radius:9px;padding:8px!important;color:#805712;font-weight:800}
 #sarniQcDialog #sarniQcMarkDateWrap[hidden],#sarniQcDialog .sarni-qc-note-marks label[hidden]{display:none!important}
 </style>
+<style id="sarni-main-health-styles">
+.sarni-main-health{margin:8px 12px 13px;border:1px solid #cfe1dc;background:#f8fbfa;border-radius:14px;overflow:hidden}
+.sarni-main-health[hidden]{display:none!important}
+.sarni-main-health>summary{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:10px 13px;font-size:13px;font-weight:800;color:#245b4b;cursor:pointer;list-style:none}
+.sarni-main-health>summary::-webkit-details-marker{display:none}
+.sarni-main-health>summary:before{content:'▸';font-size:12px;color:#4c8072}
+.sarni-main-health[open]>summary:before{content:'▾'}
+.sarni-main-health>summary>span{margin-right:auto}
+.sarni-main-health>summary small{font-size:11px;font-weight:600;color:#647b73}
+.sarni-main-health[open]>summary{border-bottom:1px solid #d9e7df;background:#eff7f1}
+.sarni-main-health-body{padding:11px 13px;display:grid;gap:10px}
+.sarni-main-health-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sarni-main-health-metric{border:1px solid #dce8e2;background:#fff;border-radius:10px;padding:9px;min-width:0;display:grid;gap:4px}
+.sarni-main-health-metric strong{font-size:11px;color:#416456}
+.sarni-main-health-metric span{font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+.sarni-main-health-metric.good span{color:#23724c}
+.sarni-main-health-metric.warn span{color:#8b671f}
+.sarni-main-health-metric.bad span{color:#a03d3d}
+.sarni-main-health-actions{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.sarni-main-health-actions :is(button,a){border:1px solid #bad4c6;background:#eaf5ee;color:#275b46;border-radius:8px;padding:7px 10px;font-size:12px;font-weight:700;text-decoration:none;min-height:34px}
+.sarni-main-health-actions :is(button,a):focus-visible,.sarni-main-health>summary:focus-visible{outline:2px solid #218567;outline-offset:2px}
+.sarni-main-health-foot{font-size:11px;color:#657970;line-height:1.5;margin:0}
+@media(max-width:700px){.sarni-main-health{margin:7px 5px 10px}.sarni-main-health-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sarni-main-health>summary{padding:9px 10px}}
+@media(max-width:350px){.sarni-main-health-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
@@ -566,6 +591,19 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <button class="mobile-session-button danger" id="mobileLogoutBtn" type="button">Log out</button>
 </div>
 </div>
+<!-- SarNi Main Dashboard Health v1 -->
+<details id="sarniMainHealth" class="sarni-main-health">
+ <summary><span>♡ Dashboard Health</span><small id="sarniMainHealthBrief">Select to inspect</small></summary>
+ <div class="sarni-main-health-body">
+  <div id="sarniMainHealthGrid" class="sarni-main-health-grid" aria-live="polite"><p>Open this section to inspect dashboard readiness.</p></div>
+  <div class="sarni-main-health-actions">
+   <button id="sarniMainHealthRefresh" type="button">↻ Check health</button>
+   <a href="./health.html" target="_blank" rel="noopener noreferrer">Site file check</a>
+   <a href="./q/" target="_blank" rel="noopener noreferrer">Quick Entry</a>
+  </div>
+  <p class="sarni-main-health-foot">Read-only status. A visible module does not prove data was saved or synchronized. No test entries, uploads or session changes.</p>
+ </div>
+</details>
 <section class="page-section" id="overviewSection">
 <div class="overview-mode-bar">
 <div aria-label="Dashboard view" class="overview-mode-switcher" role="tablist">
@@ -2370,5 +2408,45 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <script defer src="./sarni-mytrip-popup-v20-10-3.js?v=20103"></script>
 <script defer src="./sarni-entry-photos-v1.js?v=20261103-quick-entry-photo"></script>
 <script defer src="./diary-hub-launcher.js?v=20261101-admincollapse2"></script>
+<script id="sarni-main-health-script">
+/* Read-only: never calls private APIs, performs writes, or stores results. */
+(function(){
+ 'use strict';
+ const $=id=>document.getElementById(id);
+ const root=$('sarniMainHealth');
+ if(!root)return;
+ let checks=0;
+ const metric=(label,value,tone)=>{
+  const node=document.createElement('div');node.className='sarni-main-health-metric '+(tone||'warn');
+  const title=document.createElement('strong');title.textContent=label;
+  const detail=document.createElement('span');detail.textContent=value;
+  node.append(title,detail);$('sarniMainHealthGrid').append(node);
+ };
+ function inspect(){
+  ++checks;
+  $('sarniMainHealthGrid').replaceChildren();
+  const frontend=$('dashboardVersionTop')?.textContent?.trim()||'Not displayed';
+  const backend=$('dashboardBackendVersionTop')?.textContent?.trim()||'Not displayed';
+  const backendKnown=backend!=='Not displayed'&&!/after sign-in|unknown|not available|checking|connecting/i.test(backend);
+  metric('Frontend',frontend,frontend==='Not displayed'?'warn':'good');
+  metric('Backend version',backend,backendKnown?'good':'warn');
+  metric('Browser network',navigator.onLine?'Online (not a backend check)':'Offline',navigator.onLine?'good':'warn');
+  const sync=$('syncStatus')?.textContent?.trim()||'Not reported';
+  metric('Connection indicator',sync+' · UI-reported only','warn');
+  const modules=[
+   ['Diary','diarySection'],['Calendar','calendarSection'],['Expense','expenditureSection'],['Photos','adminPhotoManager']
+  ];
+  for(const [name,id] of modules){
+   const found=!!$(id);
+   metric(name,found?'Interface present · function not tested':'Interface not found',found?'warn':'bad');
+  }
+  metric('Cross-dashboard sync','Not independently verified here','warn');
+  const available=!!$('mainDashboard')&&!$('mainDashboard').classList.contains('hidden');
+  $('sarniMainHealthBrief').textContent=available?'Checked '+new Date().toLocaleTimeString():'Dashboard not yet visible';
+ }
+ root.addEventListener('toggle',()=>{if(root.open)inspect()});
+ $('sarniMainHealthRefresh').addEventListener('click',inspect);
+})();
+</script>
 </body>
 </html>
