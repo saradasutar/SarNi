@@ -7,6 +7,8 @@ on:
       - "index.html"
       - "sarni-main-batch10.js"
       - "sarni-main-batch10.css"
+      - "sarni-main-batch10.js"
+      - "sarni-main-batch10.css"
       - "q/index.html"
       - "q/sarni9-batch10.js"
       - "q/sarni9-batch10.css"
