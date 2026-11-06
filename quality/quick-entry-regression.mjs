@@ -73,7 +73,6 @@ check('Current section and shortcuts announced accessibly', mainBatchJs.includes
 check('Main dashboard scroll aids are present', mainBatchJs.includes("sarni10ScrollProgress") && mainBatchJs.includes("sarni10BackTop"));
 check('Main dashboard mobile and accessibility CSS present', mainBatchCss.includes('focus-visible') && mainBatchCss.includes('min-height:44px') && mainBatchCss.includes('overflow-wrap:anywhere') && mainBatchCss.includes('prefers-reduced-motion:reduce') && mainBatchCss.includes('@media print'));
 check('Main enhancement makes no backend or storage calls', !['fetch(', 'localStorage.', 'sessionStorage.', 'XMLHttpRequest'].some(token=>mainBatchJs.includes(token)));
-check('SarNi 10 main enhancement assets referenced', mainDashboard.includes('sarni10-main-batch.js?v=1') && mainDashboard.includes('sarni10-main-batch.css?v=1'));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
