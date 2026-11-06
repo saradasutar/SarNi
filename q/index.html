@@ -1559,6 +1559,17 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summar
  #lastSavedEntry .qe-save-breakdown-toggle{font-size:11px!important;padding:7px 8px!important}
  #lastSavedEntry .qe-save-breakdown .qe-save-destination>strong{font-size:11px!important}
 }
+</style><style id="qe-action-completion-remarks-v1">
+#entry #fields .qe-completion-area:not([hidden]){display:block!important;margin:8px 0!important;padding:9px 10px!important;border:1px solid #b8d9c5!important;border-radius:10px!important;background:#f3faf5!important}
+#entry #fields .qe-completion-area .qe-completion-toggle{display:flex!important;align-items:center!important;gap:8px!important;font-size:12px!important;font-weight:800!important;color:#226b48!important}
+#entry #fields .qe-completion-area .qe-completion-toggle input{width:19px!important;height:19px!important;min-height:19px!important;flex:none!important;accent-color:#247d51!important}
+#entry #fields #qeCompletionFields:not([hidden]){display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:7px!important;margin-top:9px!important}
+#entry #fields #qeCompletionFields label{display:grid!important;gap:4px!important;font-size:12px!important;font-weight:750!important;color:#2c624a!important}
+#entry #fields #qeCompletionFields textarea{min-height:65px!important;resize:vertical!important;font-size:15px!important;line-height:1.4!important}
+#entry #fields #qeCompletionFields small{font-size:10px!important;color:#658471!important}
+#recentList .qe-completion-recent{margin-top:8px!important;padding:9px!important;border-left:3px solid #258257!important;border-radius:7px!important;background:#eef9f2!important;white-space:normal!important}
+#recentList .qe-completion-recent strong{display:block!important;font-size:12px!important;color:#1b6a42!important}
+#recentList .qe-completion-recent p{margin:5px 0 0!important;font-size:12px!important;line-height:1.5!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;color:#315a43!important}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">📥</span><span class="qe-action-label">Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">🔄</span><span class="qe-action-label">Sync</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
@@ -1896,9 +1907,15 @@ function noteMarkings(office,stock){
  '<label class="inline-check" title="Learning"><input type="checkbox" name="needsLearning" aria-label="Learning"> Learn</label>'+
  '<label class="inline-check" title="'+last[1]+'"><input type="checkbox" name="'+last[0]+'" aria-label="'+last[1]+'"> '+shortLast+'</label>'+
  '<label class="inline-check qe-monthly-highlight" title="Monthly highlight"><input type="checkbox" name="monthlyHighlight" aria-label="Monthly highlight"> ★ Month</label></div>'+
- '<div class="note-due-row" id="noteDueRow" hidden><label><span id="noteDueCaption">'+(office?'Follow-up due':stock?'Review on':'Planned for')+' (optional)</span><input id="noteDueDate" name="markDueDate" type="date" disabled aria-label="Optional '+last[1]+' date"></label></div>';
+ '<div class="note-due-row" id="noteDueRow" hidden><label><span id="noteDueCaption">'+(office?'Follow-up due':stock?'Review on':'Planned for')+' (optional)</span><input id="noteDueDate" name="markDueDate" type="date" disabled aria-label="Optional '+last[1]+' date"></label></div>'+
+ '<div id="qeCompletionArea" class="qe-completion-area" hidden><label class="qe-completion-toggle"><input id="qeMarkCompleted" name="markCompleted" type="checkbox" disabled> ✓ Completed</label><div id="qeCompletionFields" hidden><label>Completed on<input id="qeCompletedDate" name="completedDate" type="date" disabled></label><label>Completion remark (optional)<textarea id="qeCompletionRemark" name="completionRemark" rows="2" maxlength="600" disabled placeholder="What was completed?"></textarea></label><small>Shown separately from the original note in Recent Entries.</small></div></div>';
 }
 function noteMoreOptions(office){return '';}
+function qeExtractCompletion(text){
+ const raw=String(text||'');
+ const m=raw.match(/\n\n\[SARNI_COMPLETION\]\nDate: (\d{4}-\d{2}-\d{2})\nRemark: ([\s\S]*?)\n\[\/SARNI_COMPLETION\]$/);
+ return m?{body:raw.slice(0,m.index),date:m[1],remark:m[2]}:{body:raw,date:'',remark:''};
+}
 function qeUpdateOptionalMarkDate(){
  const row=$('noteDueRow'),date=$('noteDueDate');if(!row||!date)return;
  const field=mode==='office'?'needsFollowup':mode==='stock'?'needsReview':'needsPlanning';
@@ -1907,9 +1924,18 @@ function qeUpdateOptionalMarkDate(){
  const label=$('noteDueCaption');
  if(label)label.textContent=(mode==='office'?'Follow-up due':mode==='stock'?'Review on':'Planned for')+' (optional)';
  if(!on)date.value='';
+ const completion=$('qeCompletionArea'),done=$('qeMarkCompleted'),fields=$('qeCompletionFields');
+ if(completion&&done&&fields){
+  completion.hidden=!on;done.disabled=!on;
+  if(!on)done.checked=false;
+  fields.hidden=!on||!done.checked;
+  const completedDate=$('qeCompletedDate'),remark=$('qeCompletionRemark');
+  if(completedDate){completedDate.disabled=fields.hidden;if(!fields.hidden&&!completedDate.value)completedDate.value=today();}
+  if(remark)remark.disabled=fields.hidden;
+ }
 }
 $('fields').addEventListener('change',e=>{
- if(e.target.matches('input[name="needsFollowup"],input[name="needsReview"],input[name="needsPlanning"]'))qeUpdateOptionalMarkDate();
+ if(e.target.matches('input[name="needsFollowup"],input[name="needsReview"],input[name="needsPlanning"],input[name="markCompleted"]'))qeUpdateOptionalMarkDate();
 });
 function commonNoteFields(office,stock){
  const title=office?'Title / Subject':'Title (optional)';
@@ -2345,7 +2371,7 @@ function qeRenderDiaryProgress(kind){
  const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
  const weekStart=new Date(today);weekStart.setDate(today.getDate()-(today.getDay()+6)%7);
  const monthStart=new Date(today.getFullYear(),today.getMonth(),1),yearStart=new Date(today.getFullYear(),0,1);
- const dates=[],active=[];let imp=0,learn=0,monthly=0,action=0;const seen=new Set();
+ const dates=[],active=[];let imp=0,learn=0,monthly=0,action=0,completedCount=0;const seen=new Set();
  for(const record of qeProgressRecords){
   if(record.trashed)continue;
   const f=record.fields&&typeof record.fields==='object'?record.fields:{};
@@ -2362,9 +2388,11 @@ function qeRenderDiaryProgress(kind){
   if(flagged('important','mark-important'))imp++;
   if(flagged('needsLearning','mark-learning'))learn++;
   if(flagged('monthlyHighlight','monthly-highlight'))monthly++;
-  if((kind==='diary'&&flagged('needsPlanning','needs-planning'))||(kind==='office'&&flagged('needsFollowup','needs-follow-up'))||(kind==='stock'&&flagged('needsReview','needs-review')))action++;
+  const wasCompleted=tags.includes('action-completed')||!!qeExtractCompletion(String(f.body||f.text||'')).date;
+  if(wasCompleted)completedCount++;
+  else if((kind==='diary'&&flagged('needsPlanning','needs-planning'))||(kind==='office'&&flagged('needsFollowup','needs-follow-up'))||(kind==='stock'&&flagged('needsReview','needs-review')))action++;
  }
- const cards=[['Week',dates.filter(d=>d>=weekStart).length,'Entries'],['Month',dates.filter(d=>d>=monthStart).length,new Set(active).size+' days'],['Year',dates.filter(d=>d>=yearStart).length,'Entries'],['Loaded',dates.length,'Records'],['Imp.',imp,'Marked'],['Learn',learn,'Marked'],[kind==='diary'?'Plan':kind==='office'?'Follow-up':'Review',action,'Marked'],['★ Monthly',monthly,'Highlights']];
+ const cards=[['Week',dates.filter(d=>d>=weekStart).length,'Entries'],['Month',dates.filter(d=>d>=monthStart).length,new Set(active).size+' days'],['Year',dates.filter(d=>d>=yearStart).length,'Entries'],['Loaded',dates.length,'Records'],['Imp.',imp,'Marked'],['Learn',learn,'Marked'],[kind==='diary'?'Plan':kind==='office'?'Follow-up':'Review',action,'Open'],['✓ Done',completedCount,'Completed'],['★ Monthly',monthly,'Highlights']];
  const grid=document.createElement('div');grid.className='qe-progress-grid';
  for(const [label,value,description] of cards){const card=document.createElement('div');card.className='qe-progress-card';const small=document.createElement('small');small.textContent=label;const big=document.createElement('strong');big.textContent=String(value);const sub=document.createElement('span');sub.textContent=description;card.append(small,big,sub);grid.append(card);}
  panel.append(grid);const caveat=document.createElement('small');caveat.className='qe-progress-note';caveat.textContent='Loaded entries only · Show more for older records · Not all-time totals.';panel.append(caveat);
@@ -2456,6 +2484,7 @@ async function loadRecent(append=false){
       if(record.important===true||get('important')==='true')flags.push('Imp.');
       if(tags.includes('monthly-highlight')||get('monthlyHighlight')==='true')flags.push('Monthly');
       if(tags.includes('mark-learning')||tags.includes('office:learning/knowledge')||tags.includes('learning'))flags.push('Learn');
+      if(tags.includes('action-completed')||qeExtractCompletion(get('body','text')).date)flags.push('✓ Completed');
       if(requestedMode==='office'&&tags.includes('needs-follow-up'))flags.push('Follow-up');
       if(requestedMode==='stock'&&tags.includes('needs-review'))flags.push('Review');
       if(requestedMode==='diary'&&tags.includes('needs-planning'))flags.push('Plan');
@@ -2524,7 +2553,14 @@ async function loadRecent(append=false){
     else if(field==='details'){
      const disclosure=document.createElement('details');const summary=document.createElement('summary');summary.textContent='View';
      const content=document.createElement('div');content.className='recent-cell-detail';content.textContent=(detailValues||description||record.text||'No additional details returned').slice(0,2500);
-     disclosure.append(summary,content);td.append(disclosure);
+     const completion=qeExtractCompletion(get('body','text'));
+     if(completion.date){
+      const finished=document.createElement('div');finished.className='qe-completion-recent';
+      const caption=document.createElement('strong');caption.textContent='✓ Completed · '+completion.date;finished.append(caption);
+      if(completion.remark){const note=document.createElement('p');note.textContent=completion.remark;finished.append(note);}
+      disclosure.append(summary,content,finished);
+     }else disclosure.append(summary,content);
+     td.append(disclosure);
     }
     row.append(td);
    });
@@ -2606,7 +2642,16 @@ function editRecent(record){
   const dateTag=tags.find(t=>t.startsWith(modeDateKey+':')&&/^\d{4}-\d{2}-\d{2}$/.test(t.slice(modeDateKey.length+1)));
   const picker=inputs.namedItem('markDueDate');
   if(picker)picker.value=dateTag?dateTag.slice(dateTag.indexOf(':')+1):String(record.fields.markDueDate||'');
+  const noteKey=record.kind==='office'?'body':'text';
+  const original=inputs.namedItem(noteKey);
+  const completion=qeExtractCompletion(String(original?.value||record.fields?.[noteKey]||''));
+  if(original)original.value=completion.body;
+  const done=inputs.namedItem('markCompleted');
+  if(done)done.checked=!!completion.date||tags.includes('action-completed');
   qeUpdateOptionalMarkDate();
+  const finished=inputs.namedItem('completedDate'),remark=inputs.namedItem('completionRemark');
+  if(finished&&completion.date)finished.value=completion.date;
+  if(remark)remark.value=completion.remark;
  }if(record.kind==='investment'){inputs.namedItem('side')?.dispatchEvent(new Event('change'));inputs.namedItem('sipDurationMode')?.dispatchEvent(new Event('change'));}
  if(record.kind==='investment'){const titleInput=inputs.namedItem('title');if(titleInput)titleInput.value=record.fields.title||record.fields.assetName||record.title||'';}if(record.kind==='family'){const category=inputs.namedItem('category');if(category){category.value=record.fields.category||'';category.dispatchEvent(new Event('change'));}const sub=inputs.namedItem('subcategory');if(sub)sub.value=record.fields.subcategory||'';}if(record.kind==='expense'){const category=inputs.namedItem('category');if(category){category.value=record.fields.category||'';category.dispatchEvent(new Event('change'));}const sub=inputs.namedItem('subcategory');if(sub)sub.value=record.fields.subcategory||'';}
  $('entry').dataset.editId=record.id;$('entry').dataset.pinRevision=String(record.revision||'');
@@ -2731,7 +2776,7 @@ function qeRecentPhotos(record){
 }
 
 $('entry').onsubmit=async e=>{e.preventDefault();if(busy)return;if(pinConfig?.enabled&&pinConfig.policies?.[mode]?.requirePinAdd&&!pinGrant){pinManageOpen=true;updatePinGate();status('PIN Add is enabled for '+mode+' in SarNi Admin Settings. To allow entries without PIN, uncheck PIN Add for this tab and save. For this entry you may unlock below.',true);$('pinGate').scrollIntoView({behavior:'smooth',block:'center'});$('pinInput').focus();return;}busy=true;$('save').disabled=true;status('Saving…');try{const data=Object.fromEntries(new FormData(e.target));const fingerprint=qePayloadFingerprint(mode,data);if(qePendingUncertain&&qePendingPayloadFingerprint&&fingerprint!==qePendingPayloadFingerprint){if(!confirm('You changed the entry after an unconfirmed save. This may create a different transaction. Check Recent Entries or the destination first. Continue with a new submission ID?')){status('Save cancelled. Confirm the earlier entry first.',true);return;}qeResetSubmissionIdentity();}const entryId=(pendingQuickEntryMode===mode&&pendingQuickEntryId)||Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');pendingQuickEntryId=entryId;pendingQuickEntryMode=mode;qePendingPayloadFingerprint=fingerprint;qePendingUncertain=false;qeConfirmUncertainResubmission();if(mode==='family'&&!pendingFamilyId)pendingFamilyId=entryId;if(['diary','stock','office'].includes(mode)){
- const flags=new Set(['monthly-highlight','needs-follow-up','needs-review','needs-planning','mark-learning','mark-important']);
+ const flags=new Set(['monthly-highlight','needs-follow-up','needs-review','needs-planning','mark-learning','mark-important','action-completed']);
  const dateKey=mode==='office'?'follow-up-due':mode==='stock'?'review-on':'planned-for';
  const selectedDate=String(data.markDueDate||'');
  const dateMarked=mode==='office'?!!data.needsFollowup:mode==='stock'?!!data.needsReview:!!data.needsPlanning;
@@ -2745,6 +2790,23 @@ $('entry').onsubmit=async e=>{e.preventDefault();if(busy)return;if(pinConfig?.en
  if(mode==='stock'&&data.needsReview)tags.push('needs-review');
  if(mode==='office'){tags.push('office:'+(data.needsLearning?'Learning/Knowledge':'General Work'));data.status=data.needsFollowup?'Follow-up':'Open';}
  if(dateMarked&&selectedDate)tags.push(dateKey+':'+selectedDate);
+ const completed=!!data.markCompleted&&dateMarked;
+ const completedDate=String(data.completedDate||'');
+ const completionRemark=String(data.completionRemark||'').trim();
+ if(completed&&completedDate&&!/^\d{4}-\d{2}-\d{2}$/.test(completedDate))throw Error('Choose a valid completion date.');
+ const noteKey=mode==='office'?'body':'text';
+ const existing=qeExtractCompletion(data[noteKey]);
+ data[noteKey]=existing.body;
+ if(completed){
+  const finishDate=completedDate||today();
+  tags.push('action-completed');
+  const suffix='\n\n[SARNI_COMPLETION]\nDate: '+finishDate+'\nRemark: '+completionRemark+'\n[/SARNI_COMPLETION]';
+  const limit=mode==='office'?10000:4500;
+  if(data[noteKey].length+suffix.length>limit)throw Error('Note and completion remark exceed '+limit+' characters. Shorten the remark.');
+  data[noteKey]+=suffix;
+  if(mode==='office')data.status='Completed';
+ }
+ delete data.markCompleted;delete data.completedDate;delete data.completionRemark;
  data.tags=[...new Set(tags)].join(', ').slice(0,300);data.important=!!data.important;
  delete data.needsFollowup;delete data.needsReview;delete data.needsPlanning;delete data.needsLearning;delete data.markDueDate;delete data.diaryType;delete data.officeNoteType;
 }const plannedSip=mode==='investment'&&data.side==='SIP'&&data.sipEntryPurpose==='PLAN';if(plannedSip){if(data.assetType!=='MF')throw Error('For this phase, saved SIP plans support Mutual Funds (MF).');if(!data.sipStartDate)throw Error('Choose the first SIP date.');if(data.sipDurationMode==='DATES'&&(!data.sipEndDate||data.sipEndDate<data.sipStartDate))throw Error('Choose an end date on or after the first installment.');if(data.sipDurationMode==='COUNT'&&!(Number.isInteger(Number(data.sipInstallments))&&Number(data.sipInstallments)>=1&&Number(data.sipInstallments)<=1200))throw Error('Enter 1–1200 installments.');}else if(mode==='investment'){delete data.sipPlanOnly;delete data.sipEntryPurpose;delete data.sipFrequency;delete data.sipDurationMode;delete data.sipStartDate;delete data.sipEndDate;delete data.sipInstallments;}
