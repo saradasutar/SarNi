@@ -75,11 +75,14 @@ for (const viewport of scenarios) {
    // Health UI must remain read-only, collapsible and show only status categories.
    await page.locator('#qeDashboardHealth > summary').click();
    await expect(page.locator('#qeDashboardHealth')).toHaveAttribute('open','');
-   await expect(page.locator('#qeHealthHistory')).toBeVisible();
+   const historySection=page.locator('.qe-health-history-section').filter({hasText:'Recent health history'});
+   await expect(historySection.locator('summary')).toBeVisible();
+   await expect(historySection).not.toHaveAttribute('open','');
    await expect(page.locator('.qe-health-history-section').filter({hasText:'Troubleshooting guide'})).toHaveCount(1);
    await page.locator('#qeHealthCheck').click();
    await expect(page.locator('#qeHealthMetrics')).toContainText('SarNi backend',{timeout:15000});
-   await page.locator('.qe-health-history-section').filter({hasText:'Recent health history'}).locator('summary').click();
+   await historySection.locator('summary').click();
+   await expect(page.locator('#qeHealthHistory')).toBeVisible();
    await expect(page.locator('#qeHealthHistory')).toContainText('Frontend');
    await page.locator('#qeHealthHistoryClear').click();
    await expect(page.locator('#qeHealthHistory')).toContainText('No status history');
