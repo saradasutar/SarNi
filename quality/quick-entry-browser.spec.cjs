@@ -15,7 +15,7 @@ for (const viewport of scenarios) {
   test('six tabs, form layout and safe navigation', async ({ page }) => {
    const errors=[];
    page.on('pageerror',error => errors.push(error.message));
-   await page.route('**/SarNi/config.js', route => route.fulfill({
+   await page.route('**/config.js', route => route.fulfill({
     status:200, contentType:'application/javascript',
     body:"window.PORTFOLIO_CONFIG={API_URL:'https://script.google.com/macros/s/TEST_ONLY/exec'};"
    }));
@@ -40,7 +40,7 @@ for (const viewport of scenarios) {
     await route.fulfill({status:200,contentType:'text/html',body:markup});
    });
 
-   await page.goto('http://127.0.0.1:8765/SarNi/q/?k=TEST_FIXTURE_ONLY',{waitUntil:'domcontentloaded'});
+   await page.goto('http://127.0.0.1:8765/q/?k=TEST_FIXTURE_ONLY',{waitUntil:'domcontentloaded'});
    await expect(page.locator('#tabs button[data-mode]')).toHaveCount(6,{timeout:15000});
    for (const mode of modes) {
     await page.locator('#tabs button[data-mode="'+mode+'"]').click();
