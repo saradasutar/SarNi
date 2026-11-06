@@ -1593,7 +1593,7 @@ function render(){
   '<div class="grid family-secondary-grid"><div><label for="familySubcategory">Subcategory</label><select id="familySubcategory" name="subcategory" required><option value="">Choose category first</option></select></div><div><label for="familySentTo">Paid to</label><input id="familySentTo" name="sentTo" maxlength="100" required placeholder="Shop / person"></div></div>'+
   '<p id="familyCategoryHint" class="family-expense-hint" aria-live="polite">Loading your MyFamily expense heads…</p>'+
   '<details class="advanced family-more-details"><summary>More payment details <span aria-hidden="true">⌄</span></summary><div class="advanced-body"><label for="familyFromAccount">Payment method</label><input id="familyFromAccount" name="fromAccount" maxlength="100" value="Cash / UPI" placeholder="Cash, UPI, card or account"><small>Optional. Default remains Cash / UPI.</small></div></details>';
-  $('save').hidden=false;$('reset').hidden=false;$('save').textContent='Save to MyFamily & SarNi';
+  $('save').hidden=false;$('reset').hidden=false;$('save').textContent='Save & Add Another';
   status('');
   const form=$('entry'),cat=form.elements.namedItem('category'),sub=form.elements.namedItem('subcategory'),hint=$('familyCategoryHint');
   function applyCategories(data){
