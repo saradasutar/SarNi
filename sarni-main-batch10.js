@@ -20,6 +20,7 @@
   const caption=document.createElement('span');caption.className='sarni10-nav-title';caption.textContent='QUICK SECTIONS';
   nav.append(caption);
   const items=new Map();
+  const allowedNav=button=>!!button&&!button.disabled&&!button.hidden&&!button.classList.contains('hidden')&&button.getAttribute('aria-hidden')!=='true'&&!button.closest('[hidden]');
   for(const item of sections){
    const button=document.createElement('button');button.type='button';
    button.dataset.sarni10Section=item.key;button.className='sarni10-nav-button';
@@ -27,7 +28,7 @@
    button.setAttribute('aria-label','Open '+item.title);
    button.addEventListener('click',()=>{
     const original=navigation.querySelector('[data-section="'+item.key+'"]');
-    if(original&&!original.disabled&&!original.hidden&&!original.closest('[hidden]'))original.click();
+    if(allowedNav(original))original.click();
    });
    items.set(item.key,button);nav.append(button);
   }
@@ -44,7 +45,10 @@
    if(app.hidden||app.classList.contains('hidden'))return;
    const active=navigation.querySelector('.nav-item.active[data-section]')?.dataset.section||'';
    for(const [key,button] of items){
-    const selected=key===active;
+    const source=navigation.querySelector('[data-section="'+key+'"]');
+    button.hidden=!allowedNav(source);
+    button.disabled=!allowedNav(source);
+    const selected=key===active&&!button.hidden;
     button.classList.toggle('is-current',selected);
     if(selected)button.setAttribute('aria-current','page');
     else button.removeAttribute('aria-current');
@@ -69,7 +73,7 @@
    if(el?.isContentEditable||el?.matches?.('input,textarea,select,[role="textbox"]'))return;
    if(app.hidden||app.classList.contains('hidden'))return;
    const button=[...items.values()][Number(event.code.slice(-1))-1];
-   if(!button)return;
+   if(!button||button.hidden||button.disabled)return;
    event.preventDefault();button.click();button.focus();
   });
 
@@ -84,11 +88,12 @@
   const top=document.createElement('button');top.id='sarni10BackTop';top.type='button';
   top.className='sarni10-back-top';top.textContent='↑ Top';top.hidden=true;
   top.setAttribute('aria-label','Back to top of dashboard');dashboard.append(top);
-  top.addEventListener('click',()=>dashboard.scrollTo({
+  const getScroller=()=>dashboard.scrollHeight>dashboard.clientHeight+10&&/auto|scroll/.test(getComputedStyle(dashboard).overflowY)?dashboard:document.scrollingElement;
+  top.addEventListener('click',()=>getScroller().scrollTo({
    top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'
   }));
   function updateScroll(){
-   const scroller=dashboard.scrollHeight>dashboard.clientHeight+10?dashboard:document.scrollingElement;
+   const scroller=getScroller();
    const y=scroller.scrollTop,range=Math.max(0,scroller.scrollHeight-scroller.clientHeight);
    track.style.width=(range?Math.min(100,Math.max(0,y/range*100)):0)+'%';
    top.hidden=y<440||app.classList.contains('hidden');
