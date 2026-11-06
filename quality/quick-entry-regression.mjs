@@ -48,7 +48,9 @@ check('Health History and troubleshooting controls present', includes('id="qeHea
 check('SIP-plan requests ignore stale tab responses', includes('let qeSipListRequestVersion=0') && includes('const requestVersion=++qeSipListRequestVersion') && source.split("mode!=='investment'||requestVersion!==qeSipListRequestVersion").length===3);
 check('Closing global Sync invalidates earlier requests', includes("else{++globalSyncRequest;qeVerifyCancel();") && includes("current!==globalSyncRequest||$('qeGlobalSyncPanel').hidden"));
 check('Sync permission state is guarded before rendering', includes("if(current===globalSyncRequest&&!$('qeGlobalSyncPanel').hidden)el.textContent='Recent viewing is not enabled for this link.'"));
-check('PIN changes refresh currently visible sync summaries', includes("void loadQuickSyncSummary();if(!$('qeGlobalSyncPanel').hidden)void qeLoadGlobalSync();"));
+check('PIN changes refresh currently visible sync summaries', includes("await qeRefreshPanels({global:true})") && includes("void qeRefreshPanels({global:true})"));
+check('Unified refresh controller only dispatches readers', includes('function qeRefreshPanels(options={})') && includes("['recent',()=>loadRecent(false)]") && includes("['sip',()=>loadSipPlans()]") && includes("['sync',()=>loadQuickSyncSummary()]") && includes('Promise.allSettled(jobs.map('));
+check('Tab changes and startup use coordinated refresh', includes('void qeRefreshPanels();') && !includes('void loadRecent();void loadSipPlans();void loadQuickSyncSummary();'));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
