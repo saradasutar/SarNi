@@ -86,6 +86,21 @@ for (const viewport of scenarios) {
      await expect(page.locator('#qeCompletionRemark')).toHaveCount(1);
     }
    }
+   // SarNi 9 batch: verify progressive enhancements without submitting records.
+   await expect(page.locator('#qeSearchClear')).toHaveCount(1);
+   await expect(page.locator('#qeActiveFieldCount')).toHaveCount(1);
+   await expect(page.locator('#qeBackToTop')).toHaveCount(1);
+   await page.locator('#familyReason').fill('Sample unsaved description');
+   await expect(page.locator('#qeActiveFieldCount')).toContainText('characters');
+   await page.locator('#tabs button[data-mode="family"]').focus();
+   await page.keyboard.press('ArrowLeft');
+   await expect(page.locator('#tabs button[data-mode="investment"]')).toBeFocused();
+   await expect(page.locator('#tabs button[data-mode="family"]')).toHaveAttribute('aria-pressed','true');
+   await page.locator('#toggleRecent').click();
+   await page.locator('#recentSearch').fill('sample');
+   await expect(page.locator('#qeSearchClear')).toBeVisible();
+   await page.locator('#qeSearchClear').click();
+   await expect(page.locator('#recentSearch')).toHaveValue('');
    // Health UI must remain read-only, collapsible and show only status categories.
    await page.locator('#qeDashboardHealth > summary').click();
    await expect(page.locator('#qeDashboardHealth')).toHaveAttribute('open','');
