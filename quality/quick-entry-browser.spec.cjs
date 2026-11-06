@@ -15,7 +15,19 @@ for (const viewport of scenarios) {
   test('six tabs, form layout and safe navigation', async ({ page }) => {
    const errors=[];
    const attemptedWrites=[];
+   const blockedRequests=[];
    page.on('pageerror',error => errors.push(error.message));
+   // Fail closed for every unmocked network destination. Install this first:
+   // later, more specific mock routes take precedence in Playwright.
+   await page.route('**/*',route=>{
+    const request=route.request();
+    const url=new URL(request.url());
+    if(url.origin!=='http://127.0.0.1:8765'||request.method()!=='GET'){
+     blockedRequests.push({origin:url.origin,method:request.method()});
+     return route.abort();
+    }
+    return route.continue();
+   });
    await page.route('**/config.js', route => route.fulfill({
     status:200, contentType:'application/javascript',
     body:"window.PORTFOLIO_CONFIG={API_URL:'https://script.google.com/macros/s/TEST_ONLY/exec'};"
@@ -87,6 +99,7 @@ for (const viewport of scenarios) {
    await page.locator('#qeHealthHistoryClear').click();
    await expect(page.locator('#qeHealthHistory')).toContainText('No status history');
    expect(attemptedWrites).toEqual([]);
+   expect(blockedRequests).toEqual([]);
    expect(errors).toEqual([]);
   });
  });
