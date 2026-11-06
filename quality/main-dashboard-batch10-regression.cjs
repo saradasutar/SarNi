@@ -18,7 +18,7 @@ const tests=[
  check('Keyboard shortcuts blocked during typing',js.includes("event.altKey")&&js.includes("el?.isContentEditable")&&js.includes("input,textarea,select")),
  check('Scroll progress stays read-only',js.includes("sarni10ScrollProgress")&&js.includes("track.style.width")),
  check('Back to top respects reduced motion',js.includes("sarni10BackTop")&&js.includes("prefers-reduced-motion: reduce")),
- check('Shortcut help included',js.includes("sarni10-keyboard-help")&&js.includes("Ctrl/⌘ + K")),
+ check('Shortcut help included',js.includes("sarni10-keyboard-help")&&js.includes("Alt + Shift + 1–4")),
  check('Visible focus and mobile touch styles',css.includes(':focus-visible')&&css.includes('min-height:44px')),
  check('Text overflow protection',css.includes('overflow-wrap:anywhere')),
  check('Reduced-motion styles',css.includes('prefers-reduced-motion:reduce')),
