@@ -1134,6 +1134,38 @@ main{padding-top:13px!important}
  #lastSavedEntry>strong{font-size:13px!important}
  #lastSavedEntry .qe-save-breakdown-toggle{font-size:11px!important;padding:8px 9px!important}
 }
+</style><style id="qe-writing-expand-v1">
+/* Optional writing room without stealing mobile space until requested. */
+#entry #fields .qe-writing-expand{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ margin:5px 0 9px auto!important;padding:6px 10px!important;
+ width:auto!important;min-width:0!important;min-height:32px!important;
+ border:1px solid var(--mode-border,#c7dfce)!important;border-radius:9px!important;
+ background:#fff!important;color:var(--mode-accent,#27674f)!important;
+ font-size:11px!important;font-weight:750!important;line-height:1.2!important;
+ box-shadow:none!important;
+}
+#entry #fields .qe-writing-expand:focus-visible{
+ outline:2px solid var(--mode-accent,#27674f)!important;outline-offset:2px!important;
+}
+#entry #fields textarea.qe-writing-expanded{
+ box-sizing:border-box!important;
+ min-height:clamp(270px,55dvh,570px)!important;
+ height:clamp(270px,55dvh,570px)!important;
+ max-height:none!important;
+ overflow-y:auto!important;
+ line-height:1.55!important;
+}
+@supports not (height:55dvh){
+ #entry #fields textarea.qe-writing-expanded{height:55vh!important;min-height:270px!important;}
+}
+@media(max-width:600px){
+ #entry #fields .qe-writing-expand{font-size:11px!important;min-height:33px!important;}
+ #entry #fields textarea.qe-writing-expanded{min-height:clamp(270px,55dvh,550px)!important;height:clamp(270px,55dvh,550px)!important;}
+}
+@media(prefers-reduced-motion:reduce){
+ #entry #fields textarea.qe-writing-expanded{scroll-behavior:auto!important;}
+}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">◷</span><span class="qe-action-label">Offline Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">↻</span><span class="qe-action-label">Sync Status</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
@@ -1491,9 +1523,22 @@ function commonNoteFields(office,stock){
  return stockField+
   '<label>'+title+'<input name="title" maxlength="'+(office?'140':'120')+'" '+(office?'required ':'')+'placeholder="'+(office?'Office follow-up or work note':'Short heading')+'"></label>'+
   '<label>What would you like to record?<textarea name="'+contentName+'" rows="5" maxlength="'+(office?'10000':'4500')+'" required placeholder="'+(office?'Enter authorised non-confidential work notes only':'Write your observation, reflection or lesson…')+'"></textarea></label>'+
+  '<button type="button" class="qe-writing-expand" aria-pressed="false" aria-label="Expand writing area">⤢ Expand writing</button>'+
   '<div class="note-date-tags"><label><span>Date</span><input name="'+dateName+'" type="date" value="'+today()+'" required></label><label><span>Tags</span><input name="tags" maxlength="300" value="" placeholder="" aria-label="Tags"></label></div>'+
   noteMarkings(office,stock)+noteMoreOptions(office);
 }
+/* Writing area size affects layout only, never the entry data. */
+$('fields').addEventListener('click',e=>{
+ const control=e.target.closest('.qe-writing-expand');
+ if(!control)return;
+ const note=$('fields').querySelector('textarea[name="text"],textarea[name="body"]');
+ if(!note)return;
+ const enlarged=note.classList.toggle('qe-writing-expanded');
+ control.setAttribute('aria-pressed',String(enlarged));
+ control.setAttribute('aria-label',enlarged?'Reduce writing area':'Expand writing area');
+ control.textContent=enlarged?'⤡ Normal size':'⤢ Expand writing';
+ note.focus({preventScroll:true});
+});
 function updateNoteTypeTone(){
  const select=$('fields')?.querySelector('select[name="diaryType"],select[name="officeNoteType"]');
  if(!select)return;
