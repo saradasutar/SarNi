@@ -2401,6 +2401,24 @@ $('pinUnlockForm').onsubmit=async e=>{
 $('pinLock').onclick=()=>{pinManageOpen=false;pinGrant='';$('pinShowTrash').checked=false;updatePinGate();void loadRecent(false);void loadSipPlans();};
 $('pinShowTrash').onchange=()=>{void loadRecent(false);void loadSipPlans();};
 const qePremiumIcons={"expense":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"6\" width=\"18\" height=\"15\" rx=\"2\"/><path d=\"M3 9V5a2 2 0 0 1 2-2h13\"/><path d=\"M16 13h5v5h-5a2.5 2.5 0 0 1 0-5Z\"/></svg>","diary":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 7c-2.5-2-5.6-2.3-9-1.5v14c3.4-.8 6.5-.5 9 1.5 2.5-2 5.6-2.3 9-1.5v-14c-3.4-.8-6.5-.5-9 1.5Z\"/><path d=\"M12 7v14\"/></svg>","stock":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 20V12h4v8M10 20V8h4v12M16 20V4h4v16\"/></svg>","office":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"7\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12c5 3 13 3 18 0M12 13v3\"/></svg>","investment":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><ellipse cx=\"8\" cy=\"6\" rx=\"5\" ry=\"2.5\"/><path d=\"M3 6v5c0 3 10 3 10 0V6M3 11v5c0 3 10 3 10 0v-5\"/><ellipse cx=\"17\" cy=\"13\" rx=\"4\" ry=\"2\"/><path d=\"M13 13v5c0 3 8 3 8 0v-5\"/></svg>","family":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"8\" cy=\"8\" r=\"3\"/><circle cx=\"17\" cy=\"9\" r=\"2.5\"/><path d=\"M2 21v-2a6 6 0 0 1 12 0v2M15 16c4 0 7 2 7 5\"/></svg>"};
+function qeAssertRenderedForm(kind){
+ const required={
+  expense:['qeAmount','qeReason','qePaidBy','qePaidTo','qeCategory','qeSub','qeDate','qeProject'],
+  diary:['[name="text"]','[name="entryDate"]','[name="needsPlanning"]','qeMarkCompleted'],
+  stock:['[name="companyName"]','[name="text"]','[name="entryDate"]','[name="needsReview"]','qeMarkCompleted'],
+  office:['[name="body"]','[name="date"]','[name="needsFollowup"]','qeMarkCompleted'],
+  investment:['[name="assetType"]','[name="side"]','[name="title"]','[name="investor"]','[name="amount"]','[name="date"]'],
+  family:['familyAmount','familyReason','familyPaidBy','familyFromAccount','familyCategory','familySubcategory','familySentTo','familyDate']
+ };
+ const fields=$('fields'),list=required[kind];
+ if(!fields||!list)throw Error('Unknown entry form '+kind);
+ const missing=list.filter(key=>key[0]==='['?!fields.querySelector(key):!fields.querySelector('#'+key));
+ if(missing.length)throw Error('Form incomplete: '+missing.join(', '));
+ if(document.querySelector('main')?.dataset.entryMode!==kind)throw Error('Entry form mode mismatch');
+ const buttons=[...$('tabs').querySelectorAll('button[data-mode]')];
+ const active=buttons.filter(button=>button.getAttribute('aria-pressed')==='true');
+ if(active.length!==1||active[0].dataset.mode!==kind)throw Error('Tab selection mismatch');
+}
 function render(){
  const access=info.quickAccess||{},types=[['expense','₹ Expense',access.allowExpense],['diary','✎ Diary',access.allowDiary],['stock','▥ Stock N.',access.allowStock],['office','▣ Office D.',hubAccess.allowOffice],['investment','₹ Invest',hubAccess.allowInvestment],['family','⌂ Fam. Exp.',true]].filter(x=>x[2]);
  if(!types.length){status('All entry types are disabled.',true);return;}
@@ -2440,7 +2458,7 @@ function render(){
    delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;
    // Render the NEW form before optional recent-entry, search and sync work.
    render();
-   if($('heading').textContent!==({expense:'Quick expense',diary:'Quick diary',stock:'Quick stock note',office:'Office Diary',investment:'Investment entry',family:'Family Expense'})[next])throw Error('The requested form was not rendered.');
+   qeAssertRenderedForm(next);
   }catch(error){
    mode=previous;
    try{render();}catch(_){/* Display the error rather than claiming the form switched. */}
