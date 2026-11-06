@@ -1,0 +1,34 @@
+/* SarNi Main Dashboard: ten additive usability/accessibility upgrades. */
+/* 1. Compact section jump, designed to coexist with existing command palette */
+#sarniMainJump.sarni10-jump{position:relative;margin:7px 12px 9px;padding:9px 12px;border:1px solid #d8e4df;border-radius:13px;background:var(--surface,#fff);color:var(--ink,#243b36);display:grid;gap:5px;max-width:100%;min-width:0}
+.sarni10-jump-head{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.sarni10-jump-head label{font-size:12px;font-weight:800}
+#sarniMainCurrentSection.sarni10-current{font-size:11px;font-weight:700;color:#377354;overflow-wrap:anywhere}
+.sarni10-jump-input{display:flex;gap:6px;align-items:center;min-width:0}
+#sarniMainJumpInput{flex:1 1 auto;min-width:0;max-width:420px;min-height:38px;padding:7px 10px;border-radius:9px;border:1px solid #c6dacf;background:var(--surface,#fff);color:var(--ink,#243b36);font:inherit;font-size:13px}
+#sarniMainJumpClear:not([hidden]){min-height:38px;border:1px solid #cbded1;border-radius:9px;padding:6px 10px;background:#edf7f1;color:#275d44;font-weight:750;cursor:pointer}
+#sarniMainJumpClear[hidden]{display:none!important}
+#sarniMainJumpStatus{font-size:10px;color:var(--muted,#687e76)}
+#sarniMainJumpResults:not([hidden]){display:grid;gap:3px;max-width:420px;max-height:240px;overflow-y:auto;padding:5px;border:1px solid #d2e3da;border-radius:9px;background:var(--surface,#fff)}
+#sarniMainJumpResults[hidden]{display:none!important}
+#sarniMainJumpResults button{padding:8px 10px;border:0;border-radius:7px;text-align:left;font-size:12px;color:var(--ink,#243b36);background:transparent;cursor:pointer;min-height:36px}
+#sarniMainJumpResults button:is(:hover,[aria-selected="true"]){background:#e6f5eb;color:#165939}
+/* 8. Clear keyboard focus across major dashboard controls */
+#mainDashboard :is(button,a,input,select,textarea,summary):focus-visible,
+#sarniMainBackToTop:focus-visible{outline:3px solid #178367!important;outline-offset:2px!important}
+/* 9. Comfortable mobile tap sizes, without changing dashboard density preference */
+@media(max-width:680px){
+ #sarniMainJump.sarni10-jump{margin:6px 5px 9px;padding:8px 10px}
+ #sarniMainJumpInput{min-height:44px}
+ #sarniMainJumpResults button{min-height:44px}
+ #sarniMainJumpClear:not([hidden]){min-height:44px}
+ #sarniSimplifiedNav button,.sarni-mobile-dock button{touch-action:manipulation}
+}
+/* 10. Improve long-text wrapping and respect reduced-motion accessibility */
+#mainDashboard :is(.sarni-main-health-metric,.sarni-focus-shell,.page-section,.sarni10-current){overflow-wrap:anywhere;min-width:0}
+@media(prefers-reduced-motion:reduce){
+ #sarniMainJump *,#sarniMainBackToTop,#mainDashboard :is(.sarni-main-health,.sarni-focus-shell){animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+#sarniMainBackToTop.sarni10-back-to-top:not([hidden]){position:fixed;right:max(13px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));min-width:60px;min-height:44px;padding:8px 12px;border-radius:999px;border:1px solid #c7dfd1;background:#eaf7ef;color:#155638;box-shadow:0 3px 14px #112a241f;z-index:32;font-weight:850;font-size:12px;cursor:pointer}
+#sarniMainBackToTop[hidden]{display:none!important}
+@media(max-width:680px){#sarniMainBackToTop.sarni10-back-to-top:not([hidden]){bottom:max(82px,env(safe-area-inset-bottom))}}
