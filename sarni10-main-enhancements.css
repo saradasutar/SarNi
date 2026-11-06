@@ -1,0 +1,31 @@
+/* SarNi 10: main-dashboard improvements, scoped to new shortcut controls. */
+#sarni10QuickNav{margin:10px 12px 12px;padding:12px 14px;border:1px solid #d9e6e0;border-radius:15px;background:linear-gradient(115deg,#f4faf7,#f8faff);box-shadow:0 4px 16px #1a4d3710;min-width:0}
+#sarni10QuickNav .sarni10-nav-head{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-bottom:7px}
+#sarni10QuickNav .sarni10-nav-head strong{font-size:14px;color:#215543}
+#sarni10QuickNav .sarni10-nav-head small{color:#677c73;font-size:11px;flex:1 1 165px}
+#sarni10QuickNav .sarni10-nav-head button{margin-left:auto;border:1px solid #d2e1d8;background:#fff;border-radius:9px;min-height:32px;padding:5px 11px;font-size:11px;color:#386553;font-weight:700}
+#sarni10QuickNav .sarni10-nav-content[hidden]{display:none!important}
+#sarni10QuickNav .sarni10-shortcuts{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:7px 0}
+#sarni10QuickNav .sarni10-favorite{display:inline-flex;align-items:center;max-width:100%;border:1px solid #d3e2db;border-radius:10px;background:#fff;overflow:hidden}
+#sarni10QuickNav .sarni10-favorite.is-active{border-color:#4a9b77;background:#e4f5eb;box-shadow:inset 0 0 0 1px #4a9b77}
+#sarni10QuickNav button{cursor:pointer}
+#sarni10QuickNav .sarni10-go{font-size:12px;font-weight:750;min-height:37px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:7px 10px;border:0;background:transparent;color:#205b43}
+#sarni10QuickNav .sarni10-pin{min-width:32px;min-height:37px;font-size:16px;padding:4px 6px;border:0;border-left:1px solid #d9e9df;background:transparent;color:#9b7015}
+#sarni10QuickNav .sarni10-recent{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:7px 0 3px}
+#sarni10QuickNav .sarni10-recent strong{font-size:11px;color:#687e73;margin-right:2px}
+#sarni10QuickNav .sarni10-recent small{font-size:11px;color:#7a8b82}
+#sarni10QuickNav .sarni10-recent-item{border:1px solid #e0e7e4;background:#f8faf9;border-radius:999px;padding:5px 10px;min-height:31px;font-size:11px;color:#3f6757}
+#sarni10QuickNav .sarni10-chooser{display:inline-block;max-width:100%;vertical-align:middle}
+#sarni10QuickNav .sarni10-chooser summary{cursor:pointer;list-style:disclosure-closed inside;font-size:11px;font-weight:750;color:#2f7460;padding:6px 0}
+#sarni10QuickNav .sarni10-chooser-grid{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 8px}
+#sarni10QuickNav .sarni10-chooser-grid button{min-height:34px;padding:5px 9px;border:1px solid #c9e0d4;border-radius:9px;background:#fff;color:#27614a;font-size:11px}
+#sarni10QuickNav .sarni10-shortcut-note{margin:3px 0 0;color:#73847a;font-size:10px;line-height:1.45}
+#sarni10QuickNav :is(button,summary):focus-visible,#sarni10BackToTop:focus-visible{outline:3px solid #167f5b;outline-offset:2px}
+/* Mobile hit targets and long-content handling */
+@media(max-width:600px){#sarni10QuickNav{margin:7px 5px 9px;padding:9px 10px}#sarni10QuickNav .sarni10-go,#sarni10QuickNav .sarni10-pin,#sarni10QuickNav .sarni10-recent-item,#sarni10QuickNav .sarni10-nav-head button{min-height:44px}#sarni10QuickNav .sarni10-shortcuts{gap:5px}#sarni10QuickNav .sarni10-go{max-width:115px}}
+#mainDashboard :is(.page-section,.life-card,.diary-hero,.expense-hero){min-width:0}
+#mainDashboard :is(.life-card,.diary-hero,.expense-hero) :is(p,small){overflow-wrap:anywhere}
+/* Back to top appears only once the page has been scrolled */
+#sarni10BackToTop:not([hidden]){display:inline-flex;position:fixed;bottom:max(13px,env(safe-area-inset-bottom));right:max(13px,env(safe-area-inset-right));z-index:45;align-items:center;justify-content:center;border:1px solid #abd5bd;border-radius:999px;background:#e8f6ed;color:#245c42;min-height:44px;min-width:63px;padding:7px 12px;font-size:12px;font-weight:850;box-shadow:0 3px 13px #17483128;cursor:pointer}
+#sarni10BackToTop[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){#sarni10QuickNav *,#sarni10BackToTop{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
