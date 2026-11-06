@@ -45,7 +45,7 @@ jobs:
           done
           exit 1
       - name: Run six-tab browser regression (mock backend; no real submissions)
-        run: npx playwright test quality/quick-entry-browser.spec.cjs quality/main-dashboard-health.spec.cjs --workers=1 --reporter=line
+        run: npx playwright test quality/quick-entry-browser.spec.cjs quality/main-dashboard-health.spec.cjs --workers=1 --reporter=line --screenshot=only-on-failure --trace=retain-on-failure
         env:
           CI: 'true'
       - name: Record results
