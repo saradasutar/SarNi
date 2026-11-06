@@ -33,7 +33,7 @@ check('No automatic retry for uncertain save', includes('qePendingUncertain') &&
 check('Duplicate click prevented during save', includes("busy=true;$('save').disabled=true"));
 check('Read coalescing restricted to read-only calls', includes("new Set(['qeRecent','qpinRecent'])"));
 check('Smart Refresh cache is memory-only, brief and bounded', includes("const qeRecentCacheTTL=2500,qeRecentCacheMax=18") && includes("qeRecentMemoryCache=new Map()") && includes("Date.now()-cached.at<qeRecentCacheTTL"));
-check('Smart Refresh invalidates on writes and explicit refresh', includes("if(!qeMutationActions.has(action))return qeApiTransport(action,payload)") && includes("finally{qeInvalidateReadSnapshots()}") && includes("qeReadEpoch===epoch") && includes("qeInvalidateReadSnapshots();return qeRefreshPanels({sip:false,sync:false})") && includes("qeInvalidateReadSnapshots();return qeLoadGlobalSync()"));
+check('Smart Refresh invalidates on writes and explicit refresh', includes("if(!qeMutationActions.has(action))return qeApiTransport(action,payload)") && includes("finally{qeInvalidateReadSnapshots();}") && includes("qeReadEpoch===epoch") && includes("qeInvalidateReadSnapshots();return qeRefreshPanels({sip:false,sync:false})") && includes("qeInvalidateReadSnapshots();return qeLoadGlobalSync()"));
 check('PIN changes invalidate Smart Refresh snapshots', includes("qeInvalidateReadSnapshots();pinGrant=result.grant") && includes("qeInvalidateReadSnapshots();pinManageOpen=false;pinGrant=''"));
 check('Photo formats and size remain limited', includes('image/jpeg') && includes('20*1024*1024'));
 check('Offline queue uses encryption', includes('AES-GCM') && includes('PBKDF2'));
@@ -55,7 +55,7 @@ check('PIN changes refresh currently visible sync summaries', includes("await qe
 check('Unified refresh controller only dispatches readers', includes('function qeRefreshPanels(options={})') && includes("['recent',()=>loadRecent(false)]") && includes("['sip',()=>loadSipPlans()]") && includes("['sync',()=>loadQuickSyncSummary()]") && includes('Promise.allSettled(jobs.map('));
 check('Tab changes and startup use coordinated refresh', includes('void qeRefreshPanels();') && !includes('void loadRecent();void loadSipPlans();void loadQuickSyncSummary();'));
 check('Expense and group writes invalidate Smart Refresh', includes("new Set(['qeSubmit','qeSubmitGroup'") && includes("qeInvalidateReadSnapshots();\n  try{return await qeApiTransport(action,payload);}"));
-check('Uncertain write result cannot preserve old cache', includes("A timed-out save may have committed remotely") && includes("finally{qeInvalidateReadSnapshots()}"));
+check('Uncertain write result cannot preserve old cache', includes("A timed-out save may have committed remotely") && includes("finally{qeInvalidateReadSnapshots();}"));
 check('Offline queue confirmations refresh panels without retrying', includes('let confirmedCount=0;') && includes('confirmedCount++;') && includes("if(confirmedCount&&info)void qeRefreshPanels({global:true})"));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
