@@ -67,7 +67,7 @@ check('Keyboard tab navigation and shortcut respect existing buttons', batch10Js
 check('Character counter excludes short fields', batch10Js.includes("qeActiveFieldCount") && batch10Js.includes("input.maxLength<50"));
 check('Responsive accessibility finishes and Back to Top present', batch10Css.includes('prefers-reduced-motion:reduce') && batch10Css.includes('focus-visible') && batch10Css.includes('min-height:46px') && batch10Css.includes('overflow-wrap:anywhere') && batch10Js.includes("id='qeBackToTop'"));
 check('Ten-upgrade helper contains no network or storage operations', !/(?:fetch|localStorage|sessionStorage|XMLHttpRequest)\s*\(/.test(batch10Js));
-check('SarNi main uses only the validated batch asset pair', (mainDashboard.match(/sarni-main-batch10\.js/g)||[]).length===1 && (mainDashboard.match(/sarni-main-batch10\.css/g)||[]).length===1 && !/sarni10-main-(?:workspace|polish|upgrades|batch)\\.js/.test(mainDashboard));
+check('SarNi main uses only the validated batch asset pair', mainDashboard.split('sarni-main-batch10.js').length===2 && mainDashboard.split('sarni-main-batch10.css').length===2 && !mainDashboard.includes('sarni10-main-workspace.js') && !mainDashboard.includes('sarni10-main-polish.js') && !mainDashboard.includes('sarni10-main-upgrades.js'));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
