@@ -2157,7 +2157,7 @@ function render(){
  '</div>'+
  '<div id="newHeadToggle" hidden><button type="button" id="newHeadBtn">＋ New category</button></div><div id="newHeadBox" hidden><label>New category<input id="newHeadName" maxlength="79" placeholder="e.g. Transport"></label></div>'+
  '<small class="qe-expense-group-hint">Only active groups can be selected.</small>'+
- '<details class="qe-expense-notes-details"><summary>＋ Notes (optional)</summary><div class="qe-expense-notes-body"><label for="qeNotes">Additional notes</label><textarea id="qeNotes" name="notes" rows="2" maxlength="700" placeholder="Only if you need extra information"></textarea></div></details>'+
+
  '</div></details>';
  const category=$('qeCategory'),sub=$('qeSub');const groupSelect=$('qeProject');const activeGroups=(info.expenseGroups||[]).filter(x=>['ACTIVE','PLANNED'].includes(String(x.status||'ACTIVE').toUpperCase()));activeGroups.forEach(x=>groupSelect.add(new Option(x.name,x.id)));const lastGroup=readLastGroup();if(activeGroups.some(x=>String(x.id)===lastGroup))groupSelect.value=lastGroup;
  const reloadHeads=$('qeRefreshHeads');
