@@ -2062,7 +2062,8 @@ main[data-entry-mode="family"]{
 #recentList .recent-table thead th{position:sticky!important;top:0!important;z-index:2!important;background:#eef6f1!important;white-space:nowrap!important}
 #recentList .recent-table tbody tr:nth-child(even):not(.qe-row-completed):not(.recent-trashed){background:#f9fcfa!important}
 #recentList .recent-table tbody tr:focus-within{outline:2px solid #88bba2!important;outline-offset:-2px!important}
-#recentBody .recent-summary{display:flex!important;flex-wrap:wrap!important;gap:6px!important;margin:7px 0!important}
+#recentBody .recent-summary:not([hidden]){display:flex!important;flex-wrap:wrap!important;gap:6px!important;margin:7px 0!important}
+#recentBody .recent-summary[hidden]{display:none!important}
 #recentBody .recent-summary-item{flex:1 1 105px!important;min-width:0!important;padding:7px 9px!important;border-radius:9px!important}
 #recentBody .recent-summary-item small{font-size:10px!important;line-height:1.35!important}
 #recentBody .recent-summary-item strong{font-size:15px!important;line-height:1.3!important;overflow-wrap:anywhere!important}
