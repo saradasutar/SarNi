@@ -501,7 +501,8 @@ main{padding-top:13px!important}
 #entry .note-due-row label{display:flex!important;align-items:center!important;gap:9px!important;margin:0!important;flex-wrap:nowrap!important;font-size:12px!important;font-weight:750!important}
 #entry .note-due-row label>span{white-space:nowrap!important}
 #entry .note-due-row input[type=date]{width:min(170px,47vw)!important;min-height:35px!important;padding:4px 7px!important;margin:0!important;font-size:13px!important}
-</style><style id="qe-monthly-highlight-v20261105">
+</style><style id="qe-design-consolidated-1">
+/* Section 1: qe-monthly-highlight-v20261105 */
 #entry .note-markings .qe-monthly-highlight{
  background:#fff8e8!important;border:1px solid #e8c779!important;color:#8b5913!important;
  font-weight:850!important;
@@ -510,7 +511,8 @@ main{padding-top:13px!important}
  background:#ffefbc!important;border-color:#ce911e!important;
 }
 </style>
-<script src="../config.js"></script><style id="qe-progress-style">
+<script src="../config.js"></script><style id="qe-design-consolidated-2">
+/* Section 2: qe-progress-style */
 #qeDiaryProgress{margin:12px 0 16px}#qeDiaryProgress .qe-progress-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 #qeDiaryProgress .qe-progress-title{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;color:#205646}
 #qeDiaryProgress .qe-progress-title small,#qeDiaryProgress .qe-progress-note{color:#687f76;font-size:11px}
@@ -521,7 +523,8 @@ main{padding-top:13px!important}
 #qeDiaryProgress .qe-progress-card:nth-child(7n+5){background:#fff0e9;color:#a94f29}#qeDiaryProgress .qe-progress-card:nth-child(7n+6){background:#eaf8f8;color:#126c73}
 #qeDiaryProgress .qe-progress-card:nth-child(7n){background:#fff7df;color:#8c641c}#qeDiaryProgress .qe-progress-note{display:block;margin-top:8px;line-height:1.5}
 @media(max-width:670px){#qeDiaryProgress .qe-progress-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-</style><style id="qe-mobile-tabular-recent-20261105">
+
+/* Section 3: qe-mobile-tabular-recent-20261105 */
 /* Keep Recent Entries a genuine table on narrow phones rather than tall per-record cards. */
 @media(max-width:700px){
  #recentList .recent-table-scroll{
@@ -562,7 +565,8 @@ main{padding-top:13px!important}
  #recentList .recent-table td.amount{text-align:right!important;white-space:nowrap!important}
  #recentList .recent-table tr.recent-trashed{opacity:.65}
 }
-</style><style id="qe-compact-mobile-progress-v2">
+
+/* Section 4: qe-compact-mobile-progress-v2 */
 /* Four slim cards per row on phones: 8 measures occupy only two rows. */
 @media(max-width:700px){
  #qeDiaryProgress{margin:8px 0 11px!important}
@@ -581,7 +585,8 @@ main{padding-top:13px!important}
  #qeDiaryProgress .qe-progress-card{min-height:53px!important;padding:7px 9px!important}
 }
 </style>
-<style id="qe-tab-premium-20261105">
+<style id="qe-design-consolidated-3">
+/* Section 5: qe-tab-premium-20261105 */
 /* SarNi Quick Entry: final design layer (overrides earlier global button rules). */
 #qeTabHeader{margin:12px 0 7px;display:flex;align-items:center;gap:8px;color:#183e33}
 #qeTabHeader .qe-tab-header-mark{display:grid;place-items:center;flex:none;width:29px;height:29px;border-radius:9px;background:#e5f6ed;color:#137750;font-size:18px}
@@ -616,7 +621,8 @@ main{padding-top:13px!important}
 }
 @media(max-width:340px){#tabs:not([hidden]){grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(prefers-reduced-motion:reduce){#tabs button.qe-premium-tab{transition:none!important}}
-</style><style id="qe-header-two-line-20261105">
+
+/* Section 6: qe-header-two-line-20261105 */
 /* Two-line branded mobile header: first line title, second line subtitle. */
 .qe-compact-header{display:grid!important;grid-template-columns:38px minmax(0,1fr) auto!important;align-items:center!important;column-gap:8px!important;min-height:0!important;padding:3px 0 9px!important;flex-wrap:nowrap!important}
 .qe-compact-header>img{width:38px!important;height:38px!important;flex-basis:auto!important;padding:2px!important}
@@ -642,7 +648,8 @@ main{padding-top:13px!important}
  .qe-compact-header .qe-brand-text h1{font-size:15px!important;letter-spacing:-.55px!important}
  .qe-compact-header .qe-brand-text p{font-size:9px!important;letter-spacing:-.25px!important}
 }
-</style><style id="qe-ultra-compact-v1">
+
+/* Section 7: qe-ultra-compact-v1 */
 /* Ultra Compact: visual-only changes, preserve the original six-tab navigation and its handlers. */
 #tabs:not([hidden]) {
   display:grid!important;
@@ -742,7 +749,8 @@ main{padding-top:13px!important}
   #tabs .qe-premium-tab .qe-tab-icon svg{width:14px!important;height:14px!important}
 }
 @media(prefers-reduced-motion:reduce){#tabs button.qe-premium-tab{transition:none!important}}
-</style><style id="qe-entry-focus-v1">
+
+/* Section 8: qe-entry-focus-v1 */
 /* Mobile writing-first refinement: presentation only; no form values, actions or routes changed. */
 #entry{scroll-margin-top:12px!important;}
 #entry #fields{min-width:0;}
@@ -777,7 +785,8 @@ main{padding-top:13px!important}
  #entry .actions button{font-size:12px!important;}
 }
 @media(prefers-reduced-motion:reduce){#entry #fields *{scroll-behavior:auto!important;}}
-</style><style id="qe-recent-compact-v1">
+
+/* Section 9: qe-recent-compact-v1 */
 /* Recent Entries: one neat disclosure row when closed, full tools when opened. */
 #recentSection{margin-top:11px!important;padding-top:8px!important;border-top:1px solid #e2eae5!important}
 #recentSection .recent-head{display:flex!important;align-items:center!important;gap:7px!important;flex-wrap:nowrap!important;border-left:0!important;padding-left:0!important}
@@ -805,7 +814,8 @@ main{padding-top:13px!important}
  #recentSection .recent-disclosure[aria-expanded="true"]>small{display:none!important}
  #recentSection #refreshRecent:not([hidden]){min-height:35px!important;padding:6px 8px!important}
 }
-</style><style id="qe-details-compact-v1">
+
+/* Section 10: qe-details-compact-v1 */
 /* Native accessible disclosure: metrics and plans still update while folded. */
 #quickSyncSummary.qe-collapsed-sync{margin:9px 0 7px!important;padding:0!important;border:0!important;border-radius:10px!important;background:transparent!important;box-shadow:none!important;}
 #quickSyncSummary[hidden],#sipSavedSection[hidden]{display:none!important}
@@ -823,7 +833,8 @@ main{padding-top:13px!important}
 #sipSavedSection.qe-collapsed-sip{margin:8px 0;padding:0;background:transparent;border:0;box-shadow:none;}
 #qeSipDetails .qe-sip-detail .hint{font-size:11px;line-height:1.4;margin:8px 0;}
 @media(max-width:400px){#qeSyncDetails summary,#qeSipDetails summary{min-height:40px;padding:8px 10px;font-size:12px;}}
-</style><style id="qe-header-actions-refined-v1">
+
+/* Section 11: qe-header-actions-refined-v1 */
 /* Two distinct, compact header actions with accessible labels and persistent icons. */
 .qe-compact-header .qe-header-controls{display:flex!important;align-items:center!important;flex-wrap:nowrap!important;gap:6px!important;min-width:0!important;}
 .qe-compact-header #qeOfflineButton,
@@ -863,7 +874,8 @@ main{padding-top:13px!important}
  .qe-compact-header #qeGlobalSyncButton{width:32px!important;min-width:32px!important;height:32px!important;min-height:32px!important;}
  .qe-compact-header .qe-brand-text h1{font-size:15px!important;}
 }
-</style><style id="qe-markings-no-overlap-v1">
+
+/* Section 12: qe-markings-no-overlap-v1 */
 /* Five one-line cells: caption + four distinct compact checkboxes, shared by all three note tabs. */
 #entry #fields .note-markings{
  box-sizing:border-box!important;display:grid!important;
@@ -906,7 +918,8 @@ main{padding-top:13px!important}
   flex-basis:12px!important;width:12px!important;height:12px!important;min-width:12px!important;min-height:12px!important;
  }
 }
-</style><style id="qe-note-layout-correction-v1">
+
+/* Section 13: qe-note-layout-correction-v1 */
 /* Prevent native date truncation and restore a usable quick-note layout on phone screens. */
 #entry #fields .note-date-tags{
  box-sizing:border-box!important;display:grid!important;
@@ -992,7 +1005,8 @@ main{padding-top:13px!important}
  #entry .qe-photo-inline .qe-photo-action{font-size:10.5px!important;padding:6px 6px!important;}
  #entry .qe-photo-inline .qe-photo-limit{display:none!important;}
 }
-</style><style id="qe-selective-bold-v1">
+
+/* Section 14: qe-selective-bold-v1 */
 /* Selective mobile typography: bold navigation and labels, calm editable text. */
 #tabs button.qe-premium-tab{
  font-weight:800!important;
@@ -1030,7 +1044,8 @@ main{padding-top:13px!important}
  #tabs button.qe-premium-tab.selected{font-size:10.5px!important;}
  #tabs .qe-premium-tab .qe-tab-name{letter-spacing:-.32px!important;}
 }
-</style><style id="qe-collapsible-photo-v1">
+
+/* Section 15: qe-collapsible-photo-v1 */
 /* Native compact photo disclosure in all six tabs. Upload handlers/IDs unchanged. */
 #entry details#qePhotoPicker.qe-photo-inline{
  display:block!important;box-sizing:border-box!important;
@@ -1080,7 +1095,8 @@ main{padding-top:13px!important}
  #entry #qePhotoPicker .qe-photo-content{padding:6px 8px 9px!important;gap:5px!important;}
  #entry #qePhotoPicker .qe-photo-action{padding:6px 7px!important;font-size:10.5px!important;}
 }
-</style><style id="qe-save-result-compact-v1">
+
+/* Section 16: qe-save-result-compact-v1 */
 /* Compact, accurate post-save acknowledgement with expandable destination details. */
 #lastSavedEntry:not([hidden]){
  box-sizing:border-box!important;display:block!important;
@@ -1134,7 +1150,8 @@ main{padding-top:13px!important}
  #lastSavedEntry>strong{font-size:13px!important}
  #lastSavedEntry .qe-save-breakdown-toggle{font-size:11px!important;padding:8px 9px!important}
 }
-</style><style id="qe-writing-expand-v1">
+
+/* Section 17: qe-writing-expand-v1 */
 /* Optional writing room without stealing mobile space until requested. */
 #entry #fields .qe-writing-expand{
  display:inline-flex!important;align-items:center!important;justify-content:center!important;
@@ -1166,7 +1183,8 @@ main{padding-top:13px!important}
 @media(prefers-reduced-motion:reduce){
  #entry #fields textarea.qe-writing-expanded{scroll-behavior:auto!important;}
 }
-</style><style id="qe-family-expense-consistent-v1">
+
+/* Section 18: qe-family-expense-consistent-v1 */
 /* Align Family Expense with the rest of Quick Entry without changing MyFamily data fields. */
 main[data-entry-mode="family"] #entry{
  padding:12px!important;
@@ -1249,7 +1267,8 @@ main[data-entry-mode="family"] #entry .actions .save{
  main[data-entry-mode="family"] #entry #fields>.family-amountbox{min-height:55px!important}
  main[data-entry-mode="family"] #entry .actions .save{font-size:13px!important}
 }
-</style><style id="qe-family-three-paired-rows-v1">
+
+/* Section 19: qe-family-three-paired-rows-v1 */
 /* Family Expense paired fields stay in three rows on mobile. Only this tab is affected. */
 main[data-entry-mode="family"] #entry #fields>.family-paired-row{
  box-sizing:border-box!important;
@@ -1315,7 +1334,8 @@ main[data-entry-mode="family"] #entry #fields>.family-date-details-row .family-m
   font-size:10.5px!important;padding:7px 5px!important;
  }
 }
-</style><style id="qe-family-paidto-date-v1">
+
+/* Section 20: qe-family-paidto-date-v1 */
 /* Third compact Family Expense row: Paid to + Date, with optional details beneath. */
 main[data-entry-mode="family"] #entry #fields>.family-date-details-row{
  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
@@ -1346,7 +1366,8 @@ main[data-entry-mode="family"] #entry #fields>.family-extra-details .advanced-bo
   font-size:14px!important;padding:7px 4px!important;
  }
 }
-</style><style id="qe-family-photo-details-row-v1">
+
+/* Section 21: qe-family-photo-details-row-v1 */
 /* Family Expense: photo and additional payment details on the same compact line. */
 #qeFamilyPhotoActionsRow{display:block;min-width:0}
 #qeFamilyDetailsSlot{display:none}
@@ -1410,7 +1431,8 @@ main[data-entry-mode="family"] #qePhotoPicker>.qe-photo-disclosure:after{font-si
  main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summary{padding:8px 5px!important;font-size:10px!important}
  main[data-entry-mode="family"] #qePhotoPicker>.qe-photo-disclosure{padding:8px 5px!important}
 }
-</style><style id="qe-family-pay-details-single-line-v1">
+
+/* Section 22: qe-family-pay-details-single-line-v1 */
 /* Keep the shortened family payment details toggle legible on one line. */
 main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summary{
  white-space:nowrap!important;
@@ -1429,7 +1451,8 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summar
   font-size:11px!important;
  }
 }
-</style><style id="qe-header-icon-captions-v1">
+
+/* Section 23: qe-header-icon-captions-v1 */
 /* Mobile: labelled, tap-friendly Queue/Sync actions without widening the header. */
 .qe-compact-header #qeOfflineButton .qe-action-label,
 .qe-compact-header #qeGlobalSyncButton .qe-action-label{
@@ -1469,7 +1492,8 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summar
  .qe-compact-header .qe-header-controls .qe-action-label{font-size:9px!important}
  .qe-compact-header .qe-action-glyph{font-size:16px!important}
 }
-</style><style id="qe-header-clear-icons-v1">
+
+/* Section 24: qe-header-clear-icons-v1 */
 /* Clear, distinct icons for the compact labelled header controls. */
 .qe-compact-header #qeOfflineButton .qe-action-glyph,
 .qe-compact-header #qeGlobalSyncButton .qe-action-glyph{
@@ -1488,7 +1512,8 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summar
  .qe-compact-header #qeOfflineButton .qe-action-glyph,
  .qe-compact-header #qeGlobalSyncButton .qe-action-glyph{font-size:15px!important}
 }
-</style><style id="qe-family-verify-action-v1">
+
+/* Section 25: qe-family-verify-action-v1 */
 #lastSavedEntry .qe-family-verify-shortcut{
  display:inline-flex!important;align-items:center!important;justify-content:center!important;
  margin:9px 0 0!important;padding:9px 12px!important;
@@ -1501,7 +1526,8 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summar
 #lastSavedEntry .qe-family-verify-shortcut:focus-visible{
  outline:2px solid #267955!important;outline-offset:2px!important;
 }
-</style><style id="qe-save-mobile-condensed-v1">
+
+/* Section 26: qe-save-mobile-condensed-v1 */
 /* Post-save: one visible acknowledgement, full details when requested. */
 #status.qe-save-status-compact{
  position:absolute!important;width:1px!important;height:1px!important;
@@ -1559,7 +1585,8 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summar
  #lastSavedEntry .qe-save-breakdown-toggle{font-size:11px!important;padding:7px 8px!important}
  #lastSavedEntry .qe-save-breakdown .qe-save-destination>strong{font-size:11px!important}
 }
-</style><style id="qe-action-completion-remarks-v1">
+
+/* Section 27: qe-action-completion-remarks-v1 */
 #entry #fields .qe-completion-area:not([hidden]){display:block!important;margin:8px 0!important;padding:9px 10px!important;border:1px solid #b8d9c5!important;border-radius:10px!important;background:#f3faf5!important}
 #entry #fields .qe-completion-area .qe-completion-toggle{display:flex!important;align-items:center!important;gap:8px!important;font-size:12px!important;font-weight:800!important;color:#226b48!important}
 #entry #fields .qe-completion-area .qe-completion-toggle input{width:19px!important;height:19px!important;min-height:19px!important;flex:none!important;accent-color:#247d51!important}
@@ -1570,7 +1597,8 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summar
 #recentList .qe-completion-recent{margin-top:8px!important;padding:9px!important;border-left:3px solid #258257!important;border-radius:7px!important;background:#eef9f2!important;white-space:normal!important}
 #recentList .qe-completion-recent strong{display:block!important;font-size:12px!important;color:#1b6a42!important}
 #recentList .qe-completion-recent p{margin:5px 0 0!important;font-size:12px!important;line-height:1.5!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;color:#315a43!important}
-</style><style id="qe-family-pay-fullwidth-dropdown-v1">
+
+/* Section 28: qe-family-pay-fullwidth-dropdown-v1 */
 /* Keep Attach photo / Pay details aligned, show expansion below BOTH controls. */
 main[data-entry-mode="family"] #qeFamilyPhotoActionsRow{
  display:grid!important;
@@ -1598,7 +1626,8 @@ main[data-entry-mode="family"] #qeFamilyPayExpanded small{
 main[data-entry-mode="family"] #qeFamilyDetailsSlot>.family-extra-details>summary{
  min-height:39px!important;white-space:nowrap!important;
 }
-</style><style id="qe-expense-compact-more-v1">
+
+/* Section 29: qe-expense-compact-more-v1 */
 /* Expense tab only: compact 2x2 details fields with optional separate notes. */
 main[data-entry-mode="expense"] #fields>.qe-expense-more>.advanced-body{padding:10px!important}
 main[data-entry-mode="expense"] #fields .qe-expense-paired-grid{
@@ -1646,7 +1675,8 @@ main[data-entry-mode="expense"] #fields .qe-expense-notes-body textarea{
  main[data-entry-mode="expense"] #fields .qe-expense-cell label{font-size:11px!important;line-height:1.3!important}
  main[data-entry-mode="expense"] #fields .qe-expense-cell :is(select,input){font-size:14px!important;padding:6px!important}
 }
-</style><style id="qe-expense-paidby-paidto-row-v1">
+
+/* Section 30: qe-expense-paidby-paidto-row-v1 */
 /* Expense: keep payer and recipient visible together, including on mobile. */
 main[data-entry-mode="expense"] #fields .qe-expense-paid-row{
  display:grid!important;
@@ -1670,7 +1700,8 @@ main[data-entry-mode="expense"] #fields .qe-expense-paid-row input{
  main[data-entry-mode="expense"] #fields .qe-expense-paid-row label{font-size:12px!important}
  main[data-entry-mode="expense"] #fields .qe-expense-paid-row input{padding:7px!important;font-size:15px!important}
 }
-</style><style id="qe-expense-direct-fields-v1">
+
+/* Section 31: qe-expense-direct-fields-v1 */
 main[data-entry-mode="expense"] #fields>.qe-expense-main-details{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px 10px!important;width:100%!important;min-width:0!important;margin:9px 0!important}
 main[data-entry-mode="expense"] #fields>.qe-expense-main-details>.qe-expense-cell{min-width:0!important;max-width:100%!important}
 main[data-entry-mode="expense"] #fields>.qe-expense-main-details label{display:block!important;margin:0 0 5px!important;min-height:0!important;font-size:12.5px!important;font-weight:750!important;line-height:1.25!important;white-space:normal!important}
@@ -1678,7 +1709,8 @@ main[data-entry-mode="expense"] #fields>.qe-expense-main-details :is(input,selec
 main[data-entry-mode="expense"] #fields #newHeadToggle:not([hidden]){margin:6px 0!important}
 main[data-entry-mode="expense"] #fields #newHeadBox:not([hidden]){margin:5px 0 8px!important}
 @media(max-width:390px){main[data-entry-mode="expense"] #fields>.qe-expense-main-details{gap:8px 6px!important}main[data-entry-mode="expense"] #fields>.qe-expense-main-details label{font-size:11.5px!important}main[data-entry-mode="expense"] #fields>.qe-expense-main-details :is(input,select){padding:6px!important;font-size:15px!important}}
-</style><style id="qe-expense-photo-pay-row-v1">
+
+/* Section 32: qe-expense-photo-pay-row-v1 */
 /* Expense and Family Expense share the compact photo / pay details footer layout. */
 main[data-entry-mode="expense"] #qeFamilyPhotoActionsRow{
  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
@@ -1737,7 +1769,8 @@ main[data-entry-mode="expense"] #qePhotoPicker>.qe-photo-disclosure>span{
  main[data-entry-mode="expense"] #qeFamilyPhotoActionsRow{gap:6px!important;}
  main[data-entry-mode="expense"] #qeFamilyDetailsSlot>.family-extra-details>summary{font-size:11px!important;padding:8px 6px!important;}
 }
-</style><style id="qe-expense-vertical-rhythm-v1">
+
+/* Section 33: qe-expense-vertical-rhythm-v1 */
 /* Expense only: remove inherited label margins inside paired rows and the doubled gap between them. */
 main[data-entry-mode="expense"] #entry #fields>.qe-expense-paid-row{
  margin:7px 0 0!important;
@@ -1767,7 +1800,8 @@ main[data-entry-mode="expense"] #entry #fields>.qe-expense-paid-row input{
  main[data-entry-mode="expense"] #entry #fields>.qe-expense-paid-row{margin-top:6px!important;}
  main[data-entry-mode="expense"] #entry #fields>.qe-expense-main-details{margin-top:6px!important;row-gap:7px!important;}
 }
-</style><style id="qe-pay-inline-right-column-v1">
+
+/* Section 34: qe-pay-inline-right-column-v1 */
 /* Both expense forms: expanded payment details remain under the right-hand button. */
 main[data-entry-mode="family"] #qeFamilyPhotoActionsRow,
 main[data-entry-mode="expense"] #qeFamilyPhotoActionsRow{
@@ -1807,7 +1841,8 @@ main[data-entry-mode="expense"] #qeFamilyDetailsSlot #qeDebited{
  main[data-entry-mode="family"] #qeFamilyDetailsSlot #qeFamilyPayExpanded:not([hidden]),
  main[data-entry-mode="expense"] #qeFamilyDetailsSlot #qeFamilyPayExpanded:not([hidden]){padding:6px!important;}
 }
-</style><style id="qe-completion-recent-distinct-v1">
+
+/* Section 35: qe-completion-recent-distinct-v1 */
 /* Completed diary/office/stock notes are distinguishable from open actions. */
 #recentList .recent-table tbody tr.qe-row-completed:not(.recent-trashed){
  background:color-mix(in srgb,#edf8f1 58%,#fff)!important;
@@ -1830,7 +1865,8 @@ main[data-entry-mode="expense"] #qeFamilyDetailsSlot #qeDebited{
  font-size:12px!important;line-height:1.5!important;
  color:#315a43!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important;
 }
-</style><style id="qe-reopen-completed-v1">
+
+/* Section 36: qe-reopen-completed-v1 */
 #recentList .recent-actions .qe-reopen-action{
  display:inline-flex!important;align-items:center!important;justify-content:center!important;
  margin:4px 3px!important;padding:7px 9px!important;
@@ -1842,7 +1878,8 @@ main[data-entry-mode="expense"] #qeFamilyDetailsSlot #qeDebited{
 #recentList .recent-actions .qe-reopen-action:focus-visible{
  outline:2px solid #347fb0!important;outline-offset:2px!important;
 }
-</style><style id="qe-completion-filter-v1">
+
+/* Section 37: qe-completion-filter-v1 */
 #recentBody .qe-completion-filter{
  display:flex!important;align-items:center!important;
  width:100%!important;min-width:0!important;gap:6px!important;
@@ -1866,7 +1903,8 @@ main[data-entry-mode="expense"] #qeFamilyDetailsSlot #qeDebited{
  #recentBody .qe-completion-filter{gap:4px!important}
  #recentBody .qe-completion-filter button{padding:7px 5px!important;font-size:11px!important;}
 }
-</style><style id="qe-six-tab-unified-repair-v1">
+
+/* Section 38: qe-six-tab-unified-repair-v1 */
 /* Authoritative active-state indicator: exactly one tab, selected by aria-pressed. */
 #tabs button.qe-premium-tab::after,
 #tabs button.qe-premium-tab.selected[aria-pressed="false"]::after{
@@ -1932,7 +1970,8 @@ main[data-entry-mode="family"]{
  main[data-entry-mode] #entry .actions button{font-size:13px!important;}
 }
 /* Let the form's own special two-column/date/photo components keep their layout. */
-</style><style id="qe-compact-paired-rows-repair-v1">
+
+/* Section 39: qe-compact-paired-rows-repair-v1 */
 /* Reaffirm compact two-column fields without depending on stale tab theme state. */
 #entry #fields>.qe-expense-paid-row,
 #entry #fields>.qe-expense-main-details,
