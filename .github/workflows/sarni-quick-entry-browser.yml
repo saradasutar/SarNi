@@ -1,0 +1,49 @@
+name: SarNi Quick Entry Browser Regression
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "q/index.html"
+      - "quality/quick-entry-browser.spec.cjs"
+      - ".github/workflows/sarni-quick-entry-browser.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  browser-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test runtime (isolated)
+        run: |
+          npm install --no-save --no-package-lock @playwright/test@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Start local fixture server
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/sarni-browser-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8765/q/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Run six-tab browser regression (mock backend; no real submissions)
+        run: npx playwright test quality/quick-entry-browser.spec.cjs --project=chromium --workers=1 --reporter=line
+        env:
+          CI: 'true'
+      - name: Record results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sarni-quick-entry-browser-results
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
