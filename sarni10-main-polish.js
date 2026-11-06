@@ -62,7 +62,7 @@ function setup(){
  document.addEventListener('keydown',event=>{
   if(event.key==='Escape'&&!panel.hidden){helpToggle(false);help.focus();return;}
   if(!event.altKey||!event.shiftKey||event.ctrlKey||event.metaKey||event.repeat||document.getElementById('appView')?.classList.contains('hidden'))return;
-  if(event.target?.closest('input,textarea,select,[contenteditable],dialog,[role="dialog"]'))return;
+  if(event.target?.closest?.('input,textarea,select,[contenteditable],dialog,[role="dialog"]'))return;
   const section=shortcuts[event.code];if(section&&permitted(section)){event.preventDefault();navigate(section);}
  });
  function updateScroll(){
