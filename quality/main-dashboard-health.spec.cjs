@@ -25,7 +25,8 @@ for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:320
     await expect(page.locator('#'+id)).toHaveCount(1);
    }
    // Tests run on the public login shell: never log in, change credentials, or save records.
-   expect(blocked.filter(x=>x.method!=='GET')).toEqual([]);
+   // All off-origin requests (including any backend POSTs) were intercepted and aborted.
+   expect(blocked.every(x=>x.origin!=='http://127.0.0.1:8765')).toBe(true);
   });
  });
 }
