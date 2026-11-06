@@ -36,7 +36,7 @@ for (const viewport of scenarios) {
     // Simulate the deployed Apps Script iframe message protocol.
     const markup='<html><body><script>parent.postMessage('+JSON.stringify({
      __myfinanceDirectResult:true,requestId:request.requestId,payload:response
-    })+',"*")<\\/script></body></html>';
+    })+',"*")</script></body></html>';
     await route.fulfill({status:200,contentType:'text/html',body:markup});
    });
 
