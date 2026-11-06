@@ -2165,7 +2165,7 @@ const qeReadInFlight=new Map(),qeRecentMemoryCache=new Map();
 const qeRecentCacheTTL=2500,qeRecentCacheMax=18;
 let qeReadEpoch=0;
 const qeReadOnlyListActions=new Set(['qeRecent','qpinRecent']);
-const qeMutationActions=new Set(['qpinManage','qpinSyncRetry','sipPlanGuestManage','sipPlanGuestSave','familyExpenseQuickSave','hubGuestSave','qeEditRecent','qeQuickNote','qePhotoFinish']);
+const qeMutationActions=new Set(['qeSubmit','qeSubmitGroup','qpinManage','qpinSyncRetry','sipPlanGuestManage','sipPlanGuestSave','familyExpenseQuickSave','hubGuestSave','qeEditRecent','qeQuickNote','qePhotoFinish']);
 function qeInvalidateReadSnapshots(){
  ++qeReadEpoch;qeRecentMemoryCache.clear();
 }
@@ -2174,9 +2174,12 @@ function qeReadSignature(action,payload={}){
 }
 async function api(action,payload={}){
  if(!qeReadOnlyListActions.has(action)){
-  const result=await qeApiTransport(action,payload);
-  if(qeMutationActions.has(action))qeInvalidateReadSnapshots();
-  return result;
+  if(!qeMutationActions.has(action))return qeApiTransport(action,payload);
+  // A timed-out save may have committed remotely; clear snapshots at both
+  // boundaries even if the backend response is never confirmed.
+  qeInvalidateReadSnapshots();
+  try{return await qeApiTransport(action,payload);}
+  finally{qeInvalidateReadSnapshots();}
  }
  const signature=qeReadSignature(action,payload);
  const pending=qeReadInFlight.get(signature);
@@ -2417,6 +2420,7 @@ async function qeOfflineEnqueue(kind,data,id,plannedSip){
 async function qeOfflineSendReady(){
  if(qeOfflineBusy||!qeOfflineKey||!qeOfflineData||!navigator.onLine)return;
  qeOfflineBusy=true;$('qeOfflineSend').disabled=true;
+ let confirmedCount=0;
  try{
   const ready=qeOfflineData.items.filter(x=>x.status==='ready');
   for(const item of ready){
@@ -2427,6 +2431,7 @@ async function qeOfflineSendReady(){
     if(response?.ok){
      item.status='confirmed';await qeOfflinePersist();
      qeOfflineData.items=qeOfflineData.items.filter(x=>x.id!==item.id);await qeOfflinePersist();
+     confirmedCount++;
      qeOfflineStatus('Confirmed '+item.kind+' saved. Remaining ready entries will be sent.');
     }else throw Error('No confirmed backend response');
    }catch(err){
@@ -2436,7 +2441,12 @@ async function qeOfflineSendReady(){
    }finally{qeOfflineRender();}
   }
  }catch(e){qeOfflineStatus('Queue could not be updated securely: '+String(e.message||e));}
- finally{qeOfflineBusy=false;$('qeOfflineSend').disabled=false;qeOfflineRender();}
+ finally{
+  qeOfflineBusy=false;$('qeOfflineSend').disabled=false;qeOfflineRender();
+  // Refresh once per completed batch, including a batch that later stopped
+  // on an uncertain item. Never send or retry entries from this refresh.
+  if(confirmedCount&&info)void qeRefreshPanels({global:true});
+ }
 }
 function qeUpdateConnectivity(){
  const notice=$('qeConnectivityNotice');notice.hidden=navigator.onLine;
