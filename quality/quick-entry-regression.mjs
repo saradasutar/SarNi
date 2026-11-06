@@ -11,6 +11,8 @@ const source = readFileSync(new URL('../q/index.html', import.meta.url), 'utf8')
 const mainDashboard = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const bridge = readFileSync(new URL('../sarni-health-bridge-v1.js', import.meta.url), 'utf8');
 const history = readFileSync(new URL('../sarni-health-history-v1.js', import.meta.url), 'utf8');
+const batch10Js = readFileSync(new URL('../q/sarni9-batch10.js', import.meta.url), 'utf8');
+const batch10Css = readFileSync(new URL('../q/sarni9-batch10.css', import.meta.url), 'utf8');
 const tests = [];
 const check = (name, passed) => tests.push({ name, passed: Boolean(passed) });
 const includes = (value) => source.includes(value);
@@ -57,6 +59,12 @@ check('Tab changes and startup use coordinated refresh', includes('void qeRefres
 check('Expense and group writes invalidate Smart Refresh', includes("new Set(['qeSubmit','qeSubmitGroup'") && includes("qeInvalidateReadSnapshots();\n  try{return await qeApiTransport(action,payload);}"));
 check('Uncertain write result cannot preserve old cache', includes("A timed-out save may have committed remotely") && includes("finally{qeInvalidateReadSnapshots();}"));
 check('Offline queue confirmations refresh panels without retrying', includes('let confirmedCount=0;') && includes('confirmedCount++;') && includes("if(confirmedCount&&info)void qeRefreshPanels({global:true})"));
+check('Ten-upgrade assets loaded by Quick Entry', includes('href="./sarni9-batch10.css"') && includes('src="./sarni9-batch10.js"'));
+check('Recent search can be cleared and counts announced', batch10Js.includes("id='qeSearchClear'") && batch10Js.includes("setAttribute('aria-live','polite')"));
+check('Keyboard tab navigation and shortcut respect existing buttons', batch10Js.includes("ArrowRight") && batch10Js.includes("Digit[1-6]") && batch10Js.includes("button.click()"));
+check('Character counter excludes short fields', batch10Js.includes("qeActiveFieldCount") && batch10Js.includes("input.maxLength<50"));
+check('Responsive accessibility finishes and Back to Top present', batch10Css.includes('prefers-reduced-motion:reduce') && batch10Css.includes('focus-visible') && batch10Css.includes('min-height:46px') && batch10Css.includes('overflow-wrap:anywhere') && batch10Js.includes("id='qeBackToTop'"));
+check('Ten-upgrade helper contains no network or storage operations', !/(?:fetch|localStorage|sessionStorage|XMLHttpRequest)\\s*\\(/.test(batch10Js));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
