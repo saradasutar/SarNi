@@ -5,6 +5,9 @@ on:
   push:
     paths:
       - "index.html"
+      - "quality/main-dashboard-polish-regression.cjs"
+      - "sarni10-main-polish.css"
+      - "sarni10-main-polish.js"
       - "sarni10-main-upgrades.js"
       - "sarni10-main-upgrades.css"
       - "sarni-main-batch10.js"
@@ -42,6 +45,8 @@ jobs:
         run: node quality/main-dashboard-batch10-regression.cjs
       - name: Smart Refresh behavioral regression (fake backend only)
         run: node quality/smart-refresh-regression.cjs
+      - name: SarNi 10 main dashboard regression (source only)
+        run: node quality/main-dashboard-polish-regression.cjs
       - name: Install browser test runtime (isolated)
         run: |
           npm install --no-save --no-package-lock @playwright/test@1.56.1
