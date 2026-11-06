@@ -2069,6 +2069,16 @@ main[data-entry-mode="family"]{
 #recentBody .recent-summary-item strong{font-size:15px!important;line-height:1.3!important;overflow-wrap:anywhere!important}
 #recentList .recent-table td{vertical-align:top!important}
 @media(max-width:480px){#recentBody .recent-summary-item{flex-basis:calc(50% - 6px)!important}#recentList .recent-table td,#recentList .recent-table th{padding:7px 8px!important}}
+
+/* SarNi 9: sync status evidence levels */
+#recentList .recent-sync-badge{display:inline-flex!important;align-items:center!important;max-width:100%!important;font-size:11px!important;line-height:1.2!important;padding:5px 8px!important;border-radius:999px!important;white-space:normal!important;font-weight:800!important}
+#recentList .recent-sync-badge.is-linked{background:#e9f1ff!important;color:#28558b!important;border:1px solid #c8d8f2!important}
+#recentList .recent-sync-badge.is-synced{background:#e4f6ea!important;color:#176342!important;border:1px solid #9fdbb7!important}
+#recentList .recent-sync-badge.is-pending{background:#fff4d6!important;color:#815b16!important;border:1px solid #f0d18b!important}
+#recentList .recent-sync-badge.is-unverified{background:#f0f2f5!important;color:#475569!important;border:1px solid #d3dbe3!important}
+#recentList .recent-sync-badge.is-failed{background:#fff0ed!important;color:#963f36!important;border:1px solid #edb8ad!important}
+#recentList .recent-sync-detail summary{cursor:pointer!important;font-size:11px!important;font-weight:750!important}
+#recentList .recent-sync-verification{display:block!important;overflow-wrap:anywhere!important;margin:7px 0!important;line-height:1.45!important}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">📥</span><span class="qe-action-label">Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">🔄</span><span class="qe-action-label">Sync</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
@@ -3088,7 +3098,7 @@ async function loadRecent(append=false){
       if(rawState==='TRASHED'){state='archived';label='Archived';explanation='This Family Expense entry is in Trash, not a destination synchronization status.';}
       else{explanation='This record is listed by SarNi. Both MyFamily and the SarNi mirror must be checked independently.';}
      }else if(requestedMode==='office'){explanation='Checking stored HR sync status; use Verify destination for a fresh independent lookup.';if(record.id)badge.dataset.officeSyncId=String(record.id);}
-     badge.classList.add('is-'+state);badge.textContent=label;td.append(badge);
+     badge.classList.add('is-'+state);badge.textContent=label;badge.title=explanation;badge.setAttribute('aria-label','Synchronization: '+label);td.append(badge);
      const details=document.createElement('details');details.className='recent-sync-detail';
      const trigger=document.createElement('summary');trigger.textContent='Verify / Details';
      const desc=document.createElement('small');desc.textContent=explanation;details.append(trigger,desc);
@@ -3106,17 +3116,17 @@ async function loadRecent(append=false){
         const verified=same&&proof.verified===true&&!!at&&!!destination;
         const absent=same&&proof.verified===false&&proof.destinationFound===false&&!!at;
         if(verified){
-         badge.className='recent-sync-badge is-synced';badge.textContent='Verified';
+         badge.className='recent-sync-badge is-synced';badge.textContent='Verified';badge.title='Independently matched destination record at '+at;badge.setAttribute('aria-label','Synchronization: independently verified');
          feedback.textContent='Verified at '+at+' · Destination record '+destination+'. '+(proof.message||'');
         }else if(absent){
-         badge.className='recent-sync-badge is-failed';badge.textContent='Not found';
+         badge.className='recent-sync-badge is-unverified';badge.textContent='Not found';badge.title='No matching destination record found during the last check; future delivery remains possible';badge.setAttribute('aria-label','Synchronization: destination record not found during last check');
          feedback.textContent='Destination lookup found no matching record as of '+at+'. This is not a guarantee that a previous delivery will not complete later.';
          verifiedResult=proof;
          if(requestedMode==='investment'&&pinGrant&&proof.canRetry===true&&proof.idempotentGuaranteed===true)retry.hidden=false;
         }else{
-         feedback.textContent='Not verified. Backend did not provide a matching source ID, destination ID and check timestamp. No success assumed.';
+         badge.className='recent-sync-badge is-unverified';badge.textContent='Unverified';badge.title='The verification response did not contain sufficient matching evidence';badge.setAttribute('aria-label','Synchronization: unverified');feedback.textContent='Not verified. Backend did not provide a matching source ID, destination ID and check timestamp. No success assumed.';
         }
-       }catch(error){feedback.textContent='Destination verification unavailable: '+String(error.message||error)+'. Install the read-only verification backend before using this feature.';}
+       }catch(error){badge.className='recent-sync-badge is-unverified';badge.textContent='Check unavailable';badge.title='The destination lookup could not be completed';badge.setAttribute('aria-label','Synchronization: verification unavailable');feedback.textContent='Destination verification unavailable: '+String(error.message||error)+'. Install the read-only verification backend before using this feature.';}
        finally{verify.disabled=false;}
       };
       if(requestedMode==='investment'&&pinGrant){
@@ -3124,7 +3134,7 @@ async function loadRecent(append=false){
         if(!verifiedResult||verifiedResult.canRetry!==true||verifiedResult.idempotentGuaranteed!==true)return;
         if(!confirm('The destination lookup did not find this investment. Retry using the original stable ID? Backend idempotency must prevent duplicate delivery.'))return;
         retry.disabled=true;
-        try{const answer=await api('qpinSyncRetry',{grant:pinGrant,kind:'investment',id:record.id});feedback.textContent='Retry requested: '+(answer.message||'Check again to confirm destination delivery.');retry.hidden=true;verifiedResult=null;}
+        try{const answer=await api('qpinSyncRetry',{grant:pinGrant,kind:'investment',id:record.id});feedback.textContent='Retry requested, not verified: '+(answer.message||'Check again to confirm destination delivery.');badge.className='recent-sync-badge is-pending';badge.textContent='Recheck needed';badge.title='A retry was requested; destination delivery has not been independently confirmed';badge.setAttribute('aria-label','Synchronization: retry requested, verify again');retry.hidden=true;verifiedResult=null;}
         catch(error){feedback.textContent='Retry unavailable: '+String(error.message||error)+'. No new entry was created here.';}
         finally{retry.disabled=false;}
        };details.append(retry);
@@ -3174,7 +3184,7 @@ async function loadRecent(append=false){
       for(const item of statuses.results){
        const badge=[...host.querySelectorAll('.recent-sync-badge[data-office-sync-id]')].find(x=>x.dataset.officeSyncId===String(item.id));
        if(!badge)continue;
-       if(item.state==='SYNCED'&&item.hrId){badge.className='recent-sync-badge is-synced';badge.textContent='Synced (stored)';}
+       if(item.state==='SYNCED'&&item.hrId){badge.className='recent-sync-badge is-linked';badge.textContent='Reported synced';badge.title='Stored HR sync state; check destination for independent verification';}
        else if(item.state==='PENDING'){badge.className='recent-sync-badge is-pending';badge.textContent='Pending';}
        else if(item.state==='CONFLICT'){badge.className='recent-sync-badge is-failed';badge.textContent='Conflict';}
       }
