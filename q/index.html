@@ -2742,7 +2742,7 @@ function render(){
 if(mode==='diary'||mode==='office'||mode==='stock'){const typeSelect=$('fields').querySelector('select[name="diaryType"],select[name="officeNoteType"]');if(typeSelect){typeSelect.addEventListener('change',updateNoteTypeTone);updateNoteTypeTone();}qeUpdateOptionalMarkDate();}
  $('save').textContent='Save & Add Another';status('');qeRefreshDraftBanner();
 }
-$('reset').onclick=()=>{if(busy||qePhotoBusy){status('Save or photo upload is in progress. Wait for confirmation before clearing the form.',true);return;}if(qeDraftTimer){clearTimeout(qeDraftTimer);qeDraftTimer=null;}qeClearDraft(mode);qeClearPhotoSelection();qeResetSubmissionIdentity();qeConfirmUncertainResubmission();delete $('entry').dataset.editId;delete $('entry').dataset.pinRevision;delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;render();};let recentOffset=0;let globalSyncRequest=0,qeVerifyRecentSequence=0,qeVerifyAuditReport=null,qeVerifyAuditTargets=[];
+$('reset').onclick=()=>{if(busy||qePhotoBusy){status('Save or photo upload is in progress. Wait for confirmation before clearing the form.',true);return;}if(qeDraftTimer){clearTimeout(qeDraftTimer);qeDraftTimer=null;}qeClearDraft(mode);qeClearPhotoSelection();qeResetSubmissionIdentity();qeConfirmUncertainResubmission();delete $('entry').dataset.editId;delete $('entry').dataset.pinRevision;delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;render();};let recentOffset=0,qeRecentRequestVersion=0;let globalSyncRequest=0,qeVerifyRecentSequence=0,qeVerifyAuditReport=null,qeVerifyAuditTargets=[];
 const qeRecentVerificationKinds=[{kind:'investment',name:'Investment → Analysis'},{kind:'office',name:'Office Diary → HR'},{kind:'family',name:'Family Expense → MyFamily'}];
 function qeVerifyCancel(){
  ++qeVerifyRecentSequence;
@@ -3036,6 +3036,7 @@ async function loadRecent(append=false){
  $('toggleRecent').querySelector('span').textContent=($('recentBody').hidden?'▸ ':'▾ ')+'Recent '+label+' entries';
  $('recentExplanation').textContent=isPin?'Only this link’s records are shown. Viewing is allowed when admin enables View; PIN unlock is required for Edit, Trash and Restore.':'Only records saved using this link are shown; editing requires a PIN-enabled backend.';
  const requestedMode=mode;
+ const requestVersion=++qeRecentRequestVersion;
  if(!append){qeProgressRecords=[];qeProgressKind=requestedMode;qeRenderDiaryProgress(requestedMode);$('qeDiaryProgress')?.querySelectorAll('.qe-progress-card strong').forEach(node=>node.textContent='—');}
  if($('recentBody').hidden){
   // Stats must not remain fake zero just because the recent table is collapsed.
@@ -3043,12 +3044,12 @@ async function loadRecent(append=false){
   if(['diary','office','stock'].includes(requestedMode)){
    try{
     const response=isPin?await api('qpinRecent',{grant:pinGrant,kind:requestedMode,includeTrash:false,offset:0,pageSize:50}):await api('qeRecent',{offset:0,pageSize:50,kind:requestedMode});
-    if(mode!==requestedMode)return;
+    if(mode!==requestedMode||requestVersion!==qeRecentRequestVersion)return;
     const raw=Array.isArray(response.entries)?response.entries:Array.isArray(response.items)?response.items:[];
     qeProgressRecords=raw.filter(x=>String(x.kind||'').toLowerCase()===requestedMode);
     qeRenderDiaryProgress(requestedMode);
    }catch(error){
-    if(mode===requestedMode){
+    if(mode===requestedMode&&requestVersion===qeRecentRequestVersion){
      const note=$('qeDiaryProgress')?.querySelector('.qe-progress-note');
      if(note)note.textContent='Statistics unavailable: '+String(error.message||'Unable to load entries')+'. Open Recent Entries to retry.';
      $('qeDiaryProgress')?.querySelectorAll('.qe-progress-card strong').forEach(node=>node.textContent='—');
@@ -3063,7 +3064,7 @@ async function loadRecent(append=false){
  if(!append){recentOffset=0;host.textContent='Loading '+label+' entries…';$('recentSummary').hidden=true;}
  try{
   const result=isPin?await api('qpinRecent',{grant:pinGrant,kind:requestedMode,includeTrash:$('pinShowTrash').checked,offset:recentOffset,pageSize:20}):await api('qeRecent',{offset:recentOffset,pageSize:50,kind:requestedMode});
-  if(mode!==requestedMode)return;
+  if(mode!==requestedMode||requestVersion!==qeRecentRequestVersion)return;
   const raw=Array.isArray(result.entries)?result.entries:Array.isArray(result.items)?result.items:[];
   const entries=raw.filter(x=>String(x.kind||'').toLowerCase()===requestedMode);
   if(qeProgressKind===requestedMode){qeProgressRecords.push(...entries);qeRenderDiaryProgress(requestedMode);}
@@ -3241,7 +3242,7 @@ async function loadRecent(append=false){
   }
   recentOffset=result.nextOffset??recentOffset+raw.length;
   if(result.hasMore){const more=document.createElement('button');more.type='button';more.dataset.loadMore='1';more.textContent='Show more';more.onclick=()=>loadRecent(true);host.append(more);}applyRecentSearch();
- }catch(error){if(mode!==requestedMode)return;if(!append)host.replaceChildren();const p=document.createElement('p');p.className='error';p.textContent='Recent '+label+' error: '+(error.message||'Server unavailable');host.append(p);if(isPin&&/pin session expired|unlock again|access changed/i.test(error.message||'')){pinGrant='';updatePinGate();}}
+ }catch(error){if(mode!==requestedMode||requestVersion!==qeRecentRequestVersion)return;if(!append)host.replaceChildren();const p=document.createElement('p');p.className='error';p.textContent='Recent '+label+' error: '+(error.message||'Server unavailable');host.append(p);if(isPin&&/pin session expired|unlock again|access changed/i.test(error.message||'')){pinGrant='';updatePinGate();}}
 }
 let qeCompletionFilterValue='all';
 function qeSetCompletionFilter(next){
@@ -3448,7 +3449,7 @@ function qeRecentPhotos(record){
  return details;
 }
 
-$('entry').onsubmit=async e=>{e.preventDefault();if(busy)return;if(pinConfig?.enabled&&pinConfig.policies?.[mode]?.requirePinAdd&&!pinGrant){pinManageOpen=true;updatePinGate();status('PIN Add is enabled for '+mode+' in SarNi Admin Settings. To allow entries without PIN, uncheck PIN Add for this tab and save. For this entry you may unlock below.',true);$('pinGate').scrollIntoView({behavior:'smooth',block:'center'});$('pinInput').focus();return;}busy=true;$('save').disabled=true;status('Saving…');try{const data=Object.fromEntries(new FormData(e.target));const fingerprint=qePayloadFingerprint(mode,data);if(qePendingUncertain&&qePendingPayloadFingerprint&&fingerprint!==qePendingPayloadFingerprint){if(!confirm('You changed the entry after an unconfirmed save. This may create a different transaction. Check Recent Entries or the destination first. Continue with a new submission ID?')){status('Save cancelled. Confirm the earlier entry first.',true);return;}qeResetSubmissionIdentity();}const entryId=(pendingQuickEntryMode===mode&&pendingQuickEntryId)||Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');pendingQuickEntryId=entryId;pendingQuickEntryMode=mode;qePendingPayloadFingerprint=fingerprint;qePendingUncertain=false;qeConfirmUncertainResubmission();if(mode==='family'&&!pendingFamilyId)pendingFamilyId=entryId;if(['diary','stock','office'].includes(mode)){
+$('entry').onsubmit=async e=>{e.preventDefault();if(busy)return;if(pinConfig?.enabled&&pinConfig.policies?.[mode]?.requirePinAdd&&!pinGrant){pinManageOpen=true;updatePinGate();status('PIN Add is enabled for '+mode+' in SarNi Admin Settings. To allow entries without PIN, uncheck PIN Add for this tab and save. For this entry you may unlock below.',true);$('pinGate').scrollIntoView({behavior:'smooth',block:'center'});$('pinInput').focus();return;}busy=true;$('save').disabled=true;status('Saving…');try{const data=Object.fromEntries(new FormData(e.target));const fingerprint=qePayloadFingerprint(mode,data);if(qePendingUncertain&&qePendingPayloadFingerprint&&fingerprint===qePendingPayloadFingerprint){if(!confirm('The previous save has not been confirmed. Check Recent Entries or the destination before resubmitting. Continue using the SAME original submission ID? Do not proceed if you already see the record.')){status('Repeat submission cancelled. Check whether the original record was saved.',true);return;}}if(qePendingUncertain&&qePendingPayloadFingerprint&&fingerprint!==qePendingPayloadFingerprint){if(!confirm('You changed the entry after an unconfirmed save. This may create a different transaction. Check Recent Entries or the destination first. Continue with a new submission ID?')){status('Save cancelled. Confirm the earlier entry first.',true);return;}qeResetSubmissionIdentity();}const entryId=(pendingQuickEntryMode===mode&&pendingQuickEntryId)||Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('');pendingQuickEntryId=entryId;pendingQuickEntryMode=mode;qePendingPayloadFingerprint=fingerprint;qePendingUncertain=false;qeConfirmUncertainResubmission();if(mode==='family'&&!pendingFamilyId)pendingFamilyId=entryId;if(['diary','stock','office'].includes(mode)){
  const flags=new Set(['monthly-highlight','needs-follow-up','needs-review','needs-planning','mark-learning','mark-important','action-completed']);
  const dateKey=mode==='office'?'follow-up-due':mode==='stock'?'review-on':'planned-for';
  const selectedDate=String(data.markDueDate||'');
