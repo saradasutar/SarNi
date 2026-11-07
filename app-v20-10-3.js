@@ -2928,11 +2928,23 @@ function renderBooksGrid(){
     </article>`;
   }).join('');
 }
+let sarniBookDetailRequestSeq=0;
 function openBookDetail(bookId){
+  const requestSeq=++sarniBookDetailRequestSeq;
   state.activeBookId=bookId;
   state.activeBookDetail=null;
   renderBooksPage();
-  api('bookDetail',{bookId}).then(r=>{state.activeBookDetail=r.data;renderBookDetailView();}).catch(e=>{toast(e.message,'error');state.activeBookId=null;renderBooksPage();});
+  api('bookDetail',{bookId}).then(r=>{
+    if(requestSeq!==sarniBookDetailRequestSeq||state.activeBookId!==bookId)return;
+    if(!r?.data?.book||!Array.isArray(r.data.chapters))throw new Error('Incomplete book response. Existing chapters have not been changed.');
+    state.activeBookDetail=r.data;
+    renderBookDetailView();
+  }).catch(e=>{
+    if(requestSeq!==sarniBookDetailRequestSeq||state.activeBookId!==bookId)return;
+    toast('Could not display chapters: '+(e.message||e),'error');
+    state.activeBookDetail=null;
+    if(els.bookDetailTitle)els.bookDetailTitle.textContent='Unable to load chapters — return to Books and reopen';
+  });
 }
 function backToBooksList(){state.activeBookId=null;state.activeBookDetail=null;renderBooksPage();}
 
@@ -2951,7 +2963,7 @@ function renderBookDetailView(){
   els.addChapterBtn?.classList.toggle('hidden',!canEdit);
 
   if(els.bookCollabList){
-    const rows=[{username:b.ownerUsername,role:'OWNER'}].concat(b.collaborators);
+    const rows=[{username:b.ownerUsername,role:'OWNER'}].concat(Array.isArray(b.collaborators)?b.collaborators:[]);
     els.bookCollabList.innerHTML=rows.map(c=>`<div class="book-collab-row"><span>${escapeHtml(c.username)}</span><span class="book-role-badge">${escapeHtml(BOOK_ROLE_LABEL[c.role]||c.role)}</span>${isOwner&&c.role!=='OWNER'?`<button class="small-button danger" data-remove-collab="${escapeHtml(c.username)}">Remove</button>`:''}</div>`).join('');
   }
 
@@ -3106,7 +3118,7 @@ function openChapterModal(chapter=null){
   chapterSavedRange=null;
   chapterProtectSelection=false;
   if(els.chapterNotes)els.chapterNotes.value=chapter?.notes||'';
-  const d=state.activeBookDetail,collabOptions=d?[{username:d.book.ownerUsername}].concat(d.book.collaborators):[];
+  const d=state.activeBookDetail,collabOptions=d?[{username:d.book.ownerUsername}].concat(Array.isArray(d.book.collaborators)?d.book.collaborators:[]):[];
   if(els.chapterAssignedTo){
     els.chapterAssignedTo.innerHTML='<option value="">Unassigned</option>'+collabOptions.map(c=>`<option value="${escapeHtml(c.username)}">${escapeHtml(c.username)}</option>`).join('');
     els.chapterAssignedTo.value=chapter?.assignedTo||'';
@@ -3263,7 +3275,7 @@ async function saveChapterForm(event){
 }
 async function moveChapter(id,direction){
   const d=state.activeBookDetail;if(!d)return;
-  const order=d.chapters.map(c=>c.id);
+  const order=(Array.isArray(d.chapters)?d.chapters:[]).map(c=>c.id);
   const idx=order.indexOf(id);
   const swapWith=direction==='up'?idx-1:idx+1;
   if(swapWith<0||swapWith>=order.length)return;
