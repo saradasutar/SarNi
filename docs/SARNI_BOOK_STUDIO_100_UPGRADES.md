@@ -136,6 +136,14 @@
 99. Device and print simulation with font/image overflow checks.
 100. Secure Book Quick Entry sync into the existing register with explicit book selection, idempotency, and destination confirmation.
 
+## Implementation progress — SarNi 13 (7 November 2026)
+
+**Already committed to the GitHub frontend:** Calm Writer and local session safety copies (SarNi 12); book search, chapter word counters, writing themes, chapter outline and chapter text export (SarNi 11); library sorting (title, chapter count, word count), compact book listing, chapter search, chapter status filtering, live filtered counts, text table-of-contents export, passage selection word count, spellcheck toggle, back-to-editor navigation and display-only saved preferences (SarNi 13).
+
+**Important:** This is not confirmation that all 100 features have shipped. The current code uses existing authorized `listBooks`, `bookDetail` and `saveChapter` routes and does not modify manuscript records. Live website acceptance testing remains necessary. Data recovery, durable server-side autosave, real version history, collaboration workflows, PDF/DOCX/EPUB publishing and backend-controlled share-link book saving have not been implemented by this frontend update.
+
+**Safety hold:** Preserve all 18 existing chapters of *The Story Before Ours* (Book ID from live data), 2 chapters in *Coding Book*, and existing empty *Always a Struggler* book. Do not migrate or relink chapter IDs based on manuscript titles.
+
 ## Reference product documentation
 
 - [Scrivener](https://www.literatureandlatte.com/scrivener/overview)
