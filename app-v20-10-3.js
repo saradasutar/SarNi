@@ -2981,6 +2981,32 @@ function renderBookDetailView(){
   }
 
   renderBookProgress(d);
+  // SarNi Book Safety: show a transparent discrepancy instead of hiding old records.
+  if(els.bookChaptersList){
+    const pane=els.bookChaptersList.closest('article.panel');
+    if(pane){
+      let review=pane.querySelector('#sarniBookReadHealth');
+      if(!review){
+        review=document.createElement('div');
+        review.id='sarniBookReadHealth';
+        review.setAttribute('role','status');
+        review.style.cssText='margin:9px 0 0;padding:10px 12px;background:#f7f9ff;border:1px solid #dce3f4;border-radius:10px;color:#435070;font-size:12px;line-height:1.5';
+        pane.append(review);
+      }
+      review.replaceChildren();
+      const loaded=Array.isArray(d.chapters)?d.chapters.length:0;
+      const reported=Number(b.chapterCount);
+      const mismatch=Number.isFinite(reported)&&reported!==loaded;
+      const label=document.createElement('span');
+      label.textContent=mismatch?'Chapter count mismatch: library reports '+reported+', but detail returned '+loaded+'. Your underlying records were not changed.':loaded+' active chapter(s) returned by the existing SarNi backend.';
+      review.append(label);
+      const retry=document.createElement('button');retry.type='button';
+      retry.textContent='Refresh chapters';
+      retry.style.cssText='margin-left:10px;background:#e6edff;border:1px solid #a5b9ea;padding:5px 9px;border-radius:7px;color:#24457d;cursor:pointer;font-weight:700';
+      retry.onclick=()=>{if(state.activeBookId)openBookDetail(state.activeBookId);};
+      review.append(retry);
+    }
+  }
 }
 function renderBookProgress(d){
   const dates=Object.keys(d.progressByDate||{}).sort();
