@@ -127,3 +127,41 @@ test('Quick Entry sync guidance is read-only and does not send a retry',async()=
   assert.equal(await p.locator('#qeSearchClear').count(),1);
  });
 });
+
+
+test('Focus view reduces mobile clutter but preserves search and reversibility',async()=>{
+ const html='<main id="mainDashboard"><section id="sarni10Workspace">'+
+ '<div class="sarni10-search-row"><input id="sarni10ModuleSearch" aria-label="Find modules"></div>'+
+ '<small id="sarni10ModuleCount">Seven modules</small>'+
+ '<div id="sarni10ModuleResults">All module shortcuts</div>'+
+ '<div class="sarni10-collections"><div id="sarni10Favorites">Favorites</div><div id="sarni10Recent">Recent</div></div>'+
+ '</section></main>';
+ await withPage(html,{
+  styles:['sarni-focus-view.css'],
+  scripts:['sarni-focus-view.js']
+ },{viewport:{width:375,height:812}},async p=>{
+  assert.equal(await p.locator('#sarni10Workspace').evaluate(e=>e.classList.contains('sarni-focus-view')),true);
+  assert.equal(await p.locator('#sarni10Favorites').isVisible(),false);
+  assert.equal(await p.locator('#sarni10ModuleResults').isVisible(),false);
+  await p.getByRole('textbox',{name:'Find modules'}).fill('Diary');
+  assert.equal(await p.locator('#sarni10ModuleResults').isVisible(),true);
+  await p.getByRole('button',{name:/Show favorites and all module shortcuts/}).click();
+  assert.equal(await p.locator('#sarni10Favorites').isVisible(),true);
+  assert.equal(await p.locator('#sarni10ModuleResults').isVisible(),true);
+ });
+});
+
+test('Desktop Focus view starts expanded and can collapse without changing input',async()=>{
+ const html='<section id="sarni10Workspace"><div class="sarni10-search-row">'+
+ '<input id="sarni10ModuleSearch"></div><div id="sarni10ModuleResults">Items</div>'+
+ '<div class="sarni10-collections"><div id="sarni10Favorites">Favorites</div></div></section>';
+ await withPage(html,{styles:['sarni-focus-view.css'],scripts:['sarni-focus-view.js']},
+ {viewport:{width:1280,height:800}},async p=>{
+  assert.equal(await p.locator('#sarni10Favorites').isVisible(),true);
+  await p.locator('#sarni10ModuleSearch').fill('Books');
+  await p.getByRole('button',{name:/Hide extra navigation/}).click();
+  assert.equal(await p.locator('#sarni10Favorites').isVisible(),false);
+  assert.equal(await p.locator('#sarni10ModuleResults').isVisible(),true);
+  assert.equal(await p.locator('#sarni10ModuleSearch').inputValue(),'Books');
+ });
+});
