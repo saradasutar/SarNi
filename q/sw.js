@@ -1,9 +1,9 @@
 /* SarNi Quick Entry app shell only. No personal data, API responses or private URLs are cached. */
 'use strict';
-const CACHE_NAME='sarni-q-private-shell-v2';
+const CACHE_NAME='sarni-q-private-shell-v3';
 const SCOPE=new URL(self.registration.scope);
 const SHELL=new URL('./index.html',SCOPE).href;
-const STATIC=[SHELL,new URL('./manifest.webmanifest',SCOPE).href,new URL('../config.js',SCOPE).href,new URL('../sarni-life-icon.svg',SCOPE).href,new URL('../quick-expense-192.png',SCOPE).href,new URL('../quick-expense-512.png',SCOPE).href];
+const STATIC=[SHELL,new URL('./manifest.webmanifest',SCOPE).href,new URL('./sarni9-batch10.css',SCOPE).href,new URL('./sarni9-batch10.js',SCOPE).href,new URL('../config.js',SCOPE).href,new URL('../sarni-life-icon.svg',SCOPE).href,new URL('../quick-expense-192.png',SCOPE).href,new URL('../quick-expense-512.png',SCOPE).href];
 const PATHS=new Set(STATIC.map(u=>new URL(u).pathname));
 self.addEventListener('install',event=>{
  event.waitUntil((async()=>{
