@@ -33,7 +33,10 @@ for(const mode of ['expense','diary','office','stock','investment','family'])
 assert('Quick Entry uses origin-only referrer policy before resource loads', q.includes('<meta name="referrer" content="origin">') && q.indexOf('<meta name="referrer" content="origin">') < q.indexOf('<link'));
 assert('Quick Entry referrer policy does not alter link access/expiry logic',q.includes('new URLSearchParams(location.search)')&&q.includes('qePendingUncertain'));
 assert('quick-entry authorized retry route present',q.includes('qpinSyncRetry')&&q.includes('pinGrant'));
-assert('Quick Entry renders fields before optional PIN info',q.includes("render();qeTimingMark('fields');if(qeOfflineKey)qeOfflineCaptureBootstrap();")&&q.lastIndexOf("render();qeTimingMark('fields');if(qeOfflineKey)qeOfflineCaptureBootstrap();")<q.lastIndexOf("void initializePinAccess().then("));
+assert('Quick Entry renders fields before optional PIN info',q.includes("render();formPainted=true;qeTimingMark('fields');if(qeOfflineKey)qeOfflineCaptureBootstrap();")&&q.lastIndexOf("render();formPainted=true;qeTimingMark('fields');if(qeOfflineKey)qeOfflineCaptureBootstrap();")<q.lastIndexOf("void initializePinAccess().then("));
+assert('Quick Entry waits for core access but not optional cross-dashboard permissions',q.includes("const mainResult=await api('qeInfo')")&&q.includes("api('hubGuestInfo').then(")&&!q.includes("Promise.allSettled([api('qeInfo'"));
+assert('Late cross-dashboard permissions update tabs without rerendering form',q.includes("function qeRenderTabsOnly(types)")&&q.includes("if(formPainted)qeRenderTabsOnly(qeAvailableTypes())")&&q.includes("qeRenderTabsOnly(types);"));
+assert('Quick Entry keeps Save gated while PIN policy is unknown',q.includes("quickSave.disabled=true")&&q.includes("void initializePinAccess().then("));
 assert('Quick Entry gates Save while optional PIN policy loads',q.includes("quickSave.disabled=true")&&q.includes("if(!busy&&!qePhotoBusy)quickSave.disabled=false"));
 assert('Quick Entry initial panel reads wait for PIN initialization',q.includes("void initializePinAccess().then(")&&q.includes("status('');void qeRefreshPanels();})")&&!q.includes("status(permissionNotice);void qeRefreshPanels();"));
 const quickInline=q.match(/<script>\s*([\s\S]*?)<\/script>/i)?.[1];
