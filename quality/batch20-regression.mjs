@@ -36,7 +36,7 @@ assert('quick-entry authorized retry route present',q.includes('qpinSyncRetry')&
 assert('Quick Entry renders fields before optional PIN info',q.includes("render();if(qeOfflineKey)qeOfflineCaptureBootstrap();")&&q.lastIndexOf("render();if(qeOfflineKey)qeOfflineCaptureBootstrap();")<q.lastIndexOf("void initializePinAccess().then("));
 assert('Quick Entry gates Save while optional PIN policy loads',q.includes("quickSave.disabled=true")&&q.includes("if(!busy&&!qePhotoBusy)quickSave.disabled=false"));
 assert('Quick Entry initial panel reads wait for PIN initialization',q.includes("void initializePinAccess().then(")&&q.includes("status('');void qeRefreshPanels();})")&&!q.includes("status(permissionNotice);void qeRefreshPanels();"));
-const quickInline=q.match(/<script>\\s*([\\s\\S]*?)<\\/script>/i)?.[1];
+const quickInline=q.match(/<script>\s*([\s\S]*?)<\/script>/i)?.[1];
 let quickSyntaxOk=false;
 if(quickInline){try{new Script(quickInline,{filename:'q/index.html:inline'});quickSyntaxOk=true;}catch(error){console.error('Quick Entry inline JS syntax:',error.message);}}
 assert('Quick Entry inline script parses cleanly',quickSyntaxOk);
