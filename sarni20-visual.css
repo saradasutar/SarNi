@@ -1,0 +1,51 @@
+/* SarNi Batch 20: twenty scoped frontend refinements. Avoid overriding data logic. */
+/* 01 Calm background and surface rhythm */
+#mainDashboard{--s20-line:#dce5ee;--s20-ink:#1b3448;--s20-muted:#627789}
+#sarni10Workspace{background:linear-gradient(135deg,#f9fcff 0%,#f2f9f5 100%)!important;border:1px solid #d8e5e3!important;border-radius:18px!important;box-shadow:0 8px 25px #163b4b0d!important}
+/* 02 Daily headline typography */
+#sarni20Header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:3px 2px 11px;margin-bottom:9px;border-bottom:1px solid #e0ebeb}
+#sarni20Header .sarni20-intro{display:flex;flex-direction:column;gap:2px;min-width:0}
+#sarni20Header .sarni20-eyebrow{font-size:10px;font-weight:800;letter-spacing:.12em;color:#277564}
+#sarni20Header .sarni20-title{font-size:clamp(18px,2vw,24px);line-height:1.23;letter-spacing:-.025em;color:#183a43}
+#sarni20Header .sarni20-subtitle{font-size:12px;color:#647f7c}
+/* 03 Date label and 04 live clock */
+#sarni20Header .sarni20-meta{display:flex;align-items:center;flex-wrap:wrap;gap:6px;min-width:0}
+#sarni20Header .sarni20-meta span{padding:6px 9px;background:#fff;border:1px solid #dce9e7;border-radius:999px;font-size:11px;font-weight:750;color:#315e64;white-space:nowrap;font-variant-numeric:tabular-nums}
+/* 05 Honest browser online/offline indicator */
+#sarni20Header .sarni20-meta .sarni20-network{color:#187b61;background:#eefaf4}
+#sarni20Header .sarni20-meta .sarni20-network.is-offline{color:#a3532b;background:#fff3e9}
+/* 06 Quick navigation heading, 07 collapsible controls */
+#sarni20Quicknav{margin:11px 0 12px;padding:10px;border:1px solid #dbe7e7;border-radius:13px;background:#ffffffb8}
+#sarni20Quicknav[hidden]{display:none!important}
+#sarni20Quicknav .sarni20-quicknav-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin:0 0 9px}
+#sarni20Quicknav .sarni20-quicknav-head strong{font-size:13px;color:#254b4b}
+#sarni20Quicknav .sarni20-quicknav-head small{flex:1;font-size:11px;color:#728384}
+/* 08 Touch-friendly authorized navigation tiles, 09 active state */
+#sarni20Tiles{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
+#sarni20Tiles[hidden]{display:none!important}
+#sarni20Tiles .sarni20-tile{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;padding:10px 5px;min-height:65px;border-radius:11px;border:1px solid #dfebe8;background:#fff;color:#335d59;font:750 11px/1.3 system-ui,-apple-system,'Segoe UI',sans-serif;cursor:pointer}
+#sarni20Tiles .sarni20-tile-icon{font-size:20px;font-weight:800}
+#sarni20Tiles .sarni20-tile.is-current{border-color:#6fb5a4!important;background:#e7f8f1!important;color:#146349!important;box-shadow:inset 0 0 0 1px #6fb5a4}
+/* 10 Clear shortcuts & 11 current-section indicator */
+#sarni10Workspace :is(.sarni20-toggle,.sarni20-find,.sarni20-current){padding:7px 10px;min-height:35px;border:1px solid #c9ddd9;background:#f9fdfb;color:#28645b;border-radius:9px;font:750 11px/1.4 system-ui,-apple-system,'Segoe UI',sans-serif;cursor:pointer}
+#sarni10Workspace .sarni20-utility{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 1px 0;border-top:1px solid #e1eae7}
+#sarni10Workspace .sarni20-active{flex:1;font-size:11px;color:#53746d;font-weight:750;min-width:110px}
+/* 12 Better module search */
+#sarni10ModuleSearch{border-radius:11px!important;border-color:#bad6cf!important;background:#fff!important;box-shadow:0 1px 3px #144b3712}
+/* 13 Clearer favorite and 14 recent section separation */
+#sarni10Workspace .sarni10-collections>div{border-style:solid!important;border-color:#dfebe7!important;background:#fff!important;border-radius:12px!important}
+#sarni10Workspace .sarni10-collections>div>strong{font-size:12px!important;color:#335d53!important}
+/* 15 Distinguishable active module chip */
+#sarni10Workspace .sarni10-chip{border-radius:10px!important;box-shadow:0 2px 6px #1b49350b}
+/* 16 Comfortable table scanning without changing stored values */
+#mainDashboard .page-section .table-wrap{max-width:100%;overscroll-behavior-inline:contain}
+#mainDashboard .page-section table :is(th,td){vertical-align:middle}
+/* 17 Keyboard focus, 18 reduced motion */
+#sarni10Workspace :is(button,input):focus-visible{outline:3px solid #148363!important;outline-offset:2px!important}
+/* 19 Tablet/mobile responsive layout */
+@media(max-width:1000px){#sarni20Tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:600px){#sarni20Header{align-items:flex-start}#sarni20Tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}#sarni20Tiles .sarni20-tile{min-height:62px}#sarni10Workspace .sarni20-utility{gap:5px}#sarni10Workspace .sarni20-find,#sarni10Workspace .sarni20-current{flex:1;min-height:42px}}
+@media(max-width:360px){#sarni20Tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){#sarni10Workspace *,#sarni20Quicknav *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* 20 Clean print: suppress navigation utilities, retain actual reports */
+@media print{#sarni20Header,#sarni20Quicknav,#sarni10Workspace .sarni20-utility{display:none!important}}
