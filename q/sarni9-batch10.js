@@ -63,6 +63,35 @@
   fields.addEventListener('input',updateCount);
   tabs.addEventListener('click',()=>{counter.hidden=true;});
 
+  // Batch 10: explain the existing synchronization indicators without touching records.
+  // This is a purely local, read-only aid; the server remains the authority.
+  const syncPanel=$('qeGlobalSyncPanel');
+  if(syncPanel&&!$('qe10SyncLegend')){
+   const legend=document.createElement('details');
+   legend.id='qe10SyncLegend';
+   legend.className='qe10-sync-legend';
+   const summary=document.createElement('summary');
+   summary.textContent='What do sync statuses mean?';
+   legend.append(summary);
+   const descriptions=[
+    ['Synced','The backend reports delivery. Check the destination for confirmation when necessary.'],
+    ['Pending','Delivery has not been confirmed. Do not assume it has failed.'],
+    ['Failed','The backend reports an error. Inspect the entry before any permitted retry.'],
+    ['Unverified','Not enough destination evidence is available; this does not mean synced.']
+   ];
+   const list=document.createElement('dl');
+   for(const [label,description] of descriptions){
+    const term=document.createElement('dt');term.textContent=label;
+    const explanation=document.createElement('dd');explanation.textContent=description;
+    list.append(term,explanation);
+   }
+   legend.append(list);
+   const note=document.createElement('p');
+   note.textContent='Refreshing this overview does not resend entries. Retry only from an authorized Recent Entries action, after checking whether an earlier attempt was saved.';
+   legend.append(note);
+   syncPanel.append(legend);
+  }
+
   // 10. Back to Top appears only after scrolling; never touches form values.
   const top=document.createElement('button');top.type='button';top.id='qeBackToTop';
   top.className='qe9-back-to-top';top.textContent='↑ Top';
