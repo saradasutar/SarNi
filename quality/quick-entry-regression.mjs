@@ -15,6 +15,7 @@ const bridge = readFileSync(new URL('../sarni-health-bridge-v1.js', import.meta.
 const history = readFileSync(new URL('../sarni-health-history-v1.js', import.meta.url), 'utf8');
 const batch10Js = readFileSync(new URL('../q/sarni9-batch10.js', import.meta.url), 'utf8');
 const batch10Css = readFileSync(new URL('../q/sarni9-batch10.css', import.meta.url), 'utf8');
+const quickWorker = readFileSync(new URL('../q/sw.js', import.meta.url), 'utf8');
 const tests = [];
 const check = (name, passed) => tests.push({ name, passed: Boolean(passed) });
 const includes = (value) => source.includes(value);
@@ -71,6 +72,13 @@ check('SarNi main uses exactly one approved enhancement pair', (()=>{const names
 check('SarNi 10 main workspace assets activated', mainDashboard.includes('sarni10-main-workspace.js') && mainDashboard.includes('sarni10-main-workspace.css') && !mainDashboard.includes('src="./sarni-main-batch10.js'));
 check('Main workspace uses existing navigation and avoids persistence', mainBatchJs.includes('sarniSidebarPrimary') && !['fetch(', 'localStorage.', 'sessionStorage.'].some(x=>mainBatchJs.includes(x)));
 check('Main workspace accessibility and responsive layout', mainBatchCss.includes('focus-visible') && mainBatchCss.includes('prefers-reduced-motion:reduce') && mainBatchCss.includes('min-height:44px'));
+check('Private Quick Entry links send origin-only referrer', includes('<meta name="referrer" content="origin">'));
+check('Apps Script connection hint uses origin only', includes('<link rel="preconnect" href="https://script.google.com">') && !/<link\s+rel="preconnect"[^>]+\?k=/i.test(source));
+check('Original six-tab renderer remains unchanged', includes('function render(){') && !includes('function qeRenderTabsOnly(types)') && includes("button.setAttribute('aria-pressed',String(active))"));
+check('Original access bootstrap and PIN gate remain authoritative', includes("Promise.allSettled([api('qeInfo')") && includes("initializePinAccess().then(") && includes("quickSave.disabled=true"));
+check('Quick Entry PWA public assets cached by versioned worker', quickWorker.includes("sarni-q-private-shell-v3") && quickWorker.includes("new URL('./sarni9-batch10.css',SCOPE)") && quickWorker.includes("new URL('./sarni9-batch10.js',SCOPE)"));
+check('Worker cache scope excludes queries and private API responses', quickWorker.includes("request.method!=='GET'||url.origin!==self.location.origin") && quickWorker.includes("if(!PATHS.has(url.pathname)||url.search)return;") && quickWorker.includes("cache.match(SHELL)") && !quickWorker.includes("cache.put(request"));
+check('Worker always checks online config before cached fallback', quickWorker.includes("if(url.pathname===new URL('../config.js',SCOPE).pathname)") && quickWorker.includes("try{const fresh=await fetch(request);if(fresh.ok)return fresh;}"));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
