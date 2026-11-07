@@ -40,7 +40,8 @@ const entry=document.getElementById('entry'),heading=document.querySelector('.en
 if(!entry)return;
 entry.after(note);
 const field=id=>document.getElementById(id);
-const linkToken=query.get('k')||'';\nlet scopeHash=2166136261;for(let i=0;i<linkToken.length;i++){scopeHash^=linkToken.charCodeAt(i);scopeHash=Math.imul(scopeHash,16777619);}\nconst storageKey='sarni11-book-draft-v1-'+(scopeHash>>>0).toString(16); // separate local drafts between share links, without storing their keys
+const linkToken=query.get('k')||'';
+let scopeHash=2166136261;for(let i=0;i<linkToken.length;i++){scopeHash^=linkToken.charCodeAt(i);scopeHash=Math.imul(scopeHash,16777619);}\nconst storageKey='sarni11-book-draft-v1-'+(scopeHash>>>0).toString(16); // separate local drafts between share links, without storing their keys
 let bookActive=false,dirty=false;
 try{const draft=JSON.parse(localStorage.getItem(storageKey)||'null');if(draft&&typeof draft==='object'){field('sarni11BookTitle').value=String(draft.book||'');field('sarni11Chapter').value=String(draft.chapter||'');field('sarni11Text').value=String(draft.text||'');field('sarni11Saved').textContent='Local draft found';}}catch(_){}
 function words(){field('sarni11Words').textContent=(field('sarni11Text').value.trim().match(/\S+/g)||[]).length+' words';}
