@@ -1,0 +1,90 @@
+/* SarNi Author Studio 16 — inviting, comfortable manuscript interface.
+   Pure CSS: does not touch editor content, handlers, backend or records. */
+#booksSection .books-list-view>.panel-head{
+  background:linear-gradient(118deg,#f7f2ff 0%,#f0f5ff 57%,#f0faf6 100%);
+  border:1px solid #dfdef1;border-radius:18px;padding:20px 22px;
+}
+#booksSection .books-list-view>.panel-head h2{font-size:clamp(25px,2.8vw,34px);letter-spacing:-.035em;color:#25345c}
+#booksSection .books-grid{grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:16px}
+#booksSection .books-grid .book-card{
+ border-radius:18px!important;box-shadow:0 6px 18px #2937540e;
+ transition:box-shadow .15s ease,transform .15s ease
+}
+@media(hover:hover){#booksSection .books-grid .book-card:hover{transform:translateY(-2px);box-shadow:0 12px 26px #27345a20}}
+#booksSection .book-detail-view>.panel-head{
+ border:1px solid #e1dff0;border-radius:16px;
+ background:linear-gradient(115deg,#fbf8ff,#f4f8ff);padding:16px
+}
+#booksSection .book-detail-view #bookDetailTitle{line-height:1.3;overflow-wrap:anywhere}
+#booksSection .book-detail-view .panel{border-radius:15px}
+#booksSection .book-chapters-list{gap:10px}
+#booksSection .book-chapter-row{min-height:65px}
+#chapterModal{
+ width:min(1040px,calc(100vw - 34px))!important;
+ max-height:calc(100dvh - 28px)!important;
+ padding:clamp(15px,2.5vw,29px)!important;
+ overscroll-behavior:contain;
+ border-radius:22px!important;
+}
+#chapterModal .modal-head{
+ position:sticky;top:-1px;z-index:15;
+ padding:6px 0 13px;margin-bottom:12px;
+ background:#fff;border-bottom:1px solid #e9eaf3;
+}
+#chapterModal #chapterModalTitle{font-size:clamp(22px,3vw,30px);line-height:1.25}
+#chapterModal #chapterForm{gap:13px;max-width:970px;margin-inline:auto}
+#chapterModal #chapterTitle{font-size:17px;min-height:42px}
+#chapterModal .rte-toolbar{
+ position:relative;z-index:2;border-radius:12px 12px 0 0;
+ background:#f6f7fc;gap:6px;padding:10px;
+}
+#chapterModal .rte-btn{min-height:34px;min-width:34px;border-radius:8px}
+#chapterModal .sarni-book-format-tip{
+ background:#f8f9ff;border-left:3px solid #7b79be;
+ border-radius:7px;padding:8px 12px;line-height:1.55;
+}
+#chapterModal #chapterContent{
+ width:100%;box-sizing:border-box;max-width:850px;margin-inline:auto;
+ min-height:350px;max-height:none!important;overflow-y:visible!important;
+ padding:clamp(18px,4vw,38px)!important;
+ font-family:Georgia,'Noto Serif',serif;
+ font-size:clamp(17px,1.65vw,20px)!important;
+ line-height:1.88!important;
+ letter-spacing:.005em;
+ border:1px solid #dbe1ee;
+ border-radius:14px!important;
+ box-shadow:0 7px 30px #25365b0c;
+ color:#24304a;
+ background:#fff;
+}
+#chapterModal #chapterContent:focus{
+ outline:2px solid #b8a2e9;outline-offset:1px;
+ box-shadow:0 9px 31px #4e3c8c12;
+}
+#chapterModal #chapterContent p{margin:0 0 1.1em}
+#chapterModal #chapterContent h2{font-size:1.35em;line-height:1.4}
+#chapterModal #chapterContent h3{font-size:1.15em;line-height:1.45}
+#chapterModal #chapterNotes{min-height:74px;line-height:1.55}
+#chapterModal .form-actions{
+ position:sticky;bottom:-1px;z-index:15;
+ background:rgba(255,255,255,.98);
+ padding:12px 4px 4px;
+ border-top:1px solid #e6e8f0;
+ box-shadow:0 -7px 22px #1926440a;
+}
+#chapterModal #saveChapterBtn{min-height:44px;padding:10px 19px;font-weight:800}
+#chapterModal #sarniChapterSaveNotice{max-height:100px;overflow:auto;overflow-wrap:anywhere}
+#sarni15Writer{margin:8px 0 12px!important;background:#f9f7ff!important}
+#sarni15Status{font-weight:750}
+@media(max-width:680px){
+ #chapterModal{width:calc(100vw - 14px)!important;max-height:calc(100dvh - 12px)!important;padding:12px!important;border-radius:15px!important}
+ #chapterModal #chapterContent{min-height:43vh;padding:15px!important;font-size:17px!important;line-height:1.78!important}
+ #chapterModal .modal-head{padding:3px 0 10px}
+ #chapterModal .rte-toolbar{gap:3px;padding:7px}
+ #chapterModal .form-actions{padding:9px 0 3px;gap:7px;flex-wrap:wrap}
+ #chapterModal #saveChapterBtn{flex:1 1 auto}
+ #booksSection .books-list-view>.panel-head{padding:15px}
+}
+@media(prefers-reduced-motion:reduce){
+ #booksSection .books-grid .book-card{transition:none!important;transform:none!important}
+}
