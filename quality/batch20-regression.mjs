@@ -7,7 +7,7 @@ const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const text=p=>readFileSync(resolve(root,p),'utf8');
 const files=['index.html','q/index.html','q/sarni9-batch10.js','q/sarni9-batch10.css',
  'sarni10-main-workspace.js','sarni10-main-workspace.css','sarni10-admin-centre.js',
- 'sarni10-admin-centre.css','sarni20-visual.js','sarni20-visual.css','health.html'];
+ 'sarni10-admin-centre.css','sarni20-visual.js','sarni20-visual.css','sarni-focus-view.js','sarni-focus-view.css','health.html'];
 let failures=0;
 function assert(label,pass){
  console.log((pass?'PASS':'FAIL')+' '+label);if(!pass)failures++;
@@ -17,9 +17,9 @@ if(failures)process.exit(1);
 const [h,q,admin,visual,css]=['index.html','q/index.html','sarni10-admin-centre.js','sarni20-visual.js','sarni20-visual.css'].map(text);
 function exactlyOnce(s,p){return s.split(p).length===2;}
 for(const [f,kind] of [
- ['sarni10-main-workspace.css','css'],['sarni10-admin-centre.css','css'],
+ ['sarni10-main-workspace.css','css'],['sarni10-admin-centre.css','css'],['sarni-focus-view.css','css'],
  ['sarni20-visual.css','css'],['sarni10-main-workspace.js','js'],
- ['sarni10-admin-centre.js','js'],['sarni20-visual.js','js']]){
+ ['sarni10-admin-centre.js','js'],['sarni20-visual.js','js'],['sarni-focus-view.js','js']]){
  const needle=kind==='css'?'href="./'+f+'?v=1"':'src="./'+f+'?v=1"';
  assert('linked once: '+f,exactlyOnce(h,needle));
 }
@@ -39,6 +39,9 @@ assert('Batch20 has no API/write endpoints',!/\bfetch\s*\(|XMLHttpRequest|\.post
 assert('Batch20 stores no secret or form content',!/localStorage|sessionStorage|indexedDB/.test(visual));
 assert('Batch20 supports reduced motion',css.includes('@media(prefers-reduced-motion:reduce)'));
 assert('Batch20 print excludes navigation only',css.includes('@media print')&&css.includes('#sarni20Quicknav'));
+assert('Focus view script loaded after main navigation',h.indexOf('src="./sarni-focus-view.js?v=1"')>h.indexOf('src="./sarni20-visual.js?v=1"'));
+assert('Health page checks new assets',text('health.html').includes('data-file="./sarni-focus-view.js"')&&text('health.html').includes('data-file="./q/index.html"'));
+assert('No accidental encoded line break in health markup',!text('health.html').includes('\\n<li data-file='));
 console.log('\n'+(failures?'FAILED':'PASSED')+' static regression: '+failures+' failure(s).');
 console.log('Not tested: authentication, saving, backend permissions, real sync, backup restores, end-to-end mobile interactions.');
 process.exitCode=failures?1:0;
