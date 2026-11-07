@@ -18,6 +18,7 @@ on:
       - "quality/main-dashboard-batch10-regression.cjs"
       - "quality/smart-refresh-regression.cjs"
       - "quality/quick-entry-browser.spec.cjs"
+      - "quality/quick-entry-bootstrap.spec.cjs"
       - "quality/main-dashboard-health.spec.cjs"
       - "playwright.config.cjs"
       - ".github/workflows/sarni-quick-entry-browser.yml"
@@ -57,7 +58,7 @@ jobs:
           done
           exit 1
       - name: Run six-tab browser regression (mock backend; no real submissions)
-        run: npx playwright test quality/quick-entry-browser.spec.cjs quality/main-dashboard-health.spec.cjs --workers=1 --reporter=line
+        run: npx playwright test quality/quick-entry-browser.spec.cjs quality/quick-entry-bootstrap.spec.cjs quality/main-dashboard-health.spec.cjs --workers=1 --reporter=line
         env:
           CI: 'true'
       - name: Record results
