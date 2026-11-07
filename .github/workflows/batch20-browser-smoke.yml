@@ -1,0 +1,30 @@
+name: SarNi Batch 20 browser smoke
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'q/**'
+      - 'sarni10-**'
+      - 'sarni20-**'
+      - 'sarni-focus-view.*'
+      - 'quality/batch20-browser.mjs'
+      - '.github/workflows/batch20-browser-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Install test browser
+        run: |
+          npm install --no-save playwright@1.55.1
+          npx playwright install --with-deps chromium
+      - name: Browser smoke tests (synthetic data only)
+        run: node --test quality/batch20-browser.mjs

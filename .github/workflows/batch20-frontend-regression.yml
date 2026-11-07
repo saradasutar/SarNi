@@ -1,0 +1,34 @@
+name: SarNi Batch 10-20 frontend regression
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'q/**'
+      - 'sarni10-**'
+      - 'sarni20-**'
+      - 'sarni-focus-view.*'
+      - 'quality/**'
+      - '.github/workflows/batch20-frontend-regression.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Verify JavaScript syntax
+        run: |
+          node --check sarni10-main-workspace.js
+          node --check sarni10-admin-centre.js
+          node --check sarni20-visual.js
+          node --check sarni-focus-view.js
+          node --check q/sarni9-batch10.js
+      - name: Existing Batch 10 read-only audit
+        run: node quality/batch10-audit.mjs
+      - name: Batch 20 regression gates
+        run: node quality/batch20-regression.mjs

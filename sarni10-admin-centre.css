@@ -1,0 +1,16 @@
+/* Batch 10: compact, read-only Admin Control Centre with existing authorized shortcuts */
+#sarni10AdminCentre{margin:14px 0 18px;padding:17px;border:1px solid #d6e3ee;border-radius:17px;background:linear-gradient(140deg,#f5f9ff,#f8fcfa);color:#243951}
+#sarni10AdminCentre .sarni10-admin-heading h3{font-size:clamp(18px,2vw,23px);margin:0 0 4px;font-weight:850}
+#sarni10AdminCentre .sarni10-admin-heading p{margin:0 0 13px;font-size:13px;line-height:1.5;color:#5b6e81}
+#sarni10AdminCentre .sarni10-admin-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#sarni10AdminCentre .sarni10-admin-card{min-width:0;padding:13px;display:flex;flex-direction:column;gap:7px;border:1px solid #dbe4ed;border-radius:12px;background:#fff}
+#sarni10AdminCentre .sarni10-admin-icon{font-size:22px;line-height:1.2}
+#sarni10AdminCentre h4{font-size:14px;margin:0;color:#1b3956;font-weight:850}
+#sarni10AdminCentre .sarni10-admin-card p{flex:1;color:#536b79;margin:0;font-size:12px;line-height:1.5}
+#sarni10AdminCentre .sarni10-admin-action{align-self:flex-start;padding:8px 10px;border:1px solid #bed6e4;background:#eaf5fb;color:#174a69;border-radius:9px;font-size:12px;font-weight:750;min-height:38px;cursor:pointer}
+#sarni10AdminCentre .sarni10-admin-action:hover{background:#d9eef8}
+#sarni10AdminCentre .sarni10-admin-action:focus-visible{outline:3px solid #168371;outline-offset:2px}
+#sarni10AdminCentre .sarni10-admin-planned{color:#7e5d27;background:#fff7e8;border:1px solid #eeddbf;border-radius:9px;align-self:flex-start;padding:6px 9px;font-size:11px;font-weight:750}
+#sarni10AdminCentre .sarni10-admin-feedback{margin:13px 1px 0;font-size:12px;color:#576d7b}
+@media(max-width:1000px){#sarni10AdminCentre .sarni10-admin-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){#sarni10AdminCentre{padding:12px}#sarni10AdminCentre .sarni10-admin-cards{grid-template-columns:1fr}#sarni10AdminCentre .sarni10-admin-card{gap:5px}}
