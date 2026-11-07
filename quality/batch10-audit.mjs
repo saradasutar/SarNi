@@ -25,7 +25,7 @@ check('Quick link has a read-only sync display',/recent-sync-badge/.test(quick),
 check('Quick link has authorized sync retry route',/qpinSyncRetry/.test(quick)&&/pinGrant/.test(quick),'Backend MUST verify grant, scope and idempotency');
 check('Quick entry has connection feedback',/qeConnectivity|qeDashboardHealth/.test(quick),'Failure must not masquerade as successful save');
 check('Quick entry has uncertainty handling',/qePendingUncertain/.test(quick),'Do not automatically re-submit ambiguous saves');
-check('Root has configured asset health feedback',/sarniAssetFailed/.test(html),'Asset errors visible to user');
+check('Root has configured asset health feedback',/sarNiAssetFailed/.test(html),'Asset errors visible to user');
 check('Site health distinguishes frontend from backend',/does not access personal data|does not prove login/i.test(health),'A HEAD success does not prove saving');
 check('GitHub does not contain raw Apps Script backend',!existsSync(resolve(root,'Code.gs')),'Do not publicly publish Code.gs or keys');
 const warnings=[];
