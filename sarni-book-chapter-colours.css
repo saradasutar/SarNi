@@ -1,0 +1,31 @@
+/* SarNi Book Chapters — clean, encouraging status colours.
+   Visual-only. No changes to chapters, sorting, permissions or saving. */
+#booksSection .book-chapters-list{gap:10px}
+#booksSection .book-chapter-row{
+ --chapter-accent:#7482ae;--chapter-tint:#f3f6ff;--chapter-border:#dce4f4;
+ position:relative;overflow:hidden;min-height:66px;
+ border:1px solid var(--chapter-border);
+ border-left:6px solid var(--chapter-accent);
+ border-radius:13px;
+ background:linear-gradient(105deg,var(--chapter-tint),#fff 84%);
+ padding:12px 14px;box-shadow:0 2px 8px #1d2d4a08;
+ transition:background .12s ease,box-shadow .12s ease,transform .12s ease;
+}
+#booksSection .book-chapter-row[data-chapter-status="NOT_STARTED"]{--chapter-accent:#8393bd;--chapter-tint:#f0f4ff;--chapter-border:#dbe3f4}
+#booksSection .book-chapter-row[data-chapter-status="DRAFTING"]{--chapter-accent:#a168d4;--chapter-tint:#f6efff;--chapter-border:#e6d9f6}
+#booksSection .book-chapter-row[data-chapter-status="REVIEW"]{--chapter-accent:#dc9a38;--chapter-tint:#fff6e7;--chapter-border:#f1dcb7}
+#booksSection .book-chapter-row[data-chapter-status="DONE"]{--chapter-accent:#2f9d80;--chapter-tint:#eafaf4;--chapter-border:#cce9dd}
+#booksSection .book-chapter-row:hover{box-shadow:0 5px 17px #25375716;transform:translateY(-1px)}
+#booksSection .book-chapter-row .book-chapter-main{min-width:0;outline-offset:4px}
+#booksSection .book-chapter-row .book-chapter-main strong{font-size:15px;line-height:1.48;color:#283553;overflow-wrap:anywhere}
+#booksSection .book-chapter-row .book-chapter-main small{font-size:12px;line-height:1.5;color:#62718a}
+#booksSection .book-chapter-row .book-chapter-move{gap:5px}
+#booksSection .book-chapter-row button{border-radius:8px}
+#booksSection .book-chapter-row .book-chapter-main:focus-visible{outline:3px solid #7055be;border-radius:6px}
+@media(max-width:640px){
+ #booksSection .book-chapters-list{gap:9px}
+ #booksSection .book-chapter-row{padding:11px 10px;gap:8px}
+ #booksSection .book-chapter-row .book-chapter-main strong{font-size:14px}
+ #booksSection .book-chapter-row button{min-width:32px;min-height:34px}
+}
+@media(prefers-reduced-motion:reduce){#booksSection .book-chapter-row{transition:none!important;transform:none!important}}
