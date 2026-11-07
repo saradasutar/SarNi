@@ -165,3 +165,33 @@ test('Desktop Focus view starts expanded and can collapse without changing input
   assert.equal(await p.locator('#sarni10ModuleSearch').inputValue(),'Books');
  });
 });
+
+
+test('Non-blocking cross-dashboard tab refresh preserves typed entry',async()=>{
+ const q=readFileSync(resolve(root,'q/index.html'),'utf8');
+ const start=q.indexOf('function qeRenderTabsOnly(types){');
+ const end=q.indexOf('function render(){',start);
+ assert.ok(start>=0&&end>start,'Tab-only helper should be present in Quick Entry');
+ const helper=q.slice(start,end);
+ const page=await browser.newPage();
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ try{
+  await page.setContent(doc('<nav id="tabs"></nav><form id="entry"><textarea id="noteText" aria-label="Sample note"></textarea></form>'));
+  await page.addScriptTag({content:
+   "const $=id=>document.getElementById(id);let mode='expense';"+
+   "const safe=s=>String(s);const qePremiumIcons={expense:'',office:'',investment:''};"+
+   helper+
+   "const initial=[['expense','Expense',true]];qeRenderTabsOnly(initial);"
+  });
+  assert.equal(await page.locator('#tabs button').count(),1);
+  await page.locator('#noteText').fill('Unsaved synthetic entry should survive.');
+  await page.evaluate(()=>{
+   qeRenderTabsOnly([['expense','Expense',true],['office','Office Diary',true],['investment','Investment',true]]);
+  });
+  assert.equal(await page.locator('#tabs button').count(),3);
+  assert.equal(await page.locator('#noteText').inputValue(),'Unsaved synthetic entry should survive.');
+  assert.equal(await page.locator('#tabs [aria-pressed="true"]').count(),1);
+  assert.equal(await page.locator('#tabs [data-mode="office"]').count(),1);
+  assert.deepEqual(errors,[]);
+ }finally{await page.close();}
+});
