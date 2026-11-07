@@ -29,3 +29,53 @@
  #booksSection .book-chapter-row button{min-width:32px;min-height:34px}
 }
 @media(prefers-reduced-motion:reduce){#booksSection .book-chapter-row{transition:none!important;transform:none!important}}
+
+
+/* V2 — Literary colour gallery.
+   Chapter colours rotate independently of completion status so a book with
+   all NOT_STARTED chapters does not show eighteen identical grey cards. */
+#booksSection .book-chapters-list .book-chapter-row:nth-child(8n+1){--chapter-accent:#7457c5;--chapter-tint:#f3efff;--chapter-border:#dbd0f3}
+#booksSection .book-chapters-list .book-chapter-row:nth-child(8n+2){--chapter-accent:#0e9295;--chapter-tint:#eafaf8;--chapter-border:#bfebe7}
+#booksSection .book-chapters-list .book-chapter-row:nth-child(8n+3){--chapter-accent:#d36b88;--chapter-tint:#fff0f4;--chapter-border:#f2d2de}
+#booksSection .book-chapters-list .book-chapter-row:nth-child(8n+4){--chapter-accent:#cf8b28;--chapter-tint:#fff8e9;--chapter-border:#f3e3c4}
+#booksSection .book-chapters-list .book-chapter-row:nth-child(8n+5){--chapter-accent:#387fbd;--chapter-tint:#edf6ff;--chapter-border:#ccdfef}
+#booksSection .book-chapters-list .book-chapter-row:nth-child(8n+6){--chapter-accent:#328e68;--chapter-tint:#eefaef;--chapter-border:#ccebd8}
+#booksSection .book-chapters-list .book-chapter-row:nth-child(8n+7){--chapter-accent:#bc675b;--chapter-tint:#fff2ec;--chapter-border:#efd5c8}
+#booksSection .book-chapters-list .book-chapter-row:nth-child(8n){--chapter-accent:#826ba8;--chapter-tint:#f6f1fb;--chapter-border:#e2d7ef}
+#booksSection .book-chapters-list .book-chapter-row{
+ background:linear-gradient(110deg,var(--chapter-tint) 0%,var(--chapter-tint) 15%,#fff 94%)!important;
+ border:1px solid var(--chapter-border)!important;
+ border-left:6px solid var(--chapter-accent)!important;
+ box-shadow:0 4px 15px #2d36540e!important;
+}
+#booksSection .book-chapters-list .book-chapter-row:hover{
+ box-shadow:0 10px 24px #2d36541b!important;
+}
+#booksSection .book-chapters-list .book-chapter-row .book-chapter-main strong{
+ color:#273451!important;
+ font-weight:800;
+}
+#booksSection .book-chapters-list .book-chapter-row .book-chapter-main small{
+ display:inline-flex;align-items:center;gap:5px;
+ margin-top:7px;padding:4px 9px;
+ border-radius:999px;
+ background:#ffffffcf;
+ border:1px solid var(--chapter-border);
+ color:#586783!important;font-weight:650;
+}
+#booksSection .book-chapters-list .book-chapter-row .book-chapter-move button{
+ border:1px solid var(--chapter-border);
+ color:var(--chapter-accent);
+ background:#fff!important;
+}
+#booksSection .book-chapters-list .book-chapter-row .book-chapter-move button:hover{
+ background:var(--chapter-tint)!important;
+}
+/* Status remains meaningful, and is not inferred from the decorative palette. */
+#booksSection .book-chapter-row[data-chapter-status="DRAFTING"] .book-chapter-main small{color:#75409c!important}
+#booksSection .book-chapter-row[data-chapter-status="REVIEW"] .book-chapter-main small{color:#96651b!important}
+#booksSection .book-chapter-row[data-chapter-status="DONE"] .book-chapter-main small{color:#277c5e!important}
+@media(max-width:640px){
+ #booksSection .book-chapters-list .book-chapter-row{border-left-width:5px!important}
+ #booksSection .book-chapters-list .book-chapter-row .book-chapter-main small{padding:3px 7px;font-size:11px}
+}
