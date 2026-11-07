@@ -47,6 +47,8 @@ for (const viewport of scenarios) {
      qpinRecent: {entries:[],hasMore:false},
      sipPlanGuestList: {plans:[]}
     };
+    // Combined startup is read-only and retains the same mocked access/PIN policy.
+    responses.qeBootstrap={version:1,main:{ok:true,...responses.qeInfo},hub:{ok:true,...responses.hubGuestInfo},pin:{ok:true,...responses.qpinInfo}};
     // Fail closed: unknown actions must never be silently treated as successful.
     const isRead=Object.prototype.hasOwnProperty.call(responses,request.action);
     if(!isRead) attemptedWrites.push(request.action||'(missing action)');
