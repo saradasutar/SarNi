@@ -39,3 +39,13 @@
 #qeBackToTop.qe9-back-to-top:not([hidden]){position:fixed;right:max(13px,env(safe-area-inset-right));bottom:max(15px,env(safe-area-inset-bottom));z-index:35;display:inline-flex;align-items:center;justify-content:center;min-width:58px;min-height:44px;padding:8px 12px;border:1px solid #bbd8c9;border-radius:999px;background:#ecf7f0;color:#185d3d;font-size:12px;font-weight:850;box-shadow:0 3px 12px #133c2525;cursor:pointer}
 #qeBackToTop[hidden]{display:none!important}
 @media(max-width:480px){#qeBackToTop.qe9-back-to-top:not([hidden]){right:10px;bottom:max(10px,env(safe-area-inset-bottom))}}
+
+/* Batch 10: explanatory, read-only synchronization status help. */
+#qe10SyncLegend.qe10-sync-legend{margin-top:11px;padding:10px 12px;background:#f6faf8;border:1px solid #c8ddd3;border-radius:11px;color:#284b3e}
+#qe10SyncLegend summary{cursor:pointer;font-size:12px;font-weight:800;color:#195d4a}
+#qe10SyncLegend dl{display:grid;grid-template-columns:minmax(75px,auto) 1fr;gap:7px 10px;margin:12px 0 8px;font-size:12px;line-height:1.5}
+#qe10SyncLegend dt{font-weight:800;color:#245b47}
+#qe10SyncLegend dd{margin:0;color:#445f53;overflow-wrap:anywhere}
+#qe10SyncLegend p{font-size:11px;line-height:1.55;margin:8px 0 0;color:#526e60}
+#qe10SyncLegend summary:focus-visible{outline:3px solid #17815f;outline-offset:3px}
+@media(max-width:400px){#qe10SyncLegend dl{grid-template-columns:1fr;gap:2px}#qe10SyncLegend dd{margin-bottom:8px}}
