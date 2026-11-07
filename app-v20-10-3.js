@@ -3137,6 +3137,9 @@ function openChapterModal(chapter=null){
   els.chapterForm?.reset();
   if(els.chapterBookId)els.chapterBookId.value=state.activeBookId||'';
   if(els.chapterId)els.chapterId.value=chapter?.id||'';
+  // Stable new-chapter ID prevents duplicate records after uncertain backend responses.
+  if(els.chapterForm)els.chapterForm.dataset.fastNewId=chapter?'':('CHAP-'+(window.crypto?.randomUUID?.()||'').toLowerCase());
+  if(els.chapterContent)els.chapterContent.dataset.baseUpdatedAt=chapter?.updatedAt||'';
   if(els.chapterModalTitle)els.chapterModalTitle.textContent=chapter?'Edit chapter':'New chapter';
   if(els.chapterTitle)els.chapterTitle.value=chapter?.title||'';
   if(els.chapterStatus)els.chapterStatus.value=chapter?.status||'NOT_STARTED';
@@ -3290,8 +3293,24 @@ function applyChapterHeading(tag){runRteCommand('formatBlock',tag==='P'?'P':tag)
 async function saveChapterForm(event){
   event.preventDefault();
   if(els.saveChapterBtn?.disabled)return;
-  const chapter={bookId:els.chapterBookId.value,id:els.chapterId.value.trim(),title:els.chapterTitle.value.trim(),status:els.chapterStatus.value,content:sarniChapterSafeHtml(els.chapterContent.innerHTML),assignedTo:els.chapterAssignedTo.value,notes:els.chapterNotes.value.trim()};
-  // Keep the editor open on uncertain results. Retrying a new chapter can duplicate it.
+  const chapter={
+    bookId:els.chapterBookId.value,
+    id:els.chapterId.value.trim(),
+    title:els.chapterTitle.value.trim(),
+    status:els.chapterStatus.value,
+    content:sarniChapterSafeHtml(els.chapterContent.innerHTML),
+    assignedTo:els.chapterAssignedTo.value,
+    notes:els.chapterNotes.value.trim(),
+    baseUpdatedAt:els.chapterContent.dataset.baseUpdatedAt||''
+  };
+  if(!chapter.bookId||!chapter.title){toast('Choose a book and enter a chapter title.','error');return;}
+  const isNew=!chapter.id;
+  const generated=els.chapterForm?.dataset.fastNewId||'';
+  // Use the same client-generated ID for all retries of a new chapter.
+  if(isNew&&/^CHAP-[a-f0-9-]{36}$/.test(generated)){
+    chapter.id=generated;
+    chapter.clientGenerated=true;
+  }
   const statusNode=document.getElementById('sarni15Status');
   let saveNotice=document.getElementById('sarniChapterSaveNotice');
   if(!saveNotice){
@@ -3302,31 +3321,53 @@ async function saveChapterForm(event){
     els.saveChapterBtn.closest('.form-actions')?.prepend(saveNotice);
   }
   const showStatus=text=>{if(statusNode)statusNode.textContent=text;if(saveNotice)saveNotice.textContent=text;};
+  // Track whether writing continues while the save request is processing.
+  const initialContent=els.chapterContent.innerHTML;
+  const initialNotes=els.chapterNotes.value;
+  const initialTitle=els.chapterTitle.value;
   setBusy(els.saveChapterBtn,true,'Saving…');
-  showStatus('Saving to SarNi…');
+  showStatus('Saving to SarNi… please keep this chapter open.');
   try{
-    const r=await api('saveChapter',{chapter},{timeoutMs:45000,pollFallbackDelayMs:2400});
-    if(!r?.ok)throw new Error('Save not confirmed by backend.');
-    // New fast backend returns a compact receipt; old backend returns full book data.
-    if(r.data?.book&&Array.isArray(r.data.chapters)){
-      state.activeBookDetail=r.data;
-      closeModals();
-      renderBookDetailView();
-      toast('Chapter saved.','success');
+    let r;
+    try{
+      r=await api('saveChapterFast',{chapter},{timeoutMs:45000,pollFallbackDelayMs:2400});
+    }catch(error){
+      // Fallback is safe only for a definitive unsupported action, not timeouts.
+      if(error?.code!=='UNKNOWN_ACTION')throw error;
+      showStatus('Using the original save route…');
+      const oldChapter={...chapter};
+      if(isNew){oldChapter.id='';delete oldChapter.clientGenerated;}
+      delete oldChapter.baseUpdatedAt;
+      r=await api('saveChapter',{chapter:oldChapter},{timeoutMs:45000,pollFallbackDelayMs:2400});
+    }
+    if(!r?.ok)throw Error('The server did not confirm the chapter save.');
+    const details=r.data?.book&&Array.isArray(r.data.chapters)?r.data:null;
+    const resultId=String(r.chapterId||r.data?.chapterId||(!isNew?chapter.id:''));
+    if(!details&&!resultId)throw Error('No saved chapter ID was returned. Verify before retrying.');
+    const editorChanged=els.chapterContent.innerHTML!==initialContent||
+      els.chapterNotes.value!==initialNotes||els.chapterTitle.value!==initialTitle;
+    if(editorChanged){
+      if(resultId)els.chapterId.value=resultId;
+      if(r.savedAt)els.chapterContent.dataset.baseUpdatedAt=String(r.savedAt);
+      showStatus('Earlier text saved, but newer edits remain unsaved. Click Save chapter again.');
+      toast('Earlier text saved. Newer edits remain open.','info');
       return;
     }
-    const receivedId=String(r.chapterId||r.data?.chapterId||chapter.id||'');
-    if(!receivedId)throw new Error('Backend returned no chapter identifier. Verify the chapter before retrying.');
-    closeModals();
-    toast('Chapter saved. Refreshing chapter list…','success');
-    // Read separately so save confirmation is not delayed by the full manuscript.
-    openBookDetail(chapter.bookId);
-  }catch(e){
-    const message=String(e?.message||e);
+    if(details){
+      state.activeBookDetail=details;
+      closeModals();
+      renderBookDetailView();
+    }else{
+      closeModals();
+      openBookDetail(chapter.bookId);
+    }
+    toast('Chapter saved successfully.','success');
+  }catch(error){
+    const message=String(error?.message||error);
     const uncertain=/timed out|too long|request failed|network|async|poll|response|server/i.test(message);
-    const hint=uncertain
-      ?'Save result uncertain. Your text remains in the editor. Check this chapter in the book register before trying again, particularly for a new chapter.'
-      :'Save was not confirmed: '+message;
+    const hint=uncertain?
+      'Save response uncertain. Your writing remains here. Before retrying, check the chapter register for a saved copy.':
+      'Save failed: '+message;
     showStatus(hint);
     toast(hint,'error');
   }finally{
