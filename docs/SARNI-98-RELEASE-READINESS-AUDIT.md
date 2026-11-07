@@ -64,5 +64,11 @@ Backend-dependent items remain pending until verified; do not enable switches th
 - No regression of login, six quick tabs, photo, print, search, settings, daily diary, calendars or family integrations.
 - Main and Quick Entry frontend health checks and automated browser CI green.
 
+## Security hardening committed in this iteration
+- Added `<meta name="referrer" content="origin">` to `q/index.html` before any resources load. This prevents sending the `?k=` private Quick Entry token in HTTP Referer headers, while preserving the site origin. It does **not** remove the token from the browser address bar, history or screenshots, and does **not** replace expiring or revoking share links.
+- Added an automated static release check ensuring the policy remains in place. Backend request and token validation logic is unchanged.
+- Do not add a strict `event.source` check to the Apps Script iframe message bridge without verifying the HtmlService sandbox embedding in real backends: the reply can originate from an inner iframe.
+- Neither frontend hardening nor current test suites certify server-side authorization or actual sync delivery.
+
 ## Deliverable and deployment policy
 One reviewed PR can collect the approved front-end work. Backend modifications must be validated in the private Apps Script project separately. **Do not merge or deploy solely because static CI passes.** Keep current live Sheet/Drive IDs, access rules and data intact. No new spreadsheet or reset. Any production rollout requires an approved actual release candidate plus evidence from the above gates.
