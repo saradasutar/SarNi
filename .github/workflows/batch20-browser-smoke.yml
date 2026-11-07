@@ -1,5 +1,8 @@
 name: SarNi Batch 20 browser smoke
 on:
+  push:
+    branches:
+      - upgrade/batch10-stabilization-20261107
   pull_request:
     paths:
       - 'index.html'
