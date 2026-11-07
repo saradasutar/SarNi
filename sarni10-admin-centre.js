@@ -53,7 +53,10 @@
   card('⏱','Session Security','Use the existing server-backed inactivity sign-out setting.','Open session policy',()=>goTo(security));
   card('▤','Private Backup','Open the existing manual Google Drive backup control.','Open backup control',()=>goTo(backup));
   card('♙','Users & Roles','Manage accounts in the existing Users section.','Open users',()=>{
-   if(section.classList.contains('hidden')||!document.body.classList.contains('sarni-is-admin'))return;
+   if(section.classList.contains('hidden')||!document.body.classList.contains('sarni-is-admin')){
+    status.textContent='Open Admin Settings with an authorized administrator session.';
+    return;
+   }
    const link=section.querySelector('[data-section="users"]');
    if(!link)return;
    link.click();
