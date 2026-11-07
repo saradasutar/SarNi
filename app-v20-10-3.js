@@ -2980,6 +2980,38 @@ function renderBookDetailView(){
     </div>`).join('');
   }
 
+  // Add the one-click 22-chapter action only to an existing Odia cookbook.
+  const chapterPanel=els.bookChaptersList?.closest('article.panel');
+  if(chapterPanel){
+    let banner=chapterPanel.querySelector('#odiaBulkChapters');
+    if(odiaCurrentBook()&&canEdit){
+      if(!banner){
+        banner=document.createElement('div');banner.id='odiaBulkChapters';
+        banner.style.cssText='margin:12px 0;padding:13px;border:1px solid #e8d7ac;border-radius:14px;background:linear-gradient(110deg,#fff9ec,#f1fff6);display:grid;gap:9px';
+        const btn=document.createElement('button');btn.id='odiaCreate22';btn.type='button';btn.textContent='🍃 Add 22 heritage chapters';btn.style.cssText='border:1px solid #bfa16d;border-radius:10px;padding:10px;background:#fff;color:#594021;font-weight:750;cursor:pointer;justify-self:start';
+        btn.onclick=odiaImportChapters;
+        const status=document.createElement('small');status.id='odiaBulkStatus';status.textContent='Adds only missing chapters. Illustrated covers are decorative, not authenticated recipe photographs.';
+        banner.append(btn,status);
+        els.bookChaptersList.before(banner);
+      }
+    }else if(banner)banner.remove();
+    // Decorative category covers: no external copyrighted images or misleading photo claims.
+    if(odiaCurrentBook()){
+      Array.from(els.bookChaptersList?.querySelectorAll('.book-chapter-row')||[]).forEach((row,i)=>{
+        const title=String(d.chapters?.[i]?.title||'').toLowerCase();
+        const match=ODIA_HERITAGE_CHAPTERS.find(x=>x[0].toLowerCase()===title);
+        if(!match)return;
+        const cover=document.createElement('span');cover.className='odiaIllustratedCover';
+        cover.textContent=match[1];cover.title='Decorative illustration; not a recipe photograph';
+        cover.style.cssText='display:inline-grid;place-items:center;width:50px;height:50px;min-width:50px;border-radius:12px;font-size:26px;background:linear-gradient(135deg,'+match[2]+'30,#fff);border:1px solid '+match[2]+'65;box-shadow:0 2px 8px #0000000d';
+        row.querySelector('.book-chapter-main')?.prepend(cover);
+        row.style.background='linear-gradient(105deg,'+match[2]+'13,transparent 75%)';
+        row.querySelector('.book-chapter-main')?.style.setProperty('display','flex');
+        row.querySelector('.book-chapter-main')?.style.setProperty('gap','10px');
+      });
+    }
+  }
+
   renderBookProgress(d);
   // SarNi Book Safety: show a transparent discrepancy instead of hiding old records.
   if(els.bookChaptersList){
@@ -3025,6 +3057,86 @@ function renderBookProgress(d){
     const max=Math.max(1,...last14.map(k=>(d.progressByDate||{})[k]||0));
     els.bookProgressChart.innerHTML=last14.map(k=>{const v=(d.progressByDate||{})[k]||0;const h=Math.max(2,Math.round(v/max*40));return `<div class="book-progress-bar" title="${k}: ${v} words"><i style="height:${h}px"></i></div>`;}).join('');
   }
+}
+
+
+/* Odia Heritage Cookbook: deliberate, resumable chapter creation in the CURRENT book.
+   We only use existing bookDetail/saveChapter actions. No photos are falsely represented as evidence. */
+const ODIA_HERITAGE_CHAPTERS=[
+ ['The Traditional Odia Kitchen','🏺','#b86e35','Chuli, silabata, utensils and ingredients'],
+ ['Rice and Pakhala','🍚','#4a9d88','Arua bhata, ushuna bhata, fresh and fermented pakhala'],
+ ['Dal and Everyday Meals','🥣','#d8a341','Dalma, muga dali, harada dali'],
+ ['Traditional Vegetable Curries','🥬','#65a87f','Santula, ghanta, mahura and vegetable preparations'],
+ ['Besara and Rai','🌿','#a19e32','Mustard-based dishes and regional variations'],
+ ['Traditional Saga','🥗','#53965d','Leafy greens and seasonal cooking'],
+ ['Bhaja, Poda and Bharta','🍆','#ad765b','Roasted, fried and mashed side dishes'],
+ ['Khatta, Kanji and Sour Dishes','🍋','#cb9950','Sour accompaniments and traditional kanji'],
+ ['Badi, Achar and Preserved Foods','☀️','#b7784f','Sun-dried foods, badi, pickles and preservation'],
+ ['Traditional Odia Fish','🐟','#4291a7','Home-style fish curries and besara'],
+ ['Prawns and Crabs','🦀','#3e8fac','Coastal chingudi and kankada dishes'],
+ ['Meat and Village Cooking','🍲','#a56f4f','Regional meat dishes and original village cooking'],
+ ['Breakfast and Chakuli','🥞','#ba8a43','Chakuli, chuda and breakfast traditions'],
+ ['Steamed Traditional Pithas','🍡','#a47a9d','Manda, enduri and other steamed pithas'],
+ ['Fried and Baked Pithas','🫓','#bc7354','Poda, arisa, kakara and festival pithas'],
+ ['Traditional Odia Sweets','🍮','#ba7193','Chhena-based sweets and other favourites'],
+ ['Village Snacks','🥟','#c28b55','Bara, ghuguni and local snacks'],
+ ['Millets and Rural Grains','🌾','#9d9b4a','Mandia, suan and heritage grain dishes'],
+ ['Regional Food Traditions','🗺️','#63918c','Western, southern, northern and tribal traditions'],
+ ['Festivals and Temple-Inspired Cooking','🪔','#aa7da2','Food traditions; distinguish home versions from temple recipes'],
+ ['Drinks and Summer Foods','🥥','#5caaa9','Pana, torani and seasonal drinks'],
+ ['Forgotten Village and Family Recipes','🏡','#b87b58','Firsthand recipes, contributors and memories']
+];
+let odiaChapterImportRunning=false;
+function odiaCurrentBook(){
+ const b=state.activeBookDetail?.book;
+ return b&&(/ଓଡ଼ିଆ ରୋଷେଇ|odia recipes|odia cookbook/i.test(String(b.title||''))||
+ /culinary heritage\s*\/\s*odia cookbook/i.test(String(b.genre||'')));
+}
+function odiaChapterContent(item){
+ const [title,emoji,,topics]=item;
+ return '<h2>'+emoji+' '+escapeHtml(title)+'</h2>'+
+  '<p><strong>Illustrated chapter cover:</strong> a decorative illustration only; replace with your own photograph when ready.</p>'+
+  '<h3>Dishes to research</h3><p>'+escapeHtml(topics)+'</p>'+
+  '<h3>Recipe collection</h3><p>Add every recipe with Odia and English names, precisely measured ingredients, preparation steps, cooking time and real photographs.</p>'+
+  '<h3>Authenticity and copyright record</h3><p>Status: RESEARCH PENDING. Record family or regional source, contributor consent, interview date, kitchen testing, photo ownership and written permission where required. Do not claim historical origin without proof.</p>';
+}
+async function odiaImportChapters(){
+ if(odiaChapterImportRunning||!odiaCurrentBook())return;
+ const d=state.activeBookDetail;
+ if(!d?.book?.id||!Array.isArray(d.chapters)){toast('Open and load the cookbook first.','error');return;}
+ if(d.role==='VIEWER'){toast('Editing permission is required.','error');return;}
+ const id=d.book.id;
+ const count=ODIA_HERITAGE_CHAPTERS.length;
+ const existingTitles=new Set(d.chapters.map(x=>String(x.title||'').replace(/^\d+\s*[.·-]\s*/,'').trim().toLowerCase()));
+ const pending=ODIA_HERITAGE_CHAPTERS.filter(x=>!existingTitles.has(x[0].toLowerCase()));
+ if(!pending.length){toast('All 22 chapter titles are already present.','info');return;}
+ if(!confirm('Add '+pending.length+' missing chapters to this EXISTING Odia cookbook? Existing chapters will not be replaced. Leave this page open until completion.'))return;
+ odiaChapterImportRunning=true;
+ const button=document.getElementById('odiaCreate22');
+ if(button)button.disabled=true;
+ const label=document.getElementById('odiaBulkStatus');
+ let completed=0;
+ try{
+  for(const item of pending){
+   if(state.activeBookId!==id)throw Error('You navigated away from the cookbook. Import paused.');
+   if(label)label.textContent='Saving chapter '+(completed+1)+' of '+pending.length+': '+item[0];
+   const response=await api('saveChapter',{chapter:{bookId:id,id:'',title:item[0],status:'NOT_STARTED',content:odiaChapterContent(item),assignedTo:'',notes:'HERITAGE DRAFT — verify dish and photo rights before publishing.'}},{timeoutMs:45000,pollFallbackDelayMs:2400});
+   if(!response?.ok)throw Error('The backend did not confirm saving '+item[0]);
+   completed++;
+  }
+  const check=await api('bookDetail',{bookId:id});
+  if(!check?.data?.book||!Array.isArray(check.data.chapters))throw Error('The saving requests succeeded, but the refreshed chapter list was incomplete.');
+  state.activeBookDetail=check.data;
+  renderBookDetailView();
+  toast('Added '+completed+' chapter(s). Review your cookbook!','success');
+  if(label)label.textContent='Saved '+completed+' chapters. Open a chapter to write and add real photo references.';
+ }catch(e){
+  if(label)label.textContent='Stopped after '+completed+' confirmed saves. Refresh chapters before retrying. '+String(e.message||e);
+  toast('Chapter creation paused. Verify before retrying: '+String(e.message||e),'error');
+ }finally{
+  odiaChapterImportRunning=false;
+  if(button)button.disabled=false;
+ }
 }
 
 async function createCodingBook(){
