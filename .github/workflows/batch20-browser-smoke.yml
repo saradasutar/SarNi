@@ -6,6 +6,7 @@ on:
       - 'q/**'
       - 'sarni10-**'
       - 'sarni20-**'
+      - 'sarni-focus-view.*'
       - 'quality/batch20-browser.mjs'
       - '.github/workflows/batch20-browser-smoke.yml'
   workflow_dispatch:
