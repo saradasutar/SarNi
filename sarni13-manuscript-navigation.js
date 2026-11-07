@@ -49,7 +49,7 @@ function boot(){
   libStatus.textContent=cards.length+' book'+(cards.length===1?'':'s');
  }
  let sorting=false;
- const libraryObs=new MutationObserver(()=>{if(sorting)return;sorting=true;try{sortBooks();}finally{sorting=false;}});
+ const libraryObs=new MutationObserver(()=>{if(sorting)return;sorting=true;libraryObs.disconnect();try{sortBooks();}finally{sorting=false;libraryObs.observe(grid,{childList:true});}});
  // Sorting reorders DOM nodes, so observe only when the app rebuilds the library.
  libraryObs.observe(grid,{childList:true});
  sort.addEventListener('change',()=>{libraryObs.disconnect();sortBooks();libraryObs.observe(grid,{childList:true});});
