@@ -3,6 +3,7 @@
 import {readFileSync,existsSync} from 'node:fs';
 import {dirname,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {Script} from 'node:vm';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const text=p=>readFileSync(resolve(root,p),'utf8');
 const files=['index.html','q/index.html','q/sarni9-batch10.js','q/sarni9-batch10.css',
@@ -35,6 +36,10 @@ assert('quick-entry authorized retry route present',q.includes('qpinSyncRetry')&
 assert('Quick Entry renders fields before optional PIN info',q.includes("render();if(qeOfflineKey)qeOfflineCaptureBootstrap();")&&q.lastIndexOf("render();if(qeOfflineKey)qeOfflineCaptureBootstrap();")<q.lastIndexOf("void initializePinAccess().then("));
 assert('Quick Entry gates Save while optional PIN policy loads',q.includes("quickSave.disabled=true")&&q.includes("if(!busy&&!qePhotoBusy)quickSave.disabled=false"));
 assert('Quick Entry initial panel reads wait for PIN initialization',q.includes("void initializePinAccess().then(")&&q.includes("status('');void qeRefreshPanels();})")&&!q.includes("status(permissionNotice);void qeRefreshPanels();"));
+const quickInline=q.match(/<script>\\s*([\\s\\S]*?)<\\/script>/i)?.[1];
+let quickSyntaxOk=false;
+if(quickInline){try{new Script(quickInline,{filename:'q/index.html:inline'});quickSyntaxOk=true;}catch(error){console.error('Quick Entry inline JS syntax:',error.message);}}
+assert('Quick Entry inline script parses cleanly',quickSyntaxOk);
 assert('Quick Entry opt-in timing panel exists',q.includes("qeTimingDetails.id='qeLoadTimingDetails'")&&q.includes("qeTimingDetails.addEventListener('toggle'"));
 assert('Quick Entry stages capture both permissions and visible fields',q.includes("qeTimingMark('linkInfo')")&&q.includes("qeTimingMark('hubInfo')")&&q.includes("qeTimingMark('fields')")&&q.includes("qeTimingMark('pin')"));
 assert('Quick Entry timing is memory-only with no identifiers in output',q.includes("No token, user input or response content is recorded.")&&!q.includes("localStorage.setItem('qeLoadTiming"));
