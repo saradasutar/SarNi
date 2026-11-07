@@ -3289,15 +3289,41 @@ function runRteCommand(command,value=null){
 function applyChapterHeading(tag){runRteCommand('formatBlock',tag==='P'?'P':tag);}
 async function saveChapterForm(event){
   event.preventDefault();
+  if(els.saveChapterBtn?.disabled)return;
   const chapter={bookId:els.chapterBookId.value,id:els.chapterId.value.trim(),title:els.chapterTitle.value.trim(),status:els.chapterStatus.value,content:sarniChapterSafeHtml(els.chapterContent.innerHTML),assignedTo:els.chapterAssignedTo.value,notes:els.chapterNotes.value.trim()};
+  // Keep the editor open on uncertain results. Retrying a new chapter can duplicate it.
+  const statusNode=document.getElementById('sarni15Status');
+  const showStatus=text=>{if(statusNode)statusNode.textContent=text;};
   setBusy(els.saveChapterBtn,true,'Saving…');
+  showStatus('Saving to SarNi…');
   try{
-    const r=await api('saveChapter',{chapter});
-    state.activeBookDetail=r.data;
+    const r=await api('saveChapter',{chapter},{timeoutMs:45000,pollFallbackDelayMs:2400});
+    if(!r?.ok)throw new Error('Save not confirmed by backend.');
+    // New fast backend returns a compact receipt; old backend returns full book data.
+    if(r.data?.book&&Array.isArray(r.data.chapters)){
+      state.activeBookDetail=r.data;
+      closeModals();
+      renderBookDetailView();
+      toast('Chapter saved.','success');
+      return;
+    }
+    const receivedId=String(r.chapterId||r.data?.chapterId||chapter.id||'');
+    if(!receivedId)throw new Error('Backend returned no chapter identifier. Verify the chapter before retrying.');
     closeModals();
-    renderBookDetailView();
-    toast('Chapter saved.','success');
-  }catch(e){toast(e.message,'error');}finally{setBusy(els.saveChapterBtn,false);}
+    toast('Chapter saved. Refreshing chapter list…','success');
+    // Read separately so save confirmation is not delayed by the full manuscript.
+    openBookDetail(chapter.bookId);
+  }catch(e){
+    const message=String(e?.message||e);
+    const uncertain=/timed out|too long|request failed|network|async|poll|response|server/i.test(message);
+    const hint=uncertain
+      ?'Save result uncertain. Your text remains in the editor. Check this chapter in the book register before trying again, particularly for a new chapter.'
+      :'Save was not confirmed: '+message;
+    showStatus(hint);
+    toast(hint,'error');
+  }finally{
+    setBusy(els.saveChapterBtn,false);
+  }
 }
 async function moveChapter(id,direction){
   const d=state.activeBookDetail;if(!d)return;
