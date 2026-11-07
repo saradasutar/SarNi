@@ -18,6 +18,7 @@
     window.__SAR_NI_ASSETS__={css:false,app:false};
     window.sarNiAssetLoaded=function(kind){
       window.__SAR_NI_ASSETS__[kind]=true;
+      if(kind==='css') document.documentElement.classList.add('sarni-css-ready');
       if(window.__SAR_NI_ASSETS__.css&&window.__SAR_NI_ASSETS__.app){
         document.documentElement.classList.add('sarni-assets-ready');
       }
@@ -87,9 +88,10 @@ html.sarni-personal-only .analysis-moved-link {
 }
 html.sarni-personal-only .analysis-moved-link:hover{background:#dcecff;color:#123c7e}
 
-    html:not(.sarni-assets-ready) body>*{visibility:hidden}
+    html:not(.sarni-css-ready) body>*{visibility:hidden}
     html:not(.sarni-assets-ready) #sarniAssetStatus{visibility:visible;position:fixed;inset:0;z-index:999999;display:grid;place-items:center;padding:28px;text-align:center;background:linear-gradient(145deg,#eef5ff,#f8f4ff);color:#33426a;font:700 17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
-    html.sarni-assets-ready #sarniAssetStatus{display:none}
+    html.sarni-css-ready:not(.sarni-asset-error) #sarniAssetStatus{display:none}
+    html.sarni-asset-error #sarniAssetStatus{display:grid!important;visibility:visible!important}
     #sarniAssetStatus strong{font-size:22px;color:#273566}
   
 /* Keep the old investment watchlist, portfolio quick-actions and wealth UI off SarNi. */
