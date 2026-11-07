@@ -76,17 +76,6 @@ editor.dispatchEvent(new Event('input',{bubbles:true}));
 $('odiaRecipeMessage').textContent='Template added to the editor. Add your actual recipe and photo references, then click Save chapter. No automatic publication or verification.';
 }
 function mount(){
-const list=$('booksGrid');if(list&&!$('odiaHeritageBox')){
-const wrap=document.createElement('section');wrap.id='odiaHeritageBox';
-wrap.innerHTML='<h3>🍃 ଆମ ଓଡ଼ିଆ ରୋଷେଇ · Odia Heritage Cookbook</h3><p>Preserve authentic village dishes, original photographs, easy instructions and source evidence. Your other books stay untouched.</p><div class="oh-row"><button type="button" id="odiaCreateBook">＋ Create Odia Cookbook</button><button type="button" id="odiaCopyChapters">Copy 22 chapter titles</button><select aria-label="Proposed chapter" id="odiaChapterSelect">'+chapters.map((s,i)=>'<option value="'+i+'">'+escapeHtml(s)+'</option>').join('')+'</select><button type="button" id="odiaUseChapter">Use chapter title</button></div><p id="odiaHeritageNotice" aria-live="polite">Use the existing Save book and Save chapter buttons to store your work.</p>';
-list.before(wrap);
-$('odiaCreateBook').addEventListener('click',makeBook);
-$('odiaCopyChapters').addEventListener('click',()=>{const s=chapters.join('\n');if(navigator.clipboard?.writeText){navigator.clipboard.writeText(s).then(()=>notify('Chapter titles copied.')).catch(()=>notify(s));}else notify(s)});
-$('odiaUseChapter').addEventListener('click',()=>{
-const n=Number($('odiaChapterSelect').value),str=chapters[n];if(!$('bookDetailView')||$('bookDetailView').classList.contains('hidden')){notify('Open your cookbook first, then choose the chapter title.');return}
-$('addChapterBtn')?.click();setTimeout(()=>{value('chapterTitle',str);notify('Chapter title filled. Use Save chapter after adding your writing.');},100);
-});
-}
 const modal=$('chapterModal'),editor=$('chapterContent');if(modal&&editor&&!$('odiaRecipeBar')){
 const bar=document.createElement('div');bar.id='odiaRecipeBar';
 bar.innerHTML='<strong>🍲 Odia Heritage Recipe Assistant</strong><div class="oh-row"><label>Dish name<input id="odiaDishName" placeholder="e.g. Dalma / ଡାଲମା" /></label><label>Quick recipe<select id="odiaRecipeSelect"><option value="">Choose or write your own</option>'+recipes.map(x=>'<option>'+escapeHtml(x)+'</option>').join('')+'</select></label><button type="button" id="odiaInsertRecipe">＋ Insert recipe format</button></div><div class="oh-note" id="odiaRecipeMessage">Photos: enter your own private Drive photo references and ownership details. This upgrade does not yet upload or embed book pictures automatically. Never paste unlicensed web photos.</div>';
