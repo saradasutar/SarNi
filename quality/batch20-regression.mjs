@@ -47,6 +47,13 @@ assert('Batch20 print excludes navigation only',css.includes('@media print')&&cs
 assert('Focus view script loaded after main navigation',h.indexOf('src="./sarni-focus-view.js?v=1"')>h.indexOf('src="./sarni20-visual.js?v=1"'));
 assert('Health page checks new assets',text('health.html').includes('data-file="./sarni-focus-view.js"')&&text('health.html').includes('data-file="./q/index.html"'));
 assert('No accidental encoded line break in health markup',!text('health.html').includes('\\n<li data-file='));
+
+const quickWorker=text('q/sw.js');
+assert('PWA public app shell caches Quick Entry CSS and JS',quickWorker.includes("new URL('./sarni9-batch10.css',SCOPE)")&&quickWorker.includes("new URL('./sarni9-batch10.js',SCOPE)"));
+assert('PWA shell cache bumped for new asset inventory',quickWorker.includes("sarni-q-private-shell-v3"));
+assert('Service worker ignores requests with query strings',quickWorker.includes("if(!PATHS.has(url.pathname)||url.search)return"));
+assert('Service worker limits itself to public GET same-origin',quickWorker.includes("request.method!=='GET'||url.origin!==self.location.origin"));
+assert('Service worker never uses token-bearing navigation as cache key',quickWorker.includes("cache.match(SHELL)"));
 console.log('\n'+(failures?'FAILED':'PASSED')+' static regression: '+failures+' failure(s).');
 console.log('Not tested: authentication, saving, backend permissions, real sync, backup restores, end-to-end mobile interactions.');
 process.exitCode=failures?1:0;
