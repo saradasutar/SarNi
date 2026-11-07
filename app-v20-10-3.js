@@ -2917,13 +2917,13 @@ function renderBooksGrid(){
   els.booksEmpty?.classList.toggle('hidden',rows.length>0);
   els.booksGrid.innerHTML=rows.map(b=>{
     const pct=b.chapterCount?Math.round(b.doneChapterCount/b.chapterCount*100):0;
-    const collabChips=b.collaborators.map(c=>`<span class="book-collab-chip" title="${escapeHtml(c.username)} · ${escapeHtml(BOOK_ROLE_LABEL[c.role]||c.role)}">${escapeHtml(c.username.slice(0,2).toUpperCase())}</span>`).join('');
+    const collabChips=(Array.isArray(b.collaborators)?b.collaborators:[]).map(c=>`<span class="book-collab-chip" title="${escapeHtml(c.username)} · ${escapeHtml(BOOK_ROLE_LABEL[c.role]||c.role)}">${escapeHtml(c.username.slice(0,2).toUpperCase())}</span>`).join('');
     return `<article class="book-card ${String(b.coverColor||'PURPLE').toLowerCase()}" data-open-book="${escapeHtml(b.id)}">
       <div class="book-card-head"><span class="book-status-badge">${escapeHtml(BOOK_STATUS_LABEL[b.status]||b.status)}</span><span class="book-role-badge">${escapeHtml(BOOK_ROLE_LABEL[b.role]||b.role||'')}</span></div>
       <h4>${escapeHtml(b.title)}</h4>
       <small>${escapeHtml(b.genre||'No genre set')}</small>
       <div class="book-card-progress"><i style="width:${pct}%"></i></div>
-      <div class="book-card-metrics"><span>${b.chapterCount} chapter${b.chapterCount===1?'':'s'}</span><span>${b.totalWordCount.toLocaleString('en-IN')} words</span></div>
+      <div class="book-card-metrics"><span>${b.chapterCount} chapter${b.chapterCount===1?'':'s'}</span><span>${(Number(b.totalWordCount)||0).toLocaleString('en-IN')} words</span></div>
       <div class="book-card-collabs">${collabChips||'<span class="book-collab-chip owner-only">Just you</span>'}</div>
     </article>`;
   }).join('');
@@ -2956,13 +2956,13 @@ function renderBookDetailView(){
   }
 
   if(els.bookChaptersList){
-    const rows=d.chapters;
+    const rows=Array.isArray(d.chapters)?d.chapters:[];
     els.bookChaptersEmpty?.classList.toggle('hidden',rows.length>0);
     els.bookChaptersList.innerHTML=rows.map((c,i)=>`<div class="book-chapter-row" data-chapter-status="${escapeHtml(c.status)}">
       <div class="book-chapter-move">${canEdit?`<button class="small-button" data-move-chapter-up="${escapeHtml(c.id)}" ${i===0?'disabled':''}>↑</button><button class="small-button" data-move-chapter-down="${escapeHtml(c.id)}" ${i===rows.length-1?'disabled':''}>↓</button>`:''}</div>
       <div class="book-chapter-main" data-edit-chapter="${escapeHtml(c.id)}">
         <strong>${i+1}. ${escapeHtml(c.title)}</strong>
-        <small>${escapeHtml(CHAPTER_STATUS_LABEL[c.status]||c.status)} · ${c.wordCount.toLocaleString('en-IN')} words${c.assignedTo?' · '+escapeHtml(c.assignedTo):''}</small>
+        <small>${escapeHtml(CHAPTER_STATUS_LABEL[c.status]||c.status)} · ${(Number(c.wordCount)||0).toLocaleString('en-IN')} words${c.assignedTo?' · '+escapeHtml(c.assignedTo):''}</small>
       </div>
       ${canEdit?`<button class="small-button danger" data-archive-chapter="${escapeHtml(c.id)}">Delete</button>`:''}
     </div>`).join('');
