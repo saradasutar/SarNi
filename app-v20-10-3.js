@@ -3293,7 +3293,15 @@ async function saveChapterForm(event){
   const chapter={bookId:els.chapterBookId.value,id:els.chapterId.value.trim(),title:els.chapterTitle.value.trim(),status:els.chapterStatus.value,content:sarniChapterSafeHtml(els.chapterContent.innerHTML),assignedTo:els.chapterAssignedTo.value,notes:els.chapterNotes.value.trim()};
   // Keep the editor open on uncertain results. Retrying a new chapter can duplicate it.
   const statusNode=document.getElementById('sarni15Status');
-  const showStatus=text=>{if(statusNode)statusNode.textContent=text;};
+  let saveNotice=document.getElementById('sarniChapterSaveNotice');
+  if(!saveNotice){
+    saveNotice=document.createElement('div');
+    saveNotice.id='sarniChapterSaveNotice';
+    saveNotice.setAttribute('role','status');
+    saveNotice.style.cssText='flex:1 1 100%;padding:8px 10px;background:#f2f5ff;border:1px solid #d4def3;border-radius:8px;color:#35466c;font-size:12px;line-height:1.5';
+    els.saveChapterBtn.closest('.form-actions')?.prepend(saveNotice);
+  }
+  const showStatus=text=>{if(statusNode)statusNode.textContent=text;if(saveNotice)saveNotice.textContent=text;};
   setBusy(els.saveChapterBtn,true,'Saving…');
   showStatus('Saving to SarNi…');
   try{
