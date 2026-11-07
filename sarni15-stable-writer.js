@@ -54,7 +54,7 @@ function mount(){
  function stash(){
   if(!showing||!edited||editor.contentEditable==='false')return;
   const key=storageKey();if(!key)return;
-  const c=current();const record={...c,at:new Date().toISOString()};
+  const c=current();const record={...c,plain:editor.innerText||'',at:new Date().toISOString()};
   try{sessionStorage.setItem(key,JSON.stringify(record));backupKey=key;status.textContent='Local safety copy · use Save chapter';}
   catch(_){status.textContent='Backup unavailable — save chapter';}
  }
@@ -76,13 +76,11 @@ function mount(){
  $('sarni15ExportBackup').onclick=downloadBackup;
  $('sarni15DismissBackup').onclick=()=>{recover.hidden=true;};
  $('sarni15RestoreBackup').onclick=()=>{
-  if(!backup||storageKey()!==backupKey&&storageKey()!==(backupKey=storageKey())||editor.contentEditable==='false')return;
+  if(!backup||!storageKey()||editor.contentEditable==='false')return;
   if(!confirm('Replace the current editor text with this local copy? Nothing is saved to SarNi until you press Save chapter.'))return;
-  // Never trust HTML from browser storage: sanitize with the browser to text only.
-  const tmp=document.createElement('div');tmp.textContent='';
-  const raw=String(backup.html||'').replace(/<br\s*\/?>/gi,'\n').replace(/<\/(?:p|div|h[1-6])>/gi,'\n');
-  tmp.innerHTML=raw;const safeText=tmp.textContent||'';
-  editor.textContent=safeText;if($('chapterNotes'))$('chapterNotes').value=String(backup.notes||'');
+  // Restore only plain text from the local copy; never interpret browser storage as markup.
+  editor.textContent=String(backup.plain||'');
+  if($('chapterNotes'))$('chapterNotes').value=String(backup.notes||'');
   recover.hidden=true;flag();editor.dispatchEvent(new Event('input',{bubbles:true}));
  };
  const obs=new MutationObserver(()=>{
