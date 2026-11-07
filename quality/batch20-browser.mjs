@@ -7,6 +7,7 @@
 import test,{before,after} from 'node:test';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
+import {readFileSync} from 'node:fs';
 import {resolve,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
