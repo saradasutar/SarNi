@@ -49,3 +49,10 @@
 #qe10SyncLegend p{font-size:11px;line-height:1.55;margin:8px 0 0;color:#526e60}
 #qe10SyncLegend summary:focus-visible{outline:3px solid #17815f;outline-offset:3px}
 @media(max-width:400px){#qe10SyncLegend dl{grid-template-columns:1fr;gap:2px}#qe10SyncLegend dd{margin-bottom:8px}}
+
+/* Optional, privacy-safe Quick Entry load timing; no usernames or tokens shown. */
+#qeLoadTimingDetails.qe-load-timing{margin:8px 0 10px;padding:8px 11px;border:1px solid #c7e1d9;border-radius:11px;background:#f7fcfa;color:#264e45}
+#qeLoadTimingDetails summary{cursor:pointer;font-size:11px;font-weight:760;line-height:1.55}
+#qeLoadTimingDetails summary:focus-visible{outline:3px solid #148363;outline-offset:3px}
+#qeLoadTimingDetails p{font-size:11px;line-height:1.65;margin:8px 0 2px;overflow-wrap:anywhere;color:#4d6860}
+@media print{#qeLoadTimingDetails{display:none!important}}
