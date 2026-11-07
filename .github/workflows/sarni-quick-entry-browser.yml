@@ -10,6 +10,7 @@ on:
       - "q/index.html"
       - "q/sarni9-batch10.js"
       - "q/sarni9-batch10.css"
+      - "q/sw.js"
       - "sarni-health-bridge-v1.js"
       - "sarni-health-history-v1.js"
       - "quality/quick-entry-regression.mjs"
