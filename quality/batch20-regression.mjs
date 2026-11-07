@@ -29,6 +29,8 @@ for(const id of ['sarni10Workspace','sarni10ModuleSearch','sarni10ModuleResults'
  assert('existing HTML id: '+id,h.includes('id="'+id+'"'));
 for(const mode of ['expense','diary','office','stock','investment','family'])
  assert('quick-entry mode: '+mode,new RegExp('(?:data-mode|kind|mode)[^\\n]{0,100}'+mode,'i').test(q));
+assert('Quick Entry uses origin-only referrer policy before resource loads', q.includes('<meta name="referrer" content="origin">') && q.indexOf('<meta name="referrer" content="origin">') < q.indexOf('<link'));
+assert('Quick Entry referrer policy does not alter link access/expiry logic',q.includes('new URLSearchParams(location.search)')&&q.includes('qePendingUncertain'));
 assert('quick-entry authorized retry route present',q.includes('qpinSyncRetry')&&q.includes('pinGrant'));
 assert('quick-entry unknown-save handling present',q.includes('qePendingUncertain'));
 assert('quick-entry sync badge already present',q.includes('recent-sync-badge'));
