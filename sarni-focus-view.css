@@ -1,0 +1,9 @@
+/* SarNi focus view: hide duplicated workspace navigation, not source records. */
+#sarni10Workspace .sarni-focus-view-toggle{min-height:42px;padding:8px 12px;background:#eff8f4;color:#195a4a;border:1px solid #b9d9cd;border-radius:10px;font-weight:760;font-size:12px;cursor:pointer}
+#sarni10Workspace .sarni-focus-view-toggle:focus-visible{outline:3px solid #128366;outline-offset:2px}
+#sarni10Workspace.sarni-focus-view .sarni10-collections{display:none!important}
+#sarni10Workspace.sarni-focus-view:not(.sarni-focus-searching) #sarni10ModuleResults,
+#sarni10Workspace.sarni-focus-view:not(.sarni-focus-searching) #sarni10ModuleCount{display:none!important}
+#sarni10Workspace.sarni-focus-view .sarni20-quicknav-head small{display:none}
+@media(max-width:700px){#sarni10Workspace.sarni-focus-view{padding-bottom:10px!important}#sarni10Workspace.sarni-focus-view .sarni20-tiles{gap:6px!important}}
+@media print{#sarniFocusViewButton{display:none!important}}
