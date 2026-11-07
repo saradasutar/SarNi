@@ -1,11 +1,11 @@
 // Quick Entry optional combined-bootstrap regression. No live backend or private token.
 const {test,expect}=require('@playwright/test');
 
-for(const scenario of ['combined','unsupported','incomplete']){
+for(const scenario of ['combined','unsupported','incomplete','disabled']){
  test('startup '+scenario+' preserves all six modes and authorization',async({page})=>{
   const requests=[],errors=[];
   page.on('pageerror',e=>errors.push(e.message));
-  await page.addInitScript(()=>{window.SARNI_QE_BOOTSTRAP_ENABLED=true;});
+  if(scenario==='disabled')await page.addInitScript(()=>{window.SARNI_QE_BOOTSTRAP_ENABLED=false;});
   await page.route('**/*',route=>{
    const req=route.request(),url=new URL(req.url());
    if(url.origin!=='http://127.0.0.1:8765'||req.method()!=='GET')return route.abort();
@@ -48,7 +48,8 @@ for(const scenario of ['combined','unsupported','incomplete']){
    expect(requests).not.toContain('hubGuestInfo');
    expect(requests).not.toContain('qpinInfo');
   }else{
-   expect(requests).toContain('qeBootstrap');
+   if(scenario==='disabled')expect(requests).not.toContain('qeBootstrap');
+   else expect(requests).toContain('qeBootstrap');
    expect(requests).toContain('qeInfo');
    expect(requests).toContain('hubGuestInfo');
    expect(requests).toContain('qpinInfo');
