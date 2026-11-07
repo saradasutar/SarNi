@@ -100,7 +100,7 @@ test('Admin Centre opens only existing controls and adds no new permission switc
   assert.equal(await p.locator('#sarni10AdminCentre button').count(),3);
   await p.getByRole('button',{name:'Open session policy'}).click();
   assert.equal(await p.locator('#securityIdleTimeout').evaluate(e=>document.activeElement===e),true);
-  await p.getByRole('button',{name:'Open users'}).click();
+  await p.locator('#sarni10AdminCentre').getByRole('button',{name:'Open users'}).click();
   assert.equal(await p.evaluate(()=>document.body.dataset.usersOpened),'yes');
   assert.equal(await p.getByText('Backend integration required').count(),3);
  });
@@ -108,7 +108,7 @@ test('Admin Centre opens only existing controls and adds no new permission switc
 
 test('Admin overview shortcuts refuse navigation when administrator session is absent',async()=>{
  await withPage(adminFixture(),{scripts:['sarni10-admin-centre.js']},{},async p=>{
-  await p.getByRole('button',{name:'Open users'}).click();
+  await p.locator('#sarni10AdminCentre').getByRole('button',{name:'Open users'}).click();
   assert.equal(await p.evaluate(()=>document.body.dataset.usersOpened||''),'');
   assert.match(await p.locator('.sarni10-admin-feedback').textContent(),/authorized administrator session/);
  });
@@ -124,6 +124,6 @@ test('Quick Entry sync guidance is read-only and does not send a retry',async()=
   await p.locator('#qe10SyncLegend summary').click();
   assert.match(await p.locator('#qe10SyncLegend').textContent(),/Pending/);
   assert.match(await p.locator('#qe10SyncLegend').textContent(),/does not resend entries/);
-  assert.equal(await p.getByRole('button',{name:'Clear search'}).count(),1);
+  assert.equal(await p.locator('#qeSearchClear').count(),1);
  });
 });
