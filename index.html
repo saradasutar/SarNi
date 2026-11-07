@@ -2001,7 +2001,8 @@ async function printOdiaYearbook(){
    }
    months.push({month:m,items:[...unique.values()].sort((a,b)=>String(a.date).localeCompare(String(b.date))),source:String(r.source||'Calculated Odia calendar')});
   }
-  doc.open();doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festival Yearbook '+year+'</title><style>body{font-family:Arial,sans-serif;color:#1b2540;margin:18mm}h1{margin-bottom:3px;color:#56366f}h2{margin-top:25px;color:#56366f;border-bottom:1px solid #bbb}p{line-height:1.5}table{width:100%;border-collapse:collapse;margin-bottom:15px}th,td{border:1px solid #ccc;padding:7px;text-align:left;font-size:12px}th{background:#f3eef7}small{color:#666}.month{break-inside:avoid}button{padding:10px 16px}@page{size:A4;margin:14mm}@media print{button{display:none}.month{page-break-inside:avoid}}</style></head><body></body></html>');doc.close();
+  doc.open();doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festival Yearbook '+year+'</title><style>body{font-family:Arial,sans-serif;color:#1b2540;margin:18mm}h1{margin-bottom:3px;color:#56366f}h2{margin-top:25px;color:#56366f;border-bottom:1px solid #bbb}p{line-height:1.5}table{width:100%;border-collapse:collapse;margin-bottom:15px}th,td{border:1px solid #ccc;padding:7px;text-align:left;font-size:12px}th{background:#f3eef7}small{color:#666}.month{break-inside:avoid}button{padding:10px 16px}@page{size:A4;margin:14mm}@media print{button{display:none}.month{page-break-inside:avoid}}</style><link rel="stylesheet" href="./sarni20-visual.css?v=1"/>
+</head><body></body></html>');doc.close();
   const h=doc.createElement('h1');h.textContent='ଓଡ଼ିଆ ପର୍ବପର୍ବାଣୀ · Odia Festival Yearbook '+year;doc.body.append(h);
   const warn=doc.createElement('p');warn.textContent='Includes festivals supplied by SarNi’s calendar service and the signed-in account’s saved annual festivals. This is NOT an exhaustive or Kohinoor-certified list. Dates are calculated estimates unless independently verified with the '+year+' Kohinoor Panjika.';doc.body.append(warn);
   const names=['January','February','March','April','May','June','July','August','September','October','November','December'];let total=0;
@@ -2498,5 +2499,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 <script src="./sarni10-main-workspace.js?v=1" defer></script>
 <script src="./sarni10-admin-centre.js?v=1" defer></script>
+<script src="./sarni20-visual.js?v=1" defer></script>
 </body>
 </html>
