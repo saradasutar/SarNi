@@ -48,12 +48,13 @@
    favorites.replaceChildren();
    const pinned=valid().filter(button=>favoriteSet.has(button.dataset.section));
    pinned.forEach(button=>createChip(button,favorites,true));
-   if(!pinned.length)makeEmpty(favorites,'Pin frequently used sections using ☆ below.');
+   // Hide the empty card entirely instead of occupying valuable mobile space.
+   if(favorites.parentElement)favorites.parentElement.hidden=!pinned.length;
   }
   function renderRecent(){
    recent.replaceChildren();
    history.map(id=>valid().find(b=>b.dataset.section===id)).filter(Boolean).forEach(button=>createChip(button,recent));
-   if(!recent.childElementCount)makeEmpty(recent,'Recently opened sections will appear here.');
+   if(recent.parentElement)recent.parentElement.hidden=!recent.childElementCount;
   }
   function renderSearch(){
    const query=search.value.trim().toLocaleLowerCase();
