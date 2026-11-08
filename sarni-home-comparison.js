@@ -11,6 +11,10 @@ function boot(){
  root.after(targetDiv);
  const css=document.createElement('style');css.textContent='.sarni-comparison-list{display:grid;gap:9px;margin:12px 0}.sch-row{border:1px solid #e0e5f0;background:#fff;border-radius:12px;padding:11px 13px}.sch-rowhead,.sch-foot,.sch-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.sch-rowhead strong{color:#253657}.sch-rowhead button,.sch-head button{border:1px solid #d6ccf1;background:#f7f4ff;color:#6245a0;border-radius:8px;padding:7px 10px;font-weight:800;cursor:pointer}.sch-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:9px 0}.sch-grid div{background:#f1f4fd;border-radius:8px;text-align:center;padding:8px 5px}.sch-grid div:nth-child(2){background:#eef9ff}.sch-grid div:nth-child(3){background:#fff6e7}.sch-grid div:nth-child(4){background:#edf9f2}.sch-grid strong,.sch-grid small{display:block;overflow-wrap:anywhere}.sch-grid small{font-size:10px;color:#687993}.sch-grid strong{font-size:16px;color:#293b55}.sch-track{height:7px;background:#e7e4f0;border-radius:20px;overflow:hidden;margin-top:7px}.sch-track span{display:block;height:100%;background:#6b58cb}.sch-foot{font-size:11px;color:#71809b;margin-top:6px}.sarni-targets-home{padding:14px;border:1px solid #dce5f2;background:#fafbff;border-radius:15px;margin:13px 0}.sch-head h3{font-size:19px;margin:3px 0;color:#293b55}.sch-head small{font-size:10px;color:#7359b1;font-weight:850;letter-spacing:.1em}.sch-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}.sch-stats div{background:white;border:1px solid #e6e8f1;border-radius:10px;padding:9px}.sch-stats strong{display:block;font-size:21px;color:#493aa3}.sch-stats small{font-size:10px;color:#78859a}.sch-overdue{border-left:4px solid #c43d57}.sch-empty{color:#77869a;font-size:12px}@media(max-width:620px){.sch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sch-row{padding:10px}}';
  document.head.append(css);
+ const progressCss=document.createElement('style');
+ progressCss.textContent='.sch-target-card{border-left:4px solid #7357c7}.sch-target-card.sch-overdue{border-left-color:#c43d57}.sch-stages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:10px 0 7px}.sch-stage{min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:#738097;text-align:center}.sch-stage-dot{width:100%;height:7px;border-radius:9px;background:#e5e5f0}.sch-stage.is-done .sch-stage-dot{background:#16a57c}.sch-stage.is-next .sch-stage-dot{background:#e4a23c}.sch-stage-label{font-size:10px;font-weight:760;color:#5d6685;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.sch-target-card .sch-progress-note{font-size:11px;color:#71809a;margin-top:7px}.sch-target-card .sch-rowhead strong{flex:1;min-width:0}.sch-target-card .sch-rowhead .sch-pct{font-size:13px;font-weight:850;color:#6546ad}';
+ document.head.append(progressCss);
+
  let items=[];
  function paintBooks(){
   if(!items.length){booksDiv.innerHTML='<p class="sch-empty">Saved book progress will appear after sign-in.</p>';return;}
@@ -34,9 +38,22 @@ function boot(){
   });
   $('sarniCompareStats').innerHTML='<div><strong>'+models.length+'</strong><small>Active targets</small></div><div><strong>'+models.filter(x=>x.overdue).length+'</strong><small>Overdue stages</small></div><div><strong>'+reminders.length+'</strong><small>Reminders</small></div>';
   const out=$('sarniCompareTargets');out.replaceChildren();
-  for(const t of models.slice(0,6)){
-   const pct=t.rows?t.done*20:0,card=document.createElement('article');card.className='sch-row'+(t.overdue?' sch-overdue':'');
-   card.innerHTML='<div class="sch-rowhead"><strong>'+e(t.title)+'</strong><span>'+(t.rows?pct+'% complete':'No stages yet')+'</span></div><div class="sch-track"><span style="width:'+pct+'%"></span></div><div class="sch-foot"><span>Next: '+e(t.next?.name||(!t.rows?'Set up stages':'All stages completed'))+'</span><span>'+(t.due?(t.overdue?'Overdue · ':'Due · ')+e(t.due):'No stage due date')+'</span></div>';out.append(card);
+  for(const t of models){
+   const pct=t.rows?t.done*20:0,card=document.createElement('article');
+   card.className='sch-row sch-target-card'+(t.overdue?' sch-overdue':'');
+   const marks=t.rows?t.rows.map((stage,i)=>{
+    const next=!stage.done&&t.next===stage;
+    const className=stage.done?' is-done':next?' is-next':'';
+    const label=stage.name||'Stage '+(i+1);
+    return '<div class="sch-stage'+className+'" title="'+e(label)+'"><span class="sch-stage-dot"></span><span class="sch-stage-label">'+(i+1)+'</span></div>';
+   }).join(''):'';
+   const nextTitle=t.next?.name||(!t.rows?'Set up the five achievements':'All achievements completed');
+   card.innerHTML='<div class="sch-rowhead"><strong>'+e(t.title)+'</strong><span class="sch-pct">'+(t.rows?pct+'%':'Not started')+'</span></div>'+
+    (marks?'<div class="sch-stages" aria-label="'+t.done+' out of five stages completed">'+marks+'</div>':'')+
+    '<div class="sch-track"><span style="width:'+pct+'%"></span></div>'+
+    '<div class="sch-foot"><span>Next achievement: '+e(nextTitle)+'</span><span>'+(t.due?(t.overdue?'Overdue · ':'Due · ')+e(t.due):'No stage due date')+'</span></div>'+
+    (!t.rows?'<div class="sch-progress-note">Open Target & Reminder to add five stages.</div>':'');
+   out.append(card);
   }
   for(const c of reminders.slice(0,3)){
    const card=document.createElement('article');card.className='sch-row';card.innerHTML='<div class="sch-rowhead"><strong>'+e(c.querySelector('h4')?.textContent||'Reminder')+'</strong><span>Reminder</span></div><div class="sch-foot">'+e(c.querySelector('.sticky-due')?.textContent||'')+'</div>';out.append(card);
