@@ -244,6 +244,9 @@ function boot(){
   '@media(max-width:900px){#sarniHomeTargetRowsPanel .sch-hybrid-table{min-width:1120px!important}}'
  ].join('');
  document.head.append(stageWrapCss);
+ const headerOnlyStyle=document.createElement('style');
+ headerOnlyStyle.textContent='#sarniHomeTargetRowsPanel .sch-hybrid-table thead th:nth-child(n+2):nth-child(-n+6){font-size:11px!important;font-weight:900!important;color:#51438b!important}#sarniHomeTargetRowsPanel .sch-hybrid-pill{min-height:72px!important;gap:4px!important}#sarniHomeTargetRowsPanel .sch-hybrid-check{font-size:14px!important;color:#138356!important;align-self:center!important}';
+ document.head.append(headerOnlyStyle);
 
 
 
@@ -331,7 +334,7 @@ function boot(){
     const state=stage?.done?'done':!stage?'unset':stage===t.next?'next':'pending';
     const hint=stage?(stage.name||'Achievement '+(j+1)):'Not set';
     return '<td class="sch-hybrid-stage"><div class="sch-hybrid-pill '+state+'" title="'+e(hint)+'" aria-label="Stage '+(j+1)+': '+e(hint)+'. '+(stage?.done?'Complete':'Pending')+'">'+
-      '<span class="sch-hybrid-heading">Stage '+(j+1)+(stage?.done?' <span class="sch-hybrid-check" aria-hidden="true">✓</span>':'')+'</span>'+
+      (stage?.done?'<span class="sch-hybrid-check" aria-hidden="true">✓</span>':'')+
       '<span class="sch-hybrid-caption">'+e(stage?.name||'Not set')+'</span>'+
       (stage?.date?'<span class="sch-hybrid-date">'+e(stage.date)+'</span>':'')+'</div></td>';
    }).join('');
@@ -360,7 +363,7 @@ function boot(){
    '<div class="sch-table-wrap"><table class="sch-compact-table"><thead><tr><th>Reminder</th><th>Due</th></tr></thead><tbody>'+
    reminders.map((n,i)=>'<tr class="sch-tone-'+(i%5)+'"><td class="sch-name">'+e(n.title||'Reminder')+'</td><td>'+e(n.dueDate||'—')+'</td></tr>').join('')+'</tbody></table></div>':'';
   out.innerHTML='<div class="sch-table-wrap sch-hybrid-wrap"><table class="sch-compact-table sch-hybrid-table">'+
-   '<thead><tr><th>Target</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>Progress</th><th>Next due</th><th>View</th></tr></thead><tbody>'+
+   '<thead><tr><th>Target</th><th>Stage 1</th><th>Stage 2</th><th>Stage 3</th><th>Stage 4</th><th>Stage 5</th><th>Progress</th><th>Next due</th><th>View</th></tr></thead><tbody>'+
    (lines||'<tr><td colspan="9" class="sch-empty">No active targets yet.</td></tr>')+'</tbody></table></div>'+remindersHtml;
   controls.textContent=allExpanded?'Collapse all':'Expand all';
   controls.setAttribute('aria-pressed',String(allExpanded));
