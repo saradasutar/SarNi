@@ -2517,6 +2517,79 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 
 
+<style id="sarniCompactHomeLayout11">
+/* Compact Home only. Preserve IDs, actions and backend data. */
+#overviewSection>.overview-mode-bar{display:none!important}
+#overviewSection{padding-top:0!important}
+#personalHomeContent{margin-top:0!important}
+#sarniFocusShell{margin:0 auto 10px!important;padding-top:0!important}
+#sarniFocusShell .sarni-focus-hero{
+ min-height:0!important;padding:9px 14px!important;
+ border-radius:12px!important;gap:8px!important;
+ margin:0!important;box-shadow:none!important
+}
+#sarniFocusShell .sarni-focus-hero h2{
+ font-size:clamp(17px,1.8vw,21px)!important;
+ line-height:1.2!important;margin:0!important
+}
+#sarniFocusShell .sarni-focus-kicker{font-size:9px!important;margin:0!important}
+#sarniFocusShell #sarniFocusDate{font-size:11px!important;margin:2px 0 0!important;line-height:1.2!important}
+#sarniFocusShell .sarni-focus-tools{gap:6px!important}
+#sarniFocusShell .sarni-focus-tools button{
+ min-height:31px!important;padding:6px 9px!important;
+ border-radius:9px!important;font-size:11px!important
+}
+#sarniFocusShell .sarni-focus-metrics{
+ margin-top:6px!important;gap:7px!important
+}
+#sarniFocusShell .sarni-focus-metrics button{
+ min-height:0!important;padding:8px 10px!important;
+ gap:2px!important;border-radius:10px!important
+}
+#sarniFocusShell .sarni-focus-metrics strong{
+ font-size:16px!important;line-height:1.2!important
+}
+#sarniFocusShell .sarni-focus-metrics small,
+#sarniFocusShell .sarni-focus-metrics span{font-size:10px!important;line-height:1.2!important}
+#sarniHomeBookGlance{
+ margin:7px 0!important;padding:8px 12px!important;
+ border-radius:12px!important
+}
+#sarniHomeBookGlance .sarni-home-writing-head{
+ min-height:0!important;padding:0!important;
+ margin:0 0 4px!important;align-items:center!important
+}
+#sarniHomeBookGlance .sarni-home-writing-eyebrow{display:none!important}
+#sarniHomeBookGlance .sarni-home-writing-head h3{
+ font-size:16px!important;line-height:1.2!important;margin:0!important
+}
+#sarniHomeBookGlance .sarni-home-writing-grid,
+#sarniHomeBookGlance .sarni-home-writing-progress,
+#sarniHomeBookGlance .sarni-home-writing-actions{display:none!important}
+#sarniHomeBookGlance .sarni-home-writing-note{margin:3px 0 0!important;font-size:10px!important}
+#sarniHomeBookGlance #sarniHomeBookRows{margin:3px 0!important}
+#sarniHomeTargetRowsPanel{margin:7px 0!important;padding:9px 12px!important}
+#sarniFocusShell .sarni-focus-columns{gap:8px!important;margin-top:7px!important}
+#sarniFocusShell .sarni-focus-panel{
+ min-height:0!important;padding:10px 12px!important;
+ border-radius:12px!important
+}
+#sarniFocusShell .sarni-focus-panel-head{margin-bottom:5px!important}
+#sarniFocusShell .sarni-focus-panel h3{font-size:14px!important;line-height:1.25!important}
+#sarniFocusShell .sarni-focus-foot{margin-top:6px!important;padding:5px 2px!important}
+#sarniAdvancedHome{margin-top:6px!important}
+@media(max-width:860px){
+ #sarniFocusShell .sarni-focus-hero{
+  padding:10px 11px!important;gap:7px!important
+ }
+ #sarniFocusShell .sarni-focus-metrics{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:6px!important
+ }
+ #sarniFocusShell .sarni-focus-metrics button{padding:8px!important}
+ #sarniFocusShell .sarni-focus-tools button{padding:7px!important}
+}
+</style>
 <script defer src="./sarni-book-new-safety.js?v=20261108-sidebar-targets-2"></script>
 <script defer src="./sarni-target-workspace.js?v=20261108-inline-entry-fix-4"></script>
 <script defer src="./sarni-five-stage-targets.js?v=20261108-editor-repair-5"></script>
