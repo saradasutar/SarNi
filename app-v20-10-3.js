@@ -2937,12 +2937,10 @@ document.addEventListener('sarni:book-rendered',()=>{
   document.dispatchEvent(new Event('sarni:home-books-updated'));
 });
 
-let sarniBooksArchiveView='ACTIVE';
-const sarniIsArchivedBook=b=>!!(b.archived||b.isArchived||b.archivedAt||String(b.status||'').toUpperCase()==='ARCHIVED');
 async function loadBooks(){
   if(!els.booksGrid)return;
   try{
-    const r=await api('listBooks',{includeArchived:true});
+    const r=await api('listBooks',{});
     state.books=r.data.books||[];
     if(state.activeBookId&&!state.books.some(b=>b.id===state.activeBookId)){state.activeBookId=null;state.activeBookDetail=null;}
     renderBooksPage();
@@ -2961,14 +2959,8 @@ function renderBooksPage(){
 }
 function renderBooksGrid(){
   if(!els.booksGrid)return;
-  const listRoot=els.booksGrid.closest('.books-list-view');
-  let bar=document.getElementById('sarniBooksArchiveBar');
-  if(!bar){bar=document.createElement('div');bar.id='sarniBooksArchiveBar';bar.className='sarni-books-archive-bar';els.booksGrid.before(bar);bar.addEventListener('click',event=>{const btn=event.target.closest('[data-book-view]');if(!btn)return;sarniBooksArchiveView=btn.dataset.bookView;renderBooksGrid();});}
-  const archived=state.books.filter(sarniIsArchivedBook);
-  bar.innerHTML=`<button type="button" class="small-button ${sarniBooksArchiveView==='ACTIVE'?'sarni-archive-selected':''}" data-book-view="ACTIVE">My Books</button><button type="button" class="small-button ${sarniBooksArchiveView==='ARCHIVED'?'sarni-archive-selected':''}" data-book-view="ARCHIVED">Archived Books (${archived.length})</button>`;
-  const rows=state.books.filter(b=>sarniBooksArchiveView==='ARCHIVED'?sarniIsArchivedBook(b):!sarniIsArchivedBook(b));
+  const rows=state.books;
   els.booksEmpty?.classList.toggle('hidden',rows.length>0);
-  if(els.booksEmpty&&!rows.length)els.booksEmpty.textContent=sarniBooksArchiveView==='ARCHIVED'?'No archived books returned by the server. If you previously archived books, the backend needs an archive-inclusive list route.':'No active books yet — start your first one.';
   els.booksGrid.innerHTML=rows.map(b=>{
     const pct=b.chapterCount?Math.round(b.doneChapterCount/b.chapterCount*100):0;
     const collabChips=(Array.isArray(b.collaborators)?b.collaborators:[]).map(c=>`<span class="book-collab-chip" title="${escapeHtml(c.username)} · ${escapeHtml(BOOK_ROLE_LABEL[c.role]||c.role)}">${escapeHtml(c.username.slice(0,2).toUpperCase())}</span>`).join('');
@@ -2979,7 +2971,6 @@ function renderBooksGrid(){
       <div class="book-card-progress"><i style="width:${pct}%"></i></div>
       <div class="book-card-metrics"><span>${b.chapterCount} chapter${b.chapterCount===1?'':'s'}</span><span>${(Number(b.totalWordCount)||0).toLocaleString('en-IN')} words</span></div>
       <div class="book-card-collabs">${collabChips||'<span class="book-collab-chip owner-only">Just you</span>'}</div>
-      ${sarniIsArchivedBook(b)&&b.role==='OWNER'?`<button type="button" class="small-button" data-restore-sarni-book="${escapeHtml(b.id)}">↺ Unarchive / Restore</button>`:''}
     </article>`;
   }).join('');
 }
@@ -3322,7 +3313,6 @@ function openBookModal(book=null){
   if(els.bookTargetWordCount)els.bookTargetWordCount.value=book?.targetWordCount||'';
   if(els.bookTargetDate)els.bookTargetDate.value=book?.targetDate||'';
   openModal('bookModal');
-  requestAnimationFrame(()=>{if(els.bookModal){els.bookModal.classList.remove('hidden');els.bookModal.style.visibility='visible';}els.bookTitle?.focus();});
 }
 async function saveBookForm(event){
   event.preventDefault();
@@ -3348,17 +3338,6 @@ async function archiveBookUI(id){
   }catch(e){toast(e.message,'error');}
 }
 
-async function restoreBookUI(id){
-  const book=state.books.find(b=>String(b.id)===String(id));
-  if(!book||book.role!=='OWNER'||!confirm(`Restore "${book.title}" to My Books?`))return;
-  try{
-    const r=await api('restoreBook',{id});
-    if(!r?.data||!Array.isArray(r.data.books))throw new Error('The backend has not confirmed restoration. Ask to add restoreBook and an archive-inclusive listBooks route.');
-    state.books=r.data.books;
-    sarniBooksArchiveView='ACTIVE';
-    renderBooksPage();toast('Book restored.','success');
-  }catch(e){toast('Could not restore: '+(e.message||e),'error');}
-}
 function openBookCollabModal(){
   els.bookCollabForm?.reset();
   if(els.bookCollabBookId)els.bookCollabBookId.value=state.activeBookId||'';
@@ -3677,8 +3656,6 @@ async function saveBookProgressForm(event){
 }
 
 document.addEventListener('click',event=>{
-  const restoreBook=event.target.closest('[data-restore-sarni-book]');
-  if(restoreBook){event.preventDefault();event.stopPropagation();restoreBookUI(restoreBook.dataset.restoreSarniBook);return;}
   const openBook=event.target.closest('[data-open-book]');if(openBook){openBookDetail(openBook.dataset.openBook);return;}
   if(event.target.closest('[data-remove-collab]')){removeCollaboratorUI(event.target.closest('[data-remove-collab]').dataset.removeCollab);return;}
   const editChapter=event.target.closest('[data-edit-chapter]');if(editChapter){const d=state.activeBookDetail;const ch=d?.chapters.find(c=>c.id===editChapter.dataset.editChapter);if(ch)openChapterModal(ch);return;}
