@@ -153,6 +153,9 @@ function boot(){
   '@media(max-width:750px){.sch-compact-table{font-size:11px!important}.sch-book-table .sch-name button{font-size:11px!important}}'
  ].join('');
  document.head.append(prominent);
+ const duplicateStyle=document.createElement('style');
+ duplicateStyle.textContent='.sch-duplicate-info{grid-column:1/-1;font-size:11px;color:#6b597d;background:#f7f2ff;border:1px solid #e5def4;padding:5px 8px;border-radius:7px;line-height:1.3}';
+ document.head.append(duplicateStyle);
  const noStagesStyle=document.createElement('style');
  noStagesStyle.textContent='.sch-target-stage.sch-no-stages td{padding:5px 7px!important;height:auto!important;min-height:0!important;line-height:1.25!important;font-size:11px!important}.sch-target-stage.sch-no-stages .sch-stage-achievement{font-weight:650!important;color:#738099!important}.sch-target-stage.sch-no-stages .sch-stage-number{width:21px;height:21px}.sch-target-stage.sch-no-stages .sch-tag{font-size:10px}.sch-target-name-cell .sch-target-percent{font-size:10px}';
  document.head.append(noStagesStyle);
@@ -189,7 +192,22 @@ function boot(){
   const reminders=cards.filter(c=>!c.classList.contains('target'));
   const dec=window.SarniTargetStages?.decode;
   const d=new Date(),today=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
-  const models=targets.map(card=>{
+  // The backend may contain distinct IDs for accidentally repeated saves.
+  // Hide only records with matching title, due date and complete stage content.
+  // Never delete them or merge legitimately different achievements.
+  const seen=new Set();
+  let hiddenDuplicates=0;
+  const uniqueTargets=targets.filter(card=>{
+   const title=(card.querySelector('h4')?.textContent||'').trim().toLocaleLowerCase();
+   const id=card.querySelector('[data-sticky-edit]')?.getAttribute('data-sticky-edit')||'';
+   const stored=window.SarniTargetEditorBridge?.getNote?.(id);
+   const original=String(stored?.text??card.querySelector('.sticky-full-text')?.textContent??'').trim();
+   const due=String(stored?.dueDate||'');
+   const signature=JSON.stringify([title,due,original]);
+   if(seen.has(signature)){hiddenDuplicates++;return false;}
+   seen.add(signature);return true;
+  });
+  const models=uniqueTargets.map(card=>{
    const parsed=dec?.(card.querySelector('.sticky-full-text')?.textContent||'');
    const stages=parsed?.structured?parsed.stages:null;
    const count=stages?stages.filter(x=>x.done).length:0;
@@ -197,7 +215,8 @@ function boot(){
    const due=next?.date||'';
    return {name:card.querySelector('h4')?.textContent||'Target',count,stages,next,due,late:!!due&&due<today};
   });
-  $('sarniCompareStats').innerHTML='<div><strong>'+models.length+'</strong><small>Active targets</small></div><div><strong>'+models.filter(x=>x.late).length+'</strong><small>Overdue stages</small></div><div><strong>'+reminders.length+'</strong><small>Reminders</small></div>';
+  $('sarniCompareStats').innerHTML='<div><strong>'+models.length+'</strong><small>Distinct targets</small></div><div><strong>'+models.filter(x=>x.late).length+'</strong><small>Overdue stages</small></div><div><strong>'+reminders.length+'</strong><small>Reminders</small></div>'+
+   (hiddenDuplicates?'<div class="sch-duplicate-info" role="status">'+hiddenDuplicates+' identical saved target '+(hiddenDuplicates===1?'copy':'copies')+' hidden on Home. Originals remain in Target &amp; Reminder.</div>':'');
   // Each target has a dedicated first column, spanning the visible stage rows.
   // Rebuild for Focus View instead of hiding rows so the title always remains visible.
   const rows=models.map((t,i)=>{
