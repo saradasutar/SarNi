@@ -2931,7 +2931,8 @@ document.addEventListener('sarni:book-rendered',()=>{
     ...sarniHomeBooksCache[i],...detail.book,
     chapterCount:detail.chapters.length,
     doneChapterCount:detail.chapters.filter(c=>String(c.status).toUpperCase()==='DONE').length,
-    totalWordCount:detail.chapters.reduce((n,c)=>n+Math.max(0,Number(c.wordCount)||0),0)
+    totalWordCount:detail.chapters.reduce((n,c)=>n+Math.max(0,Number(c.wordCount)||0),0),
+    latestChapterAt:detail.chapters.map(c=>String(c.updatedAt||'')).filter(Boolean).sort().at(-1)||''
   };
   document.dispatchEvent(new Event('sarni:home-books-updated'));
 });
