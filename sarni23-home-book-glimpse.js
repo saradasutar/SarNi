@@ -44,9 +44,9 @@ function boot(){
   set('sarniHwWords',fmt(words));
   set('sarniHwTarget',target?fmt(target):'Not set');
   set('sarniHwTargetDetail',target?'Total manuscript target':'Set target in Book Writing');
-  const updated=validDate(book.updatedAt||book.lastUpdatedAt);
+  const updated=validDate(book.latestChapterAt||book.updatedAt||book.lastUpdatedAt);
   set('sarniHwRecent',updated?new Intl.DateTimeFormat('en-IN',{day:'numeric',month:'short'}).format(updated):'Not recorded');
-  set('sarniHwRecentDetail',updated?'Latest book update':'Date unavailable');
+  set('sarniHwRecentDetail',updated?(book.latestChapterAt?'Latest saved chapter update':'Latest book record update'):'Date unavailable');
   set('sarniHwPercent',percent===null?'—':percent+'%');
   set('sarniHwGoalLabel',target?'Target: '+fmt(words)+' / '+fmt(target)+' words':'Add a word target in Book Writing');
   const fill=$('sarniHwFill');if(fill)fill.style.width=(percent||0)+'%';
