@@ -7,7 +7,7 @@ function boot(){
  const booksDiv=document.createElement('div');booksDiv.id='sarniHomeBookRows';booksDiv.className='sarni-comparison-list';
  root.querySelector('.sarni-home-writing-head').after(booksDiv);
  const targetDiv=document.createElement('section');targetDiv.id='sarniHomeTargetRowsPanel';targetDiv.className='sarni-targets-home';
- targetDiv.innerHTML='<div class="sch-head"><div><small>YOUR PROGRESS</small><h3>Targets &amp; Reminders</h3></div><button type="button" id="sarniCompareManage">Manage →</button></div><div class="sch-stats" id="sarniCompareStats"></div><div class="sarni-comparison-list" id="sarniCompareTargets"></div>';
+ targetDiv.innerHTML='<div class="sch-head"><div><small>YOUR PROGRESS</small><h3>Targets &amp; Reminders</h3></div><div class="sch-header-controls"><button type="button" id="sarniCompareFocus" aria-pressed="false" title="Show only the next unfinished achievement per target">Focus view</button><button type="button" id="sarniCompareManage">Manage →</button></div></div><div class="sch-stats" id="sarniCompareStats"></div><div class="sarni-comparison-list" id="sarniCompareTargets"></div>';
  root.after(targetDiv);
  const css=document.createElement('style');css.textContent='.sarni-comparison-list{display:grid;gap:9px;margin:12px 0}.sch-row{border:1px solid #e0e5f0;background:#fff;border-radius:12px;padding:11px 13px}.sch-rowhead,.sch-foot,.sch-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.sch-rowhead strong{color:#253657}.sch-rowhead button,.sch-head button{border:1px solid #d6ccf1;background:#f7f4ff;color:#6245a0;border-radius:8px;padding:7px 10px;font-weight:800;cursor:pointer}.sch-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:9px 0}.sch-grid div{background:#f1f4fd;border-radius:8px;text-align:center;padding:8px 5px}.sch-grid div:nth-child(2){background:#eef9ff}.sch-grid div:nth-child(3){background:#fff6e7}.sch-grid div:nth-child(4){background:#edf9f2}.sch-grid strong,.sch-grid small{display:block;overflow-wrap:anywhere}.sch-grid small{font-size:10px;color:#687993}.sch-grid strong{font-size:16px;color:#293b55}.sch-track{height:7px;background:#e7e4f0;border-radius:20px;overflow:hidden;margin-top:7px}.sch-track span{display:block;height:100%;background:#6b58cb}.sch-foot{font-size:11px;color:#71809b;margin-top:6px}.sarni-targets-home{padding:14px;border:1px solid #dce5f2;background:#fafbff;border-radius:15px;margin:13px 0}.sch-head h3{font-size:19px;margin:3px 0;color:#293b55}.sch-head small{font-size:10px;color:#7359b1;font-weight:850;letter-spacing:.1em}.sch-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}.sch-stats div{background:white;border:1px solid #e6e8f1;border-radius:10px;padding:9px}.sch-stats strong{display:block;font-size:21px;color:#493aa3}.sch-stats small{font-size:10px;color:#78859a}.sch-overdue{border-left:4px solid #c43d57}.sch-empty{color:#77869a;font-size:12px}@media(max-width:620px){.sch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sch-row{padding:10px}}';
  document.head.append(css);
@@ -99,6 +99,18 @@ function boot(){
  ].join('');
  document.head.append(compact);
 
+ const focusStyles=document.createElement('style');
+ focusStyles.textContent=[
+  '#sarniHomeTargetRowsPanel .sch-header-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap}',
+  '#sarniHomeTargetRowsPanel .sch-header-controls button{padding:6px 9px;border-radius:8px;font-size:11px;font-weight:800;white-space:nowrap}',
+  '#sarniHomeTargetRowsPanel #sarniCompareFocus[aria-pressed="true"]{background:#ece8ff;color:#4c36a5;border-color:#9e89da}',
+  '#sarniHomeTargetRowsPanel.sch-focus-mode .sch-target-stage:not(.sch-focus-stage){display:none!important}',
+  '#sarniHomeTargetRowsPanel.sch-focus-mode .sch-target-parent th{border-top-width:1px!important}',
+  '@media(max-width:600px){#sarniHomeTargetRowsPanel .sch-header-controls button{padding:5px 7px}#sarniHomeTargetRowsPanel .sch-head h3{font-size:15px!important}}'
+ ].join('');
+ document.head.append(focusStyles);
+
+
 
 
  let items=[];
@@ -145,7 +157,7 @@ function boot(){
    const parent='<tr class="sch-target-parent sch-tone-'+(i%5)+(t.late?' sch-late':'')+'"><th colspan="5" scope="rowgroup"><div class="sch-target-group"><span class="sch-target-heading">'+e(t.name)+'</span><span class="sch-target-percent">'+(t.stages?progress+'%':'Stages not set')+'</span><span class="sch-five-bars" aria-label="'+t.count+' of 5 achievements completed">'+Array.from({length:5},(_,j)=>'<span class="'+(stages[j]?.done?'done':stages[j]===t.next?'next':'')+'"></span>').join('')+'</span></div></th></tr>';
    const lines=t.stages?t.stages.map((stage,j)=>{
     const overdue=!stage.done&&!!stage.date&&stage.date<today;
-    return '<tr class="sch-target-stage sch-tone-'+(i%5)+(overdue?' sch-late':'')+'"><td><span class="sch-stage-number">'+(j+1)+'</span></td>'+
+    return '<tr class="sch-target-stage sch-tone-'+(i%5)+(overdue?' sch-late':'')+(stage===t.next||(!t.next&&j===4)?' sch-focus-stage':'')+'"><td><span class="sch-stage-number">'+(j+1)+'</span></td>'+
      '<td class="sch-stage-achievement">'+e(stage.name||'Not specified')+'</td>'+
      '<td>'+e(stage.date||'—')+'</td>'+
      '<td><span class="sch-tag '+(stage.done?'complete':overdue?'late':'active')+'">'+(stage.done?'✓ Complete':overdue?'Overdue':'Pending')+'</span></td>'+
@@ -162,6 +174,16 @@ function boot(){
   out.innerHTML='<div class="sch-table-wrap"><table class="sch-compact-table sch-target-table"><thead><tr><th>Stage</th><th>What to Achieve</th><th>Target Date</th><th>Status</th><th>Achievement Remark</th></tr></thead><tbody>'+ (rows||'<tr><td colspan="5" class="sch-empty">No active targets yet.</td></tr>')+'</tbody></table></div>'+
    (reminders.length?'<div class="sch-reminder-title">Reminders <span>'+reminders.length+'</span></div><div class="sch-table-wrap"><table class="sch-compact-table"><thead><tr><th>Reminder</th><th>Due / status</th></tr></thead><tbody>'+reminderRows+'</tbody></table></div>':'');
  }
+ let focusOnly=false;
+ const focusBtn=$('sarniCompareFocus');
+ function updateFocusView(){
+  targetDiv.classList.toggle('sch-focus-mode',focusOnly);
+  focusBtn.setAttribute('aria-pressed',String(focusOnly));
+  focusBtn.textContent=focusOnly?'All 5 stages':'Focus view';
+  focusBtn.title=focusOnly?'Show every stage of each target':'Show only the next unfinished achievement of each target';
+ }
+ focusBtn.addEventListener('click',()=>{focusOnly=!focusOnly;updateFocusView();});
+ updateFocusView();
  $('sarniCompareManage').addEventListener('click',()=>window.SarNiTargetsOpen?.());
  new MutationObserver(renderTargets).observe(source,{childList:true});
  document.addEventListener('sarni:home-visible',()=>{load();renderTargets();});
