@@ -17,6 +17,16 @@ css.textContent=`
  body.sarni-layout-dragging{cursor:col-resize!important;user-select:none!important}
 }
 @media(max-width:860px){#sarniLayoutHandle{display:none!important}}
+/* Bound every target ancestor to the available viewport instead of allowing its table to widen the page. */
+#appView{max-width:100%!important;min-width:0!important}
+#appView .main-content{min-width:0!important;max-width:100%!important}
+#overviewSection,#personalHomeContent,#sarniHomeBookGlance,#sarniHomeTargetRowsPanel,#sarniCompareTargets{box-sizing:border-box;min-width:0!important;max-width:100%!important}
+#sarniHomeTargetRowsPanel{width:100%!important;overflow:hidden!important}
+#sarniCompareTargets{width:100%!important;overflow:hidden!important}
+#sarniHomeTargetRowsPanel #sarniCompareTargets .sch-hybrid-wrap{display:block!important;box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:scroll!important;overflow-y:hidden!important;scroll-behavior:smooth;scrollbar-width:auto!important;scrollbar-color:#8171bc #ece9f5;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+#sarniHomeTargetRowsPanel #sarniCompareTargets .sch-hybrid-wrap::-webkit-scrollbar{height:12px!important;display:block!important}
+#sarniHomeTargetRowsPanel #sarniCompareTargets .sch-hybrid-wrap::-webkit-scrollbar-thumb{background:#9a8acb;border:2px solid #ece9f5;border-radius:12px}
+#sarniHomeTargetRowsPanel #sarniCompareTargets .sch-hybrid-wrap::-webkit-scrollbar-track{background:#ece9f5}
 #sarniCompareTargets .sch-table-scroll,#sarniCompareTargets .sch-compact-scroll,#sarniCompareTargets .sch-hybrid-scroll{max-width:100%;overflow-x:auto!important;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 #sarniHomeTargetRowsPanel #sarniCompareTargets .sch-hybrid-table{table-layout:fixed!important;border-collapse:separate;border-spacing:0}
 #sarniCompareTargets .sch-hybrid-table th{position:relative;white-space:normal;overflow-wrap:anywhere;vertical-align:middle}
@@ -54,8 +64,9 @@ function setupToolbar(container,host,table,apply,defaults){
  if(!bar){bar=document.createElement('div');bar.id='sarniTargetResizeTools';bar.style.cssText='display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:7px 0;padding:5px 2px;font-size:11px';
  const title=document.createElement('span');title.textContent='Target table: ';title.style.fontWeight='800';bar.appendChild(title);
  const make=(label,hint,cb)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.title=hint;b.style.cssText='padding:6px 10px;border-radius:8px;background:#f3f0ff;color:#513f9f;border:1px solid #c6bbee;font-weight:800;cursor:pointer';b.addEventListener('click',cb);bar.appendChild(b)};
- make('◀ Left','Show earlier columns',()=>{const h=container.querySelector('.sch-hybrid-wrap');h?.scrollBy({left:-280,behavior:'smooth'})});
- make('Right ▶','Show columns to the right',()=>{const h=container.querySelector('.sch-hybrid-wrap');h?.scrollBy({left:280,behavior:'smooth'})});
+ make('◀ Left','Show earlier columns',()=>{const h=container.querySelector('.sch-hybrid-wrap');if(h)h.scrollLeft-=Math.max(280,h.clientWidth*.6)});
+ make('Right ▶','Show columns to the right',()=>{const h=container.querySelector('.sch-hybrid-wrap');if(h)h.scrollLeft+=Math.max(280,h.clientWidth*.6)});
+ make('Show last columns »','Jump to Progress, Next due and View',()=>{const h=container.querySelector('.sch-hybrid-wrap');if(h)h.scrollLeft=h.scrollWidth});
  make('− Narrower','Make Stage 1–5 columns narrower',()=>{for(let i=1;i<=5;i++){(state.columns||(state.columns={}))[i]=Math.max(75,(Number(state.columns[i])||150)-20)}save(state);const t=container.querySelector('table.sch-hybrid-table');if(t){t.removeAttribute('data-sarni-columns');setupTargetTable()}});
  make('+ Wider','Make Stage 1–5 columns wider',()=>{for(let i=1;i<=5;i++){(state.columns||(state.columns={}))[i]=Math.min(550,(Number(state.columns[i])||150)+20)}save(state);const t=container.querySelector('table.sch-hybrid-table');if(t){t.removeAttribute('data-sarni-columns');setupTargetTable()}});
  make('Reset','Restore initial column sizes',()=>{state.columns={};save(state);const t=container.querySelector('table.sch-hybrid-table');if(t){t.removeAttribute('data-sarni-columns');setupTargetTable()}});
@@ -70,7 +81,7 @@ function setupTargetTable(){
  const columns=Array.from(table.querySelectorAll('thead th'));
  if(!columns.length)return;
  const host=table.parentElement;
- if(host){host.style.maxWidth='100%';host.style.overflowX='auto';host.style.webkitOverflowScrolling='touch';}
+ if(host){host.style.setProperty('width','100%','important');host.style.setProperty('max-width','100%','important');host.style.setProperty('min-width','0','important');host.style.setProperty('overflow-x','scroll','important');host.style.webkitOverflowScrolling='touch';}
  const widths=state.columns||{};
  const defaults=columns.map((_,i)=>i===0?220:i>=1&&i<=5?150:i===6?120:i===7?145:95);
  const apply=()=>{let total=0;columns.forEach((th,i)=>{const w=Math.max(i===0?165:75,Math.min(550,Number((state.columns||{})[i])||defaults[i]));th.style.setProperty('width',w+'px','important');th.style.setProperty('min-width',w+'px','important');th.style.setProperty('max-width',w+'px','important');colgroup.children[i].style.setProperty('width',w+'px','important');total+=w});table.style.setProperty('width',Math.max(total,890)+'px','important');table.style.setProperty('min-width',Math.max(total,890)+'px','important');};
