@@ -3346,6 +3346,7 @@ function openChapterModal(chapter=null){
   els.chapterRteToolbar?.classList.toggle('hidden',isViewer);
   if(els.saveChapterBtn)els.saveChapterBtn.classList.toggle('hidden',isViewer);
   openModal('chapterModal');
+  document.dispatchEvent(new CustomEvent('sarni:chapter-opened',{detail:{bookId:String(state.activeBookId||''),chapterId:String(chapter?.id||'')}}));
   setTimeout(()=>els.chapterContent?.focus(),80);
 }
 function updateChapterWordCountLive(){
