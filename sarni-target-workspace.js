@@ -81,6 +81,7 @@ function start(){
  window.SarNiTargetsOpen=show;
  function close(){open=false;sheet.hidden=true;sheet.style.display='none';nav.classList.remove('active');nav.removeAttribute('aria-current');}
  nav.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();show();});
+ $('sarniMobileTargetsBtn')?.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const menu=$('sarniMoreMenu');if(menu)menu.hidden=true;show();});
  $('sarniTargetsClose').addEventListener('click',close);
  sheet.querySelectorAll('[data-sarni-target-tab]').forEach(btn=>btn.addEventListener('click',()=>{current=btn.dataset.sarniTargetTab;render();}));
  $('sarniTargetSearch').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();render();});
