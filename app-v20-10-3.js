@@ -1308,8 +1308,17 @@ async function saveStickyNote(event){
     // Previous code called renderStickyNotes a second time unnecessarily.
     closeModals();
     try{
-      applyBootstrap(result.data);
-      saveCache(result.data);
+      // A target save only changes sticky records. Refresh those records directly
+      // when the backend returns them, instead of rebuilding every dashboard.
+      if(Array.isArray(result.data?.stickyNotes)){
+        state.stickyNotes=result.data.stickyNotes;
+        if(Array.isArray(result.data.stickyNoteHistory))state.stickyNoteHistory=result.data.stickyNoteHistory;
+        if(result.data.backendVersion)state.backendVersion=String(result.data.backendVersion);
+        renderStickyNotes();
+      }else{
+        // Compatible fallback for older backend response formats.
+        applyBootstrap(result.data);
+      }
       toast('Target or reminder saved.','success');
     }catch(renderError){
       console.error('Target or reminder saved; dashboard refresh failed',renderError);
