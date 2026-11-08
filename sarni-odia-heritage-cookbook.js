@@ -22,7 +22,7 @@ const stylesheet=document.createElement('style');stylesheet.textContent=`
 #odiaHeritageBox .oh-row{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
 #odiaHeritageBox button,#odiaRecipeBar button{background:#fff;border:1px solid #c9b68d;border-radius:10px;min-height:40px;padding:8px 12px;color:#55401d;font-weight:750;cursor:pointer}
 #odiaHeritageBox select,#odiaRecipeBar input,#odiaRecipeBar select{background:#fff;border:1px solid #c9b68d;border-radius:9px;padding:8px;min-height:39px;font:inherit;max-width:100%}
-#odiaRecipeBar{border:1px solid #ead7b3;border-radius:13px;background:#fffaf0;padding:12px;margin:10px 0;display:grid;gap:10px}
+#odiaRecipeBar[hidden]{display:none!important}\n#odiaRecipeBar{border:1px solid #ead7b3;border-radius:13px;background:#fffaf0;padding:12px;margin:10px 0;display:grid;gap:10px}
 #odiaRecipeBar .oh-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 #odiaRecipeBar label{display:grid;gap:4px;font-size:12px;font-weight:750}
 #odiaRecipeBar .oh-note{color:#795b32;font-size:12px;line-height:1.5}
@@ -65,7 +65,22 @@ const blocks=[
 ];
 return blocks.map(([h,v])=>'<h3>'+escapeHtml(h)+'</h3><p>'+escapeHtml(v).replace(/\n/g,'<br>')+'</p>').join('');
 }
+function isCookbookChapter(){
+ const c=window.SarniAuthorBook?.getCurrent?.();
+ const book=c?.book;
+ const bookId=String($('chapterBookId')?.value||'');
+ if(!book||String(book.id)!==bookId)return false;
+ const title=String(book.title||'').toLowerCase();
+ const genre=String(book.genre||'').toLowerCase();
+ return /cookbook|recipe|culinary|cooking|ରୋଷେଇ|ରନ୍ଧନ|ପାକ/.test(title+' '+genre);
+}
+function updateRecipeVisibility(){
+ const bar=$('odiaRecipeBar');
+ if(!bar)return;
+ bar.hidden=!isCookbookChapter()||$('chapterModal')?.classList.contains('hidden');
+}
 function insertRecipe(){
+if(!isCookbookChapter())return;
 const editor=$('chapterContent');if(!editor)return;
 const title=($('odiaDishName')?.value||'').trim()||'[Dish name]';
 if(editor.textContent.trim()&&!confirm('This chapter contains writing. Append the recipe template without replacing it?'))return;
@@ -77,11 +92,15 @@ $('odiaRecipeMessage').textContent='Template added to the editor. Add your actua
 }
 function mount(){
 const modal=$('chapterModal'),editor=$('chapterContent');if(modal&&editor&&!$('odiaRecipeBar')){
-const bar=document.createElement('div');bar.id='odiaRecipeBar';
+const bar=document.createElement('div');bar.id='odiaRecipeBar';bar.hidden=true;
 bar.innerHTML='<strong>🍲 Odia Heritage Recipe Assistant</strong><div class="oh-row"><label>Dish name<input id="odiaDishName" placeholder="e.g. Dalma / ଡାଲମା" /></label><label>Quick recipe<select id="odiaRecipeSelect"><option value="">Choose or write your own</option>'+recipes.map(x=>'<option>'+escapeHtml(x)+'</option>').join('')+'</select></label><button type="button" id="odiaInsertRecipe">＋ Insert recipe format</button></div><div class="oh-note" id="odiaRecipeMessage">Photos: enter your own private Drive photo references and ownership details. This upgrade does not yet upload or embed book pictures automatically. Never paste unlicensed web photos.</div>';
 editor.before(bar);
 $('odiaRecipeSelect').addEventListener('change',()=>{if($('odiaRecipeSelect').value)value('odiaDishName',$('odiaRecipeSelect').value);});
 $('odiaInsertRecipe').addEventListener('click',insertRecipe);
+updateRecipeVisibility();
+document.addEventListener('sarni:chapter-opened',updateRecipeVisibility);
+const observer=new MutationObserver(updateRecipeVisibility);
+observer.observe(modal,{attributes:true,attributeFilter:['class']});
 }
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
