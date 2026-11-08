@@ -1,0 +1,75 @@
+/* SarNi Author Studio — understated black & white page ornaments.
+ * These decorations are presentation only; never inserted into chapter HTML.
+ * Monochrome (default) is printer-friendly. */
+#chapterModal.s18-dec-monochrome #chapterContent,
+#sarni18Reader.s18-dec-monochrome .s18text{
+ background-color:#fff!important;
+ background-image:
+   linear-gradient(135deg,transparent 0 48%,#333 49% 50%,transparent 51%),
+   linear-gradient(135deg,transparent 0 46%,#9a9a9a 47% 48%,transparent 49%),
+   linear-gradient(135deg,transparent 0 48%,#333 49% 50%,transparent 51%),
+   linear-gradient(135deg,transparent 0 46%,#9a9a9a 47% 48%,transparent 49%);
+ background-repeat:no-repeat;
+ background-size:88px 88px,106px 106px,88px 88px,106px 106px;
+ background-position:right top,right top,left bottom,left bottom;
+}
+#chapterModal.s18-dec-corner #chapterContent,
+#sarni18Reader.s18-dec-corner .s18text{
+ background-color:#fff!important;
+ background-image:linear-gradient(90deg,#b8b8b8,#b8b8b8),
+                  linear-gradient(0deg,#b8b8b8,#b8b8b8),
+                  linear-gradient(90deg,#b8b8b8,#b8b8b8),
+                  linear-gradient(0deg,#b8b8b8,#b8b8b8);
+ background-repeat:no-repeat;
+ background-size:46px 1px,1px 46px,46px 1px,1px 46px;
+ background-position:right 20px top 20px,right 20px top 20px,left 20px bottom 20px,left 20px bottom 20px;
+}
+#chapterModal.s18-dec-frame #chapterContent,
+#sarni18Reader.s18-dec-frame .s18text{
+ background-color:#fff!important;
+ border:1px solid #555!important;
+ outline:1px solid #c9c9c9;
+ outline-offset:-11px;
+}
+#chapterModal.s18-dec-none #chapterContent,
+#sarni18Reader.s18-dec-none .s18text{
+ background-image:none!important;outline:none!important;
+}
+#chapterModal.s18-dec-monochrome #chapterContent,
+#chapterModal.s18-dec-corner #chapterContent{
+ padding:clamp(29px,5vw,48px)!important;
+}
+#sarni18Reader.s18-dec-monochrome .s18text,
+#sarni18Reader.s18-dec-corner .s18text{
+ padding:clamp(34px,5vw,54px)!important;
+}
+@media(max-width:600px){
+ #chapterModal.s18-dec-monochrome #chapterContent,
+ #chapterModal.s18-dec-corner #chapterContent{padding:30px 18px!important}
+ #sarni18Reader.s18-dec-monochrome .s18text,
+ #sarni18Reader.s18-dec-corner .s18text{padding:34px 20px!important}
+}
+@media print{
+ @page{size:A4;margin:20mm 18mm}
+ body:has(#sarni18Reader:not([hidden])) > :not(#sarni18Reader){display:none!important}
+ body:has(#sarni18Reader:not([hidden])){margin:0!important;padding:0!important;background:#fff!important}
+ #sarni18Reader:not([hidden]){position:static!important;display:block!important;padding:0!important;margin:0!important;background:#fff!important;overflow:visible!important;height:auto!important}
+ #sarni18Reader .s18sheet{width:100%!important;max-width:none!important;height:auto!important;overflow:visible!important;display:block!important;border:0!important;box-shadow:none!important;background:#fff!important}
+ #sarni18Reader .s18header{display:none!important}
+ #sarni18Reader .s18text{display:block!important;width:100%!important;max-width:none!important;height:auto!important;overflow:visible!important;margin:0!important;padding:0!important;background:#fff!important;color:#000!important;box-shadow:none!important;outline:none!important;border:0!important;font-size:11pt!important;line-height:1.65!important;white-space:pre-wrap!important;overflow-wrap:break-word!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+ #sarni18Reader.s18-dec-monochrome .s18text,
+ #sarni18Reader.s18-dec-corner .s18text{background-image:none!important;padding:0!important}
+ #sarni18Reader.s18-dec-frame .s18text{border:0!important}
+ /* Fixed, subtle ornaments repeat at page corners in paged printing. */
+ #sarni18Reader.s18-dec-monochrome::before,
+ #sarni18Reader.s18-dec-monochrome::after{
+  content:"";display:block;position:fixed;width:21mm;height:13mm;pointer-events:none;
+  border-color:#222;border-style:solid;z-index:10;
+ }
+ #sarni18Reader.s18-dec-monochrome::before{top:-11mm;right:-9mm;border-width:0 1pt 1pt 0;transform:skewY(14deg)}
+ #sarni18Reader.s18-dec-monochrome::after{bottom:-12mm;left:-9mm;border-width:1pt 0 0 1pt;transform:skewY(14deg)}
+ #sarni18Reader.s18-dec-corner::before,
+ #sarni18Reader.s18-dec-corner::after{content:"";position:fixed;width:12mm;height:12mm;border:1pt solid #444;z-index:10}
+ #sarni18Reader.s18-dec-corner::before{top:-9mm;right:-8mm;border-left:0;border-bottom:0}
+ #sarni18Reader.s18-dec-corner::after{bottom:-9mm;left:-8mm;border-top:0;border-right:0}
+}
