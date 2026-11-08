@@ -1266,6 +1266,9 @@ function renderStickyNotes(){
   renderStickyNoteHistory();
   renderPinnedStickyNotes();
   renderPersonalHome();
+  // Notify other Target/Home views once per completed canonical render.
+  // Prevents parallel MutationObservers from repeatedly rebuilding the UI.
+  document.dispatchEvent(new CustomEvent('sarni:sticky-rendered'));
 }
 // Read-only access to current authenticated Target & Reminder entries for the
 // dedicated editor. No separate backend call or duplicate record store.
@@ -1291,7 +1294,7 @@ function openStickyNote(note=null){
 async function saveStickyNote(event){
   event.preventDefault();
   const title=els.stickyNoteTitle.value.trim();
-  if(!title){toast('Enter a title for the sticky note.','error');return;}
+  if(!title){toast('Enter a title for the target or reminder.','error');return;}
   setBusy(els.saveStickyNoteBtn,true,'Saving…');
   try{
     const result=await api('saveStickyNote',{note:{
@@ -1301,21 +1304,21 @@ async function saveStickyNote(event){
       dueDate:els.stickyNoteDueDate.value,
       text:els.stickyNoteText.value.trim()
     }});
-
-    // Backend save succeeded. Close the editor before doing a full dashboard rerender.
+    // Update through the normal bootstrap rendering path exactly once.
+    // Previous code called renderStickyNotes a second time unnecessarily.
     closeModals();
-
     try{
       applyBootstrap(result.data);
       saveCache(result.data);
-      renderStickyNotes();
-      toast('Sticky note saved and shown on Overview.','success');
+      toast('Target or reminder saved.','success');
     }catch(renderError){
-      console.error('Sticky saved; dashboard rerender failed',renderError);
-      toast('Sticky note was saved. Refresh once to display the latest dashboard.','info');
+      console.error('Target or reminder saved; dashboard refresh failed',renderError);
+      toast('Record saved. Refresh to see the latest data.','info');
     }
+    document.dispatchEvent(new CustomEvent('sarni:sticky-save-result',{detail:{ok:true}}));
   }catch(e){
     toast(e.message,'error');
+    document.dispatchEvent(new CustomEvent('sarni:sticky-save-result',{detail:{ok:false,error:e.message}}));
   }finally{
     setBusy(els.saveStickyNoteBtn,false);
   }
