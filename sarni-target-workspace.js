@@ -95,6 +95,7 @@ function start(){
   const root=$('sarniTargetRows');root.replaceChildren();
   if(!rows.length)root.innerHTML='<div class="sarni-target-empty">No matching entries. Create a new target or choose another view.</div>';
   else root.append(...rows);
+  document.dispatchEvent(new CustomEvent('sarni:target-workspace-rendered'));
  }
  function show(){open=true;sheet.hidden=false;sheet.style.display='block';nav.classList.add('active');nav.setAttribute('aria-current','page');if($('utilityDrawer')?.classList.contains('open'))$('utilityDrawerCloseBtn')?.click();render();}
  window.SarNiTargetsOpen=show;
@@ -123,21 +124,25 @@ function start(){
   }
   const title=inline.elements.title.value.trim();
   if(!title){$('sarniTargetInlineStatus').textContent='Please enter a title.';return;}
+  const prepared=window.SarniTargetStages?.prepareForSave?.()||
+    {ok:true,text:inline.elements.details.value.trim()};
+  if(!prepared.ok){
+   $('sarniTargetInlineStatus').textContent=prepared.error||'Check all five stages before saving.';
+   return;
+  }
   form.reset();
   $('stickyNoteId').value=window.SarniTargetStages?.editingId||'';
   $('stickyNoteType').value=inline.elements.type.value;
   $('stickyNoteTitle').value=title;
   $('stickyNoteDueDate').value=inline.elements.dueDate.value;
-  $('stickyNoteText').value=inline.elements.details.value.trim();
+  $('stickyNoteText').value=prepared.text;
   $('sarniTargetInlineSave').disabled=true;
-  $('sarniTargetInlineStatus').textContent='Sending to SarNi…';
+  $('sarniTargetInlineStatus').textContent='Saving to SarNi…';
   // The existing authenticated listener handles saving, permission checks,
   // rerendering, and errors. Never create a second record-writing route.
   try{form.requestSubmit();}catch(err){$('sarniTargetInlineStatus').textContent='Save could not start: '+(err.message||err);$('sarniTargetInlineSave').disabled=false;return;}
-  // Existing save handler is asynchronous, but doesn't emit a completion event.
-  // Do not claim that the record was saved without its rendered appearance.
-  $('sarniTargetInlineStatus').textContent='Save requested. Verify the new entry below.';
-  $('sarniTargetInlineSave').disabled=false;
+  // Wait for the authenticated backend save result before reporting success.
+  // The normal app sends the result event; errors stay visible for correction.
  });
 
  $('sarniTargetAdd').addEventListener('click',()=>begin('TARGET'));
@@ -148,8 +153,21 @@ function start(){
   if(e.target.closest('[data-section],.mobile-nav-item,.sarni-mobile-dock'))close();
  },true);
  document.addEventListener('keydown',e=>{if(open&&e.key==='Escape'&&$('modalBackdrop')?.classList.contains('hidden'))close();});
- const observer=new MutationObserver(()=>{if(open)render();});
- ['stickyNotesList','stickyTargetHistoryList','stickyReminderHistoryList'].forEach(id=>{const el=$(id);if(el)observer.observe(el,{childList:true,subtree:false});});
+ document.addEventListener('sarni:sticky-rendered',()=>{if(open)render();});
+ document.addEventListener('sarni:sticky-save-result',e=>{
+  if(!open||inline.hidden)return;
+  const save=$('sarniTargetInlineSave'),status=$('sarniTargetInlineStatus');
+  save.disabled=false;
+  if(e.detail?.ok){
+   inline.hidden=true;
+   inline.reset();
+   if(window.SarniTargetStages)window.SarniTargetStages.editingId='';
+   status.textContent='';
+   render();
+  }else{
+   status.textContent=e.detail?.error||'Save was unsuccessful. Review the form and try again.';
+  }
+ });
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
