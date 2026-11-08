@@ -202,8 +202,15 @@ function boot(){
    const id=card.querySelector('[data-sticky-edit]')?.getAttribute('data-sticky-edit')||'';
    const stored=window.SarniTargetEditorBridge?.getNote?.(id);
    const original=String(stored?.text??card.querySelector('.sticky-full-text')?.textContent??'').trim();
+   const decoded=window.SarniTargetStages?.decode?.(original);
+   const normalize=v=>String(v||'').trim().replace(/\s+/g,' ');
+   const canonical=decoded?.structured
+    ?JSON.stringify([normalize(decoded.detail),decoded.stages.map(x=>[
+       normalize(x.name),x.date||'',!!x.done,x.completedOn||'',normalize(x.remark)
+      ])])
+    :normalize(original);
    const due=String(stored?.dueDate||'');
-   const signature=JSON.stringify([title,due,original]);
+   const signature=JSON.stringify([title,due,canonical]);
    if(seen.has(signature)){hiddenDuplicates++;return false;}
    seen.add(signature);return true;
   });
