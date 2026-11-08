@@ -107,8 +107,12 @@ function init(){
  };
  $('s20Search').addEventListener('input',stats);
  editor.addEventListener('input',()=>{if(!visible)return;dirty=true;stats();});
- editor.addEventListener('keyup',()=>{if(visible)remember();});
- editor.addEventListener('mouseup',()=>{if(visible)remember();});
+ // Throttle caret snapshots to avoid traversing text nodes on every keystroke.
+ let caretTimer=null;
+ const queueCaret=()=>{if(!visible)return;clearTimeout(caretTimer);caretTimer=setTimeout(remember,1200);};
+ editor.addEventListener('keyup',queueCaret);
+ editor.addEventListener('mouseup',queueCaret);
+ editor.addEventListener('blur',()=>{clearTimeout(caretTimer);if(visible)remember();});
  const obs=new MutationObserver(()=>{
   const isOpen=!modal.classList.contains('hidden');
   if(!isOpen){if(visible)remember();visible=false;clearInterval(interval);interval=null;modal.classList.remove('s20-max');return;}
