@@ -5,6 +5,7 @@ const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const archived=b=>{const s=String(b.status||'').toUpperCase();return s==='ARCHIVED'||s==='ARCHIVE'||b.isArchived===true||Boolean(b.archivedAt)};
 let mode='active',books=[],loading=false;
 const css=document.createElement('style');css.textContent=`
+#booksGrid[hidden]{display:none!important}
 #sarniBookArchiveTabs{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:9px 0 14px}
 #sarniBookArchiveTabs button{border:1px solid #d4d4ed;border-radius:10px;background:#f7f7fe;color:#51437d;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer}
 #sarniBookArchiveTabs button[aria-selected="true"]{background:#e7e1ff;color:#4c2ca0;border-color:#9987d8}
