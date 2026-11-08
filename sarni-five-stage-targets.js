@@ -46,21 +46,35 @@ function boot(){
   $form.elements.details.value=packed;
   if(editId)$('stickyNoteId').value=editId;
  },true);
- // In the workspace, intercept target Edit and reuse the existing core
- // handler to load all original fields before opening the inline table.
+ // Edit directly from authenticated in-memory records. No legacy modal,
+ // synthetic clicks, or recursive click interception.
  workspace.addEventListener('click',event=>{
   const btn=event.target.closest('.sticky-note-card.target [data-sticky-edit]');
   if(!btn)return;
   event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
   const id=btn.dataset.stickyEdit;
-  const original=[...$('stickyNotesList').querySelectorAll('[data-sticky-edit]')].find(b=>b.dataset.stickyEdit===id);
-  if(!original)return;
-  original.click();
-  const fields={id:$('stickyNoteId').value,type:$('stickyNoteType').value,title:$('stickyNoteTitle').value,due:$('stickyNoteDueDate').value,parsed:decode($('stickyNoteText').value)};
-  $('modalBackdrop').classList.add('hidden');$('modalBackdrop').setAttribute('aria-hidden','true');$('stickyNoteModal').classList.add('hidden');
-  $form.reset();$form.hidden=false;editId=fields.id;window.SarniTargetStages.editingId=editId;
-  $form.elements.type.value=fields.type;$form.elements.title.value=fields.title;$form.elements.dueDate.value=fields.due;$form.elements.details.value=fields.parsed.detail;
-  fill(fields.parsed.stages);visibility();$('sarniTargetInlineHeading').textContent='Edit Target';$('sarniTargetInlineSave').textContent='Save Target';$form.scrollIntoView({block:'nearest'});
+  const note=window.SarniTargetEditorBridge?.getNote?.(id);
+  if(!note){
+   const status=$('sarniTargetInlineStatus');
+   if(status)status.textContent='Could not load this target. Refresh SarNi and try again.';
+   return;
+  }
+  const parsed=decode(note.text);
+  $form.reset();
+  $form.hidden=false;
+  editId=note.id;
+  window.SarniTargetStages.editingId=editId;
+  $form.elements.type.value='TARGET';
+  $form.elements.title.value=note.title;
+  $form.elements.dueDate.value=note.dueDate;
+  $form.elements.details.value=parsed.detail;
+  fill(parsed.stages);
+  visibility();
+  $('sarniTargetInlineHeading').textContent='Edit Target';
+  $('sarniTargetInlineSave').textContent='Save Changes';
+  $('sarniTargetInlineStatus').textContent='';
+  $form.scrollIntoView({block:'nearest',behavior:'smooth'});
+  $form.elements.title.focus({preventScroll:true});
  },true);
 
  const escapeHtml=v=>String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
