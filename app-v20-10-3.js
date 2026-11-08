@@ -1273,6 +1273,13 @@ function renderStickyNotes(){
 // Read-only access to current authenticated Target & Reminder entries for the
 // dedicated editor. No separate backend call or duplicate record store.
 window.SarniTargetEditorBridge={
+  listNotes(){
+    if(!state.token)return [];
+    return (state.stickyNotes||[]).map(note=>({
+      id:String(note.id||''),noteType:String(note.noteType||'TARGET'),
+      title:String(note.title||''),dueDate:String(note.dueDate||''),text:String(note.text||'')
+    }));
+  },
   getNote(id){
     if(!state.token||!id)return null;
     const note=(state.stickyNotes||[]).find(n=>String(n.id)===String(id));
