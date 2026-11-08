@@ -43,7 +43,7 @@ function boot(){
    return {ok:false,error:'Write what you want to achieve in each of the five stages.'};
   }
   const detail=decode($form.elements.details.value).detail.trim();
-  const packed=detail+(detail?'\\n\\n':'')+A+'\\n'+JSON.stringify(entries)+'\\n'+Z;
+  const packed=detail+(detail?'\n\n':'')+A+'\n'+JSON.stringify(entries)+'\n'+Z;
   if(packed.length>5000)return {ok:false,error:'Shorten details or stage remarks before saving.'};
   return {ok:true,text:packed};
  };
