@@ -156,6 +156,9 @@ function boot(){
  const duplicateStyle=document.createElement('style');
  duplicateStyle.textContent='.sch-duplicate-info{grid-column:1/-1;font-size:11px;color:#6b597d;background:#f7f2ff;border:1px solid #e5def4;padding:5px 8px;border-radius:7px;line-height:1.3}';
  document.head.append(duplicateStyle);
+ const targetReadability=document.createElement('style');
+ targetReadability.textContent='#sarniHomeTargetRowsPanel .sch-target-table{min-width:900px!important;table-layout:fixed!important}#sarniHomeTargetRowsPanel .sch-target-table td,#sarniHomeTargetRowsPanel .sch-target-table th{vertical-align:middle!important}#sarniHomeTargetRowsPanel .sch-target-stage .sch-stage-achievement{white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;line-height:1.35!important}#sarniHomeTargetRowsPanel .sch-target-stage .sch-stage-remark{white-space:normal!important;overflow-wrap:anywhere!important;line-height:1.3!important}#sarniHomeTargetRowsPanel .sch-target-stage td:nth-last-child(3){white-space:nowrap!important}#sarniHomeTargetRowsPanel .sch-table-wrap{overflow-x:auto!important;max-width:100%!important}';
+ document.head.append(targetReadability);
  const noStagesStyle=document.createElement('style');
  noStagesStyle.textContent='.sch-target-stage.sch-no-stages td{padding:5px 7px!important;height:auto!important;min-height:0!important;line-height:1.25!important;font-size:11px!important}.sch-target-stage.sch-no-stages .sch-stage-achievement{font-weight:650!important;color:#738099!important}.sch-target-stage.sch-no-stages .sch-stage-number{width:21px;height:21px}.sch-target-stage.sch-no-stages .sch-tag{font-size:10px}.sch-target-name-cell .sch-target-percent{font-size:10px}';
  document.head.append(noStagesStyle);
