@@ -20,6 +20,13 @@ function start(){
    <button type="button" id="sarniReminderAdd">＋ New Reminder</button>
    <input id="sarniTargetSearch" type="search" placeholder="Search targets and reminders…" aria-label="Search targets and reminders"/>
  </div>
+ <form id="sarniTargetInlineForm" class="sarni-target-inline" hidden>
+   <div class="sarni-target-inline-heading"><strong id="sarniTargetInlineHeading">New Target</strong><button type="button" id="sarniTargetInlineCancel">✕ Cancel</button></div>
+   <label>Title<input name="title" type="text" maxlength="120" required placeholder="What do you want to achieve?"/></label>
+   <div class="sarni-target-inline-grid"><label>Due date (optional)<input name="dueDate" type="date"/></label><label>Type<select name="type"><option value="TARGET">Target</option><option value="REMINDER">Reminder</option></select></label></div>
+   <label>Details (optional)<textarea name="details" rows="3" maxlength="5000" placeholder="Write details or important next actions"></textarea></label>
+   <div class="sarni-target-inline-footer"><button type="submit" id="sarniTargetInlineSave">Save Target</button><span id="sarniTargetInlineStatus" role="status"></span></div>
+ </form>
  <div class="sarni-target-stats" id="sarniTargetStats"></div>
  <div class="sarni-target-tabs" role="tablist" aria-label="Target workspace views">
   <button type="button" data-sarni-target-tab="TARGET">Active Targets</button>
@@ -42,6 +49,18 @@ function start(){
  .sarni-target-actions button{border:0;border-radius:11px;padding:11px 14px;font-weight:800;background:#5e4aca;color:white;cursor:pointer}
  #sarniReminderAdd{background:#127e8b}
  #sarniTargetSearch{min-width:170px;flex:1;border:1px solid #ccd7ea;border-radius:11px;background:white;padding:11px;font-size:14px}
+ .sarni-target-inline{display:grid;gap:10px;border:1px solid #cdc4f4;border-radius:14px;padding:15px;margin:12px 0;background:white}
+ .sarni-target-inline[hidden]{display:none!important}
+ .sarni-target-inline-heading,.sarni-target-inline-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+ .sarni-target-inline-heading strong{color:#49339e;font-size:17px}
+ .sarni-target-inline-heading button{border:1px solid #ddd6f3;background:#fff;padding:8px 11px;border-radius:9px;cursor:pointer}
+ .sarni-target-inline label{display:grid;gap:5px;font-weight:750;font-size:13px;color:#3b4660}
+ .sarni-target-inline input,.sarni-target-inline textarea,.sarni-target-inline select{box-sizing:border-box;width:100%;min-height:42px;padding:9px 10px;border:1px solid #cfd8e8;border-radius:9px;font:inherit;background:#fff;color:#26334a}
+ .sarni-target-inline-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .sarni-target-inline-footer button{background:#5e4aca;border:0;border-radius:10px;color:#fff;font-weight:800;padding:11px 20px;cursor:pointer}
+ .sarni-target-inline-footer button:disabled{opacity:.55}
+ #sarniTargetInlineStatus{font-size:12px;color:#66758f}
+ @media(max-width:480px){.sarni-target-inline-grid{grid-template-columns:1fr}}
  .sarni-target-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:15px 0}
  .sarni-target-stat{background:#fff;border:1px solid #e0e5f4;padding:12px 15px;border-radius:13px}
  .sarni-target-stat strong{display:block;font-size:25px;color:#2d3387}
@@ -85,32 +104,42 @@ function start(){
  $('sarniTargetsClose').addEventListener('click',close);
  sheet.querySelectorAll('[data-sarni-target-tab]').forEach(btn=>btn.addEventListener('click',()=>{current=btn.dataset.sarniTargetTab;render();}));
  $('sarniTargetSearch').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();render();});
+ const inline=$('sarniTargetInlineForm');
  function begin(type){
-  const backdrop=$('modalBackdrop'),modal=$('stickyNoteModal'),form=$('stickyNoteForm');
-  if(!backdrop||!modal||!form){
-   alert('The Target & Reminder form is unavailable. Please refresh SarNi and sign in again.');
-   return;
+  if(!inline)return;
+  inline.reset();inline.hidden=false;inline.elements.type.value=type;
+  $('sarniTargetInlineHeading').textContent=type==='TARGET'?'New Target':'New Reminder';
+  $('sarniTargetInlineSave').textContent=type==='TARGET'?'Save Target':'Save Reminder';
+  $('sarniTargetInlineStatus').textContent='';
+  inline.elements.title.focus();
+  inline.scrollIntoView({block:'nearest',behavior:'smooth'});
+ }
+ $('sarniTargetInlineCancel').addEventListener('click',()=>{inline.hidden=true;inline.reset();});
+ inline.addEventListener('submit',e=>{
+  e.preventDefault();
+  const form=$('stickyNoteForm');
+  if(!form||!$('stickyNoteTitle')||!$('stickyNoteType')){
+   $('sarniTargetInlineStatus').textContent='Existing backend form unavailable. Refresh and sign in again.';return;
   }
-  // The management workspace is a fixed overlay. Hide it while editing, so
-  // it cannot cover the modal or intercept clicks in different layout modes.
-  sheet.style.display='none';
-  const input=$('stickyNoteId');if(input)input.value='';
+  const title=inline.elements.title.value.trim();
+  if(!title){$('sarniTargetInlineStatus').textContent='Please enter a title.';return;}
   form.reset();
-  const select=$('stickyNoteType');if(select)select.value=type;
-  const title=$('stickyNoteModalTitle');if(title)title.textContent=type==='TARGET'?'New Target':'New Reminder';
-  const save=$('saveStickyNoteBtn');if(save)save.textContent=type==='TARGET'?'Save Target':'Save Reminder';
-  backdrop.classList.remove('hidden');
-  backdrop.setAttribute('aria-hidden','false');
-  backdrop.querySelectorAll('.modal').forEach(m=>m.classList.add('hidden'));
-  modal.classList.remove('hidden');
-  requestAnimationFrame(()=>$('stickyNoteTitle')?.focus());
- }
- const backdrop=$('modalBackdrop');
- if(backdrop){
-  new MutationObserver(()=>{
-   if(open&&backdrop.classList.contains('hidden'))sheet.style.display='block';
-  }).observe(backdrop,{attributes:true,attributeFilter:['class']});
- }
+  $('stickyNoteId').value='';
+  $('stickyNoteType').value=inline.elements.type.value;
+  $('stickyNoteTitle').value=title;
+  $('stickyNoteDueDate').value=inline.elements.dueDate.value;
+  $('stickyNoteText').value=inline.elements.details.value.trim();
+  $('sarniTargetInlineSave').disabled=true;
+  $('sarniTargetInlineStatus').textContent='Sending to SarNi…';
+  // The existing authenticated listener handles saving, permission checks,
+  // rerendering, and errors. Never create a second record-writing route.
+  try{form.requestSubmit();}catch(err){$('sarniTargetInlineStatus').textContent='Save could not start: '+(err.message||err);$('sarniTargetInlineSave').disabled=false;return;}
+  // Existing save handler is asynchronous, but doesn't emit a completion event.
+  // Do not claim that the record was saved without its rendered appearance.
+  $('sarniTargetInlineStatus').textContent='Save requested. Verify the new entry below.';
+  $('sarniTargetInlineSave').disabled=false;
+ });
+
  $('sarniTargetAdd').addEventListener('click',()=>begin('TARGET'));
  $('sarniReminderAdd').addEventListener('click',()=>begin('REMINDER'));
  document.addEventListener('click',e=>{
