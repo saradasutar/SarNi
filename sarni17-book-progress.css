@@ -1,0 +1,96 @@
+/* SarNi Book Progress 17 — accurate manuscript dashboard and phone-friendly layout.
+ * Presentation only. The underlying chapter and activity records are unchanged. */
+#booksSection .book-detail-grid{
+ gap:12px!important;
+ align-items:stretch;
+}
+#booksSection .book-detail-grid>.panel{
+ padding:clamp(14px,2vw,20px)!important;
+ min-width:0;
+}
+#booksSection .book-detail-grid>.panel .panel-head{
+ display:flex;align-items:center;justify-content:space-between;
+ flex-wrap:wrap;gap:8px;margin-bottom:10px!important;
+}
+#booksSection .book-detail-grid>.panel h3{
+ font-size:clamp(18px,2vw,21px);
+ letter-spacing:-.025em;line-height:1.28;
+}
+#booksSection .book-progress-summary{
+ display:flex;align-items:center;justify-content:space-between;
+ flex-wrap:wrap;gap:7px;margin:6px 0 12px;
+}
+#booksSection #bookProgressTotalWords{font-size:14px;font-weight:760;color:#3d4d72}
+#booksSection #bookProgressStreak{font-size:12px;color:#73809b}
+#booksSection .sarni-book-progress-real{display:grid;gap:10px;margin-bottom:13px}
+#booksSection .sarni-book-progress-cards{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;
+}
+#booksSection .sbp-stat{
+ border:1px solid var(--sbp-border,#dddcef);
+ border-radius:13px;
+ padding:11px 10px;
+ background:var(--sbp-bg,#f7f5ff);
+ display:flex;flex-direction:column;align-items:flex-start;
+ gap:5px;min-width:0;
+}
+#booksSection .sbp-violet{--sbp-bg:#f4efff;--sbp-border:#e4d7fa;--sbp-color:#6745aa}
+#booksSection .sbp-teal{--sbp-bg:#edf9f7;--sbp-border:#ceeae4;--sbp-color:#177b70}
+#booksSection .sbp-amber{--sbp-bg:#fff7e9;--sbp-border:#f1dfbd;--sbp-color:#9b641f}
+#booksSection .sbp-stat span{font-size:11px;font-weight:800;color:var(--sbp-color);line-height:1.3}
+#booksSection .sbp-stat strong{
+ font-size:clamp(18px,1.9vw,25px);font-weight:850;
+ letter-spacing:-.04em;line-height:1.1;color:#263855;
+ overflow-wrap:anywhere;
+ font-variant-numeric:tabular-nums;
+}
+#booksSection .sbp-stat small{font-size:10px;line-height:1.4;color:#6a7990}
+#booksSection .sbp-goal{
+ border:1px solid #e1e5ef;background:#fbfcff;
+ border-radius:12px;padding:10px 12px;
+}
+#booksSection .sbp-goal-head{
+ display:flex;gap:8px;align-items:center;justify-content:space-between;
+ font-size:12px;color:#56657e;font-weight:720;
+}
+#booksSection .sbp-goal-head strong{color:#6145a1;font-size:13px}
+#booksSection .sbp-track{
+ overflow:hidden;margin-top:8px;width:100%;height:9px;
+ border-radius:99px;background:#e9e7f0;
+}
+#booksSection #sbpGoalFill{
+ height:100%;width:0;max-width:100%;border-radius:99px;
+ background:linear-gradient(90deg,#8565d5,#428fbb,#39a78e);
+ transition:width .22s ease;
+}
+#booksSection .sbp-help{
+ margin:0;font-size:11px;line-height:1.55;color:#788299;
+}
+#booksSection #bookProgressChart{
+ padding:7px 0 0;opacity:.85;
+}
+#booksSection .book-collab-list{margin-top:8px}
+#booksSection .book-collab-row{
+ border-radius:11px;padding:10px 12px;
+}
+#booksSection .book-detail-view>.panel-head{
+ padding:13px 16px!important;
+}
+@media(max-width:740px){
+ #booksSection .book-detail-grid{grid-template-columns:1fr!important;gap:11px!important}
+ #booksSection .book-detail-grid>.panel{
+ padding:14px!important;border-radius:15px!important;
+ }
+ #booksSection .sarni-book-progress-cards{gap:7px}
+ #booksSection .sbp-stat{padding:10px 8px}
+ #booksSection .sbp-stat strong{font-size:clamp(18px,5vw,24px)}
+ #booksSection .sbp-stat span{font-size:10px}
+ #booksSection .sbp-stat small{font-size:10px}
+ #booksSection .book-detail-grid>.panel .panel-head{margin-bottom:7px!important}
+ #booksSection .book-progress-summary{margin:3px 0 8px}
+}
+@media(max-width:380px){
+ #booksSection .sarni-book-progress-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #booksSection .sbp-stat:last-child{grid-column:1/-1}
+}
+@media(prefers-reduced-motion:reduce){#booksSection #sbpGoalFill{transition:none!important}}
