@@ -208,3 +208,31 @@
   #appView{--s22-paper:#fff;--s22-surface:#fff}
   #appView .page-section article.panel{box-shadow:none!important}
 }
+
+/* Respect SarNi's established dark-mode selector without forcing light cards. */
+body.theme-dark #appView{
+ --s22-paper:#121d2c;
+ --s22-surface:#1c2b3d;
+ --s22-ink:#edf3fb;
+ --s22-muted:#b4c3d4;
+ --s22-border:#34475a;
+ --s22-shadow:0 4px 20px rgba(0,0,0,.16);
+}
+body.theme-dark #appView .topbar{
+ background:linear-gradient(180deg,rgba(18,29,44,.97),rgba(18,29,44,.93));
+ border-color:#34475a;
+}
+body.theme-dark #appView .page-section>.panel,
+body.theme-dark #appView .page-section article.panel,
+body.theme-dark #appView .personal-home-content .panel{
+ background:var(--s22-surface);
+ color:var(--s22-ink);
+}
+body.theme-dark #appView .panel-head :is(h2,h3){
+ color:var(--s22-ink);
+}
+body.theme-dark #appView .secondary-button{
+ background:#24374b;
+ color:#e5edf7;
+ border-color:#3e5368;
+}
