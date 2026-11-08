@@ -4,8 +4,8 @@
 function setup(){
  const get=id=>document.getElementById(id),view=get('bookDetailView'),chaptersEl=get('bookChaptersList'),modal=get('chapterModal');
  if(!view||!chaptersEl||!modal||get('sarni18Control'))return;
- let preferences={theme:'classic',font:18,width:'medium'};
- try{const p=JSON.parse(localStorage.getItem('sarni18-style')||'{}');if(['classic','modern','sepia','minimal'].includes(p.theme))preferences.theme=p.theme;if([16,18,20,22].includes(Number(p.font)))preferences.font=Number(p.font);if(['narrow','medium','wide'].includes(p.width))preferences.width=p.width;}catch(e){}
+ let preferences={theme:'classic',font:18,width:'medium',decoration:'monochrome'};
+ try{const p=JSON.parse(localStorage.getItem('sarni18-style')||'{}');if(['classic','modern','sepia','minimal'].includes(p.theme))preferences.theme=p.theme;if([16,18,20,22].includes(Number(p.font)))preferences.font=Number(p.font);if(['narrow','medium','wide'].includes(p.width))preferences.width=p.width;if(['monochrome','corner','frame','none'].includes(p.decoration))preferences.decoration=p.decoration;}catch(e){}
  const style=document.createElement('style');
  style.textContent=[
  '#sarni18Control{display:grid;gap:10px;background:linear-gradient(120deg,#fbf8ff,#f2f8ff);border:1px solid #e0d9f1;border-radius:16px;padding:14px;margin:12px 0}',
@@ -45,7 +45,8 @@ function setup(){
  panel.innerHTML='<div class="s18row"><strong>✦ Author Studio</strong><button id="s18Continue" type="button">✍ Continue writing</button></div>'
  +'<div class="s18row"><label>Page design <select id="s18Design"><option value="classic">Classic Book</option><option value="modern">Modern</option><option value="sepia">Warm Sepia</option><option value="minimal">Minimal</option></select></label>'
  +'<label>Text size <select id="s18Size"><option value="16">16 px</option><option value="18">18 px</option><option value="20">20 px</option><option value="22">22 px</option></select></label>'
- +'<label>Page width <select id="s18Width"><option value="narrow">Narrow</option><option value="medium">Comfortable</option><option value="wide">Wide</option></select></label></div>'
+ +'<label>Page width <select id="s18Width"><option value="narrow">Narrow</option><option value="medium">Comfortable</option><option value="wide">Wide</option></select></label>'
+ +'<label>Page border <select id="s18Decoration"><option value="monochrome">B&W Corner Lines</option><option value="corner">Subtle Corners</option><option value="frame">Fine Page Frame</option><option value="none">Plain White</option></select></label></div>'
  +'<div class="s18row"><input id="s18Find" type="search" placeholder="Search chapters…" aria-label="Search chapters"/><button id="s18Read" type="button">📖 Read book</button><button id="s18Toc" type="button">Contents</button></div><span class="s18hint" id="s18Message">Your saved text stays unchanged when changing page designs.</span>';
  const heading=view.querySelector('.panel-head');if(heading)heading.after(panel);else view.prepend(panel);
  const reader=document.createElement('div');reader.id='sarni18Reader';reader.hidden=true;reader.setAttribute('role','dialog');reader.setAttribute('aria-modal','true');
@@ -63,15 +64,16 @@ function setup(){
  let activeBook='',items=[],page=0,wasFocused=null;
  const persist=()=>{try{localStorage.setItem('sarni18-style',JSON.stringify(preferences));}catch(e){}};
  function apply(){
-  get('s18Design').value=preferences.theme;get('s18Size').value=String(preferences.font);get('s18Width').value=preferences.width;
-  for(const cl of Array.from(modal.classList)){if(/^s18-(classic|modern|sepia|minimal|narrow|medium|wide)$/.test(cl))modal.classList.remove(cl);}
-  for(const cl of Array.from(reader.classList)){if(/^s18-(classic|modern|sepia|minimal)$/.test(cl))reader.classList.remove(cl);}
-  modal.classList.add('s18-'+preferences.theme,'s18-'+preferences.width);reader.classList.add('s18-'+preferences.theme);
+  get('s18Design').value=preferences.theme;get('s18Size').value=String(preferences.font);get('s18Width').value=preferences.width;get('s18Decoration').value=preferences.decoration;
+  for(const cl of Array.from(modal.classList)){if(/^s18-(classic|modern|sepia|minimal|narrow|medium|wide|dec-monochrome|dec-corner|dec-frame|dec-none)$/.test(cl))modal.classList.remove(cl);}
+  for(const cl of Array.from(reader.classList)){if(/^s18-(classic|modern|sepia|minimal|dec-monochrome|dec-corner|dec-frame|dec-none)$/.test(cl))reader.classList.remove(cl);}
+  modal.classList.add('s18-'+preferences.theme,'s18-'+preferences.width,'s18-dec-'+preferences.decoration);reader.classList.add('s18-'+preferences.theme,'s18-dec-'+preferences.decoration);
   modal.style.setProperty('--s18-font',preferences.font+'px');get('s18Text').style.fontSize=preferences.font+'px';
  }
  get('s18Design').onchange=e=>{preferences.theme=e.target.value;persist();apply();};
  get('s18Size').onchange=e=>{preferences.font=Number(e.target.value);persist();apply();};
  get('s18Width').onchange=e=>{preferences.width=e.target.value;persist();apply();};
+ get('s18Decoration').onchange=e=>{preferences.decoration=['monochrome','corner','frame','none'].includes(e.target.value)?e.target.value:'monochrome';persist();apply();};
  apply();
  function filter(){
   const q=get('s18Find').value.trim().toLocaleLowerCase();let count=0;
@@ -116,6 +118,10 @@ function setup(){
  const close=()=>{reader.hidden=true;wasFocused?.focus?.();};
  get('s18Close').onclick=close;
  document.addEventListener('keydown',e=>{if(!reader.hidden&&e.key==='Escape'){e.preventDefault();close();}});
+ // Reader print is a deliberate user action. Print-only CSS hides dashboard controls.
+ const printBtn=document.createElement('button');printBtn.type='button';printBtn.id='s18Print';printBtn.textContent='Print';
+ get('s18Close')?.before(printBtn);
+ printBtn.onclick=()=>{if(!reader.hidden)window.print();};
  get('s18Toc').onclick=()=>{
   if(!items.length){get('s18Message').textContent='No chapters loaded';return;}
   const d=window.SarniAuthorBook?.getCurrent?.(),text=[d?.book?.title||'Book','Table of Contents','',...items.map((c,i)=>(i+1)+'. '+c.title)].join('\n');
