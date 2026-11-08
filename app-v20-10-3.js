@@ -3013,6 +3013,8 @@ function renderBookDetailView(){
   }
 
   renderBookProgress(d);
+  // Signal a complete manuscript render; the Author Studio enhances this view once.
+  document.dispatchEvent(new CustomEvent('sarni:book-rendered',{detail:{bookId:String(b.id||'')}}));
   // SarNi Book Safety: show a transparent discrepancy instead of hiding old records.
   if(els.bookChaptersList){
     const pane=els.bookChaptersList.closest('article.panel');
@@ -3040,6 +3042,18 @@ function renderBookDetailView(){
     }
   }
 }
+// Only current, authorized book detail already loaded for the signed-in session.
+// Never exposes the login token, backend address, or private share keys.
+window.SarniAuthorBook={
+  getCurrent:()=>state.activeBookDetail,
+  openChapter:id=>{
+    const record=state.activeBookDetail?.chapters?.find(c=>String(c.id)===String(id));
+    if(!record)return false;
+    openChapterModal(record);
+    return true;
+  }
+};
+
 function renderBookProgress(d){
   // All displayed figures derive from SAVED chapter records automatically.
   // Last-modified dates provide an honest recent-activity indicator, not a
