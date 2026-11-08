@@ -4,11 +4,34 @@ const A='[SARNI_TARGET_STAGES_V1]', Z='[/SARNI_TARGET_STAGES_V1]';
 const defaults=['','','','',''];
 const fresh=()=>defaults.map(name=>({name,date:'',done:false,completedOn:'',remark:''}));
 function decode(value){
- const t=String(value||''),p=t.indexOf(A),q=t.indexOf(Z,p+A.length);
- if(p<0||q<0)return {detail:t,stages:fresh(),structured:false};
- try{let x=JSON.parse(t.slice(p+A.length,q).trim());if(!Array.isArray(x)||x.length!==5)throw Error('Invalid');
- return {detail:(t.slice(0,p)+t.slice(q+Z.length)).trim(),stages:x.map((s,i)=>({name:String(s.name||defaults[i]),date:String(s.date||''),done:!!s.done,completedOn:String(s.completedOn||''),remark:String(s.remark||'')})),structured:true};
- }catch(e){return {detail:t,stages:fresh(),structured:false};}
+ // Older frontend builds could append more than one valid metadata block to
+ // Details. Recover the latest five-stage set and remove all valid blocks
+ // from the visible description without altering the stored record.
+ let remaining=String(value||'');
+ let recovered=null,offset=0;
+ while(offset<remaining.length){
+  const a=remaining.indexOf(A,offset);
+  if(a<0)break;
+  const z=remaining.indexOf(Z,a+A.length);
+  if(z<0)break;
+  try{
+   const rows=JSON.parse(remaining.slice(a+A.length,z).trim());
+   if(!Array.isArray(rows)||rows.length!==5)throw Error('Invalid stage count');
+   recovered=rows.map((x,i)=>({
+    name:String(x.name||defaults[i]),
+    date:String(x.date||''),
+    done:!!x.done,
+    completedOn:String(x.completedOn||''),
+    remark:String(x.remark||'')
+   }));
+   remaining=remaining.slice(0,a)+remaining.slice(z+Z.length);
+   offset=a;
+  }catch(_){
+   // Preserve unrecognised metadata rather than silently deleting user data.
+   offset=z+Z.length;
+  }
+ }
+ return {detail:remaining.trim(),stages:recovered||fresh(),structured:!!recovered};
 }
 window.SarniTargetStages={decode};
 function boot(){
