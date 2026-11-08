@@ -17,6 +17,10 @@ function setup(){
  '#sarni18Control input{flex:1 1 160px}',
  '#sarni18Control #s18Continue{background:#6750ae;color:white;border-color:#6750ae}',
  '#sarni18Control .s18hint{font:600 12px system-ui;color:#70809a}',
+ '#booksSection .s18-collapsed #bookCollabList{display:none}',
+ '#booksSection .s18-collapsed{padding-bottom:11px!important}',
+ '#booksSection #s18CollabToggle{background:#f4f5fd;border:1px solid #d6dcec;border-radius:8px;padding:7px 10px;font:700 12px system-ui;color:#3f5480;cursor:pointer}',
+ '@media(max-width:800px){body:has(#chapterModal:not(.hidden)) #sarniMobileDock{display:none!important}body:has(#chapterModal:not(.hidden)) #sarniMobileQuickAdd{display:none!important}}',
  '#chapterModal.s18-classic #chapterContent{font-family:Georgia,serif!important;background:#fff!important;color:#25334c!important}',
  '#chapterModal.s18-modern #chapterContent{font-family:system-ui,sans-serif!important;background:#fff!important;color:#26374c!important}',
  '#chapterModal.s18-sepia #chapterContent{font-family:Georgia,serif!important;background:#fff7e8!important;color:#503d2d!important}',
@@ -47,6 +51,15 @@ function setup(){
  const reader=document.createElement('div');reader.id='sarni18Reader';reader.hidden=true;reader.setAttribute('role','dialog');reader.setAttribute('aria-modal','true');
  reader.innerHTML='<div class="s18sheet"><div class="s18header"><span class="s18title" id="s18ReaderTitle">Book preview</span><div><button id="s18Prev" type="button">Previous</button> <button id="s18Next" type="button">Next</button> <button id="s18Close" type="button">Close</button></div></div><div class="s18text" id="s18Text"></div></div>';
  document.body.append(reader);
+ // Keep chapters high on small screens: collapse collaborator details by default.
+ const collabList=get('bookCollabList'),collabCard=collabList?.closest('article.panel');
+ if(collabCard&&!get('s18CollabToggle')){
+   const btn=document.createElement('button');btn.id='s18CollabToggle';btn.type='button';
+   collabCard.querySelector('.panel-head')?.append(btn);
+   let closed=true;
+   const render=()=>{collabCard.classList.toggle('s18-collapsed',closed);btn.textContent=closed?'Show collaborators':'Hide collaborators';btn.setAttribute('aria-expanded',String(!closed));};
+   btn.onclick=()=>{closed=!closed;render();};render();
+ }
  let activeBook='',items=[],page=0,wasFocused=null;
  const persist=()=>{try{localStorage.setItem('sarni18-style',JSON.stringify(preferences));}catch(e){}};
  function apply(){
