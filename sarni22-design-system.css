@@ -1,0 +1,210 @@
+/* SarNi Design System 22 — coordinated presentation layer (PC + mobile)
+ * Safe scope: signed-in app only. Does NOT change routing, permissions, data,
+ * manuscript formatting, storage, login behavior or Apps Script requests.
+ * Intended as the single final stylesheet after legacy styles. */
+#appView{
+  --s22-paper:#f6f8fb;
+  --s22-surface:#ffffff;
+  --s22-ink:#20334b;
+  --s22-muted:#63748a;
+  --s22-border:#e0e7ef;
+  --s22-teal:#087d71;
+  --s22-teal-soft:#e8f5f2;
+  --s22-navy:#15283e;
+  --s22-radius:15px;
+  --s22-shadow:0 4px 20px rgba(24,42,70,.055);
+  color:var(--s22-ink);
+}
+#appView .main-content{
+  background:var(--s22-paper);
+  min-width:0;
+  padding-left:clamp(16px,2.5vw,34px);
+  padding-right:clamp(16px,2.5vw,34px);
+}
+#appView .topbar{
+  min-height:82px;
+  gap:12px;
+  margin-bottom:12px;
+  background:linear-gradient(180deg,rgba(246,248,251,.97),rgba(246,248,251,.93));
+  border-bottom:1px solid rgba(217,227,238,.72);
+  backdrop-filter:blur(9px);
+}
+#appView .topbar .topbar-title-line{gap:9px}
+#appView .topbar h1,#appView #pageTitle{
+  font-size:clamp(20px,1.8vw,27px);
+  line-height:1.16;
+  letter-spacing:-.035em;
+  color:var(--s22-ink);
+}
+#appView .topbar .eyebrow{font-size:10px;letter-spacing:.095em}
+#appView .topbar .dashboard-version-chip{
+  box-shadow:none;
+  border-radius:999px;
+  font-size:10px;
+  padding:5px 9px;
+}
+#appView .sidebar{
+  background:linear-gradient(180deg,#142d41 0%,#12263d 56%,#1b2945 100%);
+  border-right:1px solid #24445a;
+}
+#appView .side-brand{margin-bottom:10px}
+#appView .side-brand strong{letter-spacing:-.03em}
+#appView .sarni-sidebar-label{letter-spacing:.14em}
+#appView .side-nav .nav-item{
+  border-radius:11px;
+  min-height:40px;
+  line-height:1.35;
+  transition:background .14s ease,color .14s ease;
+}
+#appView .side-nav .nav-item:hover,
+#appView .side-nav .nav-item:focus-visible{
+  background:rgba(126,219,202,.10);
+}
+#appView .side-nav .nav-item.active{
+  color:#f9fffd;
+  background:linear-gradient(100deg,#0c796c,#137d83);
+  box-shadow:inset 3px 0 #92e8d8;
+}
+#appView .page-section{gap:clamp(12px,1.65vw,19px)}
+#appView .page-section>.panel,
+#appView .page-section article.panel,
+#appView .personal-home-content .panel{
+  border:1px solid var(--s22-border);
+  border-radius:var(--s22-radius);
+  background:var(--s22-surface);
+  box-shadow:var(--s22-shadow);
+  backdrop-filter:none;
+}
+#appView .page-section .panel-head{
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:clamp(11px,1.4vw,16px);
+}
+#appView .panel-head h2,#appView .panel-head h3{
+  color:var(--s22-ink);
+  letter-spacing:-.025em;
+  line-height:1.3;
+}
+#appView .panel-head h3{font-size:clamp(16px,1.35vw,20px)}
+#appView .panel-head h2{font-size:clamp(21px,2vw,27px)}
+#appView .panel .eyebrow{letter-spacing:.11em}
+#appView .primary-button{
+  background:linear-gradient(110deg,#087d71,#116f83);
+  border-radius:10px;
+  min-height:42px;
+  box-shadow:0 4px 12px rgba(12,124,115,.15);
+  transition:background .13s ease,box-shadow .13s ease;
+}
+#appView .primary-button:hover{
+  transform:none;
+  box-shadow:0 6px 16px rgba(12,124,115,.2);
+}
+#appView .secondary-button,
+#appView .small-button{
+  border-radius:10px;
+  min-height:36px;
+  box-shadow:none;
+}
+#appView button:focus-visible,
+#appView a:focus-visible,
+#appView input:focus-visible,
+#appView select:focus-visible,
+#appView textarea:focus-visible{
+  outline:2px solid #198e85;
+  outline-offset:2px;
+}
+#appView button:disabled{cursor:not-allowed;opacity:.6}
+#appView :is(input,select,textarea):not([type=checkbox]):not([type=radio]){
+  max-width:100%;
+  box-sizing:border-box;
+}
+#appView :is(input,select,textarea):not([type=checkbox]):not([type=radio]):focus{
+  border-color:#57a9a0;
+}
+#appView .form-grid-2{gap:12px}
+#appView .stack-form{gap:14px}
+#appView .sarni-focus-hero{
+  border-radius:18px;
+}
+#appView .sarni-focus-metrics>button,
+#appView .sarni-focus-shell .sarni-focus-side,
+#appView .sarni-focus-shell .sarni-focus-primary{
+  border-radius:var(--s22-radius);
+}
+#appView .book-chapter-row{border-radius:13px}
+#appView .book-chapter-row .book-chapter-main strong{
+  font-size:clamp(13px,1.2vw,15px);
+}
+#appView .book-detail-grid{gap:12px}
+#appView .book-detail-view .panel{min-width:0}
+#appView .book-detail-view .book-chapters-list{gap:9px}
+#appView :is(.panel,.book-chapter-row,.book-card){min-width:0}
+#toastRegion .toast{
+  border-radius:11px;
+  padding:10px 13px;
+  font-size:12px;
+  line-height:1.4;
+  max-width:min(360px,calc(100vw - 24px));
+}
+@media(min-width:1100px){
+  #appView .main-content{padding-bottom:55px}
+  #appView .page-section>.panel,#appView .page-section article.panel{
+    padding:clamp(17px,1.65vw,23px);
+  }
+  #appView .topbar{padding-top:6px;padding-bottom:6px}
+}
+@media(max-width:850px){
+  #appView .main-content{
+    padding-left:clamp(10px,3vw,18px)!important;
+    padding-right:clamp(10px,3vw,18px)!important;
+    padding-bottom:calc(105px + env(safe-area-inset-bottom))!important;
+  }
+  #appView .topbar{
+    min-height:65px!important;
+    padding:8px 4px!important;
+    margin-bottom:9px!important;
+    gap:7px!important;
+  }
+  #appView .topbar h1,#appView #pageTitle{
+    font-size:clamp(19px,4.5vw,24px)!important;
+    line-height:1.18!important;
+  }
+  #appView .page-section{gap:11px!important}
+  #appView .page-section>.panel,
+  #appView .page-section article.panel{
+    padding:clamp(11px,3vw,16px)!important;
+    border-radius:14px!important;
+  }
+  #appView .page-section .panel-head{margin-bottom:9px!important}
+  #appView .panel-head h2{font-size:clamp(19px,5vw,24px)!important}
+  #appView .panel-head h3{font-size:clamp(16px,4.5vw,19px)!important}
+  #appView .primary-button,
+  #appView .secondary-button{min-height:40px}
+  #appView .sarni-mobile-dock{
+    box-shadow:0 -5px 18px rgba(18,39,54,.09)!important;
+    border-top:1px solid #dce7e7!important;
+  }
+  #appView .sarni-mobile-dock .mobile-nav-item{
+    min-width:0;
+    border-radius:13px;
+  }
+  #appView .book-chapter-row{padding:10px!important;gap:8px}
+  #appView .book-chapter-main{overflow-wrap:anywhere}
+  #appView .book-detail-grid{gap:10px}
+  #toastRegion{
+    bottom:calc(108px + env(safe-area-inset-bottom))!important;
+  }
+  /* Existing full-screen chapter editor and its sticky Save bar are retained. */
+}
+@media(max-width:390px){
+  #appView .topbar .dashboard-version-chip{padding:4px 6px;font-size:9px}
+  #appView .book-detail-view .panel-head{gap:6px}
+}
+@media(prefers-reduced-motion:reduce){
+  #appView .side-nav .nav-item,
+  #appView .primary-button{transition:none!important}
+}
+@media print{
+  #appView{--s22-paper:#fff;--s22-surface:#fff}
+  #appView .page-section article.panel{box-shadow:none!important}
+}
