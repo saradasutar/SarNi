@@ -124,7 +124,7 @@ function start(){
   const title=inline.elements.title.value.trim();
   if(!title){$('sarniTargetInlineStatus').textContent='Please enter a title.';return;}
   form.reset();
-  $('stickyNoteId').value='';
+  $('stickyNoteId').value=window.SarniTargetStages?.editingId||'';
   $('stickyNoteType').value=inline.elements.type.value;
   $('stickyNoteTitle').value=title;
   $('stickyNoteDueDate').value=inline.elements.dueDate.value;
