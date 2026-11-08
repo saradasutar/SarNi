@@ -1984,7 +1984,7 @@ async function printOdiaFestivals(){
  if(!/^\\d{4}-\\d{2}$/.test(key))return;
  const popup=window.open('','_blank');
  if(!popup){if(status)status.textContent='Please allow pop-ups to print festivals.';return;}
- popup.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festivals</title></head><body><p>Preparing printable festival list...</p></body></html>');popup.document.close();
+ popup.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Odia Festivals</title></head><body><p>Preparing printable festival list...</p><script defer src="./sarni-home-layout-resize.js?v=20261108-1"></script>\n</body></html>');popup.document.close();
  if(btn)btn.disabled=true;
  try{
   const result=await fetchMonth(key);
