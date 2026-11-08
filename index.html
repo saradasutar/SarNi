@@ -654,6 +654,23 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
     <button type="button" data-sarni-nav="diary"><small>THIS MONTH</small><strong id="sarniFocusDiaryCount">—</strong><span>Diary entries →</span></button>
     <button type="button" data-sarni-nav="money"><small>UPCOMING BILLS</small><strong id="sarniFocusBillsCount">—</strong><span>Payments due →</span></button>
   </div>
+  <section class="sarni-home-writing" id="sarniHomeBookGlance" aria-label="Automatic Book Writing progress">
+    <div class="sarni-home-writing-head">
+      <div><span class="sarni-home-writing-eyebrow">YOUR CREATIVE PROGRESS</span><h3>Book Writing</h3></div>
+      <div class="sarni-home-writing-actions">
+        <label class="sarni-home-writing-choice"><span class="sr-only">Choose a book</span><select id="sarniHomeBookChoose" aria-label="Choose book for Home progress"><option value="">Loading books…</option></select></label>
+        <button type="button" id="sarniHomeOpenBook" class="sarni-home-writing-open">Open book <span aria-hidden="true">↗</span></button>
+      </div>
+    </div>
+    <div class="sarni-home-writing-grid" aria-live="polite">
+      <div class="sarni-hw-card sarni-hw-purple"><span>CHAPTERS COMPLETED</span><strong id="sarniHwChapters">—</strong><small id="sarniHwChapterDetail">Saved chapters</small></div>
+      <div class="sarni-hw-card sarni-hw-blue"><span>MANUSCRIPT WORDS</span><strong id="sarniHwWords">—</strong><small>Automatically counted</small></div>
+      <div class="sarni-hw-card sarni-hw-amber"><span>WORD TARGET</span><strong id="sarniHwTarget">—</strong><small id="sarniHwTargetDetail">From book settings</small></div>
+      <div class="sarni-hw-card sarni-hw-green"><span>LAST CHANGED</span><strong id="sarniHwRecent">—</strong><small id="sarniHwRecentDetail">Latest saved update</small></div>
+    </div>
+    <div class="sarni-home-writing-progress"><div class="sarni-home-writing-progress-line"><span id="sarniHwGoalLabel">Book writing progress</span><strong id="sarniHwPercent">—</strong></div><div class="sarni-home-writing-track" role="progressbar" aria-label="Book word target progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="sarniHwTrack"><span id="sarniHwFill"></span></div></div>
+    <p class="sarni-home-writing-note" id="sarniHwStatus" role="status">Loading your saved book progress…</p>
+  </section>
   <div class="sarni-focus-columns">
     <article class="sarni-focus-panel"><div class="sarni-focus-panel-head"><h3>Important for you</h3><button type="button" data-sarni-nav="calendar">Calendar ↗</button></div><div id="sarniFocusEvents" aria-live="polite"><p class="sarni-focus-empty">Your reminders will appear here after sign-in.</p></div></article>
     <article class="sarni-focus-panel sarni-focus-memory"><div class="sarni-focus-panel-head"><h3>Useful experience to remember</h3><button type="button" data-sarni-nav="experiences">Life Experiences ↗</button></div><div id="sarniFocusLessons" aria-live="polite"><p class="sarni-focus-empty">A saved lesson will appear when relevant.</p></div></article>
