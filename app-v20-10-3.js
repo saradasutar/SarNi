@@ -2895,9 +2895,11 @@ const BOOK_ROLE_LABEL={OWNER:'Owner',CO_AUTHOR:'Co-author',EDITOR:'Editor',VIEWE
 let sarniHomeBooksCache=null;
 let sarniHomeBooksFetchedAt=0;
 let sarniHomeBooksPending=null;
+let sarniHomeBooksOwner='';
 window.SarniHomeBookApi={
   load:async function(force=false){
     if(!state.token)throw new Error('Sign in to view book progress.');
+    if(sarniHomeBooksOwner!==state.username){sarniHomeBooksCache=null;sarniHomeBooksFetchedAt=0;sarniHomeBooksOwner=state.username||'';}
     if(!force&&sarniHomeBooksCache&&Date.now()-sarniHomeBooksFetchedAt<120000)return sarniHomeBooksCache;
     if(sarniHomeBooksPending)return sarniHomeBooksPending;
     sarniHomeBooksPending=api('listBooks',{}).then(r=>{
@@ -2912,7 +2914,7 @@ window.SarniHomeBookApi={
   peek:()=>sarniHomeBooksCache,
   open:function(bookId){
     const book=(sarniHomeBooksCache||state.books||[]).find(b=>String(b.id)===String(bookId));
-    if(!book)return false;
+    if(!book||!state.token||sarniHomeBooksOwner!==state.username)return false;
     switchSection('books');
     openBookDetail(String(book.id));
     return true;
