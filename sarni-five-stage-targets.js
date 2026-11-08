@@ -34,18 +34,19 @@ function boot(){
  $form.elements.type.addEventListener('change',visibility);
  for(const id of ['sarniTargetAdd','sarniReminderAdd'])$(id)?.addEventListener('click',()=>{editId='';window.SarniTargetStages.editingId='';fill(fresh());visibility();});
  $('sarniTargetInlineCancel')?.addEventListener('click',()=>{editId='';window.SarniTargetStages.editingId='';node.hidden=true;});
- // Capture runs before the existing workspace submit handler. It adds the
- // stage table to the existing backend text payload and preserves note ID.
- $form.addEventListener('submit',event=>{
-  if($form.elements.type.value!=='TARGET')return;
+ // Serialize stage metadata only for the backend payload. Never write JSON
+ // into the visible Details textarea (which previously exposed it after Save).
+ window.SarniTargetStages.prepareForSave=function(){
+  if($form.elements.type.value!=='TARGET')return {ok:true,text:$form.elements.details.value.trim()};
   const entries=read();
-  if(entries.length!==5||entries.some(s=>!s.name)){event.preventDefault();event.stopImmediatePropagation();$('sarniTargetInlineStatus').textContent='Write what you want to achieve in each of the five stages.';return;}
+  if(entries.length!==5||entries.some(row=>!row.name)){
+   return {ok:false,error:'Write what you want to achieve in each of the five stages.'};
+  }
   const detail=decode($form.elements.details.value).detail.trim();
-  const packed=detail+(detail?'\n\n':'')+A+'\n'+JSON.stringify(entries)+'\n'+Z;
-  if(packed.length>5000){event.preventDefault();event.stopImmediatePropagation();$('sarniTargetInlineStatus').textContent='Shorten the stage remarks to fit the saved note.';return;}
-  $form.elements.details.value=packed;
-  if(editId)$('stickyNoteId').value=editId;
- },true);
+  const packed=detail+(detail?'\\n\\n':'')+A+'\\n'+JSON.stringify(entries)+'\\n'+Z;
+  if(packed.length>5000)return {ok:false,error:'Shorten details or stage remarks before saving.'};
+  return {ok:true,text:packed};
+ };
  // Edit directly from authenticated in-memory records. No legacy modal,
  // synthetic clicks, or recursive click interception.
  workspace.addEventListener('click',event=>{
@@ -99,11 +100,13 @@ function boot(){
  const displayStyle=document.createElement('style');
  displayStyle.textContent='.sarni-stage-display{margin:8px 0}.sarni-stage-desc{white-space:pre-wrap;font-size:12px;color:#5a6682}.sarni-stage-badge{font-size:12px;color:#493aa3;font-weight:800;margin:6px 0}.sarni-stage-bar{background:#e4e0f0;height:7px;border-radius:99px;overflow:hidden}.sarni-stage-bar span{display:block;height:100%;background:#18a27c}.sarni-stage-details{margin-top:9px}.sarni-stage-details summary{cursor:pointer;font-size:12px;font-weight:800;color:#6146a6}.sarni-stage-table-scroll{overflow-x:auto}.sarni-stage-details table{min-width:670px;width:100%;border-collapse:collapse;background:white;font-size:11px;margin-top:7px}.sarni-stage-details th,.sarni-stage-details td{border:1px solid #e0e5ed;padding:6px;white-space:normal}.sarni-stage-details th{background:#f2effb}';
  document.head.append(displayStyle);
- for(const id of ['stickyNotesList','sarniTargetRows']){
-  const el=$(id);if(!el)continue;
-  decorate(el);
-  new MutationObserver(()=>decorate(el)).observe(el,{childList:true});
+ function refreshDecorations(){
+  decorate($('stickyNotesList'));
+  decorate($('sarniTargetRows'));
  }
+ document.addEventListener('sarni:sticky-rendered',refreshDecorations);
+ document.addEventListener('sarni:target-workspace-rendered',refreshDecorations);
+ refreshDecorations();
 
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
