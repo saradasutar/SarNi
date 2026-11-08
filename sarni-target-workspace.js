@@ -130,6 +130,21 @@ function start(){
    $('sarniTargetInlineStatus').textContent=prepared.error||'Check all five stages before saving.';
    return;
   }
+  const existingId=window.SarniTargetStages?.editingId||'';
+  if(!existingId){
+   // Only block an exact second save of the same record. Same title with
+   // different stages/details remains a legitimate separate target.
+   const normalize=v=>String(v||'').trim().replace(/\\s+/g,' ');
+   const incoming=[inline.elements.type.value,normalize(title).toLocaleLowerCase(),
+     inline.elements.dueDate.value,normalize(prepared.text)];
+   const identical=window.SarniTargetEditorBridge?.listNotes?.().find(note=>
+     JSON.stringify([note.noteType,normalize(note.title).toLocaleLowerCase(),
+       note.dueDate,normalize(note.text)])===JSON.stringify(incoming));
+   if(identical){
+    $('sarniTargetInlineStatus').textContent='This exact target or reminder is already saved. Open the existing entry to edit it instead of creating a duplicate.';
+    return;
+   }
+  }
   form.reset();
   $('stickyNoteId').value=window.SarniTargetStages?.editingId||'';
   $('stickyNoteType').value=inline.elements.type.value;
