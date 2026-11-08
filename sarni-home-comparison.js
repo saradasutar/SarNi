@@ -94,8 +94,8 @@ function boot(){
  '.sch-target-stage.sch-tone-2 .sch-stage-number{background:#fff1d9;color:#926322}',
  '.sch-target-stage.sch-tone-3 .sch-stage-number{background:#dff7ec;color:#16775d}',
  '.sch-target-stage.sch-tone-4 .sch-stage-number{background:#f9e7f2;color:#98557d}',
- '@media(min-width:950px){.sch-target-table{table-layout:fixed}.sch-target-table th:nth-child(1){width:8%}.sch-target-table th:nth-child(2){width:37%}.sch-target-table th:nth-child(3){width:17%}.sch-target-table th:nth-child(4){width:15%}.sch-target-table th:nth-child(5){width:23%}}',
- '@media(max-width:750px){.sch-target-table{min-width:630px}.sch-book-table{min-width:640px}}'
+ '@media(min-width:950px){.sch-target-table{table-layout:fixed}.sch-target-table thead th:nth-child(1){width:22%}.sch-target-table thead th:nth-child(2){width:6%}.sch-target-table thead th:nth-child(3){width:28%}.sch-target-table thead th:nth-child(4){width:15%}.sch-target-table thead th:nth-child(5){width:12%}.sch-target-table thead th:nth-child(6){width:17%}}',
+ '@media(max-width:750px){.sch-target-table{min-width:740px}.sch-book-table{min-width:640px}}'
  ].join('');
  document.head.append(compact);
 
@@ -104,7 +104,14 @@ function boot(){
   '#sarniHomeTargetRowsPanel .sch-header-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap}',
   '#sarniHomeTargetRowsPanel .sch-header-controls button{padding:6px 9px;border-radius:8px;font-size:11px;font-weight:800;white-space:nowrap}',
   '#sarniHomeTargetRowsPanel #sarniCompareFocus[aria-pressed="true"]{background:#ece8ff;color:#4c36a5;border-color:#9e89da}',
-  '#sarniHomeTargetRowsPanel.sch-focus-mode .sch-target-stage:not(.sch-focus-stage){display:none!important}',
+  '#sarniHomeTargetRowsPanel .sch-target-name-cell{vertical-align:middle!important;min-width:140px;max-width:240px;width:23%;padding:8px 10px!important;border-right:1px solid #dbe1ec!important;border-bottom:4px solid #fff!important;text-align:left}',
+  '#sarniHomeTargetRowsPanel .sch-target-name-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:7px}',
+  '#sarniHomeTargetRowsPanel .sch-target-name-wrap .sch-five-bars{width:100%;max-width:130px}',
+  '#sarniHomeTargetRowsPanel .sch-target-name-cell.sch-tone-0{background:#f2efff!important;border-left:4px solid #7856c5}',
+  '#sarniHomeTargetRowsPanel .sch-target-name-cell.sch-tone-1{background:#e9f7fc!important;border-left:4px solid #2295af}',
+  '#sarniHomeTargetRowsPanel .sch-target-name-cell.sch-tone-2{background:#fff5e5!important;border-left:4px solid #b78730}',
+  '#sarniHomeTargetRowsPanel .sch-target-name-cell.sch-tone-3{background:#ebfaf3!important;border-left:4px solid #169679}',
+  '#sarniHomeTargetRowsPanel .sch-target-name-cell.sch-tone-4{background:#fff0f7!important;border-left:4px solid #b96a99}',
   '#sarniHomeTargetRowsPanel.sch-focus-mode .sch-target-parent th{border-top-width:1px!important}',
   '@media(max-width:600px){#sarniHomeTargetRowsPanel .sch-header-controls button{padding:5px 7px}#sarniHomeTargetRowsPanel .sch-head h3{font-size:15px!important}}'
  ].join('');
@@ -188,20 +195,26 @@ function boot(){
    return {name:card.querySelector('h4')?.textContent||'Target',count,stages,next,due,late:!!due&&due<today};
   });
   $('sarniCompareStats').innerHTML='<div><strong>'+models.length+'</strong><small>Active targets</small></div><div><strong>'+models.filter(x=>x.late).length+'</strong><small>Overdue stages</small></div><div><strong>'+reminders.length+'</strong><small>Reminders</small></div>';
-  // Compact grouped stages, preserving one target heading and five achievement rows.
+  // Each target has a dedicated first column, spanning the visible stage rows.
+  // Rebuild for Focus View instead of hiding rows so the title always remains visible.
   const rows=models.map((t,i)=>{
    const progress=t.stages?t.count*20:0;
-   const stages=t.stages||[];
-   const parent='<tr class="sch-target-parent sch-tone-'+(i%5)+(t.late?' sch-late':'')+'"><th colspan="5" scope="rowgroup"><div class="sch-target-group"><span class="sch-target-heading">'+e(t.name)+'</span><span class="sch-target-percent">'+(t.stages?progress+'%':'Stages not set')+'</span><span class="sch-five-bars" aria-label="'+t.count+' of 5 achievements completed">'+Array.from({length:5},(_,j)=>'<span class="'+(stages[j]?.done?'done':stages[j]===t.next?'next':'')+'"></span>').join('')+'</span></div></th></tr>';
-   const lines=t.stages?t.stages.map((stage,j)=>{
+   const all=t.stages||[];
+   const focusIndex=all.findIndex(stage=>!stage.done);
+   const visible=focusOnly&&all.length?[[focusIndex<0?4:focusIndex,all[focusIndex<0?4:focusIndex]]]:all.map((stage,j)=>[j,stage]);
+   const span=Math.max(1,visible.length);
+   const progressBars=Array.from({length:5},(_,j)=>'<span class="'+(all[j]?.done?'done':all[j]===t.next?'next':'')+'"></span>').join('');
+   const titleCell='<th class="sch-target-name-cell sch-tone-'+(i%5)+'" scope="rowgroup" rowspan="'+span+'"><div class="sch-target-name-wrap"><span class="sch-target-heading">'+e(t.name)+'</span><span class="sch-target-percent">'+(t.stages?progress+'%':'Not set')+'</span><div class="sch-five-bars" aria-label="'+t.count+' of five achievements completed">'+progressBars+'</div></div></th>';
+   if(!t.stages)return '<tr class="sch-target-stage sch-tone-'+(i%5)+'">'+titleCell+'<td colspan="5" class="sch-empty">No stages saved. Open Target & Reminder to add achievements.</td></tr>';
+   return visible.map(([j,stage],index)=>{
     const overdue=!stage.done&&!!stage.date&&stage.date<today;
-    return '<tr class="sch-target-stage sch-tone-'+(i%5)+(overdue?' sch-late':'')+(stage===t.next||(!t.next&&j===4)?' sch-focus-stage':'')+'"><td><span class="sch-stage-number">'+(j+1)+'</span></td>'+
+    return '<tr class="sch-target-stage sch-tone-'+(i%5)+(overdue?' sch-late':'')+'">'+(index===0?titleCell:'')+
+     '<td><span class="sch-stage-number">'+(j+1)+'</span></td>'+
      '<td class="sch-stage-achievement">'+e(stage.name||'Not specified')+'</td>'+
      '<td>'+e(stage.date||'—')+'</td>'+
      '<td><span class="sch-tag '+(stage.done?'complete':overdue?'late':'active')+'">'+(stage.done?'✓ Complete':overdue?'Overdue':'Pending')+'</span></td>'+
-     '<td class="sch-stage-remark">'+e(stage.done?(stage.remark||'—'):(stage.remark||'—'))+'</td></tr>';
-   }).join(''):'<tr class="sch-target-stage"><td colspan="5" class="sch-empty">No five-stage details saved yet. Open Target & Reminder to enter them.</td></tr>';
-   return parent+lines;
+     '<td class="sch-stage-remark">'+e(stage.remark||'—')+'</td></tr>';
+   }).join('');
   }).join('');
   const reminderRows=reminders.map((card,i)=>{
    const name=card.querySelector('h4')?.textContent||'Reminder';
@@ -209,7 +222,7 @@ function boot(){
    return '<tr class="sch-tone-'+(i%5)+'"><td class="sch-name">'+e(name)+'</td><td>'+e(due)+'</td></tr>';
   }).join('');
   const out=$('sarniCompareTargets');
-  out.innerHTML='<div class="sch-table-wrap"><table class="sch-compact-table sch-target-table"><thead><tr><th>Stage</th><th>What to Achieve</th><th>Target Date</th><th>Status</th><th>Achievement Remark</th></tr></thead><tbody>'+ (rows||'<tr><td colspan="5" class="sch-empty">No active targets yet.</td></tr>')+'</tbody></table></div>'+
+  out.innerHTML='<div class="sch-table-wrap"><table class="sch-compact-table sch-target-table"><thead><tr><th>Target</th><th>No.</th><th>What to Achieve</th><th>Target Date</th><th>Status</th><th>Achievement Remark</th></tr></thead><tbody>'+ (rows||'<tr><td colspan="6" class="sch-empty">No active targets yet.</td></tr>')+'</tbody></table></div>'+
    (reminders.length?'<div class="sch-reminder-title">Reminders <span>'+reminders.length+'</span></div><div class="sch-table-wrap"><table class="sch-compact-table"><thead><tr><th>Reminder</th><th>Due / status</th></tr></thead><tbody>'+reminderRows+'</tbody></table></div>':'');
  }
  let focusOnly=false;
@@ -219,6 +232,7 @@ function boot(){
   focusBtn.setAttribute('aria-pressed',String(focusOnly));
   focusBtn.textContent=focusOnly?'All 5 stages':'Focus view';
   focusBtn.title=focusOnly?'Show every stage of each target':'Show only the next unfinished achievement of each target';
+  renderTargets();
  }
  focusBtn.addEventListener('click',()=>{focusOnly=!focusOnly;updateFocusView();});
  updateFocusView();
