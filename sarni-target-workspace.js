@@ -86,13 +86,30 @@ function start(){
  sheet.querySelectorAll('[data-sarni-target-tab]').forEach(btn=>btn.addEventListener('click',()=>{current=btn.dataset.sarniTargetTab;render();}));
  $('sarniTargetSearch').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();render();});
  function begin(type){
-  // Reuse the existing add button, so the core app owns the form and backend save.
-  const btn=$('homeTargetAddBtn')||$('addStickyNoteBtn');
-  if(!btn)return;
-  btn.click();
+  const backdrop=$('modalBackdrop'),modal=$('stickyNoteModal'),form=$('stickyNoteForm');
+  if(!backdrop||!modal||!form){
+   alert('The Target & Reminder form is unavailable. Please refresh SarNi and sign in again.');
+   return;
+  }
+  // The management workspace is a fixed overlay. Hide it while editing, so
+  // it cannot cover the modal or intercept clicks in different layout modes.
+  sheet.style.display='none';
+  const input=$('stickyNoteId');if(input)input.value='';
+  form.reset();
   const select=$('stickyNoteType');if(select)select.value=type;
   const title=$('stickyNoteModalTitle');if(title)title.textContent=type==='TARGET'?'New Target':'New Reminder';
-  $('stickyNoteTitle')?.focus();
+  const save=$('saveStickyNoteBtn');if(save)save.textContent=type==='TARGET'?'Save Target':'Save Reminder';
+  backdrop.classList.remove('hidden');
+  backdrop.setAttribute('aria-hidden','false');
+  backdrop.querySelectorAll('.modal').forEach(m=>m.classList.add('hidden'));
+  modal.classList.remove('hidden');
+  requestAnimationFrame(()=>$('stickyNoteTitle')?.focus());
+ }
+ const backdrop=$('modalBackdrop');
+ if(backdrop){
+  new MutationObserver(()=>{
+   if(open&&backdrop.classList.contains('hidden'))sheet.style.display='block';
+  }).observe(backdrop,{attributes:true,attributeFilter:['class']});
  }
  $('sarniTargetAdd').addEventListener('click',()=>begin('TARGET'));
  $('sarniReminderAdd').addEventListener('click',()=>begin('REMINDER'));
