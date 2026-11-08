@@ -153,6 +153,9 @@ function boot(){
   '@media(max-width:750px){.sch-compact-table{font-size:11px!important}.sch-book-table .sch-name button{font-size:11px!important}}'
  ].join('');
  document.head.append(prominent);
+ const noStagesStyle=document.createElement('style');
+ noStagesStyle.textContent='.sch-target-stage.sch-no-stages td{padding:5px 7px!important;height:auto!important;min-height:0!important;line-height:1.25!important;font-size:11px!important}.sch-target-stage.sch-no-stages .sch-stage-achievement{font-weight:650!important;color:#738099!important}.sch-target-stage.sch-no-stages .sch-stage-number{width:21px;height:21px}.sch-target-stage.sch-no-stages .sch-tag{font-size:10px}.sch-target-name-cell .sch-target-percent{font-size:10px}';
+ document.head.append(noStagesStyle);
 
 
 
@@ -205,7 +208,7 @@ function boot(){
    const span=Math.max(1,visible.length);
    const progressBars=Array.from({length:5},(_,j)=>'<span class="'+(all[j]?.done?'done':all[j]===t.next?'next':'')+'"></span>').join('');
    const titleCell='<th class="sch-target-name-cell sch-tone-'+(i%5)+'" scope="rowgroup" rowspan="'+span+'"><div class="sch-target-name-wrap"><span class="sch-target-heading">'+e(t.name)+'</span><span class="sch-target-percent">'+(t.stages?progress+'%':'Not set')+'</span><div class="sch-five-bars" aria-label="'+t.count+' of five achievements completed">'+progressBars+'</div></div></th>';
-   if(!t.stages)return '<tr class="sch-target-stage sch-tone-'+(i%5)+'">'+titleCell+'<td colspan="5" class="sch-empty">No stages saved. Open Target & Reminder to add achievements.</td></tr>';
+   if(!t.stages)return '<tr class="sch-target-stage sch-tone-'+(i%5)+' sch-no-stages">'+titleCell+'<td><span class="sch-stage-number">—</span></td><td class="sch-stage-achievement">Achievements not set</td><td>—</td><td><span class="sch-tag active">Set up</span></td><td>—</td></tr>';
    return visible.map(([j,stage],index)=>{
     const overdue=!stage.done&&!!stage.date&&stage.date<today;
     return '<tr class="sch-target-stage sch-tone-'+(i%5)+(overdue?' sch-late':'')+'">'+(index===0?titleCell:'')+
