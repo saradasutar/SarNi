@@ -14,6 +14,9 @@ function boot(){
  const progressCss=document.createElement('style');
  progressCss.textContent='.sch-target-card{border-left:4px solid #7357c7}.sch-target-card.sch-overdue{border-left-color:#c43d57}.sch-stages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:10px 0 7px}.sch-stage{min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:#738097;text-align:center}.sch-stage-dot{width:100%;height:7px;border-radius:9px;background:#e5e5f0}.sch-stage.is-done .sch-stage-dot{background:#16a57c}.sch-stage.is-next .sch-stage-dot{background:#e4a23c}.sch-stage-label{font-size:10px;font-weight:760;color:#5d6685;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.sch-target-card .sch-progress-note{font-size:11px;color:#71809a;margin-top:7px}.sch-target-card .sch-rowhead strong{flex:1;min-width:0}.sch-target-card .sch-rowhead .sch-pct{font-size:13px;font-weight:850;color:#6546ad}';
  document.head.append(progressCss);
+ const nextCss=document.createElement('style');
+ nextCss.textContent='.sch-home-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:7px;margin-top:9px}.sch-home-actions button{border:1px solid #d8cef0;border-radius:8px;background:#f7f4ff;color:#5f45a0;padding:7px 10px;font-size:11px;font-weight:800;cursor:pointer}.sch-home-actions button:focus-visible,.sch-home-actions summary:focus-visible{outline:2px solid #6b52cc;outline-offset:3px}.sch-home-details{margin-top:8px;border-top:1px solid #ecedf6;padding-top:8px}.sch-home-details summary{cursor:pointer;font-size:12px;color:#5b478f;font-weight:800}.sch-home-stage{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:7px;align-items:start;padding:7px 0;border-bottom:1px solid #f0edf7;font-size:12px}.sch-home-stage:last-child{border-bottom:0}.sch-home-stage .is-complete{color:#13805d}.sch-home-stage .is-pending{color:#ba862b}.sch-home-stage small{color:#687792;font-size:11px}.sch-home-stage .sch-home-remark{grid-column:2/-1;line-height:1.4;color:#65738a}.sch-home-due{white-space:nowrap}.sch-home-actions button[disabled]{opacity:.5;cursor:default}';
+ document.head.append(nextCss);
 
  let items=[];
  function paintBooks(){
@@ -34,7 +37,7 @@ function boot(){
   const models=targets.map(card=>{
    const raw=card.querySelector('.sticky-full-text')?.textContent||'',parsed=dec?.(raw),rows=parsed?.structured?parsed.stages:null;
    const done=rows?rows.filter(x=>x.done).length:0,next=rows?.find(x=>!x.done),due=next?.date||'';
-   return {title:card.querySelector('h4')?.textContent||'Target',rows,done,next,due,overdue:!!due&&due<today};
+   return {id:card.querySelector('[data-sticky-edit]')?.dataset.stickyEdit||'',title:card.querySelector('h4')?.textContent||'Target',rows,done,next,due,overdue:!!due&&due<today};
   });
   $('sarniCompareStats').innerHTML='<div><strong>'+models.length+'</strong><small>Active targets</small></div><div><strong>'+models.filter(x=>x.overdue).length+'</strong><small>Overdue stages</small></div><div><strong>'+reminders.length+'</strong><small>Reminders</small></div>';
   const out=$('sarniCompareTargets');out.replaceChildren();
@@ -52,7 +55,9 @@ function boot(){
     (marks?'<div class="sch-stages" aria-label="'+t.done+' out of five stages completed">'+marks+'</div>':'')+
     '<div class="sch-track"><span style="width:'+pct+'%"></span></div>'+
     '<div class="sch-foot"><span>Next achievement: '+e(nextTitle)+'</span><span>'+(t.due?(t.overdue?'Overdue · ':'Due · ')+e(t.due):'No stage due date')+'</span></div>'+
-    (!t.rows?'<div class="sch-progress-note">Open Target & Reminder to add five stages.</div>':'');
+    (!t.rows?'<div class="sch-progress-note">Open Target & Reminder to add five stages.</div>':'')+
+    (t.rows?'<details class="sch-home-details"><summary>View all five achievements</summary>'+t.rows.map((stage,i)=>'<div class="sch-home-stage"><span class="'+(stage.done?'is-complete':'is-pending')+'">'+(stage.done?'✓':(i+1))+'</span><span>'+e(stage.name||'Achievement '+(i+1))+'</span><small class="sch-home-due">'+e(stage.date||'No date')+'</small>'+(stage.done&&stage.remark?'<small class="sch-home-remark">Achievement remark: '+e(stage.remark)+'</small>':'')+'</div>').join('')+'</details>':'')+
+    '<div class="sch-home-actions"><button type="button" data-sch-target-edit="'+e(t.id)+'" '+(!t.id?'disabled':'')+'>✎ Update progress</button></div>';
    out.append(card);
   }
   for(const c of reminders.slice(0,3)){
@@ -61,6 +66,19 @@ function boot(){
   if(!out.children.length)out.innerHTML='<p class="sch-empty">No active targets or reminders to show.</p>';
  }
  $('sarniCompareManage').addEventListener('click',()=>window.SarNiTargetsOpen?.());
+ $('sarniCompareTargets').addEventListener('click',event=>{
+  const btn=event.target.closest('[data-sch-target-edit]');
+  if(!btn)return;
+  const id=btn.dataset.schTargetEdit;
+  if(!id)return;
+  const original=[...source.querySelectorAll('[data-sticky-edit]')].find(el=>el.dataset.stickyEdit===id);
+  if(!original){window.SarNiTargetsOpen?.();return;}
+  window.SarNiTargetsOpen?.();
+  const tab=document.querySelector('#sarniTargetsWorkspace [data-sarni-target-tab="TARGET"]');
+  tab?.click();
+  const edit=[...document.querySelectorAll('#sarniTargetRows [data-sticky-edit]')].find(el=>el.dataset.stickyEdit===id);
+  if(edit)edit.click();
+ });
  new MutationObserver(renderTargets).observe(source,{childList:true});
  document.addEventListener('sarni:home-visible',()=>{load();renderTargets();});
  document.addEventListener('sarni:home-books-updated',()=>{let rows=window.SarniHomeBookApi?.peek?.();if(Array.isArray(rows)){items=rows;paintBooks();}});
