@@ -2891,6 +2891,49 @@ const BOOK_STATUS_LABEL={PLANNING:'Planning',DRAFTING:'Drafting',EDITING:'Editin
 const CHAPTER_STATUS_LABEL={NOT_STARTED:'Not started',DRAFTING:'Drafting',REVIEW:'In review',DONE:'Done'};
 const BOOK_ROLE_LABEL={OWNER:'Owner',CO_AUTHOR:'Co-author',EDITOR:'Editor',VIEWER:'Viewer'};
 
+// Home book glimpse: read-only authenticated summary, deduplicated and short-lived.
+let sarniHomeBooksCache=null;
+let sarniHomeBooksFetchedAt=0;
+let sarniHomeBooksPending=null;
+window.SarniHomeBookApi={
+  load:async function(force=false){
+    if(!state.token)throw new Error('Sign in to view book progress.');
+    if(!force&&sarniHomeBooksCache&&Date.now()-sarniHomeBooksFetchedAt<120000)return sarniHomeBooksCache;
+    if(sarniHomeBooksPending)return sarniHomeBooksPending;
+    sarniHomeBooksPending=api('listBooks',{}).then(r=>{
+      if(!Array.isArray(r?.data?.books))throw new Error('Book summary unavailable.');
+      sarniHomeBooksCache=r.data.books;
+      sarniHomeBooksFetchedAt=Date.now();
+      document.dispatchEvent(new Event('sarni:home-books-updated'));
+      return sarniHomeBooksCache;
+    }).finally(()=>{sarniHomeBooksPending=null;});
+    return sarniHomeBooksPending;
+  },
+  peek:()=>sarniHomeBooksCache,
+  open:function(bookId){
+    const book=(sarniHomeBooksCache||state.books||[]).find(b=>String(b.id)===String(bookId));
+    if(!book)return false;
+    switchSection('books');
+    openBookDetail(String(book.id));
+    return true;
+  }
+};
+document.addEventListener('sarni:book-rendered',()=>{
+  const detail=state.activeBookDetail;
+  if(!detail?.book||!Array.isArray(detail.chapters))return;
+  if(!sarniHomeBooksCache)return;
+  const id=String(detail.book.id);
+  const i=sarniHomeBooksCache.findIndex(b=>String(b.id)===id);
+  if(i<0)return;
+  sarniHomeBooksCache[i]={
+    ...sarniHomeBooksCache[i],...detail.book,
+    chapterCount:detail.chapters.length,
+    doneChapterCount:detail.chapters.filter(c=>String(c.status).toUpperCase()==='DONE').length,
+    totalWordCount:detail.chapters.reduce((n,c)=>n+Math.max(0,Number(c.wordCount)||0),0)
+  };
+  document.dispatchEvent(new Event('sarni:home-books-updated'));
+});
+
 async function loadBooks(){
   if(!els.booksGrid)return;
   try{
@@ -7569,6 +7612,7 @@ function switchSection(section){
   renderSectionData(section);
   if(section==='users'&&isSarNiAdmin()&&els.usersBody)loadUsers();
   if(section==='overview')setOverviewMode('PERSONAL');
+  if(section==='overview')document.dispatchEvent(new Event('sarni:home-visible'));
   if(lifeQuoteAutoContextVisible())startLifeQuoteShuffle();else if(!(state.utilityDrawerOpen&&state.utilityDrawerTab==='QUOTE'))stopLifeQuoteShuffle();
   scheduleDashboardHScrollRefresh();
 }
