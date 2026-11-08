@@ -57,6 +57,9 @@ function boot(){
   '@media(max-width:850px){.sch-compact-table{font-size:11px}.sch-compact-table th,.sch-compact-table td{padding:7px}.sch-table-wrap{overflow-x:auto}}'
  ].join('');
  document.head.append(tableStyle);
+ const stageTableStyle=document.createElement('style');
+ stageTableStyle.textContent='.sch-target-parent th{background:#f1f2fa;padding:8px 10px!important;text-align:left;border-top:2px solid #dae0ef;border-bottom:1px solid #dfe3ec}.sch-target-parent:first-child th{border-top:0}.sch-target-group{display:flex;align-items:center;flex-wrap:wrap;gap:9px}.sch-target-heading{font-size:12px;font-weight:850;color:#263957;min-width:150px;flex:1}.sch-target-percent{font-weight:850;color:#5d4bad;font-size:11px}.sch-target-group .sch-five-bars{width:100px;min-width:100px}.sch-target-stage td{font-size:11px;padding:6px 9px!important}.sch-stage-number{font-weight:800;white-space:nowrap;color:#65549f}.sch-stage-achievement{font-weight:760;min-width:150px;overflow-wrap:anywhere;color:#2d3e58}.sch-stage-remark{min-width:100px;max-width:225px;overflow-wrap:anywhere;color:#687692}.sch-target-stage.sch-late td{background:#fff5f6}.sch-target-stage .sch-tag{display:inline-block}@media(max-width:850px){.sch-target-table{min-width:650px}.sch-target-group .sch-five-bars{width:75px;min-width:75px}}';
+ document.head.append(stageTableStyle);
 
 
  let items=[];
@@ -96,14 +99,20 @@ function boot(){
    return {name:card.querySelector('h4')?.textContent||'Target',count,stages,next,due,late:!!due&&due<today};
   });
   $('sarniCompareStats').innerHTML='<div><strong>'+models.length+'</strong><small>Active targets</small></div><div><strong>'+models.filter(x=>x.late).length+'</strong><small>Overdue stages</small></div><div><strong>'+reminders.length+'</strong><small>Reminders</small></div>';
+  // Compact grouped stages, preserving one target heading and five achievement rows.
   const rows=models.map((t,i)=>{
    const progress=t.stages?t.count*20:0;
-   const segments=t.stages?t.stages.map((x,j)=>'<span class="'+(x.done?'done':t.next===x?'next':'')+'" title="Stage '+(j+1)+': '+e(x.name||'Not set')+'"></span>').join(''):'<span></span><span></span><span></span><span></span><span></span>';
-   return '<tr class="sch-target-row sch-tone-'+(i%5)+(t.late?' sch-late':'')+'"><td class="sch-name">'+e(t.name)+'</td>'+
-    '<td><div class="sch-five-bars" aria-label="'+t.count+' of 5 achievements completed">'+segments+'</div><small>'+t.count+' / 5 · '+(t.stages?progress+'%':'Set stages')+'</small></td>'+
-    '<td class="sch-next-cell">'+e(t.next?.name||(t.stages?'All achievements done':'Set achievements'))+'</td>'+
-    '<td><span class="'+(t.late?'sch-late-date':'')+'">'+e(t.due||'—')+'</span></td>'+
-    '<td><span class="sch-tag '+(t.late?'late':t.count===5?'complete':'active')+'">'+(t.late?'Overdue':t.count===5?'Ready to finish':'In progress')+'</span></td></tr>';
+   const stages=t.stages||[];
+   const parent='<tr class="sch-target-parent sch-tone-'+(i%5)+(t.late?' sch-late':'')+'"><th colspan="5" scope="rowgroup"><div class="sch-target-group"><span class="sch-target-heading">'+e(t.name)+'</span><span class="sch-target-percent">'+(t.stages?progress+'%':'Stages not set')+'</span><span class="sch-five-bars" aria-label="'+t.count+' of 5 achievements completed">'+Array.from({length:5},(_,j)=>'<span class="'+(stages[j]?.done?'done':stages[j]===t.next?'next':'')+'"></span>').join('')+'</span></div></th></tr>';
+   const lines=t.stages?t.stages.map((stage,j)=>{
+    const overdue=!stage.done&&!!stage.date&&stage.date<today;
+    return '<tr class="sch-target-stage sch-tone-'+(i%5)+(overdue?' sch-late':'')+'"><td><span class="sch-stage-number">Stage '+(j+1)+'</span></td>'+
+     '<td class="sch-stage-achievement">'+e(stage.name||'Not specified')+'</td>'+
+     '<td>'+e(stage.date||'—')+'</td>'+
+     '<td><span class="sch-tag '+(stage.done?'complete':overdue?'late':'active')+'">'+(stage.done?'✓ Complete':overdue?'Overdue':'Pending')+'</span></td>'+
+     '<td class="sch-stage-remark">'+e(stage.done?(stage.remark||'—'):(stage.remark||'—'))+'</td></tr>';
+   }).join(''):'<tr class="sch-target-stage"><td colspan="5" class="sch-empty">No five-stage details saved yet. Open Target & Reminder to enter them.</td></tr>';
+   return parent+lines;
   }).join('');
   const reminderRows=reminders.map((card,i)=>{
    const name=card.querySelector('h4')?.textContent||'Reminder';
@@ -111,7 +120,7 @@ function boot(){
    return '<tr class="sch-tone-'+(i%5)+'"><td class="sch-name">'+e(name)+'</td><td>'+e(due)+'</td></tr>';
   }).join('');
   const out=$('sarniCompareTargets');
-  out.innerHTML='<div class="sch-table-wrap"><table class="sch-compact-table sch-target-table"><thead><tr><th>Target</th><th>5-stage achievement</th><th>Next achievement</th><th>Due date</th><th>Status</th></tr></thead><tbody>'+ (rows||'<tr><td colspan="5" class="sch-empty">No active targets yet.</td></tr>')+'</tbody></table></div>'+
+  out.innerHTML='<div class="sch-table-wrap"><table class="sch-compact-table sch-target-table"><thead><tr><th>Stage</th><th>What to Achieve</th><th>Target Date</th><th>Status</th><th>Achievement Remark</th></tr></thead><tbody>'+ (rows||'<tr><td colspan="5" class="sch-empty">No active targets yet.</td></tr>')+'</tbody></table></div>'+
    (reminders.length?'<div class="sch-reminder-title">Reminders <span>'+reminders.length+'</span></div><div class="sch-table-wrap"><table class="sch-compact-table"><thead><tr><th>Reminder</th><th>Due / status</th></tr></thead><tbody>'+reminderRows+'</tbody></table></div>':'');
  }
  $('sarniCompareManage').addEventListener('click',()=>window.SarNiTargetsOpen?.());
