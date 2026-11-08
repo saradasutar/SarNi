@@ -62,6 +62,35 @@ function boot(){
   $form.elements.type.value=fields.type;$form.elements.title.value=fields.title;$form.elements.dueDate.value=fields.due;$form.elements.details.value=fields.parsed.detail;
   fill(fields.parsed.stages);visibility();$('sarniTargetInlineHeading').textContent='Edit Target';$('sarniTargetInlineSave').textContent='Save Target';$form.scrollIntoView({block:'nearest'});
  },true);
+
+ const escapeHtml=v=>String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function decorate(root){
+  if(!root)return;
+  root.querySelectorAll('.sticky-note-card.target').forEach(card=>{
+   const raw=card.querySelector('.sticky-full-text');
+   if(!raw||card.querySelector('.sarni-stage-display'))return;
+   const parsed=decode(raw.textContent);
+   if(!parsed.structured)return;
+   raw.style.display='none'; // retain original stage JSON for editing and Home summaries
+   const done=parsed.stages.filter(s=>s.done).length;
+   const wrap=document.createElement('div');wrap.className='sarni-stage-display';
+   const rows=parsed.stages.map((r,i)=>'<tr><td>'+(i+1)+'</td><td>'+escapeHtml(r.name)+'</td><td>'+escapeHtml(r.date||'—')+'</td><td>'+(r.done?'✓ Done':'Pending')+'</td><td>'+escapeHtml(r.completedOn||'—')+'</td><td>'+escapeHtml(r.remark||'')+'</td></tr>').join('');
+   wrap.innerHTML=(parsed.detail?'<p class="sarni-stage-desc">'+escapeHtml(parsed.detail)+'</p>':'')+
+    '<div class="sarni-stage-badge">'+done+' / 5 stages · '+done*20+'% complete</div>'+
+    '<div class="sarni-stage-bar"><span style="width:'+(done*20)+'%"></span></div>'+
+    '<details class="sarni-stage-details"><summary>View five stages</summary><div class="sarni-stage-table-scroll"><table><thead><tr><th>#</th><th>Stage</th><th>Target date</th><th>Status</th><th>Completed</th><th>Remark</th></tr></thead><tbody>'+rows+'</tbody></table></div></details>';
+   raw.after(wrap);
+  });
+ }
+ const displayStyle=document.createElement('style');
+ displayStyle.textContent='.sarni-stage-display{margin:8px 0}.sarni-stage-desc{white-space:pre-wrap;font-size:12px;color:#5a6682}.sarni-stage-badge{font-size:12px;color:#493aa3;font-weight:800;margin:6px 0}.sarni-stage-bar{background:#e4e0f0;height:7px;border-radius:99px;overflow:hidden}.sarni-stage-bar span{display:block;height:100%;background:#18a27c}.sarni-stage-details{margin-top:9px}.sarni-stage-details summary{cursor:pointer;font-size:12px;font-weight:800;color:#6146a6}.sarni-stage-table-scroll{overflow-x:auto}.sarni-stage-details table{min-width:670px;width:100%;border-collapse:collapse;background:white;font-size:11px;margin-top:7px}.sarni-stage-details th,.sarni-stage-details td{border:1px solid #e0e5ed;padding:6px;white-space:normal}.sarni-stage-details th{background:#f2effb}';
+ document.head.append(displayStyle);
+ for(const id of ['stickyNotesList','sarniTargetRows']){
+  const el=$(id);if(!el)continue;
+  decorate(el);
+  new MutationObserver(()=>decorate(el)).observe(el,{childList:true});
+ }
+
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
