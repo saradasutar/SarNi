@@ -240,7 +240,7 @@ function boot(){
  focusBtn.addEventListener('click',()=>{focusOnly=!focusOnly;updateFocusView();});
  updateFocusView();
  $('sarniCompareManage').addEventListener('click',()=>window.SarNiTargetsOpen?.());
- new MutationObserver(renderTargets).observe(source,{childList:true});
+ document.addEventListener('sarni:sticky-rendered',renderTargets);
  document.addEventListener('sarni:home-visible',()=>{load();renderTargets();});
  document.addEventListener('sarni:home-books-updated',()=>{let rows=window.SarniHomeBookApi?.peek?.();if(Array.isArray(rows)){items=rows;paintBooks();}});
  const app=$('appView'),home=$('overviewSection');
