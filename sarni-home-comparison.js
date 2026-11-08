@@ -306,6 +306,13 @@ function boot(){
    if(n.type!=='TARGET'){reminders.push(n);continue;}
    const parsed=dec?.(n.text);
    const stages=parsed?.structured?parsed.stages:null;
+   // Home-only suppression of the unused MY PLAN placeholder. Preserve the
+   // original target, due date, and stage metadata in the management view.
+   // Any meaningful stage or description immediately makes it visible again.
+   const blankMyPlan=normalize(n.title).toLocaleLowerCase()==='my plan' &&
+     !normalize(parsed?.detail??n.text) &&
+     (!stages || stages.every(x=>!normalize(x.name)&&!x.date&&!x.done&&!x.completedOn&&!normalize(x.remark)));
+   if(blankMyPlan)continue;
    const signature=JSON.stringify([
     normalize(n.title).toLocaleLowerCase(),n.dueDate,
     stages?JSON.stringify([normalize(parsed.detail),stages.map(x=>[
