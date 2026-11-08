@@ -16,6 +16,16 @@
   $('bookTitle')?.focus();
  }
  document.addEventListener('click',e=>{
+  const targets=e.target.closest('#sarniSidebarTargetsBtn');
+  if(targets){
+   e.preventDefault();
+   const existing=$('homeTargetsOpenBtn');
+   if(existing){existing.click();return;}
+   const fallback=$('utilityDrawerOpenBtn');
+   fallback?.click();
+   const tab=document.querySelector('[data-utility-tab="STICKY"]');tab?.click();
+   return;
+  }
   if(!e.target.closest('#addBookBtn'))return;
   // Only intervene when the normal handler has not opened the modal.
   setTimeout(recover,0);
