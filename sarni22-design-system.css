@@ -236,3 +236,185 @@ body.theme-dark #appView .secondary-button{
  color:#e5edf7;
  border-color:#3e5368;
 }
+
+/* SarNi 22.1 — final visual consistency and small-screen refinements.
+   Scope to the signed-in dashboard; no record, save or navigation changes. */
+#appView{
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+#appView .main-content{
+  overflow-wrap:break-word;
+}
+#appView .page-section :is(.panel,.personal-card,.life-card,.sarni-focus-panel),
+#appView .book-detail-grid > *,
+#appView .sarni-focus-columns > *{
+  min-width:0;
+}
+#appView :is(.panel-head,.responsive-head) > *{
+  min-width:0;
+}
+#appView .panel-head button{
+  white-space:normal;
+  line-height:1.3;
+}
+#appView .page-section :is(p,small){
+  overflow-wrap:break-word;
+}
+#appView :is(.panel,.form-grid-2,.stack-form) :is(label,small){
+  line-height:1.45;
+}
+#appView :is(input,select,textarea):not([type=checkbox]):not([type=radio]){
+  border-radius:10px;
+}
+#appView :is(.primary-button,.secondary-button,.small-button){
+  font-weight:700;
+  letter-spacing:-.01em;
+}
+#appView :is(.form-actions,.book-toolbar-actions){
+  gap:8px;
+}
+#appView .sarni-focus-metrics > button{
+  min-width:0;
+  padding:clamp(11px,1.5vw,18px);
+  box-shadow:var(--s22-shadow);
+  border:1px solid var(--s22-border);
+  transition:border-color .14s ease,box-shadow .14s ease;
+}
+#appView .sarni-focus-metrics > button:hover{
+  border-color:#98cec4;
+  box-shadow:0 6px 18px rgba(24,42,70,.095);
+}
+#appView .sarni-focus-metrics > button strong{
+  font-variant-numeric:tabular-nums;
+  letter-spacing:-.035em;
+  overflow-wrap:anywhere;
+}
+#appView .sarni-focus-metrics > button small{
+  letter-spacing:.07em;
+}
+#appView .sarni-focus-panel{
+  border:1px solid var(--s22-border);
+  border-radius:var(--s22-radius);
+  background:var(--s22-surface);
+  box-shadow:var(--s22-shadow);
+}
+#appView .sarni-focus-panel-head{
+  gap:9px;
+  flex-wrap:wrap;
+}
+#appView .sarni-focus-panel-head h3{
+  font-size:clamp(15px,1.4vw,19px);
+  letter-spacing:-.02em;
+  line-height:1.3;
+}
+#appView :is(.table-wrap,.table-responsive,.responsive-table,.data-table-wrap){
+  max-width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+#appView table{
+  font-variant-numeric:tabular-nums;
+}
+#appView table th{
+  font-weight:750;
+  line-height:1.35;
+}
+#appView table td{
+  line-height:1.45;
+}
+#appView .side-nav .nav-item > span:first-child{
+  flex-shrink:0;
+}
+@media(min-width:1100px){
+  #appView .main-content{
+    padding-left:clamp(22px,2.4vw,38px);
+    padding-right:clamp(22px,2.4vw,38px);
+  }
+  #appView .sarni-focus-metrics{
+    gap:clamp(9px,1.25vw,15px);
+  }
+}
+@media(max-width:850px){
+  #appView .sarni-focus-metrics{
+    gap:8px!important;
+  }
+  #appView .sarni-focus-metrics > button{
+    padding:10px!important;
+    border-radius:12px!important;
+  }
+  #appView .sarni-focus-metrics > button strong{
+    font-size:clamp(17px,4.7vw,24px);
+    line-height:1.15;
+  }
+  #appView .sarni-focus-metrics > button small{
+    font-size:10px;
+    letter-spacing:.05em;
+  }
+  #appView .sarni-focus-panel{
+    padding:12px!important;
+  }
+  #appView .topbar .top-actions{
+    min-width:0;
+    gap:6px;
+  }
+  #appView .topbar-title-line{
+    gap:5px;
+  }
+  #appView .topbar .dashboard-version-pair{
+    gap:4px;
+  }
+  #appView .topbar .dashboard-version-chip{
+    max-width:100%;
+    white-space:nowrap;
+    font-size:9px;
+  }
+  #appView .page-section .panel-head{
+    justify-content:space-between;
+  }
+  #appView :is(.primary-button,.secondary-button,.small-button){
+    min-height:40px;
+    font-size:13px;
+  }
+  #appView .sarni-mobile-dock .mobile-nav-item{
+    min-height:48px;
+  }
+  #appView .book-detail-view .book-chapters-list > *{
+    min-width:0;
+  }
+  #appView .book-chapter-main strong{
+    overflow-wrap:anywhere;
+    line-height:1.45;
+  }
+}
+@media(max-width:420px){
+  #appView .topbar .top-actions{
+    flex-wrap:nowrap;
+    justify-content:flex-end;
+  }
+  #appView .topbar :is(.display-preferences,.dashboard-version-pair){
+    min-width:0;
+  }
+  #appView .sarni-focus-hero{
+    padding:14px!important;
+  }
+  #appView .sarni-focus-panel-head{
+    align-items:flex-start;
+  }
+  #appView .sarni-focus-tools{
+    gap:6px;
+  }
+}
+body.theme-dark #appView .sarni-focus-panel,
+body.theme-dark #appView .sarni-focus-metrics > button{
+  border-color:var(--s22-border);
+  box-shadow:var(--s22-shadow);
+}
+body.theme-dark #appView .sarni-focus-metrics > button:hover{
+  border-color:#428c87;
+}
+@media(prefers-reduced-motion:reduce){
+  #appView .sarni-focus-metrics > button{
+    transition:none!important;
+  }
+}
