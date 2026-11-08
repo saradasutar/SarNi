@@ -134,7 +134,7 @@ function start(){
   if(!existingId){
    // Only block an exact second save of the same record. Same title with
    // different stages/details remains a legitimate separate target.
-   const normalize=v=>String(v||'').trim().replace(/\\s+/g,' ');
+   const normalize=v=>String(v||'').trim().replace(/\s+/g,' ');
    const incoming=[inline.elements.type.value,normalize(title).toLocaleLowerCase(),
      inline.elements.dueDate.value,normalize(prepared.text)];
    const identical=window.SarniTargetEditorBridge?.listNotes?.().find(note=>
