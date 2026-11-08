@@ -18,10 +18,10 @@ css.textContent=`
 }
 @media(max-width:860px){#sarniLayoutHandle{display:none!important}}
 #sarniCompareTargets .sch-table-scroll,#sarniCompareTargets .sch-compact-scroll,#sarniCompareTargets .sch-hybrid-scroll{max-width:100%;overflow-x:auto!important;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-#sarniCompareTargets .sch-hybrid-table{table-layout:fixed;width:max-content;min-width:100%;border-collapse:separate;border-spacing:0}
+#sarniHomeTargetRowsPanel #sarniCompareTargets .sch-hybrid-table{table-layout:fixed!important;border-collapse:separate;border-spacing:0}
 #sarniCompareTargets .sch-hybrid-table th{position:relative;white-space:normal;overflow-wrap:anywhere;vertical-align:middle}
 #sarniCompareTargets .sch-hybrid-table td{white-space:normal;overflow-wrap:anywhere}
-#sarniCompareTargets .sarni-col-handle{position:absolute;right:0;top:0;bottom:0;width:11px;cursor:col-resize;touch-action:none;background:transparent;border:0;padding:0;z-index:2}
+#sarniCompareTargets .sarni-col-handle{position:absolute!important;right:-5px;top:0;bottom:0;width:17px;min-width:17px;cursor:col-resize!important;touch-action:none;background:transparent;border:0;padding:0;z-index:12;display:block!important}
 #sarniCompareTargets .sarni-col-handle:after{content:'';display:block;height:55%;position:absolute;top:22%;right:4px;border-right:2px solid #a49bc7}
 #sarniCompareTargets .sarni-col-handle:hover:after,#sarniCompareTargets .sarni-col-handle:focus-visible:after{border-color:#5a49b3;border-right-width:3px}
 #sarniCompareTargets .sarni-col-resizing{cursor:col-resize!important;user-select:none!important}
@@ -47,19 +47,37 @@ function setupSidebar(){
  handle.addEventListener('dblclick',()=>{state.navWidth=setWidth(268);save(state)});
  handle.addEventListener('keydown',ev=>{if(!eligible())return;if(ev.key==='ArrowLeft'||ev.key==='ArrowRight'){ev.preventDefault();state.navWidth=setWidth((state.navWidth||268)+(ev.key==='ArrowRight'?16:-16));save(state)}else if(ev.key==='Home'){state.navWidth=setWidth(268);save(state)}});
 }
+function setupToolbar(container,host,table,apply,defaults){
+ const section=document.getElementById('sarniHomeTargetRowsPanel');
+ if(!section)return;
+ let bar=document.getElementById('sarniTargetResizeTools');
+ if(!bar){bar=document.createElement('div');bar.id='sarniTargetResizeTools';bar.style.cssText='display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:7px 0;padding:5px 2px;font-size:11px';
+ const title=document.createElement('span');title.textContent='Target table: ';title.style.fontWeight='800';bar.appendChild(title);
+ const make=(label,hint,cb)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.title=hint;b.style.cssText='padding:6px 10px;border-radius:8px;background:#f3f0ff;color:#513f9f;border:1px solid #c6bbee;font-weight:800;cursor:pointer';b.addEventListener('click',cb);bar.appendChild(b)};
+ make('◀ Left','Show earlier columns',()=>{const h=container.querySelector('.sch-hybrid-wrap');h?.scrollBy({left:-280,behavior:'smooth'})});
+ make('Right ▶','Show columns to the right',()=>{const h=container.querySelector('.sch-hybrid-wrap');h?.scrollBy({left:280,behavior:'smooth'})});
+ make('− Narrower','Make Stage 1–5 columns narrower',()=>{for(let i=1;i<=5;i++){(state.columns||(state.columns={}))[i]=Math.max(75,(Number(state.columns[i])||150)-20)}save(state);const t=container.querySelector('table.sch-hybrid-table');if(t){t.removeAttribute('data-sarni-columns');setupTargetTable()}});
+ make('+ Wider','Make Stage 1–5 columns wider',()=>{for(let i=1;i<=5;i++){(state.columns||(state.columns={}))[i]=Math.min(550,(Number(state.columns[i])||150)+20)}save(state);const t=container.querySelector('table.sch-hybrid-table');if(t){t.removeAttribute('data-sarni-columns');setupTargetTable()}});
+ make('Reset','Restore initial column sizes',()=>{state.columns={};save(state);const t=container.querySelector('table.sch-hybrid-table');if(t){t.removeAttribute('data-sarni-columns');setupTargetTable()}});
+ section.querySelector('.sch-head')?.after(bar);
+ }
+}
 function setupTargetTable(){
  const container=document.getElementById('sarniCompareTargets');if(!container)return;
  const table=container.querySelector('table.sch-hybrid-table');if(!table||table.dataset.sarniColumns==='1')return;
+ const oldGroup=table.querySelector(':scope > colgroup');if(oldGroup)oldGroup.remove();table.querySelectorAll('.sarni-col-handle').forEach(n=>n.remove());
  table.dataset.sarniColumns='1';
  const columns=Array.from(table.querySelectorAll('thead th'));
  if(!columns.length)return;
  const host=table.parentElement;
  if(host){host.style.maxWidth='100%';host.style.overflowX='auto';host.style.webkitOverflowScrolling='touch';}
  const widths=state.columns||{};
+ const defaults=columns.map((_,i)=>i===0?220:i>=1&&i<=5?150:i===6?120:i===7?145:95);
+ const apply=()=>{let total=0;columns.forEach((th,i)=>{const w=Math.max(i===0?165:75,Math.min(550,Number((state.columns||{})[i])||defaults[i]));th.style.setProperty('width',w+'px','important');th.style.setProperty('min-width',w+'px','important');th.style.setProperty('max-width',w+'px','important');colgroup.children[i].style.setProperty('width',w+'px','important');total+=w});table.style.setProperty('width',Math.max(total,890)+'px','important');table.style.setProperty('min-width',Math.max(total,890)+'px','important');};
  const colgroup=document.createElement('colgroup');
  columns.forEach((th,i)=>{
   const col=document.createElement('col');
-  const def=i===0?210:i>=1&&i<=5?155:i===6?105:i===7?135:90;
+  const def=defaults[i];
   col.style.width=Math.max(75,Math.min(550,Number(widths[i])||def))+'px';
   colgroup.appendChild(col);
   if(i===columns.length-1)return;
@@ -67,13 +85,15 @@ function setupTargetTable(){
   th.appendChild(grip);
   let active=null,start=0,base=0;
   grip.addEventListener('pointerdown',ev=>{if(ev.button!==0)return;active=ev.pointerId;start=ev.clientX;base=parseFloat(col.style.width);grip.setPointerCapture(active);table.classList.add('sarni-col-resizing');ev.preventDefault();ev.stopPropagation()});
-  grip.addEventListener('pointermove',ev=>{if(active!==ev.pointerId)return;const n=Math.max(75,Math.min(550,base+ev.clientX-start));col.style.width=n+'px';(state.columns||(state.columns={}))[i]=Math.round(n)});
+  grip.addEventListener('pointermove',ev=>{if(active!==ev.pointerId)return;const n=Math.max(75,Math.min(550,base+ev.clientX-start));(state.columns||(state.columns={}))[i]=Math.round(n);apply()});
   const end=ev=>{if(active!==ev.pointerId)return;active=null;table.classList.remove('sarni-col-resizing');save(state)};
   grip.addEventListener('pointerup',end);grip.addEventListener('pointercancel',end);
-  grip.addEventListener('dblclick',ev=>{ev.preventDefault();ev.stopPropagation();col.style.width=def+'px';(state.columns||(state.columns={}))[i]=def;save(state)});
+  grip.addEventListener('dblclick',ev=>{ev.preventDefault();ev.stopPropagation();(state.columns||(state.columns={}))[i]=def;apply();save(state)});
   grip.addEventListener('click',ev=>ev.stopPropagation());
  });
  table.prepend(colgroup);
+ apply();
+ setupToolbar(container,host,table,apply,defaults);
 }
 function init(){
  setupSidebar();setupTargetTable();
