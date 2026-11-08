@@ -225,6 +225,27 @@ function boot(){
  ].join('');
  document.head.append(stageCardCss);
 
+ const stageWrapCss=document.createElement('style');
+ stageWrapCss.id='sarniHybridStageCards18';
+ stageWrapCss.textContent=[
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table{min-width:1120px!important;table-layout:fixed!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table thead th:first-child{width:20%!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table thead th:nth-child(n+2):nth-child(-n+6){width:11%!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table thead th:nth-child(7){width:7%!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table thead th:nth-child(8){width:11%!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table thead th:nth-child(9){width:7%!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-row>td.sch-hybrid-stage{vertical-align:top!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-pill{width:100%!important;height:auto!important;min-height:94px!important;max-height:none!important;overflow:visible!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;align-items:stretch!important;text-align:center!important;padding:8px 6px!important;gap:5px!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-heading{font-size:12px!important;line-height:1.2!important;font-weight:900!important;display:block!important;white-space:nowrap!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-check{font-size:13px!important;font-weight:900!important;margin-left:3px!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-caption{display:block!important;-webkit-line-clamp:unset!important;line-clamp:unset!important;-webkit-box-orient:unset!important;overflow:visible!important;white-space:normal!important;text-overflow:clip!important;max-height:none!important;height:auto!important;width:100%!important;overflow-wrap:anywhere!important;word-break:normal!important;font-size:10px!important;font-weight:650!important;line-height:1.35!important;text-align:center!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-date{display:block!important;margin-top:auto!important;padding-top:5px!important;border-top:1px solid rgba(75,85,115,.15)!important;font-size:9px!important;line-height:1.2!important;font-variant-numeric:tabular-nums!important;white-space:nowrap!important;opacity:.85}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-wrap{overflow-x:auto!important;overflow-y:visible!important}',
+  '@media(max-width:900px){#sarniHomeTargetRowsPanel .sch-hybrid-table{min-width:1120px!important}}'
+ ].join('');
+ document.head.append(stageWrapCss);
+
+
 
 
 
@@ -310,8 +331,9 @@ function boot(){
     const state=stage?.done?'done':!stage?'unset':stage===t.next?'next':'pending';
     const hint=stage?(stage.name||'Achievement '+(j+1)):'Not set';
     return '<td class="sch-hybrid-stage"><div class="sch-hybrid-pill '+state+'" title="'+e(hint)+'" aria-label="Stage '+(j+1)+': '+e(hint)+'. '+(stage?.done?'Complete':'Pending')+'">'+
-      '<span class="sch-hybrid-number">'+(stage?.done?'✓':j+1)+'</span>'+
-      '<span class="sch-hybrid-caption">'+e(stage?.name||'Not set')+'</span></div></td>';
+      '<span class="sch-hybrid-heading">Stage '+(j+1)+(stage?.done?' <span class="sch-hybrid-check" aria-hidden="true">✓</span>':'')+'</span>'+
+      '<span class="sch-hybrid-caption">'+e(stage?.name||'Not set')+'</span>'+
+      (stage?.date?'<span class="sch-hybrid-date">'+e(stage.date)+'</span>':'')+'</div></td>';
    }).join('');
    const pct=t.structured?t.count*20:0;
    const next=t.next?.name||(!t.structured?'Add five achievements':'All achievements completed');
