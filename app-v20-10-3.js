@@ -3041,24 +3041,72 @@ function renderBookDetailView(){
   }
 }
 function renderBookProgress(d){
-  const dates=Object.keys(d.progressByDate||{}).sort();
-  const totalWords=dates.reduce((s,k)=>s+(d.progressByDate[k]||0),0);
-  if(els.bookProgressTotalWords)els.bookProgressTotalWords.textContent=totalWords.toLocaleString('en-IN')+' words logged';
-  let streak=0,cursor=new Date();
-  for(;;){
-    const iso=cursor.toISOString().slice(0,10);
-    if((d.progressByDate||{})[iso]>0){streak++;cursor.setDate(cursor.getDate()-1);}else break;
+  const chapters=Array.isArray(d?.chapters)?d.chapters:[];
+  const book=d?.book||{};
+  const manuscriptWords=chapters.reduce((sum,c)=>sum+(Number(c.wordCount)||0),0);
+  const completed=chapters.filter(c=>String(c.status||'').toUpperCase()==='DONE').length;
+  const target=Math.max(0,Number(book.targetWordCount)||0);
+  const progressPct=target?Math.min(100,Math.round(manuscriptWords/target*100)):0;
+  const completedPct=chapters.length?Math.round(completed/chapters.length*100):0;
+  const activity=d.progressByDate||{};
+  const dates=Object.keys(activity).sort();
+  const loggedWords=dates.reduce((sum,k)=>sum+(Number(activity[k])||0),0);
+  const format=n=>(Number(n)||0).toLocaleString('en-IN');
+  // Saved manuscript content and separately logged writing activity are different.
+  if(els.bookProgressTotalWords)els.bookProgressTotalWords.textContent=format(manuscriptWords)+' manuscript words';
+  const root=els.bookProgressTotalWords?.closest('.panel');
+  if(root){
+    let summary=root.querySelector('#sarniBookActualProgress');
+    if(!summary){
+      summary=document.createElement('div');
+      summary.id='sarniBookActualProgress';
+      summary.className='sarni-book-progress-real';
+      const existingChart=els.bookProgressChart;
+      if(existingChart)existingChart.before(summary);
+      else root.append(summary);
+    }
+    // Build from fixed markup only; numerical values are assigned via textContent.
+    if(!summary.querySelector('.sarni-book-progress-cards')){
+      summary.innerHTML='<div class="sarni-book-progress-cards">'
+        +'<div class="sbp-stat sbp-violet"><span>Manuscript</span><strong id="sbpWords"></strong><small>Words saved in chapters</small></div>'
+        +'<div class="sbp-stat sbp-teal"><span>Chapters completed</span><strong id="sbpComplete"></strong><small id="sbpChapterDetail"></small></div>'
+        +'<div class="sbp-stat sbp-amber"><span>Writing activity</span><strong id="sbpLogged"></strong><small>Manually logged words</small></div>'
+        +'</div><div class="sbp-goal"><div class="sbp-goal-head"><span id="sbpGoalLabel"></span><strong id="sbpGoalPct"></strong></div><div class="sbp-track"><div id="sbpGoalFill"></div></div></div>'
+        +'<p class="sbp-help" id="sbpHelp"></p>';
+    }
+    const set=(id,value)=>{const n=summary.querySelector('#'+id);if(n)n.textContent=value;};
+    set('sbpWords',format(manuscriptWords));
+    set('sbpComplete',completed+' / '+chapters.length);
+    set('sbpChapterDetail',completedPct+'% chapters completed');
+    set('sbpLogged',format(loggedWords));
+    set('sbpGoalLabel',target?'Book target: '+format(target)+' words':'No book word target set');
+    set('sbpGoalPct',target?progressPct+'%':'—');
+    summary.querySelector('#sbpGoalFill').style.width=(target?progressPct:0)+'%';
+    set('sbpHelp','Manuscript words update when chapters are saved. Activity and streak use your optional “Log today” entries.');
   }
-  if(els.bookProgressStreak)els.bookProgressStreak.textContent=streak+' day streak';
+  const today=new Date();
+  const localKey=date=>date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
+  let streak=0,cursor=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+  // Keep continuity when there is no entry yet today, but yesterday was logged.
+  if(!(Number(activity[localKey(cursor)])>0))cursor.setDate(cursor.getDate()-1);
+  for(let i=0;i<365&&Number(activity[localKey(cursor)])>0;i++){
+    streak++;cursor.setDate(cursor.getDate()-1);
+  }
+  if(els.bookProgressStreak)els.bookProgressStreak.textContent=streak+' day activity streak';
   if(els.bookProgressChart){
     const last14=[];
-    const cur=new Date();
-    for(let i=13;i>=0;i--){const dt=new Date(cur);dt.setDate(cur.getDate()-i);last14.push(dt.toISOString().slice(0,10));}
-    const max=Math.max(1,...last14.map(k=>(d.progressByDate||{})[k]||0));
-    els.bookProgressChart.innerHTML=last14.map(k=>{const v=(d.progressByDate||{})[k]||0;const h=Math.max(2,Math.round(v/max*40));return `<div class="book-progress-bar" title="${k}: ${v} words"><i style="height:${h}px"></i></div>`;}).join('');
+    for(let i=13;i>=0;i--){
+      const dt=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+      dt.setDate(dt.getDate()-i);last14.push(localKey(dt));
+    }
+    const max=Math.max(1,...last14.map(k=>Number(activity[k])||0));
+    els.bookProgressChart.innerHTML=last14.map(k=>{
+      const v=Number(activity[k])||0,h=Math.max(2,Math.round(v/max*40));
+      return '<div class="book-progress-bar" title="'+k+': '+format(v)+' logged words"><i style="height:'+h+'px"></i></div>';
+    }).join('');
+    els.bookProgressChart.setAttribute('aria-label','Last 14 days of manually logged writing activity');
   }
 }
-
 
 /* Odia Heritage Cookbook: deliberate, resumable chapter creation in the CURRENT book.
    We only use existing bookDetail/saveChapter actions. No photos are falsely represented as evidence. */
