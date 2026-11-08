@@ -202,6 +202,30 @@ function boot(){
  ].join('');
  document.head.append(hybridStyle);
 
+ const stageCardCss=document.createElement('style');
+ stageCardCss.id='sarniHybridStageCards17';
+ stageCardCss.textContent=[
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table{min-width:890px!important;table-layout:fixed!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table thead th:first-child{width:22%!important;min-width:160px!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table thead th:nth-child(n+2):nth-child(-n+6){width:10%!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table thead th:nth-child(7){width:8%!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table thead th:nth-child(8){width:12%!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table thead th:nth-child(9){width:8%!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-table .sch-hybrid-row>td.sch-hybrid-stage{padding:5px 3px!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-pill{display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:3px!important;width:100%!important;height:65px!important;min-height:65px!important;box-sizing:border-box!important;padding:5px 4px!important;border-radius:10px!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-number{font-size:16px!important;font-weight:900!important;line-height:1!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-caption{display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;line-clamp:2!important;overflow:hidden!important;max-height:2.5em!important;max-width:100%!important;text-align:center!important;overflow-wrap:anywhere!important;font-size:9px!important;font-weight:650!important;line-height:1.23!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-pill.done{background:#dff7eb!important;color:#116b4b!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-pill.next{background:#fff1d5!important;color:#855918!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-pill.pending{background:#eff1f7!important;color:#52617d!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-pill.unset{background:#f1f2f5!important;color:#8a919f!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-title{font-size:12px!important}',
+  '#sarniHomeTargetRowsPanel .sch-hybrid-row{height:auto!important}',
+  '@media(max-width:760px){#sarniHomeTargetRowsPanel .sch-hybrid-table{min-width:890px!important}}'
+ ].join('');
+ document.head.append(stageCardCss);
+
+
 
 
 
@@ -285,8 +309,9 @@ function boot(){
     const stage=t.stages?.[j];
     const state=stage?.done?'done':!stage?'unset':stage===t.next?'next':'pending';
     const hint=stage?(stage.name||'Achievement '+(j+1)):'Not set';
-    return '<td class="sch-hybrid-stage"><span class="sch-hybrid-pill '+state+'" title="'+e(hint)+'" aria-label="'+e(hint)+': '+(stage?.done?'Complete':'Pending')+'">'+
-      (stage?.done?'✓':j+1)+'</span></td>';
+    return '<td class="sch-hybrid-stage"><div class="sch-hybrid-pill '+state+'" title="'+e(hint)+'" aria-label="Stage '+(j+1)+': '+e(hint)+'. '+(stage?.done?'Complete':'Pending')+'">'+
+      '<span class="sch-hybrid-number">'+(stage?.done?'✓':j+1)+'</span>'+
+      '<span class="sch-hybrid-caption">'+e(stage?.name||'Not set')+'</span></div></td>';
    }).join('');
    const pct=t.structured?t.count*20:0;
    const next=t.next?.name||(!t.structured?'Add five achievements':'All achievements completed');
