@@ -309,8 +309,9 @@ function boot(){
    // Home-only suppression of the unused MY PLAN placeholder. Preserve the
    // original target, due date, and stage metadata in the management view.
    // Any meaningful stage or description immediately makes it visible again.
+   // The legacy MY PLAN record has a due date/description but no achievements.
+   // Hide only this exact placeholder on Home; never delete its saved entry.
    const blankMyPlan=normalize(n.title).toLocaleLowerCase()==='my plan' &&
-     !normalize(parsed?.detail??n.text) &&
      (!stages || stages.every(x=>!normalize(x.name)&&!x.date&&!x.done&&!x.completedOn&&!normalize(x.remark)));
    if(blankMyPlan)continue;
    const signature=JSON.stringify([
