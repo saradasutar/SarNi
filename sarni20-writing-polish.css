@@ -1,0 +1,30 @@
+/* SarNi 20: calm writing and print-friendly editorial polish.
+ * No manuscript content changes. Avoid persistent animations or costly filters. */
+#booksSection #sarni18Control{border-radius:15px;box-shadow:0 5px 15px #1f2c4609}
+#booksSection .book-detail-view>.panel-head{margin-bottom:8px}
+#booksSection .book-chapters-list{scroll-margin-top:90px}
+#booksSection .book-chapter-row{min-height:65px;contain:layout style}
+#booksSection .book-chapter-main{line-height:1.5}
+#booksSection .book-chapter-main strong{letter-spacing:-.01em}
+#chapterModal #chapterContent{font-kerning:normal;text-rendering:optimizeLegibility;hyphens:auto;tab-size:2}
+#chapterModal #chapterContent p{orphans:3;widows:3}
+#chapterModal #chapterContent h2,#chapterModal #chapterContent h3{break-after:avoid}
+#chapterModal #chapterContent blockquote{border-left:2px solid #9e9e9e;padding-left:15px;margin-left:0;color:#3d3d3d}
+#chapterModal .modal-head{box-shadow:none!important}
+#sarni18Reader .s18text{orphans:3;widows:3;hyphens:auto;tab-size:2}
+#sarni18Reader .s18text:focus-visible{outline:2px solid #999;outline-offset:-3px}
+@media(max-width:650px){
+ #booksSection .book-detail-grid{grid-template-columns:1fr!important;gap:10px}
+ #booksSection .book-detail-view>.panel-head{padding:12px!important}
+ #booksSection #sarni18Control{padding:11px}
+ #chapterModal .rte-toolbar{gap:4px}
+ #chapterModal #chapterContent{overscroll-behavior:contain;line-height:1.75!important}
+ #chapterModal .form-actions{padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
+}
+@media print{
+ @page{size:A4;margin:20mm 18mm}
+ #sarni18Reader .s18text{font-family:Georgia,'Noto Serif',serif!important;font-size:11pt!important;line-height:1.65!important;color:#000!important;orphans:3;widows:3}
+ #sarni18Reader .s18text *{break-inside:avoid-page}
+ #sarni18Reader .s18header{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){#booksSection .book-chapter-row{transition:none!important}}
