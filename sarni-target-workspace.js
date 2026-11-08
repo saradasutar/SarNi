@@ -6,8 +6,8 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let current='TARGET',query='',open=false;
 function start(){
- const nav=$('sarniSidebarTargetsBtn'),main=$('mainDashboard'),source=$('stickyNotesList');
- if(!nav||!main||!source||$('sarniTargetsWorkspace'))return;
+ const nav=$('sarniSidebarTargetsBtn'),source=$('stickyNotesList');
+ if(!nav||!source||$('sarniTargetsWorkspace'))return;
  const sheet=document.createElement('section');
  sheet.id='sarniTargetsWorkspace';sheet.hidden=true;
  sheet.setAttribute('aria-label','Manage Targets and Reminders');
@@ -28,7 +28,7 @@ function start(){
  </div>
  <div id="sarniTargetRows" class="sarni-target-cards"></div>
  <p class="sarni-target-info">All entries are managed by your existing SarNi backend. Completed items remain in your recorded history.</p>`;
- main.append(sheet);
+ document.body.append(sheet);
  const style=document.createElement('style');
  style.textContent=`
  #sarniTargetsWorkspace{position:fixed;z-index:75;top:65px;bottom:14px;left:clamp(205px,19vw,285px);right:14px;overflow-y:auto;background:#f7f9ff;border:1px solid #dce3f2;border-radius:20px;box-shadow:0 28px 80px #12204a30;padding:clamp(14px,2vw,24px);color:#24324b}
@@ -77,9 +77,10 @@ function start(){
   if(!rows.length)root.innerHTML='<div class="sarni-target-empty">No matching entries. Create a new target or choose another view.</div>';
   else root.append(...rows);
  }
- function show(){open=true;sheet.hidden=false;nav.classList.add('active');nav.setAttribute('aria-current','page');if($('utilityDrawer')?.classList.contains('open'))$('utilityDrawerCloseBtn')?.click();render();}
- function close(){open=false;sheet.hidden=true;nav.classList.remove('active');nav.removeAttribute('aria-current');}
- nav.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();show();},true);
+ function show(){open=true;sheet.hidden=false;sheet.style.display='block';nav.classList.add('active');nav.setAttribute('aria-current','page');if($('utilityDrawer')?.classList.contains('open'))$('utilityDrawerCloseBtn')?.click();render();}
+ window.SarNiTargetsOpen=show;
+ function close(){open=false;sheet.hidden=true;sheet.style.display='none';nav.classList.remove('active');nav.removeAttribute('aria-current');}
+ nav.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();show();});
  $('sarniTargetsClose').addEventListener('click',close);
  sheet.querySelectorAll('[data-sarni-target-tab]').forEach(btn=>btn.addEventListener('click',()=>{current=btn.dataset.sarniTargetTab;render();}));
  $('sarniTargetSearch').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();render();});
