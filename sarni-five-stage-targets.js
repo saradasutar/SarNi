@@ -1,7 +1,7 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
 const A='[SARNI_TARGET_STAGES_V1]', Z='[/SARNI_TARGET_STAGES_V1]';
-const defaults=['Planning','Preparation','Execution','Review','Completion'];
+const defaults=['','','','',''];
 const fresh=()=>defaults.map(name=>({name,date:'',done:false,completedOn:'',remark:''}));
 function decode(value){
  const t=String(value||''),p=t.indexOf(A),q=t.indexOf(Z,p+A.length);
@@ -15,7 +15,7 @@ function boot(){
  const $form=$('sarniTargetInlineForm'),workspace=$('sarniTargetsWorkspace');
  if(!$form||!workspace)return;
  const node=document.createElement('div');node.id='sarniFiveStages';node.hidden=true;
- node.innerHTML='<div class="five-head"><strong>Five stages (20% each)</strong><span id="sarniFiveCount">0 / 5 · 0%</span></div><div class="five-scroll"><table><thead><tr><th>#</th><th>Stage / Work</th><th>Target date</th><th>Done</th><th>Completed date</th><th>Short remark</th></tr></thead><tbody id="sarniFiveBody"></tbody></table></div><div class="five-track"><span id="sarniFiveFill"></span></div>';
+ node.innerHTML='<div class="five-head"><strong>Five achievements (20% each)</strong><span id="sarniFiveCount">0 / 5 · 0%</span></div><div class="five-scroll"><table><thead><tr><th>#</th><th>What to Achieve</th><th>Target date</th><th>Done</th><th>Completed date</th><th>Short remark</th></tr></thead><tbody id="sarniFiveBody"></tbody></table></div><div class="five-track"><span id="sarniFiveFill"></span></div>';
  $form.querySelector('.sarni-target-inline-footer').before(node);
  const css=document.createElement('style');
  css.textContent='#sarniFiveStages{background:#faf9ff;border:1px solid #d8d0f2;border-radius:12px;padding:12px}#sarniFiveStages[hidden]{display:none!important}#sarniFiveStages .five-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;color:#5943a0;margin-bottom:8px}#sarniFiveStages .five-scroll{max-width:100%;overflow-x:auto}#sarniFiveStages table{min-width:720px;width:100%;border-collapse:collapse;background:white;font-size:12px}#sarniFiveStages td,#sarniFiveStages th{border:1px solid #e4e5ef;padding:7px;text-align:left}#sarniFiveStages th{background:#eeebf8}#sarniFiveStages input[type=text],#sarniFiveStages input[type=date]{width:100%;min-height:34px;font-size:12px;padding:5px}#sarniFiveStages input[type=checkbox]{width:20px;min-height:0;height:20px}#sarniFiveStages tr.done{background:#ecfbf2}#sarniFiveStages .five-track{background:#e4e0f1;border-radius:8px;height:9px;overflow:hidden;margin-top:10px}#sarniFiveFill{display:block;height:100%;background:#159b75;width:0}';
@@ -28,7 +28,7 @@ function boot(){
   let n=0;for(const tr of trRows()){let checked=tr.querySelector('[data-done]').checked,done=tr.querySelector('[data-completed]');if(checked){n++;if(!done.value)done.value=now();}else done.value='';tr.classList.toggle('done',checked);}
   $('sarniFiveCount').textContent=n+' / 5 · '+n*20+'%';$('sarniFiveFill').style.width=n*20+'%';
  }
- function fill(rows){$('sarniFiveBody').replaceChildren();rows.forEach((r,i)=>{let tr=document.createElement('tr');tr.innerHTML='<td>'+(i+1)+'</td><td><input data-name type="text" maxlength="140" required></td><td><input data-date type="date"></td><td><input data-done type="checkbox" aria-label="Complete stage '+(i+1)+'"></td><td><input data-completed type="date"></td><td><input data-remark type="text" maxlength="220" placeholder="Optional remark"></td>';tr.querySelector('[data-name]').value=r.name;tr.querySelector('[data-date]').value=r.date;tr.querySelector('[data-done]').checked=r.done;tr.querySelector('[data-completed]').value=r.completedOn;tr.querySelector('[data-remark]').value=r.remark;$('sarniFiveBody').append(tr);});update();}
+ function fill(rows){$('sarniFiveBody').replaceChildren();rows.forEach((r,i)=>{let tr=document.createElement('tr');tr.innerHTML='<td>'+(i+1)+'</td><td><input data-name type="text" maxlength="140" required></td><td><input data-date type="date"></td><td><input data-done type="checkbox" aria-label="Complete stage '+(i+1)+'"></td><td><input data-completed type="date"></td><td><input data-remark type="text" maxlength="220" placeholder="Optional remark"></td>';tr.querySelector('[data-name]').placeholder='What to achieve in stage '+(i+1);tr.querySelector('[data-name]').value=r.name;tr.querySelector('[data-date]').value=r.date;tr.querySelector('[data-done]').checked=r.done;tr.querySelector('[data-completed]').value=r.completedOn;tr.querySelector('[data-remark]').value=r.remark;$('sarniFiveBody').append(tr);});update();}
  function visibility(){node.hidden=$form.elements.type.value!=='TARGET';if(!node.hidden&&!trRows().length)fill(fresh());}
  $('sarniFiveBody').addEventListener('change',update);
  $form.elements.type.addEventListener('change',visibility);
@@ -39,7 +39,7 @@ function boot(){
  $form.addEventListener('submit',event=>{
   if($form.elements.type.value!=='TARGET')return;
   const entries=read();
-  if(entries.length!==5||entries.some(s=>!s.name)){event.preventDefault();event.stopImmediatePropagation();$('sarniTargetInlineStatus').textContent='Complete all five stage names.';return;}
+  if(entries.length!==5||entries.some(s=>!s.name)){event.preventDefault();event.stopImmediatePropagation();$('sarniTargetInlineStatus').textContent='Write what you want to achieve in each of the five stages.';return;}
   const detail=decode($form.elements.details.value).detail.trim();
   const packed=detail+(detail?'\n\n':'')+A+'\n'+JSON.stringify(entries)+'\n'+Z;
   if(packed.length>5000){event.preventDefault();event.stopImmediatePropagation();$('sarniTargetInlineStatus').textContent='Shorten the stage remarks to fit the saved note.';return;}
@@ -78,7 +78,7 @@ function boot(){
    wrap.innerHTML=(parsed.detail?'<p class="sarni-stage-desc">'+escapeHtml(parsed.detail)+'</p>':'')+
     '<div class="sarni-stage-badge">'+done+' / 5 stages · '+done*20+'% complete</div>'+
     '<div class="sarni-stage-bar"><span style="width:'+(done*20)+'%"></span></div>'+
-    '<details class="sarni-stage-details"><summary>View five stages</summary><div class="sarni-stage-table-scroll"><table><thead><tr><th>#</th><th>Stage</th><th>Target date</th><th>Status</th><th>Completed</th><th>Remark</th></tr></thead><tbody>'+rows+'</tbody></table></div></details>';
+    '<details class="sarni-stage-details"><summary>View five stages</summary><div class="sarni-stage-table-scroll"><table><thead><tr><th>#</th><th>What to Achieve</th><th>Target date</th><th>Status</th><th>Completed</th><th>Achievement remark</th></tr></thead><tbody>'+rows+'</tbody></table></div></details>';
    raw.after(wrap);
   });
  }
