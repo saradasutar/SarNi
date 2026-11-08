@@ -120,8 +120,10 @@ function init(){
  });
  obs.observe(modal,{attributes:true,attributeFilter:['class']});
  // The editor can open another chapter without closing the parent modal.
- const titleObserver=new MutationObserver(()=>{if(!visible)return;const c=current();if(c.id!==currentId||c.bookId!==currentBook){remember();currentId=c.id;currentBook=c.bookId;dirty=false;sessionStart=Date.now();updateButtons();stats();}});
- titleObserver.observe(form,{attributes:true,subtree:false,childList:false});
+ document.addEventListener('sarni:chapter-opened',()=>{
+  const c=current();visible=true;currentId=c.id;currentBook=c.bookId;dirty=false;sessionStart=Date.now();
+  info.textContent='Writing ready';updateButtons();stats();
+ });
  // Explicit save confirmation uses existing app handling; no guessed success.
  $('saveChapterBtn')?.addEventListener('click',()=>{if(visible)remember();},true);
  window.addEventListener('pagehide',remember);
