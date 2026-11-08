@@ -18,67 +18,103 @@ function boot(){
  nextCss.textContent='.sch-home-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:7px;margin-top:9px}.sch-home-actions button{border:1px solid #d8cef0;border-radius:8px;background:#f7f4ff;color:#5f45a0;padding:7px 10px;font-size:11px;font-weight:800;cursor:pointer}.sch-home-actions button:focus-visible,.sch-home-actions summary:focus-visible{outline:2px solid #6b52cc;outline-offset:3px}.sch-home-details{margin-top:8px;border-top:1px solid #ecedf6;padding-top:8px}.sch-home-details summary{cursor:pointer;font-size:12px;color:#5b478f;font-weight:800}.sch-home-stage{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:7px;align-items:start;padding:7px 0;border-bottom:1px solid #f0edf7;font-size:12px}.sch-home-stage:last-child{border-bottom:0}.sch-home-stage .is-complete{color:#13805d}.sch-home-stage .is-pending{color:#ba862b}.sch-home-stage small{color:#687792;font-size:11px}.sch-home-stage .sch-home-remark{grid-column:2/-1;line-height:1.4;color:#65738a}.sch-home-due{white-space:nowrap}.sch-home-actions button[disabled]{opacity:.5;cursor:default}';
  document.head.append(nextCss);
 
+ const tableStyle=document.createElement('style');
+ tableStyle.textContent=[
+  '#sarniHomeBookGlance{padding:12px 15px!important}',
+  '#sarniHomeBookGlance .sarni-home-writing-head{margin-bottom:4px!important}',
+  '.sarni-targets-home{padding:11px 13px!important;margin:9px 0!important}',
+  '.sarni-comparison-list{display:block!important;margin:6px 0!important}',
+  '.sch-table-wrap{max-width:100%;overflow-x:auto;border:1px solid #e2e7f1;border-radius:10px;background:#fff}',
+  '.sch-compact-table{width:100%;border-collapse:collapse;border-spacing:0;text-align:left;font-size:12px;color:#33415f}',
+  '.sch-compact-table thead{background:#f3f5fb;color:#56647f;font-size:11px}',
+  '.sch-compact-table th,.sch-compact-table td{padding:7px 9px;border-bottom:1px solid #e9edf5;vertical-align:middle}',
+  '.sch-compact-table tbody tr:last-child td{border-bottom:0}',
+  '.sch-compact-table tbody tr:hover{background:#f8f9ff}',
+  '.sch-compact-table td{font-variant-numeric:tabular-nums}',
+  '.sch-compact-table .sch-name{font-weight:800;max-width:280px;min-width:150px;overflow-wrap:anywhere}',
+  '.sch-compact-table .sch-name button{border:0;background:transparent;color:#293963;text-align:left;font:inherit;font-weight:800;padding:3px;cursor:pointer}',
+  '.sch-compact-table .sch-name button:hover{text-decoration:underline}',
+  '.sch-tone-0 .sch-name{border-left:3px solid #7a64ca;background:#f7f3ff}',
+  '.sch-tone-1 .sch-name{border-left:3px solid #3e9dbb;background:#eff9ff}',
+  '.sch-tone-2 .sch-name{border-left:3px solid #bc8b40;background:#fff8ed}',
+  '.sch-tone-3 .sch-name{border-left:3px solid #30a07f;background:#effaf5}',
+  '.sch-tone-4 .sch-name{border-left:3px solid #c478a3;background:#fff3f8}',
+  '.sch-mini-progress{min-width:75px;height:6px;border-radius:9px;background:#e7e6f0;overflow:hidden}',
+  '.sch-mini-progress span{display:block;height:100%;background:#7960ce}',
+  '.sch-compact-table small{font-size:10px;color:#77849c}',
+  '.sch-book-status,.sch-tag{font-size:10px;font-weight:800;white-space:nowrap;border-radius:7px;padding:5px 7px;background:#f1edfc;color:#6450a0}',
+  '.sch-tag.late,.sch-late-date{color:#b63350;font-weight:850}',
+  '.sch-tag.late{background:#ffeef1}',
+  '.sch-tag.complete{background:#e8f8ef;color:#157f5e}',
+  '.sch-tag.active{background:#f1efff}',
+  '.sch-next-cell{min-width:150px;max-width:260px;overflow-wrap:anywhere}',
+  '.sch-five-bars{display:flex;gap:3px;min-width:105px}',
+  '.sch-five-bars span{height:7px;flex:1;background:#e6e6ef;border-radius:6px}',
+  '.sch-five-bars span.done{background:#19a17c}',
+  '.sch-five-bars span.next{background:#e0a146}',
+  '.sch-reminder-title{margin:9px 2px 6px;color:#3d5075;font-size:12px;font-weight:850}',
+  '.sch-reminder-title span{background:#edf1fa;border-radius:20px;padding:2px 7px}',
+  '@media(max-width:850px){.sch-compact-table{font-size:11px}.sch-compact-table th,.sch-compact-table td{padding:7px}.sch-table-wrap{overflow-x:auto}}'
+ ].join('');
+ document.head.append(tableStyle);
+
+
  let items=[];
  function paintBooks(){
-  if(!items.length){booksDiv.innerHTML='<p class="sch-empty">Saved book progress will appear after sign-in.</p>';return;}
-  booksDiv.innerHTML=items.filter(x=>x?.id&&x.active!==false).map(b=>{
-   const words=num(b.totalWordCount),target=num(b.targetWordCount),pct=target?Math.min(100,Math.round(words/target*100)):null;
-   const d=new Date(b.latestChapterAt||b.updatedAt||b.lastUpdatedAt||'');const recent=Number.isFinite(d.getTime())?d.toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'—';
-   return '<article class="sch-row"><div class="sch-rowhead"><strong>'+e(b.title||'Untitled book')+'</strong><button type="button" data-sch-open="'+e(b.id)+'">Open ↗</button></div><div class="sch-grid"><div><small>Chapters done</small><strong>'+fmt(b.doneChapterCount)+' / '+fmt(b.chapterCount)+'</strong></div><div><small>Written words</small><strong>'+fmt(words)+'</strong></div><div><small>Word target</small><strong>'+(target?fmt(target):'Not set')+'</strong></div><div><small>Last updated</small><strong>'+e(recent)+'</strong></div></div><div class="sch-track"><span style="width:'+(pct||0)+'%"></span></div><div class="sch-foot"><span>'+(pct===null?'Set word target in Book Writing':pct+'% of word target')+'</span><span>'+e(b.status||'')+'</span></div></article>';
-  }).join('')||'<p class="sch-empty">No active books found.</p>';
+  const active=items.filter(b=>b&&b.id&&b.active!==false);
+  if(!active.length){booksDiv.innerHTML='<p class="sch-empty">Saved book summaries will appear after sign-in.</p>';return;}
+  const rows=active.map((b,i)=>{
+   const chapters=num(b.chapterCount),done=num(b.doneChapterCount),words=num(b.totalWordCount),target=num(b.targetWordCount);
+   const pct=target?Math.min(100,Math.round(words/target*100)):null;
+   const d=new Date(b.latestChapterAt||b.updatedAt||b.lastUpdatedAt||'');
+   const changed=Number.isFinite(d.getTime())?d.toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'—';
+   return '<tr class="sch-book-row sch-tone-'+(i%5)+'"><td class="sch-name"><button type="button" data-sch-open="'+e(b.id)+'" title="Open '+e(b.title)+'">'+e(b.title||'Untitled book')+'</button></td>'+
+    '<td><strong>'+fmt(done)+' / '+fmt(chapters)+'</strong></td>'+
+    '<td><strong>'+fmt(words)+'</strong> / '+(target?fmt(target):'Not set')+'</td>'+
+    '<td><div class="sch-mini-progress"><span style="width:'+(pct||0)+'%"></span></div><small>'+(pct===null?'No target':pct+'%')+'</small></td>'+
+    '<td><span class="sch-book-status">'+e(String(b.status||'Planning').toLowerCase().replace(/^\w/,c=>c.toUpperCase()))+'</span></td>'+
+    '<td>'+e(changed)+'</td></tr>';
+  }).join('');
+  booksDiv.innerHTML='<div class="sch-table-wrap"><table class="sch-compact-table sch-book-table"><thead><tr><th>Book</th><th>Chapters done / total</th><th>Words written / target</th><th>Progress</th><th>Status</th><th>Updated</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
   root.classList.add('sch-ready');
  }
  const second=document.createElement('style');second.textContent='#sarniHomeBookGlance.sch-ready .sarni-home-writing-grid,#sarniHomeBookGlance.sch-ready .sarni-home-writing-progress,#sarniHomeBookGlance.sch-ready .sarni-home-writing-actions{display:none!important}';document.head.append(second);
  async function load(){try{let api=window.SarniHomeBookApi;if(!api?.load)return;let x=await api.load(false);if(Array.isArray(x)){items=x;paintBooks();}}catch(err){booksDiv.innerHTML='<p class="sch-empty">Book summaries unavailable; please check Book Writing.</p>';}}
  booksDiv.addEventListener('click',ev=>{const btn=ev.target.closest('[data-sch-open]');if(btn)window.SarniHomeBookApi?.open?.(btn.dataset.schOpen);});
  function renderTargets(){
-  const cards=[...source.querySelectorAll('.sticky-note-card')],targets=cards.filter(x=>x.classList.contains('target')),reminders=cards.filter(x=>!x.classList.contains('target'));
-  const dec=window.SarniTargetStages?.decode,now=new Date(),today=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  const cards=[...source.querySelectorAll('.sticky-note-card')];
+  const targets=cards.filter(c=>c.classList.contains('target'));
+  const reminders=cards.filter(c=>!c.classList.contains('target'));
+  const dec=window.SarniTargetStages?.decode;
+  const d=new Date(),today=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
   const models=targets.map(card=>{
-   const raw=card.querySelector('.sticky-full-text')?.textContent||'',parsed=dec?.(raw),rows=parsed?.structured?parsed.stages:null;
-   const done=rows?rows.filter(x=>x.done).length:0,next=rows?.find(x=>!x.done),due=next?.date||'';
-   return {id:card.querySelector('[data-sticky-edit]')?.dataset.stickyEdit||'',title:card.querySelector('h4')?.textContent||'Target',rows,done,next,due,overdue:!!due&&due<today};
+   const parsed=dec?.(card.querySelector('.sticky-full-text')?.textContent||'');
+   const stages=parsed?.structured?parsed.stages:null;
+   const count=stages?stages.filter(x=>x.done).length:0;
+   const next=stages?.find(x=>!x.done);
+   const due=next?.date||'';
+   return {name:card.querySelector('h4')?.textContent||'Target',count,stages,next,due,late:!!due&&due<today};
   });
-  $('sarniCompareStats').innerHTML='<div><strong>'+models.length+'</strong><small>Active targets</small></div><div><strong>'+models.filter(x=>x.overdue).length+'</strong><small>Overdue stages</small></div><div><strong>'+reminders.length+'</strong><small>Reminders</small></div>';
-  const out=$('sarniCompareTargets');out.replaceChildren();
-  for(const t of models){
-   const pct=t.rows?t.done*20:0,card=document.createElement('article');
-   card.className='sch-row sch-target-card'+(t.overdue?' sch-overdue':'');
-   const marks=t.rows?t.rows.map((stage,i)=>{
-    const next=!stage.done&&t.next===stage;
-    const className=stage.done?' is-done':next?' is-next':'';
-    const label=stage.name||'Stage '+(i+1);
-    return '<div class="sch-stage'+className+'" title="'+e(label)+'"><span class="sch-stage-dot"></span><span class="sch-stage-label">'+(i+1)+'</span></div>';
-   }).join(''):'';
-   const nextTitle=t.next?.name||(!t.rows?'Set up the five achievements':'All achievements completed');
-   card.innerHTML='<div class="sch-rowhead"><strong>'+e(t.title)+'</strong><span class="sch-pct">'+(t.rows?pct+'%':'Not started')+'</span></div>'+
-    (marks?'<div class="sch-stages" aria-label="'+t.done+' out of five stages completed">'+marks+'</div>':'')+
-    '<div class="sch-track"><span style="width:'+pct+'%"></span></div>'+
-    '<div class="sch-foot"><span>Next achievement: '+e(nextTitle)+'</span><span>'+(t.due?(t.overdue?'Overdue · ':'Due · ')+e(t.due):'No stage due date')+'</span></div>'+
-    (!t.rows?'<div class="sch-progress-note">Open Target & Reminder to add five stages.</div>':'')+
-    (t.rows?'<details class="sch-home-details"><summary>View all five achievements</summary>'+t.rows.map((stage,i)=>'<div class="sch-home-stage"><span class="'+(stage.done?'is-complete':'is-pending')+'">'+(stage.done?'✓':(i+1))+'</span><span>'+e(stage.name||'Achievement '+(i+1))+'</span><small class="sch-home-due">'+e(stage.date||'No date')+'</small>'+(stage.done&&stage.remark?'<small class="sch-home-remark">Achievement remark: '+e(stage.remark)+'</small>':'')+'</div>').join('')+'</details>':'')+
-    '<div class="sch-home-actions"><button type="button" data-sch-target-edit="'+e(t.id)+'" '+(!t.id?'disabled':'')+'>✎ Update progress</button></div>';
-   out.append(card);
-  }
-  for(const c of reminders.slice(0,3)){
-   const card=document.createElement('article');card.className='sch-row';card.innerHTML='<div class="sch-rowhead"><strong>'+e(c.querySelector('h4')?.textContent||'Reminder')+'</strong><span>Reminder</span></div><div class="sch-foot">'+e(c.querySelector('.sticky-due')?.textContent||'')+'</div>';out.append(card);
-  }
-  if(!out.children.length)out.innerHTML='<p class="sch-empty">No active targets or reminders to show.</p>';
+  $('sarniCompareStats').innerHTML='<div><strong>'+models.length+'</strong><small>Active targets</small></div><div><strong>'+models.filter(x=>x.late).length+'</strong><small>Overdue stages</small></div><div><strong>'+reminders.length+'</strong><small>Reminders</small></div>';
+  const rows=models.map((t,i)=>{
+   const progress=t.stages?t.count*20:0;
+   const segments=t.stages?t.stages.map((x,j)=>'<span class="'+(x.done?'done':t.next===x?'next':'')+'" title="Stage '+(j+1)+': '+e(x.name||'Not set')+'"></span>').join(''):'<span></span><span></span><span></span><span></span><span></span>';
+   return '<tr class="sch-target-row sch-tone-'+(i%5)+(t.late?' sch-late':'')+'"><td class="sch-name">'+e(t.name)+'</td>'+
+    '<td><div class="sch-five-bars" aria-label="'+t.count+' of 5 achievements completed">'+segments+'</div><small>'+t.count+' / 5 · '+(t.stages?progress+'%':'Set stages')+'</small></td>'+
+    '<td class="sch-next-cell">'+e(t.next?.name||(t.stages?'All achievements done':'Set achievements'))+'</td>'+
+    '<td><span class="'+(t.late?'sch-late-date':'')+'">'+e(t.due||'—')+'</span></td>'+
+    '<td><span class="sch-tag '+(t.late?'late':t.count===5?'complete':'active')+'">'+(t.late?'Overdue':t.count===5?'Ready to finish':'In progress')+'</span></td></tr>';
+  }).join('');
+  const reminderRows=reminders.map((card,i)=>{
+   const name=card.querySelector('h4')?.textContent||'Reminder';
+   const due=card.querySelector('.sticky-due')?.textContent||'—';
+   return '<tr class="sch-tone-'+(i%5)+'"><td class="sch-name">'+e(name)+'</td><td>'+e(due)+'</td></tr>';
+  }).join('');
+  const out=$('sarniCompareTargets');
+  out.innerHTML='<div class="sch-table-wrap"><table class="sch-compact-table sch-target-table"><thead><tr><th>Target</th><th>5-stage achievement</th><th>Next achievement</th><th>Due date</th><th>Status</th></tr></thead><tbody>'+ (rows||'<tr><td colspan="5" class="sch-empty">No active targets yet.</td></tr>')+'</tbody></table></div>'+
+   (reminders.length?'<div class="sch-reminder-title">Reminders <span>'+reminders.length+'</span></div><div class="sch-table-wrap"><table class="sch-compact-table"><thead><tr><th>Reminder</th><th>Due / status</th></tr></thead><tbody>'+reminderRows+'</tbody></table></div>':'');
  }
  $('sarniCompareManage').addEventListener('click',()=>window.SarNiTargetsOpen?.());
- $('sarniCompareTargets').addEventListener('click',event=>{
-  const btn=event.target.closest('[data-sch-target-edit]');
-  if(!btn)return;
-  const id=btn.dataset.schTargetEdit;
-  if(!id)return;
-  const original=[...source.querySelectorAll('[data-sticky-edit]')].find(el=>el.dataset.stickyEdit===id);
-  if(!original){window.SarNiTargetsOpen?.();return;}
-  window.SarNiTargetsOpen?.();
-  const tab=document.querySelector('#sarniTargetsWorkspace [data-sarni-target-tab="TARGET"]');
-  tab?.click();
-  const edit=[...document.querySelectorAll('#sarniTargetRows [data-sticky-edit]')].find(el=>el.dataset.stickyEdit===id);
-  if(edit)edit.click();
- });
  new MutationObserver(renderTargets).observe(source,{childList:true});
  document.addEventListener('sarni:home-visible',()=>{load();renderTargets();});
  document.addEventListener('sarni:home-books-updated',()=>{let rows=window.SarniHomeBookApi?.peek?.();if(Array.isArray(rows)){items=rows;paintBooks();}});
