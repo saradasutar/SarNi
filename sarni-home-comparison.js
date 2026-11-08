@@ -61,6 +61,45 @@ function boot(){
  stageTableStyle.textContent='.sch-target-parent th{background:#f1f2fa;padding:8px 10px!important;text-align:left;border-top:2px solid #dae0ef;border-bottom:1px solid #dfe3ec}.sch-target-parent:first-child th{border-top:0}.sch-target-group{display:flex;align-items:center;flex-wrap:wrap;gap:9px}.sch-target-heading{font-size:12px;font-weight:850;color:#263957;min-width:150px;flex:1}.sch-target-percent{font-weight:850;color:#5d4bad;font-size:11px}.sch-target-group .sch-five-bars{width:100px;min-width:100px}.sch-target-stage td{font-size:11px;padding:6px 9px!important}.sch-stage-number{font-weight:800;white-space:nowrap;color:#65549f}.sch-stage-achievement{font-weight:760;min-width:150px;overflow-wrap:anywhere;color:#2d3e58}.sch-stage-remark{min-width:100px;max-width:225px;overflow-wrap:anywhere;color:#687692}.sch-target-stage.sch-late td{background:#fff5f6}.sch-target-stage .sch-tag{display:inline-block}@media(max-width:850px){.sch-target-table{min-width:650px}.sch-target-group .sch-five-bars{width:75px;min-width:75px}}';
  document.head.append(stageTableStyle);
 
+ const compact=document.createElement('style');
+ compact.id='sarniHomeCompactVerified';
+ compact.textContent=[
+ '#sarniHomeBookGlance{padding:9px 12px!important;margin:6px 0!important;border-radius:12px!important}',
+ '#sarniHomeBookGlance .sarni-home-writing-head{margin:0 0 4px!important;padding:0!important;min-height:0!important}',
+ '#sarniHomeBookGlance .sarni-home-writing-head h3{font-size:17px!important;margin:0!important;line-height:1.25!important}',
+ '#sarniHomeBookGlance .sarni-home-writing-eyebrow{font-size:9px!important}',
+ '#sarniHomeBookGlance .sarni-home-writing-grid,#sarniHomeBookGlance .sarni-home-writing-progress,#sarniHomeBookGlance .sarni-home-writing-actions{display:none!important}',
+ '#sarniHomeBookGlance .sarni-home-writing-note{font-size:10px!important;line-height:1.2!important;margin:4px 0 0!important}',
+ '#sarniHomeBookRows{display:block!important;margin:4px 0!important}',
+ '#sarniHomeTargetRowsPanel{padding:9px 12px!important;margin:6px 0 9px!important;border-radius:12px!important}',
+ '#sarniHomeTargetRowsPanel .sch-head h3{font-size:16px!important;margin:0!important}',
+ '#sarniHomeTargetRowsPanel .sch-head small{font-size:9px!important}',
+ '#sarniHomeTargetRowsPanel .sch-stats{margin:6px 0!important;gap:6px!important}',
+ '#sarniHomeTargetRowsPanel .sch-stats div{padding:5px 8px!important}',
+ '#sarniHomeTargetRowsPanel .sch-stats strong{font-size:16px!important}',
+ '#sarniHomeTargetRowsPanel .sch-stats small{font-size:9px!important}',
+ '#sarniHomeBookRows .sch-compact-table td,#sarniHomeBookRows .sch-compact-table th,#sarniHomeTargetRowsPanel .sch-compact-table td,#sarniHomeTargetRowsPanel .sch-compact-table th{padding:5px 7px!important;line-height:1.25!important}',
+ '.sch-book-table .sch-book-row.sch-tone-0 .sch-name{background:#f2efff!important;border-left:4px solid #7856c5!important}',
+ '.sch-book-table .sch-book-row.sch-tone-1 .sch-name{background:#e9f7fc!important;border-left:4px solid #2295af!important}',
+ '.sch-book-table .sch-book-row.sch-tone-2 .sch-name{background:#fff5e5!important;border-left:4px solid #b78730!important}',
+ '.sch-book-table .sch-book-row.sch-tone-3 .sch-name{background:#ebfaf3!important;border-left:4px solid #169679!important}',
+ '.sch-book-table .sch-book-row.sch-tone-4 .sch-name{background:#fff0f7!important;border-left:4px solid #b96a99!important}',
+ '.sch-target-parent.sch-tone-0 th{background:#f2efff!important;border-left:4px solid #7856c5}',
+ '.sch-target-parent.sch-tone-1 th{background:#e9f7fc!important;border-left:4px solid #2295af}',
+ '.sch-target-parent.sch-tone-2 th{background:#fff5e5!important;border-left:4px solid #b78730}',
+ '.sch-target-parent.sch-tone-3 th{background:#ebfaf3!important;border-left:4px solid #169679}',
+ '.sch-target-parent.sch-tone-4 th{background:#fff0f7!important;border-left:4px solid #b96a99}',
+ '.sch-target-stage .sch-stage-number{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;background:#ebe6fa;color:#6649a9;font-size:11px;font-weight:900}',
+ '.sch-target-stage.sch-tone-1 .sch-stage-number{background:#e2f4fa;color:#1a8298}',
+ '.sch-target-stage.sch-tone-2 .sch-stage-number{background:#fff1d9;color:#926322}',
+ '.sch-target-stage.sch-tone-3 .sch-stage-number{background:#dff7ec;color:#16775d}',
+ '.sch-target-stage.sch-tone-4 .sch-stage-number{background:#f9e7f2;color:#98557d}',
+ '@media(min-width:950px){.sch-target-table{table-layout:fixed}.sch-target-table th:nth-child(1){width:8%}.sch-target-table th:nth-child(2){width:37%}.sch-target-table th:nth-child(3){width:17%}.sch-target-table th:nth-child(4){width:15%}.sch-target-table th:nth-child(5){width:23%}}',
+ '@media(max-width:750px){.sch-target-table{min-width:630px}.sch-book-table{min-width:640px}}'
+ ].join('');
+ document.head.append(compact);
+
+
 
  let items=[];
  function paintBooks(){
@@ -106,7 +145,7 @@ function boot(){
    const parent='<tr class="sch-target-parent sch-tone-'+(i%5)+(t.late?' sch-late':'')+'"><th colspan="5" scope="rowgroup"><div class="sch-target-group"><span class="sch-target-heading">'+e(t.name)+'</span><span class="sch-target-percent">'+(t.stages?progress+'%':'Stages not set')+'</span><span class="sch-five-bars" aria-label="'+t.count+' of 5 achievements completed">'+Array.from({length:5},(_,j)=>'<span class="'+(stages[j]?.done?'done':stages[j]===t.next?'next':'')+'"></span>').join('')+'</span></div></th></tr>';
    const lines=t.stages?t.stages.map((stage,j)=>{
     const overdue=!stage.done&&!!stage.date&&stage.date<today;
-    return '<tr class="sch-target-stage sch-tone-'+(i%5)+(overdue?' sch-late':'')+'"><td><span class="sch-stage-number">Stage '+(j+1)+'</span></td>'+
+    return '<tr class="sch-target-stage sch-tone-'+(i%5)+(overdue?' sch-late':'')+'"><td><span class="sch-stage-number">'+(j+1)+'</span></td>'+
      '<td class="sch-stage-achievement">'+e(stage.name||'Not specified')+'</td>'+
      '<td>'+e(stage.date||'—')+'</td>'+
      '<td><span class="sch-tag '+(stage.done?'complete':overdue?'late':'active')+'">'+(stage.done?'✓ Complete':overdue?'Overdue':'Pending')+'</span></td>'+
