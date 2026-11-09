@@ -65,7 +65,7 @@ function boot(){
   messages.forEach((item,i)=>{
    if(i){let sep=document.createElement('span');sep.className='snb-separator';sep.textContent='✦';track.append(sep);}
    let box=document.createElement('span');box.className='snb-message';
-   let lines=String(item.text||'').split(/\\r?\\n/).filter(x=>x.trim()).slice(0,15);
+   let lines=String(item.text||'').split(/\r?\n/).filter(x=>x.trim()).slice(0,15);
    lines.forEach((value,j)=>{
     let setting=Array.isArray(item.styles)?item.styles[j]||{}:{};
     const colour=x=>/^#[0-9a-f]{6}$/i.test(String(x||''))?x:null;
