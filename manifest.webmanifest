@@ -1,28 +1,28 @@
 {
-  "id": "/SarNi/",
+  "id": "./",
   "name": "SarNi — Personal Life Dashboard",
   "short_name": "SarNi",
   "description": "Personal life dashboard for planning, calendar, expenses, diary and memories",
-  "start_url": "/SarNi/",
-  "scope": "/SarNi/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f5f7ff",
   "theme_color": "#142954",
   "icons": [
     {
-      "src": "/SarNi/icon-192.png",
+      "src": "./icon-192.png?v=20261112-iconfix1",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "/SarNi/icon-512.png",
+      "src": "./icon-512.png?v=20261112-iconfix1",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "/SarNi/sarni-life-icon.svg",
+      "src": "./sarni-life-icon.svg?v=20261112-iconfix1",
       "type": "image/svg+xml",
       "sizes": "any",
       "purpose": "any"
