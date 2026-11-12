@@ -1,6 +1,6 @@
 /* SarNi root PWA shell. Cache only public static app shell; never cache API, guest-token URLs, or personal data. */
 'use strict';
-const CACHE='sarni-root-shell-v1';
+const CACHE='sarni-root-shell-v2-iconfix';
 const ROOT=new URL(self.registration.scope);
 const SHELL=[new URL('./',ROOT).href,new URL('./index.html',ROOT).href,new URL('./manifest.webmanifest',ROOT).href,new URL('./sarni-life-icon.svg',ROOT).href,new URL('./icon-192.png',ROOT).href,new URL('./icon-512.png',ROOT).href];
 self.addEventListener('install',e=>e.waitUntil((async()=>{const c=await caches.open(CACHE);for(const u of SHELL){try{const r=await fetch(u,{cache:'reload',credentials:'same-origin'});if(r.ok&&r.type==='basic')await c.put(u,r)}catch(_){}}await self.skipWaiting()})()));
