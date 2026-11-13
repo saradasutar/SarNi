@@ -1,6 +1,6 @@
 /* SarNi Quick Entry app shell only. No personal data, API responses or private URLs are cached. */
 'use strict';
-const CACHE_NAME='sarni-q-private-shell-v5-favicon';
+const CACHE_NAME='sarni-q-private-shell-v6-token-shortcut';
 const SCOPE=new URL(self.registration.scope);
 const SHELL=new URL('./index.html',SCOPE).href;
 const STATIC=[SHELL,new URL('./manifest.webmanifest',SCOPE).href,new URL('./sarni9-batch10.css',SCOPE).href,new URL('./sarni9-batch10.js',SCOPE).href,new URL('../config.js',SCOPE).href,new URL('../sarni-life-icon.svg',SCOPE).href,new URL('../quick-expense-192.png',SCOPE).href,new URL('../quick-expense-512.png',SCOPE).href];
