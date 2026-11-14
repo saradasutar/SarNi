@@ -2889,7 +2889,7 @@ $('qeVerifyRecheckUnresolved').onclick=async()=>{
    t.line.lastElementChild.textContent='Rechecking destination…';
    let verdict;
    try{
-    const proof=await api('qeSyncVerify',{kind:t.kind,sourceRecordId:t.id,grant:pinGrant||''});
+    const proof=await qeVerifyWithTimeout({kind:t.kind,sourceRecordId:t.id,grant:pinGrant||''});
     if(run!==qeVerifyRecentSequence||$('qeVerifyRecentPanel').hidden)break;
     verdict=qeVerificationClass(proof,t.kind,t.id);
    }catch(e){
@@ -2943,6 +2943,7 @@ function qeVerificationClass(result,kind,id){
  if(result.verified===false&&result.destinationFound===false&&String(result.checkedAt||'').trim())return {key:'missing',text:'Not found at '+String(result.checkedAt)};
  return {key:'unverified',text:'Unverified · backend did not provide destination evidence'};
 }
+function qeVerifyWithTimeout(payload,ms=15000){return Promise.race([api('qeSyncVerify',payload),new Promise((_,reject)=>setTimeout(()=>reject(new Error('Destination verification timed out after '+Math.round(ms/1000)+' seconds. The destination did not return a confirmation.')),ms))]);}
 async function qeVerifyRecentRecords(){
  const panel=$('qeVerifyRecentPanel'),results=$('qeVerifyRecentResults'),foot=$('qeVerifyRecentFootnote'),btn=$('qeVerifyRecentButton'),stop=$('qeVerifyRecentCancel');
  const run=++qeVerifyRecentSequence;results.replaceChildren();
@@ -2963,7 +2964,7 @@ async function qeVerifyRecentRecords(){
     records=(Array.isArray(got.entries)?got.entries:Array.isArray(got.items)?got.items:[]).filter(x=>String(x.kind||'').toLowerCase()===kind&&!x.trashed).slice(0,3);
    }catch(e){report(current.name,'unavailable','Cannot read records: '+String(e.message||e).slice(0,140));tally.unavailable++;mark(kind,'unavailable');continue;}
    if(run!==qeVerifyRecentSequence||panel.hidden)break;
-   if(!records.length){report(current.name,'unverified','No recent records returned for this private link.');mark(kind,'no records returned');continue;}
+   if(!records.length){report(current.name,'unverified','No recent records returned for this private link.');tally.unverified++;mark(kind,'no records returned');continue;}
    for(const record of records){
     if(run!==qeVerifyRecentSequence||panel.hidden)break;
     if(!record.id){report(current.name,'unverified','Recent record has no stable ID; lookup skipped.');tally.unverified++;mark(kind,'unverified');continue;}
@@ -2971,7 +2972,7 @@ async function qeVerifyRecentRecords(){
     const line=report(label,'neutral','Checking destination…');
     const item=mark(kind,'unverified');const target={kind,id:String(record.id),line,item};qeVerifyAuditTargets.push(target);
     try{
-     const proof=await api('qeSyncVerify',{kind,sourceRecordId:String(record.id),grant:pinGrant||''});
+     const proof=await qeVerifyWithTimeout({kind,sourceRecordId:String(record.id),grant:pinGrant||''});
      if(run!==qeVerifyRecentSequence||panel.hidden)break;
      const verdict=qeVerificationClass(proof,kind,record.id);
      line.className='qe-verify-result '+verdict.key;line.lastElementChild.textContent=verdict.text;
