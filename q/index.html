@@ -3258,7 +3258,7 @@ async function loadRecent(append=false){
   if(qeProgressKind===requestedMode){qeProgressRecords.push(...entries);qeRenderDiaryProgress(requestedMode);}
   if(!append)host.replaceChildren();
   host.querySelector('[data-load-more]')?.remove();host.querySelector('[data-load-more="1"]')?.remove();
-  if(!entries.length&&!append){host.textContent='No '+label+' records returned for this link.';$('recentSearchInfo').textContent='No records available';$('recentSummary').hidden=true;return;}
+  if(!entries.length&&!append){host.textContent=requestedMode==='stock'?(result.canonicalStore==='ANALYSIS'?'Analysis Stock Notes owner responded, but this private link has no mapped Stock Note records. Check that this is the exact Quick Entry link recorded in the Stock Notes ledger.':'Analysis Stock Notes owner route is not active in this deployed SarNi backend. Deploy the latest SarNi Web App version, then refresh.'):'No '+label+' records returned for this link.';$('recentSearchInfo').textContent=requestedMode==='stock'?(result.canonicalStore==='ANALYSIS'?'Analysis owner connected · 0 records for this link':'Analysis owner route not detected'):'No records available';$('recentSummary').hidden=true;return;}
   const columnsByType={
    expense:[['date','Date'],['category','Category'],['subject','Reason / Purpose'],['amount','Amount'],['party','Paid by'],['details','Details']],
    diary:[['date','Date'],['subject','Title / Note'],['type','Type'],['details','Details']],
