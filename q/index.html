@@ -2659,8 +2659,8 @@ function updatePinGate(){
  $('pinManageToggle').hidden=!enabled||!!pinGrant;
  $('pinUnlockForm').hidden=!enabled||!!pinGrant||!pinManageOpen;
  $('pinLock').hidden=!enabled||!pinGrant;
- $('pinTrashRow').hidden=!enabled||!pinGrant;
- $('pinHint').textContent=mode==='office'?(!pinGrant?'Unlock PIN to load records visible to the HR administrator.':'PIN verified. HR administrator-visible records are loaded directly from HR; edits update the original Work Diary.') : (!pinGrant?'Recent entries are visible below. Unlock only when you need to correct, trash or restore an entry.':('Unlocked for this browser tab; '+(pinConfig?.policies?.[mode]?.edit?'editing permitted.':'view-only for this category.')));
+ $('pinTrashRow').hidden=!enabled||!pinGrant||mode==='office';
+ $('pinHint').textContent=mode==='office'?(!pinGrant?'Unlock PIN to load records visible to the HR administrator.':'PIN verified. HR Work Diary records are loaded directly from HR; edits and permanent deletes affect the original record.') : (!pinGrant?'Recent entries are visible below. Unlock only when you need to correct, trash or restore an entry.':('Unlocked for this browser tab; '+(pinConfig?.policies?.[mode]?.edit?'editing permitted.':'view-only for this category.')));
 }
 $('pinManageToggle').onclick=()=>{pinManageOpen=!pinManageOpen;updatePinGate();if(pinManageOpen)$('pinInput').focus();};
 $('pinUnlockForm').onsubmit=async e=>{
@@ -3197,9 +3197,14 @@ async function loadRecent(append=false){
  $('qeCompletionFilter').hidden=!['diary','office','stock'].includes(mode);
  const label=({expense:'Expense',diary:'Diary',stock:'Stock Note',office:'Office Diary',investment:'Investment',family:'Family Expense'})[mode]||mode;
  $('toggleRecent').querySelector('span').textContent=($('recentBody').hidden?'▸ ':'▾ ')+'Recent '+label+' entries';
- $('recentExplanation').textContent=mode==='office'?(isPin?'PIN-protected HR view: all records visible to the HR administrator are loaded from the original Work Diary. Edits update that same HR record. Archive is not enabled here.':'Unlock the PIN to view HR-administrator-visible Work Diary records.'):(isPin?'Only this link’s records are shown. Viewing is allowed when admin enables View; PIN unlock is required for Edit, Trash and Restore.':'Only records saved using this link are shown; editing requires a PIN-enabled backend.');
+ $('recentExplanation').textContent=mode==='office'?(isPin?'PIN-protected HR view: all records visible to the HR administrator are loaded from the original Work Diary. Edits update the original HR record; Delete permanently removes it.':'Unlock the PIN to view HR-administrator-visible Work Diary records.'):(isPin?'Only this link’s records are shown. Viewing is allowed when admin enables View; PIN unlock is required for Edit, Trash and Restore.':'Only records saved using this link are shown; editing requires a PIN-enabled backend.');
  const requestedMode=mode;
  const requestVersion=++qeRecentRequestVersion;
+ if(requestedMode==='office'&&isPin&&!pinGrant){
+  if(!$('recentBody').hidden){host.replaceChildren();const prompt=document.createElement('p');prompt.textContent='Unlock the PIN to view HR administrator-visible Work Diary records.';host.append(prompt);$('recentSearchInfo').textContent='PIN required for HR-wide viewing';$('recentSummary').hidden=true;}
+  const note=$('qeDiaryProgress')?.querySelector('.qe-progress-note');if(note)note.textContent='Unlock PIN to load HR administrator-visible records.';
+  return;
+ }
  if(!append){qeProgressRecords=[];qeProgressKind=requestedMode;qeRenderDiaryProgress(requestedMode);$('qeDiaryProgress')?.querySelectorAll('.qe-progress-card strong').forEach(node=>node.textContent='—');}
  if($('recentBody').hidden){
   // Stats must not remain fake zero just because the recent table is collapsed.
