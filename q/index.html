@@ -3463,7 +3463,7 @@ async function manageRecent(record,action){
  if(!pinGrant||!record.id)return;
  if(action==='trash'){
   const title=String(record.title||'Office Diary entry'),date=String(record.date||'');
-  const prompt=record.kind==='office'?'Permanently delete this record from the original HR Work Diary? This cannot be undone.\\n\\n'+title+(date?'\\n'+date:''):'Move this entry to Trash? You can restore it later while authorized.';
+  const prompt=record.kind==='office'?'Permanently delete this record from the original HR Work Diary? This cannot be undone.\n\n'+title+(date?'\n'+date:''):'Move this entry to Trash? You can restore it later while authorized.';
   if(!confirm(prompt))return;
  }
  try{const result=record.kind==='office'?await api('hubHrOwnerOfficeDelete',{grant:pinGrant,id:record.id,revision:record.revision}):await api('qpinManage',{grant:pinGrant,kind:record.kind,id:record.id,revision:record.revision,operation:action});status(result.message||'Updated successfully.');await loadRecent(false);}
