@@ -2616,8 +2616,9 @@ function commonNoteFields(office,stock){
  const dateName=office?'date':'entryDate';
  const contentName=office?'body':'text';
  const stockField=stock?'<label>Stock / company *<input name="companyName" maxlength="120" required placeholder="Company name (required by existing Stock backend)"></label>':'';
+ const hrMetadata=office?'<input type="hidden" name="hrOriginalCategory"><input type="hidden" name="hrRelatedEmployee"><input type="hidden" name="hrOriginalLink">':'';
 
- return stockField+
+ return stockField+hrMetadata+
   '<label>'+title+'<input name="title" maxlength="'+(office?'140':'120')+'" '+(office?'required ':'')+'placeholder="'+(office?'Office follow-up or work note':'Short heading')+'"></label>'+
   '<label>What would you like to record?<textarea name="'+contentName+'" rows="5" maxlength="'+(office?'10000':'4500')+'" required placeholder="'+(office?'Enter authorised non-confidential work notes only':'Write your observation, reflection or lesson…')+'"></textarea></label>'+
   '<button type="button" class="qe-writing-expand" aria-pressed="false" aria-label="Expand writing area">⤢ Expand writing</button>'+
@@ -3159,7 +3160,7 @@ function qeRenderDiaryProgress(kind){
  panel.hidden=false;panel.replaceChildren();
  const title=document.createElement('div');title.className='qe-progress-title';
  const strong=document.createElement('strong');strong.textContent=kind==='office'?'Office Diary · Progress':kind==='stock'?'Stock Notes · Progress':'My Diary · Writing Journey';
- const note=document.createElement('small');note.textContent='This link · loaded entries only';title.append(strong,note);panel.append(title);
+ const note=document.createElement('small');note.textContent=kind==='office'?'HR administrator-visible records · loaded entries only':'This link · loaded entries only';title.append(strong,note);panel.append(title);
  const now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
  const weekStart=new Date(today);weekStart.setDate(today.getDate()-(today.getDay()+6)%7);
  const monthStart=new Date(today.getFullYear(),today.getMonth(),1),yearStart=new Date(today.getFullYear(),0,1);
@@ -3207,6 +3208,7 @@ async function loadRecent(append=false){
    try{
     const response=isPin?await api('qpinRecent',{grant:pinGrant,kind:requestedMode,includeTrash:false,offset:0,pageSize:50}):await api('qeRecent',{offset:0,pageSize:50,kind:requestedMode});
     if(mode!==requestedMode||requestVersion!==qeRecentRequestVersion)return;
+    if(requestedMode==='office'&&response.requiresPin){const note=$('qeDiaryProgress')?.querySelector('.qe-progress-note');if(note)note.textContent='Unlock PIN to load HR administrator-visible records.';return;}
     const raw=Array.isArray(response.entries)?response.entries:Array.isArray(response.items)?response.items:[];
     qeProgressRecords=raw.filter(x=>String(x.kind||'').toLowerCase()===requestedMode);
     qeRenderDiaryProgress(requestedMode);
@@ -3227,6 +3229,7 @@ async function loadRecent(append=false){
  try{
   const result=isPin?await api('qpinRecent',{grant:pinGrant,kind:requestedMode,includeTrash:$('pinShowTrash').checked,offset:recentOffset,pageSize:20}):await api('qeRecent',{offset:recentOffset,pageSize:50,kind:requestedMode});
   if(mode!==requestedMode||requestVersion!==qeRecentRequestVersion)return;
+  if(requestedMode==='office'&&result.requiresPin){host.replaceChildren();const prompt=document.createElement('p');prompt.textContent='Unlock the PIN to view records visible to the HR administrator.';host.append(prompt);$('recentSearchInfo').textContent='PIN required for HR-wide viewing';$('recentSummary').hidden=true;return;}
   const raw=Array.isArray(result.entries)?result.entries:Array.isArray(result.items)?result.items:[];
   const entries=raw.filter(x=>String(x.kind||'').toLowerCase()===requestedMode);
   if(qeProgressKind===requestedMode){qeProgressRecords.push(...entries);qeRenderDiaryProgress(requestedMode);}
