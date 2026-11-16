@@ -2665,7 +2665,7 @@ function updatePinGate(){
 $('pinManageToggle').onclick=()=>{pinManageOpen=!pinManageOpen;updatePinGate();if(pinManageOpen)$('pinInput').focus();};
 $('pinUnlockForm').onsubmit=async e=>{
  e.preventDefault();const input=$('pinInput'),b=$('pinUnlock');b.disabled=true;
- try{const result=await api('qpinUnlock',{pin:input.value});qeInvalidateReadSnapshots();pinGrant=result.grant;pinManageOpen=false;input.value='';updatePinGate();status('PIN verified. Edit / Trash / Restore unlocked.');await qeRefreshPanels({global:true});}
+ try{const result=await api('qpinUnlock',{pin:input.value});qeInvalidateReadSnapshots();pinGrant=result.grant;pinManageOpen=false;input.value='';updatePinGate();status(mode==='office'?'PIN verified. HR administrator-visible Work Diary view and permitted editing unlocked.':'PIN verified. Edit / Trash / Restore unlocked.');await qeRefreshPanels({global:true});}
  catch(error){status('PIN unlock failed: '+error.message,true);}
  finally{b.disabled=false;}
 };
@@ -2853,7 +2853,7 @@ if(mode==='diary'||mode==='office'||mode==='stock'){const typeSelect=$('fields')
  $('save').textContent='Save & Add Another';status('');qeRefreshDraftBanner();
 }
 $('reset').onclick=()=>{if(busy||qePhotoBusy){status('Save or photo upload is in progress. Wait for confirmation before clearing the form.',true);return;}if(qeDraftTimer){clearTimeout(qeDraftTimer);qeDraftTimer=null;}qeClearDraft(mode);qeClearPhotoSelection();qeResetSubmissionIdentity();qeConfirmUncertainResubmission();delete $('entry').dataset.editId;delete $('entry').dataset.pinRevision;delete $('entry').dataset.sipPlanEditId;delete $('entry').dataset.sipPlanRevision;render();};let recentOffset=0,qeRecentRequestVersion=0;let globalSyncRequest=0,qeVerifyRecentSequence=0,qeVerifyAuditReport=null,qeVerifyAuditTargets=[];
-const qeRecentVerificationKinds=[{kind:'investment',name:'Investment → Analysis'},{kind:'office',name:'Office Diary → HR'},{kind:'family',name:'Family Expense → MyFamily'}];
+const qeRecentVerificationKinds=[{kind:'investment',name:'Investment → Analysis'},{kind:'family',name:'Family Expense → MyFamily'}];
 function qeVerifyCancel(){
  ++qeVerifyRecentSequence;
  qeVerifyAuditReport=null;qeVerifyAuditTargets=[];
@@ -3125,7 +3125,7 @@ async function loadQuickSyncSummary(){
  panel.hidden=!eligible;if(!eligible){quickSyncSequence++;return;}
  const seq=++quickSyncSequence;
  $('quickSyncTitle').textContent=kind==='investment'?'Analysis Sync · Recent':kind==='office'?'HR Sync · Recent':'MyFamily Link · Recent';
- metrics.textContent='Checking recent records…';note.textContent='Recent records from this private link only.';
+ metrics.textContent='Checking recent records…';note.textContent=kind==='office'?'Records visible to the HR administrator · direct HR source':'Recent records from this private link only.';
  try{
   if(!pinConfig?.enabled&&!info?.quickAccess?.allowRecent){metrics.textContent='Recent viewing is not enabled for this link.';return;}
   const result=await api(pinConfig?.enabled?'qpinRecent':'qeRecent',pinConfig?.enabled?{grant:pinGrant||'',kind,offset:0,pageSize:20,includeTrash:false}:{kind,offset:0,pageSize:20});
