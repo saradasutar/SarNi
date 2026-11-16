@@ -3331,8 +3331,9 @@ async function loadRecent(append=false){
       else if(rawState==='FAILED'||rawState==='ERROR'){state='failed';label='Failed';explanation='SarNi reports an Analysis synchronization error.';}
       else if(rawState){explanation='Stored source state: '+rawState+'. Independent destination lookup not performed.';}
      }else if(requestedMode==='family'){
-      if(rawState==='TRASHED'){state='archived';label='Archived';explanation='This Family Expense entry is in Trash, not a destination synchronization status.';}
-      else{explanation='This record is listed by SarNi. Both MyFamily and the SarNi mirror must be checked independently.';}
+      if(rawState==='TRASHED'){state='archived';label='Archived';explanation='This Family Expense entry is in the recoverable archive, not an active transaction.';}
+      else if(rawState==='SAVED'){state='linked';label='MyFamily matched';explanation='The original MyFamily Expenses row was found with the same MyFamily ID and SarNi source key; the linked mirror state is SAVED.';}
+      else{explanation='MyFamily source and SarNi mirror could not both be matched for this record. Refresh and verify before making changes.';}
      }else if(requestedMode==='office'){explanation='Checking stored HR sync status; use Verify destination for a fresh independent lookup.';if(record.id)badge.dataset.officeSyncId=String(record.id);}
      badge.classList.add('is-'+state);badge.textContent=label;badge.title=explanation;badge.setAttribute('aria-label','Synchronization: '+label);td.append(badge);
      const details=document.createElement('details');details.className='recent-sync-detail';
