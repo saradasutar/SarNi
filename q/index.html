@@ -3124,9 +3124,30 @@ async function loadQuickSyncSummary(){
  const kind=mode,eligible=['investment','office','family'].includes(kind);
  panel.hidden=!eligible;if(!eligible){quickSyncSequence++;return;}
  const seq=++quickSyncSequence;
- $('quickSyncTitle').textContent=kind==='investment'?'Analysis Sync · Recent':kind==='office'?'HR Sync · Recent':'MyFamily Link · Recent';
- metrics.textContent='Checking recent records…';note.textContent=kind==='office'?'Records visible to the HR administrator · direct HR source':'Recent records from this private link only.';
+ $('quickSyncTitle').textContent=kind==='investment'?'Analysis Sync · Recent':kind==='office'?'HR Work Diary · Live':'MyFamily Link · Recent';
+ metrics.textContent='Checking recent records…';
+ note.textContent=kind==='office'?'Reading the original HR Work Diary through the signed owner bridge.':'Recent records from this private link only.';
  try{
+  if(kind==='office'){
+   if(!pinGrant){
+    metrics.replaceChildren();
+    const pill=document.createElement('div');pill.className='qe-sync-metric unverified';
+    const number=document.createElement('strong');number.textContent='PIN required';
+    const caption=document.createElement('span');caption.textContent='HR owner access locked';
+    pill.append(number,caption);metrics.append(pill);
+    note.textContent='Unlock the management PIN to retrieve the HR administrator-visible Work Diary records.';
+    return;
+   }
+   const result=await api('hubHrOwnerOfficeList',{grant:pinGrant,offset:0,pageSize:20});
+   if(seq!==quickSyncSequence||mode!==kind)return;
+   const entries=Array.isArray(result.entries)?result.entries:[];
+   metrics.replaceChildren();
+   const make=(label,count,tone)=>{const pill=document.createElement('div');pill.className='qe-sync-metric '+tone;const number=document.createElement('strong');number.textContent=String(count);const caption=document.createElement('span');caption.textContent=label;pill.append(number,caption);metrics.append(pill);};
+   make('HR Work Diary records',Number(result.total)||0,'linked');
+   make('Loaded from HR',entries.length,'linked');
+   note.textContent='Live read from the original HR Work Diary. The HR backend returned '+entries.length+' record(s) on this page; '+(Number(result.total)||0)+' record(s) are visible to the HR administrator in total. This is direct source retrieval, not a separate copy or sync count.';
+   return;
+  }
   if(!pinConfig?.enabled&&!info?.quickAccess?.allowRecent){metrics.textContent='Recent viewing is not enabled for this link.';return;}
   const result=await api(pinConfig?.enabled?'qpinRecent':'qeRecent',pinConfig?.enabled?{grant:pinGrant||'',kind,offset:0,pageSize:20,includeTrash:false}:{kind,offset:0,pageSize:20});
   if(seq!==quickSyncSequence||mode!==kind)return;
@@ -3140,9 +3161,6 @@ async function loadQuickSyncSummary(){
    const other=entries.length-synced-pending-failed;
    make('Reported synced',synced,'linked');make('Pending',pending,'pending');make('Failed',failed,'failed');make('Unverified',other,'unverified');
    note.textContent='Showing source-side statuses for '+entries.length+' recent records only. Independent Analysis destination verification requires the pending Apps Script backend update.';
-  }else if(kind==='office'){
-   make('SarNi office records',entries.length,'linked');make('HR verified',0,'unverified');
-   note.textContent='Source records are visible. HR destination confirmation requires the pending Apps Script backend update. Not verified does not mean delivery failed.';
   }else{
    make('Recent records',entries.length,'unverified');
    note.textContent='These records were returned for this link. SarNi mirror and MyFamily delivery are not independently verified; open Recent Entries for record details.';
