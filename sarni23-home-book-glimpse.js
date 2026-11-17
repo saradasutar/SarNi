@@ -18,7 +18,7 @@ function boot(){
   set('sarniHwChapters','—');set('sarniHwChapterDetail','Saved chapters');
   set('sarniHwWords','—');set('sarniHwTarget','—');set('sarniHwTargetDetail','From book settings');
   set('sarniHwRecent','—');set('sarniHwRecentDetail','Latest saved update');
-  set('sarniHwPercent','—');set('sarniHwGoalLabel','Book word target');
+  set('sarniHwPercent','—');set('sarniHomeBookKpi','—');set('sarniHwGoalLabel','Book word target');
   const fill=$('sarniHwFill');if(fill)fill.style.width='0%';
   const track=$('sarniHwTrack');if(track){track.setAttribute('aria-valuenow','0');track.setAttribute('aria-label','Book word target not available');}
   set('sarniHwStatus',msg);
@@ -48,6 +48,7 @@ function boot(){
   set('sarniHwRecent',updated?new Intl.DateTimeFormat('en-IN',{day:'numeric',month:'short'}).format(updated):'Not recorded');
   set('sarniHwRecentDetail',updated?(book.latestChapterAt?'Latest saved chapter update':'Latest book record update'):'Date unavailable');
   set('sarniHwPercent',percent===null?'—':percent+'%');
+  set('sarniHomeBookKpi',percent===null?'—':percent+'%');
   set('sarniHwGoalLabel',target?'Target: '+fmt(words)+' / '+fmt(target)+' words':'Add a word target in Book Writing');
   const fill=$('sarniHwFill');if(fill)fill.style.width=(percent||0)+'%';
   const track=$('sarniHwTrack');if(track){track.setAttribute('aria-valuenow',String(percent||0));track.setAttribute('aria-label',percent===null?'Book word target not set':'Book writing target '+percent+' percent complete');}
