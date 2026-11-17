@@ -2218,6 +2218,49 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot summary{
  #recentBody .recent-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important}
  #recentBody .recent-summary-item{padding:5px 6px!important}
 }
+
+/* Stock Note mobile: card layout keeps Photos and all row actions visible. */
+@media(max-width:600px){
+ #recentList .recent-table[data-kind="stock"]{
+  display:block!important;width:100%!important;min-width:0!important;table-layout:auto!important;
+  border:0!important;border-collapse:separate!important;background:transparent!important
+ }
+ #recentList .recent-table[data-kind="stock"] thead{display:none!important}
+ #recentList .recent-table[data-kind="stock"] tbody{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:7px!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"]{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  grid-template-areas:"company company" "date type" "photos actions"!important;
+  gap:4px 10px!important;width:100%!important;box-sizing:border-box!important;
+  padding:9px 10px!important;border:1px solid #dce7e2!important;border-left:4px solid #377b57!important;
+  border-radius:11px!important;background:#fff!important;box-shadow:0 2px 7px #1b40340a!important
+ }
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"] td{
+  display:block!important;min-width:0!important;max-width:none!important;width:auto!important;
+  padding:3px 0!important;border:0!important;white-space:normal!important;overflow-wrap:anywhere!important;
+  font-size:11px!important;vertical-align:middle!important
+ }
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"] td::before{
+  display:block!important;content:attr(data-label)!important;margin-bottom:2px!important;
+  color:#728579!important;font-size:9px!important;font-weight:750!important;line-height:1.15!important
+ }
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"] td:nth-child(1){grid-area:date!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"] td:nth-child(2){grid-area:company!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"] td:nth-child(3){grid-area:type!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"] td:nth-child(4){grid-area:photos!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"] td:nth-child(5){grid-area:actions!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"] td:nth-child(2) strong{font-size:14px!important;line-height:1.25!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"] td:nth-child(4)::before,
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"] td:nth-child(5)::before{margin-bottom:3px!important}
+ #recentList .recent-table[data-kind="stock"] .qe-recent-photo-tools{min-width:0!important;max-width:100%!important;gap:4px!important}
+ #recentList .recent-table[data-kind="stock"] .qe-recent-photos>summary{min-height:25px!important;padding:3px 6px!important;font-size:10px!important}
+ #recentList .recent-table[data-kind="stock"] .qe-recent-action-bar{display:flex!important;align-items:center!important;flex-wrap:nowrap!important;gap:3px!important;width:max-content!important;max-width:100%!important}
+ #recentList .recent-table[data-kind="stock"] .qe-recent-action-bar button{min-height:26px!important;padding:3px 6px!important;font-size:10px!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr.qe-recent-detail-row{display:block!important;width:100%!important;padding:0 2px!important;border:0!important;background:transparent!important;box-shadow:none!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr.qe-recent-detail-row[hidden]{display:none!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr.qe-recent-detail-row td{display:block!important;width:100%!important;box-sizing:border-box!important;padding:8px 10px!important;border:1px solid #dce9e1!important;border-radius:9px!important;background:#f6fbf8!important;white-space:pre-wrap!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr.qe-recent-detail-row td::before{display:none!important;content:none!important}
+ #recentList .recent-table[data-kind="stock"] tbody tr[data-qe-record-row="1"].recent-trashed{opacity:.67!important}
+}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">📥</span><span class="qe-action-label">Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">🔄</span><span class="qe-action-label">Sync</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
@@ -3438,6 +3481,7 @@ async function loadRecent(append=false){
    const photosHeading=document.createElement('th');photosHeading.scope='col';photosHeading.textContent='Photos';heading.append(photosHeading);const actionsHeading=document.createElement('th');actionsHeading.scope='col';actionsHeading.textContent='Actions';heading.append(actionsHeading);
    thead.append(heading);tbody=document.createElement('tbody');table.append(thead,tbody);wrap.append(table);host.append(wrap);
   }
+  table.dataset.kind=requestedMode;
   const shortDate=value=>{
    if(value==null||value==='')return '—';
    const raw=String(value);
