@@ -60,7 +60,10 @@ async function dispatch(type,request){
 }
 await dispatch('install');
 const cacheNames=await caches.keys();
-assert.deepEqual(cacheNames,['sarni-q-private-shell-v3']);
+const cacheNameMatch=src.match(/const CACHE_NAME='([^']+)'/);
+assert.ok(cacheNameMatch,'service worker declares one versioned shell cache');
+assert.match(cacheNameMatch[1],/^sarni-q-private-shell-v\\d+(?:-[a-z0-9-]+)?$/,'shell cache name is versioned');
+assert.deepEqual(cacheNames,[cacheNameMatch[1]]);
 const cached=stores.get(cacheNames[0]);
 assert.ok(cached.has(scope+'sarni9-batch10.css'),'CSS cached');
 assert.ok(cached.has(scope+'sarni9-batch10.js'),'JS cached');
