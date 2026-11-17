@@ -3392,7 +3392,7 @@ async function loadRecent(append=false){
   let renderedRecordIndex=0;
   entries.forEach(record=>{
    record.__qePageOffset=pageOffset;record.__qePageSize=pageSize;
-   const groupKey='qe-record-'+(++renderedRecordIndex)+'-'+String(record.id||'');
+   const groupKey='qe-record-'+pageOffset+'-'+(++renderedRecordIndex)+'-'+String(record.id||'');
    const f=record.fields&&typeof record.fields==='object'?record.fields:{};
    const get=(...names)=>{for(const name of names){const v=f[name]??record[name];if(v!==undefined&&v!==null&&String(v).trim()!=='')return String(v);}return '';};
    const row=document.createElement('tr');row.dataset.qeRecordRow='1';row.dataset.qeGroup=groupKey;if(record.trashed)row.classList.add('recent-trashed');
