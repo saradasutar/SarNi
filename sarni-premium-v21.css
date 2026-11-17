@@ -1,0 +1,31 @@
+/* SarNi Premium v21 preview — additive, scoped presentation layer.
+   Does not alter data, APIs, IDs, or existing module behaviour. */
+#expenditureSection .expense-table-wrap{width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+#expenditureSection .expense-table{width:100%;min-width:0;table-layout:fixed;border-collapse:separate;border-spacing:0}
+#expenditureSection .expense-table th,
+#expenditureSection .expense-table td{box-sizing:border-box;white-space:normal;overflow-wrap:anywhere;word-break:normal;vertical-align:middle;padding:9px 8px}
+#expenditureSection .expense-table th{font-size:11px;line-height:1.25;letter-spacing:.01em}
+#expenditureSection .expense-table td{font-size:12px;line-height:1.38}
+#expenditureSection .expense-table td.expense-amount{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+#expenditureSection .expense-table td.expense-reason,
+#expenditureSection .expense-table td.expense-notes{white-space:normal;overflow-wrap:anywhere;line-height:1.42}
+#expenditureSection .expense-table td.expense-actions{white-space:normal;min-width:0}
+#expenditureSection .expense-actions{display:flex;flex-wrap:wrap;gap:5px;align-items:center;justify-content:flex-end}
+#expenditureSection .expense-actions .small-button{min-height:30px;padding:5px 8px;border-radius:8px;font-size:11px;line-height:1.2;white-space:normal}
+#expenditureSection .expense-table tbody tr{height:auto}
+#expenditureSection .expense-table tbody tr:hover td{background:#f8faff}
+#expenditureSection .expense-table tbody td{border-bottom:1px solid #e9eef5}
+#expenditureSection .expense-table thead th{position:sticky;top:0;z-index:1;background:#f6f8fc}
+#expenditureSection .expense-inline-actions{display:flex;flex-wrap:wrap;gap:6px}
+#expenditureSection .expense-inline-actions .small-button{min-height:32px}
+@media(max-width:900px){
+ #expenditureSection .expense-table{min-width:760px}
+ #expenditureSection .expense-table-wrap{border:1px solid #e6ebf3;border-radius:12px}
+ #expenditureSection .expense-table th,#expenditureSection .expense-table td{padding:8px 7px}
+}
+@media(max-width:600px){
+ #expenditureSection .expense-table{min-width:720px}
+ #expenditureSection .expense-table-wrap{border-radius:10px}
+ #expenditureSection .expense-table td.expense-reason{min-width:150px}
+ #expenditureSection .expense-actions{justify-content:flex-start}
+}
