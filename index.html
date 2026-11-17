@@ -570,7 +570,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <button class="nav-item saka-calendar-nav" data-section="calendar" id="sakaCalendarBtn" title="Open calendar with English dates and Odia lunar tithis" type="button"><span aria-hidden="true">▦</span> Calendar</button>
 <button class="nav-item" data-section="diary"><span aria-hidden="true">✎</span> Diary</button>
 <button class="nav-item" id="sarniSidebarTargetsBtn" type="button" title="Open existing Targets &amp; Reminders panel"><span aria-hidden="true">◎</span> Target &amp; Reminder</button>
-<button class="nav-item life-experience-nav" data-section="experiences" type="button"><span aria-hidden="true">✧</span> Life Experiences</button>
+<button class="nav-item life-experience-nav" data-section="experiences" type="button"><span aria-hidden="true">✧</span> Festival & Life Journal</button>
 <button class="nav-item book-writing-nav" data-section="books" id="pinnedBookWritingBtn" title="Open Book Writing" type="button"><span aria-hidden="true">▤</span> Book Writing</button>
 <a class="nav-item sarni-myfamily-link" href="https://saradasutar.github.io/MyFamily/" target="_blank" rel="noopener noreferrer" title="Open MyFamily dashboard in a new tab"><span aria-hidden="true">⌂</span> MyFamily ↗</a>
 <button class="nav-item admin-only hidden" data-section="users"><span aria-hidden="true">♙</span> Users</button>
@@ -1122,9 +1122,9 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 </section>
 
 <section class="page-section hidden life-experience-page" id="experiencesSection" aria-label="Life Experiences and smart lessons">
-  <div class="life-experience-hero"><div><p class="eyebrow">OUR LESSONS · LONG-TERM MEMORY</p><h2>Life Experiences</h2><p>Remember what life taught you, save your photographs privately and see the right lesson at the right moment.</p></div><button type="button" id="experienceNew" class="life-save">+ New Experience</button></div>
+  <div class="life-experience-hero"><div><p class="eyebrow">PERSONAL MEMORIES · FAMILY HERITAGE</p><h2>Festival &amp; Life Journal</h2><p>Preserve festival preparations, rituals, activities, recipes, photographs and life lessons. Festival expenses remain in the existing Expenditure section.</p></div><div class="life-experience-hero-actions"><button type="button" id="festivalRecordNew" class="life-save">+ New festival record</button><button type="button" id="experienceNew" class="life-quiet">+ Life experience</button></div></div>
   <div class="life-experience-layout">
-    <article class="life-experience-editor"><h3 id="experienceFormTitle">Write a new experience</h3><button type="button" class="life-quiet" id="experienceBengaluruExample">✈ Use Bengaluru flight example</button>
+    <article class="life-experience-editor"><h3 id="experienceFormTitle">Write a new journal entry</h3><p class="life-hint">For a festival record, use the Festival template. Set visibility to Private unless you intentionally choose to share.</p><button type="button" class="life-quiet" id="experienceBengaluruExample">✈ Use Bengaluru flight example</button>
     <form id="lifeExperienceForm" autocomplete="off"><input type="hidden" name="id"/>
       <label>Title <input name="title" placeholder="Bengaluru airport — leave earlier" maxlength="160" required/></label>
       <div class="life-experience-two"><label>Topic<select name="topic"><option value="TRAVEL">Travel</option><option value="FAMILY">Family</option><option value="HEALTH">Health</option><option value="HOUSEHOLD">Household</option><option value="FINANCE">Finance</option><option value="LEARNING">Learning</option><option value="WORK">Work</option><option value="OTHER">Other</option></select></label><label>Who can see it?<select name="visibility"><option value="SHARED">Shared with spouse</option><option value="PRIVATE">Private to me</option></select></label></div>
@@ -1148,7 +1148,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
       <div class="life-experience-two"><label>Attach original to private Google Drive<input id="experiencePhotoInput" type="file" accept="image/png,image/jpeg,image/webp"/><small>JPG, PNG or WebP · original quality preserved · up to 20 MB per upload</small></label><label>Or link an image (HTTPS URL)<input name="imageUrl" type="url" placeholder="https://example.com/photo.jpg" maxlength="900"/></label></div>
       <div class="life-experience-preview" id="experiencePhotoPreview">No photo selected</div>
       <label class="life-experience-remove"><input type="checkbox" name="removePhoto"/> Remove attached Drive photo when saving</label>
-      <div class="life-form-foot"><span id="experienceSaveStatus" role="status">Ready to save</span><button type="submit" class="life-save" id="experienceSave">Save Experience</button></div>
+      <div class="life-form-foot"><span id="experienceSaveStatus" role="status">Ready to save</span><button type="submit" class="life-save" id="experienceSave">Save Journal Entry</button></div>
 <div class="sarni-life-backend-check" aria-label="Connected photo upload service">
  <span id="sarniLifeBackendStatus" role="status" aria-live="polite">Backend version not checked yet</span>
  <button id="sarniLifeCheckBackend" type="button">Check backend version</button>
