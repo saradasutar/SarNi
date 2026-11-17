@@ -180,6 +180,12 @@ function formatCurrency(value, compact = false) {
   const n = Number(value); if (!Number.isFinite(n)) return '—';
   return new Intl.NumberFormat('en-IN',{style:'currency',currency:CONFIG.CURRENCY||'INR',maximumFractionDigits:compact?0:2,notation:compact&&Math.abs(n)>=100000?'compact':'standard'}).format(n);
 }
+function formatExpenseCurrency(value) {
+  if (value === null || value === '' || value === undefined) return '—';
+  const n = Number(value);
+  if (!Number.isFinite(n)) return '—';
+  return new Intl.NumberFormat('en-IN',{style:'currency',currency:CONFIG.CURRENCY||'INR',maximumFractionDigits:0}).format(Math.round(n));
+}
 function formatHoldingValue(value) {
   if (value === null || value === '' || value === undefined) return '—';
   const n = Number(value);
@@ -2274,7 +2280,7 @@ function expenseInlineActive(view,id){
 function renderInlineExpenseRow(item,view){
   const category=String(item.category||'');
   const common={
-    amount:`<input data-expense-inline-field="amount" type="number" min="0.01" step="0.01" value="${escapeHtml(item.amount??'')}" aria-label="Amount">`,
+    amount:`<input data-expense-inline-field="amount" type="number" min="1" step="1" value="${escapeHtml(item.amount??'')}" aria-label="Amount">`,
     account:`<input data-expense-inline-field="debitedFrom" type="text" maxlength="120" value="${escapeHtml(item.debitedFrom||'')}" aria-label="Debited from">`,
     category:`<select data-expense-inline-field="category" data-expense-inline-category aria-label="Category">${expenseInlineCategoryOptions(category)}</select>`,
     subcategory:`<select data-expense-inline-field="subcategory" aria-label="Subcategory">${expenseInlineSubcategoryOptions(category,item.subcategory||'')}</select>`,
@@ -2323,7 +2329,7 @@ async function saveInlineExpense(button){
 function renderActualExpenses(rows){
   if(!els.actualExpenseBody)return;els.actualExpenseEmpty?.classList.toggle('hidden',rows.length>0);
   els.actualExpenseBody.innerHTML=rows.map(x=>expenseInlineActive('ACTUAL',x.id)?renderInlineExpenseRow(x,'ACTUAL'):`<tr class="expense-row expense-row-${expenseCategoryColor(x.category)}">
-    <td class="expense-amount">${formatCurrency(x.amount)}</td><td>${expenseDateDisplay(x.dateSpent)}</td><td>${escapeHtml(x.paidTo||'—')}</td>
+    <td class="expense-amount">${formatExpenseCurrency(x.amount)}</td><td>${expenseDateDisplay(x.dateSpent)}</td><td>${escapeHtml(x.paidTo||'—')}</td>
     <td>${escapeHtml(x.debitedFrom||'—')}</td><td class="expense-reason">${escapeHtml(x.reason||'—')}${x.majorProjectId?`<small class="major-project-link-badge">◆ ${escapeHtml(majorProjectName(x.majorProjectId)||'Expense group')}</small>`:''}</td><td>${expenseCategoryBadge(x.category)}</td><td class="expense-subcategory-cell">${expenseSubcategoryDisplay(x.subcategory)}</td>
     <td class="expense-notes">${escapeHtml(x.notes||'—')}</td><td class="expense-actions"><button class="small-button expense-row-edit-button" data-inline-edit-expense="${escapeHtml(x.id)}" data-inline-expense-view="ACTUAL">Row edit</button><button class="small-button expense-edit-button" data-edit-expense="${escapeHtml(x.id)}">Popup edit</button><button class="small-button danger" data-delete-expense="${escapeHtml(x.id)}">Delete</button></td>
   </tr>`).join('');
@@ -2331,7 +2337,7 @@ function renderActualExpenses(rows){
 function renderPlannedExpenses(rows){
   if(!els.plannedExpenseBody)return;els.plannedExpenseEmpty?.classList.toggle('hidden',rows.length>0);
   els.plannedExpenseBody.innerHTML=rows.map(x=>{if(expenseInlineActive('PLANNED',x.id))return renderInlineExpenseRow(x,'PLANNED');const planned=String(x.status||'PLANNED').toUpperCase()==='PLANNED';return `<tr class="expense-row expense-row-${expenseCategoryColor(x.category)}">
-    <td class="expense-amount">${formatCurrency(x.amount)}</td><td>${expenseDateDisplay(x.plannedDate)}</td><td>${escapeHtml(x.paidTo||'—')}</td>
+    <td class="expense-amount">${formatExpenseCurrency(x.amount)}</td><td>${expenseDateDisplay(x.plannedDate)}</td><td>${escapeHtml(x.paidTo||'—')}</td>
     <td>${escapeHtml(x.debitedFrom||'—')}</td><td class="expense-reason">${escapeHtml(x.reason||'—')}</td><td>${expenseCategoryBadge(x.category)}</td><td class="expense-subcategory-cell">${expenseSubcategoryDisplay(x.subcategory)}</td><td class="expense-notes">${escapeHtml(x.notes||'—')}</td><td>${expenseStatusBadge(x.status)}</td>
     <td class="expense-actions">${planned?`<button class="small-button success" data-mark-plan-paid="${escapeHtml(x.id)}">Mark paid</button>`:''}<button class="small-button expense-row-edit-button" data-inline-edit-expense="${escapeHtml(x.id)}" data-inline-expense-view="PLANNED">Row edit</button><button class="small-button expense-edit-button" data-edit-plan="${escapeHtml(x.id)}">Popup edit</button><button class="small-button danger" data-delete-plan="${escapeHtml(x.id)}">Delete</button></td>
   </tr>`;}).join('');
@@ -2340,7 +2346,7 @@ function renderRegularExpenses(rows){
   renderRegularBillQuickList(rows);
   if(!els.regularExpenseBody)return;els.regularExpenseEmpty?.classList.toggle('hidden',rows.length>0);
   els.regularExpenseBody.innerHTML=rows.map(x=>{if(expenseInlineActive('REGULAR',x.id))return renderInlineExpenseRow(x,'REGULAR');const active=String(x.status||'ACTIVE').toUpperCase()==='ACTIVE';const toggle=active?'PAUSED':'ACTIVE';return `<tr class="expense-row expense-row-${expenseCategoryColor(x.category)}">
-    <td class="expense-reason"><strong>${escapeHtml(x.name||'—')}</strong><small>${escapeHtml(x.paidTo||'')}</small></td><td class="expense-amount">${formatCurrency(x.amount)}</td><td>${escapeHtml(x.debitedFrom||'—')}</td><td>${expenseCategoryBadge(x.category)}</td><td class="expense-subcategory-cell">${expenseSubcategoryDisplay(x.subcategory)}</td>
+    <td class="expense-reason"><strong>${escapeHtml(x.name||'—')}</strong><small>${escapeHtml(x.paidTo||'')}</small></td><td class="expense-amount">${formatExpenseCurrency(x.amount)}</td><td>${escapeHtml(x.debitedFrom||'—')}</td><td>${expenseCategoryBadge(x.category)}</td><td class="expense-subcategory-cell">${expenseSubcategoryDisplay(x.subcategory)}</td>
     <td>${escapeHtml(String(x.frequency||'MONTHLY').replace('_',' '))}</td><td>${expenseDateDisplay(x.nextDueDate)}</td><td>${escapeHtml(x.reason||'—')}</td><td class="expense-notes">${escapeHtml(x.notes||'—')}</td><td>${expenseStatusBadge(x.status)}</td>
     <td class="expense-actions">${active?`<button class="small-button success" data-mark-regular-paid="${escapeHtml(x.id)}">Mark paid</button>`:''}<button class="small-button" data-toggle-regular="${escapeHtml(x.id)}" data-next-status="${toggle}">${active?'Pause':'Resume'}</button><button class="small-button expense-row-edit-button" data-inline-edit-expense="${escapeHtml(x.id)}" data-inline-expense-view="REGULAR">Row edit</button><button class="small-button expense-edit-button" data-edit-regular="${escapeHtml(x.id)}">Popup edit</button><button class="small-button danger" data-delete-regular="${escapeHtml(x.id)}">Delete</button></td>
   </tr>`;}).join('');
