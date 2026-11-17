@@ -103,6 +103,37 @@ for (const viewport of scenarios) {
    await expect(page.locator('#qeSearchClear')).toBeVisible();
    await page.locator('#qeSearchClear').click();
    await expect(page.locator('#recentSearch')).toHaveValue('');
+   if (viewport.name==='desktop') {
+    const tableLayout=await page.evaluate(()=>{
+     const host=document.getElementById('recentList');
+     const wrap=document.createElement('div');wrap.className='recent-table-scroll';wrap.tabIndex=0;
+     wrap.setAttribute('role','region');wrap.style.marginTop='12px';
+     const table=document.createElement('table');table.className='recent-table';table.dataset.kind='family';
+     const head=document.createElement('thead'),hr=document.createElement('tr');
+     const fields=['date','category','subject','amount','party','sync','photos','actions'];
+     const labels=['Date','Category','Reason','Amount','Paid by','Sync','Photos','Actions'];
+     fields.forEach((field,i)=>{const th=document.createElement('th');th.dataset.field=field;th.textContent=labels[i];hr.append(th);});
+     head.append(hr);
+     const body=document.createElement('tbody'),row=document.createElement('tr');
+     fields.forEach(field=>{
+      const td=document.createElement('td');td.dataset.field=field;td.textContent=field;
+      if(field==='sync'){const badge=document.createElement('span');badge.className='recent-sync-badge is-linked';badge.textContent='MyFamily matched';td.replaceChildren(badge);}
+      if(field==='actions'){const bar=document.createElement('div');bar.className='qe-recent-action-bar';['View','Edit','Trash'].forEach(label=>{const b=document.createElement('button');b.textContent=label;bar.append(b);});td.replaceChildren(bar);}
+      row.append(td);
+     });
+     body.append(row);table.append(head,body);wrap.append(table);host.append(wrap);
+     const rect=el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width};};
+     const fieldsMap=Object.fromEntries(fields.map(field=>[field,rect(row.querySelector('[data-field="'+field+'"]'))]));
+     return {viewport:document.documentElement.clientWidth,documentWidth:document.documentElement.scrollWidth,wrapper:rect(wrap),table:rect(table),scrollWidth:wrap.scrollWidth,clientWidth:wrap.clientWidth,fields:fieldsMap,actionsPosition:getComputedStyle(row.querySelector('[data-field="actions"]')).position,syncWhiteSpace:getComputedStyle(row.querySelector('[data-field="sync"]')).whiteSpace};
+    });
+    expect(tableLayout.documentWidth).toBeLessThanOrEqual(tableLayout.viewport+2);
+    expect(tableLayout.table.width).toBeGreaterThanOrEqual(1075);
+    expect(tableLayout.scrollWidth).toBeGreaterThan(tableLayout.clientWidth);
+    expect(tableLayout.fields.sync.width).toBeGreaterThanOrEqual(160);
+    expect(tableLayout.fields.actions.width).toBeGreaterThanOrEqual(145);
+    expect(tableLayout.actionsPosition).toBe('sticky');
+    expect(tableLayout.syncWhiteSpace).toBe('nowrap');
+   }
    // Health UI must remain read-only, collapsible and show only status categories.
    await page.locator('#qeDashboardHealth > summary').click();
    await expect(page.locator('#qeDashboardHealth')).toHaveAttribute('open','');
