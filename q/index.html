@@ -2384,6 +2384,33 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot summary{
  #recentList .recent-table[data-kind="investment"] tbody tr.qe-recent-detail-row td::before,
  #recentList .recent-table[data-kind="family"] tbody tr.qe-recent-detail-row td::before{display:none!important;content:none!important}
 }
+/* Mobile one-line record strip: swipe the middle fields while Date and actions stay visible. */
+@media(max-width:600px){
+ #recentList .recent-table-scroll{max-width:100%!important;overflow-x:auto!important;overflow-y:visible!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior-x:contain!important;border:1px solid #dce7e2!important;border-radius:10px!important;background:#fff!important}
+ #recentList .recent-table[data-kind]{display:table!important;width:max-content!important;table-layout:auto!important;border-collapse:separate!important;border-spacing:0!important;min-width:720px!important}
+ #recentList .recent-table[data-kind="expense"]{min-width:850px!important}
+ #recentList .recent-table[data-kind="diary"],#recentList .recent-table[data-kind="stock"],#recentList .recent-table[data-kind="office"]{min-width:690px!important}
+ #recentList .recent-table[data-kind="investment"]{min-width:890px!important}
+ #recentList .recent-table[data-kind="family"]{min-width:990px!important}
+ #recentList .recent-table[data-kind] thead{display:table-header-group!important}
+ #recentList .recent-table[data-kind] tbody{display:table-row-group!important}
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"]{display:table-row!important;width:auto!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#fff!important}
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] td{display:table-cell!important;width:auto!important;min-width:0!important;max-width:none!important;padding:7px 8px!important;border:1px solid #e5eee9!important;white-space:nowrap!important;vertical-align:middle!important;overflow:visible!important;text-overflow:clip!important;font-size:11px!important;overflow-wrap:normal!important}
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] td::before{display:none!important;content:none!important}
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] td[data-field="date"]{position:sticky!important;left:0!important;z-index:4!important;background:#fff!important;min-width:96px!important}
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-recent-photo-cell{position:sticky!important;right:132px!important;z-index:5!important;background:#fff!important;min-width:86px!important}
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-recent-action-cell{position:sticky!important;right:0!important;z-index:6!important;background:#fff!important;min-width:132px!important}
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-recent-photo-tools{display:block!important;min-width:0!important;max-width:none!important}
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-recent-photos>summary{display:inline-flex!important;min-height:24px!important;padding:3px 6px!important;font-size:10px!important;white-space:nowrap!important}
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-recent-action-bar{display:flex!important;align-items:center!important;flex-wrap:nowrap!important;gap:3px!important;width:max-content!important;max-width:none!important;white-space:nowrap!important}
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-recent-action-bar button{min-height:25px!important;padding:3px 5px!important;font-size:9.5px!important}
+ #recentList .recent-table[data-kind] tbody tr.qe-recent-detail-row{display:table-row!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}
+ #recentList .recent-table[data-kind] tbody tr.qe-recent-detail-row[hidden]{display:none!important}
+ #recentList .recent-table[data-kind] tbody tr.qe-recent-detail-row td{white-space:normal!important}
+ #recentList .recent-table[data-kind] thead th:first-child{position:sticky!important;left:0!important;z-index:8!important;background:#eaf3ee!important}
+ #recentList .recent-table[data-kind] thead th:last-child{position:sticky!important;right:0!important;z-index:8!important;background:#eaf3ee!important}
+ #recentList .recent-table[data-kind] thead th:nth-last-child(2){position:sticky!important;right:132px!important;z-index:7!important;background:#eaf3ee!important}
+}
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">📥</span><span class="qe-action-label">Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">🔄</span><span class="qe-action-label">Sync</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
 <div class="qe-offline-head"><strong>Offline Queue</strong><button type="button" id="qeOfflineClose">Close</button></div>
