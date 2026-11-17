@@ -62,6 +62,7 @@ for (const viewport of scenarios) {
 
    await page.goto('http://127.0.0.1:8765/q/?k=TEST_FIXTURE_ONLY',{waitUntil:'domcontentloaded'});
    await expect(page.locator('#tabs button[data-mode]')).toHaveCount(6,{timeout:15000});
+   const amountControlMetrics={};
    for (const mode of modes) {
     await page.locator('#tabs button[data-mode="'+mode+'"]').click();
     await expect(page.locator('#tabs button[aria-pressed="true"]')).toHaveCount(1);
@@ -72,10 +73,18 @@ for (const viewport of scenarios) {
     await expect(page.locator('#familyAmount')).toHaveAttribute('placeholder','0');
     await expect(page.locator('#familyAmount')).toHaveAttribute('step','.01');
     await expect(page.locator('#familyAmount')).toHaveAttribute('inputmode','decimal');
+    amountControlMetrics.family=await page.locator('#familyAmount').evaluate(input=>{
+     const box=input.closest('.amountbox'),currency=box.querySelector('span'),r=box.getBoundingClientRect();
+     return {boxHeight:r.height,inputHeight:input.getBoundingClientRect().height,inputFont:getComputedStyle(input).fontSize,inputWeight:getComputedStyle(input).fontWeight,currencyFont:getComputedStyle(currency).fontSize};
+    });
    }
    if(mode==='expense'){
     await expect(page.locator('#qeAmount')).toHaveAttribute('placeholder','0');
     await expect(page.locator('#qeAmount')).toHaveAttribute('step','.01');
+    amountControlMetrics.expense=await page.locator('#qeAmount').evaluate(input=>{
+     const box=input.closest('.amountbox'),currency=box.querySelector('span'),r=box.getBoundingClientRect();
+     return {boxHeight:r.height,inputHeight:input.getBoundingClientRect().height,inputFont:getComputedStyle(input).fontSize,inputWeight:getComputedStyle(input).fontWeight,currencyFont:getComputedStyle(currency).fontSize};
+    });
    }
     await expect(page.locator('#fields')).not.toBeEmpty();
     const layout=await page.evaluate(() => ({
@@ -96,6 +105,9 @@ for (const viewport of scenarios) {
      await expect(page.locator('#qeMarkCompleted')).toHaveCount(1);
      await expect(page.locator('#qeCompletionRemark')).toHaveCount(1);
     }
+   }
+   for(const field of ['boxHeight','inputHeight','inputFont','inputWeight','currencyFont']){
+    expect(amountControlMetrics.expense[field]).toBe(amountControlMetrics.family[field]);
    }
    // SarNi 9 batch: verify progressive enhancements without submitting records.
    await expect(page.locator('#qeSearchClear')).toHaveCount(1);
