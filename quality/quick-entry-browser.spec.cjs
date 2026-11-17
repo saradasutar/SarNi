@@ -68,6 +68,15 @@ for (const viewport of scenarios) {
     await expect(page.locator('#tabs button[data-mode="'+mode+'"]')).toHaveAttribute('aria-pressed','true');
     await expect(page.locator('main')).toHaveAttribute('data-entry-mode',mode);
     await expect(page.locator('#entry')).toBeVisible();
+   if(mode==='family'){
+    await expect(page.locator('#familyAmount')).toHaveAttribute('placeholder','0');
+    await expect(page.locator('#familyAmount')).toHaveAttribute('step','.01');
+    await expect(page.locator('#familyAmount')).toHaveAttribute('inputmode','decimal');
+   }
+   if(mode==='expense'){
+    await expect(page.locator('#qeAmount')).toHaveAttribute('placeholder','0');
+    await expect(page.locator('#qeAmount')).toHaveAttribute('step','.01');
+   }
     await expect(page.locator('#fields')).not.toBeEmpty();
     const layout=await page.evaluate(() => ({
      viewport:document.documentElement.clientWidth,
