@@ -54,10 +54,10 @@ check('Desktop Recent Entries uses category-aware widths instead of a global fiv
 check('Desktop Family Expense sync and actions columns have readable widths', includes('th[data-field="sync"]') && includes('td[data-field="sync"]{min-width:165px!important;width:180px!important') && includes('th[data-field="actions"]') && includes('td[data-field="actions"]{min-width:150px!important;width:155px!important') && includes('th[data-field="photos"]'));
 check('Desktop Date, Photos and Actions stay anchored inside the horizontal scroll region', includes('td[data-field="date"]{position:sticky!important;left:0!important') && includes('td[data-field="photos"]{position:sticky!important;right:155px!important') && includes('td[data-field="actions"]{position:sticky!important;right:0!important'));
 check('Mobile Recent Entries keeps controlled horizontal scroll for other categories', includes('min-width:720px!important') && includes('overflow-x:auto!important'));
-check('All six mobile Recent Entry tabs use one-line horizontal rows', includes('table.dataset.kind=requestedMode') && includes('#recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"]{display:table-row!important') && includes('width:max-content!important') && includes('position:sticky!important;left:0!important') && includes('position:sticky!important;right:0!important'));
-check('Every Recent Entry cell exposes its semantic field for mobile cards', includes('td.dataset.field=field;'));
-check('All six mobile categories retain separate width settings for one-line rows', ['expense','diary','stock','office','investment','family'].every(kind => includes('.recent-table[data-kind="'+kind+'"]')) && includes('min-width:990px!important') && includes('min-width:890px!important') && includes('min-width:850px!important'));
-check('One-line mobile rows preserve protected actions and collapsible photo controls', includes("qeRequestProtectedAction(record,'edit')") && includes("qeRequestProtectedAction(record,'trash')") && includes('qeRecentPhotos(record)') && includes('details.append(controls)') && includes('details.addEventListener(\'toggle\''));
+
+
+
+
 check('Offline queue uses encryption', includes('AES-GCM') && includes('PBKDF2'));
 check('Styles have matching tags', count(/<style\b/g) === count(/<\/style>/g));
 check('Scripts have matching tags', count(/<script\b/g) === count(/<\/script>/g));
@@ -116,12 +116,18 @@ check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A
 check('Mobile Photos disclosure opens as one contained popup without overlaying row buttons', includes('.qe-mobile-photo .qe-recent-photos[open]{') && includes('position:absolute!important;right:0!important;top:0!important;z-index:30!important') && includes('.qe-mobile-photo .qe-recent-gallery,') && includes('position:static!important;display:flex!important'));
 check('Mobile View detail row expands below the one-line summary', includes('tbody tr.qe-recent-detail-row{display:block!important') && includes('tbody tr.qe-recent-detail-row[hidden]{display:none!important') && includes('tbody tr.qe-recent-detail-row td{display:block!important'));
 
-check('All six mobile Recent Entries tabs use wrapped cards without horizontal dragging', includes('display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important') && includes('width:100%!important;min-width:0!important') && includes('overflow:visible!important;border:0!important'));
-check('Expense and Family cards show Date, Paid by, Amount and full wrapping Reason', includes('"date party amount" "subject subject subject"') && includes('overflow-wrap:anywhere!important') && includes('td[data-field="subject"] strong'));
-check('Family mobile cards explicitly display Category and Sync', includes('td[data-field="category"]{display:block!important;grid-area:category!important') && includes('td[data-field="sync"]{display:block!important;grid-area:sync!important') && includes('.recent-sync-badge'));
-check('Mobile action buttons use fixed aligned columns across records', includes('grid-template-columns:repeat(4,minmax(0,1fr)) 38px!important') && includes('.qe-action-view{grid-column:1!important}') && includes('.qe-action-edit{grid-column:2!important}') && includes('.qe-action-trash{grid-column:3!important}'));
-check('Mobile Photos remains collapsed in the camera slot after Trash', includes('qeRecentPhotos(record,true)') && includes('.qe-mobile-photo .qe-recent-photos>summary') && includes('details.append(controls)') && includes('bottom:39px!important'));
-check('Mobile View details expand below the corresponding record card', includes('tbody tr.qe-recent-detail-row[hidden]{display:none!important') && includes("detailRow.hidden=!opening"));
+
+
+
+
+
+
+
+check('Mobile Recent Entries use a compact one-line summary with Date, Reason, Amount and Open', includes('grid-template-areas:"date subject amount actions"!important') && includes('td[data-field="date"]') && includes('td[data-field="subject"] strong') && includes('td[data-field="amount"]') && includes("viewButton.textContent='Open'"));
+check('Open toggles full record fields and details accessibly', includes("row.dataset.qeExpanded=String(opening)") && includes("viewButton.textContent=opening?'Close':'Open'") && includes("viewButton.setAttribute('aria-controls',detailRow.id)") && includes("detailRow.hidden=!opening"));
+check('Expanded Family Expense shows Paid by, Category, Sync and wrapping Reason', includes('grid-template-areas:"date party amount" "subject subject subject" "category category sync" "actions actions actions"!important') && includes('td[data-field="party"]') && includes('td[data-field="sync"]') && includes('overflow-wrap:anywhere!important'));
+check('Expanded record reveals PIN-protected Edit/Trash and collapsed Photos control', includes('[data-qe-expanded="true"] .qe-action-edit{display:inline-flex!important') && includes("qeRequestProtectedAction(record,'edit')") && includes("qeRequestProtectedAction(record,'trash')") && includes('qeRecentPhotos(record,true)'));
+check('Mobile summary has no horizontal scrolling while desktop layout remains separate', includes('overflow:visible!important;border:0!important;background:transparent!important') && includes('@media(min-width:601px)') && includes('detailRow.hidden=!opening'));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
 const failures = tests.filter(t => !t.passed);
