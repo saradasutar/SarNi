@@ -32,7 +32,7 @@ check('Family Expense paired rows and required inputs', ['familyAmount','familyR
 check('Diary, Office and Stock Note action forms', includes("name=\"needsPlanning\"") && includes("name=\"needsFollowup\"") && includes("name=\"needsReview\""));
 check('Completion remark and reopening controls', includes('qeCompletionRemark') && includes('qe-reopen-action') && includes('action-completed'));
 check('Recent Entries table and completion filter', includes('recent-table-scroll') && includes('id="qeCompletionFilter"') && includes('applyRecentSearch()'));
-check('Compact per-record lower action strip replaces management card', includes("className='qe-recent-action-row'") && !includes('Manage older entries') && !includes('pinManageToggle'));
+check('Record, Photos and View/Edit/Trash controls share one compact row', includes("const actionCell=document.createElement('td')") && includes("row.append(actionCell)") && includes("tbody.append(row,detailRow)") && !includes("className='qe-recent-action-row'") && includes('qe-recent-photo-tools') && includes('qe-recent-photo-controls') && !includes('Manage older entries') && !includes('pinManageToggle'));
 check('View expands record details without requesting a PIN', includes("viewButton.onclick=()=>") && includes("detailRow.hidden=!opening") && includes("viewButton.textContent=opening?'Hide':'View'"));
 check('Edit and Trash are offered only by PIN policy and request PIN on demand', includes('rights.edit===true') && includes('rights.trash===true') && includes("qeRequestProtectedAction(record,'edit')") && includes("qeRequestProtectedAction(record,'trash')"));
 check('Successful PIN verification resumes the selected management action', includes("if(unlocked&&pendingPinAction)await qeContinuePendingPinAction()") && includes("api('qpinUnlock'"));
@@ -46,6 +46,8 @@ check('Smart Refresh cache is memory-only, brief and bounded', includes("const q
 check('Smart Refresh invalidates on writes and explicit refresh', includes("if(!qeMutationActions.has(action))return qeApiTransport(action,payload)") && includes("finally{qeInvalidateReadSnapshots();}") && includes("qeReadEpoch===epoch") && includes("qeInvalidateReadSnapshots();return qeRefreshPanels({sip:false,sync:false})") && includes("qeInvalidateReadSnapshots();return qeLoadGlobalSync()"));
 check('PIN changes invalidate Smart Refresh snapshots', includes("qeInvalidateReadSnapshots();pinGrant=result.grant") && includes("qeInvalidateReadSnapshots();pinManageOpen=false;pinGrant=''"));
 check('Photo formats and size remain limited', includes('image/jpeg') && includes('20*1024*1024'));
+check('Photos gallery is expandable while Upload and Camera stay inline', includes("summary.textContent='📷 Photos'") && includes("browse.textContent='＋ Upload'") && includes("camera.textContent='📷 Camera'") && includes('tools.append(details,controls)') && includes("details.addEventListener('toggle'"));
+check('Progress and summary cards use compact dimensions', includes('grid-template-columns:repeat(5,minmax(0,1fr))!important') && includes('min-height:52px!important') && includes('recent-summary-item{padding:5px 7px!important'));
 check('Offline queue uses encryption', includes('AES-GCM') && includes('PBKDF2'));
 check('Styles have matching tags', count(/<style\b/g) === count(/<\/style>/g));
 check('Scripts have matching tags', count(/<script\b/g) === count(/<\/script>/g));
