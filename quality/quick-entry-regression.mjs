@@ -94,6 +94,11 @@ check('Worker cache scope excludes queries and private API responses', quickWork
 check('Worker always checks online config before cached fallback', quickWorker.includes("if(url.pathname===new URL('../config.js',SCOPE).pathname)") && quickWorker.includes("try{const fresh=await fetch(request);if(fresh.ok)return fresh;}"));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
+
+check('Mobile Expense and Family rows visibly prioritize Date, Reason and Amount', includes('td[data-field="subject"] strong') && includes('td[data-field="amount"]') && includes('td[data-field="category"]') && includes('td[data-field="party"]') && includes('family') && includes('grid-template-areas:"date subject amount actions"'));
+check('Mobile photo cell is removed from the main row and Photos is collapsed inside Actions', includes('qe-mobile-photo') && includes('qeRecentPhotos(record,true)') && includes('.qe-mobile-photo .qe-recent-photos>summary') && includes('.qe-recent-photo-cell{display:none!important}') && includes('details.append(controls)'));
+check('Mobile essential fields remain single-line and secondary fields are available by View', includes('white-space:nowrap!important') && includes('text-overflow:ellipsis!important') && includes("detailRow.hidden=!opening"));
+
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
 const failures = tests.filter(t => !t.passed);
 console.log('\n'+(tests.length-failures.length)+'/'+tests.length+' source checks passed.');
