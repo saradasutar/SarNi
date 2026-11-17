@@ -41,7 +41,7 @@ check('Sync: independent proof checked before Verified', includes('proof.verifie
 check('Retry remains guarded by idempotency guarantee', includes('verifiedResult.idempotentGuaranteed!==true'));
 check('No automatic retry for uncertain save', includes('qePendingUncertain') && includes('Continue using the SAME original submission ID?'));
 check('Duplicate click prevented during save', includes("busy=true;$('save').disabled=true"));
-check('Read coalescing restricted to read-only calls', includes("new Set(['qeRecent','qpinRecent'])"));
+check('Read coalescing restricted to read-only calls', includes("new Set(['qeRecent','qpinRecent','hubHrOwnerOfficeList'])"));
 check('Smart Refresh cache is memory-only, brief and bounded', includes("const qeRecentCacheTTL=2500,qeRecentCacheMax=18") && includes("qeRecentMemoryCache=new Map()") && includes("Date.now()-cached.at<qeRecentCacheTTL"));
 check('Smart Refresh invalidates on writes and explicit refresh', includes("if(!qeMutationActions.has(action))return qeApiTransport(action,payload)") && includes("finally{qeInvalidateReadSnapshots();}") && includes("qeReadEpoch===epoch") && includes("qeInvalidateReadSnapshots();return qeRefreshPanels({sip:false,sync:false})") && includes("qeInvalidateReadSnapshots();return qeLoadGlobalSync()"));
 check('PIN changes invalidate Smart Refresh snapshots', includes("qeInvalidateReadSnapshots();pinGrant=result.grant") && includes("qeInvalidateReadSnapshots();pinManageOpen=false;pinGrant=''"));
@@ -73,8 +73,8 @@ check('Keyboard tab navigation and shortcut respect existing buttons', batch10Js
 check('Character counter excludes short fields', batch10Js.includes("qeActiveFieldCount") && batch10Js.includes("input.maxLength<50"));
 check('Responsive accessibility finishes and Back to Top present', batch10Css.includes('prefers-reduced-motion:reduce') && batch10Css.includes('focus-visible') && batch10Css.includes('min-height:46px') && batch10Css.includes('overflow-wrap:anywhere') && batch10Js.includes("id='qeBackToTop'"));
 check('Ten-upgrade helper contains no network or storage operations', !/(?:fetch|localStorage|sessionStorage|XMLHttpRequest)\s*\(/.test(batch10Js));
-check('SarNi main uses exactly one approved enhancement pair', (()=>{const names=['sarni-main-batch10','sarni10-main-polish','sarni10-main-upgrades','sarni10-main-batch','sarni10-main-workspace'];const js=names.filter(name=>mainDashboard.includes('./'+name+'.js'));const css=names.filter(name=>mainDashboard.includes('./'+name+'.css'));return js.length===1&&css.length===1&&js[0]===css[0];})());
-check('SarNi 10 main workspace assets activated', mainDashboard.includes('sarni10-main-workspace.js') && mainDashboard.includes('sarni10-main-workspace.css') && !mainDashboard.includes('src="./sarni-main-batch10.js'));
+check('Retired duplicate main workspace has no active enhancement pair', (()=>{const names=['sarni-main-batch10','sarni10-main-polish','sarni10-main-upgrades','sarni10-main-batch','sarni10-main-workspace'];return names.every(name=>!mainDashboard.includes('src="./'+name+'.js')&&!mainDashboard.includes('href="./'+name+'.css'));})());
+check('SarNi 10 duplicate main workspace assets remain retired', mainDashboard.includes('sarni10-main-workspace.css retired') && !mainDashboard.includes('src="./sarni10-main-workspace.js') && !mainDashboard.includes('href="./sarni10-main-workspace.css'));
 check('Main workspace uses existing navigation and avoids persistence', mainBatchJs.includes('sarniSidebarPrimary') && !['fetch(', 'localStorage.', 'sessionStorage.'].some(x=>mainBatchJs.includes(x)));
 check('Main workspace accessibility and responsive layout', mainBatchCss.includes('focus-visible') && mainBatchCss.includes('prefers-reduced-motion:reduce') && mainBatchCss.includes('min-height:44px'));
 check('Private Quick Entry links send origin-only referrer', includes('<meta name="referrer" content="origin">'));
