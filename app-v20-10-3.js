@@ -1,7 +1,7 @@
 'use strict';
 
 const CONFIG = window.PORTFOLIO_CONFIG || {};
-const APP_VERSION = '20.10.3';
+const APP_VERSION = '20.10.4';
 const EXPECTED_BACKEND_VERSION = '3.17.36';
 // Background timeout follows the same administrator-chosen inactivity policy.
 // Inactive sessions are always checked by the backend as well.
