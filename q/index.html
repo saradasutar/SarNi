@@ -3076,7 +3076,8 @@ async function qeRunReadiness(){
    catch(e){put(label,'Unavailable · '+String(e.message||e).slice(0,130),'bad');}
   }
   if(pinConfig?.enabled||info?.quickAccess?.allowRecent){
-   try{await api(pinConfig?.enabled?'qpinRecent':'qeRecent',pinConfig?.enabled?{grant:pinGrant||'',kind:mode,offset:0,pageSize:1,includeTrash:false}:{kind:mode,offset:0,pageSize:1});put('Recent entries','Read response received','good');}
+   const usePinRecent=!!pinConfig?.enabled&&!(String(mode||'').toLowerCase()==='stock'&&!pinGrant);
+   try{await api(usePinRecent?'qpinRecent':'qeRecent',usePinRecent?{grant:pinGrant||'',kind:mode,offset:0,pageSize:1,includeTrash:false}:{kind:mode,offset:0,pageSize:1});put('Recent entries','Read response received','good');}
    catch(e){put('Recent entries','Unavailable or permission restricted · '+String(e.message||e).slice(0,110),'warn');}
   }else put('Recent entries','Viewing disabled in link permissions','warn');
   put('Photo Drive upload','Not checked: requires a saved record and actual upload','neutral');
@@ -3229,7 +3230,8 @@ async function loadRecent(append=false){
   // Obtain a read-only page using exactly the permissions of this existing link.
   if(['diary','office','stock'].includes(requestedMode)){
    try{
-    const response=requestedMode==='office'&&isPin?await api('hubHrOwnerOfficeList',{grant:pinGrant,offset:0,pageSize:50}):isPin?await api('qpinRecent',{grant:pinGrant,kind:requestedMode,includeTrash:false,offset:0,pageSize:50}):await api('qeRecent',{offset:0,pageSize:50,kind:requestedMode});
+    const usePinRecent=isPin&&!(requestedMode==='stock'&&!pinGrant);
+    const response=requestedMode==='office'&&isPin?await api('hubHrOwnerOfficeList',{grant:pinGrant,offset:0,pageSize:50}):usePinRecent?await api('qpinRecent',{grant:pinGrant,kind:requestedMode,includeTrash:false,offset:0,pageSize:50}):await api('qeRecent',{offset:0,pageSize:50,kind:requestedMode});
     if(mode!==requestedMode||requestVersion!==qeRecentRequestVersion)return;
     if(requestedMode==='office'&&response.requiresPin){const note=$('qeDiaryProgress')?.querySelector('.qe-progress-note');if(note)note.textContent='Unlock PIN to load HR administrator-visible records.';return;}
     const raw=Array.isArray(response.entries)?response.entries:Array.isArray(response.items)?response.items:[];
@@ -3250,7 +3252,8 @@ async function loadRecent(append=false){
  }
  if(!append){recentOffset=0;host.textContent='Loading '+label+' entries…';$('recentSummary').hidden=true;}
  try{
-  const result=requestedMode==='office'&&isPin?await api('hubHrOwnerOfficeList',{grant:pinGrant,offset:recentOffset,pageSize:20}):isPin?await api('qpinRecent',{grant:pinGrant,kind:requestedMode,includeTrash:$('pinShowTrash').checked,offset:recentOffset,pageSize:20}):await api('qeRecent',{offset:recentOffset,pageSize:50,kind:requestedMode});
+  const usePinRecent=isPin&&!(requestedMode==='stock'&&!pinGrant);
+  const result=requestedMode==='office'&&isPin?await api('hubHrOwnerOfficeList',{grant:pinGrant,offset:recentOffset,pageSize:20}):usePinRecent?await api('qpinRecent',{grant:pinGrant,kind:requestedMode,includeTrash:$('pinShowTrash').checked,offset:recentOffset,pageSize:20}):await api('qeRecent',{offset:recentOffset,pageSize:50,kind:requestedMode});
   if(mode!==requestedMode||requestVersion!==qeRecentRequestVersion)return;
   if(requestedMode==='office'&&result.requiresPin){host.replaceChildren();const prompt=document.createElement('p');prompt.textContent='Unlock the PIN to view records visible to the HR administrator.';host.append(prompt);$('recentSearchInfo').textContent='PIN required for HR-wide viewing';$('recentSummary').hidden=true;return;}
   const raw=Array.isArray(result.entries)?result.entries:Array.isArray(result.items)?result.items:[];
@@ -3398,7 +3401,7 @@ async function loadRecent(append=false){
     row.append(td);
    });
    const action=document.createElement('td');action.className='recent-actions';action.dataset.label='Actions';
-   if(isPin&&record.editable===true&&record.id){
+   if(isPin&&!!pinGrant&&record.editable===true&&record.id){
     const btn=document.createElement('button');btn.type='button';btn.textContent='Edit';btn.onclick=()=>editRecent(record);action.append(btn);
     if(isCompleted&&!record.trashed&&['diary','office','stock'].includes(requestedMode)){
      const reopen=document.createElement('button');reopen.type='button';reopen.className='qe-reopen-action';reopen.textContent='↶ Reopen';
@@ -3407,8 +3410,8 @@ async function loadRecent(append=false){
      action.append(reopen);
     }
    }
-   if(isPin&&record.deletable===true&&record.id){const btn=document.createElement('button');btn.type='button';btn.textContent=requestedMode==='office'?'Delete':'Trash';btn.title=requestedMode==='office'?'Permanently delete this original HR Work Diary record':'Move to Trash';btn.onclick=()=>manageRecent(record,'trash');action.append(btn);}
-   if(isPin&&record.restorable===true&&record.id){const btn=document.createElement('button');btn.type='button';btn.textContent='Restore';btn.onclick=()=>manageRecent(record,'restore');action.append(btn);}
+   if(isPin&&!!pinGrant&&record.deletable===true&&record.id){const btn=document.createElement('button');btn.type='button';btn.textContent=requestedMode==='office'?'Delete':'Trash';btn.title=requestedMode==='office'?'Permanently delete this original HR Work Diary record':'Move to Trash';btn.onclick=()=>manageRecent(record,'trash');action.append(btn);}
+   if(isPin&&!!pinGrant&&record.restorable===true&&record.id){const btn=document.createElement('button');btn.type='button';btn.textContent='Restore';btn.onclick=()=>manageRecent(record,'restore');action.append(btn);}
    if(!action.children.length)action.textContent=record.trashed?'In Trash':'—';
    row.append(action);if(record.id){const photos=document.createElement('td');photos.dataset.label='Photo';photos.className='qe-recent-photo-cell';photos.append(qeRecentPhotos(record));row.append(photos);}tbody.append(row);
   });
