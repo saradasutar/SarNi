@@ -29,3 +29,81 @@
  #expenditureSection .expense-table td.expense-reason{min-width:150px}
  #expenditureSection .expense-actions{justify-content:flex-start}
 }
+
+/* SARNI PREMIUM v21 — FULL REFERENCE-LED HOME EXPERIENCE */
+:root{--sp-ink:#14233b;--sp-muted:#6b7890;--sp-line:#e1e8f1;--sp-bg:#f3f6fb;--sp-shadow:0 8px 24px rgba(19,45,78,.07)}
+html,body{background:var(--sp-bg)!important;color:var(--sp-ink)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif!important}
+.app-view{grid-template-columns:248px minmax(0,1fr)!important;background:var(--sp-bg)!important}
+.sidebar{background:linear-gradient(180deg,#102d4c 0%,#0c2744 60%,#091e36 100%)!important;border-right:1px solid #254664!important;box-shadow:8px 0 28px rgba(10,32,57,.12)!important}
+.side-brand{padding:17px 14px 19px!important;border-bottom:1px solid #ffffff20!important}
+.side-brand .brand-mark{border-radius:14px!important;background:linear-gradient(145deg,#6b63ff,#8d55dd)!important;box-shadow:0 7px 20px #635bff55!important}
+.side-brand strong{font-size:19px!important;color:#fff!important}.side-brand span{color:#b7c9dc!important;letter-spacing:.14em!important}
+.side-nav{gap:5px!important;padding-top:10px!important}
+.nav-item{min-height:41px!important;border:1px solid transparent!important;border-radius:10px!important;color:#d0deec!important;font-size:13px!important;font-weight:700!important}
+.nav-item:hover{background:#ffffff12!important;color:#fff!important}
+.nav-item.active{background:linear-gradient(100deg,#1674ed,#3388d6)!important;color:#fff!important;border-color:#62a8f4!important;box-shadow:0 5px 14px #0756b544!important}
+.sidebar-session-card{background:#ffffff0c!important;border:1px solid #ffffff24!important;border-radius:13px!important}
+.main-content{background:linear-gradient(180deg,#f8fbff 0,#f2f5fa 320px)!important;padding:0 22px 32px!important;min-width:0!important}
+.topbar{min-height:70px!important;background:#ffffffed!important;border-bottom:1px solid var(--sp-line)!important;box-shadow:0 3px 14px #102b490a!important;backdrop-filter:blur(14px)!important}
+.topbar h1{font-size:24px!important;color:#162842!important;font-weight:850!important;letter-spacing:-.035em!important}
+.primary-button{background:linear-gradient(180deg,#287cf0,#1766d9)!important;border-color:#1766d9!important;border-radius:10px!important;box-shadow:0 4px 10px #1766d933!important}
+.secondary-button,.small-button{border-radius:9px!important;border-color:#dce5ef!important;background:#fff!important}
+#overviewSection .overview-mode-bar{display:none!important}
+#personalHomeContent{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:13px!important;align-items:stretch!important}
+#sarniFocusShell,#sarniAdvancedHome,#sarniAdvancedHome .sarni-advanced-home-body{display:contents!important}
+#sarniAdvancedHome>summary{display:none!important}
+#sarniFocusShell .sarni-focus-hero{grid-column:1/-1!important;min-height:105px!important;display:flex!important;align-items:center!important;padding:22px 24px!important;border:0!important;border-radius:17px!important;background:radial-gradient(ellipse at 78% 20%,#f8d79a66,transparent 26%),linear-gradient(110deg,#0d3557 0%,#17627b 47%,#527b8c 72%,#183d5c 100%)!important;box-shadow:0 10px 26px #12385b26!important;color:#fff!important;position:relative!important;overflow:hidden!important}
+#sarniFocusShell .sarni-focus-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0c2b4ad9,#123f5b88 60%,#102d4a44);pointer-events:none}
+#sarniFocusShell .sarni-focus-hero>*{position:relative;z-index:1}
+#sarniFocusShell .sarni-focus-kicker{color:#9fe8df!important;letter-spacing:.18em!important;font-size:10px!important;font-weight:900!important}
+#sarniFocusShell .sarni-focus-hero h2{color:#fff!important;font-size:27px!important;letter-spacing:-.04em!important}
+#sarniFocusShell .sarni-focus-hero p:not(.sarni-focus-kicker){color:#e1edf7!important}
+#sarniFocusShell .sarni-focus-refresh{background:#ffffff20!important;border:1px solid #ffffff42!important;color:#fff!important;border-radius:10px!important}
+#sarniFocusShell .sarni-quick-primary{background:#fff!important;color:#145d9d!important;border-radius:10px!important}
+#sarniFocusShell .sarni-focus-metrics{grid-column:1/-1!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:11px!important}
+#sarniFocusShell .sarni-focus-metrics>button,#sarniFocusShell .sarni-premium-metric{min-width:0!important;min-height:90px!important;padding:14px!important;border:1px solid #e3e9f2!important;border-radius:15px!important;background:#fff!important;box-shadow:var(--sp-shadow)!important;text-align:left!important;text-decoration:none!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:5px!important}
+#sarniFocusShell .sarni-focus-metrics>button:nth-child(1){background:linear-gradient(135deg,#e6f9e9,#f8fff8)!important;border-color:#ccefd5!important}
+#sarniFocusShell .sarni-focus-metrics>button:nth-child(2){background:linear-gradient(135deg,#f1eaff,#fff)!important;border-color:#e5d8ff!important}
+#sarniFocusShell .sarni-focus-metrics>button:nth-child(3){background:linear-gradient(135deg,#e7f4ff,#fff)!important;border-color:#d4e9ff!important}
+#sarniFocusShell .sarni-focus-metrics>button:nth-child(4){background:linear-gradient(135deg,#fff1df,#fff)!important;border-color:#f5dfbf!important}
+#sarniFocusShell .sarni-focus-metrics small,#sarniFocusShell .sarni-premium-metric small{font-size:9px!important;letter-spacing:.1em!important;color:#6b7890!important;font-weight:850!important}
+#sarniFocusShell .sarni-focus-metrics strong{font-size:22px!important;color:#172943!important;line-height:1.15!important}
+#sarniFocusShell .sarni-focus-metrics span,#sarniFocusShell .sarni-premium-metric span{font-size:10px!important;color:#6a7890!important}
+#sarniFocusShell .sarni-premium-metric strong{font-size:17px!important;color:#1268bd!important}
+#sarniPremiumQuickPanel{grid-column:5/-1!important;min-width:0!important;border:1px solid #dce6f2!important;border-radius:16px!important;padding:15px!important;background:#fff!important;box-shadow:var(--sp-shadow)!important}
+.sarni-premium-panel-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+.sarni-premium-panel-head>div>span{font-size:9px;color:#8a65d0;letter-spacing:.13em;font-weight:900}
+.sarni-premium-panel-head h3{font-size:17px;margin:3px 0;color:#172943}.sarni-premium-panel-head p{font-size:10px;color:#77849a;margin:0}
+.sarni-premium-live{font-size:9px;color:#13836b;background:#e9f8f1;padding:6px 8px;border-radius:20px;white-space:nowrap}
+.sarni-premium-quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sarni-premium-quick-grid button{min-height:62px;border:1px solid #e0e8f3;border-radius:11px;background:linear-gradient(145deg,#f8fbff,#eef5ff);color:#263c5a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:700 11px inherit;cursor:pointer}
+.sarni-premium-quick-grid button:nth-child(2){background:#fff5f3}.sarni-premium-quick-grid button:nth-child(3){background:#f2f8ff}.sarni-premium-quick-grid button:nth-child(4){background:#f4f0ff}.sarni-premium-quick-grid button:nth-child(5){background:#f4f8ed}.sarni-premium-quick-grid button:nth-child(6){background:#fff7e9}
+.sarni-premium-quick-grid b{font-size:20px;color:#286bd5}.sarni-premium-quick-grid button:hover{transform:translateY(-1px);box-shadow:0 5px 12px #1b4a7c14}
+#sarniHomeBookGlance{grid-column:1/5!important;min-width:0!important;border:1px solid #e2d9fa!important;border-radius:16px!important;background:linear-gradient(140deg,#f4efff,#fff)!important;padding:16px!important;box-shadow:var(--sp-shadow)!important}
+.sarni-home-writing-head h3{font-size:17px!important;color:#263451!important}
+.sarni-home-writing-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+.sarni-hw-card{border-radius:10px!important;padding:9px!important}
+.sarni-home-writing-progress{margin-top:11px!important}.sarni-home-writing-track{height:9px!important;border-radius:20px!important}
+#sarniFocusShell .sarni-focus-columns{grid-column:1/7!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:12px!important}
+.sarni-focus-panel{border:1px solid #e0e7f0!important;border-radius:15px!important;background:#fff!important;box-shadow:var(--sp-shadow)!important;padding:14px!important;min-width:0!important}
+.sarni-focus-panel-head h3{font-size:14px!important;color:#243651!important}
+#sarniFocusShell .sarni-focus-foot{grid-column:1/-1!important;display:flex!important;justify-content:space-between!important;gap:10px!important;color:#738199!important;font-size:10px!important}
+#sarniExpenseInsightsHome{display:block!important;grid-column:1/7!important;border:1px solid #dfe7f0!important;border-radius:15px!important;background:#fff!important;padding:15px!important;box-shadow:var(--sp-shadow)!important;min-width:0!important}
+.sarni-insight-home-grid{grid-template-columns:1fr 1fr!important;gap:12px!important}
+.sarni-insight-plot{border:0!important;background:#fbfcff!important;border-radius:11px!important;padding:10px!important}
+.sarni-home-recent-grid{grid-column:7/-1!important;display:grid!important;grid-template-columns:1fr!important;gap:10px!important;min-width:0!important}
+.sarni-recent-card{border:1px solid #dfe7f0!important;border-radius:15px!important;background:#fff!important;padding:13px!important;box-shadow:var(--sp-shadow)!important;min-width:0!important}
+.personal-home-grid{grid-column:1/-1!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}
+.personal-home-card{border-radius:15px!important;border:1px solid #dfe7f0!important;box-shadow:var(--sp-shadow)!important;background:#fff!important;min-height:190px!important}
+#lifeHome,.mobile-life-hello,.personal-home-hero{display:none!important}
+#sarniFocusShell .sarni-focus-columns article{min-height:130px}
+#expenditureSection .expense-table-wrap{width:100%;overflow-x:auto}
+#expenditureSection .expense-table{width:100%;table-layout:fixed}
+#expenditureSection .expense-table th,#expenditureSection .expense-table td{white-space:normal;overflow-wrap:anywhere;vertical-align:middle}
+#expenditureSection .expense-table td.expense-amount{text-align:right;white-space:nowrap;font-weight:800;font-variant-numeric:tabular-nums}
+#expenditureSection .expense-actions{display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end}
+#expenditureSection .expense-actions .small-button{min-height:30px;padding:5px 8px;border-radius:8px;font-size:11px}
+#booksSection .books-list-view,#booksSection .book-detail-view{border-radius:17px}
+#booksSection .book-card,#booksSection .book-detail-view .panel{border-radius:15px!important;box-shadow:var(--sp-shadow)!important;border-color:#e0e7f0!important}
+@media(max-width:1100px){.app-view{grid-template-columns:210px minmax(0,1fr)!important}#sarniFocusShell .sarni-focus-metrics{grid-template-columns:repeat(3,minmax(0,1fr))!important}#sarniPremiumQuickPanel{grid-column:1/7!important}#sarniHomeBookGlance{grid-column:7/-1!important}#sarniFocusShell .sarni-focus-columns{grid-column:1/-1!important}#sarniExpenseInsightsHome{grid-column:1/7!important}.sarni-home-recent-grid{grid-column:7/-1!important}}
+@media(max-width:700px){.app-view{grid-template-columns:1fr!important}.main-content{padding:0 10px 24px!important}#personalHomeContent{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}#sarniFocusShell .sarni-focus-hero{grid-column:1/-1!important;padding:17px!important;min-height:120px!important;align-items:flex-start!important;flex-direction:column!important}#sarniFocusShell .sarni-focus-hero h2{font-size:22px!important}#sarniFocusShell .sarni-focus-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-column:1/-1!important}#sarniFocusShell .sarni-focus-metrics>button,#sarniFocusShell .sarni-premium-metric{min-height:80px!important;padding:10px!important}#sarniFocusShell .sarni-focus-metrics strong{font-size:18px!important}#sarniPremiumQuickPanel,#sarniHomeBookGlance,#sarniFocusShell .sarni-focus-columns,#sarniExpenseInsightsHome,.sarni-home-recent-grid,.personal-home-grid{grid-column:1/-1!important}#sarniFocusShell .sarni-focus-columns{grid-template-columns:1fr!important}.sarni-insight-home-grid{grid-template-columns:1fr!important}.sarni-home-recent-grid,.personal-home-grid{grid-template-columns:1fr!important}.topbar{min-height:58px!important}.topbar h1{font-size:19px!important}}
