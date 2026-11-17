@@ -2584,18 +2584,24 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot summary{
   padding:0!important;border:1px solid #b8d9c8!important;border-radius:6px!important;
   background:#f1f8f4!important;font-size:11px!important;line-height:1!important
  }
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-mobile-photo{position:relative!important;overflow:visible!important}
+ #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-mobile-photo .qe-recent-photo-tools{position:relative!important;overflow:visible!important}
  #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-mobile-photo .qe-recent-photos[open]{
-  position:relative!important;z-index:20!important;width:auto!important;max-width:none!important
+  position:absolute!important;right:0!important;top:0!important;z-index:30!important;
+  width:max-content!important;min-width:165px!important;max-width:230px!important;
+  padding:6px!important;border:1px solid #dce7e2!important;border-radius:9px!important;
+  background:#fff!important;box-shadow:0 6px 18px #173d2c22!important
  }
  #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-mobile-photo .qe-recent-gallery,
  #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-mobile-photo .qe-recent-photo-controls{
-  position:absolute!important;right:0!important;z-index:21!important;display:flex!important;flex-wrap:wrap!important;
-  gap:5px!important;min-width:145px!important;max-width:210px!important;padding:7px!important;
-  border:1px solid #dce7e2!important;border-radius:9px!important;background:#fff!important;
-  box-shadow:0 6px 18px #173d2c22!important;white-space:normal!important
+  position:static!important;display:flex!important;flex-wrap:wrap!important;gap:5px!important;
+  min-width:0!important;max-width:100%!important;padding:4px 0!important;border:0!important;
+  border-radius:0!important;background:transparent!important;box-shadow:none!important;white-space:normal!important
  }
- #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-mobile-photo .qe-recent-gallery{top:26px!important}
- #recentList .recent-table[data-kind] tbody tr[data-qe-record-row="1"] .qe-mobile-photo .qe-recent-photo-controls{top:26px!important}
+ #recentList .recent-table[data-kind] tbody tr.qe-recent-detail-row{display:block!important;width:100%!important;padding:0 2px!important;border:0!important;background:transparent!important;box-shadow:none!important}
+ #recentList .recent-table[data-kind] tbody tr.qe-recent-detail-row[hidden]{display:none!important}
+ #recentList .recent-table[data-kind] tbody tr.qe-recent-detail-row td{display:block!important;width:100%!important;box-sizing:border-box!important;padding:8px 10px!important;border:1px solid #dce9e1!important;border-radius:9px!important;background:#f6fbf8!important;white-space:pre-wrap!important}
+ #recentList .recent-table[data-kind] tbody tr.qe-recent-detail-row td::before{display:none!important;content:none!important}
 
 }
 </style></head><body>
