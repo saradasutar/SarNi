@@ -104,6 +104,10 @@ check('Mobile finance rows show Date, Reason and Amount; Category/Paid by/Sync a
 check('Mobile photos are available only from the compact collapsible control inside Actions', includes("qeRecentPhotos(record,true)") && includes('actionBar.append(mobilePhoto)') && includes('.qe-mobile-photo{display:none!important}') && includes('.qe-mobile-photo .qe-recent-photos>summary'));
 check('Mobile expense and family rows remain one-line without a separate Photos column', includes('.qe-recent-photo-cell{display:none!important}') && includes('grid-template-columns:64px minmax(50px,1fr) 54px 114px!important') && includes('overflow-x:hidden!important'));
 
+
+check('Mobile Photos disclosure opens as one contained popup without overlaying row buttons', includes('.qe-mobile-photo .qe-recent-photos[open]{') && includes('position:absolute!important;right:0!important;top:0!important;z-index:30!important') && includes('.qe-mobile-photo .qe-recent-gallery,') && includes('position:static!important;display:flex!important'));
+check('Mobile View detail row expands below the one-line summary', includes('tbody tr.qe-recent-detail-row{display:block!important') && includes('tbody tr.qe-recent-detail-row[hidden]{display:none!important') && includes('tbody tr.qe-recent-detail-row td{display:block!important'));
+
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
 const failures = tests.filter(t => !t.passed);
 console.log('\n'+(tests.length-failures.length)+'/'+tests.length+' source checks passed.');
