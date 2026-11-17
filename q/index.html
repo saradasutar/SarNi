@@ -180,6 +180,26 @@ main[data-entry-mode="family"]{--mode-bg:#f6f2ff;--mode-border:#d9cff0;--mode-ac
 #recentList .recent-table details summary{cursor:pointer;color:#176a53;font-weight:750;white-space:nowrap}
 #recentList .recent-cell-detail{white-space:pre-wrap;min-width:170px;max-width:300px;margin-top:6px;color:#476458;font-size:12px}
 #recentList .recent-actions{white-space:nowrap}
+#recentList .qe-recent-action-row td{padding:2px 9px 9px!important;border-top:0!important;border-bottom:1px solid #e5eee9!important}
+#recentList .qe-recent-action-bar{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+#recentList .qe-recent-action-bar button{min-height:30px;margin:0;padding:5px 10px;font-size:12px;border-radius:8px}
+#recentList .qe-recent-action-bar .qe-action-view{color:#176a53;border-color:#b8d9c8;background:#f1f8f4}
+#recentList .qe-recent-action-bar .qe-action-edit{color:#285847;background:#f5f9f6}
+#recentList .qe-recent-action-bar .qe-action-trash{color:#9b3440;border-color:#e7c8cc;background:#fff7f7}
+#recentList .qe-recent-action-bar .qe-action-restore{color:#176a53;border-color:#b8d9c8;background:#f1f8f4}
+#recentList .qe-recent-detail-row td{padding:9px 12px!important;background:#f6fbf8;border-bottom:1px solid #dce9e1!important}
+#recentList .qe-recent-detail-content{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.55;color:#476458}
+.qe-pin-inline{margin:7px 0!important;padding:8px 10px;border:1px solid #d7e6dc;border-radius:10px;background:#f5faf7}
+.qe-pin-inline[hidden],#pinUnlockForm[hidden],#pinUnlockedBar[hidden]{display:none!important}
+#pinUnlockForm{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+#pinUnlockForm .qe-pin-prompt-copy{font-size:12px;font-weight:750;color:#315b4b}
+#pinUnlockForm input{width:140px;max-width:42vw;min-height:36px;padding:6px 9px;font-size:13px}
+#pinUnlockForm button,#pinUnlockedBar button{min-height:34px;padding:5px 10px;font-size:12px}
+#pinUnlockedBar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#pinUnlockedBar small{font-size:11px;color:#526d60}
+.qe-pin-trash-toggle{display:flex;align-items:center;gap:7px;margin:7px 0;font-size:12px;font-weight:650;color:#476458}
+.qe-pin-trash-toggle input{width:16px;height:16px;min-height:16px}
+
 #recentList .recent-actions button{display:inline-block;min-height:30px;margin:0 4px 4px 0;padding:4px 8px;font-size:12px;border-radius:7px}
 #recentList .recent-trashed{opacity:.65}
 @media(max-width:700px){#recentList .recent-table{font-size:12px;min-width:550px}#recentList .recent-table th,#recentList .recent-table td{padding:8px 7px}#recentList .recent-table th{font-size:11px}}
@@ -2148,7 +2168,16 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot summary{
 <div class="qe-offline-unlock"><label for="qeOfflinePassphrase">Queue passphrase</label><input type="password" id="qeOfflinePassphrase" autocomplete="off" minlength="10" placeholder="10+ characters" /><button id="qeOfflineUnlock" type="button">Create / Unlock queue</button><button id="qeOfflineLock" type="button" hidden>Lock</button></div>
 <p id="qeOfflineMessage" class="qe-offline-message" role="status">Queue is locked. Photos are excluded. Keep the page open for automatic upload when online.</p>
 <div id="qeOfflineControls" hidden><div class="qe-offline-controls"><button id="qeOfflineSend" type="button">Send ready entries</button><button id="qeOfflineCheck" type="button">Check queue</button></div><div id="qeOfflineList"></div><small id="qeOfflineReview" hidden></small></div>
-</section><section id="qeGlobalSyncPanel" class="qe-global-sync-panel" hidden aria-label="Cross-dashboard synchronization overview"><div class="qe-global-sync-head"><strong>Cross-dashboard Sync Status</strong><div><button type="button" id="qeVerifyRecentButton" aria-expanded="false" aria-controls="qeVerifyRecentPanel">🔍 Check destinations</button><button type="button" id="qeReadinessButton" aria-expanded="false" aria-controls="qeReadinessPanel">✓ Diagnostics</button><button type="button" id="qeGlobalSyncRefresh">↻ Refresh</button><button type="button" id="qeGlobalSyncClose" aria-label="Close synchronization overview">✕</button></div></div><div class="qe-global-sync-rows"><div class="qe-global-sync-row" data-kind="investment"><div class="qe-global-sync-row-title">Investment <small>→ Analysis</small></div><p id="qeGlobalInvestmentStatus">Select Sync Status to check.</p><button type="button" data-switch-sync="investment">Open tab</button></div><div class="qe-global-sync-row" data-kind="office"><div class="qe-global-sync-row-title">Office Diary <small>→ HR</small></div><p id="qeGlobalOfficeStatus">Select Sync Status to check.</p><button type="button" data-switch-sync="office">Open tab</button></div><div class="qe-global-sync-row" data-kind="family"><div class="qe-global-sync-row-title">Family Expense <small>MyFamily ↔ SarNi</small></div><p id="qeGlobalFamilyStatus">Select Sync Status to check.</p><button type="button" data-switch-sync="family">Open tab</button></div></div><section id="qeVerifyRecentPanel" class="qe-verify-recent-panel" hidden aria-live="polite"><div class="qe-verify-recent-header"><strong>Verify recent records at destination</strong><button type="button" id="qeVerifyRecentCancel" hidden>Stop</button></div><p><strong>Frontend update:</strong> Source records can be listed now. Independent HR, Analysis and MyFamily destination verification requires the matching Apps Script backend update, which will be installed separately. Until then, results must remain Unverified; this does not mean delivery failed.</p><div id="qeVerifyRecentSummary" class="qe-verify-summary" hidden aria-live="polite"></div><div id="qeVerifyRecentResults"></div><button type="button" id="qeVerifyRecheckUnresolved" hidden>↻ Recheck unresolved only</button><button type="button" id="qeVerifyCopyReport" hidden>Copy diagnostic report</button><small id="qeVerifyRecentFootnote">No transactions will be created, edited or retried.</small></section><div id="qeReadinessPanel" class="qe-readiness-panel" hidden><strong>Readiness &amp; Diagnostics</strong><small>Read-only checks. No test transactions, photos or spreadsheet changes.</small><div id="qeReadinessResults" role="status">Select Run checks.</div><button type="button" id="qeReadinessRun">Run checks</button></div><small class="qe-global-sync-disclaimer">Link-scoped recent records only. A record count does not independently prove cross-dashboard delivery. Detailed statuses and authorized Retry are inside the relevant tab’s Recent Entries.</small></section><details id="qeDashboardHealth" class="qe-health-panel"><summary>♡ Dashboard Health <span id="qeHealthBrief">Status not checked</span></summary><div class="qe-health-inner"><div class="qe-health-grid" id="qeHealthMetrics" aria-live="polite"><p>Select Check health to review your current link and dashboard. No records will be created.</p></div><div class="qe-health-actions"><button type="button" id="qeHealthCheck">↻ Check health</button><button type="button" id="qeHealthOpenSync">Cross-dashboard verification</button></div><p id="qeHealthPeerStatus" class="qe-health-peer" role="status">Main dashboard: no report received from another open tab.</p><details class="qe-health-history-section"><summary>Recent health history</summary><div id="qeHealthHistory"></div><button id="qeHealthHistoryClear" type="button">Clear history</button></details><details class="qe-health-history-section"><summary>Troubleshooting guide</summary><div class="qe-health-guide"><p><strong>Save timed out:</strong> Check Recent Entries and the destination before repeating the same entry.</p><p><strong>Backend unavailable:</strong> Check connection and the configured backend before trying again.</p><p><strong>Sync pending or unverified:</strong> Use Verify destination. Source-side Saved does not prove the copy reached HR, Analysis or MyFamily.</p><p><strong>Photo problems:</strong> Confirm JPEG within 20 MB and verify the saved entry before another upload.</p><p><strong>PIN or session expired:</strong> Reauthorize through SarNi; do not include credentials in reports.</p></div></details><div class="qe-health-errors"><strong>Recent local errors</strong><div id="qeHealthErrors">No errors reported in this browser tab.</div></div><small>Read-only checks. Backend connectivity is not proof of successful destination synchronization. Photo uploads and session expiry are not tested here.</small></div></details><nav id="tabs" hidden></nav><div class="entry-heading"><small id="subtitle">ADD TO YOUR SARNI REGISTER</small><h2 id="heading">Quick expense</h2></div><form id="entry" hidden><div id="qeDraftBanner" class="qe-draft-banner" hidden><div><strong>Unsaved draft available</strong><small id="qeDraftMeta">Saved in this browser tab only</small></div><button type="button" id="qeDraftRestore">Restore</button><button type="button" id="qeDraftDiscard">Discard</button></div><div id="fields"></div><div id="qeFamilyPhotoActionsRow" class="qe-family-photo-actions-row"><details class="qe-photo-picker qe-photo-inline" id="qePhotoPicker"><summary class="qe-photo-disclosure"><span>📎 Attach photo</span><small>JPG · Max 20 MB</small></summary><div class="qe-photo-content"><div class="qe-photo-choices"><label class="qe-photo-action" title="Select JPEG/JPG image, maximum 20 MB">＋ Upload JPG<input id="qePhotoFile" type="file" accept="image/jpeg,.jpg,.jpeg" hidden></label><label class="qe-photo-action" title="Take a photo, maximum 20 MB">📷 Take photo<input id="qePhotoCamera" type="file" accept="image/jpeg" capture="environment" hidden></label></div><small class="qe-photo-limit" title="JPEG/JPG photos up to 20 MB">Max 20 MB</small><div id="qePhotoPreview" class="qe-photo-preview" hidden></div><small id="qePhotoNotice">Original JPEG saved to private Drive after saving.</small></div></details><div id="qeFamilyDetailsSlot"></div><div id="qeFamilyPayExpanded" class="qe-family-pay-expanded" hidden></div></div><div class="actions"><button type="button" id="reset">Clear</button><button type="submit" class="save" id="save">Save &amp; Add Another</button></div></form><p id="status" role="status">Verifying private link…</p><div id="qeUncertainSaveNotice" class="qe-uncertain-notice" hidden><strong>Save result not confirmed</strong><p>Connection was interrupted. This entry might already exist in its destination. Check Recent Entries or the destination register before retrying. The same submission ID will be reused unless you change the entry.</p><button type="button" id="qeCheckUncertainSave">Check Recent Entries</button></div><section id="lastSavedEntry" hidden aria-live="polite"></section><p id="restrictedEntry" hidden style="margin:12px 0"><a id="restrictedEntryLink" href="#" style="display:inline-block;padding:11px 14px;border:1px solid #9dc7b1;border-radius:12px;background:#f0f8f3;color:#125a40;font-weight:750;text-decoration:none">Office Diary / Investment entry (admin permission required)</a><small style="display:block;margin-top:5px;color:#63776e">Available only when enabled for this private link. Stock Diary and Investment Wisdom sharing require separate backend permissions.</small></p><section id="sipSavedSection" class="sip-saved-section qe-collapsed-sip" hidden><details id="qeSipDetails"><summary><strong>Saved SIP plans</strong><span class="qe-disclosure-note">View plans</span></summary><div class="qe-sip-detail"><button type="button" id="sipRefresh">↻ Refresh plans</button><p class="hint">Plans are separate from completed investments and holdings. Only plans created with this private link are shown.</p><div id="sipSavedList" aria-live="polite"></div></div></details></section><section id="quickSyncSummary" class="qe-sync-overview qe-collapsed-sync" hidden aria-live="polite"><details id="qeSyncDetails"><summary><strong id="quickSyncTitle">Sync status</strong><span class="qe-disclosure-note">View details</span></summary><div class="qe-sync-detail"><button id="quickSyncRefresh" type="button">↻ Refresh</button><div id="quickSyncMetrics" class="qe-sync-metrics"><span>Checking status…</span></div><small id="quickSyncNote">Based on recent records from this private link; see details in Recent Entries.</small></div></details></section><section id="recentSection" hidden><div class="recent-head"><button type="button" id="toggleRecent" class="recent-disclosure" aria-controls="recentBody" aria-expanded="false"><span>▸ Recent entries</span><small>Tap to view recent transactions</small></button><div class="recent-head-actions"><button type="button" id="refreshRecent" hidden>Refresh</button></div></div><div id="recentBody" hidden><div id="qeDiaryProgress" class="qe-diary-progress" hidden aria-live="polite"></div><div id="qeCompletionFilter" class="qe-completion-filter" role="group" aria-label="Filter action status" hidden><button type="button" data-completion-filter="all" aria-pressed="true">All</button><button type="button" data-completion-filter="open" aria-pressed="false" title="Outstanding Plan, Follow-up and Review items only">Open</button><button type="button" data-completion-filter="completed" aria-pressed="false">✓ Completed</button></div><label class="recent-search-label" for="recentSearch">Search loaded transactions<input id="recentSearch" type="search" placeholder="Search date, amount, title or category…" autocomplete="off"></label><small id="recentSearchInfo" class="hint">Searches records loaded in this tab</small><div id="recentSummary" class="recent-summary" aria-live="polite" hidden></div><div id="pinGate" hidden style="border:1px solid #cfdfd6;background:#f4faf7;padding:12px;border-radius:11px;margin:10px 0"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><strong>Manage older entries</strong><button type="button" id="pinManageToggle">Edit / Trash / Restore (PIN)</button><button type="button" id="pinLock" hidden>Lock</button></div><p class="hint" id="pinHint">Admin-enabled PIN protects viewing and changing older records.</p><form id="pinUnlockForm" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" required autocomplete="off" placeholder="4-digit PIN" aria-label="Administrator-assigned management PIN" style="max-width:170px"><button type="submit" id="pinUnlock">Unlock</button></form></div><label id="pinTrashRow" hidden style="display:flex;gap:7px;align-items:center;margin:8px 0"><input id="pinShowTrash" type="checkbox"> Show archived / Trash records</label><p class="hint" id="recentExplanation">Only entries saved using this private link are displayed. Some connected registers require separate permission for managing past entries.</p><div id="recentList"></div></div></section><p class="hint">Only share this link with people you trust. The administrator may disable it at any time.</p></main>
+</section><section id="qeGlobalSyncPanel" class="qe-global-sync-panel" hidden aria-label="Cross-dashboard synchronization overview"><div class="qe-global-sync-head"><strong>Cross-dashboard Sync Status</strong><div><button type="button" id="qeVerifyRecentButton" aria-expanded="false" aria-controls="qeVerifyRecentPanel">🔍 Check destinations</button><button type="button" id="qeReadinessButton" aria-expanded="false" aria-controls="qeReadinessPanel">✓ Diagnostics</button><button type="button" id="qeGlobalSyncRefresh">↻ Refresh</button><button type="button" id="qeGlobalSyncClose" aria-label="Close synchronization overview">✕</button></div></div><div class="qe-global-sync-rows"><div class="qe-global-sync-row" data-kind="investment"><div class="qe-global-sync-row-title">Investment <small>→ Analysis</small></div><p id="qeGlobalInvestmentStatus">Select Sync Status to check.</p><button type="button" data-switch-sync="investment">Open tab</button></div><div class="qe-global-sync-row" data-kind="office"><div class="qe-global-sync-row-title">Office Diary <small>→ HR</small></div><p id="qeGlobalOfficeStatus">Select Sync Status to check.</p><button type="button" data-switch-sync="office">Open tab</button></div><div class="qe-global-sync-row" data-kind="family"><div class="qe-global-sync-row-title">Family Expense <small>MyFamily ↔ SarNi</small></div><p id="qeGlobalFamilyStatus">Select Sync Status to check.</p><button type="button" data-switch-sync="family">Open tab</button></div></div><section id="qeVerifyRecentPanel" class="qe-verify-recent-panel" hidden aria-live="polite"><div class="qe-verify-recent-header"><strong>Verify recent records at destination</strong><button type="button" id="qeVerifyRecentCancel" hidden>Stop</button></div><p><strong>Frontend update:</strong> Source records can be listed now. Independent HR, Analysis and MyFamily destination verification requires the matching Apps Script backend update, which will be installed separately. Until then, results must remain Unverified; this does not mean delivery failed.</p><div id="qeVerifyRecentSummary" class="qe-verify-summary" hidden aria-live="polite"></div><div id="qeVerifyRecentResults"></div><button type="button" id="qeVerifyRecheckUnresolved" hidden>↻ Recheck unresolved only</button><button type="button" id="qeVerifyCopyReport" hidden>Copy diagnostic report</button><small id="qeVerifyRecentFootnote">No transactions will be created, edited or retried.</small></section><div id="qeReadinessPanel" class="qe-readiness-panel" hidden><strong>Readiness &amp; Diagnostics</strong><small>Read-only checks. No test transactions, photos or spreadsheet changes.</small><div id="qeReadinessResults" role="status">Select Run checks.</div><button type="button" id="qeReadinessRun">Run checks</button></div><small class="qe-global-sync-disclaimer">Link-scoped recent records only. A record count does not independently prove cross-dashboard delivery. Detailed statuses and authorized Retry are inside the relevant tab’s Recent Entries.</small></section><details id="qeDashboardHealth" class="qe-health-panel"><summary>♡ Dashboard Health <span id="qeHealthBrief">Status not checked</span></summary><div class="qe-health-inner"><div class="qe-health-grid" id="qeHealthMetrics" aria-live="polite"><p>Select Check health to review your current link and dashboard. No records will be created.</p></div><div class="qe-health-actions"><button type="button" id="qeHealthCheck">↻ Check health</button><button type="button" id="qeHealthOpenSync">Cross-dashboard verification</button></div><p id="qeHealthPeerStatus" class="qe-health-peer" role="status">Main dashboard: no report received from another open tab.</p><details class="qe-health-history-section"><summary>Recent health history</summary><div id="qeHealthHistory"></div><button id="qeHealthHistoryClear" type="button">Clear history</button></details><details class="qe-health-history-section"><summary>Troubleshooting guide</summary><div class="qe-health-guide"><p><strong>Save timed out:</strong> Check Recent Entries and the destination before repeating the same entry.</p><p><strong>Backend unavailable:</strong> Check connection and the configured backend before trying again.</p><p><strong>Sync pending or unverified:</strong> Use Verify destination. Source-side Saved does not prove the copy reached HR, Analysis or MyFamily.</p><p><strong>Photo problems:</strong> Confirm JPEG within 20 MB and verify the saved entry before another upload.</p><p><strong>PIN or session expired:</strong> Reauthorize through SarNi; do not include credentials in reports.</p></div></details><div class="qe-health-errors"><strong>Recent local errors</strong><div id="qeHealthErrors">No errors reported in this browser tab.</div></div><small>Read-only checks. Backend connectivity is not proof of successful destination synchronization. Photo uploads and session expiry are not tested here.</small></div></details><nav id="tabs" hidden></nav><div class="entry-heading"><small id="subtitle">ADD TO YOUR SARNI REGISTER</small><h2 id="heading">Quick expense</h2></div><form id="entry" hidden><div id="qeDraftBanner" class="qe-draft-banner" hidden><div><strong>Unsaved draft available</strong><small id="qeDraftMeta">Saved in this browser tab only</small></div><button type="button" id="qeDraftRestore">Restore</button><button type="button" id="qeDraftDiscard">Discard</button></div><div id="fields"></div><div id="qeFamilyPhotoActionsRow" class="qe-family-photo-actions-row"><details class="qe-photo-picker qe-photo-inline" id="qePhotoPicker"><summary class="qe-photo-disclosure"><span>📎 Attach photo</span><small>JPG · Max 20 MB</small></summary><div class="qe-photo-content"><div class="qe-photo-choices"><label class="qe-photo-action" title="Select JPEG/JPG image, maximum 20 MB">＋ Upload JPG<input id="qePhotoFile" type="file" accept="image/jpeg,.jpg,.jpeg" hidden></label><label class="qe-photo-action" title="Take a photo, maximum 20 MB">📷 Take photo<input id="qePhotoCamera" type="file" accept="image/jpeg" capture="environment" hidden></label></div><small class="qe-photo-limit" title="JPEG/JPG photos up to 20 MB">Max 20 MB</small><div id="qePhotoPreview" class="qe-photo-preview" hidden></div><small id="qePhotoNotice">Original JPEG saved to private Drive after saving.</small></div></details><div id="qeFamilyDetailsSlot"></div><div id="qeFamilyPayExpanded" class="qe-family-pay-expanded" hidden></div></div><div class="actions"><button type="button" id="reset">Clear</button><button type="submit" class="save" id="save">Save &amp; Add Another</button></div></form><p id="status" role="status">Verifying private link…</p><div id="qeUncertainSaveNotice" class="qe-uncertain-notice" hidden><strong>Save result not confirmed</strong><p>Connection was interrupted. This entry might already exist in its destination. Check Recent Entries or the destination register before retrying. The same submission ID will be reused unless you change the entry.</p><button type="button" id="qeCheckUncertainSave">Check Recent Entries</button></div><section id="lastSavedEntry" hidden aria-live="polite"></section><p id="restrictedEntry" hidden style="margin:12px 0"><a id="restrictedEntryLink" href="#" style="display:inline-block;padding:11px 14px;border:1px solid #9dc7b1;border-radius:12px;background:#f0f8f3;color:#125a40;font-weight:750;text-decoration:none">Office Diary / Investment entry (admin permission required)</a><small style="display:block;margin-top:5px;color:#63776e">Available only when enabled for this private link. Stock Diary and Investment Wisdom sharing require separate backend permissions.</small></p><section id="sipSavedSection" class="sip-saved-section qe-collapsed-sip" hidden><details id="qeSipDetails"><summary><strong>Saved SIP plans</strong><span class="qe-disclosure-note">View plans</span></summary><div class="qe-sip-detail"><button type="button" id="sipRefresh">↻ Refresh plans</button><p class="hint">Plans are separate from completed investments and holdings. Only plans created with this private link are shown.</p><div id="sipSavedList" aria-live="polite"></div></div></details></section><section id="quickSyncSummary" class="qe-sync-overview qe-collapsed-sync" hidden aria-live="polite"><details id="qeSyncDetails"><summary><strong id="quickSyncTitle">Sync status</strong><span class="qe-disclosure-note">View details</span></summary><div class="qe-sync-detail"><button id="quickSyncRefresh" type="button">↻ Refresh</button><div id="quickSyncMetrics" class="qe-sync-metrics"><span>Checking status…</span></div><small id="quickSyncNote">Based on recent records from this private link; see details in Recent Entries.</small></div></details></section><section id="recentSection" hidden><div class="recent-head"><button type="button" id="toggleRecent" class="recent-disclosure" aria-controls="recentBody" aria-expanded="false"><span>▸ Recent entries</span><small>Tap to view recent transactions</small></button><div class="recent-head-actions"><button type="button" id="refreshRecent" hidden>Refresh</button></div></div><div id="recentBody" hidden><div id="qeDiaryProgress" class="qe-diary-progress" hidden aria-live="polite"></div><div id="qeCompletionFilter" class="qe-completion-filter" role="group" aria-label="Filter action status" hidden><button type="button" data-completion-filter="all" aria-pressed="true">All</button><button type="button" data-completion-filter="open" aria-pressed="false" title="Outstanding Plan, Follow-up and Review items only">Open</button><button type="button" data-completion-filter="completed" aria-pressed="false">✓ Completed</button></div><label class="recent-search-label" for="recentSearch">Search loaded transactions<input id="recentSearch" type="search" placeholder="Search date, amount, title or category…" autocomplete="off"></label><small id="recentSearchInfo" class="hint">Searches records loaded in this tab</small><div id="recentSummary" class="recent-summary" aria-live="polite" hidden></div><div id="pinGate" class="qe-pin-inline" hidden>
+<form id="pinUnlockForm" hidden>
+ <span class="qe-pin-prompt-copy">PIN required to continue</span>
+ <input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" minlength="4" required autocomplete="off" placeholder="Management PIN" aria-label="Administrator management PIN">
+ <button type="submit" id="pinUnlock">Continue</button>
+ <button type="button" id="pinPromptCancel">Cancel</button>
+</form>
+<div id="pinUnlockedBar" hidden><small id="pinHint">PIN verified for this browser tab.</small><button type="button" id="pinLock" hidden>Lock</button></div>
+</div>
+<label id="pinTrashRow" hidden class="qe-pin-trash-toggle"><input id="pinShowTrash" type="checkbox"> Show Trash / Restore entries</label><p class="hint" id="recentExplanation">Only entries saved using this private link are displayed. Some connected registers require separate permission for managing past entries.</p><div id="recentList"></div></div></section><p class="hint">Only share this link with people you trust. The administrator may disable it at any time.</p></main>
 <script>
 (()=>{'use strict';const $=id=>document.getElementById(id);const key=(new URLSearchParams(location.search).get('k')||new URLSearchParams(location.search).get('key')||'');const base=String(window.PORTFOLIO_CONFIG?.API_URL||'');const qeTimingStart=performance.now();
 const qeTimingStages={};
@@ -2173,7 +2202,7 @@ function qeTimingUpdate(){
 }
 qeTimingDetails.addEventListener('toggle',()=>{if(qeTimingDetails.open)qeTimingUpdate();});
 function qeTimingMark(stage){qeTimingStages[stage]=Math.round(performance.now());if(qeTimingDetails.open)qeTimingUpdate();}
-let qePhotoPending=null,qePhotoPreviewURL='',qePhotoBusy=false,qePhotoRetry=null;let qePendingPayloadFingerprint='',qePendingUncertain=false;let familyInfo=null,pendingFamilyId=null,info=null,hubAccess={allowOffice:false,allowInvestment:false},mode='expense',busy=false,pendingQuickEntryId='',pendingQuickEntryMode='',pinConfig=null,pinGrant='',pinBackendReady=false;const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};const safe=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const qeHealthErrors=[];
+let qePhotoPending=null,qePhotoPreviewURL='',qePhotoBusy=false,qePhotoRetry=null;let qePendingPayloadFingerprint='',qePendingUncertain=false;let familyInfo=null,pendingFamilyId=null,info=null,hubAccess={allowOffice:false,allowInvestment:false},mode='expense',busy=false,pendingQuickEntryId='',pendingQuickEntryMode='',pinConfig=null,pinGrant='',pinBackendReady=false,pendingPinAction=null;const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};const safe=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const qeHealthErrors=[];
 function qeHealthRecordError(msg){
  const text=String(msg||'Error').replace(/https?:\/\/\S+/g,'[URL]').replace(/(?:\?|&)(?:k|key|token|grant|pin)=[^\s&]+/gi,'[private]').slice(0,140);
  qeHealthErrors.unshift({at:new Date().toLocaleTimeString(),text});qeHealthErrors.length=Math.min(5,qeHealthErrors.length);
@@ -2654,22 +2683,92 @@ async function initializePinAccess(){
 let pinManageOpen=false;
 function updatePinGate(){
  const enabled=!!pinConfig?.enabled;
- const pinSize=pinConfig?.pinLength===2?2:4;const pinEntry=$('pinInput');pinEntry.minLength=0;pinEntry.maxLength=pinSize;pinEntry.minLength=pinSize;pinEntry.pattern='[0-9]{'+pinSize+'}';pinEntry.placeholder=pinSize+'-digit PIN';
- $('pinGate').hidden=!enabled;
- $('pinManageToggle').hidden=!enabled||!!pinGrant;
+ const pinSize=pinConfig?.pinLength===2?2:4;
+ const pinEntry=$('pinInput');
+ pinEntry.minLength=pinSize;pinEntry.maxLength=pinSize;
+ pinEntry.pattern='[0-9]{'+pinSize+'}';pinEntry.placeholder=pinSize+'-digit PIN';
+ $('pinGate').hidden=!enabled||(!pinManageOpen&&!pinGrant);
  $('pinUnlockForm').hidden=!enabled||!!pinGrant||!pinManageOpen;
+ $('pinUnlockedBar').hidden=!enabled||!pinGrant;
  $('pinLock').hidden=!enabled||!pinGrant;
  $('pinTrashRow').hidden=!enabled||!pinGrant||mode==='office';
- $('pinHint').textContent=mode==='office'?(!pinGrant?'Unlock PIN to load records visible to the HR administrator.':'PIN verified. HR Work Diary records are loaded directly from HR; edits and permanent deletes affect the original record.') : (!pinGrant?'Recent entries are visible below. Unlock only when you need to correct, trash or restore an entry.':('Unlocked for this browser tab; '+(pinConfig?.policies?.[mode]?.edit?'editing permitted.':'view-only for this category.')));
+ $('pinHint').textContent='PIN unlocked for this browser tab · permissions remain restricted by the administrator.';
 }
-$('pinManageToggle').onclick=()=>{pinManageOpen=!pinManageOpen;updatePinGate();if(pinManageOpen)$('pinInput').focus();};
+$('pinPromptCancel').onclick=()=>{
+ pendingPinAction=null;pinManageOpen=false;$('pinInput').value='';updatePinGate();
+ status('PIN request cancelled.');
+};
+function qeRequestProtectedAction(record,action){
+ if(!record?.id){status('This record has no stable ID; management is unavailable.',true);return;}
+ if(pinGrant){
+  if(action==='edit'){if(record.editable===true)editRecent(record);else status('Edit is not enabled for this record.',true);}
+  else if(action==='reopen'){if(record.editable===true)qeReopenRecent(record);else status('Reopen is not enabled for this record.',true);}
+  else if(action==='trash'){if(record.deletable===true)void manageRecent(record,'trash');else status('Trash is not enabled for this record.',true);}
+  else if(action==='restore'){if(record.restorable===true)void manageRecent(record,'restore');else status('Restore is not enabled for this record.',true);}
+  return;
+ }
+ if(!pinConfig?.enabled){status('Administrator PIN protection is not enabled for this link.',true);return;}
+ pendingPinAction={
+  id:String(record.id),kind:String(record.kind||mode),action,
+  offset:Number(record.__qePageOffset)||0,
+  pageSize:Number(record.__qePageSize)||50,
+  trashed:!!record.trashed
+ };
+ pinManageOpen=true;updatePinGate();
+ $('pinGate').scrollIntoView({behavior:'smooth',block:'nearest'});
+ $('pinInput').focus();
+ status('Enter the administrator PIN to continue with '+(action==='trash'?'Trash':action==='restore'?'Restore':action==='reopen'?'Reopen':'Edit')+'.');
+}
+async function qeFetchProtectedRecord(pending){
+ const kind=String(pending.kind||'').toLowerCase();
+ const offset=Math.max(0,Number(pending.offset)||0);
+ const pageSize=Math.max(1,Math.min(50,Number(pending.pageSize)||50));
+ const includeTrash=!!pending.trashed||pending.action==='restore';
+ const response=kind==='office'
+  ?await api('hubHrOwnerOfficeList',{grant:pinGrant,offset,pageSize:Math.min(20,pageSize)})
+  :await api('qpinRecent',{grant:pinGrant,kind,includeTrash,offset,pageSize});
+ const records=Array.isArray(response.entries)?response.entries:Array.isArray(response.items)?response.items:[];
+ const found=records.find(item=>String(item.id||'')===String(pending.id));
+ if(!found)throw Error('The selected record could not be reloaded with PIN management permissions. Refresh Recent Entries and try again.');
+ return found;
+}
+async function qeContinuePendingPinAction(){
+ const pending=pendingPinAction;
+ if(!pending||!pinGrant)return;
+ try{
+  const record=await qeFetchProtectedRecord(pending);
+  if(pending.action==='edit'){
+   if(record.editable!==true)throw Error('Edit is not enabled for this record by the administrator.');
+   pendingPinAction=null;editRecent(record);return;
+  }
+  if(pending.action==='reopen'){
+   if(record.editable!==true)throw Error('Reopen is not enabled for this record by the administrator.');
+   pendingPinAction=null;qeReopenRecent(record);return;
+  }
+  const right=pending.action==='restore'?'restorable':'deletable';
+  if(record[right]!==true)throw Error((pending.action==='restore'?'Restore':'Trash')+' is not enabled for this record by the administrator.');
+  pendingPinAction=null;await manageRecent(record,pending.action);
+ }catch(error){
+  pendingPinAction=null;
+  status('PIN verified, but the requested action could not continue: '+String(error.message||error),true);
+ }
+}
 $('pinUnlockForm').onsubmit=async e=>{
  e.preventDefault();const input=$('pinInput'),b=$('pinUnlock');b.disabled=true;
- try{const result=await api('qpinUnlock',{pin:input.value});qeInvalidateReadSnapshots();pinGrant=result.grant;pinManageOpen=false;input.value='';updatePinGate();status(mode==='office'?'PIN verified. HR administrator-visible Work Diary view and permitted editing unlocked.':'PIN verified. Edit / Trash / Restore unlocked.');await qeRefreshPanels({global:true});}
- catch(error){status('PIN unlock failed: '+error.message,true);}
+ let unlocked=false;
+ try{
+  const result=await api('qpinUnlock',{pin:input.value});
+  qeInvalidateReadSnapshots();pinGrant=result.grant;pinManageOpen=false;input.value='';updatePinGate();
+  status('PIN verified. You can now use the management action you selected.');
+  await qeRefreshPanels({global:true});unlocked=true;
+ }catch(error){status('PIN unlock failed: '+error.message,true);}
  finally{b.disabled=false;}
+ if(unlocked&&pendingPinAction)await qeContinuePendingPinAction();
 };
-$('pinLock').onclick=()=>{qeInvalidateReadSnapshots();pinManageOpen=false;pinGrant='';$('pinShowTrash').checked=false;updatePinGate();void qeRefreshPanels({global:true});};
+$('pinLock').onclick=()=>{
+ qeInvalidateReadSnapshots();pinManageOpen=false;pinGrant='';pendingPinAction=null;
+ $('pinShowTrash').checked=false;updatePinGate();void qeRefreshPanels({global:true});
+};
 $('pinShowTrash').onchange=()=>{void qeRefreshPanels({sync:false});};
 const qePremiumIcons={"expense":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"6\" width=\"18\" height=\"15\" rx=\"2\"/><path d=\"M3 9V5a2 2 0 0 1 2-2h13\"/><path d=\"M16 13h5v5h-5a2.5 2.5 0 0 1 0-5Z\"/></svg>","diary":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 7c-2.5-2-5.6-2.3-9-1.5v14c3.4-.8 6.5-.5 9 1.5 2.5-2 5.6-2.3 9-1.5v-14c-3.4-.8-6.5-.5-9 1.5Z\"/><path d=\"M12 7v14\"/></svg>","stock":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 20V12h4v8M10 20V8h4v12M16 20V4h4v16\"/></svg>","office":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><rect x=\"3\" y=\"7\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12c5 3 13 3 18 0M12 13v3\"/></svg>","investment":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><ellipse cx=\"8\" cy=\"6\" rx=\"5\" ry=\"2.5\"/><path d=\"M3 6v5c0 3 10 3 10 0V6M3 11v5c0 3 10 3 10 0v-5\"/><ellipse cx=\"17\" cy=\"13\" rx=\"4\" ry=\"2\"/><path d=\"M13 13v5c0 3 8 3 8 0v-5\"/></svg>","family":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><circle cx=\"8\" cy=\"8\" r=\"3\"/><circle cx=\"17\" cy=\"9\" r=\"2.5\"/><path d=\"M2 21v-2a6 6 0 0 1 12 0v2M15 16c4 0 7 2 7 5\"/></svg>"};
 function qeAssertRenderedForm(kind){
@@ -3216,7 +3315,7 @@ async function loadRecent(append=false){
  $('qeCompletionFilter').hidden=!['diary','office','stock'].includes(mode);
  const label=({expense:'Expense',diary:'Diary',stock:'Stock Note',office:'Office Diary',investment:'Investment',family:'Family Expense'})[mode]||mode;
  $('toggleRecent').querySelector('span').textContent=($('recentBody').hidden?'▸ ':'▾ ')+'Recent '+label+' entries';
- $('recentExplanation').textContent=mode==='office'?(isPin?'PIN-protected HR view: all records visible to the HR administrator are loaded from the original Work Diary. Edits update the original HR record; Delete permanently removes it.':'Unlock the PIN to view HR-administrator-visible Work Diary records.'):(isPin?'Only this link’s records are shown. Viewing is allowed when admin enables View; PIN unlock is required for Edit, Trash and Restore.':'Only records saved using this link are shown; editing requires a PIN-enabled backend.');
+ $('recentExplanation').textContent=mode==='office'?(isPin?'PIN-protected HR view: all records visible to the HR administrator are loaded from the original Work Diary. Edits update the original HR record; Delete permanently removes it.':'Unlock the PIN to view HR-administrator-visible Work Diary records.'):(isPin?'Only this link’s records are shown. View opens immediately; Edit, Trash and Restore require the administrator PIN.':'Only records saved using this link are shown; editing requires a PIN-enabled backend.');
  const requestedMode=mode;
  const requestVersion=++qeRecentRequestVersion;
  if(requestedMode==='office'&&isPin&&!pinGrant){
@@ -3253,7 +3352,8 @@ async function loadRecent(append=false){
  if(!append){recentOffset=0;host.textContent='Loading '+label+' entries…';$('recentSummary').hidden=true;}
  try{
   const usePinRecent=isPin&&!(requestedMode==='stock'&&!pinGrant);
-  const result=requestedMode==='office'&&isPin?await api('hubHrOwnerOfficeList',{grant:pinGrant,offset:recentOffset,pageSize:20}):usePinRecent?await api('qpinRecent',{grant:pinGrant,kind:requestedMode,includeTrash:$('pinShowTrash').checked,offset:recentOffset,pageSize:20}):await api('qeRecent',{offset:recentOffset,pageSize:50,kind:requestedMode});
+  const pageOffset=recentOffset,pageSize=requestedMode==='office'?20:(usePinRecent?20:50);
+  const result=requestedMode==='office'&&isPin?await api('hubHrOwnerOfficeList',{grant:pinGrant,offset:pageOffset,pageSize}):usePinRecent?await api('qpinRecent',{grant:pinGrant,kind:requestedMode,includeTrash:$('pinShowTrash').checked,offset:pageOffset,pageSize}):await api('qeRecent',{offset:pageOffset,pageSize,kind:requestedMode});
   if(mode!==requestedMode||requestVersion!==qeRecentRequestVersion)return;
   if(requestedMode==='office'&&result.requiresPin){host.replaceChildren();const prompt=document.createElement('p');prompt.textContent='Unlock the PIN to view records visible to the HR administrator.';host.append(prompt);$('recentSearchInfo').textContent='PIN required for HR-wide viewing';$('recentSummary').hidden=true;return;}
   const raw=Array.isArray(result.entries)?result.entries:Array.isArray(result.items)?result.items:[];
@@ -3263,12 +3363,12 @@ async function loadRecent(append=false){
   host.querySelector('[data-load-more]')?.remove();host.querySelector('[data-load-more="1"]')?.remove();
   if(!entries.length&&!append){host.textContent=requestedMode==='stock'?(result.canonicalStore==='ANALYSIS'?'Analysis Stock Notes owner responded, but this private link has no mapped Stock Note records. Check that this is the exact Quick Entry link recorded in the Stock Notes ledger.':'Analysis Stock Notes owner route is not active in this deployed SarNi backend. Deploy the latest SarNi Web App version, then refresh.'):'No '+label+' records returned for this link.';$('recentSearchInfo').textContent=requestedMode==='stock'?(result.canonicalStore==='ANALYSIS'?'Analysis owner connected · 0 records for this link':'Analysis owner route not detected'):'No records available';$('recentSummary').hidden=true;return;}
   const columnsByType={
-   expense:[['date','Date'],['category','Category'],['subject','Reason / Purpose'],['amount','Amount'],['party','Paid by'],['details','Details']],
-   diary:[['date','Date'],['subject','Title / Note'],['type','Type'],['details','Details']],
-   stock:[['date','Date'],['subject','Company / Note'],['type','Type'],['details','Details']],
-   office:[['date','Date'],['subject','Office note'],['type','Type'],['details','Details']],
-   investment:[['date','Date'],['subject','Investment'],['type','Action'],['amount','Amount'],['sync','Sync'],['details','Details']],
-   family:[['date','Date'],['category','Category'],['subject','Reason'],['amount','Amount'],['party','Paid by'],['sync','Sync'],['details','Details']]
+   expense:[['date','Date'],['category','Category'],['subject','Reason / Purpose'],['amount','Amount'],['party','Paid by']],
+   diary:[['date','Date'],['subject','Title / Note'],['type','Type']],
+   stock:[['date','Date'],['subject','Company / Note'],['type','Type']],
+   office:[['date','Date'],['subject','Office note'],['type','Type']],
+   investment:[['date','Date'],['subject','Investment'],['type','Action'],['amount','Amount'],['sync','Sync']],
+   family:[['date','Date'],['category','Category'],['subject','Reason'],['amount','Amount'],['party','Paid by'],['sync','Sync']]
   };
   const columns=columnsByType[requestedMode]||columnsByType.diary;
   let wrap=host.querySelector('.recent-table-scroll'),table=wrap?.querySelector('table'),tbody=table?.querySelector('tbody');
@@ -3278,7 +3378,7 @@ async function loadRecent(append=false){
    table=document.createElement('table');table.className='recent-table';
    const thead=document.createElement('thead'),heading=document.createElement('tr');
    columns.forEach(([field,title])=>{const th=document.createElement('th');th.scope='col';th.textContent=title;if(field==='amount')th.className='amount';heading.append(th);});
-   const controls=document.createElement('th');controls.scope='col';controls.textContent='Actions';heading.append(controls);const photosHeading=document.createElement('th');photosHeading.scope='col';photosHeading.textContent='Photos';heading.append(photosHeading);
+   const photosHeading=document.createElement('th');photosHeading.scope='col';photosHeading.textContent='Photos';heading.append(photosHeading);
    thead.append(heading);tbody=document.createElement('tbody');table.append(thead,tbody);wrap.append(table);host.append(wrap);
   }
   const shortDate=value=>{
@@ -3289,10 +3389,13 @@ async function loadRecent(append=false){
    return Number.isNaN(d.getTime())?raw.slice(0,16):d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
   };
   const asMoney=value=>value==null||value===''?'—':('₹'+Number(value).toLocaleString('en-IN',{maximumFractionDigits:2}));
+  let renderedRecordIndex=0;
   entries.forEach(record=>{
+   record.__qePageOffset=pageOffset;record.__qePageSize=pageSize;
+   const groupKey='qe-record-'+(++renderedRecordIndex)+'-'+String(record.id||'');
    const f=record.fields&&typeof record.fields==='object'?record.fields:{};
    const get=(...names)=>{for(const name of names){const v=f[name]??record[name];if(v!==undefined&&v!==null&&String(v).trim()!=='')return String(v);}return '';};
-   const row=document.createElement('tr');if(record.trashed)row.classList.add('recent-trashed');
+   const row=document.createElement('tr');row.dataset.qeRecordRow='1';row.dataset.qeGroup=groupKey;if(record.trashed)row.classList.add('recent-trashed');
    const completionInfo=['diary','office','stock'].includes(requestedMode)?qeExtractCompletion(get('body','text')):null;
    const completionTags=String(get('tags')||'').toLowerCase().split(',').map(x=>x.trim());
    const isCompleted=!!completionInfo?.date||completionTags.includes('action-completed');
@@ -3382,38 +3485,58 @@ async function loadRecent(append=false){
      }else feedback.textContent='No saved record ID available for independent verification.';
      td.append(details);
     }
-    else if(field==='details'){
-     const disclosure=document.createElement('details');const summary=document.createElement('summary');summary.textContent='View';
-     const content=document.createElement('div');content.className='recent-cell-detail';content.textContent=(detailValues||qeExtractCompletion(description||record.text).body||'No additional details returned').slice(0,2500);
-     const completion=qeExtractCompletion(get('body','text'));
-     if(completion.date){
-      const finished=document.createElement('div');finished.className='qe-completion-recent';
-      const caption=document.createElement('strong');caption.textContent='✓ Completed · '+completion.date;finished.append(caption);
-      if(completion.remark){
-       const remarkLabel=document.createElement('small');remarkLabel.className='qe-completion-remark-label';remarkLabel.textContent='Completion remark';
-       const note=document.createElement('p');note.textContent=completion.remark;
-       finished.append(remarkLabel,note);
-      }
-      disclosure.append(summary,content,finished);
-     }else disclosure.append(summary,content);
-     td.append(disclosure);
-    }
+
     row.append(td);
    });
-   const action=document.createElement('td');action.className='recent-actions';action.dataset.label='Actions';
-   if(isPin&&!!pinGrant&&record.editable===true&&record.id){
-    const btn=document.createElement('button');btn.type='button';btn.textContent='Edit';btn.onclick=()=>editRecent(record);action.append(btn);
-    if(isCompleted&&!record.trashed&&['diary','office','stock'].includes(requestedMode)){
-     const reopen=document.createElement('button');reopen.type='button';reopen.className='qe-reopen-action';reopen.textContent='↶ Reopen';
-     reopen.title='Edit this completed note and remove its completion status after Save correction';
-     reopen.onclick=()=>{editRecent(record);const done=$('qeMarkCompleted');if(!done||$('entry').dataset.editId!==String(record.id)||$('entry').dataset.originallyCompleted!=='1')return;$('entry').dataset.reopenIntent='1';done.checked=false;const finished=$('qeCompletedDate'),remark=$('qeCompletionRemark');if(finished)finished.value='';if(remark)remark.value='';qeUpdateOptionalMarkDate();$('save').textContent='Save reopening';status('Reopen '+(requestedMode==='office'?'Follow-up':requestedMode==='stock'?'Review':'Plan')+': completion is unchecked. Save reopening to update this same record, or Clear to cancel.');};
-     action.append(reopen);
-    }
+   const photos=document.createElement('td');photos.dataset.label='Photos';photos.className='qe-recent-photo-cell';
+   if(record.id)photos.append(qeRecentPhotos(record));else photos.textContent='—';
+   row.append(photos);
+   const actionRow=document.createElement('tr');actionRow.className='qe-recent-action-row';actionRow.dataset.qeGroup=groupKey;
+   const actionCell=document.createElement('td');actionCell.colSpan=columns.length+1;
+   const actionBar=document.createElement('div');actionBar.className='qe-recent-action-bar';
+   const viewButton=document.createElement('button');viewButton.type='button';viewButton.className='qe-action-view';viewButton.textContent='View';viewButton.setAttribute('aria-expanded','false');
+   const detailRow=document.createElement('tr');detailRow.className='qe-recent-detail-row';detailRow.dataset.qeGroup=groupKey;detailRow.dataset.qeDetailRow='1';detailRow.hidden=true;
+   const detailCell=document.createElement('td');detailCell.colSpan=columns.length+1;
+   const detailContent=document.createElement('div');detailContent.className='qe-recent-detail-content';
+   detailContent.textContent=(detailValues||qeExtractCompletion(description||record.text).body||'No additional details returned').slice(0,2500);
+   detailCell.append(detailContent);
+   const completion=qeExtractCompletion(get('body','text'));
+   if(completion.date){
+    const finished=document.createElement('div');finished.className='qe-completion-recent';
+    const caption=document.createElement('strong');caption.textContent='✓ Completed · '+completion.date;finished.append(caption);
+    if(completion.remark){const remarkLabel=document.createElement('small');remarkLabel.className='qe-completion-remark-label';remarkLabel.textContent='Completion remark';const note=document.createElement('p');note.textContent=completion.remark;finished.append(remarkLabel,note);}
+    detailCell.append(finished);
    }
-   if(isPin&&!!pinGrant&&record.deletable===true&&record.id){const btn=document.createElement('button');btn.type='button';btn.textContent=requestedMode==='office'?'Delete':'Trash';btn.title=requestedMode==='office'?'Permanently delete this original HR Work Diary record':'Move to Trash';btn.onclick=()=>manageRecent(record,'trash');action.append(btn);}
-   if(isPin&&!!pinGrant&&record.restorable===true&&record.id){const btn=document.createElement('button');btn.type='button';btn.textContent='Restore';btn.onclick=()=>manageRecent(record,'restore');action.append(btn);}
-   if(!action.children.length)action.textContent=record.trashed?'In Trash':'—';
-   row.append(action);if(record.id){const photos=document.createElement('td');photos.dataset.label='Photo';photos.className='qe-recent-photo-cell';photos.append(qeRecentPhotos(record));row.append(photos);}tbody.append(row);
+   detailRow.append(detailCell);
+   viewButton.onclick=()=>{
+    const opening=detailRow.hidden;detailRow.hidden=!opening;
+    viewButton.textContent=opening?'Hide':'View';viewButton.setAttribute('aria-expanded',String(opening));
+    detailRow.dataset.qeExpanded=String(opening);
+   };
+   actionBar.append(viewButton);
+   const rights=pinConfig?.policies?.[requestedMode]||{};
+   const canOfferEdit=!!pinConfig?.enabled&&(rights.edit===true||(!!pinGrant&&record.editable===true))&&(!pinGrant||record.editable===true);
+   const canOfferTrash=!!pinConfig?.enabled&&(rights.trash===true||(!!pinGrant&&record.deletable===true))&&(!pinGrant||record.deletable===true);
+   if(!record.trashed&&canOfferEdit&&record.id){
+    const editButton=document.createElement('button');editButton.type='button';editButton.className='qe-action-edit';editButton.textContent='Edit';
+    editButton.onclick=()=>qeRequestProtectedAction(record,'edit');actionBar.append(editButton);
+   }
+   if(!record.trashed&&canOfferTrash&&record.id){
+    const trashButton=document.createElement('button');trashButton.type='button';trashButton.className='qe-action-trash';trashButton.textContent=requestedMode==='office'?'Delete':'Trash';
+    trashButton.onclick=()=>qeRequestProtectedAction(record,'trash');actionBar.append(trashButton);
+   }
+   if(isCompleted&&!record.trashed&&['diary','office','stock'].includes(requestedMode)&&canOfferEdit&&record.id){
+    const reopenButton=document.createElement('button');reopenButton.type='button';reopenButton.className='qe-reopen-action';reopenButton.textContent='↶ Reopen';
+    reopenButton.title='Reopen this completed action after PIN verification';
+    reopenButton.onclick=()=>qeRequestProtectedAction(record,'reopen');actionBar.append(reopenButton);
+   }
+   if(record.trashed&&pinGrant&&record.restorable===true&&record.id){
+    const restoreButton=document.createElement('button');restoreButton.type='button';restoreButton.className='qe-action-restore';restoreButton.textContent='Restore';
+    restoreButton.onclick=()=>qeRequestProtectedAction(record,'restore');actionBar.append(restoreButton);
+   }
+   if(actionBar.children.length===1&&!record.id){const hint=document.createElement('small');hint.textContent='Management unavailable';actionBar.append(hint);}
+   actionCell.append(actionBar);actionRow.append(actionCell);
+   tbody.append(row,actionRow,detailRow);
   });
   if(requestedMode==='office' && entries.some(x=>x.syncState)){
    const ids=[...new Set(entries.filter(x=>x.id&&!x.trashed).map(x=>String(x.id)))].slice(0,20);
@@ -3447,16 +3570,24 @@ $('qeCompletionFilter').addEventListener('click',e=>{
  const b=e.target.closest('[data-completion-filter]');if(b)qeSetCompletionFilter(b.dataset.completionFilter);
 });
 function applyRecentSearch(){
- const q=$('recentSearch').value.trim().toLocaleLowerCase(),rows=[...$('recentList').querySelectorAll('tbody tr')];
+ const allRows=[...$('recentList').querySelectorAll('tbody tr')];
+ const rows=allRows.filter(row=>row.dataset.qeRecordRow==='1');
+ const q=$('recentSearch').value.trim().toLocaleLowerCase();
  let shown=0,total=0,amountCount=0,completedCount=0,openCount=0,archivedCount=0;
  const currentMode=mode,hasAmount=currentMode==='expense'||currentMode==='family';
  rows.forEach(row=>{
-  const textMatch=!q||row.textContent.toLocaleLowerCase().includes(q);
+  const group=allRows.filter(item=>item.dataset.qeGroup===row.dataset.qeGroup);
+  const groupText=group.map(item=>item.textContent||'').join(' ').toLocaleLowerCase();
+  const textMatch=!q||groupText.includes(q);
   const completed=row.classList.contains('qe-row-completed');
   const actionable=row.classList.contains('qe-row-actionable');
   const completionMatch=qeCompletionFilterValue==='all'||(qeCompletionFilterValue==='completed'?completed:(actionable&&!completed));
   const match=textMatch&&completionMatch;
-  row.hidden=!match;if(!match)return;shown++;
+  row.hidden=!match;
+  group.filter(item=>item!==row).forEach(item=>{
+   item.hidden=!match||(item.dataset.qeDetailRow==='1'&&item.dataset.qeExpanded!=='true');
+  });
+  if(!match)return;shown++;
   if(row.classList.contains('recent-trashed'))archivedCount++;
   else if(completed)completedCount++;
   else if(actionable)openCount++;
@@ -3529,6 +3660,16 @@ function editRecent(record){
  status('Editing an existing '+record.kind+' entry. Save correction or press Clear to cancel.');
 }
 
+function qeReopenRecent(record){
+ editRecent(record);
+ const done=$('qeMarkCompleted');
+ if(!done||$('entry').dataset.editId!==String(record.id)||$('entry').dataset.originallyCompleted!=='1')return;
+ $('entry').dataset.reopenIntent='1';done.checked=false;
+ const finished=$('qeCompletedDate'),remark=$('qeCompletionRemark');
+ if(finished)finished.value='';if(remark)remark.value='';
+ qeUpdateOptionalMarkDate();$('save').textContent='Save reopening';
+ status('Reopen '+(record.kind==='office'?'Follow-up':record.kind==='stock'?'Review':'Plan')+': completion is unchecked. Save reopening to update this same record, or Clear to cancel.');
+}
 let qeSipListRequestVersion=0;
 async function loadSipPlans(){
  const requestVersion=++qeSipListRequestVersion;
