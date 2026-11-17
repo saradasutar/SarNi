@@ -499,3 +499,170 @@ html,body{background:var(--sp-bg)!important;color:var(--sp-ink)!important;font-f
  #sarniHomeBookGlance .sarni-home-writing-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
  #sarniPremiumQuickPanel .sarni-premium-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
+
+/* SARNI v21.3 — REMOVE NESTED GRID COLLAPSE
+   Use block flow for the Home page's outer containers.
+   Only individual card collections use CSS Grid. */
+#overviewSection{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+}
+#personalHomeContent{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+}
+#sarniFocusShell{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+}
+#sarniFocusShell>*{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin:0 0 14px!important;
+  box-sizing:border-box!important;
+}
+#sarniFocusShell .sarni-focus-hero{
+  display:flex!important;
+  min-height:112px!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  padding:22px 25px!important;
+  overflow:hidden!important;
+}
+#sarniFocusShell .sarni-focus-metrics{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:11px!important;
+}
+#sarniFocusShell .sarni-focus-metrics>*{
+  display:flex!important;
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+#sarniFocusShell .sarni-focus-columns{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:14px!important;
+  width:100%!important;
+}
+#sarniFocusShell .sarni-focus-foot{
+  display:flex!important;
+  justify-content:space-between!important;
+  flex-wrap:wrap!important;
+  gap:10px!important;
+}
+#sarniAdvancedHome{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin:14px 0 0!important;
+}
+#sarniAdvancedHome>summary{display:none!important}
+#sarniAdvancedHome>.sarni-advanced-home-body{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+}
+#sarniAdvancedHome>.sarni-advanced-home-body>*{
+  display:block!important;
+  position:static!important;
+  float:none!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin:0 0 14px!important;
+  box-sizing:border-box!important;
+}
+#sarniHomeBookGlance{
+  display:block!important;
+  height:auto!important;
+  min-height:0!important;
+  overflow:visible!important;
+  padding:18px!important;
+}
+#sarniHomeBookGlance .sarni-home-writing-head{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  justify-content:space-between!important;
+  align-items:center!important;
+  gap:12px!important;
+}
+#sarniHomeBookGlance .sarni-home-writing-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:10px!important;
+  width:100%!important;
+}
+#sarniHomeBookGlance .sarni-hw-card{
+  display:flex!important;
+  flex-direction:column!important;
+  min-width:0!important;
+  width:100%!important;
+  overflow-wrap:anywhere!important;
+}
+#sarniPremiumQuickPanel{
+  display:block!important;
+  height:auto!important;
+  min-height:0!important;
+  overflow:visible!important;
+}
+#sarniPremiumQuickPanel .sarni-premium-quick-grid{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+#sarniAdvancedHome .sarni-focus-columns{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:14px!important;
+}
+#sarniExpenseInsightsHome:not(.hidden){display:block!important;width:100%!important}
+#sarniExpenseInsightsHome.hidden{display:none!important}
+#sarniAdvancedHome .sarni-home-recent-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:14px!important;
+  width:100%!important;
+}
+#sarniAdvancedHome .personal-home-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:14px!important;
+  width:100%!important;
+}
+#sarniAdvancedHome .personal-home-card{
+  display:flex!important;
+  flex-direction:column!important;
+  min-width:0!important;
+  width:100%!important;
+  min-height:190px!important;
+  height:auto!important;
+  overflow:hidden!important;
+}
+#sarniAdvancedHome .personal-home-card *{max-width:100%;overflow-wrap:anywhere}
+#lifeHome,#sarniAdvancedHome .mobile-life-hello,#sarniAdvancedHome .personal-home-hero{display:none!important}
+@media(max-width:1100px){
+ #sarniFocusShell .sarni-focus-metrics{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #sarniHomeBookGlance .sarni-home-writing-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #sarniPremiumQuickPanel .sarni-premium-quick-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #sarniAdvancedHome .personal-home-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:720px){
+ #sarniFocusShell .sarni-focus-hero{flex-direction:column!important;align-items:flex-start!important;gap:14px!important;padding:18px!important}
+ #sarniFocusShell .sarni-focus-tools{width:100%!important;display:flex!important;flex-wrap:wrap!important}
+ #sarniFocusShell .sarni-focus-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #sarniFocusShell .sarni-focus-columns,#sarniAdvancedHome .sarni-focus-columns,#sarniAdvancedHome .sarni-home-recent-grid,#sarniAdvancedHome .personal-home-grid{grid-template-columns:minmax(0,1fr)!important}
+ #sarniHomeBookGlance .sarni-home-writing-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #sarniPremiumQuickPanel .sarni-premium-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
