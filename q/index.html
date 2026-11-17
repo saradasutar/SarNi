@@ -3478,7 +3478,7 @@ function render(){
  $('subtitle').textContent=mode==='office'?'SARNI OFFICE DIARY · HR SYNC STATUS AFTER SAVING':mode==='investment'?'SARNI INVESTMENT · SEE SYNC STATUS AFTER SAVING':mode==='family'?'MYFAMILY EXPENSE · SARNI COPY':mode==='expense'?'ADD TO YOUR SARNI REGISTER':'ADD TO YOUR PRIVATE NOTES';
  if(mode==='family'){
   $('fields').innerHTML=
-  '<label for="familyAmount">Amount (₹)</label><div class="amountbox family-amountbox"><span aria-hidden="true">₹</span><input id="familyAmount" name="amount" type="number" inputmode="decimal" min="0.01" max="100000" step=".01" required placeholder="0.00"></div>'+
+  '<label for="familyAmount">Amount (₹)</label><div class="amountbox family-amountbox"><span aria-hidden="true">₹</span><input id="familyAmount" name="amount" type="number" inputmode="decimal" min="0.01" max="100000" step=".01" required placeholder="0"></div>'+
   '<label for="familyReason">What was it for?</label><input id="familyReason" name="reason" maxlength="500" required placeholder="e.g. Groceries, medicine, transport">'+
   '<div class="family-paired-row family-payment-row">'+
     '<div><label for="familyPaidBy">Paid by</label><input id="familyPaidBy" name="paidByName" maxlength="80" required placeholder="Person who paid"></div>'+
