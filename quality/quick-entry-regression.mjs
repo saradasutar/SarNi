@@ -99,6 +99,11 @@ check('Mobile Expense and Family rows visibly prioritize Date, Reason and Amount
 check('Mobile photo cell is removed from the main row and Photos is collapsed inside Actions', includes('qe-mobile-photo') && includes('qeRecentPhotos(record,true)') && includes('.qe-mobile-photo .qe-recent-photos>summary') && includes('.qe-recent-photo-cell{display:none!important}') && includes('details.append(controls)'));
 check('Mobile essential fields remain single-line and secondary fields are available by View', includes('white-space:nowrap!important') && includes('text-overflow:ellipsis!important') && includes("detailRow.hidden=!opening"));
 
+
+check('Mobile finance rows show Date, Reason and Amount; Category/Paid by/Sync are secondary', includes('grid-template-areas:"date subject amount actions"') && includes('td[data-field="amount"]') && includes('td[data-field="subject"] strong') && includes('td[data-field="category"]') && includes('td[data-field="party"]'));
+check('Mobile photos are available only from the compact collapsible control inside Actions', includes("qeRecentPhotos(record,true)") && includes('actionBar.append(mobilePhoto)') && includes('.qe-mobile-photo{display:none!important}') && includes('.qe-mobile-photo .qe-recent-photos>summary'));
+check('Mobile expense and family rows remain one-line without a separate Photos column', includes('.qe-recent-photo-cell{display:none!important}') && includes('grid-template-columns:64px minmax(50px,1fr) 54px 114px!important') && includes('overflow-x:hidden!important'));
+
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
 const failures = tests.filter(t => !t.passed);
 console.log('\n'+(tests.length-failures.length)+'/'+tests.length+' source checks passed.');
