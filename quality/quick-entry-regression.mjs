@@ -100,9 +100,13 @@ check('Mobile photo cell is removed from the main row and Photos is collapsed in
 check('Mobile essential fields remain single-line and secondary fields are available by View', includes('white-space:nowrap!important') && includes('text-overflow:ellipsis!important') && includes("detailRow.hidden=!opening"));
 
 
-check('Mobile finance rows show Date, Reason and Amount; Category/Paid by/Sync are secondary', includes('grid-template-areas:"date subject amount actions"') && includes('td[data-field="amount"]') && includes('td[data-field="subject"] strong') && includes('td[data-field="category"]') && includes('td[data-field="party"]'));
+check('Mobile finance rows show Date, Paid by, Amount and Reason in requested order', includes('td[data-field="date"]{') && includes('td[data-field="party"]{order:2!important') && includes('td[data-field="amount"]{order:3!important') && includes('td[data-field="subject"]{order:4!important') && includes('td[data-field="subject"] strong'));
+check('Expense and Family mobile action sequence is View, Edit, Trash, Camera', source.indexOf("actionBar.append(viewButton)") < source.indexOf('actionBar.append(editButton)') && source.indexOf('actionBar.append(editButton)') < source.indexOf('actionBar.append(trashButton)') && source.indexOf('if(record.id)actionBar.append(mobilePhoto)'));
+check('Expense and Family mobile fields share one non-wrapping flex row', includes('flex-flow:row nowrap!important') && includes('overflow-x:auto!important') && includes('td[data-field="party"]{order:2!important'));
+
 check('Mobile photos are available only from the compact collapsible control inside Actions', includes("qeRecentPhotos(record,true)") && includes('actionBar.append(mobilePhoto)') && includes('.qe-mobile-photo{display:none!important}') && includes('.qe-mobile-photo .qe-recent-photos>summary'));
-check('Mobile expense and family rows remain one-line without a separate Photos column', includes('.qe-recent-photo-cell{display:none!important}') && includes('grid-template-columns:64px minmax(50px,1fr) 54px 114px!important') && includes('overflow-x:hidden!important'));
+check('Mobile expense and family rows use swipeable single line without a separate Photos column', includes('.qe-recent-photo-cell{display:none!important}') && includes('flex-flow:row nowrap!important') && includes('overflow-x:auto!important') && includes('order:5!important'));
+
 
 
 check('Mobile Photos disclosure opens as one contained popup without overlaying row buttons', includes('.qe-mobile-photo .qe-recent-photos[open]{') && includes('position:absolute!important;right:0!important;top:0!important;z-index:30!important') && includes('.qe-mobile-photo .qe-recent-gallery,') && includes('position:static!important;display:flex!important'));
