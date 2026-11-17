@@ -32,6 +32,11 @@ check('Family Expense paired rows and required inputs', ['familyAmount','familyR
 check('Diary, Office and Stock Note action forms', includes("name=\"needsPlanning\"") && includes("name=\"needsFollowup\"") && includes("name=\"needsReview\""));
 check('Completion remark and reopening controls', includes('qeCompletionRemark') && includes('qe-reopen-action') && includes('action-completed'));
 check('Recent Entries table and completion filter', includes('recent-table-scroll') && includes('id="qeCompletionFilter"') && includes('applyRecentSearch()'));
+check('Compact per-record lower action strip replaces management card', includes("className='qe-recent-action-row'") && !includes('Manage older entries') && !includes('pinManageToggle'));
+check('View expands record details without requesting a PIN', includes("viewButton.onclick=()=>") && includes("detailRow.hidden=!opening") && includes("viewButton.textContent=opening?'Hide':'View'"));
+check('Edit and Trash are offered only by PIN policy and request PIN on demand', includes('rights.edit===true') && includes('rights.trash===true') && includes("qeRequestProtectedAction(record,'edit')") && includes("qeRequestProtectedAction(record,'trash')"));
+check('Successful PIN verification resumes the selected management action', includes("if(unlocked&&pendingPinAction)await qeContinuePendingPinAction()") && includes("api('qpinUnlock'"));
+check('Restore and completed-action Reopen remain available under PIN', includes("qeRequestProtectedAction(record,'restore')") && includes("qeRequestProtectedAction(record,'reopen')"));
 check('Sync: independent proof checked before Verified', includes('proof.verified===true') && includes('proof.destinationRecordId') && includes('proof.checkedAt'));
 check('Retry remains guarded by idempotency guarantee', includes('verifiedResult.idempotentGuaranteed!==true'));
 check('No automatic retry for uncertain save', includes('qePendingUncertain') && includes('Continue using the SAME original submission ID?'));
@@ -76,7 +81,7 @@ check('Private Quick Entry links send origin-only referrer', includes('<meta nam
 check('Apps Script connection hint uses origin only', includes('<link rel="preconnect" href="https://script.google.com">') && !/<link\s+rel="preconnect"[^>]+\?k=/i.test(source));
 check('Original six-tab renderer remains unchanged', includes('function render(){') && !includes('function qeRenderTabsOnly(types)') && includes("button.setAttribute('aria-pressed',String(active))"));
 check('Original access bootstrap and PIN gate remain authoritative', includes("Promise.allSettled([api('qeInfo')") && includes("initializePinAccess().then(") && includes("quickSave.disabled=true"));
-check('Quick Entry PWA public assets cached by versioned worker', quickWorker.includes("sarni-q-private-shell-v3") && quickWorker.includes("new URL('./sarni9-batch10.css',SCOPE)") && quickWorker.includes("new URL('./sarni9-batch10.js',SCOPE)"));
+check('Quick Entry PWA public assets cached by versioned worker', /const CACHE_NAME='sarni-q-private-shell-v\\d+/.test(quickWorker) && quickWorker.includes("new URL('./sarni9-batch10.css',SCOPE)") && quickWorker.includes("new URL('./sarni9-batch10.js',SCOPE)"));
 check('Worker cache scope excludes queries and private API responses', quickWorker.includes("request.method!=='GET'||url.origin!==self.location.origin") && quickWorker.includes("if(!PATHS.has(url.pathname)||url.search)return;") && quickWorker.includes("cache.match(SHELL)") && !quickWorker.includes("cache.put(request"));
 check('Worker always checks online config before cached fallback', quickWorker.includes("if(url.pathname===new URL('../config.js',SCOPE).pathname)") && quickWorker.includes("try{const fresh=await fetch(request);if(fresh.ok)return fresh;}"));
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
