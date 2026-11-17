@@ -2175,12 +2175,7 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot summary{
 #recentBody .recent-summary-item small{font-size:9px!important;line-height:1.15!important}
 #recentBody .recent-summary-item strong{font-size:12px!important;line-height:1.2!important;margin-top:2px!important}
 /* Fit five columns inside the 650px Quick Entry panel on desktop. */
-#recentList .recent-table{width:100%!important;min-width:0!important;table-layout:fixed!important;box-sizing:border-box!important}
-#recentList .recent-table th:nth-child(1),#recentList .recent-table td:nth-child(1){width:15%!important}
-#recentList .recent-table th:nth-child(2),#recentList .recent-table td:nth-child(2){width:22%!important}
-#recentList .recent-table th:nth-child(3),#recentList .recent-table td:nth-child(3){width:19%!important}
-#recentList .recent-table th:nth-child(4),#recentList .recent-table td:nth-child(4){width:16%!important}
-#recentList .recent-table th:nth-child(5),#recentList .recent-table td:nth-child(5){width:28%!important}
+#recentList .recent-table{width:max-content!important;min-width:100%!important;table-layout:auto!important;box-sizing:border-box!important}
 #recentList .recent-table td{padding:6px 5px!important;font-size:11px!important;overflow-wrap:anywhere}
 #recentList .recent-table td:first-child{white-space:nowrap!important}
 #recentList .qe-recent-photo-cell,#recentList .qe-recent-action-cell{min-width:0!important;white-space:nowrap!important}
@@ -2715,6 +2710,80 @@ main[data-entry-mode="family"] #qeFamilyDetailsSlot summary{
   display:block!important;width:100%!important;box-sizing:border-box!important;padding:8px 10px!important;
   border:1px solid #dce9e1!important;border-radius:9px!important;background:#f6fbf8!important;white-space:pre-wrap!important
  }
+}
+
+/* Category-aware desktop Recent Entries table.
+   Wider categories scroll inside their own panel instead of squeezing or overlapping columns. */
+@media(min-width:601px){
+ #recentList .recent-table-scroll{
+  display:block!important;width:100%!important;max-width:100%!important;
+  overflow-x:auto!important;overflow-y:visible!important;position:relative!important;
+  overscroll-behavior-x:contain!important;-webkit-overflow-scrolling:touch!important;
+  scrollbar-width:thin!important
+ }
+ #recentList .recent-table[data-kind]{
+  display:table!important;width:max-content!important;min-width:100%!important;
+  table-layout:auto!important;border-collapse:separate!important;border-spacing:0!important;
+  box-sizing:border-box!important
+ }
+ #recentList .recent-table[data-kind="diary"],
+ #recentList .recent-table[data-kind="stock"],
+ #recentList .recent-table[data-kind="office"]{min-width:770px!important}
+ #recentList .recent-table[data-kind="expense"]{min-width:900px!important}
+ #recentList .recent-table[data-kind="investment"]{min-width:990px!important}
+ #recentList .recent-table[data-kind="family"]{min-width:1080px!important}
+ #recentList .recent-table[data-kind] th,
+ #recentList .recent-table[data-kind] td{
+  box-sizing:border-box!important;white-space:nowrap!important;vertical-align:middle!important;
+  padding:8px 9px!important;overflow-wrap:normal!important
+ }
+ #recentList .recent-table[data-kind] th{font-size:11px!important;line-height:1.25!important}
+ #recentList .recent-table[data-kind] td{font-size:11.5px!important;line-height:1.35!important}
+ #recentList .recent-table[data-kind] td[data-field="subject"]{
+  min-width:200px!important;max-width:270px!important;white-space:normal!important;overflow-wrap:anywhere!important
+ }
+ #recentList .recent-table[data-kind] td[data-field="subject"] strong{
+  display:block!important;max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important
+ }
+ #recentList .recent-table[data-kind] th[data-field="date"],
+ #recentList .recent-table[data-kind] td[data-field="date"]{min-width:105px!important;width:105px!important}
+ #recentList .recent-table[data-kind] th[data-field="category"],
+ #recentList .recent-table[data-kind] td[data-field="category"]{min-width:115px!important;width:120px!important}
+ #recentList .recent-table[data-kind] th[data-field="subject"],
+ #recentList .recent-table[data-kind] td[data-field="subject"]{min-width:200px!important;width:220px!important}
+ #recentList .recent-table[data-kind] th[data-field="amount"],
+ #recentList .recent-table[data-kind] td[data-field="amount"]{min-width:100px!important;width:110px!important;text-align:right!important}
+ #recentList .recent-table[data-kind] th[data-field="party"],
+ #recentList .recent-table[data-kind] td[data-field="party"]{min-width:90px!important;width:100px!important}
+ #recentList .recent-table[data-kind] th[data-field="type"],
+ #recentList .recent-table[data-kind] td[data-field="type"]{min-width:135px!important;width:155px!important;white-space:normal!important}
+ #recentList .recent-table[data-kind] th[data-field="sync"],
+ #recentList .recent-table[data-kind] td[data-field="sync"]{min-width:165px!important;width:180px!important;white-space:nowrap!important}
+ #recentList .recent-table[data-kind] td[data-field="sync"] .recent-sync-badge{max-width:none!important;white-space:nowrap!important}
+ #recentList .recent-table[data-kind] td[data-field="sync"] .recent-sync-detail,
+ #recentList .recent-table[data-kind] td[data-field="sync"] .recent-sync-detail summary{white-space:nowrap!important}
+ #recentList .recent-table[data-kind] th[data-field="photos"],
+ #recentList .recent-table[data-kind] td[data-field="photos"]{min-width:90px!important;width:95px!important}
+ #recentList .recent-table[data-kind] th[data-field="actions"],
+ #recentList .recent-table[data-kind] td[data-field="actions"]{min-width:150px!important;width:155px!important}
+ #recentList .recent-table[data-kind] td[data-field="photos"]{position:sticky!important;right:155px!important;z-index:4!important;background:#fff!important}
+ #recentList .recent-table[data-kind] th[data-field="photos"]{position:sticky!important;right:155px!important;z-index:7!important;background:#eaf3ee!important}
+ #recentList .recent-table[data-kind] td[data-field="actions"]{position:sticky!important;right:0!important;z-index:5!important;background:#fff!important}
+ #recentList .recent-table[data-kind] th[data-field="actions"]{position:sticky!important;right:0!important;z-index:8!important;background:#eaf3ee!important}
+ #recentList .recent-table[data-kind] td[data-field="date"]{position:sticky!important;left:0!important;z-index:4!important;background:#fff!important}
+ #recentList .recent-table[data-kind] th[data-field="date"]{position:sticky!important;left:0!important;z-index:8!important;background:#eaf3ee!important}
+ #recentList .recent-table[data-kind] td[data-field="photos"] .qe-recent-photo-tools{min-width:0!important;max-width:100%!important}
+ #recentList .recent-table[data-kind] td[data-field="photos"] .qe-recent-photos>summary{white-space:nowrap!important}
+ #recentList .recent-table[data-kind] td[data-field="actions"] .qe-recent-action-bar{
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  flex-wrap:nowrap!important;gap:4px!important;width:max-content!important;max-width:none!important
+ }
+ #recentList .recent-table[data-kind] td[data-field="actions"] .qe-recent-action-bar button{
+  flex:0 0 auto!important;min-height:29px!important;padding:4px 7px!important;font-size:10.5px!important
+ }
+ #recentList .recent-table[data-kind] tbody tr:nth-child(even) td[data-field="date"],
+ #recentList .recent-table[data-kind] tbody tr:nth-child(even) td[data-field="photos"],
+ #recentList .recent-table[data-kind] tbody tr:nth-child(even) td[data-field="actions"]{background:#f8fbf9!important}
 }
 </style></head><body>
 <main><header class="qe-compact-header"><img src="../sarni-life-icon.svg" alt="SarNi logo"><div class="qe-brand-text"><h1>SarNi · Quick Entry</h1><p>Personal Life Centre · Fast &amp; simple entry</p></div><div class="qe-header-controls"><span class="qe-private-chip">Private link</span><button type="button" id="qeOfflineButton" class="qe-global-sync-button" aria-label="Offline Queue" title="Offline Queue" aria-controls="qeOfflinePanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">📥</span><span class="qe-action-label">Queue</span><span id="qeOfflineCount"></span></button><button type="button" id="qeGlobalSyncButton" class="qe-global-sync-button" aria-label="Sync Status" title="Sync Status" aria-controls="qeGlobalSyncPanel" aria-expanded="false"><span class="qe-action-glyph" aria-hidden="true">🔄</span><span class="qe-action-label">Sync</span></button></div></header><section id="qePrivateLinkHelp" class="qe-link-help" hidden><strong>Open your private Quick Entry link</strong><p>For your privacy, the installed shortcut does not save the secret link token. Paste your existing SarNi Quick Entry link to open your authorized forms.</p><input id="qePrivateLinkInput" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://saradasutar.github.io/SarNi/q/?k=…" aria-label="Private Quick Entry link"><button id="qePrivateLinkOpen" type="button">Open Private Link</button><small id="qePrivateLinkError" role="status"></small></section><div id="qeConnectivityNotice" class="qe-connectivity-notice" hidden role="status">Offline · Entries can be queued after unlocking your encrypted queue.</div><div class="qe-mini-info" aria-label="Quick Entry features"><span>✓ No dashboard login</span><span>▤ Six entry types</span><span>⌄ Recent on demand</span></div><section id="qeOfflinePanel" class="qe-offline-panel" hidden aria-label="Encrypted offline entry queue">
@@ -3932,8 +4001,8 @@ async function loadRecent(append=false){
    wrap=document.createElement('div');wrap.className='recent-table-scroll';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label','Recent '+label+' records; scroll horizontally for more columns');
    table=document.createElement('table');table.className='recent-table';
    const thead=document.createElement('thead'),heading=document.createElement('tr');
-   columns.forEach(([field,title])=>{const th=document.createElement('th');th.scope='col';th.textContent=title;if(field==='amount')th.className='amount';heading.append(th);});
-   const photosHeading=document.createElement('th');photosHeading.scope='col';photosHeading.textContent='Photos';heading.append(photosHeading);const actionsHeading=document.createElement('th');actionsHeading.scope='col';actionsHeading.textContent='Actions';heading.append(actionsHeading);
+   columns.forEach(([field,title])=>{const th=document.createElement('th');th.scope='col';th.dataset.field=field;th.textContent=title;if(field==='amount')th.className='amount';heading.append(th);});
+   const photosHeading=document.createElement('th');photosHeading.scope='col';photosHeading.dataset.field='photos';photosHeading.textContent='Photos';heading.append(photosHeading);const actionsHeading=document.createElement('th');actionsHeading.scope='col';actionsHeading.dataset.field='actions';actionsHeading.textContent='Actions';heading.append(actionsHeading);
    thead.append(heading);tbody=document.createElement('tbody');table.append(thead,tbody);wrap.append(table);host.append(wrap);
   }
   table.dataset.kind=requestedMode;
@@ -4044,10 +4113,10 @@ async function loadRecent(append=false){
 
     row.append(td);
    });
-   const photos=document.createElement('td');photos.dataset.label='Photos';photos.className='qe-recent-photo-cell';
+   const photos=document.createElement('td');photos.dataset.label='Photos';photos.dataset.field='photos';photos.className='qe-recent-photo-cell';
    if(record.id)photos.append(qeRecentPhotos(record));else photos.textContent='—';
    row.append(photos);
-   const actionCell=document.createElement('td');actionCell.dataset.label='Actions';actionCell.className='qe-recent-action-cell';
+   const actionCell=document.createElement('td');actionCell.dataset.label='Actions';actionCell.dataset.field='actions';actionCell.className='qe-recent-action-cell';
    const actionBar=document.createElement('div');actionBar.className='qe-recent-action-bar';
    const mobilePhoto=document.createElement('div');mobilePhoto.className='qe-mobile-photo';
    if(record.id)mobilePhoto.append(qeRecentPhotos(record,true));
