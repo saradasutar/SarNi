@@ -99,22 +99,29 @@ check('Worker always checks online config before cached fallback', quickWorker.i
 check('No inline private key hardcoded', !/const\s+(?:pinGrant|key)\s*=\s*['"][A-Za-z0-9]{16,}['"]/.test(source));
 
 
-check('Mobile Expense and Family rows visibly prioritize Date, Reason and Amount', includes('td[data-field="subject"] strong') && includes('td[data-field="amount"]') && includes('td[data-field="category"]') && includes('td[data-field="party"]') && includes('family') && includes('grid-template-areas:"date subject amount actions"'));
-check('Mobile photo cell is removed from the main row and Photos is collapsed inside Actions', includes('qe-mobile-photo') && includes('qeRecentPhotos(record,true)') && includes('.qe-mobile-photo .qe-recent-photos>summary') && includes('.qe-recent-photo-cell{display:none!important}') && includes('details.append(controls)'));
-check('Mobile essential fields remain single-line and secondary fields are available by View', includes('white-space:nowrap!important') && includes('text-overflow:ellipsis!important') && includes("detailRow.hidden=!opening"));
 
 
-check('Mobile finance rows show Date, Paid by, Amount and Reason in requested order', includes('order:1!important;flex-basis:70px!important') && includes('order:2!important;flex-basis:54px!important') && includes('order:3!important;flex-basis:64px!important') && includes('order:4!important;flex-basis:132px!important') && includes('td[data-field="subject"] strong'));
-check('Expense and Family mobile action sequence is View, Edit, Trash, Camera', source.indexOf("actionBar.append(viewButton)") < source.indexOf('actionBar.append(editButton)') && source.indexOf('actionBar.append(editButton)') < source.indexOf('actionBar.append(trashButton)') && source.indexOf('if(record.id)actionBar.append(mobilePhoto)'));
-check('Expense and Family mobile fields share one non-wrapping flex row', includes('flex-flow:row nowrap!important') && includes('overflow-x:auto!important') && includes('order:2!important;flex-basis:54px!important') && includes('min-width:100%!important'));
 
-check('Mobile photos are available only from the compact collapsible control inside Actions', includes("qeRecentPhotos(record,true)") && includes('actionBar.append(mobilePhoto)') && includes('.qe-mobile-photo{display:none!important}') && includes('.qe-mobile-photo .qe-recent-photos>summary'));
-check('Mobile expense and family rows use swipeable single line without a separate Photos column', includes('.qe-recent-photo-cell{display:none!important}') && includes('flex-flow:row nowrap!important') && includes('overflow-x:auto!important') && includes('order:5!important'));
+
+
+
+
+
+
+
+
 
 
 
 check('Mobile Photos disclosure opens as one contained popup without overlaying row buttons', includes('.qe-mobile-photo .qe-recent-photos[open]{') && includes('position:absolute!important;right:0!important;top:0!important;z-index:30!important') && includes('.qe-mobile-photo .qe-recent-gallery,') && includes('position:static!important;display:flex!important'));
 check('Mobile View detail row expands below the one-line summary', includes('tbody tr.qe-recent-detail-row{display:block!important') && includes('tbody tr.qe-recent-detail-row[hidden]{display:none!important') && includes('tbody tr.qe-recent-detail-row td{display:block!important'));
+
+check('All six mobile Recent Entries tabs use wrapped cards without horizontal dragging', includes('display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important') && includes('width:100%!important;min-width:0!important') && includes('overflow:visible!important;border:0!important'));
+check('Expense and Family cards show Date, Paid by, Amount and full wrapping Reason', includes('"date party amount" "subject subject subject"') && includes('overflow-wrap:anywhere!important') && includes('td[data-field="subject"] strong'));
+check('Family mobile cards keep Category and Sync visible', includes('grid-area:category!important') && includes('grid-area:sync!important') && includes('.recent-sync-badge'));
+check('Mobile action buttons use fixed aligned columns across records', includes('grid-template-columns:repeat(4,minmax(0,1fr)) 38px!important') && includes('.qe-action-view{grid-column:1!important}') && includes('.qe-action-edit{grid-column:2!important}') && includes('.qe-action-trash{grid-column:3!important}'));
+check('Mobile Photos remains collapsed in the camera slot after Trash', includes('qeRecentPhotos(record,true)') && includes('.qe-mobile-photo .qe-recent-photos>summary') && includes('details.append(controls)') && includes('bottom:39px!important'));
+check('Mobile View details expand below the corresponding record card', includes('tbody tr.qe-recent-detail-row[hidden]{display:none!important') && includes("detailRow.hidden=!opening"));
 
 for (const t of tests) console.log((t.passed ? 'PASS' : 'FAIL')+'  '+t.name);
 const failures = tests.filter(t => !t.passed);
