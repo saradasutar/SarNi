@@ -898,3 +898,39 @@ body.theme-dark #appView .sarni-home-writing-note{color:#b8c7d8}
  #appView .personal-home-grid{grid-template-columns:1fr!important}
  #appView .sarni-reference-module-links{grid-template-columns:1fr!important}
 }
+
+/* Scenic brand treatment on the existing application header; controls remain unchanged. */
+#appView .topbar{
+ position:relative!important;isolation:isolate!important;overflow:hidden!important;
+ min-height:76px!important;padding:12px 22px!important;
+ border:1px solid #183b58!important;border-radius:15px!important;
+ background:
+  radial-gradient(circle at 76% 22%,rgba(255,220,150,.95) 0 2.8%,transparent 3.1%),
+  linear-gradient(160deg,transparent 0 54%,rgba(15,69,83,.62) 54.2% 64%,transparent 64.2%),
+  linear-gradient(145deg,transparent 0 61%,rgba(8,42,67,.68) 61.2% 73%,transparent 73.2%),
+  linear-gradient(110deg,#0b2a46 0%,#15516a 44%,#102d49 100%)!important;
+ box-shadow:0 8px 22px rgba(9,34,56,.14)!important;
+}
+#appView .topbar>*{position:relative!important;z-index:2!important}
+#appView .topbar h1{color:#fff!important;text-shadow:0 1px 3px #071c33!important}
+#appView .topbar .eyebrow,#appView .topbar .dashboard-version-chip{color:#e0f3f5!important}
+#appView .topbar :is(button,a){border-color:#ffffff3b!important}
+#appView .personal-home-hero{position:relative!important;isolation:isolate!important}
+#appView .personal-home-hero:before{
+ content:"";position:absolute;z-index:-1;right:0;bottom:0;width:58%;height:100%;
+ background:
+  linear-gradient(145deg,transparent 0 42%,rgba(20,71,83,.13) 42.2% 54%,transparent 54.2%),
+  linear-gradient(155deg,transparent 0 52%,rgba(20,57,83,.16) 52.2% 69%,transparent 69.2%);
+ clip-path:polygon(0 100%,16% 61%,25% 76%,45% 30%,57% 63%,72% 42%,100% 72%,100% 100%);
+}
+#appView .personal-home-hero:after{
+ content:"";position:absolute;z-index:-1;right:9%;top:13%;width:48px;height:48px;border-radius:50%;
+ background:radial-gradient(circle,#fff4c9 0%,#f4c66d 62%,rgba(244,198,109,0) 72%);
+ opacity:.85;
+}
+#appView .personal-home-hero>div{position:relative;z-index:1}
+@media(max-width:720px){
+ #appView .topbar{border-radius:0 0 13px 13px!important;padding:10px 12px!important}
+ #appView .topbar h1{font-size:19px!important}
+ #appView .personal-home-hero:before{width:82%;opacity:.5}
+}
