@@ -48,6 +48,8 @@ check('PIN changes invalidate Smart Refresh snapshots', includes("qeInvalidateRe
 check('Photo formats and size remain limited', includes('image/jpeg') && includes('20*1024*1024'));
 check('Photos disclosure collapses thumbnails, Upload and Camera together', includes("summary.textContent='📷 Photos'") && includes("browse.textContent='＋ Upload'") && includes("camera.textContent='📷 Camera'") && includes('details.append(controls)') && includes('tools.append(details)') && !includes('tools.append(details,controls)') && includes("details.addEventListener('toggle'"));
 check('Progress and summary cards use compact dimensions', includes('grid-template-columns:repeat(5,minmax(0,1fr))!important') && includes('min-height:52px!important') && includes('recent-summary-item{padding:5px 7px!important'));
+check('Desktop Recent Entries table fits panel so all actions are visible', includes('width:100%!important;min-width:0!important;table-layout:fixed!important') && includes('qe-recent-action-bar{gap:3px!important;width:100%!important;max-width:100%!important') && includes('th:nth-child(5),#recentList .recent-table td:nth-child(5){width:28%!important'));
+check('Mobile Recent Entries keeps controlled horizontal scroll', includes('min-width:720px!important') && includes('overflow-x:auto!important'));
 check('Offline queue uses encryption', includes('AES-GCM') && includes('PBKDF2'));
 check('Styles have matching tags', count(/<style\b/g) === count(/<\/style>/g));
 check('Scripts have matching tags', count(/<script\b/g) === count(/<\/script>/g));
