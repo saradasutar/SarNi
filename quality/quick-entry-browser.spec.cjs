@@ -143,6 +143,60 @@ for (const viewport of scenarios) {
     expect(tableLayout.actionsPosition).toBe('sticky');
     expect(tableLayout.syncWhiteSpace).toBe('nowrap');
    }
+   if(viewport.name!=='desktop'){
+    const cards=await page.evaluate(()=>{
+     const host=document.getElementById('recentList'),wrap=document.createElement('div');
+     wrap.className='recent-table-scroll';
+     const table=document.createElement('table');table.className='recent-table';table.dataset.kind='family';
+     const body=document.createElement('tbody');
+     for(let n=0;n<2;n++){
+      const row=document.createElement('tr');row.dataset.qeRecordRow='1';
+      const fields=[['date','Date','15 Nov 2026'],['party','Paid by','SS'],['amount','Amount','₹1,401'],['subject','Reason','SARNI-MYFAMILY long medicine grocery transportation expense reason that must wrap across lines'],['category','Category','Home'],['sync','Sync','MyFamily matched']];
+      for(const [field,label,value] of fields){
+       const td=document.createElement('td');td.dataset.field=field;td.dataset.label=label;
+       if(field==='subject'){const strong=document.createElement('strong');strong.textContent=value;td.append(strong);}
+       else if(field==='sync'){const badge=document.createElement('span');badge.className='recent-sync-badge is-linked';badge.textContent=value;td.append(badge);}
+       else td.textContent=value;
+       row.append(td);
+      }
+      const photos=document.createElement('td');photos.dataset.field='photos';photos.className='qe-recent-photo-cell';row.append(photos);
+      const actionCell=document.createElement('td');actionCell.dataset.field='actions';actionCell.dataset.label='Actions';actionCell.className='qe-recent-action-cell';
+      const bar=document.createElement('div');bar.className='qe-recent-action-bar';
+      for(const [label,cls] of [['View','qe-action-view'],['Edit','qe-action-edit'],['Trash','qe-action-trash']]){
+       const button=document.createElement('button');button.type='button';button.className=cls;button.textContent=label;bar.append(button);
+      }
+      const photo=document.createElement('div');photo.className='qe-mobile-photo';
+      const details=document.createElement('details');details.className='qe-recent-photos';
+      const summary=document.createElement('summary');summary.textContent='📷';details.append(summary);photo.append(details);
+      bar.append(photo);actionCell.append(bar);row.append(actionCell);body.append(row);
+     }
+     table.append(body);wrap.append(table);host.append(wrap);
+     const rows=[...table.querySelectorAll('tr[data-qe-record-row]')],rect=el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};
+     const reason=rows[0].querySelector('[data-field="subject"] strong');
+     const actionXs=row=>['qe-action-view','qe-action-edit','qe-action-trash'].map(cls=>rect(row.querySelector('.'+cls)).x);
+     return {viewport:document.documentElement.clientWidth,documentWidth:document.documentElement.scrollWidth,
+      display:getComputedStyle(rows[0]).display,rowWidth:rect(rows[0]).width,scrollWidth:wrap.scrollWidth,clientWidth:wrap.clientWidth,
+      reasonWhiteSpace:getComputedStyle(reason).whiteSpace,reasonHeight:rect(reason).height,
+      category:getComputedStyle(rows[0].querySelector('[data-field="category"]')).display,
+      sync:getComputedStyle(rows[0].querySelector('[data-field="sync"]')).display,
+      photoCell:getComputedStyle(rows[0].querySelector('.qe-recent-photo-cell')).display,
+      camera:getComputedStyle(rows[0].querySelector('.qe-mobile-photo summary')).display,
+      actionXs:[actionXs(rows[0]),actionXs(rows[1])]
+     };
+    });
+    expect(cards.display).toBe('grid');
+    expect(cards.rowWidth).toBeLessThanOrEqual(cards.viewport+2);
+    expect(cards.reasonWhiteSpace).toBe('normal');
+    expect(cards.reasonHeight).toBeGreaterThan(28);
+    expect(cards.category).not.toBe('none');
+    expect(cards.sync).not.toBe('none');
+    expect(cards.photoCell).toBe('none');
+    expect(cards.camera).not.toBe('none');
+    expect(cards.scrollWidth).toBeLessThanOrEqual(cards.clientWidth+2);
+    expect(cards.documentWidth).toBeLessThanOrEqual(cards.viewport+2);
+    for(let c=0;c<3;c++)expect(Math.abs(cards.actionXs[0][c]-cards.actionXs[1][c])).toBeLessThanOrEqual(2);
+   }
+
    // Health UI must remain read-only, collapsible and show only status categories.
    await page.locator('#qeDashboardHealth > summary').click();
    await expect(page.locator('#qeDashboardHealth')).toHaveAttribute('open','');
