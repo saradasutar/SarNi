@@ -620,3 +620,139 @@ body.theme-dark #appView .sarni-home-writing-note{color:#b8c7d8}
 }
 @media(prefers-reduced-motion:reduce){#appView #sarniHwFill{transition:none!important}}
 @media print{#appView .sarni-home-writing{break-inside:avoid;box-shadow:none}}
+
+
+/* SarNi v23 — reference-led Home dashboard presentation.
+   Visual-only: existing controls, form IDs, data targets and event handlers remain intact. */
+#appView .main-content{
+  background:
+    radial-gradient(ellipse at 82% -8%,rgba(14,165,164,.075),transparent 34%),
+    linear-gradient(180deg,#f7fbff 0%,#f2f6fb 100%)!important;
+}
+#appView .sidebar{
+  background:linear-gradient(180deg,#092a4b 0%,#08213e 58%,#071b34 100%)!important;
+  border-right:1px solid #173e60!important;
+  box-shadow:8px 0 30px rgba(8,31,57,.12)!important;
+}
+#appView .side-brand{padding:19px 15px 20px!important}
+#appView .side-brand .brand-mark{background:linear-gradient(145deg,#0a9e8c,#16b6a2)!important;border-radius:15px!important}
+#appView .side-brand strong{font-size:20px!important;color:#fff!important}
+#appView .side-brand span{color:#a8c6d9!important;font-size:9px!important;letter-spacing:.17em!important}
+#appView .sarni-sidebar-label{color:#8db0c8!important}
+#appView .side-nav{gap:5px!important}
+#appView .side-nav .nav-item{
+  min-height:42px!important;border-radius:11px!important;padding:9px 12px!important;
+  color:#d3e2ed!important;font-size:13px!important;font-weight:720!important;
+}
+#appView .side-nav .nav-item.active{
+  background:linear-gradient(100deg,#087fbb,#1688c7)!important;
+  border-color:#36a8db!important;box-shadow:0 5px 15px #0079b344!important;
+}
+#appView .side-nav .nav-item.active span{color:#fff!important}
+#appView .topbar{
+  min-height:76px!important;border:1px solid #e1eaf2!important;border-radius:0 0 18px 18px!important;
+  background:rgba(255,255,255,.96)!important;box-shadow:0 5px 20px rgba(22,54,85,.045)!important;
+  padding:10px 18px!important;margin-bottom:16px!important;
+}
+#appView .topbar h1{font-size:25px!important;font-weight:850!important;color:#102b49!important}
+#appView .topbar .eyebrow{color:#07877f!important}
+#appView .overview-mode-bar{display:none!important}
+#appView #sarniFocusShell{display:none!important}
+#appView #sarniAdvancedHome{
+  display:block!important;border:0!important;background:transparent!important;
+  margin:0!important;padding:0!important;
+}
+#appView #sarniAdvancedHome>summary{display:none!important}
+#appView .sarni-advanced-home-body{
+  display:grid!important;grid-template-columns:minmax(0,1fr);gap:15px!important;
+}
+#appView .personal-home-hero{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:18px!important;
+  min-height:112px!important;padding:22px 25px!important;margin:0!important;
+  border:1px solid #dce8f1!important;border-radius:19px!important;
+  background:
+    radial-gradient(circle at 88% 10%,rgba(255,255,255,.45),transparent 28%),
+    linear-gradient(115deg,#e5f8f4 0%,#edf6ff 54%,#f5efff 100%)!important;
+  box-shadow:0 7px 22px rgba(23,65,90,.055)!important;
+}
+#appView .personal-home-hero .eyebrow{color:#087f79!important;font-size:10px!important;letter-spacing:.16em!important;font-weight:900!important}
+#appView .personal-home-hero h2{font-size:clamp(22px,2.1vw,30px)!important;color:#102d4b!important;letter-spacing:-.04em!important}
+#appView .personal-home-hero p:not(.eyebrow){font-size:13px!important;color:#536d82!important}
+#appView .personal-home-actions{gap:8px!important}
+#appView .personal-home-actions button{min-height:40px!important;border-radius:11px!important;padding:9px 13px!important;font-size:12px!important}
+#appView #lifeHome{
+  margin:0!important;padding:18px!important;border:1px solid #dce7f0!important;border-radius:19px!important;
+  background:#fff!important;box-shadow:0 6px 22px rgba(21,54,85,.045)!important;
+}
+#appView #lifeHome .life-section-title{align-items:center!important;gap:12px!important;margin-bottom:15px!important}
+#appView #lifeHome .life-section-title h2{font-size:20px!important;color:#152f4d!important;letter-spacing:-.025em!important}
+#appView #lifeHome .life-section-title p{font-size:12px!important;color:#6a7c90!important}
+#appView #lifeHome .life-private-pill{border-radius:999px!important;background:#eaf8f2!important;color:#167b5b!important}
+#appView #lifeHome .life-stat-grid{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:11px!important;margin:0 0 15px!important;
+}
+#appView #lifeHome .life-stat{
+  min-width:0!important;padding:15px!important;border:1px solid #dce9ef!important;border-radius:15px!important;
+  background:linear-gradient(145deg,#f3fbff,#f5f9ff)!important;box-shadow:none!important;
+}
+#appView #lifeHome .life-stat:nth-child(2){background:linear-gradient(145deg,#f7f1ff,#fbf7ff)!important;border-color:#e9ddfa!important}
+#appView #lifeHome .life-stat:nth-child(3){background:linear-gradient(145deg,#eafaf5,#f4fcf8)!important;border-color:#d5eee4!important}
+#appView #lifeHome .life-stat:nth-child(4){background:linear-gradient(145deg,#fff7e9,#fffaf3)!important;border-color:#f2e5cf!important}
+#appView #lifeHome .life-stat>span{font-size:11px!important;font-weight:800!important;color:#536c82!important}
+#appView #lifeHome .life-stat strong{display:block;margin:7px 0 4px!important;font-size:clamp(19px,1.8vw,26px)!important;line-height:1.15!important;color:#122e4c!important;font-variant-numeric:tabular-nums!important;overflow-wrap:anywhere}
+#appView #lifeHome .life-stat small{font-size:10px!important;color:#718398!important}
+#appView #lifeHome .life-duo{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px!important}
+#appView #lifeHome .life-card{
+  min-width:0!important;padding:16px!important;border:1px solid #e0e9f1!important;border-radius:15px!important;
+  background:#fff!important;box-shadow:0 3px 13px rgba(23,55,82,.035)!important;
+}
+#appView #lifeHome .life-card-top h3{font-size:16px!important;color:#183654!important}
+#appView #lifeHome .life-card-icon{width:37px!important;height:37px!important;border-radius:12px!important;background:#e9f7f5!important;color:#07877d!important}
+#appView #lifeHome .life-entry-form{gap:10px!important}
+#appView #lifeHome .life-entry-form label{font-size:11px!important;font-weight:750!important;color:#50667d!important}
+#appView #lifeHome .life-entry-form :is(input,select,textarea){
+  min-height:39px!important;border:1px solid #dce5ed!important;border-radius:9px!important;background:#fbfdff!important;
+  color:#1d344e!important;font-size:12px!important;padding:9px 11px!important;
+}
+#appView #lifeHome .life-entry-form textarea{min-height:100px!important}
+#appView #lifeHome .life-save{min-height:40px!important;border-radius:10px!important;background:linear-gradient(110deg,#087f79,#0d9c91)!important}
+#appView .sarni-insight-home:not(.hidden){margin:0!important;padding:17px!important;border:1px solid #dce7f0!important;border-radius:17px!important;background:#fff!important;box-shadow:0 5px 18px rgba(21,54,85,.04)!important}
+#appView .sarni-home-recent-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px!important;margin:0!important}
+#appView .sarni-recent-card{
+  min-width:0!important;padding:16px!important;border:1px solid #dce7f0!important;border-radius:16px!important;
+  background:#fff!important;box-shadow:0 5px 18px rgba(21,54,85,.04)!important;
+}
+#appView .sarni-recent-heading h3{font-size:15px!important;color:#173654!important}
+#appView .sarni-recent-heading button{border-radius:9px!important;background:#eaf5ff!important;color:#1267a4!important}
+#appView .personal-home-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:13px!important}
+#appView .personal-home-card{
+  min-width:0!important;min-height:210px!important;padding:16px!important;border:1px solid #dce7f0!important;
+  border-radius:16px!important;box-shadow:0 5px 18px rgba(21,54,85,.04)!important;
+}
+#appView .personal-home-card h3{font-size:15px!important;color:#173654!important}
+#appView .personal-home-card .personal-card-actions button{border-radius:9px!important;min-height:36px!important}
+#appView .personal-home-content>.personal-home-footer{display:flex!important}
+#appView .sarni-advanced-home-body .mobile-life-hello{display:none!important}
+@media(max-width:1100px){
+ #appView #lifeHome .life-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #appView .personal-home-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #appView .quote-home-card{grid-column:1/-1!important}
+}
+@media(max-width:850px){
+ #appView .personal-home-hero{display:flex!important;align-items:flex-start!important;flex-direction:column!important;padding:17px!important;gap:10px!important}
+ #appView .personal-home-actions{justify-content:flex-start!important}
+ #appView #lifeHome{padding:12px!important}
+ #appView #lifeHome .life-section-title{align-items:flex-start!important;flex-direction:column!important}
+ #appView #lifeHome .life-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ #appView #lifeHome .life-stat{padding:11px!important}
+ #appView #lifeHome .life-stat strong{font-size:19px!important}
+ #appView #lifeHome .life-duo{grid-template-columns:1fr!important}
+ #appView .sarni-home-recent-grid{grid-template-columns:1fr!important}
+ #appView .personal-home-grid{grid-template-columns:1fr!important}
+ #appView .personal-home-card{min-height:175px!important}
+ #appView .personal-home-content>.personal-home-footer{display:flex!important}
+}
+@media(prefers-reduced-motion:no-preference){
+ #appView #lifeHome .life-stat,#appView .sarni-recent-card,#appView .personal-home-card{transition:transform .16s ease,box-shadow .16s ease}
+ #appView #lifeHome .life-stat:hover,#appView .sarni-recent-card:hover,#appView .personal-home-card:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(21,54,85,.075)!important}
+}
