@@ -518,7 +518,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 
 
 <!-- sarni10-main-workspace.css retired: duplicate Quick Workspace was removed. -->
-<link rel="stylesheet" href="./sarni22-design-system.css?v=5" media="all"/>
+<link rel="stylesheet" href="./sarni22-design-system.css?v=6" media="all"/>
 </head>
 <body>
 <a class="skip-link" href="#mainDashboard">Skip to dashboard</a>
@@ -662,23 +662,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
     <button type="button" data-sarni-nav="diary"><small>THIS MONTH</small><strong id="sarniFocusDiaryCount">—</strong><span>Diary entries →</span></button>
     <button type="button" data-sarni-nav="money"><small>UPCOMING BILLS</small><strong id="sarniFocusBillsCount">—</strong><span>Payments due →</span></button>
   </div>
-  <section class="sarni-home-writing" id="sarniHomeBookGlance" aria-label="Automatic Book Writing progress">
-    <div class="sarni-home-writing-head">
-      <div><span class="sarni-home-writing-eyebrow">YOUR CREATIVE PROGRESS</span><h3>Book Writing</h3></div>
-      <div class="sarni-home-writing-actions">
-        <label class="sarni-home-writing-choice"><span class="sr-only">Choose a book</span><select id="sarniHomeBookChoose" aria-label="Choose book for Home progress"><option value="">Loading books…</option></select></label>
-        <button type="button" id="sarniHomeOpenBook" class="sarni-home-writing-open">Open book <span aria-hidden="true">↗</span></button>
-      </div>
-    </div>
-    <div class="sarni-home-writing-grid" aria-live="polite">
-      <div class="sarni-hw-card sarni-hw-purple"><span>CHAPTERS COMPLETED</span><strong id="sarniHwChapters">—</strong><small id="sarniHwChapterDetail">Saved chapters</small></div>
-      <div class="sarni-hw-card sarni-hw-blue"><span>MANUSCRIPT WORDS</span><strong id="sarniHwWords">—</strong><small>Automatically counted</small></div>
-      <div class="sarni-hw-card sarni-hw-amber"><span>WORD TARGET</span><strong id="sarniHwTarget">—</strong><small id="sarniHwTargetDetail">From book settings</small></div>
-      <div class="sarni-hw-card sarni-hw-green"><span>LAST CHANGED</span><strong id="sarniHwRecent">—</strong><small id="sarniHwRecentDetail">Latest saved update</small></div>
-    </div>
-    <div class="sarni-home-writing-progress"><div class="sarni-home-writing-progress-line"><span id="sarniHwGoalLabel">Book writing progress</span><strong id="sarniHwPercent">—</strong></div><div class="sarni-home-writing-track" role="progressbar" aria-label="Book word target progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="sarniHwTrack"><span id="sarniHwFill"></span></div></div>
-    <p class="sarni-home-writing-note" id="sarniHwStatus" role="status">Loading your saved book progress…</p>
-  </section>
+  
 <div class="sarni-focus-columns">
     <article class="sarni-focus-panel"><div class="sarni-focus-panel-head"><h3>Important for you</h3><button type="button" data-sarni-nav="calendar">Calendar ↗</button></div><div id="sarniFocusEvents" aria-live="polite"><p class="sarni-focus-empty">Your reminders will appear here after sign-in.</p></div></article>
     <article class="sarni-focus-panel sarni-focus-memory"><div class="sarni-focus-panel-head"><h3>Useful experience to remember</h3><button type="button" data-sarni-nav="experiences">Life Experiences ↗</button></div><div id="sarniFocusLessons" aria-live="polite"><p class="sarni-focus-empty">A saved lesson will appear when relevant.</p></div></article>
@@ -716,8 +700,9 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <div class="life-stat"><span>Spent this year</span><strong data-life-stat="year">₹0</strong><small>Actual spending only</small></div>
 <div class="life-stat"><span>Active trip / work heads</span><strong data-life-stat="heads">0</strong><small>Budget is optional</small></div>
 <div class="life-stat"><span>Diary this month</span><strong data-life-stat="diary">0</strong><small data-life-stat="streak">Start writing today</small></div>
+<div class="life-stat life-stat-book"><span>Book Writing</span><strong id="sarniHomeBookKpi">—</strong><small>Selected book progress</small></div>
 </div>
-<div class="life-duo">
+<details class="life-quick-forms"><summary>＋ Open quick expense and diary forms</summary><div class="life-duo">
 <article class="life-card"><div class="life-card-top"><div><span class="life-eyebrow">QUICK EXPENSE</span><h3>Add expense here</h3></div><span class="life-card-icon">₹</span></div>
 <div id="expenseExperienceHint" class="life-context-hint hidden" role="status"></div><form class="life-entry-form" data-life-expense-form="" id="lifeExpenseHome">
 <div class="life-fields"><label>Date<input name="date" required="" type="date"/></label><label>Amount ₹<input inputmode="decimal" min="0.01" name="amount" placeholder="0.00" required="" step="0.01" type="number"/></label></div>
@@ -736,9 +721,20 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 </form>
 <details class="sarni-recent-quick sarni-recent-quick-diary" id="sarniQuickRecentDiary"><summary>Last 3 diary entries <span>↻</span></summary><div id="sarniRecentQuickDiary" class="sarni-recent-quick-list" aria-live="polite">Your recent diary notes appear after sign-in.</div></details>
 </article>
-</div>
+</div></details>
 </section>
-<section aria-labelledby="sarniInsightsHomeTitle" class="sarni-insight-section sarni-insight-home hidden" id="sarniExpenseInsightsHome">
+<section class="sarni-reference-quick" aria-label="Quick entry shortcuts">
+ <div class="sarni-reference-panel-head"><div><span>FAST DAILY ENTRY</span><h3>Quick Entry</h3><p>Open your existing entry tools in one click</p></div><span class="sarni-reference-bolt">ϟ</span></div>
+ <div class="sarni-reference-quick-grid">
+  <button type="button" data-sarni-qc="expense"><b>₹</b><span>Expense</span></button>
+  <button type="button" data-sarni-qc="diary"><b>✎</b><span>Diary</span></button>
+  <button type="button" data-sarni-qc="stock"><b>▥</b><span>Stock Note</span></button>
+  <button type="button" data-section="calendar"><b>▦</b><span>Calendar</span></button>
+  <button type="button" data-section="books"><b>▤</b><span>Book Writing</span></button>
+  <a href="https://saradasutar.github.io/MyFamily/" target="_blank" rel="noopener noreferrer"><b>♧</b><span>Family Expense</span></a>
+ </div>
+</section>
+<section aria-labelledby="sarniInsightsHomeTitle" class="sarni-insight-section sarni-insight-home" id="sarniExpenseInsightsHome">
 <div class="sarni-insight-head"><div><span class="sarni-insight-eyebrow">SPENDING, MADE CLEAR</span><h3 id="sarniInsightsHomeTitle">Expense Insights</h3><p id="sarniInsightHomePeriod">Your monthly spending at a glance</p></div><button class="sarni-insight-link" id="sarniInsightOpenFull" type="button">View all charts <span aria-hidden="true">↗</span></button></div>
 <div class="sarni-insight-home-grid">
 <div class="sarni-insight-plot"><h4>Where money went</h4><div aria-live="polite" class="sarni-donut-region" id="sarniHomeCategoryChart"></div></div>
@@ -750,6 +746,23 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
   <article class="sarni-recent-card"><div class="sarni-recent-heading"><h3>Latest 5 expenses</h3><button type="button" data-section="expenditure">View all →</button></div><div id="sarniHomeRecentExpenses" aria-live="polite"></div></article>
   <article class="sarni-recent-card"><div class="sarni-recent-heading"><h3>Latest 5 diary entries</h3><button type="button" data-section="diary">View all →</button></div><div id="sarniHomeRecentDiaries" aria-live="polite"></div></article>
 </div>
+<section class="sarni-home-writing" id="sarniHomeBookGlance" aria-label="Automatic Book Writing progress">
+    <div class="sarni-home-writing-head">
+      <div><span class="sarni-home-writing-eyebrow">YOUR CREATIVE PROGRESS</span><h3>Book Writing</h3></div>
+      <div class="sarni-home-writing-actions">
+        <label class="sarni-home-writing-choice"><span class="sr-only">Choose a book</span><select id="sarniHomeBookChoose" aria-label="Choose book for Home progress"><option value="">Loading books…</option></select></label>
+        <button type="button" id="sarniHomeOpenBook" class="sarni-home-writing-open">Open book <span aria-hidden="true">↗</span></button>
+      </div>
+    </div>
+    <div class="sarni-home-writing-grid" aria-live="polite">
+      <div class="sarni-hw-card sarni-hw-purple"><span>CHAPTERS COMPLETED</span><strong id="sarniHwChapters">—</strong><small id="sarniHwChapterDetail">Saved chapters</small></div>
+      <div class="sarni-hw-card sarni-hw-blue"><span>MANUSCRIPT WORDS</span><strong id="sarniHwWords">—</strong><small>Automatically counted</small></div>
+      <div class="sarni-hw-card sarni-hw-amber"><span>WORD TARGET</span><strong id="sarniHwTarget">—</strong><small id="sarniHwTargetDetail">From book settings</small></div>
+      <div class="sarni-hw-card sarni-hw-green"><span>LAST CHANGED</span><strong id="sarniHwRecent">—</strong><small id="sarniHwRecentDetail">Latest saved update</small></div>
+    </div>
+    <div class="sarni-home-writing-progress"><div class="sarni-home-writing-progress-line"><span id="sarniHwGoalLabel">Book writing progress</span><strong id="sarniHwPercent">—</strong></div><div class="sarni-home-writing-track" role="progressbar" aria-label="Book word target progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="sarniHwTrack"><span id="sarniHwFill"></span></div></div>
+    <p class="sarni-home-writing-note" id="sarniHwStatus" role="status">Loading your saved book progress…</p>
+  </section>
 <div class="personal-home-grid">
 <article class="personal-home-card diary-home-card tint-blue">
 <div class="personal-card-head">
@@ -795,6 +808,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 </div>
 </article>
 </div>
+<div class="sarni-reference-module-links" aria-label="Connected SarNi workspaces"><a href="https://sutartech.github.io/Analysis/" target="_blank" rel="noopener noreferrer"><b>▥</b><span><strong>Analysis</strong><small>Investment &amp; Stocks</small></span>↗</a><a href="https://saradasutar.github.io/MyFamily/" target="_blank" rel="noopener noreferrer"><b>♧</b><span><strong>MyFamily</strong><small>Family Finance</small></span>↗</a></div>
 </div>
 </div></details>
 </section>
