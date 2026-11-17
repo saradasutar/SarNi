@@ -1,7 +1,7 @@
 'use strict';
 
 const CONFIG = window.PORTFOLIO_CONFIG || {};
-const APP_VERSION = '20.10.3';
+const APP_VERSION = '20.10.4';
 const EXPECTED_BACKEND_VERSION = '3.17.36';
 // Background timeout follows the same administrator-chosen inactivity policy.
 // Inactive sessions are always checked by the backend as well.
@@ -9502,6 +9502,7 @@ function initLifeExperiences(){
   $('sarniLifeCheckBackend')?.addEventListener('click',()=>sarniLifeCheckBackendVersion({force:true}));
   f.addEventListener('submit',saveLifeExperienceForm);
   $('experienceNew')?.addEventListener('click',()=>{sarLifeReset();f.scrollIntoView({behavior:'smooth',block:'start'});});
+  $('festivalRecordNew')?.addEventListener('click',()=>{sarLifeReset();f.elements.title.value='';f.elements.topic.value='OTHER';f.elements.visibility.value='PRIVATE';f.elements.triggerKind.value='ANY';f.elements.location.value='';f.elements.keywords.value='';f.elements.sourceDiaryId.value='';$('experienceFormTitle').textContent='New Festival & Tradition Record';sarLifeSetRichEditor('<h2>Festival / occasion</h2><p> </p><h2>Meaning and family tradition</h2><p> </p><h2>Preparation and materials required</h2><p> </p><h2>What to do — step by step</h2><ol><li> </li></ol><h2>Traditional food / recipes</h2><p> </p><h2>Our family activities and memories</h2><p> </p><h2>What future generations should know</h2><p> </p>');$('experienceSaveStatus').textContent='Private by default. Attach one representative photo; the current journal supports one photo per entry.';f.scrollIntoView({behavior:'smooth',block:'start'});f.elements.title.focus();});
   $('experienceBengaluruExample')?.addEventListener('click',()=>{sarLifeReset();f.elements.title.value='Bengaluru airport — start early';f.elements.topic.value='TRAVEL';f.elements.triggerKind.value='FLIGHT';f.elements.location.value='Bengaluru';if(f.elements.departureCity)f.elements.departureCity.value='Bengaluru';f.elements.keywords.value='airport, flight';sarLifeSetRichEditor('When departing by air from Bengaluru, start for the airport at least 5 hours before flight departure, allowing sufficient time for road traffic and check-in.');$('experienceSaveStatus').textContent='Example filled in. Review and press Save Experience to store it.';f.scrollIntoView({behavior:'smooth'});});
   $('experienceUseDiary')?.addEventListener('click',sarLifeUseDiary);
   $('experienceSearch')?.addEventListener('input',sarLifeRender);
