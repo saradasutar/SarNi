@@ -11339,3 +11339,81 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 @media (max-width:620px) {
   #loginView #loginForm > .ssec-forgot-password{margin:-4px 0 -2px!important;min-height:35px!important;font-size:12px!important}
 }
+
+/* v20.10.4 · unified Family Heritage Journal shared with MyFamily */
+.fj-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:22px 24px;border:1px solid rgba(105,91,183,.18);border-radius:22px;background:linear-gradient(125deg,#f6f3ff,#eef9f6 58%,#fff8f0);box-shadow:0 10px 28px rgba(39,35,82,.07)}
+.fj-hero h2{margin:4px 0 7px;font-size:clamp(1.45rem,2.4vw,2.1rem);color:#30265b}
+.fj-hero p:not(.eyebrow){max-width:760px;margin:0;color:#66627b;line-height:1.55}
+.fj-hero-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.fj-principles{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.fj-principles span{padding:7px 10px;border:1px solid #e3deef;border-radius:99px;background:#fff;color:#625d76;font-size:.7rem;font-weight:780}
+.fj-status{margin:8px 0 12px;color:#69647e;font-size:.78rem;font-weight:700}
+.fj-status.error{color:#a63145}
+.fj-toolbar{display:grid;grid-template-columns:minmax(230px,2fr) repeat(3,minmax(120px,1fr));gap:10px;margin:12px 0;padding:12px;border:1px solid #e7e2f0;border-radius:15px;background:#fff}
+.fj-toolbar label,.fj-fields label,.fj-link-grid label{display:grid;gap:6px;min-width:0;color:#58536e;font-size:.75rem;font-weight:780}
+.fj-toolbar input,.fj-toolbar select,.fj-fields input,.fj-fields select,.fj-fields textarea,.fj-link-grid select,.fj-photo-uploader input:not([type=file]){width:100%;min-width:0}
+.fj-count{margin:10px 0;color:#77728b;font-size:.78rem;font-weight:760}
+.fj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:13px}
+.fj-card{display:flex;flex-direction:column;gap:9px;min-width:0;padding:15px;border:1px solid #e3dfed;border-radius:17px;background:#fff;box-shadow:0 6px 18px rgba(45,38,94,.045)}
+.fj-card.private{border-color:#e9d4e1;background:#fffafe}
+.fj-card-top{display:flex;justify-content:space-between;gap:8px;color:#5a489e;font-size:.66rem;font-weight:850;text-transform:uppercase}
+.fj-card-top b{color:#228371}
+.fj-card.private .fj-card-top b{color:#a34d79}
+.fj-card h3{margin:2px 0 0;color:#302d45;font-size:1.02rem;line-height:1.35}
+.fj-odia{margin:-5px 0 0;color:#a44f7a}
+.fj-excerpt{margin:0;color:#6b667c;font-size:.8rem;line-height:1.55;white-space:pre-line}
+.fj-linked{margin:0;color:#6350a8;font-size:.68rem;font-weight:760}
+.fj-card-meta{display:flex;justify-content:space-between;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:8px;border-top:1px solid #f0edf5;color:#77728a;font-size:.66rem}
+.fj-open{align-self:flex-end;padding:8px 13px;border:1px solid #d8d1ef;border-radius:10px;background:#f7f4ff;color:#5b48ab;font-weight:820;font-size:.72rem}
+.fj-empty,.fj-loading,.fj-error{grid-column:1/-1;padding:30px;text-align:center;color:#6e6980}
+.fj-error{border:1px solid #e8bec5;border-radius:14px;background:#fff6f7;text-align:left;color:#a53247}
+.fj-editor{margin-top:20px;padding:0;border:1px solid #e1dcef;border-radius:20px;background:#fff;box-shadow:0 14px 35px rgba(34,29,80,.08);overflow:hidden}
+.fj-editor-head{position:sticky;top:0;z-index:4;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:16px 20px;border-bottom:1px solid #eeeaf4;background:rgba(255,255,255,.97);backdrop-filter:blur(12px)}
+.fj-editor-head h3{margin:2px 0;font-size:1.2rem}
+#familyJournalForm{display:grid;gap:14px;max-height:72vh;overflow:auto;padding:18px 20px}
+.fj-fields{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.fj-fields>label,.fj-fields>.life-experience-two{grid-column:1/-1}
+.fj-fields>label:nth-child(1),.fj-fields>label:nth-child(2){grid-column:auto}
+.fj-fields textarea{min-height:82px;resize:vertical}
+.fj-links-panel,.fj-photo-panel{padding:14px;border:1px solid #e1dcef;border-radius:16px;background:linear-gradient(145deg,#faf8ff,#f0faf7)}
+.fj-links-panel h4,.fj-photo-panel h4{margin:2px 0 5px}
+.fj-links-panel small,.fj-photo-panel small{color:#746f86;line-height:1.45}
+.fj-link-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.fj-link-grid select{min-height:125px;padding:7px;border:1px solid #dcd5ed;border-radius:10px;background:#fff}
+.fj-link-grid option{padding:5px}
+.fj-link-options{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.fj-link-options label{display:flex;align-items:center;gap:7px;font-size:.72rem;color:#605b74}
+.fj-link-options input{width:auto}
+.fj-note{margin:8px 0 0;color:#9a4c70;font-size:.75rem}
+.fj-note.hidden{display:none}
+.fj-photo-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:12px 0}
+.fj-photo{overflow:hidden;border:1px solid #e2ddec;border-radius:13px;background:#fff}
+.fj-photo-img{display:block;width:100%;padding:0;border:0;background:#f4f1fa}
+.fj-photo-img img{display:block;width:100%;height:150px;object-fit:cover}
+.fj-photo>div{display:grid;gap:5px;padding:9px}
+.fj-photo>div strong{font-size:.75rem}
+.fj-photo>div small{font-size:.64rem;line-height:1.4}
+.fj-photo-actions{display:flex;gap:6px;flex-wrap:wrap}
+.fj-photo-actions button{padding:6px 8px;border:1px solid #ddd6ee;border-radius:8px;background:#f8f6ff;color:#5e4caf;font-size:.65rem;font-weight:800}
+.fj-photo-actions button[data-fj-archive-photo]{color:#a34255;border-color:#f0d0d5;background:#fff7f8}
+.fj-photo-uploader{display:grid;gap:10px;padding-top:12px;border-top:1px dashed #d6cfea}
+.fj-photo-uploader label{display:grid;gap:6px;color:#58536e;font-size:.73rem;font-weight:760}
+.fj-form-actions{position:sticky;bottom:0;z-index:3;display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;padding:12px 20px max(12px,env(safe-area-inset-bottom));border-top:1px solid #eeeaf4;background:rgba(255,255,255,.97)}
+.fj-form-actions button{min-height:42px}
+.fj-photo-viewer{width:min(900px,calc(100vw - 24px));max-width:900px;padding:15px}
+.fj-photo-viewer img{display:block;max-width:100%;max-height:78vh;object-fit:contain;margin:12px auto;border-radius:12px}
+#familyActivitiesSection .hidden{display:none!important}
+@media(max-width:860px){
+ .fj-hero{align-items:stretch;flex-direction:column;padding:17px}
+ .fj-hero-actions{justify-content:stretch}
+ .fj-hero-actions>*{flex:1}
+ .fj-toolbar{grid-template-columns:1fr 1fr}
+ .fj-toolbar .fj-search{grid-column:1/-1}
+ #familyJournalForm{max-height:none;padding:14px}
+ .fj-fields{grid-template-columns:1fr}
+ .fj-fields>label,.fj-fields>.life-experience-two,.fj-fields>label:nth-child(1),.fj-fields>label:nth-child(2){grid-column:1/-1}
+ .fj-link-grid{grid-template-columns:1fr}
+ .fj-form-actions{display:grid;grid-template-columns:1fr 1fr}
+ .fj-form-actions #familyJournalSave{grid-column:1/-1}
+ .fj-photo-viewer{max-height:90dvh}
+}
