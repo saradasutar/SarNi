@@ -1,7 +1,7 @@
 'use strict';
 
 const CONFIG = window.PORTFOLIO_CONFIG || {};
-const APP_VERSION = '20.10.3';
+const APP_VERSION = '20.10.4';
 const EXPECTED_BACKEND_VERSION = '3.17.36';
 // Background timeout follows the same administrator-chosen inactivity policy.
 // Inactive sessions are always checked by the backend as well.
@@ -7612,11 +7612,11 @@ function switchSection(section){
   if(typeof closeSarNiMobileMore==='function')closeSarNiMobileMore();
   if(window.innerWidth<=860)window.scrollTo({top:0,behavior:'instant'});
   scheduleHoldingsReadingRefresh();
-  document.body.classList.remove('section-overview','section-holdings','section-transactions','section-watchlist','section-sip','section-expenditure','section-diary','section-users','section-adminSettings','section-books','section-gpf','section-quickDiary','section-calendar','section-creditCards','section-experiences');
+  document.body.classList.remove('section-overview','section-holdings','section-transactions','section-watchlist','section-sip','section-expenditure','section-diary','section-users','section-adminSettings','section-books','section-gpf','section-quickDiary','section-calendar','section-creditCards','section-experiences','section-familyActivities');
   document.body.classList.add(`section-${section}`);
-  const titles={overview:state.overviewMode==='INVESTMENT'?'My dashboard':'My dashboard',holdings:'Holdings & performance',transactions:'Transactions',watchlist:'Watchlist',sip:'SIP Planner & Future Investment',expenditure:'Expenditure',diary:'Diary',quickDiary:'Quick Diary',calendar:'Calendar · English & Saka',experiences:'Life Experiences',creditCards:'Credit Cards',users:'Users',adminSettings:'Admin Settings',books:'Book Writing',gpf:'GPF · Personal Savings'};
+  const titles={overview:state.overviewMode==='INVESTMENT'?'My dashboard':'My dashboard',holdings:'Holdings & performance',transactions:'Transactions',watchlist:'Watchlist',sip:'SIP Planner & Future Investment',expenditure:'Expenditure',diary:'Diary',quickDiary:'Quick Diary',calendar:'Calendar · English & Saka',experiences:'Life Experiences',familyActivities:'Activities & Rituals',creditCards:'Credit Cards',users:'Users',adminSettings:'Admin Settings',books:'Book Writing',gpf:'GPF · Personal Savings'};
   if(els.pageTitle)els.pageTitle.textContent=titles[section]||'My Finance';
-  ['overview','holdings','transactions','watchlist','sip','expenditure','diary','quickDiary','calendar','experiences','creditCards','users','adminSettings','books','gpf'].forEach(name=>{
+  ['overview','holdings','transactions','watchlist','sip','expenditure','diary','quickDiary','calendar','experiences','familyActivities','creditCards','users','adminSettings','books','gpf'].forEach(name=>{
     const sec=$(`${name}Section`);
     if(sec)sec.classList.toggle('hidden',name!==section);
   });
@@ -7638,6 +7638,7 @@ function switchSection(section){
   if(section==='quickDiary')renderQuickDiaryWorkspace();
   if(section==='calendar')renderStandaloneCalendar();
   if(section==='experiences')loadLifeExperiences();
+  if(section==='familyActivities'&&window.SarniFamilyActivities)window.SarniFamilyActivities.load();
   if(section==='expenditure')loadPeopleDirectory(true);
   if(section==='creditCards')sarCcLoad();
   if(section==='users'&&isSarNiAdmin())loadPeopleDirectory(true);
