@@ -571,6 +571,7 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
 <button class="nav-item" data-section="diary"><span aria-hidden="true">✎</span> Diary</button>
 <button class="nav-item" id="sarniSidebarTargetsBtn" type="button" title="Open existing Targets &amp; Reminders panel"><span aria-hidden="true">◎</span> Target &amp; Reminder</button>
 <button class="nav-item life-experience-nav" data-section="experiences" type="button"><span aria-hidden="true">✧</span> Life Experiences</button>
+<button class="nav-item" data-section="familyActivities" type="button"><span aria-hidden="true">✿</span> Activities &amp; Rituals</button>
 <button class="nav-item book-writing-nav" data-section="books" id="pinnedBookWritingBtn" title="Open Book Writing" type="button"><span aria-hidden="true">▤</span> Book Writing</button>
 <a class="nav-item sarni-myfamily-link" href="https://saradasutar.github.io/MyFamily/" target="_blank" rel="noopener noreferrer" title="Open MyFamily dashboard in a new tab"><span aria-hidden="true">⌂</span> MyFamily ↗</a>
 <button class="nav-item admin-only hidden" data-section="users"><span aria-hidden="true">♙</span> Users</button>
@@ -1158,6 +1159,76 @@ html body #appView.hidden,html body #appView[hidden],html body #loginView.hidden
     <article class="life-experience-list-panel"><div class="life-experience-tools"><h3>Saved experiences</h3><input id="experienceSearch" type="search" placeholder="Search a topic, place or lesson…" aria-label="Search experiences"/><button type="button" class="life-quiet" id="experiencePrint">⎙ Print</button></div><div id="experienceList" class="life-experience-list"><p class="life-hint">Open this page to load your life experiences.</p></div><button id="experienceLoadMore" type="button" class="life-quiet hidden">Load more experiences</button></article>
   </div>
 </section>
+<section class="page-section hidden" id="familyActivitiesSection" aria-label="Family Activities and Rituals Heritage Journal">
+  <div class="fj-hero">
+    <div><p class="eyebrow">ONE FAMILY · ONE SHARED ARCHIVE</p><h2>Activities &amp; Rituals</h2><p>Preserve your family's festivals, traditions, recipes, customs and memories. Family entries are shared between MyFamily and SarNi; Private entries remain yours.</p></div>
+    <div class="fj-hero-actions"><button type="button" class="life-quiet" id="familyJournalPrintList">⎙ Print filtered journal</button><button type="button" class="life-save" id="familyJournalNew">＋ Add a memory</button></div>
+  </div>
+  <div class="fj-principles"><span>♡ Family entries are collaborative</span><span>🔒 Private entries stay with their creator</span><span>▧ Original photographs remain in MyFamily Drive</span></div>
+  <div class="fj-status" id="familyJournalStatus" role="status">Journal connects to MyFamily using your verified SarNi email.</div>
+  <div class="fj-toolbar">
+    <label class="fj-search">Search<input id="familyJournalSearch" type="search" placeholder="Festival, ritual, story, food…"></label>
+    <label>Type<select id="familyJournalTypeFilter"><option value="">All types</option><option value="FESTIVAL">Festival</option><option value="ACTIVITY">Activity</option><option value="RITUAL">Ritual</option><option value="TRADITION">Tradition</option><option value="CELEBRATION">Celebration</option><option value="CUSTOM">Custom</option></select></label>
+    <label>Visibility<select id="familyJournalVisibilityFilter"><option value="ALL">Family + my private</option><option value="FAMILY">Family only</option><option value="PRIVATE">My private only</option></select></label>
+    <label>Year<select id="familyJournalYearFilter"><option value="">All years</option></select></label>
+  </div>
+  <div class="fj-count" id="familyJournalCount">Loading shared archive…</div>
+  <div class="fj-grid" id="familyJournalList"><p class="fj-loading">Loading the shared family archive…</p></div>
+  <section class="fj-editor hidden" id="familyJournalEditor" aria-label="Family journal editor">
+    <header class="fj-editor-head"><div><p class="eyebrow">FAMILY LEGACY JOURNAL</p><h3 id="familyJournalEditorTitle">Add a family memory</h3><small>MyFamily is the canonical archive. Changes are shared automatically with authorised accounts.</small></div><button id="familyJournalCloseEditor" type="button" class="life-quiet">Close ×</button></header>
+    <form id="familyJournalForm">
+      <input id="familyJournalEntryId" type="hidden">
+      <div class="fj-fields">
+        <label>Title *<input id="familyJournalTitle" required maxlength="120" placeholder="e.g. Raja Sankranti in our family"></label>
+        <label>Odia name<input id="familyJournalOdiaName" maxlength="120" placeholder="ଓଡ଼ିଆ ନାମ"></label>
+        <div class="life-experience-two">
+          <label>Event date<input id="familyJournalEventDate" type="date"></label>
+          <label>Entry type<select id="familyJournalEntryType"><option value="FESTIVAL">Festival</option><option value="ACTIVITY">Activity</option><option value="RITUAL">Ritual</option><option value="TRADITION">Tradition</option><option value="CELEBRATION">Celebration</option><option value="CUSTOM">Custom</option></select></label>
+        </div>
+        <label>Who can see this?<select id="familyJournalVisibility"><option value="FAMILY">Family — shared with authorised family members</option><option value="PRIVATE">Private — only me</option></select></label>
+        <label>Significance and history<textarea id="familyJournalMeaning" rows="3" maxlength="1200" placeholder="What does this festival or activity mean? How did it begin in our family?"></textarea></label>
+        <label>Preparations and materials<textarea id="familyJournalInstructions" rows="4" maxlength="6000" placeholder="Items, preparation steps, timings and practical guidance"></textarea></label>
+        <div class="life-experience-two">
+          <label>Rituals and step-by-step activities<textarea id="familyJournalRituals" rows="4" maxlength="4000" placeholder="Write the sequence so a future family member can follow it"></textarea></label>
+          <label>Traditional food and recipes<textarea id="familyJournalFood" rows="4" maxlength="3000" placeholder="Dishes, ingredients and recipes"></textarea></label>
+        </div>
+        <label>People and responsibilities<textarea id="familyJournalResponsibilities" rows="3" maxlength="3000" placeholder="Participants, roles and arrangements"></textarea></label>
+        <label>Personal memories, lessons and stories<textarea id="familyJournalMemories" rows="4" maxlength="6000" placeholder="Earlier generations, special moments and lessons worth preserving"></textarea></label>
+      </div>
+      <section class="fj-links-panel" id="familyJournalLinksPanel">
+        <div><p class="eyebrow">CALENDAR CONNECTIONS</p><h4>Show this knowledge with future events</h4><small>Link one journal entry to recurring Odia festivals or Important Dates. The same story is reused every year.</small></div>
+        <div class="fj-link-grid">
+          <label>Odia Kohinoor festivals<select id="familyJournalFestivalLinks" multiple size="6"></select></label>
+          <label>Important Dates<select id="familyJournalImportantDateLinks" multiple size="6"></select></label>
+        </div>
+        <div class="fj-link-options"><label><input id="familyJournalShowCalendar" type="checkbox" checked> Show in calendar details</label><label><input id="familyJournalShowYearbook" type="checkbox" checked> Show in festival yearbook</label></div>
+        <p id="familyJournalLinksReadonly" class="fj-note hidden">Only the entry owner can change calendar links. You can still contribute Family photographs.</p>
+        <p id="familyJournalPrivateLinkNote" class="fj-note private hidden">Private memories never appear in shared calendars or yearbooks.</p>
+      </section>
+      <section class="fj-photo-panel hidden" id="familyJournalPhotoPanel">
+        <div><p class="eyebrow">SHARED FAMILY PHOTO ARCHIVE</p><h4>Photographs and contributors</h4><small>All authorised family members can add photos to a Family memory. Private photos stay with the creator. Originals are stored in the private MyFamily Drive folder.</small></div>
+        <div class="fj-photo-gallery" id="familyJournalPhotoGallery"></div>
+        <div class="fj-photo-uploader" id="familyJournalPhotoUploader">
+          <label>Choose photograph<input id="familyJournalPhotoFile" type="file" accept="image/jpeg,image/png,image/webp"></label>
+          <div class="life-experience-two"><label>Photo date<input id="familyJournalPhotoDate" type="date"></label><label>Caption<input id="familyJournalPhotoCaption" maxlength="240" placeholder="Who, where and what is happening"></label></div>
+          <label>Photographer / source<input id="familyJournalPhotoSource" maxlength="160" placeholder="Family album · photographed by…"></label>
+          <button type="button" class="life-save" id="familyJournalUploadPhoto">Upload original &amp; add photo</button>
+          <small>For this first SarNi bridge release, original photo uploads are limited to 8 MB each.</small>
+        </div>
+      </section>
+      <div class="fj-form-actions">
+        <button type="button" class="life-quiet" id="familyJournalPrintEntry">⎙ Print memory</button>
+        <button type="button" class="life-quiet danger" id="familyJournalArchive">Archive entry</button>
+        <button type="submit" class="life-save" id="familyJournalSave">Save memory</button>
+      </div>
+    </form>
+  </section>
+</section>
+<dialog id="familyJournalPhotoViewer" class="modal fj-photo-viewer">
+  <div class="modal-head"><h3>Family photograph</h3><button type="button" class="modal-close" id="familyJournalPhotoViewerClose">×</button></div>
+  <img id="familyJournalPhotoViewerImage" alt="Family journal photograph">
+</dialog>
+
 <section class="page-section hidden" id="diarySection">
 <div class="diary-hero">
 <div>
