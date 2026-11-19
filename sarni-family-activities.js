@@ -122,7 +122,7 @@
     $('familyJournalSave').disabled=true;status('Saving to the shared MyFamily archive…');
     try{
       const r=await call('familyJournalSave',payload);
-      if(payload.visibility==='FAMILY')await call('familyJournalLinksSave',{guideId:r.id,links:selectedLinks()});
+      await call('familyJournalLinksSave',{guideId:r.id,links:payload.visibility==='FAMILY'?selectedLinks():[]});
       await load();await openEntry(r.id);status('Saved to MyFamily. Shared Family records are available in both dashboards.');notify('Family memory saved to the shared archive.','success');
     }catch(e){status(e.message,true);notify(e.message,'error');}
     finally{$('familyJournalSave').disabled=false;}
