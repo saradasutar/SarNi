@@ -3703,7 +3703,9 @@ function render(){
    return;
   }
   const values=Object.fromEntries(Object.entries(investmentFields).map(([name,input])=>[name,Number(input.value)]));
-  if(!Object.values(values).every(value=>Number.isFinite(value)&&value>0)){
+  // Validate only the two populated inputs. Number('') is 0, so validating
+  // all three fields incorrectly rejected every valid two-field calculation.
+  if(!filled.every(name=>Number.isFinite(values[name])&&values[name]>0)){
    investmentCalcHint.textContent='Enter two positive numeric values to calculate the remaining field.';
    return;
   }
