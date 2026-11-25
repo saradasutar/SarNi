@@ -60,7 +60,22 @@ for (const viewport of scenarios) {
     await route.fulfill({status:200,contentType:'text/html',body:markup});
    });
 
-   await page.goto('http://127.0.0.1:8765/q/?k=TEST_FIXTURE_ONLY',{waitUntil:'domcontentloaded'});
+   await page.addInitScript(()=>{
+ localStorage.setItem('portfolio_username','quick-entry-regression');
+ localStorage.setItem('myfinance_last_good_dashboard_v1_quick-entry-regression',JSON.stringify({
+  savedAt:Date.now(),
+  data:{
+   holdings:[
+    {type:'STOCK',assetName:'Reliance Industries',code:'RELIANCE'},
+    {type:'STOCK',assetName:'State Bank of India',code:'SBIN'},
+    {type:'STOCK',assetName:'Example Alpha Ltd',code:'DUP'},
+    {type:'STOCK',assetName:'Example Beta Ltd',code:'DUP'}
+   ],
+   watchlist:[{type:'ETF',assetName:'Nippon India ETF Nifty 50 BeES',code:'NIFTYBEES'}]
+  }
+ }));
+});
+await page.goto('http://127.0.0.1:8765/q/?k=TEST_FIXTURE_ONLY',{waitUntil:'domcontentloaded'});
    await expect(page.locator('#tabs button[data-mode]')).toHaveCount(6,{timeout:15000});
    const amountControlMetrics={};
    for (const mode of modes) {
@@ -109,7 +124,44 @@ for (const viewport of scenarios) {
    for(const field of ['boxHeight','inputHeight','inputFont','inputWeight','currencyFont']){
     expect(amountControlMetrics.expense[field]).toBe(amountControlMetrics.family[field]);
    }
-   // SarNi 9 batch: verify progressive enhancements without submitting records.
+   // Investment math: two positive values calculate only the missing third.
+    await page.locator('#tabs button[data-mode="investment"]').click();
+    const invAmount=page.locator('#fields input[name="amount"]');
+    const invUnits=page.locator('#fields input[name="units"]');
+    const invPrice=page.locator('#fields input[name="price"]');
+    const invName=page.locator('#fields input[name="title"]');
+    const invCode=page.locator('#fields input[name="code"]');
+    const invType=page.locator('#fields select[name="assetType"]');
+    await invType.selectOption('STOCK');
+    await invAmount.fill('300');
+    await invUnits.fill('12');
+    await expect(invPrice).toHaveValue('25');
+    await invUnits.fill('15');
+    await expect(invPrice).toHaveValue('20');
+    await invPrice.fill('');
+    await expect(invPrice).toHaveValue('20');
+    await invAmount.fill('');
+    await invPrice.fill('30');
+    await expect(invAmount).toHaveValue('450');
+    await invUnits.fill('');
+    await invAmount.fill('900');
+    await expect(invUnits).toHaveValue('30');
+
+    // Instrument autofill uses only exact matches from the current Analysis cache.
+    await invAmount.fill('');await invUnits.fill('');await invPrice.fill('');
+    await invCode.fill('RELIANCE');
+    await expect(invName).toHaveValue('Reliance Industries');
+    await invName.fill('State Bank of India');
+    await expect(invCode).toHaveValue('SBIN');
+    await invName.fill('');
+    await invCode.fill('DUP');
+    await expect(invName).toHaveValue('');
+    await expect(page.locator('#qeInvestmentLookupHint')).toContainText('More than one saved instrument');
+    await invCode.fill('UNKNOWN');
+    await expect(invName).toHaveValue('');
+    await expect(page.locator('#qeInvestmentLookupHint')).toContainText('No exact match');
+
+    // SarNi 9 batch: verify progressive enhancements without submitting records.
    await expect(page.locator('#qeSearchClear')).toHaveCount(1);
    await expect(page.locator('#qeActiveFieldCount')).toHaveCount(1);
    await expect(page.locator('#qeBackToTop')).toHaveCount(1);
