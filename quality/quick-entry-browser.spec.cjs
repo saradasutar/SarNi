@@ -151,6 +151,7 @@ await page.goto('http://127.0.0.1:8765/q/?k=TEST_FIXTURE_ONLY',{waitUntil:'domco
     await invAmount.fill('');await invUnits.fill('');await invPrice.fill('');
     await invCode.fill('RELIANCE');
     await expect(invName).toHaveValue('Reliance Industries');
+    await invCode.fill('');
     await invName.fill('State Bank of India');
     await expect(invCode).toHaveValue('SBIN');
     await invName.fill('');
