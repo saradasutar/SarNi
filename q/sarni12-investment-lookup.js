@@ -178,7 +178,7 @@
       if(query.length<2){say(lookupStatus,'Enter at least two characters. Manual entry is always available.','');return;}
       searchTimer=setTimeout(()=>search(query),450);
     });
-    search.addEventListener('keydown',event=>{if(event.key==='Escape')closeResults();});
+    searchInput.addEventListener('keydown',event=>{if(event.key==='Escape')closeResults();});
     document.addEventListener('click',event=>{if(!wrap.contains(event.target))closeResults();},{passive:true});
     asset.addEventListener('change',()=>{
       if(searchInput.value)searchInput.dispatchEvent(new Event('input',{bubbles:true}));
