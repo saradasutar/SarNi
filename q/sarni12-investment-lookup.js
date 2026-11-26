@@ -164,7 +164,7 @@
           button.append(el('small',{},detail));
           button.addEventListener('click',()=>select(item));results.appendChild(button);
         });
-        results.hidden=false;search.setAttribute('aria-expanded','true');
+        results.hidden=false;searchInput.setAttribute('aria-expanded','true');
         say(lookupStatus,items.length+' matching instrument(s). Select the correct company / scheme.','success');
       } catch(error) {
         showUnavailable('Search unavailable: '+String(error&&error.message||error).slice(0,150)+'. Name, symbol and price fields remain editable.',true);
@@ -174,7 +174,7 @@
 
     searchInput.addEventListener('input',()=>{
       if(searchTimer)clearTimeout(searchTimer);
-      const query=search.value.trim();closeResults();
+      const query=searchInput.value.trim();closeResults();
       if(query.length<2){say(lookupStatus,'Enter at least two characters. Manual entry is always available.','');return;}
       searchTimer=setTimeout(()=>search(query),450);
     });
