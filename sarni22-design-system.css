@@ -1073,3 +1073,34 @@ body.theme-dark #appView .sarni-home-writing-note{color:#b8c7d8}
 @media(max-width:1280px) and (min-width:1051px){
   #appView .topbar .dashboard-version-chip{font-size:10px!important;padding:6px 9px!important}
 }
+
+
+/* v20.10.6 — show both chapter completion and manuscript word-goal progress
+   on each Book Writing library card. Values come only from saved book/chapter records. */
+.book-card-progress-stack{
+  display:grid;
+  gap:10px;
+  margin:12px 0 11px;
+}
+.book-card-progress-unit{display:grid;gap:4px;min-width:0}
+.book-card-progress-label{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  color:#65718b;font-size:10px;font-weight:800;line-height:1.3;
+}
+.book-card-progress-label strong{
+  color:#24385b;font-size:10px;font-weight:950;text-align:right;
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.book-card-progress-stack .book-card-progress{
+  height:7px;margin:0;border-radius:99px;background:#e9edf5;overflow:hidden;
+}
+.book-card-progress-stack .book-card-progress i{
+  display:block;height:100%;border-radius:inherit;transition:width .25s ease;
+}
+.book-card-progress-stack .book-card-chapter-track i{
+  background:linear-gradient(90deg,#8c99b2,#66768f);
+}
+.book-card-progress-stack .book-card-word-track i{
+  background:linear-gradient(90deg,#6658d8,#25a58b);
+}
+.book-card-progress-note{color:#78849c;font-size:10px;line-height:1.3}
