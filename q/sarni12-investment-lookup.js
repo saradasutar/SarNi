@@ -82,7 +82,7 @@
     );
     const nameLabel=title.closest('label');
     if (nameLabel && nameLabel.parentElement) nameLabel.parentElement.insertBefore(wrap,nameLabel);
-    const search=wrap.querySelector('#qeMarketSearch'), results=wrap.querySelector('#qeMarketSearchResults'),
+    const searchInput=wrap.querySelector('#qeMarketSearch'), results=wrap.querySelector('#qeMarketSearchResults'),
       lookupStatus=wrap.querySelector('#qeMarketLookupStatus');
     const priceStatus=el('small',{id:'qeMarketPriceStatus','aria-live':'polite'},'Price / NAV can always be entered or corrected manually.');
     const priceLabel=price.closest('label');
@@ -108,7 +108,7 @@
     });
 
     const api=()=>window.sarniInvestmentLookupApi;
-    const closeResults=()=>{results.replaceChildren();results.hidden=true;search.setAttribute('aria-expanded','false');};
+    const closeResults=()=>{results.replaceChildren();results.hidden=true;searchInput.setAttribute('aria-expanded','false');};
     const showUnavailable=(message,error)=>{closeResults();say(lookupStatus,message,error?'error':'');};
 
     async function select(item) {
@@ -117,7 +117,7 @@
       title.value=displayName; code.value=item.code||'';
       title.dispatchEvent(new Event('input',{bubbles:true}));
       code.dispatchEvent(new Event('input',{bubbles:true}));
-      search.value=displayName+(item.code?' · '+item.code:'');
+      searchInput.value=displayName+(item.code?' · '+item.code:'');
       say(lookupStatus,'Selected '+displayName+' · '+item.code+'. Name and code are populated and remain editable.','success');
       const type=String(asset.value||'').toUpperCase(),seq=++requestSeq;
       if(type==='MF' && Number(item.nav||item.price)>0){
@@ -170,9 +170,9 @@
         showUnavailable('Search unavailable: '+String(error&&error.message||error).slice(0,150)+'. Name, symbol and price fields remain editable.',true);
       }
     }
-    function searchInputCurrent(query){return search.isConnected && search.value.trim()===query;}
+    function searchInputCurrent(query){return searchInput.isConnected && searchInput.value.trim()===query;}
 
-    search.addEventListener('input',()=>{
+    searchInput.addEventListener('input',()=>{
       if(searchTimer)clearTimeout(searchTimer);
       const query=search.value.trim();closeResults();
       if(query.length<2){say(lookupStatus,'Enter at least two characters. Manual entry is always available.','');return;}
@@ -181,7 +181,7 @@
     search.addEventListener('keydown',event=>{if(event.key==='Escape')closeResults();});
     document.addEventListener('click',event=>{if(!wrap.contains(event.target))closeResults();},{passive:true});
     asset.addEventListener('change',()=>{
-      if(search.value)search.dispatchEvent(new Event('input',{bubbles:true}));
+      if(searchInput.value)searchInput.dispatchEvent(new Event('input',{bubbles:true}));
       else say(lookupStatus,'Search uses the selected '+String(asset.value).toUpperCase()+' directory.','');
     });
   }
