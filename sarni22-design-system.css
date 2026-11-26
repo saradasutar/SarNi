@@ -1104,3 +1104,31 @@ body.theme-dark #appView .sarni-home-writing-note{color:#b8c7d8}
   background:linear-gradient(90deg,#6658d8,#25a58b);
 }
 .book-card-progress-note{color:#78849c;font-size:10px;line-height:1.3}
+
+
+/* v20.10.7 — Home grid balance:
+   Targets & Reminders used to occupy only columns 9–12, leaving a large empty
+   block below recent expenses/diary in columns 1–8. Span the full dashboard.
+   This is presentation-only; target rows, stored data and controls are unchanged. */
+#appView .sarni-advanced-home-body > #sarniHomeTargetRowsPanel{
+  grid-column:1 / -1!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  align-self:start!important;
+  box-sizing:border-box!important;
+}
+#appView #sarniHomeTargetRowsPanel .sch-stats{
+  grid-template-columns:repeat(3,minmax(150px,1fr))!important;
+}
+#appView #sarniHomeTargetRowsPanel #sarniCompareTargets{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+}
+@media(max-width:720px){
+  #appView #sarniHomeTargetRowsPanel .sch-stats{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
