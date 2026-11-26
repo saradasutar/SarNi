@@ -1035,3 +1035,41 @@ body.theme-dark #appView .sarni-home-writing-note{color:#b8c7d8}
     overflow-wrap:anywhere!important;
   }
 }
+
+
+/* v20.10.5 — high-contrast FE/BE release labels.
+   The topbar itself is dark; keep the badge text dark on its light badge surface. */
+#appView .topbar .dashboard-version-pair{
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:nowrap!important;
+  gap:8px!important;
+  flex:0 0 auto!important;
+}
+#appView .topbar .dashboard-version-chip{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:30px!important;
+  padding:6px 11px!important;
+  border:1px solid #a9bfd2!important;
+  border-radius:999px!important;
+  color:#12334b!important;
+  background:#f2f8ff!important;
+  font-size:11px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  letter-spacing:.025em!important;
+  font-variant-numeric:tabular-nums!important;
+  text-shadow:none!important;
+  box-shadow:0 2px 6px rgba(3,20,36,.14)!important;
+  opacity:1!important;
+}
+#appView .topbar .dashboard-version-chip.backend-chip{
+  color:#075b45!important;
+  background:#e4fff1!important;
+  border-color:#83c9a8!important;
+}
+@media(max-width:1280px) and (min-width:1051px){
+  #appView .topbar .dashboard-version-chip{font-size:10px!important;padding:6px 9px!important}
+}
