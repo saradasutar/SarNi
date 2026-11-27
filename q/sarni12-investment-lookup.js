@@ -12,6 +12,18 @@
     return node;
   };
   const fmt = n => Number(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:4});
+  const norm = value => String(value||'').normalize('NFKC').trim().toLocaleLowerCase('en-IN').replace(/\\s+/g,' ');
+  // Never treat a ticker (e.g. DMART) as the company name. Prefer explicit
+  // full-name fields if a backend response provides more than one label.
+  const resolvedInstrumentName = item => {
+    const candidates = [item && item.companyName,item && item.fullName,item && item.displayName,item && item.name,item && item.assetName];
+    const code = norm(item && item.code);
+    for (const candidate of candidates) {
+      const value = String(candidate||'').trim();
+      if (value && norm(value)!==code) return value;
+    }
+    return '';
+  };
   const say = (node, message, kind) => {
     node.textContent = message || '';
     node.classList.remove('qe12-success','qe12-error');
@@ -113,19 +125,29 @@
 
     async function select(item) {
       closeResults();
-      const displayName=item.displayName||item.name||'';
-      // Populate both existing transaction fields as one programmatic selection.
-      // Their legacy local-only listeners must not launch a second search.
+      const displayName=resolvedInstrumentName(item);
+      // Populate the stock/fund name only from a resolved company/scheme name.
+      // A symbol must never be copied into the name field as a false full name.
       settingFromLookup=true;
       try {
-        title.value=displayName; code.value=item.code||'';
-        title.dispatchEvent(new Event('input',{bubbles:true}));
-        code.dispatchEvent(new Event('input',{bubbles:true}));
+        if(displayName) {
+          title.value=displayName;
+          title.dispatchEvent(new Event('input',{bubbles:true}));
+        }
+        if(item.code) {
+          code.value=item.code;
+          code.dispatchEvent(new Event('input',{bubbles:true}));
+        }
       } finally { settingFromLookup=false; }
-      searchInput.value=displayName+(item.code?' · '+item.code:'');
+      searchInput.value=(displayName||String(item.code||'').trim())+(item.code?' · '+item.code:'');
       const legacyHint=document.getElementById('qeInvestmentLookupHint');
-      if(legacyHint)legacyHint.textContent='✓ Central instrument directory match. No Analysis sign-in is required; name and symbol remain editable.';
-      say(lookupStatus,'Selected '+displayName+' · '+item.code+'. Name and code are populated and remain editable.','success');
+      if(legacyHint)legacyHint.textContent=displayName
+        ? '✓ Full company / scheme name resolved. No Analysis sign-in is required; name and symbol remain editable.'
+        : 'The directory returned a symbol but no full company name. The symbol was not copied into the name field; enter the full name manually.';
+      say(lookupStatus,displayName
+        ? 'Selected '+displayName+' · '+item.code+'. Name and symbol are populated and remain editable.'
+        : 'Selected symbol '+item.code+'. Full company name was not supplied by the lookup; enter it manually.',
+        displayName?'success':'error');
       const type=String(asset.value||'').toUpperCase(),seq=++requestSeq;
       if(type==='MF' && Number(item.nav||item.price)>0){
         proposePrice(price,{value:Number(item.nav||item.price),note:'AMFI NAV dated '+(item.navDate||'latest report')+' · Source: AMFI'},priceStatus);
@@ -168,14 +190,16 @@
         if(autoSelectExact){
           const normalized=query.normalize('NFKC').trim().toLocaleLowerCase('en-IN').replace(/\\s+/g,' ');
           const exactCodes=items.filter(item=>String(item.code||'').normalize('NFKC').trim().toLocaleLowerCase('en-IN')===normalized);
-          const exactNames=items.filter(item=>String(item.displayName||item.name||'').normalize('NFKC').trim().toLocaleLowerCase('en-IN').replace(/\\s+/g,' ')===normalized);
+          const exactNames=items.filter(item=>norm(resolvedInstrumentName(item))===normalized);
           const exact=exactCodes.length===1?exactCodes[0]:(!exactCodes.length&&exactNames.length===1?exactNames[0]:null);
           if(exact){await select(exact);return;}
         }
         items.forEach(item=>{
           const button=el('button',{type:'button',className:'qe12-result',role:'option'});
-          button.append(el('strong',{},item.displayName||item.name||'Instrument'));
+          const fullName=resolvedInstrumentName(item);
+          button.append(el('strong',{},fullName||item.code||'Instrument name unavailable'));
           let detail=(item.code?'Code: '+item.code:'')+(item.series?' · Series: '+item.series:'')+(item.exchange?' · '+item.exchange:'');
+          if(!fullName)detail+=' · Full company name unavailable';
           if(item.assetType==='MF' && item.nav!=null) detail+=' · NAV ₹'+fmt(item.nav)+(item.navDate?' · '+item.navDate:'');
           button.append(el('small',{},detail));
           button.addEventListener('click',()=>select(item));results.appendChild(button);
