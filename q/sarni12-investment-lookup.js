@@ -3,7 +3,7 @@
 (() => {
   'use strict';
   const wired = new WeakSet(), priceStates = new WeakMap();
-  let requestSeq = 0, searchTimer = null, styleReady = false;
+  let requestSeq = 0, searchTimer = null, styleReady = false, settingFromLookup = false;
 
   const el = (tag, attrs, value) => {
     const node = document.createElement(tag);
@@ -114,10 +114,17 @@
     async function select(item) {
       closeResults();
       const displayName=item.displayName||item.name||'';
-      title.value=displayName; code.value=item.code||'';
-      title.dispatchEvent(new Event('input',{bubbles:true}));
-      code.dispatchEvent(new Event('input',{bubbles:true}));
+      // Populate both existing transaction fields as one programmatic selection.
+      // Their legacy local-only listeners must not launch a second search.
+      settingFromLookup=true;
+      try {
+        title.value=displayName; code.value=item.code||'';
+        title.dispatchEvent(new Event('input',{bubbles:true}));
+        code.dispatchEvent(new Event('input',{bubbles:true}));
+      } finally { settingFromLookup=false; }
       searchInput.value=displayName+(item.code?' · '+item.code:'');
+      const legacyHint=document.getElementById('qeInvestmentLookupHint');
+      if(legacyHint)legacyHint.textContent='✓ Central instrument directory match. No Analysis sign-in is required; name and symbol remain editable.';
       say(lookupStatus,'Selected '+displayName+' · '+item.code+'. Name and code are populated and remain editable.','success');
       const type=String(asset.value||'').toUpperCase(),seq=++requestSeq;
       if(type==='MF' && Number(item.nav||item.price)>0){
@@ -141,7 +148,7 @@
       }
     }
 
-    async function search(query) {
+    async function search(query, autoSelectExact) {
       const bridge=api();
       if(!bridge || typeof bridge.search!=='function'){
         showUnavailable('Instrument lookup is not connected yet. Enter name, symbol and Price / NAV manually.',true);return;
@@ -155,6 +162,15 @@
         results.replaceChildren();
         if(!items.length){
           showUnavailable((reply&&reply.message)||'No matching instrument found. Enter name and symbol manually below.',false);return;
+        }
+        // When the user typed directly into Symbol or Name, accept only a
+        // unique exact match. Partial or ambiguous matches remain selectable.
+        if(autoSelectExact){
+          const normalized=query.normalize('NFKC').trim().toLocaleLowerCase('en-IN').replace(/\\s+/g,' ');
+          const exactCodes=items.filter(item=>String(item.code||'').normalize('NFKC').trim().toLocaleLowerCase('en-IN')===normalized);
+          const exactNames=items.filter(item=>String(item.displayName||item.name||'').normalize('NFKC').trim().toLocaleLowerCase('en-IN').replace(/\\s+/g,' ')===normalized);
+          const exact=exactCodes.length===1?exactCodes[0]:(!exactCodes.length&&exactNames.length===1?exactNames[0]:null);
+          if(exact){await select(exact);return;}
         }
         items.forEach(item=>{
           const button=el('button',{type:'button',className:'qe12-result',role:'option'});
@@ -172,11 +188,38 @@
     }
     function searchInputCurrent(query){return searchInput.isConnected && searchInput.value.trim()===query;}
 
-    searchInput.addEventListener('input',()=>{
+    function scheduleSearch(rawQuery, autoSelectExact) {
       if(searchTimer)clearTimeout(searchTimer);
-      const query=searchInput.value.trim();closeResults();
-      if(query.length<2){say(lookupStatus,'Enter at least two characters. Manual entry is always available.','');return;}
-      searchTimer=setTimeout(()=>search(query),450);
+      const query=String(rawQuery||'').trim();
+      closeResults();
+      if(query.length<2){
+        say(lookupStatus,'Enter at least two characters. Manual entry is always available.','');
+        return;
+      }
+      searchTimer=setTimeout(()=>search(query,!!autoSelectExact),450);
+    }
+
+    searchInput.addEventListener('input',()=>scheduleSearch(searchInput.value,false));
+
+    // The older fields remain the primary transaction fields. Typing in either
+    // of them now also invokes this central instrument directory, including
+    // from a login-free sharable Quick Entry link.
+    const legacyHint=document.getElementById('qeInvestmentLookupHint');
+    if(legacyHint)legacyHint.textContent='No Analysis sign-in required. Type a company/fund name or symbol in this form; exact matches populate the other field.';
+    [title,code].forEach((field)=>{
+      field.addEventListener('input',()=>{
+        if(settingFromLookup)return;
+        const query=String(field.value||'').trim();
+        if(!query){if(searchTimer)clearTimeout(searchTimer);closeResults();return;}
+        searchInput.value=query;
+        if(legacyHint)legacyHint.textContent='Searching the central instrument directory. Manual entry remains available.';
+        scheduleSearch(query,true);
+      });
+      field.addEventListener('change',()=>{
+        if(settingFromLookup)return;
+        const query=String(field.value||'').trim();
+        if(query.length>=2){searchInput.value=query;scheduleSearch(query,true);}
+      });
     });
     searchInput.addEventListener('keydown',event=>{if(event.key==='Escape')closeResults();});
     document.addEventListener('click',event=>{if(!wrap.contains(event.target))closeResults();},{passive:true});
